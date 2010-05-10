@@ -1,0 +1,20 @@
+
+2010-May-10  Matt Newville  <newville@cars.uchicago.edu>
+	* version 0.9.2
+
+	improved many parts, especially for image display and stripchart.
+	expanded examples
+
+2005-Mar-22  Matt Newville  <newville@cars.uchicago.edu>
+	* version 0.8
+
+	removed much code that is now repeated in matplotlib's
+	backend_wx(agg).
+
+	expanded examples
+
+2005-Mar-04  Ken McIvor  <mcivken@iit.edu>
+	* version 0.7: 
+	Ken built distutils scripts, reorganized code and examples
+
+	* original public release

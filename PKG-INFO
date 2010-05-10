@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: MPlot
+Version: 0.9.1
+Summary: A library for 2D plotting in wxPython using matplotlib.
+Home-page: UNKNOWN
+Author: Matthew Newville
+Author-email: newville@cars.uchicago.edu
+License: Python
+Description: UNKNOWN
+Platform: UNKNOWN

@@ -1,0 +1,4 @@
+include README.txt LICENSE.txt ChangeLog MANIFEST.in MANIFEST
+recursive-include lib *.py
+recursive-include examples *
+#recursive-include doc *

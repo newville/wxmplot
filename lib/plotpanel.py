@@ -43,8 +43,7 @@ class PlotPanel(BasePanel):
         self.conf = PlotConfig()
 
         self.win_config = None
-
-
+        self.cursor_callback = None
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
@@ -262,5 +261,6 @@ class PlotPanel(BasePanel):
         if event == None: return        
         fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
         self.write_message(fmt % (event.xdata,event.ydata), panel=0)
-
+        if hasattr(self.cursor_callback , '__call__'):
+            self.cursor_callback(x=event.xdata, y=event.ydata)
         

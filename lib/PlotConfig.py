@@ -73,20 +73,22 @@ class LineProperties:
             self.set_style(self.style, line=line)
             self.set_marker(self.marker,line=line)
             self.set_markersize(self.markersize, line=line)
-
             self.set_linewidth(self.linewidth, line=line)
 
-
-            
     def set_color(self, color,line=None):
         self.color = color
         c = colors.hexcolor(color)
+        def _setc(aline, col):
+            aline.set_color(col)                    
+            
         if line:
-            for l in line:
-                l.set_color(c)
-                # l.set_markeredgecolor(c)
-                # l.set_markerfacecolor(c)
-
+            for lx in line:
+                if isinstance(lx, (list, tuple)):
+                    for sublx in lx:
+                        _setc(sublx, c)
+                else:
+                    _setc(lx, c)
+                    
     def set_label(self, label,line=None):
         self.label = label
         if line:
@@ -123,7 +125,10 @@ class LineProperties:
         self.linewidth=linewidth
         if line:
             for l in line:
-                l.set_linewidth(self.linewidth/2.0)
+                try:
+                    l.set_linewidth(self.linewidth/2.0)
+                except:
+                    pass
                  
 class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """

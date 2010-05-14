@@ -88,9 +88,7 @@ class PlotPanel(BasePanel):
         if dy is None:
             _lines = self.axes.plot(xdata,ydata,drawstyle=drawstyle)
         else:
-            l1,l2 = self.axes.errorbar(xdata,ydata,yerr=dy)
-            _lines = [l1]
-            for i in l2: _lines.append(i)
+            _lines = self.axes.errorbar(xdata,ydata,yerr=dy)
         
         self.data_range    = [min((self.data_range[0],min(xdata))),
                               max((self.data_range[1],max(xdata))),
@@ -111,7 +109,6 @@ class PlotPanel(BasePanel):
         if markersize!=None: cnf.set_trace_markersize(markersize)
         
         self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        
         self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))            
 
         xa = self.axes.xaxis

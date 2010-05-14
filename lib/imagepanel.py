@@ -36,7 +36,7 @@ class ImagePanel(BasePanel):
 
         self.conf = ImageConfig()
         self.win_config = None
-
+        self.cursor_callback = None
         self.figsize = size
         self.dpi     = dpi
 
@@ -132,9 +132,14 @@ class ImagePanel(BasePanel):
     def reportLeftDown(self,event=None):
         if event == None: return        
         ix, iy = round(event.xdata), round(event.ydata)
-        if ix > 0 and ix < self.conf.data.shape[1] and iy > 0 and iy < self.conf.data.shape[0]:
-            msg = "Pixel[%i, %i], Intensity=%.4g " %(ix,iy, self.conf.data[iy,ix])
+        if (ix > 0 and ix < self.conf.data.shape[1] and
+            iy > 0 and iy < self.conf.data.shape[0]):
+            msg = "Pixel[%i, %i], Intensity=%.4g " %(ix,iy,
+                                                     self.conf.data[iy,ix])
             self.write_message(msg, panel=0)
+            if hasattr(self.cursor_callback , '__call__'):
+                self.cursor_callback(x=event.xdata, y=event.ydata)
+            
 
     def zoom_OK(self, start,stop):
         """ returns whether a requested zoom is acceptable: rejects zooms that are too small"""

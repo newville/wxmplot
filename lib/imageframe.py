@@ -35,7 +35,7 @@ class ImageFrame(BaseFrame):
         show_config_popup = not config_on_frame
 
         self.img_panel = ImagePanel(self, parent,
-                                    show_config_popup=show_config_popup)
+                                show_config_popup=show_config_popup)
         self.conf = self.img_panel.conf
         BaseFrame.__init__(self, parent=parent,
                            panel=self.img_panel, size=size)

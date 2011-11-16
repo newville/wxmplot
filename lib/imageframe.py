@@ -12,9 +12,16 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from imagepanel import ImagePanel
 from baseframe import BaseFrame
 from colors import rgb2hex
-ColorMap_List = ('gray', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
-                 'cool', 'copper', 'spring', 'summer', 'autumn', 'winter',
-                 'Spectral', 'Accent', 'Set1', 'Set2', 'Set3')
+ColorMap_List = []
+
+for cm in ('gray', 'coolwarm', 'cool', 'Spectral', 'gist_earth',
+           'gist_yarg', 'gist_rainbow', 'gist_heat', 'gist_stern', 'ocean',
+           'copper', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
+           'cool', 'copper', 'spring', 'summer', 'autumn', 'winter',
+           'Spectral', 'Accent', 'YlGn', 'YlGnBlu', ):
+    if hasattr(colormap, cm):
+        ColorMap_List.append(cm)
+
 
 Interp_List = ('nearest', 'bilinear', 'bicubic', 'spline16', 'spline36',
                'hanning', 'hamming', 'hermite', 'kaiser', 'quadric',
@@ -191,11 +198,18 @@ class ImageFrame(BaseFrame):
     def onCMapReverse(self,event=None):
         self.conf.cmap_reverse = event.IsChecked()
         cmap_name = self.conf.cmap.name
-        if  cmap_name.endswith('_r'): cmap_name = cmap_name[:-2]
+        if isinstance(cmap_name, tuple):
+            print 'cannot reverse ', self.conf.cmap, self.conf.cmap.name
+            return
+        if cmap_name.endswith('_r'):
+            cmap_name = cmap_name[:-2]
         self.update_cmap(cmap_name)
-        
+            
     def update_cmap(self, cmap_name):
-        if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
+
+        if  self.conf.cmap_reverse:
+            cmap_name = cmap_name + '_r'
+            
         self.conf.cmap = getattr(colormap, cmap_name)
         
         self.conf.image.set_cmap(self.conf.cmap)

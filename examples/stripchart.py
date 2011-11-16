@@ -3,7 +3,7 @@ import time
 import numpy
 import wx
 
-import  MPlot
+from mplot import PlotFrame
 
 def next_data():
     t0 = time.time()
@@ -88,14 +88,15 @@ class TestFrame(wx.Frame):
     def ShowPlotFrame(self, do_raise=True):
         "make sure plot frame is enabled, and visible"
         if self.plotframe == None:
-            self.plotframe = MPlot.PlotFrame(self)
+            self.plotframe = PlotFrame(self)
         try:
             self.plotframe.Show()
         except wx.PyDeadObjectError:
-            self.plotframe = MPlot.PlotFrame(self)            
+            self.plotframe = PlotFrame(self)            
             self.plotframe.Show()
 
-        if do_raise:    self.plotframe.Raise()
+        if do_raise:
+            self.plotframe.Raise()
             
     def onStartTimer(self,event=None):
         self.count    = 0

@@ -6,7 +6,7 @@
 import wx
 import matplotlib
 
-from Closure import Closure
+from utils import Closure
 
 from plotpanel import PlotPanel
 from baseframe import BaseFrame

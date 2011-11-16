@@ -4,13 +4,13 @@
 
 import wx
 import numpy 
-import MPlot  
+import mplot  
 
 x   = numpy.arange(0.0,10.0,0.1)
 y   = numpy.sin(2*x)/(x+2)
 app = wx.PySimpleApp()
 
-pframe = MPlot.PlotFrame()
+pframe = mplot.PlotFrame()
 pframe.plot(x,y)
 pframe.set_title('Test Plot')
 pframe.set_xlabel(r'  ${ R \mathrm{(\AA)}}$  ')

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-import  MPlot
+from mplot import PlotApp
 
-f = open('examples/time.dat','r')
+f = open('time.dat','r')
 l = f.readlines()
 f.close()
 t = []
@@ -13,8 +13,8 @@ for i in l:
     x.append(float(j[1]))    
 
 
-app = MPlot.PlotApp()
-app.plot(t,x,use_dates=True)
+app = PlotApp()
+app.plot(t, x, use_dates=True, drawstyle='steps-post')
 app.set_title('Time series data:')
 app.run()
 

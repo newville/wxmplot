@@ -8,7 +8,7 @@ import time
 import os
 import wx
 import matplotlib
-from Printer import Printer
+from utils import Printer
 
 class BasePanel(wx.Panel):
     """

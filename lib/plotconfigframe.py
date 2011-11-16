@@ -10,12 +10,11 @@ from matplotlib import rcParams
 from matplotlib.colors import colorConverter
 from matplotlib.font_manager import fontManager, FontProperties
 
-from Closure import Closure
-from PlotConfig import PlotConfig
+from utils import Closure, LabelEntry
+from config import PlotConfig
 from colors import hexcolor
-from LabelEntry import LabelEntry
 
-def mpl_color(c, default = (242,243,244)):
+def mpl_color(c, default = (242, 243, 244)):
     try:
         r = map(lambda x: int(x*255), colorConverter.to_rgb(c))
         return tuple(r)

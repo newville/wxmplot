@@ -3,7 +3,6 @@
 color support for MPlot.
 
 """
-import types
 
 x11_colors = {'aliceblue': (240,248,255), 'antiquewhite': (250,235,215),
               'antiquewhite1': (255,239,219), 'antiquewhite2': (238,223,204),
@@ -305,7 +304,7 @@ def hex2rgb(hex):
 
 
 def rgb2hex(rgb):
-    if type(rgb) == types.TupleType:
+    if isinstance(rgb, tuple):
         col = '#%02x%02x%02x' % rgb[:3]
     else:
         try:
@@ -318,26 +317,28 @@ def rgb2hex(rgb):
 def hexcolor(color):
     " returns hex color given a tuple, wx.Color, or X11 named color"
     # first, if this is a hex color already, return!
-    if type(color) == types.StringType:
-        if color[0:1] == '#' and len(color)==7: return color
+    if isinstance(color, (str, unicode)):
+        if color[0] == '#' and len(color)==7:
+            return color
 
     # now, get color to an rgb tuple 
     rgb = (0,0,0)
-    if type(color) == types.TupleType:
+    if isinstance(color, tuple):
         rgb = color
-    elif type(color) == types.ListType:
+    elif isinstance(color, list):
         rgb = tuple(color)
-    elif type(color) == types.StringType:
+    elif isinstance(color, (str, unicode)):
         c = color.lower()
         if c.find(' ')>-1:    c = c.replace(' ','')
         if c.find('gray')>-1: c = c.replace('gray','grey')
-        if c in x11_colors.keys():  rgb = x11_colors[c]
+        if c in x11_colors:
+            rgb = x11_colors[c]
     else:
         try:
             rgb = color.Red(), color.Green(), color.Blue()
         except:
             pass
-    #
+
     # convert rgb to hex color
     col = '#%02x%02x%02x' % (rgb)
     return col.upper()

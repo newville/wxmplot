@@ -7,7 +7,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-from LabelEntry import LabelEntry
+from utils import LabelEntry
 
 ColorMap_List = ('gray', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
                  'cool', 'copper', 'spring', 'summer', 'autumn', 'winter', 

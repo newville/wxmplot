@@ -1,15 +1,105 @@
 #!/usr/bin/python
-##
-## wxPython Printer class for Matplotlib WX backend.
-##
-import wx
+#
 
+import wx
+import sys
+
+class Closure:
+    """A very simple callback class to emulate a closure (reference to
+    a function with arguments) in python.
+
+    This class holds a user-defined function to be executed when the
+    class is invoked as a function.  This is useful in many situations,
+    especially for 'callbacks' where lambda's are quite enough.
+    Many Tkinter 'actions' can use such callbacks.
+
+    >>>def my_action(x=None):
+    ...    print('my action: x = ', x)
+    >>>c = Closure(my_action,x=1)
+    ..... sometime later ...
+    >>>c()
+     my action: x = 1
+    >>>c(x=2)
+     my action: x = 2
+
+    based on Command class from J. Grayson's Tkinter book.
+    """
+    def __init__(self, func=None, *args, **kws):
+        self.func  = func
+        self.kws   = kws
+        self.args  = args
+
+    def __call__(self,  *args, **kws):
+        self.kws.update(kws)
+        if hasattr(self.func, '__call__'):
+            self.args = args
+            return self.func(*self.args, **self.kws)
+
+
+class LabelEntry(wx.TextCtrl):
+    """
+    simple extension of TextCtrl.  Typical usage:
+#  entry = LabelEntry(self, -1, value='22',
+#                     color='black',
+#                     labeltext='X',labelbgcolor='green',
+#                     style=wx.ALIGN_LEFT|wx.ST_NO_AUTORESIZE)
+#  row   = wx.BoxSizer(wx.HORIZONTAL)
+#  row.Add(entry.label, 1,wx.ALIGN_LEFT|wx.EXPAND)
+#  row.Add(entry,    1,wx.ALIGN_LEFT|wx.EXPAND)        
+
+    """
+    def __init__(self,parent,value,size=-1,
+                 font=None, action=None,
+                 bgcolor=None, color=None, style=None,
+                 labeltext=None, labelsize=-1,
+                 labelcolor=None, labelbgcolor=None):
+
+        if style is None:
+            style=wx.ALIGN_LEFT|wx.ST_NO_AUTORESIZE|wx.TE_PROCESS_ENTER
+        if action is None:
+            action = self.GetValue
+        self.action = action
+        
+        if labeltext is not None:
+            self.label = wx.StaticText(parent, -1, labeltext,
+                                       size = (labelsize,-1),
+                                       style = style)
+            if labelcolor:
+                self.label.SetForegroundColour(labelcolor)
+            if labelbgcolor:
+                self.label.SetBackgroundColour(labelbgcolor)
+            if font is not None:
+                self.label.SetFont(font)
+
+        try:
+            value = str(value)
+        except:
+            value = ' '
+
+        wx.TextCtrl.__init__(self, parent, -1, value,
+                             size=(size,-1),style=style)
+
+        self.Bind(wx.EVT_TEXT_ENTER, self.__act)
+        self.Bind(wx.EVT_KILL_FOCUS, self.__act)
+        if font is not None:
+            self.SetFont(font)
+        if color:
+            self.SetForegroundColour(color)
+        if bgcolor:
+            self.SetBackgroundColour(bgcolor)
+        
+    def __act(self,event=None):
+        self.action(event=event)
+        val = self.GetValue()
+        event.Skip()
+        return val
+    
 class PrintoutWx(wx.Printout):
     """Simple wrapper around wx Printout class -- all the real work
     here is scaling the matplotlib canvas bitmap to the current
     printer's definition.
     """
-    def __init__(self, canvas, width=6.0,margin=0.25, title='MPlot Figure'):
+    def __init__(self, canvas, width=6.0, margin=0.25, title='MPlot Figure'):
         wx.Printout.__init__(self,title=title)
         self.canvas = canvas
         self.width  = width

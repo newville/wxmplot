@@ -14,8 +14,8 @@ from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.dates import AutoDateFormatter, AutoDateLocator
 
-from PlotConfig import PlotConfig
-from PlotConfigFrame import PlotConfigFrame
+from config import PlotConfig
+from plotconfigframe import PlotConfigFrame
 
 from basepanel import BasePanel
 

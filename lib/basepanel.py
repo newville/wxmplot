@@ -31,6 +31,7 @@ class BasePanel(wx.Panel):
 
         self.cursor_mode='cursor'
         self.cursor_save='cursor'
+        self.cursor_xy = (None, None)
         self._yfmt = '%.4f'
         self._xfmt = '%.4f'
         self.use_dates = False
@@ -166,7 +167,8 @@ class BasePanel(wx.Panel):
     ## GUI events
     ####
     def reportLeftDown(self,event=None,**kw):
-        if event == None: return                
+        if event == None: return
+        self.cursor_xy = (event.xdata,event.ydata)
         self.write_message("%f, %f" % (event.xdata,event.ydata), panel=1)
         
     def onLeftDown(self,event=None):

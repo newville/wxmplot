@@ -47,6 +47,8 @@ class PlotPanel(BasePanel):
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
+        self._xx = None
+        self._xbkg = None
 
     def plot(self,xdata,ydata, label=None, dy=None,
              color=None,  style =None, linewidth=None,
@@ -57,6 +59,8 @@ class PlotPanel(BasePanel):
         plot (that is, create a newplot: clear, then oplot)
         """
 
+        self._xx = None
+        self._xbkg = None        
         self.axes.cla()
         self.conf.ntrace  = 0
         self.data_range   = [min(xdata),max(xdata),
@@ -131,7 +135,8 @@ class PlotPanel(BasePanel):
 
     def set_xylims(self, xyrange,autoscale=True, scalex=True, scaley=True):
         """ update xy limits of a plot, as used with .update_line() """
-        xmin,xmax,ymin,ymax = xyrange
+        xmin, xmax, ymin, ymax = xyrange
+        # print 'panel set xylims' , xyrange
         if autoscale:
             if scalex:
                 xmin, xmax= self.data_range[0], self.data_range[1]
@@ -146,7 +151,8 @@ class PlotPanel(BasePanel):
                 self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             if scaley:
                 self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))            
-            
+        #self.canvas.draw()
+        
     def clear(self):
         """ clear plot """
         self.axes.cla()
@@ -160,6 +166,10 @@ class PlotPanel(BasePanel):
         self.zoom_lims = [None]
         self.unzoom(event)
         
+    def get_cursor(self):
+        """ return cursor position"""
+        return self.cursor_xy
+
     def unzoom(self,event=None):
         """ zoom out 1 level, or to full data range """
         lims = None
@@ -235,21 +245,29 @@ class PlotPanel(BasePanel):
         # define zoom box properties
         self.conf.zoombrush = wx.Brush('#080830',  wx.SOLID)
         self.conf.zoompen   = wx.Pen('#707070', 2, wx.SOLID) # SOLID)
-
         self.addCanvasEvents()
 
     def update_line(self,trace,xdata,ydata):
         """ update a single trace, for faster redraw """
-        x = self.conf.get_mpl_line(trace)
-        x.set_data(xdata,ydata)
+        # print 'update ', trace, self._xx, self._xbkg
+        if self._xx is None:
+            self._xx     = self.conf.get_mpl_line(trace)
+            self._xbkg = self.canvas.copy_from_bbox(self.axes.bbox)
+            
+        self.canvas.restore_region(self._xbkg)
+        
+        self._xx.set_data(xdata,ydata)
         self.data_range = [min(self.data_range[0],xdata.min()),
                            max(self.data_range[1],xdata.max()),
                            min(self.data_range[2],ydata.min()),
                            max(self.data_range[3],ydata.max())]
 
         # this defeats zooming, which gets ugly in this fast-mode anyway.
-        self.cursor_mode = 'cursor'
-        self.canvas.draw()
+        self.axes.draw_artist(self._xx)
+        self.canvas.blit(self.axes.bbox)
+
+        # self.canvas.draw()
+        # self.cursor_mode = 'cursor'
 
     ####
     ## GUI events

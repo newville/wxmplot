@@ -21,6 +21,10 @@ class PlotFrame(BaseFrame):
         """plot after clearing current plot """        
         self.panel.plot(x,y,**kw)
         
+    def get_cursor(self):
+        """ return cursor position"""
+        return self.panel.cursor_xy
+
     def oplot(self,x,y,**kw):
         """generic plotting method, overplotting any existing plot """
         self.panel.oplot(x,y,**kw)

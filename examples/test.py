@@ -1,6 +1,6 @@
 import wx
 import time, os, sys
-from numpy import arange, sin, cos, exp, pi
+from numpy import arange, sin, cos, exp, pi, linspace
 
 from mplot.plotframe import PlotFrame
 
@@ -37,28 +37,30 @@ class TestFrame(wx.Frame):
         panel      = wx.Panel(self, -1, size=(-1, -1))
         panelsizer = wx.BoxSizer(wx.VERTICAL)        
         
-        
-        b10 = wx.Button(panel, -1, 'Plot 1',    size=(-1,-1))
-        b20 = wx.Button(panel, -1, 'Plot 2',    size=(-1,-1))
+        panelsizer.Add( wx.StaticText(panel, -1, 'MPlot Examples '),
+                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT|wx.EXPAND, 10)
+
+        b10 = wx.Button(panel, -1, 'Example #1',    size=(-1,-1))
+        b20 = wx.Button(panel, -1, 'Example #2',    size=(-1,-1))
+        b22 = wx.Button(panel, -1, 'Plot with 2 axes',    size=(-1,-1))
         b31 = wx.Button(panel, -1, 'Exponential Plot',    size=(-1,-1))
         b32 = wx.Button(panel, -1, 'SemiLog Plot',    size=(-1,-1))
         b40 = wx.Button(panel, -1, 'Start Timed Plot',   size=(-1,-1))
         b50 = wx.Button(panel, -1, 'Stop Timed Plot',    size=(-1,-1))
-        b60 = wx.Button(panel, -1, 'Plot 25000 points',  size=(-1,-1))
-        
+        b60 = wx.Button(panel, -1, 'Plot 100,000 points',  size=(-1,-1))
+
         b10.Bind(wx.EVT_BUTTON,self.onPlot1)
         b20.Bind(wx.EVT_BUTTON,self.onPlot2)
+        b22.Bind(wx.EVT_BUTTON,self.onPlot4)        
         b31.Bind(wx.EVT_BUTTON,self.onPlot3)
         b32.Bind(wx.EVT_BUTTON,self.onPlotSLog)
         b40.Bind(wx.EVT_BUTTON,self.onStartTimer)
         b50.Bind(wx.EVT_BUTTON,self.onStopTimer)
         b60.Bind(wx.EVT_BUTTON,self.onPlotBig)                
 
-
-        panelsizer.Add( wx.StaticText(panel, -1, 'MPlot Examples '),
-                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT|wx.EXPAND, 10)
         panelsizer.Add(b10, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b20, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
+        panelsizer.Add(b22, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b31, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b32, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b40, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)        
@@ -83,10 +85,10 @@ class TestFrame(wx.Frame):
         self.y2 = sin(2*pi*x/30.0)
         self.y3 =  -pi + 2*(x/10. + exp(-(x-3)/5.0))
         self.y4 =  exp(0.01 + 0.5*x ) / (x+2)
+        self.y5 =  3000 * self.y3
         self.npts = len(self.x)
-
-        self.bigx   = arange(0,250,0.01)
-        self.bigy   = sin(pi*self.bigx/80)
+        self.bigx   = linspace(0, 100, 100000)
+        self.bigy   = sin(pi*self.bigx/28.0)
 
 
     def ShowPlotFrame(self, do_raise=True):
@@ -113,11 +115,20 @@ class TestFrame(wx.Frame):
         self.plotframe.oplot(self.x,self.y3,color='green',marker='+',markersize=14)
         self.plotframe.write_message("Plot 2")
 
+
     def onPlot3(self,event=None):
         self.ShowPlotFrame()        
         self.plotframe.plot( self.x,self.y4,ylog_scale=False,
                              color='black',style='dashed')
         self.plotframe.write_message("Exponential Plot")
+
+        
+    def onPlot4(self,event=None):
+        self.ShowPlotFrame()        
+        self.plotframe.plot( self.x,self.y2, color='black',style='dashed')
+        self.plotframe.oplot(self.x,self.y5, color='red', side='right')
+        self.plotframe.write_message("Plot with 2 axes")
+
 
     def onPlotSLog(self,event=None):
         self.ShowPlotFrame()        
@@ -128,7 +139,7 @@ class TestFrame(wx.Frame):
     def onPlotBig(self,event=None):
         self.ShowPlotFrame()
         t0 = time.time()
-        self.plotframe.plot(self.bigx,self.bigy)
+        self.plotframe.plot(self.bigx, self.bigy, marker='+', linewidth=0)
         dt = time.time()-t0
         self.plotframe.write_message(
             "Plot array with npts=%i, elapsed time=%8.3f s" % (len(self.bigx),dt))
@@ -147,7 +158,7 @@ class TestFrame(wx.Frame):
         self.n_update = 1
         self.time0    = time.time()
         self.start_mem= self.report_memory()
-        self.timer.Start(10)
+        self.timer.Start(25)
         
     def timer_results(self):
         if (self.count < 2): return

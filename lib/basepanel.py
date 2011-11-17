@@ -34,14 +34,15 @@ class BasePanel(wx.Panel):
         self.cursor_mode = 'cursor'
         self.cursor_save = 'cursor'
         self._yfmt = '%.4f'
+        self._y2fmt = '%.4f'
         self._xfmt = '%.4f'
         self.use_dates = False
-        self.ylog_scale = False
         self.show_config_popup = show_config_popup
         self.launch_dir  = os.getcwd()
 
         self.mouse_uptime = time.time()
-        self.zoom_lims = [None]
+        self.zoom_lims = []           # store x, y coords zoom levels
+        self.zoom_ini  = (-1, -1, -1, -1)  # store init axes, x, y coords for zoom-box
         self.rbbox = None
         self.parent = parent
         self.printer = Printer(self)
@@ -65,7 +66,7 @@ class BasePanel(wx.Panel):
         self.popup_config     = wx.NewId()
         self.popup_save   = wx.NewId()
         self.popup_menu = wx.Menu()
-        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out 1 level')
+        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out')
         self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
         self.popup_menu.AppendSeparator()
         if self.show_config_popup:
@@ -87,15 +88,15 @@ class BasePanel(wx.Panel):
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """
-        self.zoom_lims = [None]
+        if len(self.zoom_lims) > 0:
+            self.zoom_lims = [self.zoom_lims[0]]
         self.unzoom(event)
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         lims = None
         if len(self.zoom_lims) > 1:
-            self.zoom_lims.pop()
-            lims = self.zoom_lims[-1]
+            lims = self.zoom_lims.pop()
 
         ax = self.axes
         if lims is None: # auto scale
@@ -110,14 +111,21 @@ class BasePanel(wx.Panel):
                 ax.set_ybound(ax.yaxis.get_major_locator(
                     ).view_limits(ymin, ymax))
         else:
-            ax.set_xlim(lims[:2])
-            ax.set_ylim(lims[2:])
+            self.set_xylims(lims=lims[self.axes], axes=self.axes,
+                            autoscale=False)            
         txt = ''
         if len(self.zoom_lims) > 1:
             txt = 'zoom level %i' % (len(self.zoom_lims))
         self.write_message(txt)
         self.canvas.draw()
         
+    def create_right_axes(self):
+        "create right-hand y axes"
+        if len(self.fig.get_axes()) < 2:
+            ax = self.axes.twinx()
+
+        return self.fig.get_axes()[1]
+
     def get_xylims(self):
         x = self.axes.get_xlim()
         y = self.axes.get_ylim()
@@ -137,6 +145,10 @@ class BasePanel(wx.Panel):
         "set plot ylabel"
         self.conf.ylabel = s
         self.conf.relabel()
+
+    def set_y2label(self, s):
+        "set plot ylabel"
+        self.conf.relabel(y2label=s)
 
     def write_message(self, s, panel=0):
         """ write message to message handler
@@ -187,57 +199,62 @@ class BasePanel(wx.Panel):
         """ left button down: report x,y coords, start zooming mode"""
         if event is None:
             return
-        if event.inaxes != self.axes:
+        if event.inaxes not in self.fig.get_axes():
             return
-        self.conf.zoom_x = event.x
-        self.conf.zoom_y = event.y
-        # print 'basepaneel LeftDown: ', event.x, event.y,event.xdata,event.ydata,event.inaxes
-        if event.inaxes is not None:
-            self.conf.zoom_init = (event.xdata, event.ydata)
-            self.reportLeftDown(event=event)
-        else:
-            self.conf.zoom_init = self.axes.transData.inverted(
-                ).transform((event.x, event.y))
-        self.cursor_mode = 'zoom'
 
+        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
+        if event.inaxes is not None:
+            self.reportLeftDown(event=event)
+
+        self.cursor_mode = 'zoom'
         self.ForwardEvent(event=event.guiEvent)
 
     def zoom_OK(self, start, stop):
         return True
 
     def onLeftUp(self, event=None):
-        """ left button up: zoom in on selected region?? """
-
+        """ left button up: zoom in on selected region"""
         if event is None:
             return
 
+        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:
-            dx = abs(self.conf.zoom_x - event.x)
-            dy = abs(self.conf.zoom_y - event.y)
+            dx = abs(ini_x - event.x)
+            dy = abs(ini_y - event.y)
         except:
             dx, dy = 0, 0
         t0 = time.time()
-        if ((dx > 6) and (dy > 6) and (t0-self.mouse_uptime)>0.1 and
+
+        if ((dx > 4) and (dy > 4) and (t0-self.mouse_uptime)>0.1 and
             self.cursor_mode == 'zoom'):
             self.mouse_uptime = t0
-            if event.inaxes is not None:
-                _end = (event.xdata, event.ydata)
-            else: # allows zooming in to go slightly out of range....
-                _end =  self.axes.transData.inverted(
-                    ).transform((event.x, event.y))
+            olims = {}
+            nlims = {}
+            for ax in self.fig.get_axes():
+                olims[ax] = ax.get_xlim(), ax.get_ylim()
+            self.zoom_lims.append(olims)
+            msg = 'zoom level %i ' % (len(self.zoom_lims))
+            # for multiple axes, we first collect all the new limits, and only
+            # then apply them
+            for ax in self.fig.get_axes():
+                try:
+                    x1, y1 = ax.transData.inverted().transform((event.x, event.y))
+                except:
+                    x1, y1 =  event.xdata, event.ydata
+                try:
+                    x0, y0 = ax.transData.inverted().transform((ini_x, ini_y))
+                except:
+                    x0, y0 =  ini_xd, ini_yd
 
-            try:
-                _ini = self.conf.zoom_init
-                _lim = (min(_ini[0], _end[0]), max(_ini[0], _end[0]),
-                        min(_ini[1], _end[1]), max(_ini[1], _end[1]))
+                nlims[ax] = ((min(x0, x1), max(x0, x1)),
+                             (min(y0, y1), max(y0, y1)))
 
-                if self.zoom_OK(_ini,  _end):
-                    self.set_xylims(_lim, autoscale=False)
-                    self.zoom_lims.append(_lim)
-                    txt = 'zoom level %i ' % (len(self.zoom_lims)-1)
-                    self.write_message(txt, panel=1)
-            except:
-                self.write_message("Cannot Zoom")
+                                        
+            # now appply limits:
+            for ax in nlims:
+                self.set_xylims(lims=nlims[ax], axes=ax, autoscale=False)
+
+            self.write_message(msg, panel=1)
 
         self.rbbox = None
         self.cursor_mode = 'cursor'
@@ -260,7 +277,7 @@ class BasePanel(wx.Panel):
             return
         self.cursor_mode = 'cursor'
         # note that the matplotlib event location have to be converted
-        if event.inaxes:
+        if event.inaxes is not None:
             pos = event.guiEvent.GetPosition()
             wx.CallAfter(self.PopupMenu, self.popup_menu, pos)
         self.ForwardEvent(event=event.guiEvent)
@@ -308,16 +325,22 @@ class BasePanel(wx.Panel):
         " y-axis formatter "
         return self.__format(y, type='y')
 
+    def y2formatter(self, y, pos):
+        " y-axis formatter "
+        return self.__format(y, type='y2')
+
     def __format(self, x, type='x'):
         """ home built tick formatter to use with FuncFormatter():
         x     value to be formatted
-        type  'x' or 'y' to set which list of ticks to get
+        type  'x' or 'y' or 'y2' to set which list of ticks to get
 
         also sets self._yfmt/self._xfmt for statusbar
         """
         fmt, v = '%1.5g','%1.5g'
         if type == 'y':
             ax = self.axes.yaxis
+        elif type == 'y2' and len(self.fig.get_axes()) > 1:
+            ax =  self.fig.get_axes()[1].yaxis
         else:
             ax = self.axes.xaxis
 
@@ -355,6 +378,8 @@ class BasePanel(wx.Panel):
             s = s.replace('-0','-')
         if type == 'y':
             self._yfmt = v
+        if type == 'y2':
+            self._y2fmt = v
         if type == 'x':
             self._xfmt = v
         return s
@@ -409,9 +434,9 @@ class BasePanel(wx.Panel):
         if event is None:
             return
 
+        ax = event.inaxes
         if self.cursor_mode == 'cursor':
-            if event.inaxes is not None:
-                self.conf.zoom_init = (event.xdata, event.ydata)
+            if ax is not None:
                 self.reportMotion(event=event)
             return
         try:
@@ -420,16 +445,17 @@ class BasePanel(wx.Panel):
             self.cursor_mode == 'cursor'
             return
 
-        x0     = min(x, self.conf.zoom_x)
-        ymax   = max(y, self.conf.zoom_y)
-        width  = abs(x -self.conf.zoom_x)
-        height = abs(y -self.conf.zoom_y)
+        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        x0     = min(x, ini_x)
+        ymax   = max(y, ini_y)
+        width  = abs(x -ini_x)
+        height = abs(y -ini_y)
         y0     = self.canvas.figure.bbox.height - ymax
 
         zdc = wx.ClientDC(self.canvas)
         zdc.SetLogicalFunction(wx.XOR)
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
-        zdc.SetPen(wx.Pen('WHITE', 2, wx.SOLID))
+        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
         zdc.ResetBoundingBox()
         zdc.BeginDrawing()
 
@@ -444,8 +470,13 @@ class BasePanel(wx.Panel):
 
     def reportMotion(self, event=None):
         fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
-        self.write_message(fmt % (event.xdata, event.ydata), panel=1)
-
+        y  = event.ydata
+        if len(self.fig.get_axes()) > 1:
+            try:
+                x, y = self.axes.transData.inverted().transform((event.x, event.y))
+            except:
+                pass
+        self.write_message(fmt % (event.xdata, y), panel=1)
 
     def Print(self, event=None, **kw):
         self.printer.Print(event=event, **kw)

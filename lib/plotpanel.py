@@ -36,79 +36,89 @@ class PlotPanel(BasePanel):
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
         self.conf = PlotConfig()
-        self.data_range = None
+        self.data_range = {}
         self.win_config = None
         self.cursor_callback = None
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
 
-    def plot(self, xdata, ydata, label=None, dy=None,
-             color=None,  style =None, linewidth=None,
-             marker=None,   markersize=None,   drawstyle=None,
-             use_dates=False, ylog_scale=False, grid=None,
-             title=None,  xlabel=None, ylabel=None,  **kw):
+    def plot(self, xdata, ydata, side='left', title=None,
+             xlabel=None, ylabel=None, y2label=None,
+             use_dates=False, grid=None,  **kw):
         """
-        plot (that is, create a newplot: clear, then oplot)
+        plot (that is, create a new plot: clear, then oplot)
         """
 
-        self.axes.cla()
+        allaxes = self.fig.get_axes()
+        if len(allaxes) > 1:
+            for ax in allaxes[1:]:
+                self.fig.delaxes(ax)
+
+        axes = self.axes
+        if side == 'right':
+            axes = self.create_right_axes()
+        axes.cla()
         self.conf.ntrace  = 0
-        self.data_range   = [min(xdata), max(xdata),
-                             min(ydata), max(ydata)]
+        self.data_range[axes] = [[min(xdata), max(xdata)],
+                                 [min(ydata), max(ydata)]]
         if xlabel is not None:
             self.set_xlabel(xlabel)
         if ylabel is not None:
             self.set_ylabel(ylabel)
+        if y2label is not None:
+            self.set_y2label(y2label)
         if title  is not None:
             self.set_title(title)
         if use_dates is not None:
             self.use_dates  = use_dates
-        if ylog_scale is not None:
-            self.ylog_scale = ylog_scale
 
         if grid:
             self.conf.show_grid = grid
 
-        return self.oplot(xdata, ydata, label=label,
-                          color=color, style=style,
-                          drawstyle=drawstyle,
-                          linewidth=linewidth, dy=dy,
-                          marker=marker, markersize=markersize,  **kw)
+        return self.oplot(xdata, ydata, side=side, **kw)
 
-    def oplot(self, xdata, ydata, label=None, color=None, style=None,
-              linewidth=None, marker=None, markersize=None,
-              drawstyle=None, dy=None,
+    def oplot(self, xdata, ydata, side='left', label=None,
+              dy=None, xylims=None, ylog_scale=False, 
               xmin=None, xmax=None, ymin=None, ymax=None,
+              color=None, style=None, drawstyle=None, 
+              linewidth=None, marker=None, markersize=None,
               autoscale=True, refresh=True, yaxis='left', **kw):
         """ basic plot method, overplotting any existing plot """
         # set y scale to log/linear
         yscale = 'linear'
-        if self.ylog_scale and min(ydata) > 0:
+        if ylog_scale and min(ydata) > 0:
             yscale = 'log'
-        self.axes.set_yscale(yscale, basey=10)
+
+        axes = self.axes
+        if side == 'right':
+            axes = self.create_right_axes()
+
+        axes.set_yscale(yscale, basey=10)
 
         if dy is None:
-            _lines = self.axes.plot(xdata, ydata, drawstyle=drawstyle)
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle)
         else:
-            _lines = self.axes.errorbar(xdata, ydata, yerr=dy)
+            _lines = axes.errorbar(xdata, ydata, yerr=dy)
 
-        if self.data_range is None:
-            self.data_range   = [min(xdata), max(xdata),
-                                 min(ydata), max(ydata)]
+        if axes not in self.data_range:
+            self.data_range[axes] = [[min(xdata), max(xdata)],
+                                     [min(ydata), max(ydata)]]
 
-        self.data_range    = [min((self.data_range[0], min(xdata))),
-                              max((self.data_range[1], max(xdata))),
-                              min((self.data_range[2], min(ydata))),
-                              max((self.data_range[3], max(ydata)))]
-        if xmin is not None:
-            self.data_range[0] = max(xmin, self.data_range[0])
+        dr = self.data_range[axes]
+        dr = self.data_range[axes] = [[min(dr[0][0], min(xdata)),
+                                       max(dr[0][1], max(xdata))],
+                                      [min(dr[1][0], min(ydata)),
+                                       max(dr[1][1], max(ydata))]]
+
         if xmax is not None:
-            self.data_range[1] = min(xmax, self.data_range[1])
+            self.data_range[axes][0] = max(xmin, dr[0][0])
+        if xmax is not None:
+            self.data_range[axes][1] = min(xmax, dr[0][1])
         if ymin is not None:
-            self.data_range[2] = max(ymin, self.data_range[2])
+            self.data_range[axes][2] = max(ymin, dr[1][0])
         if ymax is not None:
-            self.data_range[3] = min(ymax, self.data_range[3])
+            self.data_range[axes][3] = min(ymax, dr[1][1])
         
         cnf  = self.conf
         n    = cnf.ntrace
@@ -129,96 +139,77 @@ class PlotPanel(BasePanel):
         if markersize is not None:
             cnf.set_trace_markersize(markersize)
 
-        self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        if axes == self.axes:
+            axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
+        else:
+            axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
+
+        axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
 
         if refresh:
             cnf.refresh_trace(n)
             cnf.relabel()
 
-        if autoscale and (xmin is None and xmax is None and
-                          ymin is None and ymax is None):
-            self.axes.autoscale_view()
-            self.zoom_lims = [None]
-        else:
-            self.set_xylims(self.data_range, autoscale=False)
-            
-        if self.conf.show_grid:
+        if xylims is not None:
+            self.set_xylims(xylims, autoscale=False)
+        elif autoscale:
+            axes.autoscale_view()
+            self.unzoom_all()
+        if self.conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
-            for i in self.axes.get_xgridlines()+self.axes.get_ygridlines():
+            for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(self.conf.grid_color)
-            self.axes.grid(True)
+            axes.grid(True)
+        else:
+            axes.grid(False)
 
         self.canvas.draw()
         self.canvas.Refresh()
         cnf.ntrace = cnf.ntrace + 1
         return _lines
 
-    def set_xylims(self, xyrange, autoscale=True, scalex=True, scaley=True):
+    def set_xylims(self, lims, axes=None, side=None, autoscale=True):
         """ update xy limits of a plot, as used with .update_line() """
-        xmin, xmax, ymin, ymax = xyrange
-        if autoscale:
-            if scalex:
-                xmin, xmax = self.data_range[0], self.data_range[1]
-            if scaley:
-                ymin, ymax = self.data_range[2], self.data_range[3]
 
-        self.axes.set_xlim((xmin, xmax), emit=True)
-        self.axes.set_ylim((ymin, ymax), emit=True)
-        self.axes.update_datalim(((xmin, ymin), (xmax, ymax)))
+        if axes is None:
+            axes = self.axes
+        if side == 'right' and len(self.fig.get_axes()) == 2:
+            axes = self.fig.get_axes()[1]
+
         if autoscale:
-            if scalex:
-                self.axes.set_xbound(self.axes.xaxis.get_major_locator(
-                    ).view_limits(xmin,xmax))
-            if scaley:
-                self.axes.set_ybound(self.axes.yaxis.get_major_locator(
-                    ).view_limits(ymin,ymax))
+            (xmin, xmax), (ymin, ymax) = self.data_range[axes]
+        else:
+            (xmin, xmax), (ymin, ymax) = lims
+
+        axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
+        axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
+        axes.set_xlim((xmin, xmax), emit=True)
+        axes.set_ylim((ymin, ymax), emit=True)
 
     def clear(self):
         """ clear plot """
-        self.axes.cla()
+        for ax in self.fig.get_axes():
+            ax.cla()
+
         self.conf.ntrace = 0
         self.conf.xlabel = ''
         self.conf.ylabel = ''
+        self.conf.y2label = ''
         self.conf.title  = ''
-
-    def unzoom_all(self, event=None):
-        """ zoom out full data range """
-        self.zoom_lims = [None]
-        self.unzoom(event)
 
     def unzoom(self, event=None):
         """ zoom out 1 level, or to full data range """
-        lims = None
-        if len(self.zoom_lims) > 1:
-            self.zoom_lims.pop()
-            lims = self.zoom_lims[-1]
+        if len(self.zoom_lims) < 1:
+            return
 
-        if lims is None: # auto scale
-            self.zoom_lims = [None]
-            xmin, xmax, ymin, ymax = self.data_range
-            self.axes.set_xlim((xmin, xmax), emit=True)
-            self.axes.set_ylim((ymin, ymax), emit=True)
-            self.axes.update_datalim(((xmin, ymin), (xmax, ymax)))
-            self.axes.set_xbound(self.axes.xaxis.get_major_locator(
-                ).view_limits(xmin,xmax))
-            self.axes.set_ybound(self.axes.yaxis.get_major_locator(
-                ).view_limits(ymin,ymax))
-
-        else:
-            self.axes.set_xlim(lims[:2])
-            self.axes.set_ylim(lims[2:])
+        for ax, lims in self.zoom_lims.pop().items():
+            self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
         txt = ''
         if len(self.zoom_lims)>1:
             txt = 'zoom level %i' % (len(self.zoom_lims))
         self.write_message(txt)
         self.canvas.draw()
-
-    def set_ylabel(self, s):
-        "set plot ylabel"
-        self.conf.ylabel = s
-        self.conf.relabel()
 
     def configure(self, event=None):
         try:
@@ -236,22 +227,18 @@ class PlotPanel(BasePanel):
 
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
-        self.axes  = self.fig.add_axes([0.12, 0.12, 0.80, 0.80],
-                                       axisbg='#FFFFFE')
+        self.axes  = self.fig.add_axes([0.12, 0.12, 0.76, 0.76],
+                                       axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)
         self.printer.canvas = self.canvas
-
         self.set_bg()
-
-        self.conf.axes = self.axes
-        self.conf.fig  = self.fig
         self.conf.canvas = self.canvas
         self.canvas.SetCursor(wx.StockCursor(wx.CURSOR_CROSS))
 
         # overwrite ScalarFormatter from ticker.py here:
-        self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
 
         # This way of adding to sizer allows resizing
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -260,21 +247,20 @@ class PlotPanel(BasePanel):
         self.SetSizer(sizer)
         self.Fit()
 
-        # define zoom box properties
-        self.conf.zoombrush = wx.Brush('#F8F8F000',  wx.TRANSPARENT)
-        self.conf.zoompen   = wx.Pen(  wx.BLACK,  2, wx.SOLID)
-
         self.addCanvasEvents()
 
-    def update_line(self, trace, xdata, ydata):
+    def update_line(self, trace, xdata, ydata, side='left'):
         """ update a single trace, for faster redraw """
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
-        self.data_range = [min(self.data_range[0], xdata.min()),
-                           max(self.data_range[1], xdata.max()),
-                           min(self.data_range[2], ydata.min()),
-                           max(self.data_range[3], ydata.max())]
-
+        axes = self.axes
+        if side == 'right':
+            axes = self.create_right_axes()
+        dr = self.data_range[axes]
+        self.data_range[axes] = [[min(dr[0][0], xdata.min()),
+                                  max(dr[0][1], xdata.max())],
+                                 [min(dr[1][0], ydata.min()),
+                                  max(dr[1][1], ydata.max())]]
         # this defeats zooming, which gets ugly in this fast-mode anyway.
         self.cursor_mode = 'cursor'
         self.canvas.draw()
@@ -285,8 +271,24 @@ class PlotPanel(BasePanel):
     def reportLeftDown(self, event=None):
         if event is None:
             return
-        fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
-        self.write_message(fmt % (event.xdata, event.ydata), panel=0)
+        ex, ey = event.x, event.y
+        msg = ''
+        try:
+            x, y = self.axes.transData.inverted().transform((ex, ey))
+        except:
+            x, y = event.xdata, event.ydata
+
+        msg = ("X,Y= %s, %s" % (self._xfmt, self._yfmt)) % (x, y)
+
+        if len(self.fig.get_axes()) > 1:
+            ax2 = self.fig.get_axes()[1]
+            try:
+                x2, y2 = ax2.transData.inverted().transform((ex, ey))
+                msg = "X,Y,Y2= %s, %s, %s" % (self._xfmt, self._yfmt,
+                                              self._y2fmt) % (x, y, y2)
+            except:
+                pass
+        self.write_message(msg,  panel=0)
         if hasattr(self.cursor_callback , '__call__'):
             self.cursor_callback(x=event.xdata, y=event.ydata)
 

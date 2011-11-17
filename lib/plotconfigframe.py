@@ -31,15 +31,15 @@ class PlotConfigFrame(wx.Frame):
     def __init__(self, config):
         if config is None: config = PlotConfig()
         self.conf   = config
-        self.axes   = self.conf.axes
+
         self.canvas = self.conf.canvas
-        
+        self.axes = self.canvas.figure.get_axes()        
         self.conf.relabel()
         self.DrawPanel()
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL 
-        wx.Frame.__init__(self, None,-1, 'Configure MPlot', style=style)
+        wx.Frame.__init__(self, None,-1, 'Configure 2D Plot', style=style)
         wx.Frame.SetBackgroundColour(self,"#F8F8F0")
         
         panel = wx.Panel(self, -1)
@@ -50,7 +50,7 @@ class PlotConfigFrame(wx.Frame):
 
         topsizer  = wx.GridBagSizer(5,5)
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-        ltitle = wx.StaticText(panel, -1, 'MPlot Configuration',
+        ltitle = wx.StaticText(panel, -1, 'Plot Configuration',
                               style=labstyle)
         ltitle.SetFont(Font)
         ltitle.SetForegroundColour("Blue")
@@ -77,12 +77,13 @@ class PlotConfigFrame(wx.Frame):
         tcol = wx.StaticText(panel, -1, 'Colors',style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-        
-        col = mpl_color(self.axes.get_axis_bgcolor(),default=(255,255,252))
-        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=wx.DefaultSize)
+
+        ax = self.axes[0]
+        col = mpl_color(ax.get_axis_bgcolor(),default=(255,255,252))
+        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(110, 25))
        
-        col = mpl_color(self.axes.get_xgridlines()[0].get_color(),default=(240,240,240))
-        gridcol = csel.ColourSelect(panel, -1, "Grid",col, size=wx.DefaultSize)
+        col = mpl_color(ax.get_xgridlines()[0].get_color(),default=(240,240,240))
+        gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(45, 25))
  
         bgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor,argu='bg'))
         gridcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu='grid')) 
@@ -231,10 +232,12 @@ class PlotConfigFrame(wx.Frame):
             self.conf.set_trace_color(color,trace=int(argu[6:]))
             self.redraw_legend()            
         elif argu == 'grid':
-            for i in self.axes.get_xgridlines()+self.axes.get_ygridlines():
-                i.set_color(color)
+            for ax in self.axes:
+                for i in ax.get_xgridlines()+ax.get_ygridlines():
+                    i.set_color(color)
         elif argu == 'bg':
-            self.axes.set_axis_bgcolor(color)
+            for ax in self.axes:
+                ax.set_axis_bgcolor(color)
 
         self.canvas.draw()
 
@@ -275,8 +278,10 @@ class PlotConfigFrame(wx.Frame):
         if argu=='size':
             self.conf.labelfont.set_size(event.GetInt())
             self.conf.titlefont.set_size(event.GetInt()+2)
-            for lab in self.axes.get_xticklabels()+self.axes.get_yticklabels():
-                lab.set_fontsize( event.GetInt()-1)
+            for ax in self.axes:
+                for lab in ax.get_xticklabels()+ax.get_yticklabels():
+                    lab.set_fontsize( event.GetInt()-1)
+
             self.canvas.draw()            
             return
 
@@ -323,7 +328,9 @@ class PlotConfigFrame(wx.Frame):
 
     def onShowGrid(self,event):
         self.conf.show_grid = event.IsChecked()
-        self.axes.grid(event.IsChecked())
+        self.axes[0].grid(event.IsChecked())
+        for ax in self.axes[1:]:
+            ax.grid(False)
         self.canvas.draw()
 
     def onShowLegend(self,event,argu=''):
@@ -355,7 +362,10 @@ class PlotConfigFrame(wx.Frame):
             pass
 
         labs = []
-        lins = self.axes.get_lines()
+        lins = []
+        for ax in self.axes:
+            lins.extend(ax.get_lines())
+
         for l in lins:
             xl = l.get_label()
             if not self.conf.show_legend: xl = ''
@@ -363,9 +373,9 @@ class PlotConfigFrame(wx.Frame):
         labs = tuple(labs)
 
         if (self.conf.legend_onaxis == 'off plot'):
-            lgn = self.conf.fig.legend
+            lgn = self.conf.canvas.figure.legend
         else:
-            lgn = self.conf.axes.legend
+            lgn = self.axes[0].legend
 
         if (self.conf.show_legend):
             self.conf.mpl_legend = lgn(lins, labs, loc=self.conf.legend_loc)

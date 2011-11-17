@@ -58,11 +58,16 @@ class ImagePanel(BasePanel):
         self.axes.set_axis_off()
         self.unzoom(set_bounds=False)
         
-    def set_xylims(self, xyrange,autoscale=True):
+    def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
-        xmin,xmax,ymin,ymax = xyrange
+        if axes is None:
+            axes = self.axes
+
         if autoscale:
-            xmin,xmax,ymin,ymax = self.data_range
+            (xmin, xmax), (ymin, ymax) = self.data_range
+        else:
+            (xmin, xmax), (ymin, ymax) = lims
+            
             
         if abs(xmax-xmin) < 1.90:
             xmin  = 0.5*(xmax+xmin) - 1
@@ -83,11 +88,6 @@ class ImagePanel(BasePanel):
         """ clear plot """
         self.axes.cla()
         self.conf.title  = ''
-
-    def unzoom_all(self,event=None):
-        """ zoom out full data range """
-        self.zoom_lims = [None]
-        self.unzoom(event,set_bounds=False)
 
     def configure(self,event=None):
         try:
@@ -143,12 +143,15 @@ class ImagePanel(BasePanel):
 
     def zoom_OK(self, start,stop):
         """ returns whether a requested zoom is acceptable: rejects zooms that are too small"""
-        # print 'zoom ok ', start, stop, self.data_range
-        xmax = self.data_range[1]
-        ymax = self.data_range[3]
-        return  ((start[0] > 0    or stop[0] > 0) and
-                 (start[1] > 0    or stop[1] > 0) and
-                 (start[0] < xmax or stop[0] < xmax) and
-                 (start[1] < ymax or stop[1] < ymax) and
-                 (abs(start[0] - stop[0]) > 1.25) and
-                 (abs(start[1] - stop[1]) > 1.25))
+        return True
+#     
+#         # print 'zoom ok ', start, stop, self.data_range
+#         xmax = self.data_range[1]
+#         ymax = self.data_range[3]
+#         return  ((start[0] > 0    or stop[0] > 0) and
+#                  (start[1] > 0    or stop[1] > 0) and
+#                  (start[0] < xmax or stop[0] < xmax) and
+#                  (start[1] < ymax or stop[1] < ymax) and
+#                  (abs(start[0] - stop[0]) > 1.25) and
+#                  (abs(start[1] - stop[1]) > 1.25))
+# 

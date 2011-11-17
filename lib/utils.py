@@ -132,9 +132,15 @@ class PrintoutWx(wx.Printout):
         # set figure resolution,bg color for printer
         self.canvas.figure.dpi = ppw
         self.canvas.figure.set_facecolor('#FFFFFF')
-        self.canvas.bitmap.SetWidth(  int(self.canvas.bitmap.GetWidth() * vscale))
-        self.canvas.bitmap.SetHeight( int(self.canvas.bitmap.GetHeight()* vscale))
-        self.canvas.draw()
+        self.canvas.bitmap.SetWidth(int(self.canvas.bitmap.GetWidth() * vscale))
+        self.canvas.bitmap.SetHeight(int(self.canvas.bitmap.GetHeight()* vscale))
+
+        # occasional crash here?
+        try:
+            self.canvas.draw()
+        except:
+            return
+        
         # page may need additional scaling on preview
         page_scale = 1.0
         if self.IsPreview():   page_scale = float(dcw)/pgw

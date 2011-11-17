@@ -191,11 +191,11 @@ class TestFrame(wx.Frame):
             nx = self.n_update = min(self.npts,3+int(self.n_update*1.25))
             if nx > int(0.85*self.npts):
                 nx = self.n_update = self.npts
-                xylims = (min(self.x),max(self.x),
-                          min(self.y1),max(self.y1))
+                xylims = ((min(self.x),max(self.x)),
+                          (min(self.y1),max(self.y1)))
             else:
-                xylims = (min(self.x[0:nx]),max(self.x[0:nx]),
-                          min(self.y1[0:nx]),max(self.y1[0:nx]))
+                xylims = ((min(self.x[0:nx]),max(self.x[0:nx])),
+                          (min(self.y1[0:nx]),max(self.y1[0:nx])))
             self.up_count = self.up_count + 1
             self.plotframe.panel.set_xylims(xylims,autoscale=False)
             

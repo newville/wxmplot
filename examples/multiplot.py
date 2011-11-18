@@ -3,9 +3,8 @@
 # simple example of MPlot
 
 import wx
-import mplot  
-import numpy 
-
+import mplot
+import numpy
 
 x   = numpy.arange(0.0,10.0,0.1)
 y1  = numpy.sin(2*x)/(x+2)

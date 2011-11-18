@@ -14,7 +14,7 @@ for i in l:
 
 
 app = PlotApp()
-app.plot(t, x, use_dates=True, drawstyle='steps-post')
+app.plot(t, x, use_dates=True, drawstyle='steps-post', marker='+', markersize=12)
 app.set_title('Time series data:')
 app.run()
 

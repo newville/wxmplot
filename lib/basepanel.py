@@ -21,7 +21,10 @@ class BasePanel(wx.Panel):
          bindings for keyboard short-cuts
     """
     def __init__(self, parent, messenger=None,
-                 show_config_popup=True, **kw):
+                 show_config_popup=True, **kws):
+
+        wx.Panel.__init__(self, parent, -1, **kws)
+
         self.is_macosx = False
         if os.name == 'posix':
             if os.uname()[0] == 'Darwin':
@@ -112,13 +115,13 @@ class BasePanel(wx.Panel):
                     ).view_limits(ymin, ymax))
         else:
             self.set_xylims(lims=lims[self.axes], axes=self.axes,
-                            autoscale=False)            
+                            autoscale=False)
         txt = ''
         if len(self.zoom_lims) > 1:
             txt = 'zoom level %i' % (len(self.zoom_lims))
         self.write_message(txt)
         self.canvas.draw()
-        
+
     def create_right_axes(self):
         "create right-hand y axes"
         if len(self.fig.get_axes()) < 2:
@@ -168,7 +171,7 @@ class BasePanel(wx.Panel):
             ofile = ofile.replace(c, '_')
 
         ofile = ofile + '.png'
-        
+
         dlg = wx.FileDialog(self, message='Save Plot Figure as...',
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,
@@ -249,7 +252,7 @@ class BasePanel(wx.Panel):
                 nlims[ax] = ((min(x0, x1), max(x0, x1)),
                              (min(y0, y1), max(y0, y1)))
 
-                                        
+
             # now appply limits:
             for ax in nlims:
                 self.set_xylims(lims=nlims[ax], axes=ax, autoscale=False)

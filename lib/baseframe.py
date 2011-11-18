@@ -10,10 +10,10 @@ import matplotlib
 
 class Menu_IDs:
     def __init__(self):
-        self.EXIT   = wx.NewId()        
+        self.EXIT   = wx.NewId()
         self.SAVE   = wx.NewId()
         self.CONFIG = wx.NewId()
-        self.UNZOOM = wx.NewId()                
+        self.UNZOOM = wx.NewId()
         self.HELP   = wx.NewId()
         self.ABOUT  = wx.NewId()
         self.PRINT  = wx.NewId()
@@ -22,7 +22,7 @@ class Menu_IDs:
         self.CLIPB  = wx.NewId()
         self.SELECT_COLOR = wx.NewId()
         self.SELECT_SMOOTH= wx.NewId()
-        
+
 class BaseFrame(wx.Frame):
     """
     MatPlotlib 2D plot as a wx.Frame, using PlotPanel
@@ -32,10 +32,10 @@ class BaseFrame(wx.Frame):
  Left-Click:   to display X,Y coordinates
  Left-Drag:    to zoom in on plot region
  Right-Click:  display popup menu with choices:
-                Zoom out 1 level       
+                Zoom out 1 level
                 Zoom all the way out
                 --------------------
-                Configure 
+                Configure
                 Save Image
 
 Also, these key bindings can be used
@@ -43,17 +43,22 @@ Also, these key bindings can be used
 
   Ctrl-S:     save plot image to file
   Ctrl-C:     copy plot image to clipboard
-  Ctrl-K:     Configure Plot 
+  Ctrl-K:     Configure Plot
   Ctrl-Q:     quit
 
 """
 
 
-    about_msg =  """MPlot  version 0.9 
+    about_msg =  """MPlot  version 0.9
 Matt Newville <newville@cars.uchicago.edu>"""
 
-    def __init__(self, parent=None, panel=None, size=(700,450),
-                 exit_callback=None, **kwds):
+    def __init__(self, parent=None, panel=None, title='',
+                 size=(700,450), exit_callback=None, **kws):
+
+        kws['style'] = wx.DEFAULT_FRAME_STYLE
+        kws['size']  = size
+        wx.Frame.__init__(self, parent, -1, title, **kws)
+
         self.exit_callback = exit_callback
         self.parent = parent
         self.panel  = panel
@@ -85,18 +90,18 @@ Matt Newville <newville@cars.uchicago.edu>"""
     def unzoom(self,event=None):
         """zoom out 1 level, or to full data range """
         if self.panel is not None: self.panel.unzoom(event=event)
-        
+
     def set_title(self,s):
         "set plot title"
         if self.panel is not None: self.panel.set_title(s)
-        
+
     def set_xlabel(self,s):
-        "set plot xlabel"        
+        "set plot xlabel"
         if self.panel is not None: self.panel.set_xlabel(s)
 
     def set_ylabel(self,s):
         "set plot xlabel"
-        if self.panel is not None: self.panel.set_ylabel(s)        
+        if self.panel is not None: self.panel.set_ylabel(s)
 
     def save_figure(self,event=None):
         """ save figure image to file"""
@@ -106,13 +111,9 @@ Matt Newville <newville@cars.uchicago.edu>"""
         if self.panel is not None: self.panel.configure(event=event)
 
     ####
-    ## create GUI 
+    ## create GUI
     ####
-    def BuildFrame(self, size=(700,450), **kwds):
-        kwds['style'] = wx.DEFAULT_FRAME_STYLE
-        kwds['size']  = size
-        wx.Frame.__init__(self, self.parent, -1, self.title, **kwds)
-
+    def BuildFrame(self):
         sbar = self.CreateStatusBar(2,wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
@@ -129,11 +130,11 @@ Matt Newville <newville@cars.uchicago.edu>"""
             self.panel.messenger = self.write_message
             sizer.Add(self.panel, 1, wx.EXPAND)
             self.BindMenuToPanel()
-            
+
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.Fit()
-        
+
     def Build_DefaultUserMenus(self):
         mids = self.menuIDs
         m = wx.Menu()
@@ -147,7 +148,7 @@ Matt Newville <newville@cars.uchicago.edu>"""
     def BuildMenu(self):
         mids = self.menuIDs
         m0 = wx.Menu()
-        
+
         m0.Append(mids.SAVE, "&Save\tCtrl+S",   "Save PNG Image of Plot")
         m0.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
         m0.AppendSeparator()
@@ -163,8 +164,8 @@ Matt Newville <newville@cars.uchicago.edu>"""
         mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for MPlot")
         mhelp.Append(mids.ABOUT, "About", "About MPlot")
         self.top_menus['Help'] = mhelp
-        
-        mbar = wx.MenuBar()        
+
+        mbar = wx.MenuBar()
 
         mbar.Append(self.top_menus['File'], "File")
         for m in self.user_menus:
@@ -188,7 +189,7 @@ Matt Newville <newville@cars.uchicago.edu>"""
             self.Bind(wx.EVT_MENU, panel.unzoom_all,   id=mids.UNZOOM)
 
             self.Bind(wx.EVT_MENU, panel.save_figure,  id=mids.SAVE)
-            self.Bind(wx.EVT_MENU, panel.Print,        id=mids.PRINT)        
+            self.Bind(wx.EVT_MENU, panel.Print,        id=mids.PRINT)
             self.Bind(wx.EVT_MENU, panel.PrintSetup,   id=mids.PSETUP)
             self.Bind(wx.EVT_MENU, panel.PrintPreview, id=mids.PREVIEW)
             self.Bind(wx.EVT_MENU, panel.canvas.Copy_to_Clipboard,
@@ -208,12 +209,15 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
     def onExit(self, event=None):
         try:
-            if callable(self.exit_callback):  self.exit_callback()
+            if hasattr(self.exit_callback, '__call__'):
+                self.exit_callback()
         except:
             pass
         try:
-            if self.panel is not None: self.panel.win_config.Close(True)
-            if self.panel is not None: self.panel.win_config.Destroy()            
+            if self.panel is not None:
+                self.panel.win_config.Close(True)
+            if self.panel is not None:
+                self.panel.win_config.Destroy()
         except:
             pass
 
@@ -221,4 +225,4 @@ Matt Newville <newville@cars.uchicago.edu>"""
             self.Destroy()
         except:
             pass
-        
+

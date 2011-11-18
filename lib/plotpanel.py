@@ -1,8 +1,7 @@
 #!/usr/bin/python
-##
-## MPlot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
-##
-
+"""
+mplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
+"""
 import wx
 
 import matplotlib
@@ -24,16 +23,15 @@ class PlotPanel(BasePanel):
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
-    def __init__(self, parent, messenger=None,
-                 size=(6.00, 3.70), dpi=96, **kwds):
-
-        BasePanel.__init__(self, parent,  messenger=messenger)
+    def __init__(self, parent, size=(6.00, 3.70), dpi=96, **kws):
 
         matplotlib.rc('axes', axisbelow=True)
         matplotlib.rc('lines', linewidth=2)
         matplotlib.rc('xtick',  labelsize=11, color='k')
         matplotlib.rc('ytick',  labelsize=11, color='k')
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
+
+        BasePanel.__init__(self, parent, **kws)
 
         self.conf = PlotConfig()
         self.data_range = {}
@@ -79,11 +77,11 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              dy=None, xylims=None, ylog_scale=False, 
+              dy=None, xylims=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
-              color=None, style=None, drawstyle=None, 
+              color=None, style=None, drawstyle=None,
               linewidth=None, marker=None, markersize=None,
-              autoscale=True, refresh=True, yaxis='left', **kw):
+              autoscale=True, refresh=True):
         """ basic plot method, overplotting any existing plot """
         # set y scale to log/linear
         yscale = 'linear'
@@ -119,7 +117,7 @@ class PlotPanel(BasePanel):
             self.data_range[axes][2] = max(ymin, dr[1][0])
         if ymax is not None:
             self.data_range[axes][3] = min(ymax, dr[1][1])
-        
+
         cnf  = self.conf
         n    = cnf.ntrace
 
@@ -197,7 +195,7 @@ class PlotPanel(BasePanel):
         self.conf.y2label = ''
         self.conf.title  = ''
 
-    def unzoom(self, event=None):
+    def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         if len(self.zoom_lims) < 1:
             return
@@ -212,6 +210,7 @@ class PlotPanel(BasePanel):
         self.canvas.draw()
 
     def configure(self, event=None):
+        """show configuration frame"""
         try:
             self.win_config.Raise()
         except:
@@ -220,17 +219,15 @@ class PlotPanel(BasePanel):
     ####
     ## create GUI
     ####
-    def BuildPanel(self, **kwds):
+    def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
-
-        wx.Panel.__init__(self, self.parent, -1, **kwds)
-
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
         self.axes  = self.fig.add_axes([0.12, 0.12, 0.76, 0.76],
                                        axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)
+
         self.printer.canvas = self.canvas
         self.set_bg()
         self.conf.canvas = self.canvas
@@ -289,6 +286,7 @@ class PlotPanel(BasePanel):
             except:
                 pass
         self.write_message(msg,  panel=0)
-        if hasattr(self.cursor_callback , '__call__'):
+        if (self.cursor_callback is not None and
+            hasattr(self.cursor_callback , '__call__')):
             self.cursor_callback(x=event.xdata, y=event.ydata)
 

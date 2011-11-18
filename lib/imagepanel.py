@@ -26,19 +26,19 @@ class ImagePanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
 
-    def __init__(self, parent, messenger=None, show_config_popup=True,
-                 size=(4.50,4.00), dpi=96, **kwds):
+    def __init__(self, parent, messenger=None,
+                 size=(4.50,4.00), dpi=96, **kws):
 
         matplotlib.rc('lines', linewidth=2)
-        BasePanel.__init__(self, parent,
-                           messenger=messenger,
-                           show_config_popup=show_config_popup)
+
+        BasePanel.__init__(self, parent, messenger=messenger, **kws)
 
         self.conf = ImageConfig()
         self.win_config = None
         self.cursor_callback = None
         self.figsize = size
         self.dpi     = dpi
+        self.BuildPanel()
 
     def display(self,data,x=None,y=None,**kw):
         """
@@ -98,9 +98,8 @@ class ImagePanel(BasePanel):
     ####
     ## create GUI
     ####
-    def BuildPanel(self, **kwds):
+    def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
-        wx.Panel.__init__(self, self.parent, -1, **kwds)
 
         self.fig   = Figure(self.figsize,dpi=self.dpi)
         self.axes  = self.fig.add_axes([0.08,0.08,0.90,0.90],

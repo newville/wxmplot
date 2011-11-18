@@ -7,6 +7,7 @@ Here, we'll call the thing drawn on the screen a 'trace', and the configuration
 here is for trace properties:
     color        color of trace (a color name or hex code such as #FF00FF)
     style        trace style: one of ('solid', 'dashed', 'dotted', 'dash-dot')
+    drawstyle    style for joining point: one of ('default', 'steps-pre', 'steps-post')
     width        trace width
     marker       marker symbol for each point (see list below)
     markersize   size of marker
@@ -31,10 +32,15 @@ import colors
 from ordereddict import OrderedDict
 
 StyleMap  = OrderedDict()
+DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
+
+for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
+    DrawStyleMap[k] = k
 
 for k,v in (('solid','-'), ('dashed','--'), ('dotted',':'), ('dash-dot','-.')):
     StyleMap[k]=v
+
 
 for k,v in (('no symbol','None'), ('square','s'), ('+','+'),
             ('o','o'), ('x','x'), ('diamond','D'), ('thin diamond','d'),
@@ -50,10 +56,12 @@ class LineProperties:
     to  make the matplotlib calls to set the Line2D properties
     """
 
-    def __init__(self,color='black',style='solid',linewidth=2,
+    def __init__(self,color='black',style='solid', drawstyle='default',
+                 linewidth=2,
                  marker='no symbol',markersize=6,markercolor=None,label=''):
         self.color      = color
         self.style      = style
+        self.drawstyle  = drawstyle
         self.linewidth  = linewidth
         self.marker     = marker
         self.markersize = markersize
@@ -71,6 +79,7 @@ class LineProperties:
             self.set_label(self.label, line=line)
             self.set_color(self.color, line=line)
             self.set_style(self.style, line=line)
+            self.set_drawstyle(self.drawstyle, line=line)
             self.set_marker(self.marker,line=line)
             self.set_markersize(self.markersize, line=line)
             self.set_linewidth(self.linewidth, line=line)
@@ -94,7 +103,7 @@ class LineProperties:
         if line:
             line[0].set_label(self.label)
 
-    def set_style(self,style,line=None):
+    def set_style(self, style, line=None):
         sty = 'solid'
         if style in StyleMap:
             sty = style
@@ -104,6 +113,14 @@ class LineProperties:
         self.style = sty
         if line:
             line[0].set_linestyle(StyleMap[sty])
+
+    def set_drawstyle(self, style, line=None):
+        sty = 'default'
+        if style in DrawStyleMap:
+            sty = style
+        self.drawstyle = sty
+        if line:
+            line[0].set_drawstyle(DrawStyleMap[sty])
 
     def set_marker(self,marker,line=None):
         sym = 'no symbol'
@@ -142,7 +159,9 @@ class PlotConfig:
         self.xlabel = ' '
         self.ylabel = ' '
         self.y2label = ' '
+
         self.styles      = StyleMap.keys()
+        self.drawstyles  = DrawStyleMap.keys()
         self.symbols     = MarkerMap.keys()
         self.legend_locs = ['upper right' , 'upper left', 'upper center',
                             'lower right',  'lower left', 'lower center',
@@ -198,6 +217,7 @@ class PlotConfig:
         line = self.traces[n]
         if label == None:label = "trace %i" % (n+1)
         line.label = label
+        line.drawstyle = 'default'
         if color     != None: line.color = color
         if style     != None: line.style = style
         if linewidth != None: line.linewidth = linewidth
@@ -249,6 +269,10 @@ class PlotConfig:
     def set_trace_style(self,style,trace=None):
         if trace is None: trace = self.ntrace
         self.traces[trace].set_style(style,line=self.__mpline(trace))
+
+    def set_trace_drawstyle(self, style,trace=None):
+        if trace is None: trace = self.ntrace
+        self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
 
     def set_trace_marker(self,marker,trace=None):
         if trace is None: trace = self.ntrace

@@ -28,9 +28,7 @@ class ImagePanel(BasePanel):
 
     def __init__(self, parent, messenger=None,
                  size=(4.50,4.00), dpi=96, **kws):
-
         matplotlib.rc('lines', linewidth=2)
-
         BasePanel.__init__(self, parent, messenger=messenger, **kws)
 
         self.conf = ImageConfig()

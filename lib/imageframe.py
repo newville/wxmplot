@@ -37,14 +37,9 @@ class ImageFrame(BaseFrame):
                  config_on_frame=True, **kws):
 
         self.config_on_frame = config_on_frame
-        show_config_popup = not config_on_frame
-
         BaseFrame.__init__(self, parent=parent,
                            title  = 'Image Display Frame',
                            size=size, **kws)
-        self.panel = ImagePanel(self,
-                                show_config_popup=show_config_popup)
-        self.conf = self.panel.conf
         self.BuildFrame()
 
     def display(self, img, **kw):
@@ -77,20 +72,24 @@ class ImageFrame(BaseFrame):
         self.BuildMenu()
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
+        self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
+        self.panel = ImagePanel(self,
+                                show_config_popup=(not self.config_on_frame))
+
+        self.panel.messenger = self.write_message
+
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
             mainsizer.Add(lpanel, 0,
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
 
-        if self.panel is not None:
-            self.panel.BuildPanel()
-            self.panel.messenger = self.write_message
-            mainsizer.Add(self.panel, 1, wx.EXPAND)
-            self.panel.fig.set_facecolor(self.bgcol)
+        self.panel.fig.set_facecolor(self.bgcol)
 
-            self.BindMenuToPanel()
-            mids = self.menuIDs
-            self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
+        mainsizer.Add(self.panel, 1, wx.EXPAND)
+
+        self.BindMenuToPanel()
+        mids = self.menuIDs
+        self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
 
         self.SetAutoLayout(True)
         self.SetSizer(mainsizer)
@@ -98,6 +97,7 @@ class ImageFrame(BaseFrame):
 
     def BuildConfigPanel(self):
         """config panel for left-hand-side of frame"""
+        conf = self.panel.conf
         lpanel = wx.Panel(self)
         lsizer = wx.GridBagSizer(7, 4)
 
@@ -106,7 +106,7 @@ class ImageFrame(BaseFrame):
         interp_choice =  wx.Choice(lpanel, choices=Interp_List)
         interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
 
-        interp_choice.SetStringSelection(self.conf.interp)
+        interp_choice.SetStringSelection(conf.interp)
         s = wx.StaticText(lpanel, label=' Smoothing:')
         s.SetForegroundColour('Blue')
         lsizer.Add(s,               (0, 0), (1, 3), labstyle, 5)
@@ -118,7 +118,7 @@ class ImageFrame(BaseFrame):
 
         cmap_choice =  wx.Choice(lpanel, choices=ColorMap_List)
         cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
-        cmap_name = self.conf.cmap.name
+        cmap_name = conf.cmap.name
         if cmap_name.endswith('_r'):
             cmap_name = cmap_name[:-2]
         cmap_choice.SetStringSelection(cmap_name)
@@ -126,9 +126,9 @@ class ImageFrame(BaseFrame):
         cmap_toggle = wx.CheckBox(lpanel, label='Reverse Table',
                                   size=(140, -1))
         cmap_toggle.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
-        cmap_toggle.SetValue(self.conf.cmap_reverse)
+        cmap_toggle.SetValue(conf.cmap_reverse)
 
-        cmax = self.conf.cmap_range
+        cmax = conf.cmap_range
         self.cmap_data   = numpy.outer(numpy.linspace(0, 1, cmax),
                                        numpy.ones(cmax/8))
 
@@ -143,21 +143,17 @@ class ImageFrame(BaseFrame):
         self.cmap_fig.set_facecolor(self.bgcol)
 
         self.cmap_image = self.cmap_axes.imshow(self.cmap_data,
-                                                cmap=self.conf.cmap,
+                                                cmap=conf.cmap,
                                                 interpolation='bilinear')
 
         self.cmap_axes.set_ylim((0, cmax), emit=True)
 
-        self.cmap_lo_val = wx.Slider(lpanel, -1,
-                                     self.conf.cmap_lo, 0,
-                                     self.conf.cmap_range,
-                                     size=(-1, 200),
+        self.cmap_lo_val = wx.Slider(lpanel, -1, conf.cmap_lo, 0,
+                                     conf.cmap_range, size=(-1, 200),
                                      style=wx.SL_INVERSE|wx.SL_VERTICAL)
 
-        self.cmap_hi_val = wx.Slider(lpanel, -1,
-                                     self.conf.cmap_hi, 0,
-                                     self.conf.cmap_range,
-                                     size=(-1, 200),
+        self.cmap_hi_val = wx.Slider(lpanel, -1, conf.cmap_hi, 0,
+                                     conf.cmap_range, size=(-1, 200),
                                      style=wx.SL_INVERSE|wx.SL_VERTICAL)
 
         self.cmap_lo_val.Bind(wx.EVT_SCROLL,  self.onStretchLow)
@@ -176,16 +172,16 @@ class ImageFrame(BaseFrame):
         return lpanel
 
     def onInterp(self, event=None):
-        self.conf.interp =  event.GetString()
-        self.conf.image.set_interpolation(self.conf.interp)
-        self.conf.canvas.draw()
+        self.panel.conf.interp =  event.GetString()
+        self.panel.conf.image.set_interpolation(self.panel.conf.interp)
+        self.panel.canvas.draw()
 
     def onCMap(self, event=None):
         self.update_cmap(event.GetString())
 
     def onCMapReverse(self, event=None):
-        self.conf.cmap_reverse = event.IsChecked()
-        cmap_name = self.conf.cmap.name
+        self.panel.conf.cmap_reverse = event.IsChecked()
+        cmap_name = self.panel.conf.cmap.name
         if isinstance(cmap_name, tuple):
             return
         if cmap_name.endswith('_r'):
@@ -193,15 +189,14 @@ class ImageFrame(BaseFrame):
         self.update_cmap(cmap_name)
 
     def update_cmap(self, cmap_name):
-
-        if  self.conf.cmap_reverse:
+        conf = self.panel.conf
+        if  conf.cmap_reverse:
             cmap_name = cmap_name + '_r'
 
-        self.conf.cmap = getattr(colormap, cmap_name)
-
-        self.conf.image.set_cmap(self.conf.cmap)
-        self.cmap_image.set_cmap(self.conf.cmap)
-        self.conf.canvas.draw()
+        conf.cmap = getattr(colormap, cmap_name)
+        conf.image.set_cmap(conf.cmap)
+        self.cmap_image.set_cmap(conf.cmap)
+        self.panel.canvas.draw()
         self.cmap_canvas.draw()
 
     def onStretchLow(self, event=None):
@@ -213,19 +208,20 @@ class ImageFrame(BaseFrame):
     def StretchCMap(self, low, high):
         lo, hi = min(low, high), max(low, high)
         if (hi-lo)<2:
-            hi = min(hi+1, self.conf.cmap_range)
+            hi = min(hi+1, self.panel.conf.cmap_range)
             lo = max(lo, 0)
 
         self.cmap_lo_val.SetValue(lo)
         self.cmap_hi_val.SetValue(hi)
-        self.conf.cmap_lo = lo
-        self.conf.cmap_hi = hi
+        self.panel.conf.cmap_lo = lo
+        self.panel.conf.cmap_hi = hi
         self.UpdateImages()
 
     def UpdateImages(self):
-        lo = self.conf.cmap_lo
-        hi = self.conf.cmap_hi
-        cmax = 1.0 * self.conf.cmap_range
+        conf = self.panel.conf
+        lo = conf.cmap_lo
+        hi = conf.cmap_hi
+        cmax = 1.0 * conf.cmap_range
 
         wid = numpy.ones(cmax/8)
 
@@ -244,11 +240,11 @@ class ImageFrame(BaseFrame):
         self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0., 1., hi-lo), wid)
         self.cmap_data[hi:, :] = 1
 
-        img = cmax * self.conf.data/(1.0*self.conf.data.max())
+        img = cmax * conf.data/(1.0*conf.data.max())
         img = numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax-1))/cmax
 
         cmap_fill_val = 1.0/(hi-lo)
-        if self.conf.log_scale:
+        if conf.log_scale:
             imin = img[numpy.where(img>0)].min()
             img = numpy.log(abs(img)+imin/5.0)
             img = (img-img.min()) / abs(img.max()-img.min())
@@ -258,11 +254,11 @@ class ImageFrame(BaseFrame):
             self.cmap_data = cmimg
 
         self.cmap_image.set_data(self.cmap_data)
-        self.conf.image.set_data(img)
-        self.conf.canvas.draw()
+        conf.image.set_data(img)
+        conf.canvas.draw()
 
     def onLogScale(self, event=None):
-        self.conf.log_scale = event.IsChecked()
+        self.panel.conf.log_scale = event.IsChecked()
         self.UpdateImages()
 
     def onCMapSave(self, event=None):

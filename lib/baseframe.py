@@ -7,6 +7,7 @@ import os
 import time
 import wx
 import matplotlib
+from plotpanel import PlotPanel
 
 class Menu_IDs:
     def __init__(self):
@@ -93,15 +94,18 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
     def set_title(self,s):
         "set plot title"
-        if self.panel is not None: self.panel.set_title(s)
+        if self.panel is not None:
+            self.panel.set_title(s)
 
     def set_xlabel(self,s):
         "set plot xlabel"
         if self.panel is not None: self.panel.set_xlabel(s)
+        self.panel.canvas.draw()
 
     def set_ylabel(self,s):
         "set plot xlabel"
         if self.panel is not None: self.panel.set_ylabel(s)
+        self.panel.canvas.draw()
 
     def save_figure(self,event=None):
         """ save figure image to file"""
@@ -125,11 +129,10 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.BuildMenu()
-        if self.panel is not None:
-            self.panel.BuildPanel()
-            self.panel.messenger = self.write_message
-            sizer.Add(self.panel, 1, wx.EXPAND)
-            self.BindMenuToPanel()
+        self.panel = PlotPanel(self)
+        self.panel.messenger = self.write_message
+        sizer.Add(self.panel, 1, wx.EXPAND)
+        self.BindMenuToPanel()
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)

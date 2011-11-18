@@ -13,7 +13,6 @@ class PlotFrame(BaseFrame):
         BaseFrame.__init__(self, parent=parent,
                            title  = '2D Plot Frame',
                            size=size, **kws)
-        self.panel = PlotPanel(self)
         self.BuildFrame()
 
     def plot(self, x, y, **kw):

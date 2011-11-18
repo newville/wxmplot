@@ -25,15 +25,9 @@ class MultiPlotFrame(BaseFrame):
         self.panels = {}
         self.rows = rows
         self.cols = cols
+        self.panelsize = panelsize
         self.current_panel = (0,0)
-        for i in range(rows):
-            for j in range(cols):
-                self.panels[(i,j)] = PlotPanel(self, size=panelsize)
-                self.panels[(i,j)].messenger = self.write_message
-
-        self.panel = self.panels[(0,0)]
         self.BuildFrame()
-
 
     def set_panel(self,ix,iy):
         self.current_panel = (ix,iy)
@@ -123,15 +117,19 @@ class MultiPlotFrame(BaseFrame):
         self.BuildMenu()
         sizer = wx.GridBagSizer(self.rows,self.cols)
 
+
         for i in range(self.rows):
             for j in range(self.cols):
+                self.panels[(i,j)] = PlotPanel(self, size=self.panelsize)
+                self.panels[(i,j)].messenger = self.write_message
                 panel = self.panels[(i,j)]
-                panel.BuildPanel()
-                self.Build_DefaultUserMenus() # panel=panel)
+                self.Build_DefaultUserMenus()
                 sizer.Add(panel,(i,j),(1,1),flag=wx.EXPAND|wx.ALIGN_CENTER)
                 panel.reportLeftDown = Closure(self.reportLeftDown,
                                                panelkey=(i,j))
 
+
+        self.panel = self.panels[(0,0)]
         for i in range(self.rows): sizer.AddGrowableRow(i)
         for i in range(self.cols): sizer.AddGrowableCol(i)
 

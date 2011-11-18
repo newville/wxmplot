@@ -231,6 +231,7 @@ class PlotConfig:
         axes[0].set_title(self.title,   fontproperties=self.titlefont)
         if len(axes) > 1:
             axes[1].set_ylabel(self.y2label, fontproperties=self.labelfont)
+        self.canvas.draw()
 
     def refresh_trace(self,trace=None):
         if trace is None: trace = self.ntrace

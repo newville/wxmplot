@@ -40,6 +40,7 @@ class PlotPanel(BasePanel):
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
+        self.BuildPanel()
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,

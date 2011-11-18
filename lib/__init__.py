@@ -69,7 +69,7 @@ __date__     = '18-Nov-2011'
 
 from plotframe import PlotFrame
 from plotpanel import PlotPanel
-from imagepanel import ImagePanelArt Start on Friday, November 18th from 2-3pm
+from imagepanel import ImagePanel
 from imageframe import ImageFrame
 from multiframe import MultiPlotFrame
 from plotapp  import PlotApp

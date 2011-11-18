@@ -52,7 +52,7 @@ to interact with the plots.
 
 
 :class:`PlotPanel` methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+====================================================================
 
 .. method:: plot(x, y, **kws)
 
@@ -237,7 +237,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
    show plot configuration window for customizing plot.
 
 
-====================================================================
+
 :class:`PlotFrame`: a wx.Frame showing a :class:`PlotPanel`
 ====================================================================
 
@@ -252,7 +252,6 @@ menubar with menu items for saving, printing and configuring plots..
 The frame will have a *panel* member holding the underlying :class:`PlotPanel`.
 
 
-====================================================================
 :class:`PlotApp`: a wx.App showing a :class:`PlotFrame`
 ====================================================================
 
@@ -288,7 +287,21 @@ menubar with menu items for saving, printing and configuring plots..
         p.run()
 
 
-====================================================================
 Examples and Screenshots
 ====================================================================
+
+A basic plot from a :class:`PlotFrame` looks like this:
+
+
+.. image:: images/basic_screenshot.png
+
+
+The configuration window (Options->Configuration or Ctrl-K) for this plot looks
+like this:
+
+.. image:: images/configuration_frame.png
+
+where all the options there will dynamically change the plot in the PlotPanel.
+
+
 

@@ -12,7 +12,7 @@ import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-from ImageConfig  import ImageConfig,   ImageConfigFrame
+from imageconf import ImageConfig, ImageConfigFrame
 from basepanel import BasePanel
 
 class ImagePanel(BasePanel):
@@ -57,7 +57,7 @@ class ImagePanel(BasePanel):
                                            interpolation='nearest')
         self.axes.set_axis_off()
         self.unzoom(set_bounds=False)
-        
+
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
         if axes is None:
@@ -67,8 +67,8 @@ class ImagePanel(BasePanel):
             (xmin, xmax), (ymin, ymax) = self.data_range
         else:
             (xmin, xmax), (ymin, ymax) = lims
-            
-            
+
+
         if abs(xmax-xmin) < 1.90:
             xmin  = 0.5*(xmax+xmin) - 1
             xmax = 0.5*(xmax+xmin) + 1
@@ -82,7 +82,7 @@ class ImagePanel(BasePanel):
         self.axes.update_datalim(((xmin,ymin),(xmax,ymax)))
         if autoscale:
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
-            self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))            
+            self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
 
     def clear(self):
         """ clear plot """
@@ -96,7 +96,7 @@ class ImagePanel(BasePanel):
             self.win_config = ImageConfigFrame(conf=self.conf)
 
     ####
-    ## create GUI 
+    ## create GUI
     ####
     def BuildPanel(self, **kwds):
         """ builds basic GUI panel and popup menu"""
@@ -105,10 +105,10 @@ class ImagePanel(BasePanel):
         self.fig   = Figure(self.figsize,dpi=self.dpi)
         self.axes  = self.fig.add_axes([0.08,0.08,0.90,0.90],
                                        axisbg='#FEFEFE')
-                                      
+
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
         self.fig.set_facecolor('#FBFBF8')
-        
+
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
         self.conf.canvas= self.canvas
@@ -128,9 +128,9 @@ class ImagePanel(BasePanel):
     ####
     def reportMotion(self,event=None):
         pass
-    
+
     def reportLeftDown(self,event=None):
-        if event == None: return        
+        if event == None: return
         ix, iy = round(event.xdata), round(event.ydata)
         if (ix > 0 and ix < self.conf.data.shape[1] and
             iy > 0 and iy < self.conf.data.shape[0]):
@@ -139,12 +139,12 @@ class ImagePanel(BasePanel):
             self.write_message(msg, panel=0)
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)
-            
+
 
     def zoom_OK(self, start,stop):
         """ returns whether a requested zoom is acceptable: rejects zooms that are too small"""
         return True
-#     
+#
 #         # print 'zoom ok ', start, stop, self.data_range
 #         xmax = self.data_range[1]
 #         ymax = self.data_range[3]
@@ -154,4 +154,4 @@ class ImagePanel(BasePanel):
 #                  (start[1] < ymax or stop[1] < ymax) and
 #                  (abs(start[0] - stop[0]) > 1.25) and
 #                  (abs(start[1] - stop[1]) > 1.25))
-# 
+#

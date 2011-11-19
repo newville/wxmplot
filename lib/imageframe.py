@@ -18,11 +18,10 @@ ColorMap_List = []
 for cm in ('gray', 'coolwarm', 'cool', 'Spectral', 'gist_earth',
            'gist_yarg', 'gist_rainbow', 'gist_heat', 'gist_stern', 'ocean',
            'copper', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
-           'cool', 'copper', 'spring', 'summer', 'autumn', 'winter',
-           'Spectral', 'Accent', 'YlGn', 'YlGnBlu', ):
+           'cool', 'copper', 'spring', 'summer', 'autumn', 'winter', 'PiYG', 'PRGn',
+           'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
-
 
 Interp_List = ('nearest', 'bilinear', 'bicubic', 'spline16', 'spline36',
                'hanning', 'hamming', 'hermite', 'kaiser', 'quadric',

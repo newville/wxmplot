@@ -24,12 +24,6 @@ if  [ $? -ne 0 ]  ; then
   exit 
 fi
 
-echo "# Make sure this script is updated!"
-git checkout master publish_docs.sh
-if  [ $? -ne 0 ]  ; then 
-  echo ' failed.'
-  exit 
-fi
 
 tar xzf ../_docs.tgz .
 

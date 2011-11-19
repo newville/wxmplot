@@ -7,7 +7,7 @@ SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
 
-INSTALLDIR = /home/newville/public_html/lmfit/
+INSTALLDIR = /home/newville/public_html/mplot/
 
 
 # Internal variables.
@@ -23,14 +23,14 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-lmfit.pdf: latex
+mplot.pdf: latex
 	cd $(BUILDDIR)/latex && make all-pdf
-	cp -pr $(BUILDDIR)/latex/lmfit.pdf ./lmfit.pdf
+	cp -pr $(BUILDDIR)/latex/mplot.pdf ./
 
-all: html lmfit.pdf
+all: html mplot.pdf
 
 install: all
-	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(INSTALLDIR)/lmfit.pdf
+	cp -pr $(BUILDDIR)/latex/*.pdf $(INSTALLDIR)/.
 	cp -pr $(BUILDDIR)/html/* $(INSTALLDIR)/.
 
 help:

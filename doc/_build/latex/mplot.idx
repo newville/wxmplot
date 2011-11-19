@@ -1,0 +1,19 @@
+\indexentry{PlotPanel (built-in class)|hyperpage}{5}
+\indexentry{plot()|hyperpage}{6}
+\indexentry{oplot()|hyperpage}{6}
+\indexentry{clear()|hyperpage}{7}
+\indexentry{set\_xylims()|hyperpage}{7}
+\indexentry{get\_xylims()|hyperpage}{7}
+\indexentry{unzoom()|hyperpage}{7}
+\indexentry{unzoom\_all()|hyperpage}{7}
+\indexentry{update\_line()|hyperpage}{7}
+\indexentry{set\_title()|hyperpage}{7}
+\indexentry{set\_xlabel()|hyperpage}{7}
+\indexentry{set\_ylabel()|hyperpage}{7}
+\indexentry{set\_y2label()|hyperpage}{7}
+\indexentry{set\_bgcol()|hyperpage}{7}
+\indexentry{write\_message()|hyperpage}{7}
+\indexentry{save\_figure()|hyperpage}{8}
+\indexentry{configure()|hyperpage}{8}
+\indexentry{PlotFrame (built-in class)|hyperpage}{8}
+\indexentry{PlotAppp (built-in class)|hyperpage}{8}

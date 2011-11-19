@@ -215,8 +215,7 @@ class PlotPanel(BasePanel):
         try:
             self.win_config.Raise()
         except:
-            self.win_config = PlotConfigFrame(self.conf)
-
+            self.win_config = PlotConfigFrame(parent=self, config=self.conf)
     ####
     ## create GUI
     ####

@@ -173,8 +173,7 @@ class ImageFrame(BaseFrame):
 
     def onInterp(self, event=None):
         self.panel.conf.interp =  event.GetString()
-        self.panel.conf.image.set_interpolation(self.panel.conf.interp)
-        self.panel.canvas.draw()
+        self.panel.redraw()
 
     def onCMap(self, event=None):
         self.update_cmap(event.GetString())
@@ -194,10 +193,23 @@ class ImageFrame(BaseFrame):
             cmap_name = cmap_name + '_r'
 
         conf.cmap = getattr(colormap, cmap_name)
+        self.redraw_cmap()
+
+    def redraw_cmap(self):
+        conf = self.panel.conf
         conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
-        self.panel.canvas.draw()
+
+        lo = conf.cmap_lo
+        hi = conf.cmap_hi
+        cmax = 1.0 * conf.cmap_range
+        wid = numpy.ones(cmax/8)
+        self.cmap_data[:lo, :] = 0
+        self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0., 1., hi-lo), wid)
+        self.cmap_data[hi:, :] = 1
+        self.cmap_image.set_data(self.cmap_data)
         self.cmap_canvas.draw()
+        self.panel.redraw()
 
     def onStretchLow(self, event=None):
         self.StretchCMap(event.GetInt(), self.cmap_hi_val.GetValue())
@@ -208,58 +220,14 @@ class ImageFrame(BaseFrame):
     def StretchCMap(self, low, high):
         lo, hi = min(low, high), max(low, high)
         if (hi-lo)<2:
-            hi = min(hi+1, self.panel.conf.cmap_range)
+            hi = min(hi, self.panel.conf.cmap_range)
             lo = max(lo, 0)
 
         self.cmap_lo_val.SetValue(lo)
         self.cmap_hi_val.SetValue(hi)
         self.panel.conf.cmap_lo = lo
         self.panel.conf.cmap_hi = hi
-        self.UpdateImages()
-
-    def UpdateImages(self):
-        conf = self.panel.conf
-        lo = conf.cmap_lo
-        hi = conf.cmap_hi
-        cmax = 1.0 * conf.cmap_range
-
-        wid = numpy.ones(cmax/8)
-
-        # color table altered into a set of 3 linear segments:
-        # Intensity = 0.0:0.1  between 0 and lo
-        # Intensity = 0.1:0.9  between lo and hi
-        # Intensity = 0.9:1.0  between hi and cmap_range (highest value)
-        # self.cmap_data[:lo,:] = numpy.outer(numpy.linspace(0.0,0.1,lo),wid)
-        # self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0.1,0.9,hi-lo),wid)
-        # self.cmap_data[hi:,:] = numpy.outer(numpy.linspace(0.9,
-        # 1.0,cmax-hi),wid)
-        # ex = self.cmap_data[:,0]
-        # print ex, len(ex), lo, hi
-
-        self.cmap_data[:lo, :] = 0
-        self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0., 1., hi-lo), wid)
-        self.cmap_data[hi:, :] = 1
-
-        img = cmax * conf.data/(1.0*conf.data.max())
-        img = numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax-1))/cmax
-
-        cmap_fill_val = 1.0/(hi-lo)
-        if conf.log_scale:
-            imin = img[numpy.where(img>0)].min()
-            img = numpy.log(abs(img)+imin/5.0)
-            img = (img-img.min()) / abs(img.max()-img.min())
-
-            cmimg = numpy.log(self.cmap_data+cmap_fill_val/5.0)
-            cmimg = (cmimg-cmimg.min()) / abs(cmimg.max()-cmimg.min())
-            self.cmap_data = cmimg
-
-        self.cmap_image.set_data(self.cmap_data)
-        conf.image.set_data(img)
-        conf.canvas.draw()
-
-    def onLogScale(self, event=None):
-        self.panel.conf.log_scale = event.IsChecked()
-        self.UpdateImages()
+        self.redraw_cmap()
 
     def onCMapSave(self, event=None):
         """save color table image"""

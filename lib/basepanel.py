@@ -47,6 +47,8 @@ class BasePanel(wx.Panel):
         self.zoom_lims = []           # store x, y coords zoom levels
         self.zoom_ini  = (-1, -1, -1, -1)  # store init axes, x, y coords for zoom-box
         self.rbbox = None
+        self.zdc = None
+
         self.parent = parent
         self.printer = Printer(self)
 
@@ -60,9 +62,9 @@ class BasePanel(wx.Panel):
                                 self.__onMouseButtonEvent)
         self.canvas.mpl_connect("key_press_event",
                                 self.__onKeyEvent)
+        self.BuildPopup()
 
-        self.rbbox = None
-        self.zdc = None
+    def BuildPopup(self):
         # build pop-up menu for right-click display
         self.popup_unzoom_all = wx.NewId()
         self.popup_unzoom_one = wx.NewId()
@@ -100,7 +102,6 @@ class BasePanel(wx.Panel):
         lims = None
         if len(self.zoom_lims) > 1:
             lims = self.zoom_lims.pop()
-
         ax = self.axes
         if lims is None: # auto scale
             self.zoom_lims = [None]
@@ -408,7 +409,7 @@ class BasePanel(wx.Panel):
             elif ckey == 'K':
                 self.configure(event)
             elif ckey == 'Z':
-                self.unzoom_all(event)
+                self.unzoom(event)
             elif ckey == 'P':
                 self.canvas.printer.Print(event)
 

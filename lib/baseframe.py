@@ -189,7 +189,7 @@ Matt Newville <newville@cars.uchicago.edu>"""
             p = panel
             mids = self.menuIDs
             self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
-            self.Bind(wx.EVT_MENU, panel.unzoom_all,   id=mids.UNZOOM)
+            self.Bind(wx.EVT_MENU, panel.unzoom,       id=mids.UNZOOM)
 
             self.Bind(wx.EVT_MENU, panel.save_figure,  id=mids.SAVE)
             self.Bind(wx.EVT_MENU, panel.Print,        id=mids.PRINT)

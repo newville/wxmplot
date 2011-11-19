@@ -106,11 +106,10 @@ class ImagePanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
 
         self.fig   = Figure(self.figsize,dpi=self.dpi)
-        self.axes  = self.fig.add_axes([0.08,0.08,0.90,0.90],
-                                       axisbg='#FEFEFE')
+        self.axes  = self.fig.add_axes([0.02, 0.02, 0.96, 0.96])
 
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
-        self.fig.set_facecolor('#FBFBF8')
+        self.fig.set_facecolor('#FBABA8')
 
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
@@ -120,7 +119,7 @@ class ImagePanel(BasePanel):
 
         # This way of adding to sizer allows resizing
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.canvas, 2, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND,0)
+        sizer.Add(self.canvas, 2, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND|wx.ALL, 0)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.Fit()

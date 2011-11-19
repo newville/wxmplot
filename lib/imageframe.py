@@ -11,22 +11,10 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from imagepanel import ImagePanel
+from imageconf import ColorMap_List, Interp_List
 from baseframe import BaseFrame
 from colors import rgb2hex
-ColorMap_List = []
-
-for cm in ('gray', 'coolwarm', 'cool', 'Spectral', 'gist_earth',
-           'gist_yarg', 'gist_rainbow', 'gist_heat', 'gist_stern', 'ocean',
-           'copper', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
-           'cool', 'copper', 'spring', 'summer', 'autumn', 'winter', 'PiYG', 'PRGn',
-           'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
-    if hasattr(colormap, cm):
-        ColorMap_List.append(cm)
-
-Interp_List = ('nearest', 'bilinear', 'bicubic', 'spline16', 'spline36',
-               'hanning', 'hamming', 'hermite', 'kaiser', 'quadric',
-               'catrom', 'gaussian', 'bessel', 'mitchell', 'sinc',
-               'lanczos')
+from utils import Closure, LabelEntry
 
 class ImageFrame(BaseFrame):
     """
@@ -41,8 +29,10 @@ class ImageFrame(BaseFrame):
                            size=size, **kws)
         self.BuildFrame()
 
-    def display(self, img, **kw):
+    def display(self, img, title=None, **kw):
         """plot after clearing current plot """
+        if title is not None:
+            self.SetTitle(title)
         self.panel.display(img, **kw)
 
     def BuildCustomMenus(self):
@@ -54,8 +44,18 @@ class ImageFrame(BaseFrame):
                  "Zoom out to full data range")
         m.AppendSeparator()
         m.Append(mids.SAVE_CMAP, "Save Colormap Image")
+        sm = wx.Menu()
+        for itype in Interp_List:
+            wid = wx.NewId()
+            sm.AppendRadioItem(wid, itype, itype)
+            self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
+        self.user_menus  = [('&Options', m), ('Smoothing', sm)]
 
-        self.user_menus  = [('&Options', m)]
+    def onInterp(self, evt=None, name=None):
+        if name not in Interp_List:
+            name = Interp_List[0]
+        self.panel.conf.interp = name
+        self.panel.redraw()
 
     def BuildFrame(self):
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
@@ -73,7 +73,8 @@ class ImageFrame(BaseFrame):
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self,
-                                show_config_popup=(not self.config_on_frame))
+                                show_config_popup=(not self.config_on_frame),
+                                data_callback=self.onDataChange)
 
         self.panel.messenger = self.write_message
 
@@ -102,18 +103,12 @@ class ImageFrame(BaseFrame):
 
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
 
-        interp_choice =  wx.Choice(lpanel, choices=Interp_List)
-        interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
+        # interp_choice =  wx.Choice(lpanel, choices=Interp_List)
+        # interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
 
-        interp_choice.SetStringSelection(conf.interp)
-        s = wx.StaticText(lpanel, label=' Smoothing:')
+        s = wx.StaticText(lpanel, label=' Color Table:', size=(100, -1))
         s.SetForegroundColour('Blue')
-        lsizer.Add(s,               (0, 0), (1, 3), labstyle, 5)
-        lsizer.Add(interp_choice,   (1, 0), (1, 3), labstyle, 2)
-
-        s = wx.StaticText(lpanel, label=' Color Table:')
-        s.SetForegroundColour('Blue')
-        lsizer.Add(s, (2, 0), (1, 3), labstyle, 5)
+        lsizer.Add(s, (0, 0), (1, 3), labstyle, 5)
 
         cmap_choice =  wx.Choice(lpanel, choices=ColorMap_List)
         cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
@@ -129,9 +124,9 @@ class ImageFrame(BaseFrame):
 
         cmax = conf.cmap_range
         self.cmap_data   = numpy.outer(numpy.linspace(0, 1, cmax),
-                                       numpy.ones(cmax/8))
+                                       numpy.ones(cmax/4))
 
-        self.cmap_fig   = Figure((0.350, 1.75), dpi=100)
+        self.cmap_fig   = Figure((0.80, 1.0), dpi=100)
         self.cmap_axes  = self.cmap_fig.add_axes([0, 0, 1, 1])
         self.cmap_axes.set_axis_off()
 
@@ -148,34 +143,91 @@ class ImageFrame(BaseFrame):
         self.cmap_axes.set_ylim((0, cmax), emit=True)
 
         self.cmap_lo_val = wx.Slider(lpanel, -1, conf.cmap_lo, 0,
-                                     conf.cmap_range, size=(-1, 200),
+                                     conf.cmap_range, size=(-1, 180),
                                      style=wx.SL_INVERSE|wx.SL_VERTICAL)
 
         self.cmap_hi_val = wx.Slider(lpanel, -1, conf.cmap_hi, 0,
-                                     conf.cmap_range, size=(-1, 200),
+                                     conf.cmap_range, size=(-1, 180),
                                      style=wx.SL_INVERSE|wx.SL_VERTICAL)
 
         self.cmap_lo_val.Bind(wx.EVT_SCROLL,  self.onStretchLow)
         self.cmap_hi_val.Bind(wx.EVT_SCROLL,  self.onStretchHigh)
 
+        iauto_toggle = wx.CheckBox(lpanel, label='Autoscale Intensity?',
+                                  size=(160, -1))
+        iauto_toggle.Bind(wx.EVT_CHECKBOX, self.onInt_Autoscale)
+        iauto_toggle.SetValue(conf.auto_intensity)
 
-        lsizer.Add(cmap_choice,      (3, 0), (1, 4), labstyle, 2)
-        lsizer.Add(cmap_toggle,      (4, 0), (1, 4), labstyle, 5)
-        lsizer.Add(self.cmap_lo_val, (5, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.cmap_canvas, (5, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
-        lsizer.Add(self.cmap_hi_val, (5, 3), (1, 1), labstyle, 5)
-        # lsizer.Add(log_toggle,       (6,0), (1,4), labstyle)
+        lsizer.Add(cmap_choice,      (1, 0), (1, 4), labstyle, 2)
+        lsizer.Add(cmap_toggle,      (2, 0), (1, 4), labstyle, 5)
+        lsizer.Add(self.cmap_lo_val, (3, 0), (1, 1), labstyle, 5)
+        lsizer.Add(self.cmap_canvas, (3, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
+        lsizer.Add(self.cmap_hi_val, (3, 3), (1, 1), labstyle, 5)
+        lsizer.Add(iauto_toggle,     (4,0), (1,4), labstyle)
+
+        self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=40, labeltext='I min:',
+                                   action = Closure(self.onThreshold, argu='lo'))
+        self.imax_val = LabelEntry(lpanel, conf.int_hi,  size=40, labeltext='I max:',
+                                   action = Closure(self.onThreshold, argu='hi'))
+        self.imax_val.Disable()
+        self.imin_val.Disable()
+
+        lsizer.Add(self.imin_val.label, (5, 0), (1, 1), labstyle, 5)
+        lsizer.Add(self.imax_val.label, (6, 0), (1, 1), labstyle, 5)
+        lsizer.Add(self.imin_val, (5, 1), (1, 2), labstyle, 5)
+        lsizer.Add(self.imax_val, (6, 1), (1, 2), labstyle, 5)
 
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
         return lpanel
 
-    def onInterp(self, event=None):
-        self.panel.conf.interp =  event.GetString()
-        self.panel.redraw()
-
     def onCMap(self, event=None):
         self.update_cmap(event.GetString())
+
+    def onDataChange(self, data, x=None, y=None, **kw):
+        imin, imax = data.min(), data.max()
+        self.imin_val.SetValue("%.4g" % imin)
+        self.imax_val.SetValue("%.4g" % imax)
+        self.panel.conf.int_lo = imin
+        self.panel.conf.int_hi = imax
+
+    def onThreshold(self, event=None, argu='hi'):
+        if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
+            try:
+                val =  float(str(event.GetString()).strip())
+            except:
+                return
+        elif (wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType()):
+            val = float(self.imax_val.GetValue())
+            if argu == 'lo':
+                val = float(self.imin_val.GetValue())
+        if argu == 'lo':
+            self.panel.conf.int_lo = val
+        else:
+            self.panel.conf.int_hi = val
+        self.panel.redraw()
+
+    def onInt_Autoscale(self, event=None):
+        val = self.panel.conf.auto_intensity = event.IsChecked()
+        if val:
+            try:
+                self.onDataChange(self.panel.conf.data)
+            except:
+                pass
+            self.imax_val.Disable()
+            self.imin_val.Disable()
+        else:
+            self.imax_val.Enable()
+            self.imin_val.Enable()
+        self.panel.redraw()
+
+
+#
+#         if isinstance(cmap_name, tuple):
+#             return
+#         if cmap_name.endswith('_r'):
+#             cmap_name = cmap_name[:-2]
+#         self.update_cmap(cmap_name)
 
     def onCMapReverse(self, event=None):
         self.panel.conf.cmap_reverse = event.IsChecked()
@@ -202,7 +254,7 @@ class ImageFrame(BaseFrame):
         lo = conf.cmap_lo
         hi = conf.cmap_hi
         cmax = 1.0 * conf.cmap_range
-        wid = numpy.ones(cmax/8)
+        wid = numpy.ones(cmax/4)
         self.cmap_data[:lo, :] = 0
         self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0., 1., hi-lo), wid)
         self.cmap_data[hi:, :] = 1

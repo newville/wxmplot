@@ -19,19 +19,20 @@ from basepanel import BasePanel
 class ImagePanel(BasePanel):
     """
     MatPlotlib Image as a wx.Panel, suitable for embedding
-    in any wx.Frame.   This does provide a right-click popup
-    menu for configuration, zooming, saving an image of the
-    figure, and Ctrl-C for copy-image-to-clipboard.
+    in any wx.Frame.   This provides a right-click popup
+    menu for configuration, zoom by dragging, saving an image
+    figure, and Ctrl-C for copy-image-to-clipboard, customizations
+    of colormap, interpolation, and intesity scaling
 
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
 
-    def __init__(self, parent, messenger=None,
+    def __init__(self, parent, messenger=None, data_callback=None,
                  size=(4.50,4.00), dpi=96, **kws):
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent, messenger=messenger, **kws)
-
+        self.data_callback = data_callback
         self.conf = ImageConfig()
         self.win_config = None
         self.cursor_callback = None
@@ -39,7 +40,7 @@ class ImagePanel(BasePanel):
         self.dpi     = dpi
         self.BuildPanel()
 
-    def display(self,data,x=None,y=None,**kw):
+    def display(self, data, x=None, y=None,**kw):
         """
         display (that is, create a new image display on the current frame
         """
@@ -50,11 +51,15 @@ class ImagePanel(BasePanel):
         if y is not None: self.data_range[2:] = [min(y),max(y)]
 
         self.conf.data = data
+        cmap = self.conf.cmap
         img = (data -data.min()) /(1.0*data.max() - data.min())
-        self.conf.image = self.axes.imshow(img, cmap=colormap.gray,
-                                           interpolation='nearest')
+        self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,
+                                           interpolation=self.conf.interp)
         self.axes.set_axis_off()
         self.unzoom(set_bounds=False)
+        if hasattr(self.data_callback, '__call__'):
+            self.data_callback(data, x=x, y=y, **kw)
+
 
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
@@ -172,14 +177,7 @@ class ImagePanel(BasePanel):
             self.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
             lims = {self.axes: ((xmin, xmax), (ymin, ymax))}
-
-        self.set_xylims(lims=lims[self.axes], axes=self.axes,
-                        autoscale=False)
-        txt = ''
-        if len(self.zoom_lims) > 1:
-            txt = 'zoom level %i' % (len(self.zoom_lims))
-        self.write_message(txt)
-        self.redraw()
+        self.set_xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """
@@ -192,7 +190,7 @@ class ImagePanel(BasePanel):
            interpolation
            color map
            max/min values from sliders or
-           intensity ranges
+           explicit intensity ranges
         """
         conf = self.conf
         lo, hi = conf.cmap_lo, conf.cmap_hi
@@ -208,6 +206,9 @@ class ImagePanel(BasePanel):
 
         dmin = numpy.min(data[ymin:ymax, xmin:xmax]) #
         dmax = numpy.max(data[ymin:ymax, xmin:xmax]) #
+        if not conf.auto_intensity:
+            dmin = conf.int_lo
+            dmax = conf.int_hi
 
         img = cmax*(data -dmin) /(1.0*dmax- dmin + 1.e-5)
         img = numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax))/cmax

@@ -117,10 +117,10 @@ class BasePanel(wx.Panel):
         else:
             self.set_xylims(lims=lims[self.axes], axes=self.axes,
                             autoscale=False)
-        txt = ''
-        if len(self.zoom_lims) > 1:
-            txt = 'zoom level %i' % (len(self.zoom_lims))
-        self.write_message(txt)
+#         txt = ''
+#         if len(self.zoom_lims) > 1:
+#             txt = 'zoom level %i' % (len(self.zoom_lims))
+#         self.write_message(txt)
         self.canvas.draw()
 
     def create_right_axes(self):
@@ -237,7 +237,7 @@ class BasePanel(wx.Panel):
             for ax in self.fig.get_axes():
                 olims[ax] = ax.get_xlim(), ax.get_ylim()
             self.zoom_lims.append(olims)
-            msg = 'zoom level %i ' % (len(self.zoom_lims))
+            # msg = 'zoom level %i ' % (len(self.zoom_lims))
             # for multiple axes, we first collect all the new limits, and only
             # then apply them
             for ax in self.fig.get_axes():
@@ -258,7 +258,7 @@ class BasePanel(wx.Panel):
             for ax in nlims:
                 self.set_xylims(lims=nlims[ax], axes=ax, autoscale=False)
 
-            self.write_message(msg, panel=1)
+            # self.write_message(msg, panel=1)
 
         self.rbbox = None
         self.cursor_mode = 'cursor'

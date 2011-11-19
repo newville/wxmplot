@@ -204,10 +204,10 @@ class PlotPanel(BasePanel):
         for ax, lims in self.zoom_lims.pop().items():
             self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
-        txt = ''
-        if len(self.zoom_lims)>1:
-            txt = 'zoom level %i' % (len(self.zoom_lims))
-        self.write_message(txt)
+#         txt = ''
+#         if len(self.zoom_lims)>1:
+#             txt = 'zoom level %i' % (len(self.zoom_lims))
+#         self.write_message(txt)
         self.canvas.draw()
 
     def configure(self, event=None):

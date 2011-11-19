@@ -7,15 +7,21 @@ from matplotlib.font_manager import FontProperties
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-from utils import LabelEntry
+ColorMap_List = []
 
-ColorMap_List = ('gray', 'jet', 'hsv', 'Reds', 'Greens', 'Blues', 'hot',
-                 'cool', 'copper', 'spring', 'summer', 'autumn', 'winter',
-                 'Spectral', 'Accent', 'Set1', 'Set2', 'Set3')
+for cm in ('gray', 'coolwarm', 'cool', 'copper', 'Reds', 'Greens', 'Blues',
+           'hot', 'jet', 'hsv', 'Spectral', 'gist_earth', 'gist_yarg',
+           'gist_rainbow', 'gist_heat', 'gist_stern', 'ocean', 'spring',
+           'summer', 'autumn', 'winter', 'PiYG', 'PRGn', 'Spectral',
+           'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
 
-Interp_List = ('nearest', 'bilinear', 'bicubic', 'spline16', 'spline36',
-               'hanning', 'hamming', 'hermite', 'kaiser', 'quadric', 'catrom',
-               'gaussian', 'bessel', 'mitchell', 'sinc', 'lanczos')
+    if hasattr(colormap, cm):
+        ColorMap_List.append(cm)
+
+Interp_List = ('nearest', 'bilinear', 'bicubic', 'gaussian', 'catrom',
+               'spline16', 'spline36', 'hanning', 'hamming', 'hermite',
+               'kaiser', 'quadric', 'bessel', 'mitchell', 'sinc',
+               'lanczos')
 
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):
@@ -25,24 +31,22 @@ class ImageConfig:
         self.cmap  = colormap.gray
         self.cmap_reverse = False
         self.interp = 'nearest'
-        self.title   = 'map'
         self.log_scale = False
         self.flip = (False, False)
         self.xylims = [[None, None], [None, None]]
         self.cmap_lo = 0
         self.cmap_hi = self.cmap_range = 100
+        self.auto_intensity = True
+        self.int_lo = ''
+        self.int_hi = ''
+        self.title = 'image'
         # self.zoombrush = wx.Brush('#141430',  wx.SOLID)
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
         self.zoompen   = wx.Pen('#101090',  3, wx.SOLID)
 
-        f0 =  FontProperties()
-        self.titlefont = f0.copy()
-        self.titlefont.set_size(14)
-
     def relabel(self):
         " re draw labels (title, x,y labels)"
-        self.axes.set_title(self.title,
-                            fontproperties=self.titlefont)
+        pass
     def set_zoombrush(self,color, style):
         self.zoombrush = wx.Brush(color, style)
 
@@ -78,14 +82,6 @@ class ImageConfigFrame(wx.Frame):
 
         sizer.Add(label,(0,0),(1,5),  labstyle,2)
 
-        self.wid_title = LabelEntry(panel, self.conf.title,
-                                    size=400,
-                                    labeltext='Title: ',
-                                    action = self.onTitle)
-
-        sizer.Add(self.wid_title.label, (1,0), (1,1), labstyle,5)
-        sizer.Add(self.wid_title,        (1,1), (1,5), labstyle,5)
-        #
         row = 2
         interp_choice =  wx.Choice(panel, -1, choices=Interp_List, size=(130,-1))
         interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
@@ -226,12 +222,3 @@ class ImageConfigFrame(wx.Frame):
         self.canvas.draw()
         self.cmap_canvas.draw()
 
-    def onTitle(self, event,argu=''):
-        s = ''
-        if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
-            s = str(event.GetString()).strip()
-        elif (wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType()):
-            self.conf.title = self.wid_title.GetValue().strip()
-
-        self.conf.relabel()
-        self.canvas.draw()

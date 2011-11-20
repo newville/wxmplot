@@ -45,7 +45,8 @@ class ImagePanel(BasePanel):
         display (that is, create a new image display on the current frame
         """
         self.axes.cla()
-        self.conf.ntraces  = 0
+        self.conf.rot = 0
+        self.conf.flip = (False, False)
         self.data_range = [0,data.shape[1], 0, data.shape[0]]
         if x is not None: self.data_range[:1] = [min(x),max(x)]
         if y is not None: self.data_range[2:] = [min(y),max(y)]
@@ -56,10 +57,9 @@ class ImagePanel(BasePanel):
         self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,
                                            interpolation=self.conf.interp)
         self.axes.set_axis_off()
-        self.unzoom(set_bounds=False)
+        self.unzoom_all()
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kw)
-
 
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
@@ -127,44 +127,13 @@ class ImagePanel(BasePanel):
 
     def BuildPopup(self):
         # build pop-up menu for right-click display
-        self.popup_unzoom_all = wx.NewId()
-        self.popup_unzoom_one = wx.NewId()
-        self.popup_save   = wx.NewId()
-        self.popup_flipv  = wx.NewId()
-        self.popup_fliph  = wx.NewId()
-        self.popup_flipo  = wx.NewId()
-        self.popup_menu = wx.Menu()
-        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out')
-        self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
-        self.popup_menu.AppendSeparator()
-        self.popup_menu.Append(self.popup_flipv, 'Flip Top/Bottom')
-        self.popup_menu.Append(self.popup_fliph, 'Flip Left/Right')
-        self.popup_menu.Append(self.popup_flipo, 'Flip to Original')
-        self.popup_menu.AppendSeparator()
-        self.popup_menu.Append(self.popup_save,  'Save Image')
-        self.Bind(wx.EVT_MENU, self.unzoom,    id=self.popup_unzoom_one)
-        self.Bind(wx.EVT_MENU, self.unzoom_all,   id=self.popup_unzoom_all)
-        self.Bind(wx.EVT_MENU, self.save_figure,  id=self.popup_save)
-        self.Bind(wx.EVT_MENU, self.onFlip,       id=self.popup_fliph)
-        self.Bind(wx.EVT_MENU, self.onFlip,       id=self.popup_flipv)
-        self.Bind(wx.EVT_MENU, self.onFlip,       id=self.popup_flipo)
+        pass
 
     ####
     ## GUI events, overriding BasePanel components
     ####
     def reportMotion(self,event=None):
         pass
-
-    def onFlip(self, event=None):
-        oldflip = self.conf.flip
-        wid = event.GetId()
-        if wid == self.popup_fliph:
-            self.conf.flip = (oldflip[0], not oldflip[1])
-        elif wid == self.popup_flipv:
-            self.conf.flip = (not oldflip[0], oldflip[1])
-        elif wid == self.popup_flipo:
-            self.conf.flip = (False, False)
-        self.unzoom_all()
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
@@ -192,6 +161,18 @@ class ImagePanel(BasePanel):
            explicit intensity ranges
         """
         conf = self.conf
+        # note: rotations should really just re-display the image.
+        rot = conf.rot % 4
+        if rot != 0:
+            r90 = numpy.rot90
+            if rot == 1:
+                self.display(r90(conf.data))
+            elif rot == 2:
+                self.display(r90(r90(conf.data)))
+            else:
+                self.display(r90(r90(r90(conf.data))))
+
+
         lo, hi = conf.cmap_lo, conf.cmap_hi
         cmax = 1.0*conf.cmap_range
 
@@ -216,9 +197,9 @@ class ImagePanel(BasePanel):
             img = numpy.log10(1.0+ 9.0 * img)
 
         if conf.flip[0]:
-            img = img[::-1]
+            img = numpy.flipud(img)
         if conf.flip[1]:
-            img = img.transpose()[::-1].transpose()
+            img = numpy.fliplr(img)
 
         conf.image.set_data(img)
         conf.image.set_interpolation(conf.interp)

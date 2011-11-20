@@ -33,6 +33,7 @@ class ImageConfig:
         self.interp = 'nearest'
         self.log_scale = False
         self.flip = (False, False)
+        self.rot  = 0
         self.xylims = [[None, None], [None, None]]
         self.cmap_lo = 0
         self.cmap_hi = self.cmap_range = 100

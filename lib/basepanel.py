@@ -34,6 +34,7 @@ class BasePanel(wx.Panel):
         if messenger is None:
             self.messenger = self.__def_messenger
 
+        self.popup_menu =  None
         self.cursor_mode = 'cursor'
         self.cursor_save = 'cursor'
         self._yfmt = '%.4f'
@@ -281,7 +282,7 @@ class BasePanel(wx.Panel):
             return
         self.cursor_mode = 'cursor'
         # note that the matplotlib event location have to be converted
-        if event.inaxes is not None:
+        if event.inaxes is not None and self.popup_menu is not None:
             pos = event.guiEvent.GetPosition()
             wx.CallAfter(self.PopupMenu, self.popup_menu, pos)
         self.ForwardEvent(event=event.guiEvent)

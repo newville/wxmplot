@@ -46,7 +46,7 @@ to interact with the plots.
    The *show_config_popup* arguments controls whether to bind right-click
    to showing a poup menu with options to zoom in or out, configure the
    plot, or save the image to a file.
-   
+
 
    Extra keyword parameters are sent to the wx.Panel.
 
@@ -72,7 +72,7 @@ to interact with the plots.
 
 .. _plotopt_table:
 
-Table of Arguments for plot() and oplot():   Except where noted, 
+Table of Arguments for plot() and oplot():   Except where noted,
 the arguments are available for both :meth:`plot` and :meth:`oplot`.
 
   +-------------+------------+---------+------------------------------------------------+
@@ -86,7 +86,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
   +-------------+------------+---------+------------------------------------------------+
   | y2label     | string     | None    | right-hand abscissa label (:meth:`plot` only)  |
   +-------------+------------+---------+------------------------------------------------+
-  | label       | string     | None    | trace label (defaults to 'trace N')            |   
+  | label       | string     | None    | trace label (defaults to 'trace N')            |
   +-------------+------------+---------+------------------------------------------------+
   | side        | left/right | left    | side for ylabel                                |
   +-------------+------------+---------+------------------------------------------------+
@@ -122,13 +122,13 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
   +-------------+------------+---------+------------------------------------------------+
   | autoscale   | bool       | True    | whether to automatically set plot limits       |
   +-------------+------------+---------+------------------------------------------------+
-  
+
   As a general note, the configuration for the plot (title, labels, grid
   displays) and for each trace (color, linewidth, ...) are preserved for a
   :class:`PlotPanel`. A few specific notes:
 
    1. The title, label, and grid arguments to :meth:`plot` default to ``None``,
-   which means to use the previously used value. 
+   which means to use the previously used value.
 
    2. The *use_dates* option is not very rich, and simply turns x-values that
    are Unix timestamps into x labels showing the dates.
@@ -146,7 +146,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
    6. Valid *marker* arguments are '+', 'o', 'x', '^', 'v', '>', '<', '|', '_',
    'square', 'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or
    'tripod 2'.
-  
+
    7. Valid *drawstyles* are None (which connects points with a straight line),
    'steps-pre', 'steps-mid', or 'steps-post', which give a step between the
    points, either just after a point ('steps-pre'), midway between them
@@ -155,7 +155,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
    transition to a new value as a sudden step, you want 'steps-post'.
 
   All of these values, and a few more settings controlling whether and how to
-  display a plot legend can be configured interactively (see Plot Configuration).   
+  display a plot legend can be configured interactively (see Plot Configuration).
 
 
 .. method:: clear()
@@ -177,7 +177,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
 
 .. method:: get_xylims()
 
-   return current x, y limits. 
+   return current x, y limits.
 
 .. method:: unzoom()
 
@@ -190,7 +190,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
 
 .. method:: update_line(trace, x, y[, side='left'])
 
-   update an existing trace. 
+   update an existing trace.
 
    :param trace: integer index for the trace (0 is the first trace)
    :param x:     array of x values
@@ -269,18 +269,18 @@ menubar with menu items for saving, printing and configuring plots..
 
         from mplot import PlotApp
         from numpy import arange, sin, cos, exp, pi
-        
+
         xx  = arange(0.0,12.0,0.1)
         y1  = 1*sin(2*pi*xx/3.0)
         y2  = 4*cos(2*pi*(xx-1)/5.0)/(6+xx)
         y3  = -pi + 2*(xx/10. + exp(-(xx-3)/5.0))
-        
+
         p = PlotApp()
         p.plot(xx, y1, color='blue',  style='dashed',
                title='Example PlotApp',  label='a',
-               ylabel=r'$k^2\chi(k) $',  
+               ylabel=r'$k^2\chi(k) $',
                xlabel=r'$  k \ (\AA^{-1}) $' )
-        
+
         p.oplot(xx, y2,  marker='+', linewidth=0, label =r'$ x_1 $')
         p.oplot(xx, y3,  style='solid',          label ='x_2')
         p.write_message(Try Help->Quick Reference')
@@ -292,7 +292,6 @@ Examples and Screenshots
 
 A basic plot from a :class:`PlotFrame` looks like this:
 
-
 .. image:: images/basic_screenshot.png
 
 
@@ -303,5 +302,10 @@ like this:
 
 where all the options there will dynamically change the plot in the PlotPanel.
 
-
+Many more examples are given in the *examples* directory in the source
+distribution kit.  The *demo.py* script there will show several 2D Plot
+panel examples, including a plot which uses a timer to simulate a dynamic
+plot, updating the plot as fast as it can - typically 10 to 30 times per
+second, depending on your machine.  The *stripchart.py* example script also
+shows a dynamic, time-based plot.
 

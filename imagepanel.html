@@ -40,6 +40,15 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
+<li><a class="reference internal" href="#imageframe-a-wx-frame-for-image-display"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="plotpanel.html"
                         title="previous chapter"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt>:  A wx.Panel for Basic 2D Line Plots</a></p>
@@ -70,7 +79,53 @@
           <div class="body">
             
   <div class="section" id="imagepanel-a-wx-panel-for-image-display">
-<h1><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display<a class="headerlink" href="#imagepanel-a-wx-panel-for-image-display" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>:  A wx.Panel for Image Display<a class="headerlink" href="#imagepanel-a-wx-panel-for-image-display" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display (ie, gray-scale and
+false-color intensity maps for 2-D arrays.  As with <a class="reference internal" href="plotpanel.html#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>,
+this is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be included in a wx GUI
+anywhere a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> can be.  While the image can be customized
+programmatically, the only interactivity built in to the
+<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is the ability to zoom in and out.</p>
+<p>In contrast, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides many more ways to manipulate
+an image, and will be discussed below.</p>
+<dl class="class">
+<dt id="ImagePanel">
+<em class="property">class </em><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(4.5</em>, <em>4.0)</em><span class="optional">[</span>, <em>dpi=96</em><span class="optional">[</span>, <em>messenger=None</em><span class="optional">[</span>, <em>data_callback=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#ImagePanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Image Panel, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt></p>
+</dd></dl>
+
+<div class="section" id="imageframe-a-wx-frame-for-image-display">
+<h2><a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>:  A wx.Frame for Image Display<a class="headerlink" href="#imageframe-a-wx-frame-for-image-display" title="Permalink to this headline">¶</a></h2>
+<p>In addition to providing a top-level window frame holding an
+<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides the end-user with many ways to
+manipulate the image:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>display x, y, intensity coordinates (left-click)</li>
+<li>zoom in on a particular region of the plot (left-drag).</li>
+<li>change color maps.</li>
+<li>flip and rotate image.</li>
+<li>select optional smoothing interpolation.</li>
+<li>modify intensity scales.</li>
+<li>save high-qualiy plot images (as PNGs), copy to system clipboard, or print.</li>
+</ol>
+</div></blockquote>
+<p>These options are all available programmatically as well.</p>
+<dl class="class">
+<dt id="ImageFrame">
+<em class="property">class </em><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(550</em>, <em>450)</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#ImageFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Image Frame, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples-and-screenshots">
+<h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
+<p>A basic plot from a <a class="reference internal" href="plotpanel.html#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> looks like this:</p>
+<img alt="_images/imagedisplay4.png" src="_images/imagedisplay4.png" />
+<p>This screenshot (from Mac OS X) doesn't show the top menu, which includes
+menus for rotating or flipping the image, selecting an interpolation
+scheme, or saving PNG images of either the image or the colormap.</p>
+</div>
 </div>
 
 

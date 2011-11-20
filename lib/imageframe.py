@@ -39,11 +39,14 @@ class ImageFrame(BaseFrame):
         "build menus"
         mids = self.menuIDs
         mids.SAVE_CMAP = wx.NewId()
+        mids.LOG_SCALE = wx.NewId()
         m = wx.Menu()
         m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
+        m.Append(mids.LOG_SCALE, "Log Scale Intensity\tCtrl+L", "", wx.ITEM_CHECK)
         m.AppendSeparator()
         m.Append(mids.SAVE_CMAP, "Save Colormap Image")
+
         sm = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()
@@ -90,6 +93,7 @@ class ImageFrame(BaseFrame):
         self.BindMenuToPanel()
         mids = self.menuIDs
         self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
+        self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
 
         self.SetAutoLayout(True)
         self.SetSizer(mainsizer)
@@ -279,6 +283,10 @@ class ImageFrame(BaseFrame):
         self.panel.conf.cmap_lo = lo
         self.panel.conf.cmap_hi = hi
         self.redraw_cmap()
+
+    def onLogScale(self, event=None):
+        self.panel.conf.log_scale = not self.panel.conf.log_scale
+        self.panel.redraw()
 
     def onCMapSave(self, event=None):
         """save color table image"""

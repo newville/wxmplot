@@ -212,6 +212,9 @@ class ImagePanel(BasePanel):
         img = cmax*(data -dmin) /(1.0*dmax- dmin + 1.e-5)
         img = numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax))/cmax
 
+        if conf.log_scale:
+            img = numpy.log10(1.0+ 9.0 * img)
+
         if conf.flip[0]:
             img = img[::-1]
         if conf.flip[1]:

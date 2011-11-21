@@ -2,3 +2,4 @@ include README.txt LICENSE.txt ChangeLog MANIFEST.in
 recursive-include lib *.py
 recursive-include examples *
 recursive-include doc *
+recursive-exclude doc/_build *

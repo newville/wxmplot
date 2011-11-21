@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-mplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
+wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
 import wx
 

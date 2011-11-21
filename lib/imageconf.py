@@ -10,11 +10,10 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 ColorMap_List = []
 
 for cm in ('gray', 'coolwarm', 'cool', 'copper', 'Reds', 'Greens', 'Blues',
-           'hot', 'jet', 'hsv', 'Spectral', 'gist_earth', 'gist_yarg',
-           'gist_rainbow', 'gist_heat', 'gist_stern', 'ocean', 'spring',
-           'summer', 'autumn', 'winter', 'PiYG', 'PRGn', 'Spectral',
+           'spring', 'summer', 'autumn', 'winter', 'terrain', 'hot', 'jet',
+           'hsv', 'Spectral', 'gist_earth', 'gist_yarg', 'gist_rainbow',
+           'gist_heat', 'gist_stern', 'ocean', 'PiYG', 'PRGn', 'Spectral',
            'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
-
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 
@@ -32,8 +31,9 @@ class ImageConfig:
         self.cmap_reverse = False
         self.interp = 'nearest'
         self.log_scale = False
-        self.flip = (False, False)
-        self.rot  = 0
+        self.flip_ud = False
+        self.flip_lr = False
+        self.rot  = False
         self.xylims = [[None, None], [None, None]]
         self.cmap_lo = 0
         self.cmap_hi = self.cmap_range = 100
@@ -53,6 +53,7 @@ class ImageConfig:
 
     def set_zoompen(self,color, style):
         self.zoompen = wx.Pen(color, 3, style)
+
 
 class ImageConfigFrame(wx.Frame):
     def __init__(self, parent=None, conf=None, cmap=None,interp=None,**kw):

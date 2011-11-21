@@ -7,7 +7,7 @@ import sys
 import time
 import os
 import wx
-import numpy
+import numpy as np
 import matplotlib
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
@@ -38,19 +38,30 @@ class ImagePanel(BasePanel):
         self.cursor_callback = None
         self.figsize = size
         self.dpi     = dpi
+        self.xlab    = 'X'
+        self.ylab    = 'Y'
         self.BuildPanel()
 
-    def display(self, data, x=None, y=None,**kw):
+    def display(self, data, x=None, y=None, xlabel=None, ylabel=None, **kw):
         """
-        display (that is, create a new image display on the current frame
+        display a new image display on the current panel
         """
         self.axes.cla()
-        self.conf.rot = 0
-        self.conf.flip = (False, False)
+        self.conf.rot = False
         self.data_range = [0,data.shape[1], 0, data.shape[0]]
-        if x is not None: self.data_range[:1] = [min(x),max(x)]
-        if y is not None: self.data_range[2:] = [min(y),max(y)]
+        if x is not None:
+            self.xdata = np.array(x)
+            if self.xdata.shape[0] != data.shape[1]:
+                print 'Warning X array wrong size!'
+        if y is not None:
+            self.ydata = np.array(y)
+            if self.ydata.shape[0] != data.shape[0]:
+                print 'Warning Y array wrong size!'
 
+        if xlabel is not None:
+            self.xlab = xlabel
+        if ylabel is not None:
+            self.ylab = ylabel
         self.conf.data = data
         cmap = self.conf.cmap
         img = (data -data.min()) /(1.0*data.max() - data.min())
@@ -71,13 +82,18 @@ class ImagePanel(BasePanel):
         else:
             (xmin, xmax), (ymin, ymax) = lims
 
-        if abs(xmax-xmin) < 1.90:
-            xmin = 0.5*(xmax+xmin) - 1
-            xmax = 0.5*(xmax+xmin) + 1
+        xmin = int(max(self.data_range[0], xmin) + 0.5)
+        xmax = int(min(self.data_range[1], xmax) + 0.5)
+        ymin = int(max(self.data_range[2], ymin) + 0.5)
+        ymax = int(min(self.data_range[3], ymax) + 0.5)
 
-        if abs(ymax-ymin) < 1.90:
-            ymin = 0.5*(ymax+xmin) - 1
-            ymax = 0.5*(ymax+xmin) + 1
+        if abs(xmax-xmin) < 2:
+            xmin = int(0.5*(xmax+xmin) - 1)
+            xmax = xmin + 2
+
+        if abs(ymax-ymin) < 2:
+            ymin = int(0.5*(ymax+xmin) - 1)
+            ymax = ymin + 2
 
         self.axes.set_xlim((xmin,xmax),emit=True)
         self.axes.set_ylim((ymin,ymax),emit=True)
@@ -86,7 +102,7 @@ class ImagePanel(BasePanel):
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
 
-        self.conf.xylims = [[int(xmin+0.5), int(xmax+0.5)], [int(ymin+0.5), int(ymax+0.5)]]
+        self.conf.xylims = [[xmin, xmax], [ymin, ymax]]
         self.redraw()
 
     def clear(self):
@@ -154,54 +170,42 @@ class ImagePanel(BasePanel):
 
     def redraw(self):
         """redraw image, applying the following:
-           flip state
-           interpolation
-           color map
-           max/min values from sliders or
-           explicit intensity ranges
+        rotation, flips, log scale
+        max/min values from sliders or explicit intensity ranges
+        color map
+        interpolation
         """
         conf = self.conf
-        # note: rotations should really just re-display the image.
-        rot = conf.rot % 4
-        if rot != 0:
-            r90 = numpy.rot90
-            if rot == 1:
-                self.display(r90(conf.data))
-            elif rot == 2:
-                self.display(r90(r90(conf.data)))
-            else:
-                self.display(r90(r90(r90(conf.data))))
+        # note: rotation re-calls display(), to reset the image
+        # other transformations will just do .set_data() on image
+        if conf.rot:
+            self.display(np.rot90(conf.data),
+                         x=self.ydata, xlabel=self.ylab,
+                         y=self.xdata[::-1], ylabel=self.xlab)
+        # flips, log scales
+        img = conf.data
+        if conf.flip_ud:   img = np.flipud(img)
+        if conf.flip_lr:   img = np.fliplr(img)
+        if conf.log_scale: img = np.log10(1.0+ 9.0 * img)
 
+        # apply intensity scale for current limited (zoomed) image
+        imin = conf.int_lo
+        imax = conf.int_hi
+        if conf.auto_intensity:
+            ((xmin, xmax), (ymin, ymax)) = self.conf.xylims
+            if xmin is None:  xmin = 0
+            if xmax is None:  xmax = img.shape[1]
+            if ymin is None:  ymin = 0
+            if ymax is None:  ymax = img.shape[0]
+            imin = np.min(img[ymin:ymax, xmin:xmax])
+            imax = np.max(img[ymin:ymax, xmin:xmax])
+        img = (img - imin)/(imax - imin + 1.e-8)
 
-        lo, hi = conf.cmap_lo, conf.cmap_hi
-        cmax = 1.0*conf.cmap_range
+        # apply clipped color scale, as from sliders
+        mlo = conf.cmap_lo/(1.0*conf.cmap_range)
+        mhi = conf.cmap_hi/(1.0*conf.cmap_range)
+        conf.image.set_data(np.clip((img - mlo)/(mhi - mlo + 1.e-8), 0, 1))
 
-        ((xmin, xmax), (ymin, ymax)) = self.conf.xylims
-
-        data = conf.data
-        if xmin is None: xmin = 0
-        if xmax is None: xmax = data.shape[1]
-        if ymin is None: ymin = 0
-        if ymax is None: ymax = data.shape[0]
-
-        dmin = numpy.min(data[ymin:ymax, xmin:xmax]) #
-        dmax = numpy.max(data[ymin:ymax, xmin:xmax]) #
-        if not conf.auto_intensity:
-            dmin = conf.int_lo
-            dmax = conf.int_hi
-
-        img = cmax*(data -dmin) /(1.0*dmax- dmin + 1.e-5)
-        img = numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax))/cmax
-
-        if conf.log_scale:
-            img = numpy.log10(1.0+ 9.0 * img)
-
-        if conf.flip[0]:
-            img = numpy.flipud(img)
-        if conf.flip[1]:
-            img = numpy.fliplr(img)
-
-        conf.image.set_data(img)
         conf.image.set_interpolation(conf.interp)
         self.canvas.draw()
 
@@ -209,16 +213,18 @@ class ImagePanel(BasePanel):
         if event == None:
             return
         ix, iy = round(event.xdata), round(event.ydata)
-        if self.conf.flip[1]:
-            ix = self.conf.data.shape[1] - ix
-        if self.conf.flip[0]:
-            iy = self.conf.data.shape[0] - iy
+        if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
+        if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix
 
-        if (ix > 0 and ix < self.conf.data.shape[1] and
-            iy > 0 and iy < self.conf.data.shape[0]):
-            msg = "Pixel[%i, %i], Intensity=%.4g " %(ix,iy,
-                                                     self.conf.data[iy,ix])
+        if (ix >= 0 and ix < self.conf.data.shape[1] and
+            iy >= 0 and iy < self.conf.data.shape[0]):
+            pos = ''
+            if self.xdata is not None:
+                pos = ' %s=%.4g,' % (self.xlab, self.xdata[ix])
+            if self.ydata is not None:
+                pos = '%s %s=%.4g,' % (pos, self.ylab, self.ydata[iy])
+            msg = "Pixel [%i, %i],%s Intensity=%.4g " % (ix, iy, pos,
+                                                         self.conf.data[iy, ix])
             self.write_message(msg, panel=0)
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)
-

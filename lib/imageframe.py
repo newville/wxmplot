@@ -1,8 +1,7 @@
 #!/usr/bin/python
 """
- mplot ImageFrame: a wx.Frame for image display, using matplotlib
+wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 """
-
 import os
 import wx
 import numpy
@@ -44,14 +43,12 @@ class ImageFrame(BaseFrame):
         mids.FLIP_V    = wx.NewId()
         mids.FLIP_O    = wx.NewId()
         mids.ROT_CW    = wx.NewId()
-        mids.ROT_CCW    = wx.NewId()
         m = wx.Menu()
         m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
         m.Append(mids.LOG_SCALE, "Log Scale Intensity\tCtrl+L", "", wx.ITEM_CHECK)
         m.AppendSeparator()
         m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
-        m.Append(mids.ROT_CCW, 'Rotate counter-clockwise', '')
         m.AppendSeparator()
         m.Append(mids.FLIP_V, 'Flip Top/Bottom', '')
         m.Append(mids.FLIP_H, 'Flip Left/Right', '')
@@ -62,8 +59,6 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_O)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
-        self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CCW)
-
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -80,27 +75,24 @@ class ImageFrame(BaseFrame):
 
     def onFlip(self, event=None):
         conf = self.panel.conf
-        oldflip = conf.flip
         wid = event.GetId()
         mids = self.menuIDs
 
         if wid == mids.FLIP_H:
-            conf.flip = (oldflip[0], not oldflip[1])
+            conf.flip_lr = not conf.flip_lr
         elif wid == mids.FLIP_V:
-            conf.flip = (not oldflip[0], oldflip[1])
+            conf.flip_ud = not conf.flip_ud
         elif wid == mids.FLIP_O:
-            conf.flip = (False, False)
+            conf.flip_lr, conf.flip_ud = False, False
         elif wid == mids.ROT_CW:
-            conf.rot = (conf.rot + 1) % 4
-        elif wid == mids.ROT_CCW:
-            conf.rot = (conf.rot - 1) % 4
+            conf.rot = True
         self.panel.unzoom_all()
 
     def BuildFrame(self):
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
-        sfont.SetPointSize(10)
+        sfont.SetPointSize(12)
         sbar.SetFont(sfont)
 
         self.SetStatusWidths([-3, -1])

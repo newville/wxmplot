@@ -40,6 +40,8 @@ class ImagePanel(BasePanel):
         self.dpi     = dpi
         self.xlab    = 'X'
         self.ylab    = 'Y'
+        self.xdata   = None
+        self.ydata   = None
         self.BuildPanel()
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None, **kw):
@@ -179,9 +181,11 @@ class ImagePanel(BasePanel):
         # note: rotation re-calls display(), to reset the image
         # other transformations will just do .set_data() on image
         if conf.rot:
+            if self.xdata is not None:
+                self.xdata = self.xdata[::-1]
             self.display(np.rot90(conf.data),
                          x=self.ydata, xlabel=self.ylab,
-                         y=self.xdata[::-1], ylabel=self.xlab)
+                         y=self.xdata, ylabel=self.xlab)
         # flips, log scales
         img = conf.data
         if conf.flip_ud:   img = np.flipud(img)

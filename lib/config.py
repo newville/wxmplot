@@ -25,7 +25,7 @@ Valid marker names are:
 """
 
 from matplotlib.font_manager import FontProperties
-from matplotlib import rcParams
+from matplotlib import rcParams, pyparsing
 import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
@@ -238,8 +238,7 @@ class PlotConfig:
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x,y labels)"
         n = self.labelfont.get_size()
-        rcParams['xtick.labelsize']=  n-1
-        rcParams['ytick.labelsize']=  n-1
+        rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
         if xlabel is not None:  self.xlabel = xlabel
         if ylabel is not None:  self.ylabel = ylabel
         if y2label is not None: self.y2label = y2label

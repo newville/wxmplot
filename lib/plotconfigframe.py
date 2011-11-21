@@ -9,6 +9,7 @@ import matplotlib
 from matplotlib import rcParams
 from matplotlib.colors import colorConverter
 from matplotlib.font_manager import fontManager, FontProperties
+from matplotlib.pyparsing import ParseFatalException
 
 from utils import Closure, LabelEntry
 from config import PlotConfig
@@ -302,13 +303,13 @@ class PlotConfigFrame(wx.Frame):
 
     def onText(self, event,argu=''):
         if argu=='size':
-            self.conf.labelfont.set_size(event.GetInt())
-            self.conf.titlefont.set_size(event.GetInt()+2)
+            size = event.GetInt()
+            self.conf.labelfont.set_size(size)
+            self.conf.titlefont.set_size(size+2)
             for ax in self.axes:
                 for lab in ax.get_xticklabels()+ax.get_yticklabels():
-                    lab.set_fontsize( event.GetInt()-1)
-
-            self.canvas.draw()
+                    lab.set_fontsize(size)
+            self.conf.relabel()
             return
 
         s = ''
@@ -349,8 +350,10 @@ class PlotConfigFrame(wx.Frame):
                 self.redraw_legend()
             except:
                 pass
-        self.conf.relabel()
-        self.canvas.draw()
+        try:
+            self.conf.relabel()
+        except ParseFatalException:
+            print "Math pyparsing error... bad latex for %s" % argu
 
     def onShowGrid(self,event):
         self.conf.show_grid = event.IsChecked()

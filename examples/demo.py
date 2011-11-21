@@ -11,7 +11,7 @@ class TestFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent, ID, '',
                          wx.DefaultPosition, wx.Size(-1,-1),**kwds)
-        self.SetTitle(" MPlot Test ")
+        self.SetTitle(" WXMPlot Plotting Demo")
 
 
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
@@ -37,7 +37,7 @@ class TestFrame(wx.Frame):
         panel      = wx.Panel(self, -1, size=(-1, -1))
         panelsizer = wx.BoxSizer(wx.VERTICAL)
 
-        panelsizer.Add( wx.StaticText(panel, -1, 'MPlot Examples '),
+        panelsizer.Add( wx.StaticText(panel, -1, 'wxmplot 2D PlotPanel examples '),
                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT|wx.EXPAND, 10)
 
         b10 = wx.Button(panel, -1, 'Example #1',    size=(-1,-1))

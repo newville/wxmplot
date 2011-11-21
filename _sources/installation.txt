@@ -5,51 +5,59 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The mplot package requires Python, wxPython, numpy, and matplotlib.
-
+The wxmplot package requires Python, wxPython, numpy, and matplotlib.  Some
+of the example applications rely on the Image module as well.
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version is available from PyPI or CARS (Univ of Chicago):
+The latest version is available from PyPI or CARS (Univ of Chicago):
 
-.. _mplot-1.0.tar.gz (CARS): http://cars9.uchicago.edu/software/mplot/src/mplot-1.0.tar.gz
+.. _wxmplot-0.9.6.tar.gz (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.6.tar.gz
+.. _wxmplot-0.9.6.tar.gz (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.6.tar.gz
+.. _wxmplot-0.9.6.zip    (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.6.zip
+.. _wxmplot-0.9.6.zip    (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.6.zip
 
-.. _mplot github repository:   http://github.com/newville/mplot
+.. _wxmplot github repository:   http://github.com/newville/wxmplot
 .. _Python Setup Tools:        http://pypi.python.org/pypi/setuptools
 
-+----------------------+------------------+--------------------------------------------+
-|  Download Option     | Python Versions  |  Location                                  |
-+======================+==================+============================================+
-|  Source Kit          | 2.6, 2.7         | -  `mplot-1.0.tar.gz (CARS)`_              |
-+----------------------+------------------+--------------------------------------------+
-|  Development Version |   all            |  use `mplot github repository`_            |
-+----------------------+------------------+--------------------------------------------+
++----------------------+------------------+-------------------------------------------+
+|  Download Option     | Python Versions  |  Location                                 |
++======================+==================+===========================================+
+|  Source Kit          | 2.6, 2.7         | - `wxmplot-0.9.6.tar.gz (CARS)`_          |
+|                      |                  | - `wxmplot-0.9.6.tar.gz (PyPI)`_          |
+|                      |                  | - `wxmplot-0.9.6.zip    (CARS)`_          |
+|                      |                  | - `wxmplot-0.9.6.zip    (PyPI)`_          |
++----------------------+------------------+-------------------------------------------+
+|  Development Version |   all            |  use `wxmplot github repository`_         |
++----------------------+------------------+-------------------------------------------+
 
 if you have `Python Setup Tools`_  installed, you can download and install
 the package simply with::
 
-   easy_install -U mplot
+   easy_install -U wxmplot
 
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 To get the latest development version, use::
 
-   git clone http://github.com/newville/mplot.git
+   git clone http://github.com/newville/wxmplot.git
 
 
 Installation
 ~~~~~~~~~~~~~~~~~
 
-Installation from source on any platform is::
+This is a pure python module, so installation fon all platforms can use the source kit::
 
+   tar xvzf wxmplot-0.9.6.tar.gz  or unzip wxmplot-0.9.6.zip
+   cd wxmplot-0.9.6/
    python setup.py install
 
 License
 ~~~~~~~~~~~~~
 
-The mplot code is distribution under the following license:
+The wxmplot code is distribution under the following license:
 
   Copyright (c) 2011 Matthew Newville, The University of Chicago
 

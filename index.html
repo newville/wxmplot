@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MPLOT: simple, rich plotting widgets for wxPython using matplotlib &mdash; MPlot: 2d plotting widgets for wxPython, using matplotlib</title>
+    <title>WXMPLOT: simple, rich plotting widgets for wxPython using matplotlib &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
+    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="MPlot: 2d plotting widgets for wxPython, using matplotlib" href="#" />
+    <link rel="top" title="WXMPlot: 2d plotting widgets for wxPython, using matplotlib" href="#" />
     <link rel="next" title="Downloading and Installation" href="installation.html" /> 
   </head>
   <body>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">MPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li><a href="#">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
@@ -43,23 +46,23 @@
 <p>Current version: <b>0.9.6</b></p>
 <p>Downloads:
 <ul>
-  <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/mplot/src/">cars.uchicago.edu</a>
+  <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/wxmplot/src/">cars.uchicago.edu</a>
   <li>&nbsp; &nbsp; <a href="http://pypi.python.org/pypi/wxmplot/">PyPI (Python.org)</a> <p>
        try <tt>easy_install -U wxmplot</tt>
 </ul>
 <p>
 
-Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/mplot/">github.com</a> <br>
+Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxmplot/">github.com</a> <br>
 
 <h3>Documentation</h3>
 
- <a href="mplot.pdf">  PDF Format</a>
-<hr> 
+ <a href="wxmplot.pdf">  PDF Format</a>
+<hr>
 <p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -77,17 +80,17 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/mpl
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="mplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib">
-<h1>MPLOT:  simple, rich plotting widgets for wxPython using matplotlib<a class="headerlink" href="#mplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib" title="Permalink to this headline">¶</a></h1>
-<p>The mplot python package provides simple, rich plotting widgets for
+  <div class="section" id="wxmplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib">
+<h1>WXMPLOT:  simple, rich plotting widgets for wxPython using matplotlib<a class="headerlink" href="#wxmplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib" title="Permalink to this headline">¶</a></h1>
+<p>The wxmplot python package provides simple, rich plotting widgets for
 <a class="reference external" href="http://www.wxpython.org/">wxPython</a>.  These are built on top of the <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> library, which
-provides a wonderful library for 2D plots and image display.  The mplot
+provides a wonderful library for 2D plots and image display.  The wxmplot
 package does not attempt to expose all of matplotlib's capabilities, but
 does provide widgets (wxPython panels) for basic 2D plotting and image
 display that handle many use cases.  The widgets are designed to be very
 easy to program with, and provide end-users with interactivity and
 customization of the graphics without knowing matplotlib.</p>
-<p>The mplot package is aimed at programmers who want decent scientific
+<p>The wxmplot package is aimed at programmers who want decent scientific
 graphics for their applications that can be manipulated by the end-user.
 If you're a python programmer, comfortable writing matplotlib / pylab
 scripts, or plotting interactively from IPython, this package may seem to
@@ -110,7 +113,9 @@ limiting for your needs.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-methods"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imageframe-a-wx-frame-for-image-display"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#image-configuration-with-imageconfig">Image configuration with <tt class="docutils literal"><span class="pre">ImageConfig</span></tt></a></li>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#examples-and-screenshots">Examples and Screenshots</a></li>
 </ul>
 </li>
@@ -133,12 +138,12 @@ limiting for your needs.</p>
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              >next</a> |</li>
-        <li><a href="#">MPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li><a href="#">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

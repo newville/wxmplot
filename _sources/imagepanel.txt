@@ -17,6 +17,49 @@ an image, and will be discussed below.
 
    Create an Image Panel, a :class:`wx.Panel`
 
+   :param parent: wx parent object.
+   :param size:   figure size in inches.
+   :param dpi:    dots per inch for figure.
+   :param messenger: function for accepting output messages.
+   :type messenger: callable or ``None``
+   :param data_callback: function to call with new data, on :meth:`display`
+   :type data_callback: callable or ``None``
+
+   The *size*, and *dpi* arguments are sent to matplotlib's
+   :class:`Figure`.  The *messenger* should should be a function that
+   accepts text messages from the panel for informational display.  The
+   default value is to use :func:`sys.stdout.write`.
+
+   The *data_callback* is useful if some parent frame wants to know if the
+   data has been changed with :meth:`display`.  :class:`ImageFrame` uses
+   this to display the intensity max/min values.
+
+   Extra keyword parameters are sent to the wx.Panel.
+
+   The configuration settings for an image (its colormap, smoothing,
+   orientation, and so on) are controlled through configuration
+   attributes.
+
+:class:`ImagePanel` methods
+====================================================================
+
+.. method:: display(data[, x=None[, y=None[, **kws]]])
+
+   display a new image from the 2-D numpy array *data*.  If provided, the
+   *x* and *y* values will be used for display purposes, as to give scales
+   to the pixels of the data.
+
+   Additional keyword arguments will be sent to a *data_callback* function,
+   if that has been defined.
+
+.. method: clear()
+
+  clear the image
+
+.. method: redraw()
+
+  redraw the image, as when the configuration attributes have been changed.
+
 :class:`ImageFrame`:  A wx.Frame for Image Display
 ==========================================================
 
@@ -32,7 +75,8 @@ manipulate the image:
    6. modify intensity scales.
    7. save high-qualiy plot images (as PNGs), copy to system clipboard, or print.
 
-These options are all available programmatically as well.
+These options are all available programmatically as well, by setting the
+configuration attributes and redrawing the image.
 
 .. class:: ImageFrame(parent[, size=(550, 450)[, **kws]])
 
@@ -40,10 +84,55 @@ These options are all available programmatically as well.
    Create an Image Frame, a :class:`wx.Frame`.
 
 
+Image configuration with :class:`ImageConfig`
+==============================================================
+
+To change any of the attributes of the image on an :class:`ImagePanel`, you
+can set the corresponding attribute of the panel's :attr:`conf`.   That is,
+if you create an :class:`ImagePanel`, you can set the colormap with::
+
+    import matplotlib.cm as cmap
+    im_panel = ImagePanel(parent)
+    im_panel.display(data_array)
+
+    # now change colormap:
+    im_panel.conf.cmap = cmap.cool
+    im_panel.redraw()
+
+    # now rotate the image by 90 degrees (clockwise):
+    im_panel.conf.rot = True
+    im_panel.redraw()
+
+For a :class:`ImageFrame`, you can access this attribute as *frame.panel.conf.cmap*.
+
+The list of configuration attributes and their meaning are given in the
+:ref:`Table of Image Configuration attributes <imageconf_table>`
+
+.. _imageconf_table:
+
+Table of Image Configuration attributes:  All of these are members of the
+*panel.conf* object, as shown in the example above.
+
+  +----------------+------------+---------+---------------------------------------------+
+  | attribute      |   type     | default | meaning                                     |
+  +================+============+=========+=============================================+
+  | rot            | bool       | False   | rotate image 90 degrees clockwise           |
+  +----------------+------------+---------+---------------------------------------------+
+  | flip_ud        | bool       | False   | flip image top/bottom                       |
+  +----------------+------------+---------+---------------------------------------------+
+  | flip_lr        | bool       | False   | flip image left/right                       |
+  +----------------+------------+---------+---------------------------------------------+
+  | log_scale      | bool       | False   | display log(image)                          |
+  +----------------+------------+---------+---------------------------------------------+
+  | auto_intensity | bool       | True    | auto-scale the intensity                    |
+  +----------------+------------+---------+---------------------------------------------+
+
+cmap cmap_reverse interp xylims cmap_lo cmap_hi int_lo int_hi
+
 Examples and Screenshots
 ====================================================================
 
-A basic plot from a :class:`PlotFrame` looks like this:
+A basic plot from a :class:`ImageFrame` looks like this:
 
 .. image:: images/imagedisplay.png
 

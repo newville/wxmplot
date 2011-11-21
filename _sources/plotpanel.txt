@@ -267,7 +267,7 @@ menubar with menu items for saving, printing and configuring plots..
    This allows very simple scripts which give plot interactivity and
    customization::
 
-        from mplot import PlotApp
+        from wxmplot import PlotApp
         from numpy import arange, sin, cos, exp, pi
 
         xx  = arange(0.0,12.0,0.1)

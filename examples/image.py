@@ -1,6 +1,6 @@
 import wx
 from numpy import exp, random, arange, outer
-from mplot import ImageFrame
+from wxmplot import ImageFrame
 
 def gauss2d(x, y, x0, y0, sx, sy):
     return outer( exp( -(((x-x0)/float(sx))**2)/2),
@@ -9,11 +9,12 @@ def gauss2d(x, y, x0, y0, sx, sy):
 if __name__ == '__main__':
     app = wx.PySimpleApp()
     frame = ImageFrame(config_on_frame=True)
-    nx, ny = 350, 400
+    ny, nx = 350, 400
     x = arange(nx)
     y = arange(ny)
-
-    dat  = 0.3 * random.random(size=nx*ny).reshape(nx, ny)
+    ox =  x / 62.
+    oy = -2 + y / 97.0
+    dat  = 0.3 * random.random(size=nx*ny).reshape(ny, nx)
     dat =  dat + 0.25 + (6.0*gauss2d(x, y, 90,   76,  5,  6) +
                   1.0*gauss2d(x, y, 180, 100,  7,  3) +
                   1.0*gauss2d(x, y, 175,  98,  3,  7) +
@@ -22,7 +23,6 @@ if __name__ == '__main__':
                   0.9*gauss2d(x, y, 240, 265,  8,  3) +
                   7.0*gauss2d(x, y, 40,  310,  2,  3))
 
-
-    frame.display(dat)
+    frame.display(dat, x=ox, y=oy)
     frame.Show()
     app.MainLoop()

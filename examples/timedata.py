@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from mplot import PlotApp
+from wxmplot import PlotApp
 
 f = open('time.dat','r')
 l = f.readlines()
@@ -10,7 +10,7 @@ x = []
 for i in l:
     j =  i[:-1].strip().split()
     t.append(float(j[0]))
-    x.append(float(j[1]))    
+    x.append(float(j[1]))
 
 
 app = PlotApp()

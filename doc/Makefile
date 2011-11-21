@@ -2,13 +2,12 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-PAPER         =
-BUILDDIR      = _build
-
-INSTALLDIR = /home/newville/public_html/mplot/
-
+SPHINXOPTS   =
+SPHINXBUILD  = sphinx-build
+PAPER        =
+BUILDDIR     = _build
+MODULE       = wxmplot
+INSTALLDIR   = /home/newville/public_html/wxmplot/
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -23,11 +22,11 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-mplot.pdf: latex
+$(MODULE).pdf: latex
 	cd $(BUILDDIR)/latex && make all-pdf
-	cp -pr $(BUILDDIR)/latex/mplot.pdf ./
+	cp -pr $(BUILDDIR)/latex/*.pdf ./
 
-all: html mplot.pdf
+all: html $(MODULE).pdf
 
 install: all
 	cp -pr $(BUILDDIR)/latex/*.pdf $(INSTALLDIR)/.

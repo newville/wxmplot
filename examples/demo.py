@@ -2,13 +2,13 @@ import wx
 import time, os, sys
 from numpy import arange, sin, cos, exp, pi, linspace
 
-from mplot.plotframe import PlotFrame
+from wxmplot.plotframe import PlotFrame
 
 class TestFrame(wx.Frame):
     def __init__(self, parent, ID, *args,**kwds):
 
         kwds["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
-            
+
         wx.Frame.__init__(self, parent, ID, '',
                          wx.DefaultPosition, wx.Size(-1,-1),**kwds)
         self.SetTitle(" MPlot Test ")
@@ -35,8 +35,8 @@ class TestFrame(wx.Frame):
         framesizer = wx.BoxSizer(wx.VERTICAL)
 
         panel      = wx.Panel(self, -1, size=(-1, -1))
-        panelsizer = wx.BoxSizer(wx.VERTICAL)        
-        
+        panelsizer = wx.BoxSizer(wx.VERTICAL)
+
         panelsizer.Add( wx.StaticText(panel, -1, 'MPlot Examples '),
                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT|wx.EXPAND, 10)
 
@@ -51,21 +51,21 @@ class TestFrame(wx.Frame):
 
         b10.Bind(wx.EVT_BUTTON,self.onPlot1)
         b20.Bind(wx.EVT_BUTTON,self.onPlot2)
-        b22.Bind(wx.EVT_BUTTON,self.onPlot4)        
+        b22.Bind(wx.EVT_BUTTON,self.onPlot4)
         b31.Bind(wx.EVT_BUTTON,self.onPlot3)
         b32.Bind(wx.EVT_BUTTON,self.onPlotSLog)
         b40.Bind(wx.EVT_BUTTON,self.onStartTimer)
         b50.Bind(wx.EVT_BUTTON,self.onStopTimer)
-        b60.Bind(wx.EVT_BUTTON,self.onPlotBig)                
+        b60.Bind(wx.EVT_BUTTON,self.onPlotBig)
 
         panelsizer.Add(b10, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b20, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b22, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b31, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b32, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
-        panelsizer.Add(b40, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)        
+        panelsizer.Add(b40, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b50, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
-        panelsizer.Add(b60, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)        
+        panelsizer.Add(b60, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
 
         panel.SetSizer(panelsizer)
         panelsizer.Fit(panel)
@@ -97,44 +97,44 @@ class TestFrame(wx.Frame):
         try:
             self.plotframe.Show()
         except wx.PyDeadObjectError:
-            self.plotframe = PlotFrame(self)            
+            self.plotframe = PlotFrame(self)
             self.plotframe.Show()
 
         if do_raise:    self.plotframe.Raise()
-            
-    
+
+
     def onPlot1(self,event=None):
         self.ShowPlotFrame()
         self.plotframe.plot(self.x,self.y1)
         self.plotframe.oplot(self.x,self.y2)
-        self.plotframe.write_message("Plot 1")        
-        
+        self.plotframe.write_message("Plot 1")
+
     def onPlot2(self,event=None):
-        self.ShowPlotFrame()        
+        self.ShowPlotFrame()
         self.plotframe.plot( self.x,self.y2,color='black',style='dashed')
         self.plotframe.oplot(self.x,self.y3,color='green',marker='+',markersize=14)
         self.plotframe.write_message("Plot 2")
 
 
     def onPlot3(self,event=None):
-        self.ShowPlotFrame()        
+        self.ShowPlotFrame()
         self.plotframe.plot( self.x,self.y4,ylog_scale=False,
                              color='black',style='dashed')
         self.plotframe.write_message("Exponential Plot")
 
-        
+
     def onPlot4(self,event=None):
-        self.ShowPlotFrame()        
+        self.ShowPlotFrame()
         self.plotframe.plot( self.x,self.y2, color='black',style='dashed')
         self.plotframe.oplot(self.x,self.y5, color='red', side='right')
         self.plotframe.write_message("Plot with 2 axes")
 
 
     def onPlotSLog(self,event=None):
-        self.ShowPlotFrame()        
+        self.ShowPlotFrame()
         self.plotframe.plot( self.x,self.y4,ylog_scale=True,
                              color='black',style='dashed')
-        self.plotframe.write_message("Semi Log Plot")        
+        self.plotframe.write_message("Semi Log Plot")
 
     def onPlotBig(self,event=None):
         self.ShowPlotFrame()
@@ -151,7 +151,7 @@ class TestFrame(wx.Frame):
         else:
             mem = 0
         return int(mem)
-    
+
     def onStartTimer(self,event=None):
         self.count    = 0
         self.up_count = 0
@@ -159,7 +159,7 @@ class TestFrame(wx.Frame):
         self.time0    = time.time()
         self.start_mem= self.report_memory()
         self.timer.Start(25)
-        
+
     def timer_results(self):
         if (self.count < 2): return
         etime = time.time() - self.time0
@@ -168,7 +168,7 @@ class TestFrame(wx.Frame):
         self.plotframe.write_message(s)
         self.time0 = 0
         self.count = 0
-        
+
     def onStopTimer(self,event=None):
         self.timer.Stop()
         try:
@@ -179,7 +179,7 @@ class TestFrame(wx.Frame):
     def onTimer(self, event):
         # print 'timer ', self.count, time.time()
         self.count += 1
-        self.ShowPlotFrame(do_raise=False)        
+        self.ShowPlotFrame(do_raise=False)
         n = self.count
         if n >= self.npts:
             self.timer.Stop()
@@ -209,11 +209,11 @@ class TestFrame(wx.Frame):
                           (min(self.y1[0:nx]),max(self.y1[0:nx])))
             self.up_count = self.up_count + 1
             self.plotframe.panel.set_xylims(xylims,autoscale=False)
-            
+
     def XonTimer(self, event):
         # print 'timer ', self.count
         self.count += 1
-        self.ShowPlotFrame(do_raise=False)        
+        self.ShowPlotFrame(do_raise=False)
 
         if self.count >= self.npts:
             self.timer.Stop()

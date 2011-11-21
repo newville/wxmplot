@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #
-# Name:      mplot
+# Name:      wxmplot
+# Version:   0.9.6
 # Purpose:   Provide user-configurable 2D plotting module, using wxPython
 #            and matplotlib.
 # Author:    Matthew Newville
-# Copyright: Matthew Newville, The University of Chicago, 2004
+# Copyright: Matthew Newville, The University of Chicago, 2011
 # Licence:   BSD license
-# Created:   12/09/2004
+# Updated:   11/20/2011
 #-----------------------------------------------------------------------------
 
 """
@@ -14,10 +15,10 @@ MPlot:  Plotting Tools based on matplotlib and wxPython.
 
 Principle objects:
 
-    PlotPanel:   2D Plotting Panel
+    PlotPanel: 2D Plotting Panel
     PlotFrame  wx.Frame containing PlotPanel
 
-    ImagePanel:    Image display Panel
+    ImagePanel:  Image display Panel
     ImageFrame   wx.Frame containing ImagePanel
 
   PlotPanel is a wxPython plotting component, that can be included in
@@ -61,11 +62,10 @@ and provides these basic methods:
 
    clear():  clear plot
    save_figure():  bring up file dialog for saving image of figure
-
 """
 
 __version__  = '0.9.6'
-__date__     = '18-Nov-2011'
+__date__     = '20-Nov-2011'
 
 from plotframe import PlotFrame
 from plotpanel import PlotPanel

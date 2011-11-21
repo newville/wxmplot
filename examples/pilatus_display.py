@@ -4,7 +4,7 @@
 import wx
 import Image
 import numpy
-import mplot
+from wxmplot import ImageFrame
 
 def getPilatusImage(filename):
     img = Image.open(filename)
@@ -14,7 +14,7 @@ def getPilatusImage(filename):
 img, dat = getPilatusImage('Pilatus.tiff')
 
 app = wx.PySimpleApp()
-frame = mplot.ImageFrame()
+frame = ImageFrame()
 frame.display(dat)
 frame.Show()
 app.MainLoop()

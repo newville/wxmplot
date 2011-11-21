@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# mplot documentation build configuration file
+# wxmplot documentation build configuration file
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -36,7 +36,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'mplot'
+project = u'wxmplot'
 copyright = u'2011, Matthew Newville, The University of Chicago'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -45,8 +45,8 @@ copyright = u'2011, Matthew Newville, The University of Chicago'
 #
 # The short X.Y version.
 try:
-    import mplot
-    release = mplot.__version__
+    import wxmplot
+    release = wxmplot.__version__
 # The full version, including alpha/beta/rc tags.
 except ImportError:
     release = '0.1'
@@ -110,10 +110,10 @@ html_theme = 'sphinxdoc'
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 #html_title = None
-html_title = 'MPlot: 2d plotting widgets for wxPython, using matplotlib'
+html_title = 'WXMPlot: 2d plotting widgets for wxPython, using matplotlib'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = 'MPlot: 2d plotting widgets for wxPython, using matplotlib'
+html_short_title = 'WXMPlot: 2d plotting widgets for wxPython, using matplotlib'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -165,7 +165,7 @@ html_show_sourcelink = True
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'mplotdoc'
+htmlhelp_basename = 'wxmplotdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -179,7 +179,7 @@ htmlhelp_basename = 'mplotdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'mplot.tex', u'mplot documentation',
+  ('index', 'wxmplot.tex', u'wxmplot documentation',
    u'Matthew Newville', 'manual'),
 ]
 

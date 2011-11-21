@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from mplot import PlotApp
+from wxmplot import PlotApp
 
 f = open('xafs.dat','r')
 x = []

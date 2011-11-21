@@ -5,7 +5,7 @@ import numpy as np
 import wx
 from wx.lib import masked
 
-from mplot import PlotPanel
+from wxmplot import PlotPanel
 
 def next_data():
     "simulated data"
@@ -22,7 +22,7 @@ class StripChartFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent, ID, '',
                          wx.DefaultPosition, wx.Size(-1,-1), **kws)
-        self.SetTitle("mplot StripChart Demo")
+        self.SetTitle("wxmplot StripChart Demo")
 
         self.tmin = 15.0
 
@@ -67,7 +67,6 @@ class StripChartFrame(wx.Frame):
                                          fractionWidth=1,  allowNegative=False,
                                          allowNone=False, min=0.1, limited=True)
 
-
         btnsizer.Add(b_on,   0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(b_off,  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(tlabel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
@@ -108,7 +107,6 @@ class StripChartFrame(wx.Frame):
         self.count += 1
         etime = time.time() - self.time0
         self.tmin = float(self.time_range.GetValue())
-
         t1, y1 = next_data()
         self.tlist.append(t1)
         self.ylist.append(y1)
@@ -128,8 +126,8 @@ class StripChartFrame(wx.Frame):
                                   autoscale=False)
 
     def OnAbout(self, event):
-        dlg = wx.MessageDialog(self, "mplot example: stripchart app",
-                              "About MPlot test", wx.OK | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",
+                              "About WXMPlot test", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 

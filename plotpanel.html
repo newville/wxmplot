@@ -3,20 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>PlotPanel: A wx.Panel for Basic 2D Line Plots &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
-    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -72,7 +69,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -104,7 +101,7 @@ capabilities for the end-user:</p>
 <li>customize titles, labels, legend, color, linestyle, marker,
 and whether a grid is shown.  A separate window is used to
 set these attributes.</li>
-<li>save high-qualiy plot images (as PNGs), copy to system
+<li>save high-quality plot images (as PNGs), copy to system
 clipboard, or print.</li>
 </ol>
 </div></blockquote>
@@ -124,12 +121,12 @@ to interact with the plots.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>parent</strong> -- wx parent object.</li>
 <li><strong>size</strong> -- figure size in inches.</li>
 <li><strong>dpi</strong> -- dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
-<li><strong>show_config_popup</strong> (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>) -- whether to enable a popup-menu on right-click.</li>
+<li><strong>messenger</strong> (callable or <tt class="xref docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
+<li><strong>show_config_popup</strong> (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>) -- whether to enable a popup-menu on right-click.</li>
 </ul>
 </td>
 </tr>
@@ -176,119 +173,119 @@ the arguments are available for both <a class="reference internal" href="#plot" 
 <col width="59%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">argument</th>
+<tr><th class="head">argument</th>
 <th class="head">type</th>
 <th class="head">default</th>
 <th class="head">meaning</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>title</td>
+<tr><td>title</td>
 <td>string</td>
 <td>None</td>
 <td>Plot title (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-odd"><td>xlabel</td>
+<tr><td>xlabel</td>
 <td>string</td>
 <td>None</td>
 <td>ordinate label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-even"><td>ylabel</td>
+<tr><td>ylabel</td>
 <td>string</td>
 <td>None</td>
 <td>abscissa label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-odd"><td>y2label</td>
+<tr><td>y2label</td>
 <td>string</td>
 <td>None</td>
 <td>right-hand abscissa label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-even"><td>label</td>
+<tr><td>label</td>
 <td>string</td>
 <td>None</td>
 <td>trace label (defaults to 'trace N')</td>
 </tr>
-<tr class="row-odd"><td>side</td>
+<tr><td>side</td>
 <td>left/right</td>
 <td>left</td>
 <td>side for ylabel</td>
 </tr>
-<tr class="row-even"><td>use_dates</td>
+<tr><td>use_dates</td>
 <td>bool</td>
 <td>False</td>
 <td>to show dates in xlabel (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-odd"><td>grid</td>
+<tr><td>grid</td>
 <td>None/bool</td>
 <td>None</td>
 <td>to show grid lines (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 </tr>
-<tr class="row-even"><td>color</td>
+<tr><td>color</td>
 <td>string</td>
 <td>blue</td>
 <td>color to use for trace</td>
 </tr>
-<tr class="row-odd"><td>linewidth</td>
+<tr><td>linewidth</td>
 <td>int</td>
 <td>2</td>
 <td>linewidth for trace</td>
 </tr>
-<tr class="row-even"><td>style</td>
+<tr><td>style</td>
 <td>string</td>
 <td>solid</td>
 <td>line-style for trace (solid, dashed, ...)</td>
 </tr>
-<tr class="row-odd"><td>drawstyle</td>
+<tr><td>drawstyle</td>
 <td>string</td>
 <td>line</td>
 <td>style connecting points of trace</td>
 </tr>
-<tr class="row-even"><td>marker</td>
+<tr><td>marker</td>
 <td>string</td>
 <td>None</td>
 <td>symbol to show for each point (+, o, ....)</td>
 </tr>
-<tr class="row-odd"><td>markersize</td>
+<tr><td>markersize</td>
 <td>int</td>
 <td>8</td>
 <td>size of marker shown for each point</td>
 </tr>
-<tr class="row-even"><td>dy</td>
+<tr><td>dy</td>
 <td>array</td>
 <td>None</td>
 <td>uncertainties for y values; error bars</td>
 </tr>
-<tr class="row-odd"><td>ylog_scale</td>
+<tr><td>ylog_scale</td>
 <td>bool</td>
 <td>False</td>
 <td>draw y axis with log(base 10) scale</td>
 </tr>
-<tr class="row-even"><td>xmin</td>
+<tr><td>xmin</td>
 <td>float</td>
 <td>None</td>
 <td>minimum displayed x value</td>
 </tr>
-<tr class="row-odd"><td>xmax</td>
+<tr><td>xmax</td>
 <td>float</td>
 <td>None</td>
 <td>maximum displayed x value</td>
 </tr>
-<tr class="row-even"><td>ymin</td>
+<tr><td>ymin</td>
 <td>float</td>
 <td>None</td>
 <td>minimum displayed y value</td>
 </tr>
-<tr class="row-odd"><td>ymax</td>
+<tr><td>ymax</td>
 <td>float</td>
 <td>None</td>
 <td>maximum displayed y value</td>
 </tr>
-<tr class="row-even"><td>xylims</td>
+<tr><td>xylims</td>
 <td>2x2 list</td>
 <td>None</td>
 <td>[[xmin, xmax], [ymin, ymax]]</td>
 </tr>
-<tr class="row-odd"><td>autoscale</td>
+<tr><td>autoscale</td>
 <td>bool</td>
 <td>True</td>
 <td>whether to automatically set plot limits</td>
@@ -299,7 +296,7 @@ the arguments are available for both <a class="reference internal" href="#plot" 
 displays) and for each trace (color, linewidth, ...) are preserved for a
 <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>. A few specific notes:</p>
 <blockquote>
-<div><p>1. The title, label, and grid arguments to <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> default to <tt class="docutils literal"><span class="pre">None</span></tt>,
+<div><p>1. The title, label, and grid arguments to <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> default to <tt class="xref docutils literal"><span class="pre">None</span></tt>,
 which means to use the previously used value.</p>
 <p>2. The <em>use_dates</em> option is not very rich, and simply turns x-values that
 are Unix timestamps into x labels showing the dates.</p>
@@ -337,7 +334,7 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>limits</strong> (<em>2x2 list: [[xmin, xmax], [ymin, ymax]]</em>) -- x and y limits</li>
 <li><strong>axes</strong> -- instance of matplotlib axes to use (i.e, for right or left side y axes)</li>
 <li><strong>side</strong> -- set to 'right' to get right-hand axes.</li>
@@ -376,7 +373,7 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>trace</strong> -- integer index for the trace (0 is the first trace)</li>
 <li><strong>x</strong> -- array of x values</li>
 <li><strong>y</strong> -- array of y values</li>
@@ -491,10 +488,10 @@ p.run()</pre>
 <div class="section" id="examples-and-screenshots">
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
 <p>A basic plot from a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> looks like this:</p>
-<img alt="_images/basic_screenshot.png" src="_images/basic_screenshot.png" />
+<img alt="_images/basic_screenshot2.png" src="_images/basic_screenshot2.png" />
 <p>The configuration window (Options-&gt;Configuration or Ctrl-K) for this plot looks
 like this:</p>
-<img alt="_images/configuration_frame.png" src="_images/configuration_frame.png" />
+<img alt="_images/configuration_frame2.png" src="_images/configuration_frame2.png" />
 <p>where all the options there will dynamically change the plot in the PlotPanel.</p>
 <p>Many more examples are given in the <em>examples</em> directory in the source
 distribution kit.  The <em>demo.py</em> script there will show several 2D Plot
@@ -528,7 +525,7 @@ shows a dynamic, time-based plot.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

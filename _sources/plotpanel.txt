@@ -14,7 +14,7 @@ capabilities for the end-user:
    3. customize titles, labels, legend, color, linestyle, marker,
       and whether a grid is shown.  A separate window is used to
       set these attributes.
-   4. save high-qualiy plot images (as PNGs), copy to system
+   4. save high-quality plot images (as PNGs), copy to system
       clipboard, or print.
 
 A :class:`PlotFrame` that includes a :class:`PlotPanel`, menus, and

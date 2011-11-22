@@ -3,20 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>ImagePanel: A wx.Panel for Image Display &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
-    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,7 +62,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -101,12 +98,12 @@ an image, and will be discussed below.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>parent</strong> -- wx parent object.</li>
 <li><strong>size</strong> -- figure size in inches.</li>
 <li><strong>dpi</strong> -- dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
-<li><strong>data_callback</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function to call with new data, on <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a></li>
+<li><strong>messenger</strong> (callable or <tt class="xref docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
+<li><strong>data_callback</strong> (callable or <tt class="xref docutils literal"><span class="pre">None</span></tt>) -- function to call with new data, on <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -151,7 +148,7 @@ manipulate the image:</p>
 <li>flip and rotate image.</li>
 <li>select optional smoothing interpolation.</li>
 <li>modify intensity scales.</li>
-<li>save high-qualiy plot images (as PNGs), copy to system clipboard, or print.</li>
+<li>save high-quality plot images (as PNGs), copy to system clipboard, or print.</li>
 </ol>
 </div></blockquote>
 <p>These options are all available programmatically as well, by setting the
@@ -195,50 +192,109 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">attribute</th>
+<tr><th class="head">attribute</th>
 <th class="head">type</th>
 <th class="head">default</th>
 <th class="head">meaning</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>rot</td>
+<tr><td>rot</td>
 <td>bool</td>
 <td>False</td>
 <td>rotate image 90 degrees clockwise</td>
 </tr>
-<tr class="row-odd"><td>flip_ud</td>
+<tr><td>flip_ud</td>
 <td>bool</td>
 <td>False</td>
 <td>flip image top/bottom</td>
 </tr>
-<tr class="row-even"><td>flip_lr</td>
+<tr><td>flip_lr</td>
 <td>bool</td>
 <td>False</td>
 <td>flip image left/right</td>
 </tr>
-<tr class="row-odd"><td>log_scale</td>
+<tr><td>log_scale</td>
 <td>bool</td>
 <td>False</td>
 <td>display log(image)</td>
 </tr>
-<tr class="row-even"><td>auto_intensity</td>
+<tr><td>auto_intensity</td>
 <td>bool</td>
 <td>True</td>
 <td>auto-scale the intensity</td>
 </tr>
+<tr><td>cmap</td>
+<td>colormap</td>
+<td>gray</td>
+<td>colormap for intensity scale</td>
+</tr>
+<tr><td>cmap_reverse</td>
+<td>bool</td>
+<td>False</td>
+<td>reverse colormap</td>
+</tr>
+<tr><td>interp</td>
+<td>string</td>
+<td>nearest</td>
+<td>interpolation, smoothing algorithm</td>
+</tr>
+<tr><td>xylims</td>
+<td>list</td>
+<td>None</td>
+<td>xmin, xmax, ymin, ymax for display</td>
+</tr>
+<tr><td>cmap_lo</td>
+<td>int</td>
+<td>0</td>
+<td>low intensity percent for colormap mapping</td>
+</tr>
+<tr><td>cmap_hi</td>
+<td>int</td>
+<td>100</td>
+<td>high intensity percent for colormap mapping</td>
+</tr>
+<tr><td>int_lo</td>
+<td>float</td>
+<td>None</td>
+<td>low intensity when autoscaling is off</td>
+</tr>
+<tr><td>int_hi</td>
+<td>float</td>
+<td>None</td>
+<td>high intensity when autoscaling is off</td>
+</tr>
 </tbody>
 </table>
 </div></blockquote>
-<p>cmap cmap_reverse interp xylims cmap_lo cmap_hi int_lo int_hi</p>
+<p>Some notes:</p>
+<ol class="arabic simple">
+<li><em>cmap</em> is an instance of a matplotlib colormap.</li>
+<li><em>cmap_lo</em> and <em>cmap_hi</em> set the low and high values for the sliders that compress the
+colormap, and are on a scale from 0 to 100.</li>
+<li>In contrast, <em>int_lo</em> and <em>int_hi</em> set the map intensity values that are used when
+<em>auto_intensity</em> is <tt class="xref docutils literal"><span class="pre">False</span></tt>.  These can be used to put two different maps on the
+same intensity intensity scale.</li>
+</ol>
 </div>
 <div class="section" id="examples-and-screenshots">
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
 <p>A basic plot from a <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> looks like this:</p>
-<img alt="_images/imagedisplay.png" src="_images/imagedisplay.png" />
-<p>This screenshot (from Mac OS X) doesn't show the top menu, which includes
-menus for rotating or flipping the image, selecting an interpolation
-scheme, or saving PNG images of either the image or the colormap.</p>
+<img alt="_images/imagedisplay5.png" src="_images/imagedisplay5.png" />
+<p>This screenshot shows a long list of choices for color table, a checkbox to
+reverse the color table, sliders to adjust the upper and lower level, a
+checkbox to auto-scale the intensity, or entries to set the intensity
+values for minimum and maximum intensity.  Clicking on the image will show
+its coordinates and intensity value.  Click-and-Drag will select a
+rectangular box to zoom in on a particular feature of the image.</p>
+<p>The File menu includes options to save an PNG file of the image (Ctrl-S),
+copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
+print-preview the image, or quit the application.   The Options menu
+includes Zoom Out (Ctrl-Z), applying a log-scale to the intensity (Ctrl-L),
+rotating the image clockwise (Ctrl-R), flipping the image top/bottom
+(Ctrl-T) or right/left (Ctrl-F), or saving an image of the colormap.
+The Smoothing menu allows you choose from one of several interpolation
+algorithms.</p>
 </div>
 </div>
 
@@ -262,7 +318,7 @@ scheme, or saving PNG images of either the image or the colormap.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

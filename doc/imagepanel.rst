@@ -126,8 +126,14 @@ Table of Image Configuration attributes:  All of these are members of the
   +----------------+------------+---------+---------------------------------------------+
   | auto_intensity | bool       | True    | auto-scale the intensity                    |
   +----------------+------------+---------+---------------------------------------------+
+  | cmap           | colormap   | gray    | colormap for intensity scale                |
+  +----------------+------------+---------+---------------------------------------------+
+  | cmap_reverse   | bool       | False   | reverse colormap                            |
+  +----------------+------------+---------+---------------------------------------------+
+  | interp         | string     | nearest | interpolation, smoothing algorithm          |
+  +----------------+------------+---------+---------------------------------------------+
 
-cmap cmap_reverse interp xylims cmap_lo cmap_hi int_lo int_hi
+xylims cmap_lo cmap_hi int_lo int_hi
 
 Examples and Screenshots
 ====================================================================
@@ -136,6 +142,19 @@ A basic plot from a :class:`ImageFrame` looks like this:
 
 .. image:: images/imagedisplay.png
 
-This screenshot (from Mac OS X) doesn't show the top menu, which includes
-menus for rotating or flipping the image, selecting an interpolation
-scheme, or saving PNG images of either the image or the colormap.
+This screenshot shows a long list of choices for color table, a checkbox to
+reverse the color table, sliders to adjust the upper and lower level, a
+checkbox to auto-scale the intensity, or entries to set the intensity
+values for minimum and maximum intensity.  Clicking on the image will show
+its coordinates and intensity value.  Click-and-Drag will select a
+rectangular box to zoom in on a particular feature of the image.
+
+The File menu includes options to save an PNG file of the image (Ctrl-S),
+copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
+print-preview the image, or quit the application.   The Options menu
+includes Zoom Out (Ctrl-Z), applying a log-scale to the intensity (Ctrl-L),
+rotating the image clockwise (Ctrl-R), flippint the image top/bottom
+(Ctrl-T) or right/left (Ctrl-F), or saving an image of the colormap.
+The Smoothing menu allows you choose from one of several interpolation
+algorithms.
+

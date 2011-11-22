@@ -4,9 +4,10 @@
 import distutils
 from distutils.core import setup, Extension
 
+import lib
 setup(
     name = 'wxmplot',
-    version = '0.9.6',
+    version = lib.__version__,
     author = 'Matthew Newville',
     author_email = 'newville@cars.uchicago.edu',
     license = 'Python',

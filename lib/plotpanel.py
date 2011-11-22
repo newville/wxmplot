@@ -78,7 +78,7 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              dy=None, xylims=None, ylog_scale=False,
+              dy=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=None, marker=None, markersize=None,
@@ -110,15 +110,19 @@ class PlotPanel(BasePanel):
                                       [min(dr[1][0], min(ydata)),
                                        max(dr[1][1], max(ydata))]]
 
+        xylims = None
+        if xmin is not None:
+            self.data_range[axes][0][0] = max(xmin, dr[0][0])
+            xylims = self.data_range[axes]
         if xmax is not None:
-            self.data_range[axes][0] = max(xmin, dr[0][0])
-        if xmax is not None:
-            self.data_range[axes][1] = min(xmax, dr[0][1])
+            self.data_range[axes][0][1] = min(xmax, dr[0][1])
+            xylims = self.data_range[axes]
         if ymin is not None:
-            self.data_range[axes][2] = max(ymin, dr[1][0])
+            self.data_range[axes][1][0] = max(ymin, dr[1][0])
+            xylims = self.data_range[axes]
         if ymax is not None:
-            self.data_range[axes][3] = min(ymax, dr[1][1])
-
+            self.data_range[axes][1][1] = min(ymax, dr[1][1])
+            xylims = self.data_range[axes]
         cnf  = self.conf
         n    = cnf.ntrace
 
@@ -169,7 +173,6 @@ class PlotPanel(BasePanel):
 
     def set_xylims(self, lims, axes=None, side=None, autoscale=True):
         """ update xy limits of a plot, as used with .update_line() """
-
         if axes is None:
             axes = self.axes
         if side == 'right' and len(self.fig.get_axes()) == 2:
@@ -224,7 +227,7 @@ class PlotPanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
-        self.axes  = self.fig.add_axes([0.12, 0.12, 0.76, 0.76],
+        self.axes  = self.fig.add_axes([0.12, 0.15, 0.76, 0.7],
                                        axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)

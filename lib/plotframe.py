@@ -14,7 +14,7 @@ class PlotFrame(BaseFrame):
         if title is None:
             title = '2D Plot Frame'
         BaseFrame.__init__(self, parent=parent,
-                           title  = title, 
+                           title  = title,
                            size=size, **kws)
         self.BuildFrame()
 

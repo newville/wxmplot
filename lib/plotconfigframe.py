@@ -58,8 +58,11 @@ class PlotConfigFrame(wx.Frame):
 
         topsizer.Add(ltitle,(0,0),(1,5),  labstyle,2)
 
-        self.titl = LabelEntry(panel, self.conf.title,  size=420,labeltext='Title: ',
-                               action = Closure(self.onText,argu='title'))
+        tlabel = wx.StaticText(panel, -1, 'Title:', size=(-1,-1),style=labstyle)
+        mlstyle = wx.TE_PROCESS_ENTER|wx.ST_NO_AUTORESIZE|wx.TE_MULTILINE
+        self.titl = wx.TextCtrl(panel, -1, self.conf.title, size=(420, 35),
+                                style=mlstyle)
+        self.titl.Bind(wx.EVT_KILL_FOCUS, Closure(self.onText, argu='title'))
 
         self.xlab = LabelEntry(panel, self.conf.xlabel, size=420,labeltext='X Label: ',
                                action = Closure(self.onText,argu='xlabel'))
@@ -67,19 +70,19 @@ class PlotConfigFrame(wx.Frame):
         self.ylab = LabelEntry(panel, self.conf.ylabel, size=420,labeltext='Y Label: ',
                                action = Closure(self.onText,argu='ylabel'))
 
-        self.y2lab = LabelEntry(panel, self.conf.ylabel, size=420,labeltext='Y2 Label: ',
-                               action = Closure(self.onText,argu='ylabel'))
+        self.y2lab = LabelEntry(panel, self.conf.y2label, size=420, labeltext='Y2 Label: ',
+                               action = Closure(self.onText, argu='y2label'))
 
 
+        topsizer.Add(tlabel,          (1, 0), (1, 1), labstyle,5)
+        topsizer.Add(self.titl,       (1, 1), (1, 5), labstyle,5)
+        topsizer.Add(self.xlab.label, (2, 0), (1, 1), labstyle,5)
+        topsizer.Add(self.xlab,       (2, 1), (1, 5), labstyle,5)
+        topsizer.Add(self.ylab.label, (3, 0), (1, 1), labstyle,5)
+        topsizer.Add(self.ylab,       (3, 1), (1, 5), labstyle,5)
+        topsizer.Add(self.y2lab.label,(4, 0), (1, 1), labstyle,5)
+        topsizer.Add(self.y2lab,      (4, 1), (1, 5), labstyle,5)
 
-        topsizer.Add(self.titl.label, (1,0), (1,1), labstyle,5)
-        topsizer.Add(self.titl,       (1,1), (1,5), labstyle,5)
-        topsizer.Add(self.y2lab.label,(2,0), (1,1), labstyle,5)
-        topsizer.Add(self.y2lab,      (2,1), (1,5), labstyle,5)
-        topsizer.Add(self.ylab.label, (3,0), (1,1), labstyle,5)
-        topsizer.Add(self.ylab,       (3,1), (1,5), labstyle,5)
-        topsizer.Add(self.xlab.label, (4,0), (1,1), labstyle,5)
-        topsizer.Add(self.xlab,       (4,1), (1,5), labstyle,5)
 
         tl2 = wx.StaticText(panel, -1, 'Text Size:', size=(-1,-1),style=labstyle)
         txt_size = wx.SpinCtrl(panel, -1, "", (-1,-1),(55,30))
@@ -113,22 +116,27 @@ class PlotConfigFrame(wx.Frame):
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
 
         ax = self.axes[0]
-        col = mpl_color(ax.get_axis_bgcolor(),default=(255,255,252))
-        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(130, 30))
+        col = mpl_color(ax.get_axis_bgcolor(), default=(255,255,252))
+        bgcol = csel.ColourSelect(panel,  -1, "Plot Background", col, size=(120, 30))
+
+        col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
+        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(100, 30))
 
         col = mpl_color(ax.get_xgridlines()[0].get_color(),default=(240,240,240))
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
 
-        bgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor,argu='bg'))
-        gridcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu='grid'))
+        bgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='bg'))
+        fbgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='fbg'))
+        gridcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor, argu='grid'))
 
         btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
         midsizer  = wx.GridBagSizer(5,8)
 
-        midsizer.Add(tcol,      (0,0), (1,1), labstyle,2)
-        midsizer.Add(gridcol,   (0,1), (1,1), btnstyle,2)
-        midsizer.Add(bgcol,     (0,2), (1,1), btnstyle,2)
+        midsizer.Add(tcol,      (0, 0), (1,1), labstyle,2)
+        midsizer.Add(gridcol,   (0, 1), (1,1), btnstyle,2)
+        midsizer.Add(bgcol,     (0, 2), (1,1), btnstyle,2)
+        midsizer.Add(fbgcol,    (0, 3), (1,1), btnstyle,2)
 
 
         tl1 = wx.StaticText(panel, -1, '  Legend at:', size=(-1,-1),style=labstyle)
@@ -142,7 +150,7 @@ class PlotConfigFrame(wx.Frame):
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
 
-        midsizer.Add(tl1,       (0,3), (1,2), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL,2)
+        midsizer.Add(tl1,       (0,4), (1,1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL,2)
         midsizer.Add(leg_loc,   (0,5), (1,1), labstyle,2)
         midsizer.Add(leg_onax,  (0,6), (1,1), labstyle,2)
 
@@ -245,9 +253,9 @@ class PlotConfigFrame(wx.Frame):
         self.Show()
         self.Raise()
 
-    def onColor(self,event,argu='grid'):
+    def onColor(self, event, argu='grid'):
         color = hexcolor( event.GetValue() )
-        if (argu[:6] == 'trace '):
+        if argu[:6] == 'trace ':
             self.conf.set_trace_color(color,trace=int(argu[6:]))
             self.redraw_legend()
         elif argu == 'grid':
@@ -257,7 +265,8 @@ class PlotConfigFrame(wx.Frame):
         elif argu == 'bg':
             for ax in self.axes:
                 ax.set_axis_bgcolor(color)
-
+        elif argu == 'fbg':
+            self.canvas.figure.set_facecolor(color)
         self.canvas.draw()
 
 
@@ -320,11 +329,12 @@ class PlotConfigFrame(wx.Frame):
                 s = self.titl.GetValue()
             if argu == 'ylabel':
                 s = self.ylab.GetValue()
+            if argu == 'y2label':
+                s = self.y2lab.GetValue()
             if argu == 'xlabel':
                 s = self.xlab.GetValue()
-            elif (argu[:6] == 'trace '):
+            elif argu[:6] == 'trace ':
                 s = self.trace_labels[int(argu[6:])].GetValue()
-
         try:
             s = str(s).strip()
         except TypeError:
@@ -338,13 +348,15 @@ class PlotConfigFrame(wx.Frame):
         else:
             t = r"""%s""" % s
 
-        if (argu == 'xlabel'):
+        if argu == 'xlabel':
             self.conf.xlabel = t
-        elif (argu == 'ylabel'):
+        elif argu == 'ylabel':
             self.conf.ylabel = t
-        elif (argu == 'title'):
+        elif argu == 'y2label':
+            self.conf.y2label = t
+        elif argu == 'title':
             self.conf.title = t
-        elif (argu[:6] == 'trace '):
+        elif argu[:6] == 'trace ':
             try:
                 self.conf.set_trace_label(t,trace=int(argu[6:]))
                 self.redraw_legend()

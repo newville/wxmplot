@@ -48,11 +48,17 @@ class PlotPanel(BasePanel):
         """
         plot (that is, create a new plot: clear, then oplot)
         """
+        
+        allaxes = self.fig.get_axes()
+        if len(allaxes) > 1:
+            for ax in allaxes[1:]:
+                self.fig.delaxes(ax)
 
-        axes = self.fig.get_axes()[0]
+        axes = self.axes
+        axes.cla()        
         if side == 'right':
             axes = self.get_right_axes()
-        axes.cla()
+            axes.cla()
         self.conf.ntrace  = 0
         self.data_range[axes] = [min(xdata), max(xdata),
                                  min(ydata), max(ydata)]

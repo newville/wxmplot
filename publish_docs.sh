@@ -2,6 +2,7 @@ docbuild='doc/_build'
 
 cd doc
 echo '# Making docs'
+rm -rf _build/
 make all
 cd ../
 

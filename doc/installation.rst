@@ -54,7 +54,7 @@ To get the latest development version, use::
 Installation
 ~~~~~~~~~~~~~~~~~
 
-This is a pure python module, so installation fon all platforms can use the source kit::
+This is a pure python module, so installation on all platforms can use the source kit::
 
    tar xvzf wxmplot-0.9.7.tar.gz  or unzip wxmplot-0.9.7.zip
    cd wxmplot-0.9.7/

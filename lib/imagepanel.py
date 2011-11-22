@@ -50,7 +50,7 @@ class ImagePanel(BasePanel):
         """
         self.axes.cla()
         self.conf.rot = False
-        self.data_range = [0,data.shape[1], 0, data.shape[0]]
+        self.data_range = [0, data.shape[1], 0, data.shape[0]]
         if x is not None:
             self.xdata = np.array(x)
             if self.xdata.shape[0] != data.shape[1]:
@@ -80,9 +80,9 @@ class ImagePanel(BasePanel):
             axes = self.axes
 
         if autoscale:
-            (xmin, xmax), (ymin, ymax) = self.data_range
+            xmin, xmax, ymin, ymax = self.data_range
         else:
-            (xmin, xmax), (ymin, ymax) = lims
+            xmin, xmax, ymin, ymax = lims
 
         xmin = int(max(self.data_range[0], xmin) + 0.5)
         xmax = int(min(self.data_range[1], xmax) + 0.5)
@@ -162,7 +162,7 @@ class ImagePanel(BasePanel):
         if lims is None: # auto scale
             self.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
-            lims = {self.axes: ((xmin, xmax), (ymin, ymax))}
+            lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
 
     def unzoom_all(self, event=None):

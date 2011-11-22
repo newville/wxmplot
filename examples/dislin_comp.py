@@ -14,8 +14,9 @@ y2 = np.sin(np.pi*x/180)
 app = PlotApp()
 app.plot(x, y1, color='red',
          xlabel='x', ylabel='y',
-         title='DISLIN Comparison\nsin(x) and cos(x)')
-app.oplot(x, y2, color='green3', marker='+',
-          xmin=0, xmax=360.0)
+         title='DISLIN Comparison\nsin(x) and cos(x)',
+         xmin=0, xmax=360.0)
+app.oplot(x, y2, color='green3', marker='+')
+
 
 app.run()

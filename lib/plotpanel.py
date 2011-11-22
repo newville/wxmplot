@@ -9,9 +9,9 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
-from config import PlotConfig
 from plotconfigframe import PlotConfigFrame
 from basepanel import BasePanel
+from config import PlotConfig
 
 class PlotPanel(BasePanel):
     """
@@ -49,18 +49,14 @@ class PlotPanel(BasePanel):
         plot (that is, create a new plot: clear, then oplot)
         """
 
-        allaxes = self.fig.get_axes()
-        if len(allaxes) > 1:
-            for ax in allaxes[1:]:
-                self.fig.delaxes(ax)
-
-        axes = self.axes
+        axes = self.fig.get_axes()[0]
         if side == 'right':
-            axes = self.create_right_axes()
+            axes = self.get_right_axes()
         axes.cla()
         self.conf.ntrace  = 0
-        self.data_range[axes] = [[min(xdata), max(xdata)],
-                                 [min(ydata), max(ydata)]]
+        self.data_range[axes] = [min(xdata), max(xdata),
+                                 min(ydata), max(ydata)]
+
         if xlabel is not None:
             self.set_xlabel(xlabel)
         if ylabel is not None:
@@ -78,21 +74,20 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              dy=None, ylog_scale=False,
+              dy=None, ylog_scale=False, 
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=None, marker=None, markersize=None,
               autoscale=True, refresh=True):
         """ basic plot method, overplotting any existing plot """
+        axes = self.axes
+        if side == 'right':
+            axes = self.get_right_axes()
+
         # set y scale to log/linear
         yscale = 'linear'
         if ylog_scale and min(ydata) > 0:
             yscale = 'log'
-
-        axes = self.axes
-        if side == 'right':
-            axes = self.create_right_axes()
-
         axes.set_yscale(yscale, basey=10)
 
         if dy is None:
@@ -101,46 +96,47 @@ class PlotPanel(BasePanel):
             _lines = axes.errorbar(xdata, ydata, yerr=dy)
 
         if axes not in self.data_range:
-            self.data_range[axes] = [[min(xdata), max(xdata)],
-                                     [min(ydata), max(ydata)]]
+            self.data_range[axes] = [min(xdata), max(xdata),
+                                     min(ydata), max(ydata)]
 
         dr = self.data_range[axes]
-        dr = self.data_range[axes] = [[min(dr[0][0], min(xdata)),
-                                       max(dr[0][1], max(xdata))],
-                                      [min(dr[1][0], min(ydata)),
-                                       max(dr[1][1], max(ydata))]]
+        dr = self.data_range[axes] = [min(dr[0], min(xdata)),
+                                      max(dr[1], max(xdata)),
+                                      min(dr[2], min(ydata)),
+                                      max(dr[3], max(ydata))]
 
         xylims = None
         if xmin is not None:
-            self.data_range[axes][0][0] = max(xmin, dr[0][0])
+            self.data_range[axes][0] = max(xmin, dr[0])
             xylims = self.data_range[axes]
         if xmax is not None:
-            self.data_range[axes][0][1] = min(xmax, dr[0][1])
+            self.data_range[axes][1] = min(xmax, dr[1])
             xylims = self.data_range[axes]
         if ymin is not None:
-            self.data_range[axes][1][0] = max(ymin, dr[1][0])
+            self.data_range[axes][2] = max(ymin, dr[2])
             xylims = self.data_range[axes]
         if ymax is not None:
-            self.data_range[axes][1][1] = min(ymax, dr[1][1])
+            self.data_range[axes][3] = min(ymax, dr[3])
             xylims = self.data_range[axes]
-        cnf  = self.conf
-        n    = cnf.ntrace
+            
+        conf  = self.conf
+        n    = conf.ntrace
 
         if label is None:
             label = 'trace %i' % (n+1)
-        cnf.set_trace_label(label)
-        cnf.lines[n] = _lines
+        conf.set_trace_label(label)
+        conf.lines[n] = _lines
 
         if color:
-            cnf.set_trace_color(color)
+            conf.set_trace_color(color)
         if style:
-            cnf.set_trace_style(style)
+            conf.set_trace_style(style)
         if marker:
-            cnf.set_trace_marker(marker)
+            conf.set_trace_marker(marker)
         if linewidth is not None:
-            cnf.set_trace_linewidth(linewidth)
+            conf.set_trace_linewidth(linewidth)
         if markersize is not None:
-            cnf.set_trace_markersize(markersize)
+            conf.set_trace_markersize(markersize)
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
@@ -150,14 +146,15 @@ class PlotPanel(BasePanel):
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
 
         if refresh:
-            cnf.refresh_trace(n)
-            cnf.relabel()
+            conf.refresh_trace(n)
+            conf.relabel()
 
         if xylims is not None:
             self.set_xylims(xylims, autoscale=False)
-        elif autoscale:
+        if autoscale:        
             axes.autoscale_view()
             self.unzoom_all()
+
         if self.conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -168,7 +165,8 @@ class PlotPanel(BasePanel):
 
         self.canvas.draw()
         self.canvas.Refresh()
-        cnf.ntrace = cnf.ntrace + 1
+        conf.ntrace = conf.ntrace + 1
+        
         return _lines
 
     def set_xylims(self, lims, axes=None, side=None, autoscale=True):
@@ -179,9 +177,9 @@ class PlotPanel(BasePanel):
             axes = self.fig.get_axes()[1]
 
         if autoscale:
-            (xmin, xmax), (ymin, ymax) = self.data_range[axes]
+            xmin, xmax, ymin, ymax = self.data_range[axes]
         else:
-            (xmin, xmax), (ymin, ymax) = lims
+            xmin, xmax, ymin, ymax = lims
 
         axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
         axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
@@ -199,18 +197,17 @@ class PlotPanel(BasePanel):
         self.conf.y2label = ''
         self.conf.title  = ''
 
+    def reset_config(self):
+        """reset configuration to defaults."""
+        self.conf.set_defaults()
+
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         if len(self.zoom_lims) < 1:
             return
-
         for ax, lims in self.zoom_lims.pop().items():
             self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
-#         txt = ''
-#         if len(self.zoom_lims)>1:
-#             txt = 'zoom level %i' % (len(self.zoom_lims))
-#         self.write_message(txt)
         self.canvas.draw()
 
     def configure(self, event=None):
@@ -227,7 +224,7 @@ class PlotPanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
-        self.axes  = self.fig.add_axes([0.12, 0.15, 0.76, 0.7],
+        self.axes  = self.fig.add_axes([0.14, 0.14, 0.76, 0.72],
                                        axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)
@@ -252,16 +249,17 @@ class PlotPanel(BasePanel):
 
     def update_line(self, trace, xdata, ydata, side='left'):
         """ update a single trace, for faster redraw """
+
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
         axes = self.axes
         if side == 'right':
-            axes = self.create_right_axes()
+            axes = self.get_right_axes()
         dr = self.data_range[axes]
-        self.data_range[axes] = [[min(dr[0][0], xdata.min()),
-                                  max(dr[0][1], xdata.max())],
-                                 [min(dr[1][0], ydata.min()),
-                                  max(dr[1][1], ydata.max())]]
+        self.data_range[axes] = [min(dr[0], xdata.min()),
+                                 max(dr[1], xdata.max()),
+                                 min(dr[2], ydata.min()),
+                                 max(dr[3], ydata.max())]
         # this defeats zooming, which gets ugly in this fast-mode anyway.
         self.cursor_mode = 'cursor'
         self.canvas.draw()

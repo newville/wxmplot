@@ -39,12 +39,11 @@ class PlotConfigFrame(wx.Frame):
         self.DrawPanel()
 
     def DrawPanel(self):
-        style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL
+        style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL
         wx.Frame.__init__(self, self.parent, -1, 'Configure 2D Plot', style=style)
-        wx.Frame.SetBackgroundColour(self,"#F8F8F0")
-
-        panel = wx.Panel(self, -1)
-        panel.SetBackgroundColour( "#F8F8F0")
+        bgcol = mpl_color(self.canvas.figure.get_facecolor())
+        panel = self.mainpanel = wx.Panel(self, -1)
+        panel.SetBackgroundColour(bgcol)
 
         Font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(Font)
@@ -58,23 +57,22 @@ class PlotConfigFrame(wx.Frame):
 
         topsizer.Add(ltitle,(0,0),(1,5),  labstyle,2)
 
-        tlabel = wx.StaticText(panel, -1, 'Title:', size=(-1,-1),style=labstyle)
-        mlstyle = wx.TE_PROCESS_ENTER|wx.ST_NO_AUTORESIZE|wx.TE_MULTILINE
-        self.titl = wx.TextCtrl(panel, -1, self.conf.title, size=(420, 35),
-                                style=mlstyle)
-        self.titl.Bind(wx.EVT_KILL_FOCUS, Closure(self.onText, argu='title'))
+        self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
+                               labeltext='Title: ',size=420, 
+                               action = Closure(self.onText, argu='title'))
+        self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
+                               labeltext='X Label: ',size=420, 
+                               action = Closure(self.onText, argu='xlabel'))
 
-        self.xlab = LabelEntry(panel, self.conf.xlabel, size=420,labeltext='X Label: ',
-                               action = Closure(self.onText,argu='xlabel'))
+        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
+                               labeltext='Y Label: ',size=420, 
+                               action = Closure(self.onText, argu='ylabel'))
 
-        self.ylab = LabelEntry(panel, self.conf.ylabel, size=420,labeltext='Y Label: ',
-                               action = Closure(self.onText,argu='ylabel'))
-
-        self.y2lab = LabelEntry(panel, self.conf.y2label, size=420, labeltext='Y2 Label: ',
+        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
+                               labeltext='Y2 Label: ',size=420, 
                                action = Closure(self.onText, argu='y2label'))
 
-
-        topsizer.Add(tlabel,          (1, 0), (1, 1), labstyle,5)
+        topsizer.Add(self.titl.label, (1, 0), (1, 1), labstyle,5)
         topsizer.Add(self.titl,       (1, 1), (1, 5), labstyle,5)
         topsizer.Add(self.xlab.label, (2, 0), (1, 1), labstyle,5)
         topsizer.Add(self.xlab,       (2, 1), (1, 5), labstyle,5)
@@ -117,10 +115,10 @@ class PlotConfigFrame(wx.Frame):
 
         ax = self.axes[0]
         col = mpl_color(ax.get_axis_bgcolor(), default=(255,255,252))
-        bgcol = csel.ColourSelect(panel,  -1, "Plot Background", col, size=(120, 30))
+        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(110, 30))
 
         col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
-        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(100, 30))
+        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(90, 30))
 
         col = mpl_color(ax.get_xgridlines()[0].get_color(),default=(240,240,240))
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
@@ -170,7 +168,7 @@ class PlotConfigFrame(wx.Frame):
             i = i+1
 
         self.trace_labels = []
-        # print 'GUI CONFIG ', len(self.axes.get_lines()), self.conf.ntraces
+
         for i in range(1 + self.conf.ntrace): # len(self.axes.get_lines())):
             irow += 1
             argu  = "trace %i" % i
@@ -182,11 +180,6 @@ class PlotConfigFrame(wx.Frame):
             dsty = lin.style
             djsty = lin.drawstyle
             dsym = lin.marker
-
-            # tid = wx.StaticText(panel,-1,"%i" % (i+1)); x.SetFont(Font)
-            #             lab = wx.TextCtrl(panel, -1, dlab, size=(140,-1),
-            #                               style=wx.TE_PROCESS_ENTER)
-            #             lab.Bind(wx.EVT_TEXT_ENTER, Closure(self.onText,argu=argu))
 
             lab = LabelEntry(panel, dlab, size=140,labeltext="%i" % (i+1),
                                action = Closure(self.onText,argu=argu))
@@ -267,6 +260,7 @@ class PlotConfigFrame(wx.Frame):
                 ax.set_axis_bgcolor(color)
         elif argu == 'fbg':
             self.canvas.figure.set_facecolor(color)
+
         self.canvas.draw()
 
 
@@ -310,7 +304,7 @@ class PlotConfigFrame(wx.Frame):
         except:
             return
 
-    def onText(self, event,argu=''):
+    def onText(self, event, argu=''):
         if argu=='size':
             size = event.GetInt()
             self.conf.labelfont.set_size(size)
@@ -320,53 +314,53 @@ class PlotConfigFrame(wx.Frame):
                     lab.set_fontsize(size)
             self.conf.relabel()
             return
+        if argu == 'title':
+            wid = self.titl
+        elif argu == 'ylabel':
+            wid = self.ylab
+        elif argu == 'y2label':
+            wid = self.y2lab
+        elif argu == 'xlabel':
+            wid = self.xlab
+        elif argu[:6] == 'trace ':
+            wid = self.trace_labels[int(argu[6:])]
 
-        s = ''
-        if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
+
+        if wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType():
             s = str(event.GetString()).strip()
-        elif (wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType()):
-            if argu == 'title':
-                s = self.titl.GetValue()
-            if argu == 'ylabel':
-                s = self.ylab.GetValue()
-            if argu == 'y2label':
-                s = self.y2lab.GetValue()
-            if argu == 'xlabel':
-                s = self.xlab.GetValue()
-            elif argu[:6] == 'trace ':
-                s = self.trace_labels[int(argu[6:])].GetValue()
+        elif wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType():
+            s = wid.GetValue()
+
         try:
             s = str(s).strip()
         except TypeError:
             s = ''
 
-        t = s
-        if '"' not in s:
-            t = r"%s" % s
-        elif "'" not in s:
-            t = r'%s' % s
-        else:
-            t = r"""%s""" % s
+
+        if '\\n' in s:
+            s = s.replace('\\n', '\n')
 
         if argu == 'xlabel':
-            self.conf.xlabel = t
+            self.conf.xlabel = s
         elif argu == 'ylabel':
-            self.conf.ylabel = t
+            self.conf.ylabel = s
         elif argu == 'y2label':
-            self.conf.y2label = t
+            self.conf.y2label = s
         elif argu == 'title':
-            self.conf.title = t
+            self.conf.title = s
         elif argu[:6] == 'trace ':
             try:
-                self.conf.set_trace_label(t,trace=int(argu[6:]))
+                self.conf.set_trace_label(s, trace=int(argu[6:]))
                 self.redraw_legend()
             except:
                 pass
+            
         try:
             self.conf.relabel()
+            wid.SetBackgroundColour((255,255,255))
         except ParseFatalException:
-            print "Math pyparsing error... bad latex for %s" % argu
-
+            wid.SetBackgroundColour((250,250,200))
+            
     def onShowGrid(self,event):
         self.conf.show_grid = event.IsChecked()
         self.axes[0].grid(event.IsChecked())
@@ -421,7 +415,6 @@ class PlotConfigFrame(wx.Frame):
         if (self.conf.show_legend):
             self.conf.mpl_legend = lgn(lins, labs, loc=self.conf.legend_loc)
             self.conf.mpl_legend.draw_frame(self.conf.show_legend_frame)
-        self.canvas.draw()
 
     def onExit(self, event):
         self.Close(True)

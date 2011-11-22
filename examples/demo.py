@@ -1,6 +1,7 @@
 import wx
 import time, os, sys
-from numpy import arange, sin, cos, exp, pi, linspace
+
+from numpy import arange, sin, cos, exp, pi, linspace, ones, random
 
 from wxmplot.plotframe import PlotFrame
 
@@ -91,16 +92,21 @@ class TestFrame(wx.Frame):
         self.bigy   = sin(pi*self.bigx/28.0)
 
 
-    def ShowPlotFrame(self, do_raise=True):
+    def ShowPlotFrame(self, do_raise=True, clear=True):
         "make sure plot frame is enabled, and visible"
-        if self.plotframe == None:  self.plotframe = PlotFrame(self)
+        if self.plotframe == None:
+            self.plotframe = PlotFrame(self)
         try:
             self.plotframe.Show()
         except wx.PyDeadObjectError:
             self.plotframe = PlotFrame(self)
             self.plotframe.Show()
 
-        if do_raise:    self.plotframe.Raise()
+        if do_raise:
+            self.plotframe.Raise()
+        if clear:
+            self.plotframe.panel.clear()
+            self.plotframe.reset_config()            
 
 
     def onPlot1(self,event=None):
@@ -111,9 +117,9 @@ class TestFrame(wx.Frame):
 
     def onPlot2(self,event=None):
         self.ShowPlotFrame()
-        x  = np.arange(100)
-        y1 = np.cos(np.pi*x/72)
-        y2 = np.sin(np.pi*x/23)
+        x  = arange(100)
+        y1 = cos(pi*x/72)
+        y2 = sin(pi*x/23)
         self.plotframe.plot(x, y1, color='red')
         self.plotframe.oplot(x, y2, color='green3', marker='+')
         self.plotframe.write_message("Plot 2")
@@ -121,18 +127,20 @@ class TestFrame(wx.Frame):
 
     def onPlotErr(self,event=None):
         self.ShowPlotFrame()
-        npts = 41
-        x  = np.linspace(0, 10.0, npts)
-        y  = 0.4 * np.cos(x/2.0) + np.random.normal(scale=0.03, size=npts)
-        dy = 0.03 * np.ones(npts)
+        npts = 81
+        x  = linspace(0, 40.0, npts)
+        y  = 0.4 * cos(x/2.0) + random.normal(scale=0.03, size=npts)
+        dy = 0.03 * (ones(npts) + random.normal(scale=0.2, size=npts))
+
         self.plotframe.plot(x, y, dy=dy, color='red', linewidth=0,
-                            xlabel='x', ylabel='y',
+                            xlabel='x', ylabel='y', marker='o',
                             title='Plot with error bars')
         self.plotframe.write_message("Errorbars!")
 
 
     def onPlot2Axes(self,event=None):
         self.ShowPlotFrame()
+
         self.plotframe.plot( self.x,self.y2, color='black',style='dashed')
         self.plotframe.oplot(self.x,self.y5, color='red', side='right')
         self.plotframe.write_message("Plot with 2 axes")
@@ -140,12 +148,14 @@ class TestFrame(wx.Frame):
 
     def onPlotSLog(self,event=None):
         self.ShowPlotFrame()
+
         self.plotframe.plot( self.x,self.y4,ylog_scale=True,
                              color='black',style='dashed')
         self.plotframe.write_message("Semi Log Plot")
 
     def onPlotBig(self,event=None):
         self.ShowPlotFrame()
+
         t0 = time.time()
         self.plotframe.plot(self.bigx, self.bigy, marker='+', linewidth=0)
         dt = time.time()-t0
@@ -187,7 +197,7 @@ class TestFrame(wx.Frame):
     def onTimer(self, event):
         # print 'timer ', self.count, time.time()
         self.count += 1
-        self.ShowPlotFrame(do_raise=False)
+        self.ShowPlotFrame(do_raise=False, clear=False)
         n = self.count
         if n >= self.npts:
             self.timer.Stop()
@@ -210,29 +220,13 @@ class TestFrame(wx.Frame):
             nx = self.n_update = min(self.npts,3+int(self.n_update*1.25))
             if nx > int(0.85*self.npts):
                 nx = self.n_update = self.npts
-                xylims = ((min(self.x),max(self.x)),
-                          (min(self.y1),max(self.y1)))
+                xylims = (min(self.x),max(self.x),
+                          min(self.y1),max(self.y1))
             else:
-                xylims = ((min(self.x[0:nx]),max(self.x[0:nx])),
-                          (min(self.y1[0:nx]),max(self.y1[0:nx])))
+                xylims = (min(self.x[0:nx]),max(self.x[0:nx]),
+                          min(self.y1[0:nx]),max(self.y1[0:nx]))
             self.up_count = self.up_count + 1
             self.plotframe.panel.set_xylims(xylims,autoscale=False)
-
-    def XonTimer(self, event):
-        # print 'timer ', self.count
-        self.count += 1
-        self.ShowPlotFrame(do_raise=False)
-
-        if self.count >= self.npts:
-            self.timer.Stop()
-            self.timer_results()
-        else:
-            self.plotframe.plot(self.x[:self.count],
-                                self.y1[:self.count],refresh=False)
-
-            etime = time.time() - self.time0
-            s = " %i / %i   elapsed time= %8.2f s" % (self.count,self.npts,etime)
-            self.plotframe.write_message(s)
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This sample program shows some\n"

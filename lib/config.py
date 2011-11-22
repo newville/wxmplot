@@ -151,6 +151,17 @@ class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """
     def __init__(self, canvas=None): # trace_color_callback=None):
         self.canvas = canvas
+
+        self.styles      = StyleMap.keys()
+        self.drawstyles  = DrawStyleMap.keys()
+        self.symbols     = MarkerMap.keys()
+        self.legend_locs = ['upper right' , 'upper left', 'upper center',
+                            'lower right',  'lower left', 'lower center',
+                            'center left',  'center right', 'right', 'center']
+        self.legend_onaxis_choices =  ['on plot', 'off plot']
+        self.set_defaults()
+        
+    def set_defaults(self):
         self.zoom_x = 0
         self.zoom_y = 0
         self.zoom_init = (0, 1)
@@ -160,20 +171,12 @@ class PlotConfig:
         self.ylabel = ' '
         self.y2label = ' '
 
-        self.styles      = StyleMap.keys()
-        self.drawstyles  = DrawStyleMap.keys()
-        self.symbols     = MarkerMap.keys()
-        self.legend_locs = ['upper right' , 'upper left', 'upper center',
-                            'lower right',  'lower left', 'lower center',
-                            'center left',  'center right', 'right', 'center']
-        self.legend_onaxis_choices =  ['on plot', 'off plot']
-
         self.legend_loc    =  'upper right'
         self.legend_onaxis =  'on plot'
         self.mpl_legend  = None
         self.show_grid   = True
         self.show_legend = False
-        self.show_legend_frame = True
+        self.show_legend_frame = False
         # self.trace_color_callback = trace_color_callback
         f0 =  FontProperties()
         self.labelfont = f0.copy()
@@ -183,50 +186,48 @@ class PlotConfig:
 
         self.grid_color = '#E5E5E5'
         # preload some traces
-        #                   color  style linewidth marker markersize
         self.ntrace = 0
         self.lines  = [None]*30
         self.traces = []
-        self._init_trace(20,None, 'black'    ,'dotted',2,'o', 8)
-        self._init_trace( 0,None, 'blue',     'solid', 2,None,8)
-        self._init_trace( 1,None, 'red',      'solid', 2,None,8)
-        self._init_trace( 2,None, 'black',    'solid', 2,None,8)
-        self._init_trace( 3,None, 'magenta',  'solid', 2,None,8)
-        self._init_trace( 4,None, 'darkgreen','solid', 2,None,8)
-        self._init_trace( 5,None, 'maroon'   ,'solid', 2,None,8)
-        self._init_trace( 6,None, 'blue',     'dashed',2,None,8)
-        self._init_trace( 7,None, 'red',      'dashed',2,None,8)
-        self._init_trace( 8,None, 'black',    'dashed',2,None,8)
-        self._init_trace( 9,None, 'magenta',  'dashed',2,None,8)
-        self._init_trace(10,None, 'darkgreen','dashed',2,None,8)
-        self._init_trace(11,None, 'maroon'   ,'dashed',2,None,8)
-        self._init_trace(12,None, 'blue',     'dotted',2,None,8)
-        self._init_trace(13,None, 'red',      'dotted',2,None,8)
-        self._init_trace(14,None, 'black',    'dotted',2,None,8)
-        self._init_trace(15,None, 'magenta',  'dotted',2,None,8)
-        self._init_trace(16,None, 'darkgreen','dotted',2,None,8)
-        self._init_trace(17,None, 'maroon'   ,'dotted',2,None,8)
-        self._init_trace(18,None, 'blue'     ,'solid',1,'+',8)
-        self._init_trace(19,None, 'red'      ,'solid',1,'+',8)
+        self._init_trace( 0, 'blue',      'solid')
+        self._init_trace( 1, 'red',       'solid')
+        self._init_trace( 2, 'black',     'solid')
+        self._init_trace( 3, 'magenta',   'solid')
+        self._init_trace( 4, 'green3',    'solid')
+        self._init_trace( 5, 'maroon',    'solid')
+        self._init_trace( 6, 'blue',     'dashed')
+        self._init_trace( 7, 'red',      'dashed')
+        self._init_trace( 8, 'black',    'dashed')
+        self._init_trace( 9, 'magenta',  'dashed')
+        self._init_trace(10, 'green3',   'dashed')
+        self._init_trace(11, 'maroon',   'dashed')
+        self._init_trace(12, 'blue',     'dotted')
+        self._init_trace(13, 'red',      'dotted')
+        self._init_trace(14, 'black',    'dotted')
+        self._init_trace(15, 'magenta',  'dotted')
+        self._init_trace(16, 'green3',   'dotted')
+        self._init_trace(17, 'maroon',   'dotted')
+        self._init_trace(18, 'blue',      'solid', marker='+')
+        self._init_trace(19, 'red',       'solid', marker='+')
+        self._init_trace(20, 'black',     'solid', marker='o')
 
-    def _init_trace(self,n,label,color,style,
-                  linewidth,marker,markersize):
+    def _init_trace(self, n,  color, style,
+                    linewidth=2, marker=None, markersize=8):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProperties())
         line = self.traces[n]
-        if label == None:label = "trace %i" % (n+1)
+        label = "trace %i" % (n+1)
         line.label = label
         line.drawstyle = 'default'
-        if color     != None: line.color = color
-        if style     != None: line.style = style
-        if linewidth != None: line.linewidth = linewidth
-        if marker    != None: line.marker = marker
-        if markersize!= None: line.markersize = markersize
+        if color      is not None: line.color = color
+        if style      is not None: line.style = style
+        if linewidth  is not None: line.linewidth = linewidth
+        if marker     is not None: line.marker = marker
+        if markersize is not None: line.markersize = markersize
         self.traces[n] = line
 
-
-    def __mpline(self,trace):
+    def __mpline(self, trace):
         n = max(0,int(trace))
         while n >= len(self.traces):
             self.traces.append(LineProperties())
@@ -250,6 +251,7 @@ class PlotConfig:
         axes[0].set_title(self.title,   fontproperties=self.titlefont)
         if len(axes) > 1:
             axes[1].set_ylabel(self.y2label, fontproperties=self.labelfont)
+
         self.canvas.draw()
 
     def refresh_trace(self,trace=None):

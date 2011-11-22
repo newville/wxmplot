@@ -118,14 +118,11 @@ class BasePanel(wx.Panel):
         else:
             self.set_xylims(lims=lims[self.axes], axes=self.axes,
                             autoscale=False)
-#         txt = ''
-#         if len(self.zoom_lims) > 1:
-#             txt = 'zoom level %i' % (len(self.zoom_lims))
-#         self.write_message(txt)
+
         self.canvas.draw()
 
-    def create_right_axes(self):
-        "create right-hand y axes"
+    def get_right_axes(self):
+        "create, if needed, and return right-hand y axes"
         if len(self.fig.get_axes()) < 2:
             ax = self.axes.twinx()
 
@@ -236,7 +233,9 @@ class BasePanel(wx.Panel):
             olims = {}
             nlims = {}
             for ax in self.fig.get_axes():
-                olims[ax] = ax.get_xlim(), ax.get_ylim()
+                xmin, xmax = ax.get_xlim()
+                ymin, ymax = ax.get_ylim()
+                olims[ax] = [xmin, xmax, ymin, ymax]
             self.zoom_lims.append(olims)
             # msg = 'zoom level %i ' % (len(self.zoom_lims))
             # for multiple axes, we first collect all the new limits, and only
@@ -249,10 +248,10 @@ class BasePanel(wx.Panel):
                 try:
                     x0, y0 = ax.transData.inverted().transform((ini_x, ini_y))
                 except:
-                    x0, y0 =  ini_xd, ini_yd
+                    x0, y0 = ini_xd, ini_yd
 
-                nlims[ax] = ((min(x0, x1), max(x0, x1)),
-                             (min(y0, y1), max(y0, y1)))
+                nlims[ax] = [min(x0, x1), max(x0, x1),
+                             min(y0, y1), max(y0, y1)]
 
 
             # now appply limits:

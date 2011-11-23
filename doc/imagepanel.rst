@@ -103,6 +103,13 @@ if you create an :class:`ImagePanel`, you can set the colormap with::
     im_panel.conf.rot = True
     im_panel.redraw()
 
+    # now flip the image (top/bottom), apply log-scaling,
+    # and apply gaussian interpolation
+    im_panel.conf.flip_ud = True
+    im_panel.conf.log_scale = True
+    im_panel.conf.interp = 'gaussian'
+    im_panel.redraw()
+
 For a :class:`ImageFrame`, you can access this attribute as *frame.panel.conf.cmap*.
 
 The list of configuration attributes and their meaning are given in the
@@ -145,12 +152,12 @@ Table of Image Configuration attributes:  All of these are members of the
 
 Some notes:
 
-1. *cmap* is an instance of a matplotlib colormap. 
+1. *cmap* is an instance of a matplotlib colormap.
 2. *cmap_lo* and *cmap_hi* set the low and high values for the sliders that compress the
-   colormap, and are on a scale from 0 to 100.  
+   colormap, and are on a scale from 0 to 100.
 3. In contrast, *int_lo* and *int_hi* set the map intensity values that are used when
    *auto_intensity* is ``False``.  These can be used to put two different maps on the
-   same intensity intensity scale.   
+   same intensity intensity scale.
 
 Examples and Screenshots
 ====================================================================

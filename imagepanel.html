@@ -179,6 +179,13 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <span class="c"># now rotate the image by 90 degrees (clockwise):</span>
 <span class="n">im_panel</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">rot</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">im_panel</span><span class="o">.</span><span class="n">redraw</span><span class="p">()</span>
+
+<span class="c"># now flip the image (top/bottom), apply log-scaling,</span>
+<span class="c"># and apply gaussian interpolation</span>
+<span class="n">im_panel</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">flip_ud</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">im_panel</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">log_scale</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">im_panel</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">interp</span> <span class="o">=</span> <span class="s">&#39;gaussian&#39;</span>
+<span class="n">im_panel</span><span class="o">.</span><span class="n">redraw</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>For a <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>, you can access this attribute as <em>frame.panel.conf.cmap</em>.</p>

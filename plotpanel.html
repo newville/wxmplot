@@ -338,7 +338,7 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>limits</strong> (<em>2x2 list: [[xmin, xmax], [ymin, ymax]]</em>) -- x and y limits</li>
+<li><strong>limits</strong> (<em>a 4-element list: [xmin, xmax, ymin, ymax]</em>) -- x and y limits</li>
 <li><strong>axes</strong> -- instance of matplotlib axes to use (i.e, for right or left side y axes)</li>
 <li><strong>side</strong> -- set to 'right' to get right-hand axes.</li>
 <li><strong>autoscale</strong> -- whether to automatically scale to data range.</li>
@@ -440,6 +440,12 @@ this will go the the StatusBar.</p>
 <dd><p>show plot configuration window for customizing plot.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="reset_config">
+<tt class="descname">reset_config</tt><big>(</big><big>)</big><a class="headerlink" href="#reset_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the configuration to default settings.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="plotframe-a-wx-frame-showing-a-plotpanel">
 <h2><a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>: a wx.Frame showing a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a><a class="headerlink" href="#plotframe-a-wx-frame-showing-a-plotpanel" title="Permalink to this headline">¶</a></h2>
@@ -456,9 +462,9 @@ menubar with menu items for saving, printing and configuring plots..</p>
 </div>
 <div class="section" id="plotapp-a-wx-app-showing-a-plotframe">
 <h2><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a><a class="headerlink" href="#plotapp-a-wx-app-showing-a-plotframe" title="Permalink to this headline">¶</a></h2>
-<p>A <tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt> is a wx.App -- an application  -- that
-consists of a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>.   This  and is decorated with a status bar and
-menubar with menu items for saving, printing and configuring plots..</p>
+<p>A <tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt> is a wx.App -- an application -- that consists of a
+<a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>.  This show a frame that is decorated with a status bar
+and menubar with menu items for saving, printing and configuring plots.</p>
 <dl class="class">
 <dt id="PlotAppp">
 <em class="property">class </em><tt class="descname">PlotAppp</tt><a class="headerlink" href="#PlotAppp" title="Permalink to this definition">¶</a></dt>

@@ -168,7 +168,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
    Set the x and y limits for a plot based on a 2x2 list.
 
    :param limits: x and y limits
-   :type limits: 2x2 list: [[xmin, xmax], [ymin, ymax]]
+   :type limits: a 4-element list: [xmin, xmax, ymin, ymax]
    :param axes: instance of matplotlib axes to use (i.e, for right or left side y axes)
    :param side: set to 'right' to get right-hand axes.
    :param autoscale: whether to automatically scale to data range.
@@ -231,11 +231,13 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
 
    show a FileDialog to save a PNG image of the current plot.
 
-
 .. method:: configure()
 
    show plot configuration window for customizing plot.
 
+.. method:: reset_config()
+
+   reset the configuration to default settings.
 
 
 :class:`PlotFrame`: a wx.Frame showing a :class:`PlotPanel`
@@ -255,9 +257,9 @@ The frame will have a *panel* member holding the underlying :class:`PlotPanel`.
 :class:`PlotApp`: a wx.App showing a :class:`PlotFrame`
 ====================================================================
 
-A :class:`PlotApp` is a wx.App -- an application  -- that
-consists of a :class:`PlotFrame`.   This  and is decorated with a status bar and
-menubar with menu items for saving, printing and configuring plots..
+A :class:`PlotApp` is a wx.App -- an application -- that consists of a
+:class:`PlotFrame`.  This show a frame that is decorated with a status bar
+and menubar with menu items for saving, printing and configuring plots.
 
 .. class:: PlotAppp()
 

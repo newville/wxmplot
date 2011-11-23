@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>ImagePanel: A wx.Panel for Image Display &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
+    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -62,7 +65,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -98,12 +101,12 @@ an image, and will be discussed below.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>parent</strong> -- wx parent object.</li>
 <li><strong>size</strong> -- figure size in inches.</li>
 <li><strong>dpi</strong> -- dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <tt class="xref docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
-<li><strong>data_callback</strong> (callable or <tt class="xref docutils literal"><span class="pre">None</span></tt>) -- function to call with new data, on <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a></li>
+<li><strong>messenger</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
+<li><strong>data_callback</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function to call with new data, on <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -192,74 +195,74 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">attribute</th>
+<tr class="row-odd"><th class="head">attribute</th>
 <th class="head">type</th>
 <th class="head">default</th>
 <th class="head">meaning</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>rot</td>
+<tr class="row-even"><td>rot</td>
 <td>bool</td>
 <td>False</td>
 <td>rotate image 90 degrees clockwise</td>
 </tr>
-<tr><td>flip_ud</td>
+<tr class="row-odd"><td>flip_ud</td>
 <td>bool</td>
 <td>False</td>
 <td>flip image top/bottom</td>
 </tr>
-<tr><td>flip_lr</td>
+<tr class="row-even"><td>flip_lr</td>
 <td>bool</td>
 <td>False</td>
 <td>flip image left/right</td>
 </tr>
-<tr><td>log_scale</td>
+<tr class="row-odd"><td>log_scale</td>
 <td>bool</td>
 <td>False</td>
 <td>display log(image)</td>
 </tr>
-<tr><td>auto_intensity</td>
+<tr class="row-even"><td>auto_intensity</td>
 <td>bool</td>
 <td>True</td>
 <td>auto-scale the intensity</td>
 </tr>
-<tr><td>cmap</td>
+<tr class="row-odd"><td>cmap</td>
 <td>colormap</td>
 <td>gray</td>
 <td>colormap for intensity scale</td>
 </tr>
-<tr><td>cmap_reverse</td>
+<tr class="row-even"><td>cmap_reverse</td>
 <td>bool</td>
 <td>False</td>
 <td>reverse colormap</td>
 </tr>
-<tr><td>interp</td>
+<tr class="row-odd"><td>interp</td>
 <td>string</td>
 <td>nearest</td>
 <td>interpolation, smoothing algorithm</td>
 </tr>
-<tr><td>xylims</td>
+<tr class="row-even"><td>xylims</td>
 <td>list</td>
 <td>None</td>
 <td>xmin, xmax, ymin, ymax for display</td>
 </tr>
-<tr><td>cmap_lo</td>
+<tr class="row-odd"><td>cmap_lo</td>
 <td>int</td>
 <td>0</td>
 <td>low intensity percent for colormap mapping</td>
 </tr>
-<tr><td>cmap_hi</td>
+<tr class="row-even"><td>cmap_hi</td>
 <td>int</td>
 <td>100</td>
 <td>high intensity percent for colormap mapping</td>
 </tr>
-<tr><td>int_lo</td>
+<tr class="row-odd"><td>int_lo</td>
 <td>float</td>
 <td>None</td>
 <td>low intensity when autoscaling is off</td>
 </tr>
-<tr><td>int_hi</td>
+<tr class="row-even"><td>int_hi</td>
 <td>float</td>
 <td>None</td>
 <td>high intensity when autoscaling is off</td>
@@ -273,7 +276,7 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <li><em>cmap_lo</em> and <em>cmap_hi</em> set the low and high values for the sliders that compress the
 colormap, and are on a scale from 0 to 100.</li>
 <li>In contrast, <em>int_lo</em> and <em>int_hi</em> set the map intensity values that are used when
-<em>auto_intensity</em> is <tt class="xref docutils literal"><span class="pre">False</span></tt>.  These can be used to put two different maps on the
+<em>auto_intensity</em> is <tt class="docutils literal"><span class="pre">False</span></tt>.  These can be used to put two different maps on the
 same intensity intensity scale.</li>
 </ol>
 </div>
@@ -318,7 +321,7 @@ algorithms.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

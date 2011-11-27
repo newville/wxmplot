@@ -3,7 +3,7 @@ import numpy
 import Image
 from wxmplot import ImageFrame
 
-img = Image.open("test.tiff")
+img = Image.open("ceo2.tiff")
 h, v = img.size
 
 app = wx.PySimpleApp()

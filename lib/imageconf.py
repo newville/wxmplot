@@ -41,6 +41,7 @@ class ImageConfig:
         self.int_lo = ''
         self.int_hi = ''
         self.title = 'image'
+        self.cursor_mode = 'zoom'
         # self.zoombrush = wx.Brush('#141430',  wx.SOLID)
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
         self.zoompen   = wx.Pen('#101090',  3, wx.SOLID)

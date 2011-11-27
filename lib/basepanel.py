@@ -8,6 +8,8 @@ import time
 import os
 import wx
 import matplotlib
+from matplotlib.widgets import Lasso
+
 from utils import Printer
 
 class BasePanel(wx.Panel):
@@ -35,8 +37,7 @@ class BasePanel(wx.Panel):
             self.messenger = self.__def_messenger
 
         self.popup_menu =  None
-        self.cursor_mode = 'cursor'
-        self.cursor_save = 'cursor'
+        self.cursor_state = None
         self._yfmt = '%.4f'
         self._y2fmt = '%.4f'
         self._xfmt = '%.4f'
@@ -204,21 +205,40 @@ class BasePanel(wx.Panel):
         if event.inaxes not in self.fig.get_axes():
             return
 
-        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
+        self.cursor_state = self.conf.cursor_mode # 'zoom'  # or 'lasso'!
         if event.inaxes is not None:
             self.reportLeftDown(event=event)
+            if self.cursor_state == 'zoom':
+                self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
+            elif self.cursor_state == 'lasso':
+                self.lasso = Lasso(event.inaxes, (event.xdata, event.ydata),
+                                   self.lassoHandler)
+            self.ForwardEvent(event=event.guiEvent)
 
-        self.cursor_mode = 'zoom'
-        self.ForwardEvent(event=event.guiEvent)
+
+    def lassoHandler(self, vertices):
+        try:
+            del self.lasso
+            self.canvas.draw_idle()
+        except:
+            pass
 
     def zoom_OK(self, start, stop):
         return True
 
     def onLeftUp(self, event=None):
-        """ left button up: zoom in on selected region"""
+        """ left button up: zoom in or handle lasso"""
         if event is None:
             return
+        if self.cursor_state == 'zoom':
+            self._onLeftUp_Zoom(event)
 
+        self.canvas.draw()
+        self.cursor_state = None
+        self.ForwardEvent(event=event.guiEvent)
+
+    def _onLeftUp_Zoom(self, event=None):
+        """ left up / zoom mode"""
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:
             dx = abs(ini_x - event.x)
@@ -226,44 +246,35 @@ class BasePanel(wx.Panel):
         except:
             dx, dy = 0, 0
         t0 = time.time()
-
-        if ((dx > 4) and (dy > 4) and (t0-self.mouse_uptime)>0.1 and
-            self.cursor_mode == 'zoom'):
+        self.rbbox = None
+        if (dx > 3) and (dy > 3) and (t0-self.mouse_uptime)>0.1:
             self.mouse_uptime = t0
-            olims = {}
-            nlims = {}
+            zlims, tlims = {}, {}
             for ax in self.fig.get_axes():
                 xmin, xmax = ax.get_xlim()
                 ymin, ymax = ax.get_ylim()
-                olims[ax] = [xmin, xmax, ymin, ymax]
-            self.zoom_lims.append(olims)
-            # msg = 'zoom level %i ' % (len(self.zoom_lims))
+                zlims[ax] = [xmin, xmax, ymin, ymax]
+            self.zoom_lims.append(zlims)
             # for multiple axes, we first collect all the new limits, and only
             # then apply them
             for ax in self.fig.get_axes():
+                ax_inv = ax.transData.inverted
                 try:
-                    x1, y1 = ax.transData.inverted().transform((event.x, event.y))
+                    x1, y1 = ax_inv().transform((event.x, event.y))
                 except:
-                    x1, y1 =  event.xdata, event.ydata
+                    x1, y1 = event.xdata, event.ydata
                 try:
-                    x0, y0 = ax.transData.inverted().transform((ini_x, ini_y))
+                    x0, y0 = ax_inv().transform((ini_x, ini_y))
                 except:
                     x0, y0 = ini_xd, ini_yd
 
-                nlims[ax] = [min(x0, x1), max(x0, x1),
+                tlims[ax] = [min(x0, x1), max(x0, x1),
                              min(y0, y1), max(y0, y1)]
+            # now apply limits:
+            for ax, lims in tlims.items():
+                self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
 
-            # now appply limits:
-            for ax in nlims:
-                self.set_xylims(lims=nlims[ax], axes=ax, autoscale=False)
-
-            # self.write_message(msg, panel=1)
-
-        self.rbbox = None
-        self.cursor_mode = 'cursor'
-        self.canvas.draw()
-        self.ForwardEvent(event=event.guiEvent)
 
     def ForwardEvent(self, event=None):
         """finish wx event, forward it to other wx objects"""
@@ -279,7 +290,6 @@ class BasePanel(wx.Panel):
         """ right button down: show pop-up"""
         if event is None:
             return
-        self.cursor_mode = 'cursor'
         # note that the matplotlib event location have to be converted
         if event.inaxes is not None and self.popup_menu is not None:
             pos = event.guiEvent.GetPosition()
@@ -288,10 +298,8 @@ class BasePanel(wx.Panel):
 
     def onRightUp(self, event=None):
         """ right button up: put back to cursor mode"""
-        if event is None:
-            return
-        self.cursor_mode = 'cursor'
-        self.ForwardEvent(event=event.guiEvent)
+        if event is not None:
+            self.ForwardEvent(event=event.guiEvent)
 
     ####
     ## private methods
@@ -421,8 +429,8 @@ class BasePanel(wx.Panel):
         """
         if event is None:
             return
-        # print 'MouseButtonEvent ', event, event.button
         button = event.button or 1
+
         handlers = {(1, 'button_press_event'):   self.onLeftDown,
                     (1, 'button_release_event'): self.onLeftUp,
                     (3, 'button_press_event'):   self.onRightDown,
@@ -437,18 +445,17 @@ class BasePanel(wx.Panel):
         """Draw a cursor over the axes"""
         if event is None:
             return
-
         ax = event.inaxes
-        if self.cursor_mode == 'cursor':
+        if self.cursor_state not in ('zoom', 'lasso'):
             if ax is not None:
                 self.reportMotion(event=event)
             return
         try:
             x, y  = event.x, event.y
         except:
-            self.cursor_mode == 'cursor'
             return
-
+        if self.cursor_state == 'lasso':
+            return
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         x0     = min(x, ini_x)
         ymax   = max(y, ini_y)

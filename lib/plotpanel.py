@@ -3,16 +3,21 @@
 wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
 import wx
-
+from numpy import nonzero
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
+from matplotlib.colors import colorConverter
+from matplotlib.collections import CircleCollection
+from matplotlib.nxutils import points_inside_poly
+
 from plotconfigframe import PlotConfigFrame
 from basepanel import BasePanel
 from config import PlotConfig
 
+to_rgba = colorConverter.to_rgba
 class PlotPanel(BasePanel):
     """
     MatPlotlib 2D plot as a wx.Panel, suitable for embedding
@@ -48,21 +53,20 @@ class PlotPanel(BasePanel):
         """
         plot (that is, create a new plot: clear, then oplot)
         """
-        
         allaxes = self.fig.get_axes()
         if len(allaxes) > 1:
             for ax in allaxes[1:]:
                 self.fig.delaxes(ax)
 
         axes = self.axes
-        axes.cla()        
+        axes.cla()
         if side == 'right':
             axes = self.get_right_axes()
             axes.cla()
         self.conf.ntrace  = 0
+        self.conf.cursor_mode = 'zoom'
         self.data_range[axes] = [min(xdata), max(xdata),
                                  min(ydata), max(ydata)]
-
         if xlabel is not None:
             self.set_xlabel(xlabel)
         if ylabel is not None:
@@ -73,14 +77,13 @@ class PlotPanel(BasePanel):
             self.set_title(title)
         if use_dates is not None:
             self.use_dates  = use_dates
-
         if grid:
             self.conf.show_grid = grid
 
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              dy=None, ylog_scale=False, 
+              dy=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=None, marker=None, markersize=None,
@@ -124,7 +127,7 @@ class PlotPanel(BasePanel):
         if ymax is not None:
             self.data_range[axes][3] = min(ymax, dr[3])
             xylims = self.data_range[axes]
-            
+
         conf  = self.conf
         n    = conf.ntrace
 
@@ -157,7 +160,7 @@ class PlotPanel(BasePanel):
 
         if xylims is not None:
             self.set_xylims(xylims, autoscale=False)
-        if autoscale:        
+        if autoscale:
             axes.autoscale_view()
             self.unzoom_all()
 
@@ -172,8 +175,62 @@ class PlotPanel(BasePanel):
         self.canvas.draw()
         self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
-        
+
         return _lines
+
+    def scatterplot(self, xdata, ydata, label=None, size=5,
+                    color=None, edgecolor=None, selectcolor=None,
+                    xlabel=None, ylabel=None, y2label=None,
+                    xmin=None, xmax=None, ymin=None, ymax=None,
+                    title=None, grid=None, **kw):
+
+        if xlabel is not None:
+            self.set_xlabel(xlabel)
+        if ylabel is not None:
+            self.set_ylabel(ylabel)
+        if y2label is not None:
+            self.set_y2label(y2label)
+        if title  is not None:
+            self.set_title(title)
+        if grid:
+            self.conf.show_grid = grid
+
+        self.conf.cursor_mode = 'lasso'
+        if color is not None:
+            self.conf.scatter_normalcolor = color
+        if edgecolor is not None:
+            self.conf.scatter_edgecolor = edgecolor
+        if selectcolor is not None:
+            self.conf.scatter_selectcolor = selectcolor
+
+        fcols = [to_rgba(self.conf.scatter_normalcolor) for x in xdata]
+        ecols = [self.conf.scatter_edgecolor]*len(xdata)
+
+        self.conf.scatter_data = [(x, y) for x, y in zip(xdata, ydata)]
+
+        self.conf.scatter_coll = CircleCollection(
+            sizes=(size, ), facecolors=fcols, edgecolors=ecols,
+            offsets=self.conf.scatter_data,
+            transOffset= self.axes.transData)
+        self.axes.add_collection(self.conf.scatter_coll)
+        self.axes.autoscale_view()
+        self.canvas.draw()
+
+    def lassoHandler(self, vertices):
+        conf = self.conf
+        fcols = conf.scatter_coll.get_facecolors()
+        ecols = conf.scatter_coll.get_edgecolors()
+        pts = nonzero(points_inside_poly(conf.scatter_data, vertices))[0]
+
+        for i in range(len(conf.scatter_data)):
+            fcols[i] = to_rgba(conf.scatter_normalcolor)
+            ecols[i] = to_rgba(conf.scatter_edgecolor)
+            if i in pts:
+                fcols[i] = ecols[i] = to_rgba(conf.scatter_selectcolor)
+
+        self.lasso = None
+        self.canvas.draw_idle()
+        return pts
 
     def set_xylims(self, lims, axes=None, side=None, autoscale=True):
         """ update xy limits of a plot, as used with .update_line() """
@@ -267,7 +324,7 @@ class PlotPanel(BasePanel):
                                  min(dr[2], ydata.min()),
                                  max(dr[3], ydata.max())]
         # this defeats zooming, which gets ugly in this fast-mode anyway.
-        self.cursor_mode = 'cursor'
+        self.cursor_state = None
         self.canvas.draw()
 
     ####

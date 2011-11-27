@@ -160,7 +160,7 @@ class PlotConfig:
                             'center left',  'center right', 'right', 'center']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
-        
+
     def set_defaults(self):
         self.zoom_x = 0
         self.zoom_y = 0
@@ -170,6 +170,12 @@ class PlotConfig:
         self.xlabel = ' '
         self.ylabel = ' '
         self.y2label = ' '
+        self.cursor_mode = 'zoom'
+        self.scatter_normalcolor = 'blue'
+        self.scatter_selectcolor = 'red'
+        self.scatter_edgecolor = 'blue'
+        self.scatter_data = None
+        self.scatter_coll = None
 
         self.legend_loc    =  'upper right'
         self.legend_onaxis =  'on plot'

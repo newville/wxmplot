@@ -26,17 +26,21 @@ class PlotFrame(BaseFrame):
         """generic plotting method, overplotting any existing plot """
         self.panel.oplot(x, y, **kw)
 
-    def clear(self):
-        "clear plot"
-        self.panel.clear()
+    def scatterplot(self, x, y, **kw):
+        """plot after clearing current plot """
+        self.panel.scatterplot(x, y, **kw)
 
     def clear(self):
         "clear plot"
         self.panel.clear()
 
-    def reset_config(self):        
+    def clear(self):
+        "clear plot"
+        self.panel.clear()
+
+    def reset_config(self):
         self.panel.reset_config()
-        
+
     def update_line(self, t, x, y, **kw):
         """overwrite data for trace t """
         self.panel.update_line(t, x, y, **kw)

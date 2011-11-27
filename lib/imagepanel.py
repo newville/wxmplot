@@ -104,7 +104,7 @@ class ImagePanel(BasePanel):
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
 
-        self.conf.xylims = [[xmin, xmax], [ymin, ymax]]
+        self.conf.xylims = [xmin, xmax, ymin, ymax]
         self.redraw()
 
     def clear(self):
@@ -190,13 +190,16 @@ class ImagePanel(BasePanel):
         img = conf.data
         if conf.flip_ud:   img = np.flipud(img)
         if conf.flip_lr:   img = np.fliplr(img)
-        if conf.log_scale: img = np.log10(1.0+ 9.0 * img)
+        if conf.log_scale: img = np.log10(1 + 9.0*img)
 
         # apply intensity scale for current limited (zoomed) image
         imin = conf.int_lo
         imax = conf.int_hi
+        if conf.log_scale:
+            imin = np.log10(1 + 9.0*imin)
+            imax = np.log10(1 + 9.0*imax)
         if conf.auto_intensity:
-            ((xmin, xmax), (ymin, ymax)) = self.conf.xylims
+            (xmin, xmax, ymin, ymax) = self.conf.xylims
             if xmin is None:  xmin = 0
             if xmax is None:  xmax = img.shape[1]
             if ymin is None:  ymin = 0

@@ -34,7 +34,7 @@ class ImageConfig:
         self.flip_ud = False
         self.flip_lr = False
         self.rot  = False
-        self.xylims = [[None, None], [None, None]]
+        self.xylims = [None, None, None, None]
         self.cmap_lo = 0
         self.cmap_hi = self.cmap_range = 100
         self.auto_intensity = True

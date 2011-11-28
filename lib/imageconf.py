@@ -40,6 +40,8 @@ class ImageConfig:
         self.auto_intensity = True
         self.int_lo = ''
         self.int_hi = ''
+        self.data = None
+        self.indices = None
         self.title = 'image'
         self.cursor_mode = 'zoom'
         # self.zoombrush = wx.Brush('#141430',  wx.SOLID)

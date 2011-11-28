@@ -20,9 +20,11 @@ class ImageFrame(BaseFrame):
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
     """
     def __init__(self, parent=None, size=(550, 450),
-                 config_on_frame=True, **kws):
+                 config_on_frame=True, lasso_callback=None,
+                 **kws):
 
         self.config_on_frame = config_on_frame
+        self.lasso_callback = lasso_callback
         BaseFrame.__init__(self, parent=parent,
                            title  = 'Image Display Frame',
                            size=size, **kws)
@@ -43,22 +45,31 @@ class ImageFrame(BaseFrame):
         mids.FLIP_V    = wx.NewId()
         mids.FLIP_O    = wx.NewId()
         mids.ROT_CW    = wx.NewId()
+        mids.CUR_ZOOM  = wx.NewId()
+        mids.CUR_LASSO = wx.NewId()
         m = wx.Menu()
         m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
+        m.Append(mids.SAVE_CMAP, "Save Image of Colormap")
+        m.AppendSeparator()
         m.Append(mids.LOG_SCALE, "Log Scale Intensity\tCtrl+L", "", wx.ITEM_CHECK)
-        m.AppendSeparator()
         m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
-        m.AppendSeparator()
         m.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
         m.Append(mids.FLIP_O, 'Flip to Original', '')
         m.AppendSeparator()
-        m.Append(mids.SAVE_CMAP, "Save Image of Colormap")
+        m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom\tCtrl+M',
+                          'Lef-Drag Cursor to zoom to box')
+        m.AppendRadioItem(mids.CUR_LASSO, 'Cursor Mode: Lasso\tCtrl+N',
+                          'Lef-Drag Cursor to select area')
+        m.AppendSeparator()
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_H)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_O)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
+        self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
+        self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
+
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -72,6 +83,14 @@ class ImageFrame(BaseFrame):
             name = Interp_List[0]
         self.panel.conf.interp = name
         self.panel.redraw()
+
+    def onCursorMode(self, event=None):
+        conf = self.panel.conf
+        wid = event.GetId()
+        conf.cursor_mode = 'zoom'
+        if wid == self.menuIDs.CUR_LASSO:
+            conf.cursor_mode = 'lasso'
+
 
     def onFlip(self, event=None):
         conf = self.panel.conf
@@ -103,7 +122,8 @@ class ImageFrame(BaseFrame):
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
-        self.panel = ImagePanel(self, data_callback=self.onDataChange)
+        self.panel = ImagePanel(self, data_callback=self.onDataChange,
+                                lasso_callback=self.onLasso)
                                 # show_config_popup=(not self.config_on_frame),
 
 
@@ -216,6 +236,14 @@ class ImageFrame(BaseFrame):
     def onCMap(self, event=None):
         self.update_cmap(event.GetString())
 
+    def onLasso(self, data=None, selected=None, mask=None, **kw):
+        print 'lasso:' , selected[:10]
+        if hasattr(self.lasso_callback , '__call__'):
+            self.lasso_callback(data=conf.data, selected=sel,
+                                mask=mask)
+            
+        
+        
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
         self.imin_val.SetValue("%.4g" % imin)

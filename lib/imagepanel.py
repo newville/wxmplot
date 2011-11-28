@@ -12,9 +12,11 @@ import matplotlib
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
+from matplotlib.nxutils import points_inside_poly
 
 from imageconf import ImageConfig, ImageConfigFrame
 from basepanel import BasePanel
+from debugtime import debugtime
 
 class ImagePanel(BasePanel):
     """
@@ -29,10 +31,11 @@ class ImagePanel(BasePanel):
     """
 
     def __init__(self, parent, messenger=None, data_callback=None,
-                 size=(4.50,4.00), dpi=96, **kws):
+                 size=(4.50,4.00), dpi=96, lasso_callback=None, **kws):
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent, messenger=messenger, **kws)
         self.data_callback = data_callback
+        self.lasso_callback = lasso_callback
         self.conf = ImageConfig()
         self.win_config = None
         self.cursor_callback = None
@@ -65,15 +68,21 @@ class ImagePanel(BasePanel):
         if ylabel is not None:
             self.ylab = ylabel
         self.conf.data = data
+        print " -> callafter"
+        wx.CallAfter(self.calc_indices)
+        print " callafter passed"
         cmap = self.conf.cmap
         img = (data -data.min()) /(1.0*data.max() - data.min())
         self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,
                                            interpolation=self.conf.interp)
+
         self.axes.set_axis_off()
         self.unzoom_all()
+        print " after unzoomall"        
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kw)
-
+        print "display done"
+        
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
         if axes is None:
@@ -150,6 +159,30 @@ class ImagePanel(BasePanel):
     ####
     ## GUI events, overriding BasePanel components
     ####
+    def calc_indices(self):
+        if self.conf.data is not None:
+            print 'calc indices! '
+            ny, nx = self.conf.data.shape
+            inds = []
+            for iy in range(ny):
+                inds.extend([(iy, ix) for ix in range(nx)])
+            self.conf.indices = np.array(inds)
+            
+        
+    def lassoHandler(self, vertices):
+        conf = self.conf
+        if conf.indices is None:
+            self.calc_indices()
+
+        ind = conf.indices
+        mask = points_inside_poly(ind, vertices)
+        sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
+        self.lasso = None
+        self.canvas.draw_idle()
+        if hasattr(self.lasso_callback , '__call__'):
+            self.lasso_callback(data=conf.data, selected=sel,
+                                mask=mask)
+            
     def reportMotion(self,event=None):
         pass
 

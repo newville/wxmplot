@@ -206,7 +206,6 @@ class BasePanel(wx.Panel):
             return
 
         self.cursor_state = self.conf.cursor_mode # 'zoom'  # or 'lasso'!
-        print 'onLeftDown ', self.conf.cursor_mode
         if event.inaxes is not None:
             self.reportLeftDown(event=event)
             if self.cursor_state == 'zoom':

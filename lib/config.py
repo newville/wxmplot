@@ -170,12 +170,16 @@ class PlotConfig:
         self.xlabel = ' '
         self.ylabel = ' '
         self.y2label = ' '
+        self.plot_type = 'lineplot'
         self.cursor_mode = 'zoom'
+        self.scatter_size = 6
         self.scatter_normalcolor = 'blue'
+        self.scatter_normaledge  = 'blue'
         self.scatter_selectcolor = 'red'
-        self.scatter_edgecolor = 'blue'
+        self.scatter_selectedge  = 'red'
         self.scatter_data = None
         self.scatter_coll = None
+        self.scatter_mask = None
 
         self.legend_loc    =  'upper right'
         self.legend_onaxis =  'on plot'

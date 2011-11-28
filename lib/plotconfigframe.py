@@ -4,16 +4,22 @@
 #
 import wx
 import wx.lib.colourselect  as csel
+import wx.lib.agw.flatnotebook as flat_nb
+import numpy as np
 
 import matplotlib
 from matplotlib import rcParams
 from matplotlib.colors import colorConverter
 from matplotlib.font_manager import fontManager, FontProperties
 from matplotlib.pyparsing import ParseFatalException
+from matplotlib.colors import colorConverter
+to_rgba = colorConverter.to_rgba
 
 from utils import Closure, LabelEntry
 from config import PlotConfig
 from colors import hexcolor
+
+FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
 def mpl_color(c, default = (242, 243, 244)):
     try:
@@ -22,7 +28,7 @@ def mpl_color(c, default = (242, 243, 244)):
     except:
         return default
 
-def autopack(panel,sizer):
+def autopack(panel, sizer):
     panel.SetAutoLayout(True)
     panel.SetSizer(sizer)
     sizer.Fit(panel)
@@ -42,34 +48,35 @@ class PlotConfigFrame(wx.Frame):
         style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL
         wx.Frame.__init__(self, self.parent, -1, 'Configure 2D Plot', style=style)
         bgcol = mpl_color(self.canvas.figure.get_facecolor())
+        self.bgcol = bgcol
         panel = self.mainpanel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
-        Font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
-        panel.SetFont(Font)
+        font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+        panel.SetFont(font)
 
         topsizer  = wx.GridBagSizer(5,8)
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
         ltitle = wx.StaticText(panel, -1, 'Plot Configuration',
                               style=labstyle)
-        ltitle.SetFont(Font)
+        ltitle.SetFont(font)
         ltitle.SetForegroundColour("Blue")
 
         topsizer.Add(ltitle,(0,0),(1,5),  labstyle,2)
 
         self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
-                               labeltext='Title: ',size=420, 
+                               labeltext='Title: ',size=420,
                                action = Closure(self.onText, argu='title'))
         self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
-                               labeltext='X Label: ',size=420, 
+                               labeltext='X Label: ',size=420,
                                action = Closure(self.onText, argu='xlabel'))
 
         self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
-                               labeltext='Y Label: ',size=420, 
+                               labeltext='Y Label: ',size=420,
                                action = Closure(self.onText, argu='ylabel'))
 
         self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
-                               labeltext='Y2 Label: ',size=420, 
+                               labeltext='Y2 Label: ',size=420,
                                action = Closure(self.onText, argu='y2label'))
 
         topsizer.Add(self.titl.label, (1, 0), (1, 1), labstyle,5)
@@ -152,23 +159,122 @@ class PlotConfigFrame(wx.Frame):
         midsizer.Add(leg_loc,   (0,5), (1,1), labstyle,2)
         midsizer.Add(leg_onax,  (0,6), (1,1), labstyle,2)
 
-        midsizer.Add(wx.StaticLine(panel, size=(450, -1), style=wx.LI_HORIZONTAL),
-                     (1, 1), (1, 6), labstyle|wx.EXPAND, 2)
 
-        # main row 2: list of traces
-        botsizer = wx.GridBagSizer(5, 5)
+
+        self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
+
+        self.nb.SetActiveTabColour((253, 253, 230))
+        self.nb.SetTabAreaColour((self.bgcol[0]-2, self.bgcol[1]-2, self.bgcol[2]-2))
+        self.nb.SetNonActiveTabTextColour((10, 10, 100))
+        self.nb.SetActiveTabTextColour((100, 10, 10))
+        self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
+                        'Line Traces', True)
+        self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
+                        'Scatterplot Settings',
+                        self.conf.plot_type == 'scatter')
+
+        bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
+        bok.Bind(wx.EVT_BUTTON,self.onExit)
+
+        btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
+
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
+        a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
+        mainsizer.Add(topsizer, 0, a, 3)
+        mainsizer.Add(midsizer, 0, a, 3)
+        mainsizer.Add(self.nb,  0, a, 3)
+        mainsizer.Add(btnsizer, 1, a, 2)
+        autopack(panel,mainsizer)
+
+        s = wx.BoxSizer(wx.VERTICAL)
+        s.Add(panel,   0, a, 5)
+        autopack(self,s)
+        self.Show()
+        self.Raise()
+
+    def make_scatter_panel(self, parent, font=None):
+        # list of traces
+        panel = wx.Panel(parent)
+        if font is None:
+            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+        sizer = wx.GridBagSizer(4, 4)
+
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+        slab = wx.StaticText(panel, -1, 'Symbol Size:', size=(-1,-1),style=labstyle)
+        ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (55,30))
+        ssize.SetRange(1, 100)
+        ssize.SetValue(self.conf.scatter_size)
+        ssize.Bind(wx.EVT_SPINCTRL, Closure(self.onScatter, argu='size'))
+
+        sizer.Add(slab,  (0, 0), (1,1), labstyle, 5)
+        sizer.Add(ssize, (0, 1), (1,1), labstyle, 5)
+
+        conf = self.conf
+        nfcol = csel.ColourSelect(panel,  -1, "",
+                                  mpl_color(conf.scatter_normalcolor,
+                                            default=(0, 0, 128)),
+                                  size=(45, 30))
+        necol = csel.ColourSelect(panel,  -1, "",
+                                  mpl_color(conf.scatter_normaledge,
+                                            default=(0, 0, 200)),
+                                  size=(45, 30))
+        sfcol = csel.ColourSelect(panel,  -1, "",
+                                  mpl_color(conf.scatter_selectcolor,
+                                            default=(128, 0, 0)),
+                                  size=(45, 30))
+        secol = csel.ColourSelect(panel,  -1, "",
+                                  mpl_color(conf.scatter_selectedge,
+                                           default=(200, 0, 0)),
+                                  size=(45, 30))
+        nfcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_nf'))
+        necol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_ne'))
+        sfcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_sf'))
+        secol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_se'))
+
+        btnstyle= wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.ALL
+
+        sizer.Add(wx.StaticText(panel, -1, 'Colors: ',
+                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
+                  (1, 0), (1,1), labstyle,2)
+        sizer.Add(wx.StaticText(panel, -1, 'Normal Symbol:',
+                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
+                  (1, 1), (1,1), labstyle,2)
+        sizer.Add(wx.StaticText(panel, -1, 'Selected Symbol:',
+                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
+                  (1, 2), (1,1), labstyle,2)
+        sizer.Add(wx.StaticText(panel, -1, 'Face Color:',
+                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
+                  (2, 0), (1,1), labstyle,2)
+        sizer.Add(wx.StaticText(panel, -1, 'Edge Color:',
+                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL),
+                  (3, 0), (1,1), labstyle,2)
+
+        sizer.Add(nfcol,   (2, 1), (1,1), btnstyle,2)
+        sizer.Add(necol,   (3, 1), (1,1), btnstyle,2)
+        sizer.Add(sfcol,   (2, 2), (1,1), btnstyle,2)
+        sizer.Add(secol,   (3, 2), (1,1), btnstyle,2)
+
+
+        autopack(panel, sizer)
+        return panel
+
+    def make_linetrace_panel(self, parent, font=None):
+        # list of traces
+        panel = wx.Panel(parent)
+        if font is None:
+            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+
+        sizer = wx.GridBagSizer(5, 5)
         i = 0
         irow = 0
-
         for t in ('#','Label','Color', 'Line Style',
                   'Thickness','Symbol',' Size', 'Join Style'):
-            x = wx.StaticText(panel,-1,t)
-            x.SetFont(Font)
-            botsizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            x = wx.StaticText(panel, -1, t)
+            x.SetFont(font)
+            sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
             i = i+1
-
         self.trace_labels = []
-
         for i in range(1 + self.conf.ntrace): # len(self.axes.get_lines())):
             irow += 1
             argu  = "trace %i" % i
@@ -180,7 +286,6 @@ class PlotConfigFrame(wx.Frame):
             dsty = lin.style
             djsty = lin.drawstyle
             dsym = lin.marker
-
             lab = LabelEntry(panel, dlab, size=140,labeltext="%i" % (i+1),
                                action = Closure(self.onText,argu=argu))
             self.trace_labels.append(lab)
@@ -211,40 +316,17 @@ class PlotConfigFrame(wx.Frame):
             jsty.Bind(wx.EVT_CHOICE,Closure(self.onJoinStyle, argu=argu))
             jsty.SetStringSelection(djsty)
 
-            botsizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(lab,(irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(col,(irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(sty,(irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(thk,(irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(sym,(irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(msz,(irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            botsizer.Add(jsty,(irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(lab,(irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(col,(irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(sty,(irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(thk,(irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(sym,(irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(msz,(irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(jsty,(irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
 
-
-        bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
-        bok.Bind(wx.EVT_BUTTON,self.onExit)
-
-
-        btnsizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
-
-        #bxk = wx.Button(panel, -1, 'QUIT',    size=(-1,-1))
-        #bxk.Bind(wx.EVT_BUTTON,self.onExit)
-        #btnsizer.Add(bxk,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 1)
-
-        mainsizer = wx.BoxSizer(wx.VERTICAL)
-        a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
-        mainsizer.Add(topsizer,0, a, 5)
-        mainsizer.Add(midsizer,0, a, 5)
-        mainsizer.Add(botsizer,0, a, 5)
-        mainsizer.Add(btnsizer,0, a, 5)
-        autopack(panel,mainsizer)
-
-        s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(panel,   0, a, 5)
-        autopack(self,s)
-        self.Show()
-        self.Raise()
+        autopack(panel,sizer)
+        return panel
 
     def onColor(self, event, argu='grid'):
         color = hexcolor( event.GetValue() )
@@ -304,6 +386,43 @@ class PlotConfigFrame(wx.Frame):
         except:
             return
 
+    def onScatter(self, event, argu=None):
+
+        if self.conf.scatter_coll is None or argu is None:
+            return
+        conf = self.conf
+        coll = conf.scatter_coll
+        recolor = True
+        if argu == 'size':
+            conf.scatter_size = event.GetInt()
+            coll._sizes = (conf.scatter_size,)
+            recolor = False
+        elif argu == 'scatt_nf':
+            self.conf.scatter_normalcolor = hexcolor(event.GetValue())
+        elif argu == 'scatt_ne':
+            self.conf.scatter_normaledge = hexcolor(event.GetValue())
+        elif argu == 'scatt_sf':
+            self.conf.scatter_selectcolor = hexcolor(event.GetValue())
+        elif argu == 'scatt_se':
+            self.conf.scatter_selectedge = hexcolor(event.GetValue())
+
+        if recolor:
+            fcols = coll.get_facecolors()
+            ecols = coll.get_edgecolors()
+            try:
+                pts = np.nonzero(self.conf.scatter_mask)[0]
+            except:
+                pts = []
+            for i in range(len(conf.scatter_data)):
+                if i in pts:
+                    ecols[i] = to_rgba(conf.scatter_selectedge)
+                    fcols[i] = to_rgba(conf.scatter_selectcolor)
+                    fcols[i][3] = 0.5
+                else:
+                    fcols[i] = to_rgba(conf.scatter_normalcolor)
+                    ecols[i] = to_rgba(conf.scatter_normaledge)
+        self.canvas.draw_idle()
+
     def onText(self, event, argu=''):
         if argu=='size':
             size = event.GetInt()
@@ -354,13 +473,12 @@ class PlotConfigFrame(wx.Frame):
                 self.redraw_legend()
             except:
                 pass
-            
         try:
             self.conf.relabel()
-            wid.SetBackgroundColour((255,255,255))
+            wid.SetBackgroundColour((255, 255, 255))
         except ParseFatalException:
-            wid.SetBackgroundColour((250,250,200))
-            
+            wid.SetBackgroundColour((250, 250, 200))
+
     def onShowGrid(self,event):
         self.conf.show_grid = event.IsChecked()
         self.axes[0].grid(event.IsChecked())

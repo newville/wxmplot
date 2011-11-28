@@ -42,6 +42,7 @@ class PlotPanel(BasePanel):
         self.data_range = {}
         self.win_config = None
         self.cursor_callback = None
+        self.lasso_callback = None
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
@@ -65,6 +66,7 @@ class PlotPanel(BasePanel):
             axes.cla()
         self.conf.ntrace  = 0
         self.conf.cursor_mode = 'zoom'
+        self.conf.plot_type = 'lineplot'
         self.data_range[axes] = [min(xdata), max(xdata),
                                  min(ydata), max(ydata)]
         if xlabel is not None:
@@ -77,7 +79,7 @@ class PlotPanel(BasePanel):
             self.set_title(title)
         if use_dates is not None:
             self.use_dates  = use_dates
-        if grid:
+        if grid is not None:
             self.conf.show_grid = grid
 
         return self.oplot(xdata, ydata, side=side, **kw)
@@ -108,25 +110,7 @@ class PlotPanel(BasePanel):
             self.data_range[axes] = [min(xdata), max(xdata),
                                      min(ydata), max(ydata)]
 
-        dr = self.data_range[axes]
-        dr = self.data_range[axes] = [min(dr[0], min(xdata)),
-                                      max(dr[1], max(xdata)),
-                                      min(dr[2], min(ydata)),
-                                      max(dr[3], max(ydata))]
-
-        xylims = None
-        if xmin is not None:
-            self.data_range[axes][0] = max(xmin, dr[0])
-            xylims = self.data_range[axes]
-        if xmax is not None:
-            self.data_range[axes][1] = min(xmax, dr[1])
-            xylims = self.data_range[axes]
-        if ymin is not None:
-            self.data_range[axes][2] = max(ymin, dr[2])
-            xylims = self.data_range[axes]
-        if ymax is not None:
-            self.data_range[axes][3] = min(ymax, dr[3])
-            xylims = self.data_range[axes]
+        xylims = self.calc_xylims(axes, xmin, xmax, ymin, ymax)
 
         conf  = self.conf
         n    = conf.ntrace
@@ -175,14 +159,31 @@ class PlotPanel(BasePanel):
         self.canvas.draw()
         self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
-
         return _lines
 
-    def scatterplot(self, xdata, ydata, label=None, size=5,
-                    color=None, edgecolor=None, selectcolor=None,
+    def calc_xylims(self, axes, xmin, xmax, ymin, ymax):
+        dr = self.data_range[axes]
+        xylims = dr
+        if xmin is not None:
+            self.data_range[axes][0] = max(xmin, dr[0])
+            xylims = self.data_range[axes]
+        if xmax is not None:
+            self.data_range[axes][1] = min(xmax, dr[1])
+            xylims = self.data_range[axes]
+        if ymin is not None:
+            self.data_range[axes][2] = max(ymin, dr[2])
+            xylims = self.data_range[axes]
+        if ymax is not None:
+            self.data_range[axes][3] = min(ymax, dr[3])
+            xylims = self.data_range[axes]
+        return xylims
+
+    def scatterplot(self, xdata, ydata, label=None, size=10,
+                    color=None, edgecolor=None,
+                    selectcolor=None, selectedge=None,
                     xlabel=None, ylabel=None, y2label=None,
                     xmin=None, xmax=None, ymin=None, ymax=None,
-                    title=None, grid=None, **kw):
+                    title=None, grid=None, callback=None, **kw):
 
         if xlabel is not None:
             self.set_xlabel(xlabel)
@@ -192,45 +193,73 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label)
         if title  is not None:
             self.set_title(title)
-        if grid:
+        if grid is not None:
             self.conf.show_grid = grid
+        if callback is not None:
+            self.lasso_callback = callback
 
+        self.conf.plot_type = 'scatter'
         self.conf.cursor_mode = 'lasso'
         if color is not None:
             self.conf.scatter_normalcolor = color
         if edgecolor is not None:
-            self.conf.scatter_edgecolor = edgecolor
+            self.conf.scatter_normaledge  = edgecolor
         if selectcolor is not None:
             self.conf.scatter_selectcolor = selectcolor
+        if selectedge is not None:
+            self.conf.scatter_selectedge = selectedge
+
+        axes = self.axes
+        self.data_range[axes] = [min(xdata), max(xdata),
+                                 min(ydata), max(ydata)]
+        xylims = self.calc_xylims(axes, xmin, xmax, ymin, ymax)
 
         fcols = [to_rgba(self.conf.scatter_normalcolor) for x in xdata]
-        ecols = [self.conf.scatter_edgecolor]*len(xdata)
+        ecols = [self.conf.scatter_normaledge]*len(xdata)
 
         self.conf.scatter_data = [(x, y) for x, y in zip(xdata, ydata)]
-
+        self.conf.scatter_size = size
         self.conf.scatter_coll = CircleCollection(
             sizes=(size, ), facecolors=fcols, edgecolors=ecols,
             offsets=self.conf.scatter_data,
             transOffset= self.axes.transData)
         self.axes.add_collection(self.conf.scatter_coll)
-        self.axes.autoscale_view()
+        if xylims is not None:
+            self.set_xylims(xylims, autoscale=True) # False)
+
+        if self.conf.show_grid:
+            # I'm sure there's a better way...
+            for i in axes.get_xgridlines()+axes.get_ygridlines():
+                i.set_color(self.conf.grid_color)
+            axes.grid(True)
+        else:
+            axes.grid(False)
+        axes.autoscale_view()
+
         self.canvas.draw()
 
     def lassoHandler(self, vertices):
         conf = self.conf
         fcols = conf.scatter_coll.get_facecolors()
         ecols = conf.scatter_coll.get_edgecolors()
-        pts = nonzero(points_inside_poly(conf.scatter_data, vertices))[0]
-
+        mask = points_inside_poly(conf.scatter_data, vertices)
+        pts = nonzero(mask)[0]
+        self.conf.scatter_mask = mask
         for i in range(len(conf.scatter_data)):
-            fcols[i] = to_rgba(conf.scatter_normalcolor)
-            ecols[i] = to_rgba(conf.scatter_edgecolor)
             if i in pts:
-                fcols[i] = ecols[i] = to_rgba(conf.scatter_selectcolor)
+                ecols[i] = to_rgba(conf.scatter_selectedge)
+                fcols[i] = to_rgba(conf.scatter_selectcolor)
+                fcols[i][3] = 0.5
+            else:
+                fcols[i] = to_rgba(conf.scatter_normalcolor)
+                ecols[i] = to_rgba(conf.scatter_normaledge)
 
         self.lasso = None
         self.canvas.draw_idle()
-        return pts
+        if (self.lasso_callback is not None and
+            hasattr(self.lasso_callback , '__call__')):
+            self.lasso_callback(data = conf.scatter_coll.get_offsets(),
+                                selected = pts, mask=mask)
 
     def set_xylims(self, lims, axes=None, side=None, autoscale=True):
         """ update xy limits of a plot, as used with .update_line() """

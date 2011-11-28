@@ -206,6 +206,7 @@ class BasePanel(wx.Panel):
             return
 
         self.cursor_state = self.conf.cursor_mode # 'zoom'  # or 'lasso'!
+        print 'onLeftDown ', self.conf.cursor_mode
         if event.inaxes is not None:
             self.reportLeftDown(event=event)
             if self.cursor_state == 'zoom':
@@ -213,11 +214,20 @@ class BasePanel(wx.Panel):
             elif self.cursor_state == 'lasso':
                 self.lasso = Lasso(event.inaxes, (event.xdata, event.ydata),
                                    self.lassoHandler)
+                ## set lasso color
+                cmap = getattr(self.conf, 'cmap', None)
+                if cmap is not None:
+                    rgb = (int(i*255)^255 for i in cmap._lut[0][:3])
+                    col = '#%02x%02x%02x' % tuple(rgb)
+                    self.lasso.line.set_color(col)
+                else:
+                    self.lasso.line.set_color('goldenrod')                    
             self.ForwardEvent(event=event.guiEvent)
 
 
     def lassoHandler(self, vertices):
         try:
+            print 'default lasso handler -- override!'
             del self.lasso
             self.canvas.draw_idle()
         except:
@@ -467,6 +477,8 @@ class BasePanel(wx.Panel):
         zdc.SetLogicalFunction(wx.XOR)
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
+        pen = zdc.GetPen()
+            
         zdc.ResetBoundingBox()
         zdc.BeginDrawing()
 

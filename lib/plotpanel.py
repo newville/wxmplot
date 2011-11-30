@@ -28,8 +28,10 @@ class PlotPanel(BasePanel):
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
-    def __init__(self, parent, size=(6.00, 3.70), dpi=96, **kws):
-
+    def __init__(self, parent, size=(6.00, 3.70), dpi=96,
+                 trace_color_callback=None, **kws):
+        
+        self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
         matplotlib.rc('lines', linewidth=2)
         matplotlib.rc('xtick',  labelsize=11, color='k')
@@ -85,7 +87,7 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              dy=None, ylog_scale=False,
+              xlabel=None, ylabel=None, dy=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=None, marker=None, markersize=None,
@@ -94,7 +96,6 @@ class PlotPanel(BasePanel):
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
-
         # set y scale to log/linear
         yscale = 'linear'
         if ylog_scale and min(ydata) > 0:
@@ -130,6 +131,8 @@ class PlotPanel(BasePanel):
             conf.set_trace_linewidth(linewidth)
         if markersize is not None:
             conf.set_trace_markersize(markersize)
+        if drawstyle is not None:
+            conf.set_trace_drawstyle(drawstyle)
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
@@ -307,7 +310,10 @@ class PlotPanel(BasePanel):
         try:
             self.win_config.Raise()
         except:
-            self.win_config = PlotConfigFrame(parent=self, config=self.conf)
+            self.win_config = PlotConfigFrame(parent=self,
+                                              config=self.conf,
+                                              trace_color_callback=self.trace_color_callback)
+            
 
     ####
     ## create GUI
@@ -344,6 +350,7 @@ class PlotPanel(BasePanel):
 
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
+        
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()

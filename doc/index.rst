@@ -1,3 +1,4 @@
+
 .. wxmplot documentation master file
 
 WXMPLOT:  simple, rich plotting widgets for wxPython using matplotlib

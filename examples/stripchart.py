@@ -17,8 +17,7 @@ def next_data():
 
 class StripChartFrame(wx.Frame):
     def __init__(self, parent, ID, **kws):
-
-        kwds["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
+        kws["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
 
         wx.Frame.__init__(self, parent, ID, '',
                          wx.DefaultPosition, wx.Size(-1,-1), **kws)
@@ -118,11 +117,11 @@ class StripChartFrame(wx.Frame):
         if n <= 2:
             self.plotpanel.plot(tdat, ydat)
         else:
-            self.plotpanel.update_line(0, tdat, ydat)
+            self.plotpanel.update_line(0, tdat, ydat, draw=True)
             self.write_message(" %i points in %8.4f s" % (n,etime))
 
-        self.plotpanel.set_xylims(((-abs(self.tmin), 0),
-                                   (ydat[mask].min(), ydat[mask].max())),
+        self.plotpanel.set_xylims((-abs(self.tmin), 0,
+                                   ydat[mask].min(), ydat[mask].max()),
                                   autoscale=False)
 
     def OnAbout(self, event):

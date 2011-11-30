@@ -30,6 +30,10 @@ class PlotFrame(BaseFrame):
         """plot after clearing current plot """
         self.panel.scatterplot(x, y, **kw)
 
+    def draw(self):
+        "explicit draw of underlying canvas"
+        self.panel.canvas.draw()
+        
     def clear(self):
         "clear plot"
         self.panel.clear()

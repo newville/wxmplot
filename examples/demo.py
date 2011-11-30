@@ -94,8 +94,9 @@ class TestFrame(wx.Frame):
 
     def ShowPlotFrame(self, do_raise=True, clear=True):
         "make sure plot frame is enabled, and visible"
-        if self.plotframe == None:
+        if self.plotframe is None:
             self.plotframe = PlotFrame(self)
+            self.has_plot = False
         try:
             self.plotframe.Show()
         except wx.PyDeadObjectError:
@@ -199,13 +200,18 @@ class TestFrame(wx.Frame):
         self.count += 1
         self.ShowPlotFrame(do_raise=False, clear=False)
         n = self.count
+        if n < 2:
+            return
         if n >= self.npts:
             self.timer.Stop()
             self.timer_results()
-        elif n <= 1:
+        elif n <= 3:
             self.plotframe.plot(self.x[:n], self.y1[:n])# , grid=False)
         else:
-            self.plotframe.update_line(0,self.x[:n], self.y1[:n])
+            try:
+                self.plotframe.update_line(0, self.x[:n], self.y1[:n], draw=True)
+            except:
+                self.timer.Stop()
 
             etime = time.time() - self.time0
             s = " %i / %i points in %8.4f s" % (n,self.npts,etime)

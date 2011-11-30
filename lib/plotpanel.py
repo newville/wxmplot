@@ -339,7 +339,7 @@ class PlotPanel(BasePanel):
 
         self.addCanvasEvents()
 
-    def update_line(self, trace, xdata, ydata, side='left'):
+    def update_line(self, trace, xdata, ydata, side='left', draw=False):
         """ update a single trace, for faster redraw """
 
         x = self.conf.get_mpl_line(trace)
@@ -354,8 +354,12 @@ class PlotPanel(BasePanel):
                                  max(dr[3], ydata.max())]
         # this defeats zooming, which gets ugly in this fast-mode anyway.
         self.cursor_state = None
-        self.canvas.draw()
+        if draw:
+            self.canvas.draw()
 
+    def draw(self):
+        self.canvas.draw()        
+        
     ####
     ## GUI events
     ####

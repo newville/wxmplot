@@ -62,11 +62,12 @@ class PlotPanel(BasePanel):
                 self.data_range.pop(ax)
                 self.fig.delaxes(ax)
 
+        self.data_range = {}
+        self.zoom_lims = []
+        self.clear()
         axes = self.axes
-        axes.cla()
         if side == 'right':
             axes = self.get_right_axes()
-            axes.cla()
         self.conf.ntrace  = 0
         self.conf.cursor_mode = 'zoom'
         self.conf.plot_type = 'lineplot'
@@ -85,6 +86,7 @@ class PlotPanel(BasePanel):
         if grid is not None:
             self.conf.show_grid = grid
 
+        # print 'at plot ', self.data_range[axes]
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
@@ -129,7 +131,6 @@ class PlotPanel(BasePanel):
         elif autoscale:
             axes.autoscale_view()
             self.unzoom_all()
-
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -287,12 +288,12 @@ class PlotPanel(BasePanel):
         axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
         axes.set_xlim((xmin, xmax), emit=True)
         axes.set_ylim((ymin, ymax), emit=True)
-
+        axes.autoscale_view()
+        
     def clear(self):
         """ clear plot """
         for ax in self.fig.get_axes():
             ax.cla()
-
         self.conf.ntrace = 0
         self.conf.xlabel = ''
         self.conf.ylabel = ''
@@ -306,9 +307,11 @@ class PlotPanel(BasePanel):
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         if len(self.zoom_lims) < 1:
-            return
-        for ax, lims in self.zoom_lims.pop().items():
-            self.set_xylims(lims=lims, axes=ax, autoscale=False)
+            self.axes.autoscale_view()
+            return 
+        else:
+            for ax, lims in self.zoom_lims.pop().items():
+                self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
         self.canvas.draw()
 

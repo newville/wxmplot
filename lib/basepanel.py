@@ -105,6 +105,7 @@ class BasePanel(wx.Panel):
         if len(self.zoom_lims) > 1:
             lims = self.zoom_lims.pop()
         ax = self.axes
+        print 'base unzoom ', lims, set_bounds
         if lims is None: # auto scale
             self.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range

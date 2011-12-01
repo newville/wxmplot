@@ -34,8 +34,8 @@ class PlotPanel(BasePanel):
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
         matplotlib.rc('lines', linewidth=2)
-        matplotlib.rc('xtick',  labelsize=11, color='k')
-        matplotlib.rc('ytick',  labelsize=11, color='k')
+        matplotlib.rc('xtick', labelsize=11, color='k')
+        matplotlib.rc('ytick', labelsize=11, color='k')
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
         BasePanel.__init__(self, parent, **kws)
@@ -59,6 +59,7 @@ class PlotPanel(BasePanel):
         allaxes = self.fig.get_axes()
         if len(allaxes) > 1:
             for ax in allaxes[1:]:
+                self.data_range.pop(ax)
                 self.fig.delaxes(ax)
 
         axes = self.axes
@@ -90,7 +91,7 @@ class PlotPanel(BasePanel):
               xlabel=None, ylabel=None, dy=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
-              linewidth=None, marker=None, markersize=None,
+              linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
@@ -101,26 +102,51 @@ class PlotPanel(BasePanel):
         if ylog_scale and min(ydata) > 0:
             yscale = 'log'
         axes.set_yscale(yscale, basey=10)
+        if linewidth is None:
+            linewidth = 2
+
+        if axes not in self.data_range:
+            self.data_range[axes] = [min(xdata), max(xdata),
+                                     min(ydata), max(ydata)]
+
+        xylims = None
+        if (xmin is not None or xmax is not None or
+            ymin is not None or ymax is not None):
+            xylims = self.calc_xylims(axes, xmin, xmax, ymin, ymax)
+
+        if axes == self.axes:
+            axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
+        else:
+            axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
+
+        axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+
+        conf  = self.conf
+        n    = conf.ntrace
+
+        if xylims is not None:
+            self.set_xylims(xylims, autoscale=False)
+        elif autoscale:
+            axes.autoscale_view()
+            self.unzoom_all()
+
+        if conf.show_grid and axes == self.axes:
+            # I'm sure there's a better way...
+            for i in axes.get_xgridlines()+axes.get_ygridlines():
+                i.set_color(self.conf.grid_color)
+            axes.grid(True)
+        else:
+            axes.grid(False)
 
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle)
         else:
             _lines = axes.errorbar(xdata, ydata, yerr=dy)
 
-        if axes not in self.data_range:
-            self.data_range[axes] = [min(xdata), max(xdata),
-                                     min(ydata), max(ydata)]
-
-        xylims = self.calc_xylims(axes, xmin, xmax, ymin, ymax)
-
-        conf  = self.conf
-        n    = conf.ntrace
-
         if label is None:
-            label = 'trace %i' % (n+1)
+            label = 'trace %i' % (conf.ntrace+1)
         conf.set_trace_label(label)
-        conf.lines[n] = _lines
-
+        
         if color:
             conf.set_trace_color(color)
         if style:
@@ -134,30 +160,11 @@ class PlotPanel(BasePanel):
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle)
 
-        if axes == self.axes:
-            axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        else:
-            axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
-
-        axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        conf.lines[n] = _lines
 
         if refresh:
-            conf.refresh_trace(n)
+            conf.refresh_trace(conf.ntrace)
             conf.relabel()
-
-        if xylims is not None:
-            self.set_xylims(xylims, autoscale=False)
-        if autoscale:
-            axes.autoscale_view()
-            self.unzoom_all()
-
-        if self.conf.show_grid and axes == self.axes:
-            # I'm sure there's a better way...
-            for i in axes.get_xgridlines()+axes.get_ygridlines():
-                i.set_color(self.conf.grid_color)
-            axes.grid(True)
-        else:
-            axes.grid(False)
 
         self.canvas.draw()
         self.canvas.Refresh()

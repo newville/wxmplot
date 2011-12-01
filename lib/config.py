@@ -138,7 +138,7 @@ class LineProperties:
         if line:
             line[0].set_markersize(self.markersize/2.0)
 
-    def set_linewidth(self,linewidth,line=None):
+    def set_linewidth(self, linewidth, line=None):
         self.linewidth=linewidth
         if line:
             for l in line:

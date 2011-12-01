@@ -16,7 +16,6 @@ from matplotlib.nxutils import points_inside_poly
 
 from imageconf import ImageConfig, ImageConfigFrame
 from basepanel import BasePanel
-from debugtime import debugtime
 
 class ImagePanel(BasePanel):
     """

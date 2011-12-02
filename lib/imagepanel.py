@@ -67,9 +67,8 @@ class ImagePanel(BasePanel):
         if ylabel is not None:
             self.ylab = ylabel
         self.conf.data = data
-        print " -> callafter"
+
         wx.CallAfter(self.calc_indices)
-        print " callafter passed"
         cmap = self.conf.cmap
         img = (data -data.min()) /(1.0*data.max() - data.min())
         self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,
@@ -77,10 +76,8 @@ class ImagePanel(BasePanel):
 
         self.axes.set_axis_off()
         self.unzoom_all()
-        print " after unzoomall"        
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kw)
-        print "display done"
         
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
@@ -160,7 +157,6 @@ class ImagePanel(BasePanel):
     ####
     def calc_indices(self):
         if self.conf.data is not None:
-            print 'calc indices! '
             ny, nx = self.conf.data.shape
             inds = []
             for iy in range(ny):

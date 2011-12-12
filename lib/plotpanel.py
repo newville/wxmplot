@@ -59,7 +59,8 @@ class PlotPanel(BasePanel):
         allaxes = self.fig.get_axes()
         if len(allaxes) > 1:
             for ax in allaxes[1:]:
-                self.data_range.pop(ax)
+                if ax in self.data_range:
+                    self.data_range.pop(ax)
                 self.fig.delaxes(ax)
 
         self.data_range = {}

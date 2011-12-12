@@ -99,7 +99,7 @@ class PrintoutWx(wx.Printout):
     here is scaling the matplotlib canvas bitmap to the current
     printer's definition.
     """
-    def __init__(self, canvas, width=6.0, margin=0.25, title='MPlot Figure'):
+    def __init__(self, canvas, width=6.0, margin=0.25, title='WXMPlot Figure'):
         wx.Printout.__init__(self,title=title)
         self.canvas = canvas
         self.width  = width

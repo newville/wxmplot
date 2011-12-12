@@ -191,8 +191,8 @@ class PlotConfig:
         f0 =  FontProperties()
         self.labelfont = f0.copy()
         self.titlefont = f0.copy()
-        self.labelfont.set_size(12)
-        self.titlefont.set_size(14)
+        self.labelfont.set_size(10)
+        self.titlefont.set_size(11)
 
         self.grid_color = '#E5E5E5'
         # preload some traces

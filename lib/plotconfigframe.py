@@ -537,7 +537,9 @@ class PlotConfigFrame(wx.Frame):
             lgn = self.axes[0].legend
 
         if (self.conf.show_legend):
-            self.conf.mpl_legend = lgn(lins, labs, loc=self.conf.legend_loc)
+            self.conf.mpl_legend = lgn(lins, labs,
+                                       loc=self.conf.legend_loc,
+                                       prop=self.conf.labelfont)
             self.conf.mpl_legend.draw_frame(self.conf.show_legend_frame)
         self.canvas.draw_idle()
         

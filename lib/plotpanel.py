@@ -136,12 +136,9 @@ class PlotPanel(BasePanel):
         conf  = self.conf
         n    = conf.ntrace
 
-
-
         scalex = self.user_limits[0] is None and self.user_limits[1] is None
         scaley = self.user_limits[2] is None and self.user_limits[3] is None
 
-        print 'autoscale ', autoscale, scalex, scaley
         if autoscale and scalex and scaley:
             axes.autoscale(enable=True, axis='both')
         else:

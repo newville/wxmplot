@@ -48,7 +48,7 @@ class TestFrame(wx.Frame):
         b32 = wx.Button(panel, -1, 'SemiLog Plot',        size=(-1,-1))
         b40 = wx.Button(panel, -1, 'Start Timed Plot',    size=(-1,-1))
         b50 = wx.Button(panel, -1, 'Stop Timed Plot',     size=(-1,-1))
-        b60 = wx.Button(panel, -1, 'Plot 100,000 points',  size=(-1,-1))
+        b60 = wx.Button(panel, -1, 'Plot 500,000 points',  size=(-1,-1))
 
         b10.Bind(wx.EVT_BUTTON,self.onPlot1)
         b20.Bind(wx.EVT_BUTTON,self.onPlot2)
@@ -81,15 +81,17 @@ class TestFrame(wx.Frame):
 
     def create_data(self):
         self.count = 0
-        self.x  = x = arange(0.0,20.0,0.1)
+        self.x  = x = arange(0.0,25.0,0.1)
         self.y1 = 4*cos(2*pi*(x-1)/5.7)/(6+x) + 2*sin(2*pi*(x-1)/2.2)/(10)
         self.y2 = sin(2*pi*x/30.0)
         self.y3 =  -pi + 2*(x/10. + exp(-(x-3)/5.0))
         self.y4 =  exp(0.01 + 0.5*x ) / (x+2)
         self.y5 =  3000 * self.y3
         self.npts = len(self.x)
-        self.bigx   = linspace(0, 100, 100000)
-        self.bigy   = sin(pi*self.bigx/28.0)
+        self.bigx   = linspace(0, 2500, 500000)
+        self.bigy   = (sin(pi*self.bigx/140.0) +
+                       cos(pi*self.bigx/277.0) +
+                       cos(pi*self.bigx/820.0))
 
 
     def ShowPlotFrame(self, do_raise=True, clear=True):
@@ -177,7 +179,7 @@ class TestFrame(wx.Frame):
         self.n_update = 1
         self.time0    = time.time()
         self.start_mem= self.report_memory()
-        self.timer.Start(25)
+        self.timer.Start(10)
 
     def timer_results(self):
         if (self.count < 2): return
@@ -214,17 +216,17 @@ class TestFrame(wx.Frame):
                 self.timer.Stop()
 
             etime = time.time() - self.time0
-            s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
-            self.plotframe.write_message(s)
+            # s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
+            #self.plotframe.write_message(s)
 
-        xr    = (min(self.x[:n]),max(self.x[:n]))
-        yr    = (min(self.y1[:n]),max(self.y1[:n]))
-        xv,yv = self.plotframe.get_xylims()
+        xr    = min(self.x[:n]), max(self.x[:n])
+        yr    = min(self.y1[:n]),max(self.y1[:n])
+        xv, yv = self.plotframe.get_xylims()
         if ((n > self.n_update-1) or
             (xr[0] < xv[0]) or (xr[1] > xv[1]) or
             (yr[0] < yv[0]) or (yr[1] > yv[1])):
-            nx = self.n_update = min(self.npts,3+int(self.n_update*1.25))
-            if nx > int(0.85*self.npts):
+            nx = self.n_update = min(self.npts,3+int(self.n_update*2.0))
+            if nx > int(0.92*self.npts):
                 nx = self.n_update = self.npts
                 xylims = (min(self.x),max(self.x),
                           min(self.y1),max(self.y1))

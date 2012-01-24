@@ -305,8 +305,6 @@ class PlotConfig:
         "enable/disable grid display"
         if show is not None:
             self.show_grid = show
-        print 'CONF  enable grid ', self.show_grid
-            
         axes = self.canvas.figure.get_axes()
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:

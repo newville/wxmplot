@@ -340,14 +340,12 @@ class PlotPanel(BasePanel):
         if show is None:
             show = not self.conf.show_legend
         self.conf.show_legend = show
-        print 'Toggle Legend ', show
         self.conf.draw_legend()
 
     def toggle_grid(self, evt=None, show=None):
         "toggle grid display"
         if show is None:
             show = not self.conf.show_grid
-        print '>> Toggle Grid ', show
         self.conf.enable_grid(show)
 
     def configure(self, event=None):

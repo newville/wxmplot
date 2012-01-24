@@ -34,9 +34,9 @@ class PlotPanel(BasePanel):
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
         matplotlib.rc('lines', linewidth=2)
-        matplotlib.rc('xtick', labelsize=10, color='k')
-        matplotlib.rc('ytick', labelsize=10, color='k')
-        matplotlib.rc('legend', fontsize=10)
+        matplotlib.rc('xtick', labelsize=9, color='k')
+        matplotlib.rc('ytick', labelsize=9, color='k')
+        matplotlib.rc('legend', fontsize=9)
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
         BasePanel.__init__(self, parent, **kws)
@@ -54,7 +54,7 @@ class PlotPanel(BasePanel):
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
-             use_dates=False, grid=None,  **kw):
+             use_dates=False, grid=None, **kw):
         """
         plot (that is, create a new plot: clear, then oplot)
         """
@@ -92,11 +92,12 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, side=side, **kw)
 
     def oplot(self, xdata, ydata, side='left', label=None,
-              xlabel=None, ylabel=None, dy=None, ylog_scale=False,
+              xlabel=None, ylabel=None, y2label=None, title=None,
+              dy=None, ylog_scale=False,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
-              autoscale=True, refresh=True):
+              autoscale=True, refresh=True, show_legend=None):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -109,6 +110,18 @@ class PlotPanel(BasePanel):
         if linewidth is None:
             linewidth = 2
 
+        if xlabel is not None:
+            self.set_xlabel(xlabel)
+        if ylabel is not None:
+            self.set_ylabel(ylabel)
+        if y2label is not None:
+            self.set_y2label(y2label)
+        if title  is not None:
+            self.set_title(title)
+
+        if show_legend is not None:
+            self.conf.show_legend = show_legend
+            
         # set data range for this axes, and the view limits
         datrange = [min(xdata), max(xdata), min(ydata), max(ydata)]
         if axes not in self.data_range:
@@ -322,6 +335,21 @@ class PlotPanel(BasePanel):
 
         self.canvas.draw()
 
+    def toggle_legend(self, evt=None, show=None):
+        "toggle legend display"
+        if show is None:
+            show = not self.conf.show_legend
+        self.conf.show_legend = show
+        print 'Toggle Legend ', show
+        self.conf.draw_legend()
+
+    def toggle_grid(self, evt=None, show=None):
+        "toggle grid display"
+        if show is None:
+            show = not self.conf.show_grid
+        print '>> Toggle Grid ', show
+        self.conf.enable_grid(show)
+
     def configure(self, event=None):
         """show configuration frame"""
         try:
@@ -339,7 +367,7 @@ class PlotPanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
-        self.axes  = self.fig.add_axes([0.14, 0.14, 0.76, 0.72],
+        self.axes  = self.fig.add_axes([0.15, 0.15, 0.75, 0.72],
                                        axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)

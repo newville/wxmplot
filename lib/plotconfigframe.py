@@ -433,7 +433,7 @@ class PlotConfigFrame(wx.Frame):
         if argu=='size':
             size = event.GetInt()
             self.conf.labelfont.set_size(size)
-            self.conf.titlefont.set_size(size+2)
+            self.conf.titlefont.set_size(size+1)
             for ax in self.axes:
                 for lab in ax.get_xticklabels()+ax.get_yticklabels():
                     lab.set_fontsize(size)
@@ -486,11 +486,7 @@ class PlotConfigFrame(wx.Frame):
             wid.SetBackgroundColour((250, 250, 200))
 
     def onShowGrid(self,event):
-        self.conf.show_grid = event.IsChecked()
-        self.axes[0].grid(event.IsChecked())
-        for ax in self.axes[1:]:
-            ax.grid(False)
-        self.canvas.draw()
+        self.conf.enable_grid(show=event.IsChecked())
 
     def onShowLegend(self,event,argu=''):
         if (argu == 'legend'):
@@ -501,47 +497,7 @@ class PlotConfigFrame(wx.Frame):
             self.conf.legend_loc  = event.GetString()
         elif (argu=='onaxis'):
             self.conf.legend_onaxis  = event.GetString()
-        self.redraw_legend()
+        self.cpnf.draw_legend()
 
-
-    def redraw_legend(self):
-        """redraw the legend"""
-        # first erase the current legend
-        try:
-            lgn = self.conf.mpl_legend
-            if lgn:
-                for i in lgn.get_texts(): i.set_text('')
-                for i in lgn.get_lines():
-                    i.set_linewidth(0)
-                    i.set_markersize(0)
-                    i.set_marker('None')
-                lgn.draw_frame(False)
-                lgn.set_visible(False)
-        except:
-            pass
-
-        labs = []
-        lins = []
-        for ax in self.axes:
-            lins.extend(ax.get_lines())
-
-        for l in lins:
-            xl = l.get_label()
-            if not self.conf.show_legend: xl = ''
-            labs.append(xl)
-        labs = tuple(labs)
-
-        if (self.conf.legend_onaxis == 'off plot'):
-            lgn = self.conf.canvas.figure.legend
-        else:
-            lgn = self.axes[0].legend
-
-        if (self.conf.show_legend):
-            self.conf.mpl_legend = lgn(lins, labs,
-                                       loc=self.conf.legend_loc,
-                                       prop=self.conf.labelfont)
-            self.conf.mpl_legend.draw_frame(self.conf.show_legend_frame)
-        self.canvas.draw_idle()
-        
     def onExit(self, event):
         self.Close(True)

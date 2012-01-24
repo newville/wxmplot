@@ -23,6 +23,8 @@ class Menu_IDs:
         self.CLIPB  = wx.NewId()
         self.SELECT_COLOR = wx.NewId()
         self.SELECT_SMOOTH= wx.NewId()
+        self.TOGGLE_LEGEND = wx.NewId()
+        self.TOGGLE_GRID = wx.NewId()
 
 class BaseFrame(wx.Frame):
     """
@@ -143,6 +145,10 @@ Matt Newville <newville@cars.uchicago.edu>"""
         m = wx.Menu()
         m.Append(mids.CONFIG, "Configure Plot\tCtrl+K",
                  "Configure Plot styles, colors, labels, etc")
+        m.Append(mids.TOGGLE_LEGEND, "Toggle Legend\tCtrl+L",
+                 "Toggle Legend Display")
+        m.Append(mids.TOGGLE_GRID, "Toggle Grid\tCtrl+G",
+                 "Toggle Grid Display")
         m.AppendSeparator()
         m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
@@ -188,6 +194,9 @@ Matt Newville <newville@cars.uchicago.edu>"""
         if panel is not None:
             p = panel
             mids = self.menuIDs
+            self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
+            self.Bind(wx.EVT_MENU, panel.toggle_legend, id=mids.TOGGLE_LEGEND)
+            self.Bind(wx.EVT_MENU, panel.toggle_grid, id=mids.TOGGLE_GRID)
             self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
             self.Bind(wx.EVT_MENU, panel.unzoom,       id=mids.UNZOOM)
 

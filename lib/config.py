@@ -191,8 +191,8 @@ class PlotConfig:
         f0 =  FontProperties()
         self.labelfont = f0.copy()
         self.titlefont = f0.copy()
-        self.labelfont.set_size(10)
-        self.titlefont.set_size(11)
+        self.labelfont.set_size(9)
+        self.titlefont.set_size(10)
 
         self.grid_color = '#E5E5E5'
         # preload some traces
@@ -301,3 +301,59 @@ class PlotConfig:
         if trace is None: trace = self.ntrace
         return self.__mpline(trace)[0]
 
+    def enable_grid(self, show=None):
+        "enable/disable grid display"
+        if show is not None:
+            self.show_grid = show
+        print 'CONF  enable grid ', self.show_grid
+            
+        axes = self.canvas.figure.get_axes()
+        axes[0].grid(self.show_grid)
+        for ax in axes[1:]:
+            ax.grid(False)
+        self.canvas.draw()
+
+
+    def draw_legend(self, show=None):
+        "redraw the legend"
+        if show is not None:
+            self.show_legend = show
+            
+        axes = self.canvas.figure.get_axes()
+        # clear existing legend
+        try:
+            lgn = self.mpl_legend
+            if lgn:
+                for i in lgn.get_texts(): i.set_text('')
+                for i in lgn.get_lines():
+                    i.set_linewidth(0)
+                    i.set_markersize(0)
+                    i.set_marker('None')
+                lgn.draw_frame(False)
+                lgn.set_visible(False)
+        except:
+            pass
+
+        labs = []
+        lins = []
+        for ax in axes:
+            lins.extend(ax.get_lines())
+
+        for l in lins:
+            xl = l.get_label()
+            if not self.show_legend: xl = ''
+            labs.append(xl)
+        labs = tuple(labs)
+
+        if (self.legend_onaxis == 'off plot'):
+            lgn = self.canvas.figure.legend
+        else:
+            lgn = axes[0].legend
+
+        if (self.show_legend):
+            self.mpl_legend = lgn(lins, labs,
+                                  loc=self.legend_loc,
+                                  prop=self.labelfont)
+            self.mpl_legend.draw_frame(self.show_legend_frame)
+        self.canvas.draw()
+        

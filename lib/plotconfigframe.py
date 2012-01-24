@@ -122,18 +122,24 @@ class PlotConfigFrame(wx.Frame):
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
 
         ax = self.axes[0]
-        col = mpl_color(ax.get_axis_bgcolor(), default=(255,255,252))
-        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(110, 30))
-
-        col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
-        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(90, 30))
 
         col = mpl_color(ax.get_xgridlines()[0].get_color(),default=(240,240,240))
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
 
+        col = mpl_color(ax.get_axis_bgcolor(), default=(255,255,252))
+        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(100, 30))
+
+        col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
+        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(80, 30))
+
+        col = mpl_color(self.conf.textcolor, default=(2, 2, 2))
+        textcol = csel.ColourSelect(panel,  -1, "Text", col, size=(80, 30))
+
+
         bgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='bg'))
         fbgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='fbg'))
         gridcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor, argu='grid'))
+        textcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor, argu='text'))
 
         btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
@@ -143,6 +149,7 @@ class PlotConfigFrame(wx.Frame):
         midsizer.Add(gridcol,   (0, 1), (1,1), btnstyle,2)
         midsizer.Add(bgcol,     (0, 2), (1,1), btnstyle,2)
         midsizer.Add(fbgcol,    (0, 3), (1,1), btnstyle,2)
+        midsizer.Add(textcol,   (0, 4), (1,1), btnstyle,2)
 
 
         tl1 = wx.StaticText(panel, -1, '  Legend at:', size=(-1,-1),style=labstyle)
@@ -156,10 +163,9 @@ class PlotConfigFrame(wx.Frame):
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
 
-        midsizer.Add(tl1,       (0,4), (1,1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL,2)
-        midsizer.Add(leg_loc,   (0,5), (1,1), labstyle,2)
-        midsizer.Add(leg_onax,  (0,6), (1,1), labstyle,2)
-
+        midsizer.Add(tl1,       (0,5), (1,1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL,2)
+        midsizer.Add(leg_loc,   (0,6), (1,1), labstyle,2)
+        midsizer.Add(leg_onax,  (0,7), (1,1), labstyle,2)
 
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
@@ -340,6 +346,7 @@ class PlotConfigFrame(wx.Frame):
             self.redraw_legend()
             
         elif argu == 'grid':
+            self.conf.grid_color = color
             for ax in self.axes:
                 for i in ax.get_xgridlines()+ax.get_ygridlines():
                     i.set_color(color)
@@ -348,7 +355,11 @@ class PlotConfigFrame(wx.Frame):
                 ax.set_axis_bgcolor(color)
         elif argu == 'fbg':
             self.canvas.figure.set_facecolor(color)
-
+        elif argu == 'text':
+            self.conf.textcolor = color
+            self.conf.relabel()
+            return
+        
         self.canvas.draw()
 
 
@@ -427,7 +438,7 @@ class PlotConfigFrame(wx.Frame):
                 else:
                     fcols[i] = to_rgba(conf.scatter_normalcolor)
                     ecols[i] = to_rgba(conf.scatter_normaledge)
-        self.canvas.draw_idle()
+        self.canvas.draw()
 
     def onText(self, event, argu=''):
         if argu=='size':
@@ -460,7 +471,6 @@ class PlotConfigFrame(wx.Frame):
             s = str(s).strip()
         except TypeError:
             s = ''
-
 
         if '\\n' in s:
             s = s.replace('\\n', '\n')
@@ -497,7 +507,7 @@ class PlotConfigFrame(wx.Frame):
             self.conf.legend_loc  = event.GetString()
         elif (argu=='onaxis'):
             self.conf.legend_onaxis  = event.GetString()
-        self.cpnf.draw_legend()
+        self.conf.draw_legend()
 
     def onExit(self, event):
         self.Close(True)

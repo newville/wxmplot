@@ -56,7 +56,7 @@ class LineProperties:
     to  make the matplotlib calls to set the Line2D properties
     """
 
-    def __init__(self,color='black',style='solid', drawstyle='default',
+    def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2,
                  marker='no symbol',markersize=6,markercolor=None,label=''):
         self.color      = color
@@ -155,9 +155,11 @@ class PlotConfig:
         self.styles      = StyleMap.keys()
         self.drawstyles  = DrawStyleMap.keys()
         self.symbols     = MarkerMap.keys()
-        self.legend_locs = ['upper right' , 'upper left', 'upper center',
-                            'lower right',  'lower left', 'lower center',
-                            'center left',  'center right', 'right', 'center']
+
+        self.legend_locs = ['upper right' , 'lower right', 'center right', 
+                            'upper left', 'lower left',  'center left',  
+                            'upper center', 'lower center', 'center']
+
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
 
@@ -193,7 +195,7 @@ class PlotConfig:
         self.titlefont = f0.copy()
         self.labelfont.set_size(9)
         self.titlefont.set_size(10)
-
+        self.textcolor = '#000000'
         self.grid_color = '#E5E5E5'
         # preload some traces
         self.ntrace = 0
@@ -250,17 +252,26 @@ class PlotConfig:
         " re draw labels (title, x,y labels)"
         n = self.labelfont.get_size()
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
+        rcParams['xtick.color'] =  rcParams['ytick.color'] =  self.textcolor
+
         if xlabel is not None:  self.xlabel = xlabel
         if ylabel is not None:  self.ylabel = ylabel
         if y2label is not None: self.y2label = y2label
         if title is not None:   self.title = title
 
         axes = self.canvas.figure.get_axes()
-        axes[0].set_xlabel(self.xlabel, fontproperties=self.labelfont)
-        axes[0].set_ylabel(self.ylabel, fontproperties=self.labelfont)
-        axes[0].set_title(self.title,   fontproperties=self.titlefont)
+        kws = dict(fontproperties=self.titlefont, color=self.textcolor)
+        axes[0].set_title(self.title, **kws)
+        kws['fontproperties'] = self.labelfont
+       
+        axes[0].set_xlabel(self.xlabel, **kws)
+        axes[0].set_ylabel(self.ylabel, **kws)
+        for ax in axes[0].xaxis, axes[0].yaxis:
+            for t in (ax.get_ticklabels() + ax.get_ticklines()):
+                t.set_color(self.textcolor)
+
         if len(axes) > 1:
-            axes[1].set_ylabel(self.y2label, fontproperties=self.labelfont)
+            axes[1].set_ylabel(self.y2label, **kws)
 
         self.canvas.draw()
 

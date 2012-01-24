@@ -153,12 +153,12 @@ class PlotConfigFrame(wx.Frame):
 
 
         tl1 = wx.StaticText(panel, -1, '  Legend at:', size=(-1,-1),style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(130,-1))
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120,-1))
         leg_loc.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
         leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
-                             size=(120,-1))
+                             size=(90,-1))
         leg_onax.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 

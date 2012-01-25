@@ -38,7 +38,7 @@ class PlotConfigFrame(wx.Frame):
     def __init__(self, parent=None, config=None, trace_color_callback=None):
         if config is None: config = PlotConfig()
         self.conf   = config
-        self.trace_color_callback = trace_color_callback        
+        self.trace_color_callback = trace_color_callback
         self.parent = parent
         self.canvas = self.conf.canvas
         self.axes = self.canvas.figure.get_axes()
@@ -342,9 +342,8 @@ class PlotConfigFrame(wx.Frame):
             self.conf.set_trace_color(color,trace=trace)
             if hasattr(self.trace_color_callback, '__call__'):
                 self.trace_color_callback(trace, color)
-
             self.redraw_legend()
-            
+
         elif argu == 'grid':
             self.conf.grid_color = color
             for ax in self.axes:
@@ -359,9 +358,7 @@ class PlotConfigFrame(wx.Frame):
             self.conf.textcolor = color
             self.conf.relabel()
             return
-        
         self.canvas.draw()
-
 
     def onStyle(self,event,argu='grid'):
         try:
@@ -507,6 +504,9 @@ class PlotConfigFrame(wx.Frame):
             self.conf.legend_loc  = event.GetString()
         elif (argu=='onaxis'):
             self.conf.legend_onaxis  = event.GetString()
+        self.conf.draw_legend()
+
+    def redraw_legend(self):
         self.conf.draw_legend()
 
     def onExit(self, event):

@@ -225,6 +225,11 @@ class BasePanel(wx.Panel):
             self.ForwardEvent(event=event.guiEvent)
 
 
+    def toggle_legend(self, evt=None, show=None):
+        pass
+    def toggle_grid(self, evt=None, show=None):
+        pass
+    
     def lassoHandler(self, vertices):
         try:
             print 'default lasso handler -- override!'

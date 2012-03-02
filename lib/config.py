@@ -156,8 +156,8 @@ class PlotConfig:
         self.drawstyles  = DrawStyleMap.keys()
         self.symbols     = MarkerMap.keys()
 
-        self.legend_locs = ['upper right' , 'lower right', 'center right', 
-                            'upper left', 'lower left',  'center left',  
+        self.legend_locs = ['upper right' , 'lower right', 'center right',
+                            'upper left', 'lower left',  'center left',
                             'upper center', 'lower center', 'center']
 
         self.legend_onaxis_choices =  ['on plot', 'off plot']
@@ -251,6 +251,7 @@ class PlotConfig:
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x,y labels)"
         n = self.labelfont.get_size()
+
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
         rcParams['xtick.color'] =  rcParams['ytick.color'] =  self.textcolor
 
@@ -263,17 +264,32 @@ class PlotConfig:
         kws = dict(fontproperties=self.titlefont, color=self.textcolor)
         axes[0].set_title(self.title, **kws)
         kws['fontproperties'] = self.labelfont
-       
+
         axes[0].set_xlabel(self.xlabel, **kws)
         axes[0].set_ylabel(self.ylabel, **kws)
+
+        def showobj(o):
+            print '============ ', o
+            for i in dir(o):
+                if i.startswith('get'):
+                    print i, getattr(o, i)
+            print '============'
+
         for ax in axes[0].xaxis, axes[0].yaxis:
             for t in (ax.get_ticklabels() + ax.get_ticklines()):
                 t.set_color(self.textcolor)
-
-        if len(axes) > 1:
-            axes[1].set_ylabel(self.y2label, **kws)
-
         self.canvas.draw()
+
+#         fr =  axes[0].get_frame()
+#         print 'Frame'
+#         showobj(fr)
+#         print fr.set_edgecolor('#00AA22')
+#         print fr.get_edgecolor()
+#         print fr.get_axes()
+#         showobj(axes[0])
+#         #         print 'Xaxis'
+#         showobj(axes[0].xaxis)
+
 
     def refresh_trace(self,trace=None):
         if trace is None: trace = self.ntrace
@@ -327,7 +343,7 @@ class PlotConfig:
         "redraw the legend"
         if show is not None:
             self.show_legend = show
-            
+
         axes = self.canvas.figure.get_axes()
         # clear existing legend
         try:
@@ -365,4 +381,4 @@ class PlotConfig:
                                   prop=self.labelfont)
             self.mpl_legend.draw_frame(self.show_legend_frame)
         self.canvas.draw()
-        
+

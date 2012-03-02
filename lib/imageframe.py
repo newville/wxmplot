@@ -58,7 +58,7 @@ class ImageFrame(BaseFrame):
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
         m.Append(mids.FLIP_O, 'Flip to Original', '')
         m.AppendSeparator()
-        m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom\tCtrl+M',
+        m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom to Box\tCtrl+B',
                           'Lef-Drag Cursor to zoom to box')
         m.AppendRadioItem(mids.CUR_LASSO, 'Cursor Mode: Lasso\tCtrl+N',
                           'Lef-Drag Cursor to select area')
@@ -241,9 +241,9 @@ class ImageFrame(BaseFrame):
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
-            
-        
-        
+
+
+
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
         self.imin_val.SetValue("%.4g" % imin)

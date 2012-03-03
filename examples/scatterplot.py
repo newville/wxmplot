@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# scatterplot example, with lassoing and 
+# scatterplot example, with lassoing and
 # a user-level lasso-callback
 
 import wx
@@ -19,7 +19,7 @@ pframe.scatterplot(x, y, title='Scatter Plot', size=15,
                    xlabel='$ x\, \mathrm{(\AA)}$',
                    ylabel='$ y\, \mathrm{(\AA^{-1})}$')
 pframe.panel.lasso_callback = onlasso
-pframe.write_message('MPlot PlotFrame example: Try Help->Quick Reference')
+pframe.write_message('WXMPlot PlotFrame example: Try Help->Quick Reference')
 pframe.Show()
 #
 app.MainLoop()

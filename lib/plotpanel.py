@@ -54,7 +54,7 @@ class PlotPanel(BasePanel):
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
-             use_dates=False, grid=None, **kw):
+             use_dates=False, **kws):
         """
         plot (that is, create a new plot: clear, then oplot)
         """
@@ -86,18 +86,16 @@ class PlotPanel(BasePanel):
             self.set_title(title)
         if use_dates is not None:
             self.use_dates  = use_dates
-        if grid is not None:
-            self.conf.show_grid = grid
 
-        return self.oplot(xdata, ydata, side=side, **kw)
+        return self.oplot(xdata, ydata, side=side, **kws)
 
     def oplot(self, xdata, ydata, side='left', label=None,
               xlabel=None, ylabel=None, y2label=None, title=None,
-              dy=None, ylog_scale=False,
+              dy=None, ylog_scale=False, grid=None,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
-              autoscale=True, refresh=True, show_legend=None):
+              autoscale=True, refresh=True, show_legend=None, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -121,7 +119,9 @@ class PlotPanel(BasePanel):
 
         if show_legend is not None:
             self.conf.show_legend = show_legend
-            
+        if grid is not None:
+            self.conf.show_grid = grid
+
         # set data range for this axes, and the view limits
         datrange = [min(xdata), max(xdata), min(ydata), max(ydata)]
         if axes not in self.data_range:

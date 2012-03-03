@@ -63,52 +63,50 @@ class PlotConfigFrame(wx.Frame):
         ltitle.SetFont(font)
         ltitle.SetForegroundColour("Blue")
 
-        topsizer.Add(ltitle,(0,0),(1,5),  labstyle,2)
+        topsizer.Add(ltitle, (0, 0), (1, 5),  labstyle, 2)
 
         self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
                                labeltext='Title: ',size=420,
                                action = Closure(self.onText, argu='title'))
+        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
+                               labeltext='Y Label: ',size=420,
+                               action = Closure(self.onText, argu='ylabel'))
+        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
+                               labeltext='Y2 Label: ',size=420,
+                               action = Closure(self.onText, argu='y2label'))
         self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
                                labeltext='X Label: ',size=420,
                                action = Closure(self.onText, argu='xlabel'))
 
-        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
-                               labeltext='Y Label: ',size=420,
-                               action = Closure(self.onText, argu='ylabel'))
-
-        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
-                               labeltext='Y2 Label: ',size=420,
-                               action = Closure(self.onText, argu='y2label'))
-
-        topsizer.Add(self.titl.label, (1, 0), (1, 1), labstyle,5)
-        topsizer.Add(self.titl,       (1, 1), (1, 5), labstyle,5)
-        topsizer.Add(self.xlab.label, (2, 0), (1, 1), labstyle,5)
-        topsizer.Add(self.xlab,       (2, 1), (1, 5), labstyle,5)
-        topsizer.Add(self.ylab.label, (3, 0), (1, 1), labstyle,5)
-        topsizer.Add(self.ylab,       (3, 1), (1, 5), labstyle,5)
-        topsizer.Add(self.y2lab.label,(4, 0), (1, 1), labstyle,5)
-        topsizer.Add(self.y2lab,      (4, 1), (1, 5), labstyle,5)
+        topsizer.Add(self.titl.label, (1, 0), (1, 1), labstyle, 5)
+        topsizer.Add(self.titl,       (1, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.ylab.label, (2, 0), (1, 1), labstyle, 5)
+        topsizer.Add(self.ylab,       (2, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.y2lab.label,(3, 0), (1, 1), labstyle, 5)
+        topsizer.Add(self.y2lab,      (3, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.xlab.label, (4, 0), (1, 1), labstyle, 5)
+        topsizer.Add(self.xlab,       (4, 1), (1, 5), labstyle, 5)
 
 
-        tl2 = wx.StaticText(panel, -1, 'Text Size:', size=(-1,-1),style=labstyle)
-        txt_size = wx.SpinCtrl(panel, -1, "", (-1,-1),(55,30))
+        tl2 = wx.StaticText(panel, -1, 'Text Size:', size=(-1, -1), style=labstyle)
+        txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (55, 30))
         txt_size.SetRange(5, 30)
         txt_size.SetValue(self.conf.labelfont.get_size())
         txt_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='size'))
 
-        topsizer.Add(tl2,             (1,6), (1,1), labstyle,2)
-        topsizer.Add(txt_size,        (1,7), (1,1), labstyle,2)
+        topsizer.Add(tl2,        (1, 6), (1, 1), labstyle, 2)
+        topsizer.Add(txt_size,   (1, 7), (1, 1), labstyle, 2)
 
 
-        show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1,-1),(-1,-1))
+        show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(self.conf.show_grid)
 
-        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1,-1),(-1,-1))
+        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='legend'))
         show_leg.SetValue(self.conf.show_legend)
 
-        show_lfr = wx.CheckBox(panel,-1, 'Legend Frame', (-1,-1),(-1,-1))
+        show_lfr = wx.CheckBox(panel,-1, 'Legend Frame', (-1, -1), (-1, -1))
         show_lfr.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
@@ -123,10 +121,10 @@ class PlotConfigFrame(wx.Frame):
 
         ax = self.axes[0]
 
-        col = mpl_color(ax.get_xgridlines()[0].get_color(),default=(240,240,240))
+        col = mpl_color(ax.get_xgridlines()[0].get_color(), default=(240, 240, 240))
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
 
-        col = mpl_color(ax.get_axis_bgcolor(), default=(255,255,252))
+        col = mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252))
         bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(100, 30))
 
         col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
@@ -136,37 +134,36 @@ class PlotConfigFrame(wx.Frame):
         textcol = csel.ColourSelect(panel,  -1, "Text", col, size=(80, 30))
 
 
-        bgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='bg'))
+        bgcol.Bind(csel.EVT_COLOURSELECT,   Closure(self.onColor, argu='bg'))
         fbgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='fbg'))
-        gridcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor, argu='grid'))
-        textcol.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor, argu='text'))
+        gridcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onColor, argu='grid'))
+        textcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onColor, argu='text'))
 
         btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
-        midsizer  = wx.GridBagSizer(5,8)
+        midsizer  = wx.GridBagSizer(5, 8)
 
-        midsizer.Add(tcol,      (0, 0), (1,1), labstyle,2)
-        midsizer.Add(gridcol,   (0, 1), (1,1), btnstyle,2)
-        midsizer.Add(bgcol,     (0, 2), (1,1), btnstyle,2)
-        midsizer.Add(fbgcol,    (0, 3), (1,1), btnstyle,2)
-        midsizer.Add(textcol,   (0, 4), (1,1), btnstyle,2)
+        midsizer.Add(tcol,      (0, 0), (1, 1), labstyle, 2)
+        midsizer.Add(gridcol,   (0, 1), (1, 1), btnstyle, 2)
+        midsizer.Add(bgcol,     (0, 2), (1, 1), btnstyle, 2)
+        midsizer.Add(fbgcol,    (0, 3), (1, 1), btnstyle, 2)
+        midsizer.Add(textcol,   (0, 4), (1, 1), btnstyle, 2)
 
 
-        tl1 = wx.StaticText(panel, -1, '  Legend at:', size=(-1,-1),style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120,-1))
+        tl1 = wx.StaticText(panel, -1, '  Legend at:', size=(-1, -1), style=labstyle)
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
         leg_loc.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
         leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
-                             size=(90,-1))
+                             size=(90, -1))
         leg_onax.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
 
-        midsizer.Add(tl1,       (0,5), (1,1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL,2)
-        midsizer.Add(leg_loc,   (0,6), (1,1), labstyle,2)
-        midsizer.Add(leg_onax,  (0,7), (1,1), labstyle,2)
-
+        midsizer.Add(tl1,      (0, 5), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, 2)
+        midsizer.Add(leg_loc,  (0, 6), (1, 1), labstyle, 2)
+        midsizer.Add(leg_onax, (0, 7), (1, 1), labstyle, 2)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
 

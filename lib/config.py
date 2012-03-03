@@ -42,10 +42,10 @@ for k,v in (('solid','-'), ('dashed','--'), ('dotted',':'), ('dash-dot','-.')):
     StyleMap[k]=v
 
 
-for k,v in (('no symbol','None'), ('square','s'), ('+','+'),
-            ('o','o'), ('x','x'), ('diamond','D'), ('thin diamond','d'),
-            ('^','^'), ('v','v'), ('>','>'), ('<','<'), ('|','|'),('_','_'),
-            ('hexagon','h'), ('pentagon','p'),
+for k,v in (('no symbol','None'), ('+','+'), ('o','o'), ('x','x'),
+            ('square','s'), ('diamond','D'), ('thin diamond','d'),
+            ('^','^'), ('v','v'), ('>','>'), ('<','<'),
+            ('|','|'),('_','_'), ('hexagon','h'), ('pentagon','p'),
             ('tripod 1','1'), ('tripod 2','2')):
     MarkerMap[k] = v
 
@@ -370,12 +370,11 @@ class PlotConfig:
             labs.append(xl)
         labs = tuple(labs)
 
-        if (self.legend_onaxis == 'off plot'):
+        lgn = axes[0].legend
+        if self.legend_onaxis == 'off plot':
             lgn = self.canvas.figure.legend
-        else:
-            lgn = axes[0].legend
 
-        if (self.show_legend):
+        if self.show_legend:
             self.mpl_legend = lgn(lins, labs,
                                   loc=self.legend_loc,
                                   prop=self.labelfont)

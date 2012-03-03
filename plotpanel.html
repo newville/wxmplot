@@ -92,30 +92,30 @@
             
   <div class="section" id="plotpanel-a-wx-panel-for-basic-2d-line-plots">
 <h1><a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>:  A wx.Panel for Basic 2D Line Plots<a class="headerlink" href="#plotpanel-a-wx-panel-for-basic-2d-line-plots" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class supports standard 2-d plots (line plots,
-scatter plots) with a simple-to-use programming interface.  This is derived
-from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be included in a wx GUI anywhere a
-<tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> can be.   A <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> provides the following
-capabilities for the end-user:</p>
+<p>The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class supports standard 2 dimensional plots,
+including line plots and scatter plots, with a simple-to-use programming
+interface.   This is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be included
+in a wx GUI anywhere a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> can be.  A <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>
+provides the following capabilities for the end-user:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>display x, y coordinates (left-click)</li>
-<li>zoom in on a particular region of the plot (left-drag)</li>
-<li>customize titles, labels, legend, color, linestyle, marker,
-and whether a grid is shown.  A separate window is used to
-set these attributes.</li>
-<li>save high-quality plot images (as PNGs), copy to system
+<li>display x, y coordinates as the mouse move.</li>
+<li>display x, y coordinates of last left-click.</li>
+<li>zoom in on a particular region of the plot with left-drag in a
+lineplot, or draw an 'lasso' around selected points in a scatterplot.</li>
+<li>customize titles, labels, legend, colors, linestyles, markers,
+and whether a grid and a legend is shown.  A separate window is used
+to give control of these settings.</li>
+<li>save high-quality plot images (as PNGs), or copy to system
 clipboard, or print.</li>
 </ol>
 </div></blockquote>
-<p>A <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> that includes a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, menus, and
-statusbar is also provided to give a separate plotting window to an
-application.  These both have the basic plotting methods of <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> to
-make a new plot with a single trace, and <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> to overplot another
-trace on top of an existing plot.  These each
-take 2 equal-length numpy arrays (abscissa, ordinate) for each trace.
-The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> have many additional methods
-to interact with the plots.</p>
+<p>These both classes have the
+basic plotting methods of <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> to make a new plot with a single
+trace, and <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> to overplot another trace on top of an existing
+plot.  These each take 2 equal-length numpy arrays (abscissa, ordinate) for
+each trace.  The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> have many
+additional methods to interact with the plots.</p>
 <dl class="class">
 <dt id="PlotPanel">
 <em class="property">class </em><tt class="descname">PlotPanel</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(6.0</em>, <em>3.7)</em><span class="optional">[</span>, <em>dpi=96</em><span class="optional">[</span>, <em>messenger=None</em><span class="optional">[</span>, <em>show_config_popup=True</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#PlotPanel" title="Permalink to this definition">¶</a></dt>
@@ -154,7 +154,7 @@ plot, or save the image to a file.</p>
 displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> method
 has many optional parameters, all using keyword/value argument.  Since most
 of these are shared with the <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method, the full set of parameters
-is given in <a class="reference internal" href="#plotopt-table"><em>Table of Arguments for plot() and oplot()</em></a></p>
+is given in <a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -162,136 +162,190 @@ is given in <a class="reference internal" href="#plotopt-table"><em>Table of Arg
 <tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#oplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overwriting any existing plot.</p>
 <p>The <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method has many optional parameters,  as listed in
-<a class="reference internal" href="#plotopt-table"><em>Table of Arguments for plot() and oplot()</em></a></p>
+<a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a></p>
 </dd></dl>
 
-<p id="plotopt-table">Table of Arguments for plot() and oplot():   Except where noted,
-the arguments are available for both <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> and <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>.</p>
+<p id="plotopt-table"><strong>Table of Plot Arguments</strong> These arguments apply for the <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a>, <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>, and
+<a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> methods.  Except where noted, the arguments are available for <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> and
+<a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>.  In addition, the <a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> method uses many of the same arguments for the
+same meaning, as indicated by the right-most column.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="16%" />
-<col width="15%" />
-<col width="11%" />
-<col width="59%" />
+<col width="14%" />
+<col width="13%" />
+<col width="9%" />
+<col width="51%" />
+<col width="14%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">argument</th>
 <th class="head">type</th>
 <th class="head">default</th>
 <th class="head">meaning</th>
+<th class="head">scatterplot?</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>title</td>
 <td>string</td>
 <td>None</td>
-<td>Plot title (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>Plot title</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>xlabel</td>
+<tr class="row-odd"><td>ylabel</td>
 <td>string</td>
 <td>None</td>
-<td>ordinate label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>abscissa label</td>
+<td>yes</td>
 </tr>
-<tr class="row-even"><td>ylabel</td>
+<tr class="row-even"><td>y2label</td>
 <td>string</td>
 <td>None</td>
-<td>abscissa label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>right-hand abscissa label</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>y2label</td>
-<td>string</td>
-<td>None</td>
-<td>right-hand abscissa label (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
-</tr>
-<tr class="row-even"><td>label</td>
+<tr class="row-odd"><td>label</td>
 <td>string</td>
 <td>None</td>
 <td>trace label (defaults to 'trace N')</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>side</td>
+<tr class="row-even"><td>side</td>
 <td>left/right</td>
 <td>left</td>
-<td>side for ylabel</td>
-</tr>
-<tr class="row-even"><td>use_dates</td>
-<td>bool</td>
-<td>False</td>
-<td>to show dates in xlabel (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>side for y-axis and label</td>
+<td>yes</td>
 </tr>
 <tr class="row-odd"><td>grid</td>
 <td>None/bool</td>
 <td>None</td>
-<td>to show grid lines (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>to show grid lines</td>
+<td>yes</td>
 </tr>
 <tr class="row-even"><td>color</td>
 <td>string</td>
 <td>blue</td>
 <td>color to use for trace</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>linewidth</td>
+<tr class="row-odd"><td>use_dates</td>
+<td>bool</td>
+<td>False</td>
+<td>to show dates in xlabel (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>linewidth</td>
 <td>int</td>
 <td>2</td>
 <td>linewidth for trace</td>
+<td>no</td>
 </tr>
-<tr class="row-even"><td>style</td>
+<tr class="row-odd"><td>style</td>
 <td>string</td>
 <td>solid</td>
 <td>line-style for trace (solid, dashed, ...)</td>
+<td>no</td>
 </tr>
-<tr class="row-odd"><td>drawstyle</td>
+<tr class="row-even"><td>drawstyle</td>
 <td>string</td>
 <td>line</td>
 <td>style connecting points of trace</td>
+<td>no</td>
 </tr>
-<tr class="row-even"><td>marker</td>
+<tr class="row-odd"><td>marker</td>
 <td>string</td>
 <td>None</td>
 <td>symbol to show for each point (+, o, ....)</td>
+<td>no</td>
 </tr>
-<tr class="row-odd"><td>markersize</td>
+<tr class="row-even"><td>markersize</td>
 <td>int</td>
 <td>8</td>
 <td>size of marker shown for each point</td>
+<td>no</td>
 </tr>
-<tr class="row-even"><td>dy</td>
+<tr class="row-odd"><td>dy</td>
 <td>array</td>
 <td>None</td>
 <td>uncertainties for y values; error bars</td>
+<td>no</td>
 </tr>
-<tr class="row-odd"><td>ylog_scale</td>
+<tr class="row-even"><td>ylog_scale</td>
 <td>bool</td>
 <td>False</td>
 <td>draw y axis with log(base 10) scale</td>
+<td>no</td>
 </tr>
-<tr class="row-even"><td>xmin</td>
+<tr class="row-odd"><td>xmin</td>
 <td>float</td>
 <td>None</td>
 <td>minimum displayed x value</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>xmax</td>
+<tr class="row-even"><td>xmax</td>
 <td>float</td>
 <td>None</td>
 <td>maximum displayed x value</td>
+<td>yes</td>
 </tr>
-<tr class="row-even"><td>ymin</td>
+<tr class="row-odd"><td>ymin</td>
 <td>float</td>
 <td>None</td>
 <td>minimum displayed y value</td>
+<td>yes</td>
 </tr>
-<tr class="row-odd"><td>ymax</td>
+<tr class="row-even"><td>ymax</td>
 <td>float</td>
 <td>None</td>
 <td>maximum displayed y value</td>
-</tr>
-<tr class="row-even"><td>xylims</td>
-<td>2x2 list</td>
-<td>None</td>
-<td>[[xmin, xmax], [ymin, ymax]]</td>
+<td>yes</td>
 </tr>
 <tr class="row-odd"><td>autoscale</td>
 <td>bool</td>
 <td>True</td>
 <td>whether to automatically set plot limits</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>draw_legend</td>
+<td>None/bool</td>
+<td>None</td>
+<td>whether to display legend (None: leave as is)</td>
+<td>no</td>
+</tr>
+<tr class="row-odd"><td>refresh</td>
+<td>bool</td>
+<td>True</td>
+<td>whether to refresh display</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td colspan="3"><strong>arguments that apply only for</strong> <a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>size</td>
+<td>int</td>
+<td>10</td>
+<td>size of marker</td>
+<td>yes</td>
+</tr>
+<tr class="row-even"><td>edgecolor</td>
+<td>string</td>
+<td>black</td>
+<td>edge color of marker</td>
+<td>yes</td>
+</tr>
+<tr class="row-odd"><td>selectcolor</td>
+<td>string</td>
+<td>red</td>
+<td>color for selected points</td>
+<td>yes</td>
+</tr>
+<tr class="row-even"><td>callback</td>
+<td>function</td>
+<td>None</td>
+<td>user-supplied callback to run on selection</td>
+<td>yes</td>
 </tr>
 </tbody>
 </table>
@@ -324,6 +378,39 @@ transition to a new value as a sudden step, you want 'steps-post'.</p>
 display a plot legend can be configured interactively (see Plot Configuration).</p>
 </div></blockquote>
 <dl class="method">
+<dt id="update_line">
+<tt class="descname">update_line</tt><big>(</big><em>trace</em>, <em>x</em>, <em>y</em><span class="optional">[</span>, <em>side='left'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#update_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>update an existing trace.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>trace</strong> -- integer index for the trace (0 is the first trace)</li>
+<li><strong>x</strong> -- array of x values</li>
+<li><strong>y</strong> -- array of y values</li>
+<li><strong>side</strong> -- which y axis to use ('left' or 'right').</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function is particularly useful for data that is changing and you
+wish to update traces from a previous <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> or <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> with
+the new (x, y) data without completely redrawing the entire plot.  Using
+this method is substantially faster than replotting, and should be used
+for dynamic plots such as a StripChart.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scatterplot">
+<tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#scatterplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>draws a 2d scatterplot.   This is a collection of points that are not meant to imply a specific
+order that can be connected by a continuous line.    A full list of arguments are listed in
+<a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="clear">
 <tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the plot.</p>
@@ -347,7 +434,7 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 </tr>
 </tbody>
 </table>
-<p>That is, if <cite>autoscale=False</cite> is passed in, then the limits are use.</p>
+<p>That is, if <cite>autoscale=False</cite> is passed in, then the limits are used.</p>
 </dd></dl>
 
 <dl class="method">
@@ -366,29 +453,6 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 <dt id="unzoom_all">
 <tt class="descname">unzoom_all</tt><big>(</big><big>)</big><a class="headerlink" href="#unzoom_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>unzoom the plot to the full data range.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="update_line">
-<tt class="descname">update_line</tt><big>(</big><em>trace</em>, <em>x</em>, <em>y</em><span class="optional">[</span>, <em>side='left'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#update_line" title="Permalink to this definition">¶</a></dt>
-<dd><p>update an existing trace.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>trace</strong> -- integer index for the trace (0 is the first trace)</li>
-<li><strong>x</strong> -- array of x values</li>
-<li><strong>y</strong> -- array of y values</li>
-<li><strong>side</strong> -- which y axis to use ('left' or 'right').</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>This function is particularly useful for data that is changing and you wish
-to update the line with the new data without completely redrawing the entire
-plot.  Using this method is substantially faster than replotting.</p>
 </dd></dl>
 
 <dl class="method">
@@ -451,14 +515,52 @@ this will go the the StatusBar.</p>
 <h2><a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>: a wx.Frame showing a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a><a class="headerlink" href="#plotframe-a-wx-frame-showing-a-plotpanel" title="Permalink to this headline">¶</a></h2>
 <p>A <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> is a wx.Frame -- a separate plot window -- that
 contains a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and is decorated with a status bar and
-menubar with menu items for saving, printing and configuring plots..</p>
+menubar with menu items for saving, printing and configuring plots.
+It inherits many of the methods of a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>.</p>
 <dl class="class">
 <dt id="PlotFrame">
 <em class="property">class </em><tt class="descname">PlotFrame</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(700</em>, <em>450)</em><span class="optional">[</span>, <em>title=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#PlotFrame" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a plot frame.</p>
+<dd><p>create a plot frame.  This frame will have a <tt class="xref py py-data docutils literal"><span class="pre">panel</span></tt> member
+holding the underlying <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, and have menus and statusbar
+for plot interaction.</p>
 </dd></dl>
 
-<p>The frame will have a <em>panel</em> member holding the underlying <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>.</p>
+<dl class="method">
+<dt>
+<tt class="descname">plot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.plot</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.oplot</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.scatterplot</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">clear</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.clear</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">update_line</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.update_line</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">reset_config</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dd><p>Passed to panel.reset_config</p>
+</dd></dl>
+
 </div>
 <div class="section" id="plotapp-a-wx-app-showing-a-plotframe">
 <h2><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a><a class="headerlink" href="#plotapp-a-wx-app-showing-a-plotframe" title="Permalink to this headline">¶</a></h2>
@@ -502,6 +604,8 @@ p.run()</pre>
 like this:</p>
 <img alt="_images/configuration_frame.png" src="_images/configuration_frame.png" />
 <p>where all the options there will dynamically change the plot in the PlotPanel.</p>
+<p>An example scatterplot looks like this:</p>
+<img alt="_images/scatterplot.png" src="_images/scatterplot.png" />
 <p>Many more examples are given in the <em>examples</em> directory in the source
 distribution kit.  The <em>demo.py</em> script there will show several 2D Plot
 panel examples, including a plot which uses a timer to simulate a dynamic

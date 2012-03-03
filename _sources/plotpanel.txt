@@ -3,28 +3,28 @@
 :class:`PlotPanel`:  A wx.Panel for Basic 2D Line Plots
 ==========================================================
 
-The :class:`PlotPanel` class supports standard 2-d plots (line plots,
-scatter plots) with a simple-to-use programming interface.  This is derived
-from a :class:`wx.Panel` and so can be included in a wx GUI anywhere a
-:class:`wx.Panel` can be.   A :class:`PlotPanel` provides the following
-capabilities for the end-user:
+The :class:`PlotPanel` class supports standard 2 dimensional plots,
+including line plots and scatter plots, with a simple-to-use programming
+interface.   This is derived from a :class:`wx.Panel` and so can be included
+in a wx GUI anywhere a :class:`wx.Panel` can be.  A :class:`PlotPanel`
+provides the following capabilities for the end-user:
 
-   1. display x, y coordinates (left-click)
-   2. zoom in on a particular region of the plot (left-drag)
-   3. customize titles, labels, legend, color, linestyle, marker,
-      and whether a grid is shown.  A separate window is used to
-      set these attributes.
-   4. save high-quality plot images (as PNGs), copy to system
+   1. display x, y coordinates as the mouse move.
+   2. display x, y coordinates of last left-click.
+   3. zoom in on a particular region of the plot with left-drag in a
+      lineplot, or draw an 'lasso' around selected points in a scatterplot.
+   4. customize titles, labels, legend, colors, linestyles, markers,
+      and whether a grid and a legend is shown.  A separate window is used
+      to give control of these settings.
+   5. save high-quality plot images (as PNGs), or copy to system
       clipboard, or print.
 
-A :class:`PlotFrame` that includes a :class:`PlotPanel`, menus, and
-statusbar is also provided to give a separate plotting window to an
-application.  These both have the basic plotting methods of :meth:`plot` to
-make a new plot with a single trace, and :meth:`oplot` to overplot another
-trace on top of an existing plot.  These each
-take 2 equal-length numpy arrays (abscissa, ordinate) for each trace.
-The :class:`PlotPanel` and :class:`PlotFrame` have many additional methods
-to interact with the plots.
+These both classes have the
+basic plotting methods of :meth:`plot` to make a new plot with a single
+trace, and :meth:`oplot` to overplot another trace on top of an existing
+plot.  These each take 2 equal-length numpy arrays (abscissa, ordinate) for
+each trace.  The :class:`PlotPanel` and :class:`PlotFrame` have many
+additional methods to interact with the plots.
 
 .. class:: PlotPanel(parent[, size=(6.0, 3.7)[, dpi=96[, messenger=None[, show_config_popup=True[, **kws]]]]])
 
@@ -60,68 +60,79 @@ to interact with the plots.
    displayed curve for these data is called a *trace*.  The :meth:`plot` method
    has many optional parameters, all using keyword/value argument.  Since most
    of these are shared with the :meth:`oplot` method, the full set of parameters
-   is given in :ref:`Table of Arguments for plot() and oplot() <plotopt_table>`
+   is given in :ref:`Table of Plot Arguments <plotopt_table>`
 
 .. method:: oplot(x, y, **kws)
 
    Draw a plot of the numpy arrays *x* and *y*, overwriting any existing plot.
 
    The :meth:`oplot` method has many optional parameters,  as listed in
-   :ref:`Table of Arguments for plot() and oplot() <plotopt_table>`
-
+   :ref:`Table of Plot Arguments <plotopt_table>`
 
 .. _plotopt_table:
 
-Table of Arguments for plot() and oplot():   Except where noted,
-the arguments are available for both :meth:`plot` and :meth:`oplot`.
+**Table of Plot Arguments** These arguments apply for the :meth:`plot`, :meth:`oplot`, and
+:meth:`scatterplot` methods.  Except where noted, the arguments are available for :meth:`plot` and
+:meth:`oplot`.  In addition, the :meth:`scatterplot` method uses many of the same arguments for the
+same meaning, as indicated by the right-most column.
 
-  +-------------+------------+---------+------------------------------------------------+
-  | argument    |   type     | default | meaning                                        |
-  +=============+============+=========+================================================+
-  | title       | string     | None    | Plot title (:meth:`plot` only)                 |
-  +-------------+------------+---------+------------------------------------------------+
-  | xlabel      | string     | None    | ordinate label (:meth:`plot` only)             |
-  +-------------+------------+---------+------------------------------------------------+
-  | ylabel      | string     | None    | abscissa label (:meth:`plot` only)             |
-  +-------------+------------+---------+------------------------------------------------+
-  | y2label     | string     | None    | right-hand abscissa label (:meth:`plot` only)  |
-  +-------------+------------+---------+------------------------------------------------+
-  | label       | string     | None    | trace label (defaults to 'trace N')            |
-  +-------------+------------+---------+------------------------------------------------+
-  | side        | left/right | left    | side for ylabel                                |
-  +-------------+------------+---------+------------------------------------------------+
-  | use_dates   | bool       | False   | to show dates in xlabel (:meth:`plot` only)    |
-  +-------------+------------+---------+------------------------------------------------+
-  | grid        | None/bool  | None    | to show grid lines (:meth:`plot` only)         |
-  +-------------+------------+---------+------------------------------------------------+
-  | color       | string     | blue    | color to use for trace                         |
-  +-------------+------------+---------+------------------------------------------------+
-  | linewidth   | int        | 2       | linewidth for trace                            |
-  +-------------+------------+---------+------------------------------------------------+
-  | style       | string     | solid   | line-style for trace (solid, dashed, ...)      |
-  +-------------+------------+---------+------------------------------------------------+
-  | drawstyle   | string     | line    | style connecting points of trace               |
-  +-------------+------------+---------+------------------------------------------------+
-  | marker      | string     | None    | symbol to show for each point (+, o, ....)     |
-  +-------------+------------+---------+------------------------------------------------+
-  | markersize  | int        | 8       | size of marker shown for each point            |
-  +-------------+------------+---------+------------------------------------------------+
-  | dy          | array      | None    | uncertainties for y values; error bars         |
-  +-------------+------------+---------+------------------------------------------------+
-  | ylog_scale  | bool       | False   | draw y axis with log(base 10) scale            |
-  +-------------+------------+---------+------------------------------------------------+
-  | xmin        | float      | None    | minimum displayed x value                      |
-  +-------------+------------+---------+------------------------------------------------+
-  | xmax        | float      | None    | maximum displayed x value                      |
-  +-------------+------------+---------+------------------------------------------------+
-  | ymin        | float      | None    | minimum displayed y value                      |
-  +-------------+------------+---------+------------------------------------------------+
-  | ymax        | float      | None    | maximum displayed y value                      |
-  +-------------+------------+---------+------------------------------------------------+
-  | xylims      | 2x2 list   | None    | [[xmin, xmax], [ymin, ymax]]                   |
-  +-------------+------------+---------+------------------------------------------------+
-  | autoscale   | bool       | True    | whether to automatically set plot limits       |
-  +-------------+------------+---------+------------------------------------------------+
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | argument    |   type     | default | meaning                                        | scatterplot?|
+  +=============+============+=========+================================================+=============+
+  | title       | string     | None    | Plot title                                     |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | ylabel      | string     | None    | abscissa label                                 |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | y2label     | string     | None    | right-hand abscissa label                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | label       | string     | None    | trace label (defaults to 'trace N')            |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | side        | left/right | left    | side for y-axis and label                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | grid        | None/bool  | None    | to show grid lines                             |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | color       | string     | blue    | color to use for trace                         |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | use_dates   | bool       | False   | to show dates in xlabel (:meth:`plot` only)    |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | linewidth   | int        | 2       | linewidth for trace                            |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | style       | string     | solid   | line-style for trace (solid, dashed, ...)      |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | drawstyle   | string     | line    | style connecting points of trace               |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | marker      | string     | None    | symbol to show for each point (+, o, ....)     |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | markersize  | int        | 8       | size of marker shown for each point            |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | dy          | array      | None    | uncertainties for y values; error bars         |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | ylog_scale  | bool       | False   | draw y axis with log(base 10) scale            |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | xmin        | float      | None    | minimum displayed x value                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | xmax        | float      | None    | maximum displayed x value                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | ymin        | float      | None    | minimum displayed y value                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | ymax        | float      | None    | maximum displayed y value                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | autoscale   | bool       | True    | whether to automatically set plot limits       |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | draw_legend | None/bool  | None    | whether to display legend (None: leave as is)  |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | refresh     | bool       | True    | whether to refresh display                     |  no         |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  |             | **arguments that apply only for** :meth:`scatterplot`                 |             |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | size        | int        | 10      | size of marker                                 |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | edgecolor   | string     | black   | edge color of marker                           |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | selectcolor | string     | red     | color for selected points                      |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
+  | callback    | function   | None    | user-supplied callback to run on selection     |  yes        |
+  +-------------+------------+---------+------------------------------------------------+-------------+
 
   As a general note, the configuration for the plot (title, labels, grid
   displays) and for each trace (color, linewidth, ...) are preserved for a
@@ -157,6 +168,27 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
   All of these values, and a few more settings controlling whether and how to
   display a plot legend can be configured interactively (see Plot Configuration).
 
+.. method:: update_line(trace, x, y[, side='left'])
+
+   update an existing trace.
+
+   :param trace: integer index for the trace (0 is the first trace)
+   :param x:     array of x values
+   :param y:     array of y values
+   :param side:  which y axis to use ('left' or 'right').
+
+   This function is particularly useful for data that is changing and you
+   wish to update traces from a previous :meth:`plot` or :meth:`oplot` with
+   the new (x, y) data without completely redrawing the entire plot.  Using
+   this method is substantially faster than replotting, and should be used
+   for dynamic plots such as a StripChart.
+
+.. method:: scatterplot(x, y, **kws)
+
+   draws a 2d scatterplot.   This is a collection of points that are not meant to imply a specific
+   order that can be connected by a continuous line.    A full list of arguments are listed in
+   :ref:`Table of Plot Arguments <plotopt_table>`.
+
 
 .. method:: clear()
 
@@ -173,7 +205,7 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
    :param side: set to 'right' to get right-hand axes.
    :param autoscale: whether to automatically scale to data range.
 
-   That is, if `autoscale=False` is passed in, then the limits are use.
+   That is, if `autoscale=False` is passed in, then the limits are used.
 
 .. method:: get_xylims()
 
@@ -186,21 +218,6 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
 .. method:: unzoom_all()
 
    unzoom the plot to the full data range.
-
-
-.. method:: update_line(trace, x, y[, side='left'])
-
-   update an existing trace.
-
-   :param trace: integer index for the trace (0 is the first trace)
-   :param x:     array of x values
-   :param y:     array of y values
-   :param side:  which y axis to use ('left' or 'right').
-
-   This function is particularly useful for data that is changing and you wish
-   to update the line with the new data without completely redrawing the entire
-   plot.  Using this method is substantially faster than replotting.
-
 
 .. method:: set_title(title)
 
@@ -245,13 +262,39 @@ the arguments are available for both :meth:`plot` and :meth:`oplot`.
 
 A :class:`PlotFrame` is a wx.Frame -- a separate plot window -- that
 contains a :class:`PlotPanel` and is decorated with a status bar and
-menubar with menu items for saving, printing and configuring plots..
+menubar with menu items for saving, printing and configuring plots.
+It inherits many of the methods of a :class:`PlotPanel`.
 
 .. class:: PlotFrame(parent[, size=(700, 450)[, title=None[, **kws]]])
 
-   create a plot frame.
+   create a plot frame.  This frame will have a :data:`panel` member
+   holding the underlying :class:`PlotPanel`, and have menus and statusbar
+   for plot interaction.
 
-The frame will have a *panel* member holding the underlying :class:`PlotPanel`.
+.. method:: plot(x, y, **kws)
+
+   Passed to panel.plot
+
+
+.. method:: oplot(x, y, **kws)
+
+   Passed to panel.oplot
+
+.. method:: scatterplot(x, y, **kws)
+
+   Passed to panel.scatterplot
+
+.. method:: clear(x, y, **kws)
+
+   Passed to panel.clear
+
+.. method:: update_line(x, y, **kws)
+
+   Passed to panel.update_line
+
+.. method:: reset_config(x, y, **kws)
+
+   Passed to panel.reset_config
 
 
 :class:`PlotApp`: a wx.App showing a :class:`PlotFrame`
@@ -303,6 +346,13 @@ like this:
 .. image:: images/configuration_frame.png
 
 where all the options there will dynamically change the plot in the PlotPanel.
+
+An example scatterplot looks like this:
+
+
+.. image:: images/scatterplot.png
+
+
 
 Many more examples are given in the *examples* directory in the source
 distribution kit.  The *demo.py* script there will show several 2D Plot

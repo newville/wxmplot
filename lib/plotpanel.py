@@ -116,9 +116,9 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label)
         if title  is not None:
             self.set_title(title)
-
         if show_legend is not None:
             self.conf.show_legend = show_legend
+
         if grid is not None:
             self.conf.show_grid = grid
 
@@ -162,7 +162,7 @@ class PlotPanel(BasePanel):
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
-                i.set_color(self.conf.grid_color)
+                i.set_color(conf.grid_color)
             axes.grid(True)
         else:
             axes.grid(False)
@@ -194,6 +194,9 @@ class PlotPanel(BasePanel):
         if refresh:
             conf.refresh_trace(conf.ntrace)
             conf.relabel()
+
+        if self.conf.show_legend:
+            conf.draw_legend()
 
         self.canvas.draw()
         self.canvas.Refresh()

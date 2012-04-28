@@ -78,7 +78,7 @@ class ImagePanel(BasePanel):
         self.unzoom_all()
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kw)
-        
+
     def set_xylims(self, lims, axes=None, autoscale=True):
         """ update xy limits of a plot"""
         if axes is None:
@@ -108,7 +108,6 @@ class ImagePanel(BasePanel):
         if autoscale:
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
-
         self.conf.xylims = [xmin, xmax, ymin, ymax]
         self.redraw()
 
@@ -150,7 +149,39 @@ class ImagePanel(BasePanel):
 
     def BuildPopup(self):
         # build pop-up menu for right-click display
-        pass
+        self.popup_unzoom_all = wx.NewId()
+        self.popup_unzoom_one = wx.NewId()
+        self.popup_rot90     = wx.NewId()
+        self.popup_curmode   = wx.NewId()
+        self.popup_save   = wx.NewId()
+        self.popup_menu = wx.Menu()
+        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out')
+        self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
+        self.popup_menu.AppendSeparator()
+        self.popup_menu.Append(self.popup_rot90,   'Rotate 90deg (CW)')
+        # self.popup_menu.Append(self.popup_curmode, 'Toggle Cursor Mode')
+
+        #if self.show_config_popup:
+        #    self.popup_menu.Append(self.popup_config,'Configure')
+
+        self.popup_menu.Append(self.popup_save,  'Save Image')
+        self.Bind(wx.EVT_MENU, self.unzoom,       id=self.popup_unzoom_one)
+        self.Bind(wx.EVT_MENU, self.unzoom_all,   id=self.popup_unzoom_all)
+        self.Bind(wx.EVT_MENU, self.save_figure,  id=self.popup_save)
+        # self.Bind(wx.EVT_MENU, self.toggle_curmode,  id=self.popup_curmode)
+        self.Bind(wx.EVT_MENU, self.rotate90,  id=self.popup_rot90)
+
+    def rotate90(self, event=None):
+        "rotate 90 degrees, CW"
+        self.conf.rot = True
+        self.unzoom_all()
+
+    def toggle_curmode(self, event=None):
+        "toggle cursor mode"
+        if self.conf.cursor_mode == 'zoom':
+            self.conf.cursor_mode = 'lasso'
+        else:
+            self.conf.cursor_mode = 'zoom'
 
     ####
     ## GUI events, overriding BasePanel components
@@ -162,8 +193,8 @@ class ImagePanel(BasePanel):
             for iy in range(ny):
                 inds.extend([(iy, ix) for ix in range(nx)])
             self.conf.indices = np.array(inds)
-            
-        
+
+
     def lassoHandler(self, vertices):
         conf = self.conf
         if conf.indices is None:
@@ -177,7 +208,7 @@ class ImagePanel(BasePanel):
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
-            
+
     def reportMotion(self,event=None):
         pass
 

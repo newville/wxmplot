@@ -105,7 +105,7 @@ class BasePanel(wx.Panel):
         if len(self.zoom_lims) > 1:
             lims = self.zoom_lims.pop()
         ax = self.axes
-        print 'base unzoom ', lims, set_bounds
+        # print 'base unzoom ', lims, set_bounds
         if lims is None: # auto scale
             self.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
@@ -221,7 +221,7 @@ class BasePanel(wx.Panel):
                     col = '#%02x%02x%02x' % tuple(rgb)
                     self.lasso.line.set_color(col)
                 else:
-                    self.lasso.line.set_color('goldenrod')                    
+                    self.lasso.line.set_color('goldenrod')
             self.ForwardEvent(event=event.guiEvent)
 
 
@@ -229,7 +229,7 @@ class BasePanel(wx.Panel):
         pass
     def toggle_grid(self, evt=None, show=None):
         pass
-    
+
     def lassoHandler(self, vertices):
         try:
             print 'default lasso handler -- override!'
@@ -483,7 +483,7 @@ class BasePanel(wx.Panel):
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
         pen = zdc.GetPen()
-            
+
         zdc.ResetBoundingBox()
         zdc.BeginDrawing()
 

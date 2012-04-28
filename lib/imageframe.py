@@ -56,7 +56,7 @@ class ImageFrame(BaseFrame):
         m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
         m.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
-        m.Append(mids.FLIP_O, 'Flip to Original', '')
+        # m.Append(mids.FLIP_O, 'Flip to Original', '')
         m.AppendSeparator()
         m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom to Box\tCtrl+B',
                           'Lef-Drag Cursor to zoom to box')
@@ -69,7 +69,6 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
-
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -90,7 +89,6 @@ class ImageFrame(BaseFrame):
         conf.cursor_mode = 'zoom'
         if wid == self.menuIDs.CUR_LASSO:
             conf.cursor_mode = 'lasso'
-
 
     def onFlip(self, event=None):
         conf = self.panel.conf

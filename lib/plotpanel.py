@@ -28,8 +28,9 @@ class PlotPanel(BasePanel):
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
-    def __init__(self, parent, size=(4.00, 2.48), dpi=144,
-                 trace_color_callback=None, **kws):
+    def __init__(self, parent, size=(4.00, 2.48), dpi=150,
+                 trace_color_callback=None,
+                 output_title='plot', **kws):
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -39,7 +40,8 @@ class PlotPanel(BasePanel):
         matplotlib.rc('legend', fontsize=9)
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
-        BasePanel.__init__(self, parent, **kws)
+        BasePanel.__init__(self, parent,
+                           output_title=output_title, **kws)
 
         self.conf = PlotConfig()
         self.data_range = {}

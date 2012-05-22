@@ -30,9 +30,12 @@ class ImagePanel(BasePanel):
     """
 
     def __init__(self, parent, messenger=None, data_callback=None,
-                 size=(4.50,4.00), dpi=96, lasso_callback=None, **kws):
+                 size=(4.50,4.00), dpi=96,
+                 output_title='Image', lasso_callback=None, **kws):
         matplotlib.rc('lines', linewidth=2)
-        BasePanel.__init__(self, parent, messenger=messenger, **kws)
+        BasePanel.__init__(self, parent,
+                           output_title=output_title,
+                           messenger=messenger, **kws)
         self.data_callback = data_callback
         self.lasso_callback = lasso_callback
         self.conf = ImageConfig()

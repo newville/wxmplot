@@ -23,7 +23,8 @@ class BasePanel(wx.Panel):
          bindings for keyboard short-cuts
     """
     def __init__(self, parent, messenger=None,
-                 show_config_popup=True, **kws):
+                 show_config_popup=True,
+                 output_title=None, **kws):
 
         wx.Panel.__init__(self, parent, -1, **kws)
 
@@ -52,7 +53,7 @@ class BasePanel(wx.Panel):
         self.zdc = None
 
         self.parent = parent
-        self.printer = Printer(self)
+        self.printer = Printer(self, title=output_title)
 
     def addCanvasEvents(self):
         # use matplotlib events

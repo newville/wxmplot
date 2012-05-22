@@ -21,7 +21,7 @@ class ImageFrame(BaseFrame):
     """
     def __init__(self, parent=None, size=(550, 450),
                  config_on_frame=True, lasso_callback=None,
-                 **kws):
+                 output_title='Image',   **kws):
 
         self.config_on_frame = config_on_frame
         self.lasso_callback = lasso_callback

@@ -99,8 +99,13 @@ class PrintoutWx(wx.Printout):
     here is scaling the matplotlib canvas bitmap to the current
     printer's definition.
     """
-    def __init__(self, canvas, width=6.0, margin=0.25, title='WXMPlot Figure'):
-        wx.Printout.__init__(self,title=title)
+    _title_ = 'wxmplot'
+    def __init__(self, canvas, width=6.0, margin=0.25,
+                 title=None):
+        if title is None:
+            title = self._title_
+    
+        wx.Printout.__init__(self, title=title)
         self.canvas = canvas
         self.width  = width
         self.margin = margin
@@ -168,14 +173,15 @@ class PrintoutWx(wx.Printout):
         return True
 
 class Printer:
-    def __init__(self, parent, canvas=None, width=6.0, margin=0.5):
+    def __init__(self, parent, title=None,
+                 canvas=None, width=6.0, margin=0.5):
         """initialize printer settings using wx methods"""
 
         self.parent = parent
         self.canvas = canvas
         self.pwidth = width
         self.pmargin= margin
-
+        self.title = title
         self.printerData = wx.PrintData()
         self.printerData.SetPaperId(wx.PAPER_LETTER)
         self.printerData.SetPrintMode(wx.PRINT_MODE_PRINTER)
@@ -205,11 +211,13 @@ class Printer:
         self.printerData = wx.PrintData(data.GetPrintData())
         dlg.Destroy()
 
-    def Preview(self, event=None):
+    def Preview(self, title=None, event=None):
         """ generate Print Preview with wx Print mechanism"""
-        po1  = PrintoutWx(self.canvas,
+        if title is None:
+            title = self.title
+        po1  = PrintoutWx(self.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
-        po2  = PrintoutWx(self.canvas,
+        po2  = PrintoutWx(self.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
         self.preview = wx.PrintPreview(po1,po2,self.printerData)
 
@@ -224,13 +232,16 @@ class Printer:
             frame.Centre(wx.BOTH)
             frame.Show(True)
 
-    def Print(self, event=None):
+    def Print(self, title=None, event=None):
         """ Print figure using wx Print mechanism"""
         pdd = wx.PrintDialogData()
         pdd.SetPrintData(self.printerData)
         pdd.SetToPage(1)
         printer  = wx.Printer(pdd)
-        printout = PrintoutWx(self.canvas, width=self.pwidth,   margin=self.pmargin)
+        if title is None:
+            title = self.title
+        printout = PrintoutWx(self.canvas, title=title,
+                              width=self.pwidth, margin=self.pmargin)
         print_ok = printer.Print(self.parent, printout, True)
 
         if not print_ok and not printer.GetLastError() == wx.PRINTER_CANCELLED:

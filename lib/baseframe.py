@@ -52,16 +52,17 @@ Also, these key bindings can be used
 """
 
 
-    about_msg =  """MPlot  version 0.9
+    about_msg =  """WXMPlot  version 0.9.8
 Matt Newville <newville@cars.uchicago.edu>"""
 
     def __init__(self, parent=None, panel=None, title='',
-                 size=(700,450), exit_callback=None, **kws):
+                 size=(700,450), exit_callback=None,
+                 output_title='Plot', **kws):
 
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
         wx.Frame.__init__(self, parent, -1, title, **kws)
-
+        self.output_title = output_title
         self.exit_callback = exit_callback
         self.parent = parent
         self.panel  = panel
@@ -131,7 +132,8 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.BuildMenu()
-        self.panel = PlotPanel(self)
+        self.panel = PlotPanel(self,
+                               output_title=self.output_title)
         self.panel.messenger = self.write_message
         sizer.Add(self.panel, 1, wx.EXPAND)
         self.BindMenuToPanel()
@@ -170,8 +172,8 @@ Matt Newville <newville@cars.uchicago.edu>"""
         self.top_menus['File'] = m0
 
         mhelp = wx.Menu()
-        mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for MPlot")
-        mhelp.Append(mids.ABOUT, "About", "About MPlot")
+        mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
+        mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
         self.top_menus['Help'] = mhelp
 
         mbar = wx.MenuBar()
@@ -208,13 +210,13 @@ Matt Newville <newville@cars.uchicago.edu>"""
                       id=mids.CLIPB)
 
     def onAbout(self, event=None):
-        dlg = wx.MessageDialog(self, self.about_msg, "About MPlot",
+        dlg = wx.MessageDialog(self, self.about_msg, "About WXMPlot",
                                wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 
     def onHelp(self, event=None):
-        dlg = wx.MessageDialog(self, self.help_msg, "MPlot Quick Reference",
+        dlg = wx.MessageDialog(self, self.help_msg, "WXMPlot Quick Reference",
                                wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()

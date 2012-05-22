@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-
-import distutils
-from distutils.core import setup, Extension
-
+from setuptools import setup
 import lib
 setup(
     name = 'wxmplot',

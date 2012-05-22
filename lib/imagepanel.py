@@ -30,7 +30,7 @@ class ImagePanel(BasePanel):
     """
 
     def __init__(self, parent, messenger=None, data_callback=None,
-                 size=(4.50,4.00), dpi=96,
+                 size=(4.50,4.00), dpi=100,
                  output_title='Image', lasso_callback=None, **kws):
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent,
@@ -130,7 +130,7 @@ class ImagePanel(BasePanel):
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
 
-        self.fig   = Figure(self.figsize,dpi=self.dpi)
+        self.fig   = Figure(self.figsize, dpi=self.dpi)
         self.axes  = self.fig.add_axes([0.02, 0.02, 0.96, 0.96])
 
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)

@@ -182,7 +182,7 @@ class BasePanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            self.canvas.print_figure(path, dpi=300)
+            self.canvas.print_figure(path, dpi=600)
             if (path.find(self.launch_dir) ==  0):
                 path = path[len(self.launch_dir)+1:]
             self.write_message('Saved plot to %s' % path)

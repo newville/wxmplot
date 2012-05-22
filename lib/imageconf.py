@@ -115,7 +115,7 @@ class ImageConfigFrame(wx.Frame):
         cmax = self.conf.cmap_range
         self.cmap_data   = numpy.outer(numpy.ones(cmax/8),
                                        numpy.arange(0,cmax,1.0)/(1.0*cmax))
-        self.cmap_fig     = Figure( (3.85, 0.5), dpi=96)
+        self.cmap_fig     = Figure( (3.85, 0.5), dpi=100)
         self.cmap_axes  = self.cmap_fig.add_axes([0.01,0.01,0.98,0.98])
         self.cmap_axes.set_axis_off()
         self.cmap_canvas = FigureCanvasWxAgg(panel, -1, self.cmap_fig)
@@ -175,7 +175,7 @@ class ImageConfigFrame(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            self.cmap_canvas.print_figure(path,dpi=300)
+            self.cmap_canvas.print_figure(path, dpi=300)
 
     def onInterp(self,event=None):
         self.conf.interp =  event.GetString()

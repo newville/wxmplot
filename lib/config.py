@@ -267,6 +267,9 @@ class PlotConfig:
 
         axes[0].set_xlabel(self.xlabel, **kws)
         axes[0].set_ylabel(self.ylabel, **kws)
+        if len(axes) > 1:
+            axes[1].set_ylabel(self.y2label, **kws)
+
 
         def showobj(o):
             print '============ ', o

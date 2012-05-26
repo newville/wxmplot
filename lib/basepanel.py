@@ -143,17 +143,15 @@ class BasePanel(wx.Panel):
 
     def set_xlabel(self, s):
         "set plot xlabel"
-        self.conf.xlabel = s
-        self.conf.relabel()
+        self.conf.relabel(xlabel=s)
 
     def set_ylabel(self, s):
         "set plot ylabel"
-        self.conf.ylabel = s
-        self.conf.relabel()
+        self.conf.relabel(ylabel=s)
 
     def set_y2label(self, s):
         "set plot ylabel"
-        self.conf.relabel(y2label=s)
+        self.conf.relabel(y2label = s)
 
     def write_message(self, s, panel=0):
         """ write message to message handler

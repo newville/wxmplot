@@ -52,7 +52,7 @@ class PlotPanel(BasePanel):
         self.figsize = size
         self.dpi     = dpi
         self.BuildPanel()
-        self.user_limits = [None, None, None, None]
+        self.user_limits = {} # [None, None, None, None]
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
@@ -76,7 +76,7 @@ class PlotPanel(BasePanel):
         self.conf.ntrace  = 0
         self.conf.cursor_mode = 'zoom'
         self.conf.plot_type = 'lineplot'
-        self.user_limits = [None, None, None, None]
+        self.user_limits[axes] = [None, None, None, None]
 
         if xlabel is not None:
             self.set_xlabel(xlabel)
@@ -126,6 +126,7 @@ class PlotPanel(BasePanel):
 
         # set data range for this axes, and the view limits
         datrange = [min(xdata), max(xdata), min(ydata), max(ydata)]
+
         if axes not in self.data_range:
             self.data_range[axes] = datrange
         else:
@@ -134,13 +135,19 @@ class PlotPanel(BasePanel):
             self.data_range[axes][1] = max(dr[1], datrange[1])
             self.data_range[axes][2] = min(dr[2], datrange[2])
             self.data_range[axes][3] = max(dr[3], datrange[3])
+        if axes not in self.user_limits:
+            self.user_limits[axes] = [None, None, None, None]
+        if xmin is not None: self.user_limits[axes][0] = xmin
+        if xmax is not None: self.user_limits[axes][1] = xmax
+        if ymin is not None: self.user_limits[axes][2] = ymin
+        if ymax is not None: self.user_limits[axes][3] = ymax
 
-        if xmin is not None: self.user_limits[0] = xmin
-        if xmax is not None: self.user_limits[1] = xmax
-        if ymin is not None: self.user_limits[2] = ymin
-        if ymax is not None: self.user_limits[3] = ymax
+        # xylims = self.calc_xylims(axes)
+        xylims = self.user_limits[axes][:]
+        for i in range(4):
+            if xylims[i] is None:
+                xylims[i] = self.data_range[axes][i]
 
-        xylims = self.calc_xylims(axes)
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
@@ -151,8 +158,8 @@ class PlotPanel(BasePanel):
         conf  = self.conf
         n    = conf.ntrace
 
-        scalex = self.user_limits[0] is None and self.user_limits[1] is None
-        scaley = self.user_limits[2] is None and self.user_limits[3] is None
+        scalex = self.user_limits[axes][0] is None and self.user_limits[axes][1] is None
+        scaley = self.user_limits[axes][2] is None and self.user_limits[axes][3] is None
 
         if autoscale and scalex and scaley:
             axes.autoscale(enable=True, axis='both')
@@ -206,7 +213,7 @@ class PlotPanel(BasePanel):
         return _lines
 
     def calc_xylims(self, axes):
-        xylims = self.user_limits[:]
+        xylims = self.user_limits[axes][:]
         for i in range(4):
             if xylims[i] is None:
                 xylims[i] = self.data_range[axes][i]

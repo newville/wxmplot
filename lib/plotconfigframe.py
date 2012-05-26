@@ -468,26 +468,19 @@ class PlotConfigFrame(wx.Frame):
 
         if '\\n' in s:
             s = s.replace('\\n', '\n')
-
-        if argu == 'xlabel':
-            self.conf.xlabel = s
-        elif argu == 'ylabel':
-            self.conf.ylabel = s
-        elif argu == 'y2label':
-            self.conf.y2label = s
-        elif argu == 'title':
-            self.conf.title = s
+        if argu in ('xlabel', 'ylabel', 'y2label', 'title'):
+            try:
+                kws = {argu: s}
+                self.conf.relabel(**kws)
+                wid.SetBackgroundColour((255, 255, 255))
+            except ParseFatalException: # as from latex error!
+                wid.SetBackgroundColour((250, 250, 200))
         elif argu[:6] == 'trace ':
             try:
                 self.conf.set_trace_label(s, trace=int(argu[6:]))
                 self.redraw_legend()
             except:
                 pass
-        try:
-            self.conf.relabel()
-            wid.SetBackgroundColour((255, 255, 255))
-        except ParseFatalException:
-            wid.SetBackgroundColour((250, 250, 200))
 
     def onShowGrid(self,event):
         self.conf.enable_grid(show=event.IsChecked())

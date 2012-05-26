@@ -265,9 +265,13 @@ class PlotConfig:
         axes[0].set_title(self.title, **kws)
         kws['fontproperties'] = self.labelfont
 
-        axes[0].set_xlabel(self.xlabel, **kws)
-        axes[0].set_ylabel(self.ylabel, **kws)
-        if len(axes) > 1:
+        if len(self.xlabel) > 0 and self.xlabel not in ('', None, 'None'):
+            axes[0].set_xlabel(self.xlabel, **kws)
+
+        if len(self.ylabel) > 0 and self.ylabel not in ('', None, 'None'):
+            axes[0].set_ylabel(self.ylabel, **kws)
+        if (len(axes) > 1 and len(self.y2label) > 0 and
+            self.y2label not in ('', None, 'None')):
             axes[1].set_ylabel(self.y2label, **kws)
 
 

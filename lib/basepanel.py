@@ -138,8 +138,7 @@ class BasePanel(wx.Panel):
 
     def set_title(self, s):
         "set plot title"
-        self.conf.title = s
-        self.conf.relabel()
+        self.conf.relabel(title=s)
 
     def set_xlabel(self, s):
         "set plot xlabel"
@@ -151,7 +150,7 @@ class BasePanel(wx.Panel):
 
     def set_y2label(self, s):
         "set plot ylabel"
-        self.conf.relabel(y2label = s)
+        self.conf.relabel(y2label=s)
 
     def write_message(self, s, panel=0):
         """ write message to message handler

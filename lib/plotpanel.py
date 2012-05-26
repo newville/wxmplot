@@ -377,7 +377,7 @@ class PlotPanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
 
-        self.axes  = self.fig.add_axes([0.15, 0.15, 0.75, 0.72],
+        self.axes  = self.fig.add_axes([0.13, 0.15, 0.72, 0.72],
                                        axisbg='#FEFFFE')
 
         self.canvas = FigureCanvas(self, -1, self.fig)

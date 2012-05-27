@@ -254,11 +254,16 @@ class PlotPanel(BasePanel):
         self.data_range[axes] = [min(xdata), max(xdata),
                                  min(ydata), max(ydata)]
 
-        if xmin is not None: self.user_limits[0] = xmin
-        if xmax is not None: self.user_limits[1] = xmax
-        if ymin is not None: self.user_limits[2] = ymin
-        if ymax is not None: self.user_limits[3] = ymax
-        xylims = self.calc_xylims(axes)
+        if xmin is not None: self.user_limits[axes][0] = xmin
+        if xmax is not None: self.user_limits[axes][1] = xmax
+        if ymin is not None: self.user_limits[axes][2] = ymin
+        if ymax is not None: self.user_limits[axes][3] = ymax
+
+        # xylims = self.calc_xylims(axes)
+        xylims = self.user_limits[axes][:]
+        for i in range(4):
+            if xylims[i] is None:
+                xylims[i] = self.data_range[axes][i]
 
         fcols = [to_rgba(self.conf.scatter_normalcolor) for x in xdata]
         ecols = [self.conf.scatter_normaledge]*len(xdata)
@@ -309,11 +314,11 @@ class PlotPanel(BasePanel):
 
     def set_xylims(self, lims, axes=None, side=None, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
+        # print ' plotpanel set_xylims ', side, lims
         if axes is None:
             axes = self.axes
         if side == 'right' and len(self.fig.get_axes()) == 2:
             axes = self.fig.get_axes()[1]
-
         xmin, xmax, ymin, ymax = lims
 
         #axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
@@ -400,7 +405,8 @@ class PlotPanel(BasePanel):
 
         self.addCanvasEvents()
 
-    def update_line(self, trace, xdata, ydata, side='left', draw=False):
+    def update_line(self, trace, xdata, ydata, side='left', draw=False,
+                    xmin=None, xmax=None, ymin=None, ymax=None):
         """ update a single trace, for faster redraw """
 
         x = self.conf.get_mpl_line(trace)
@@ -410,10 +416,12 @@ class PlotPanel(BasePanel):
         if side == 'right':
             axes = self.get_right_axes()
         dr = self.data_range[axes]
+
         self.data_range[axes] = [min(dr[0], xdata.min()),
                                  max(dr[1], xdata.max()),
                                  min(dr[2], ydata.min()),
                                  max(dr[3], ydata.max())]
+        # print 'Update ', trace, side, axes == self.get_right_axes(), dr
         # this defeats zooming, which gets ugly in this fast-mode anyway.
         self.cursor_state = None
         if draw:

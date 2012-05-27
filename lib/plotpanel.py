@@ -29,6 +29,7 @@ class PlotPanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
     def __init__(self, parent, size=(4.00, 2.48), dpi=150,
+                 axis_size=None, axisbg=None,
                  trace_color_callback=None,
                  output_title='plot', **kws):
 
@@ -51,6 +52,11 @@ class PlotPanel(BasePanel):
         self.parent    = parent
         self.figsize = size
         self.dpi     = dpi
+
+        if axis_size is None:  axis_size = [0.14, 0.14, 0.70, 0.70]
+        if axisbg is None:     axisbg='#FEFFFE'
+        self.axisbg = axisbg
+        self.axis_size = axis_size
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
 
@@ -374,16 +380,13 @@ class PlotPanel(BasePanel):
                                               config=self.conf,
                                               trace_color_callback=self.trace_color_callback)
 
-
     ####
     ## create GUI
     ####
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
-
-        self.axes  = self.fig.add_axes([0.13, 0.15, 0.72, 0.72],
-                                       axisbg='#FEFFFE')
+        self.axes  = self.fig.add_axes(self.axis_size, axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 

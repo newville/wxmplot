@@ -57,8 +57,8 @@ class LineProperties:
     """
 
     def __init__(self, color='black', style='solid', drawstyle='default',
-                 linewidth=2,
-                 marker='no symbol',markersize=6,markercolor=None,label=''):
+                 linewidth=2, marker='no symbol',markersize=6,
+                 markercolor=None, label=''):
         self.color      = color
         self.style      = style
         self.drawstyle  = drawstyle
@@ -67,6 +67,7 @@ class LineProperties:
         self.markersize = markersize
         self.markercolor= markercolor
         self.label      = label
+        self.data_range = [None, None, None, None]
 
     def update(self, line=None):
         """ set a matplotlib Line2D to have the current properties"""
@@ -240,13 +241,13 @@ class PlotConfig:
         self.traces[n] = line
 
     def __mpline(self, trace):
-        n = max(0,int(trace))
-        while n >= len(self.traces):
+        n = max(0, int(trace))
+        while n > len(self.traces):
             self.traces.append(LineProperties())
         try:
             return self.lines[n]
         except:
-            return None
+            return self.lines[n-1]
 
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x,y labels)"
@@ -307,7 +308,7 @@ class PlotConfig:
             trace = self.ntrace
         self.traces[trace].set_color(color,line=self.__mpline(trace))
 
-    def set_trace_label(self,label,trace=None):
+    def set_trace_label(self, label, trace=None):
         if trace is None: trace = self.ntrace
         self.traces[trace].set_label(label,line=self.__mpline(trace))
 
@@ -330,6 +331,14 @@ class PlotConfig:
     def set_trace_linewidth(self,linewidth,trace=None):
         if trace is None: trace = self.ntrace
         self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
+
+    def set_trace_datarange(self, datarange, trace=None):
+        if trace is None: trace = self.ntrace
+        self.traces[trace].data_range = datarange
+
+    def get_trace_datarange(self, trace=None):
+        if trace is None: trace = self.ntrace
+        return self.traces[trace].data_range
 
     def get_mpl_line(self,trace=None):
         if trace is None: trace = self.ntrace

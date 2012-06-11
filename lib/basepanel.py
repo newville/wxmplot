@@ -119,8 +119,9 @@ class BasePanel(wx.Panel):
                 ax.set_ybound(ax.yaxis.get_major_locator(
                     ).view_limits(ymin, ymax))
         else:
-            self.set_xylims(lims=lims[self.axes], axes=self.axes,
-                            autoscale=False)
+            self.set_viewlimits(axes=ax)
+            #self.set_xylims(lims=lims[self.axes], axes=self.axes,
+            #                autoscale=False)
 
         self.canvas.draw()
 
@@ -267,7 +268,7 @@ class BasePanel(wx.Panel):
                 xmin, xmax = ax.get_xlim()
                 ymin, ymax = ax.get_ylim()
                 zlims[ax] = [xmin, xmax, ymin, ymax]
-            self.zoom_lims.append(zlims)
+            # self.zoom_lims.append(zlims)
             # for multiple axes, we first collect all the new limits, and only
             # then apply them
             for ax in self.fig.get_axes():
@@ -283,11 +284,11 @@ class BasePanel(wx.Panel):
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
                              min(y0, y1), max(y0, y1)]
+            self.zoom_lims.append(tlims)
             # now apply limits:
-            for ax, lims in tlims.items():
-                self.set_xylims(lims=lims, axes=ax, autoscale=False)
-
-
+            self.set_viewlimits(axes=ax)
+            #for ax, lims in tlims.items():
+            #    self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
     def ForwardEvent(self, event=None):
         """finish wx event, forward it to other wx objects"""

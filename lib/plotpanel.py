@@ -59,6 +59,7 @@ class PlotPanel(BasePanel):
         self.axis_size = axis_size
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
+        self.zoom_lims = []
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
@@ -75,6 +76,7 @@ class PlotPanel(BasePanel):
 
         self.data_range = {}
         self.zoom_lims = []
+        self.axes_traces = {}
         self.clear()
         axes = self.axes
         if side == 'right':
@@ -130,29 +132,32 @@ class PlotPanel(BasePanel):
         if grid is not None:
             self.conf.show_grid = grid
 
-        # set data range for this axes, and the view limits
-        datrange = [min(xdata), max(xdata), min(ydata), max(ydata)]
+        # set data range for this trace
+        datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
+        #
+        #         if axes not in self.data_range:
+        #             self.data_range[axes] = datarange
+        #         else:
+        #             dr = self.data_range[axes][:]
+        #             self.data_range[axes][0] = min(dr[0], datrange[0])
+        #             self.data_range[axes][1] = max(dr[1], datrange[1])
+        #             self.data_range[axes][2] = min(dr[2], datrange[2])
+        #             self.data_range[axes][3] = max(dr[3], datrange[3])
 
-        if axes not in self.data_range:
-            self.data_range[axes] = datrange
-        else:
-            dr = self.data_range[axes][:]
-            self.data_range[axes][0] = min(dr[0], datrange[0])
-            self.data_range[axes][1] = max(dr[1], datrange[1])
-            self.data_range[axes][2] = min(dr[2], datrange[2])
-            self.data_range[axes][3] = max(dr[3], datrange[3])
+
         if axes not in self.user_limits:
             self.user_limits[axes] = [None, None, None, None]
+
         if xmin is not None: self.user_limits[axes][0] = xmin
         if xmax is not None: self.user_limits[axes][1] = xmax
         if ymin is not None: self.user_limits[axes][2] = ymin
         if ymax is not None: self.user_limits[axes][3] = ymax
 
-        # xylims = self.calc_xylims(axes)
-        xylims = self.user_limits[axes][:]
-        for i in range(4):
-            if xylims[i] is None:
-                xylims[i] = self.data_range[axes][i]
+#         # xylims = self.calc_xylims(axes)
+#         xylims = self.user_limits[axes][:]
+#         for i in range(4):
+#             if xylims[i] is None:
+#                 xylims[i] = self.data_range[axes][i]
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
@@ -163,16 +168,19 @@ class PlotPanel(BasePanel):
 
         conf  = self.conf
         n    = conf.ntrace
-
-        scalex = self.user_limits[axes][0] is None and self.user_limits[axes][1] is None
-        scaley = self.user_limits[axes][2] is None and self.user_limits[axes][3] is None
-
-        if autoscale and scalex and scaley:
-            axes.autoscale(enable=True, axis='both')
-        else:
-            self.set_xylims(xylims, axes=axes)
-
-            axes.autoscale_view(scalex=scalex, scaley=scaley)
+        print 'oplot ... this is trace ', n
+        if axes not in self.axes_traces:
+            self.axes_traces[axes] = []
+        self.axes_traces[axes].append(n)
+#        scalex = self.user_limits[axes][0] is None and self.user_limits[axes][1] is None
+#        scaley = self.user_limits[axes][2] is None and self.user_limits[axes][3] is None
+#
+#         if autoscale and scalex and scaley:
+#             axes.autoscale(enable=True, axis='both')
+#         else:
+#             self.set_viewlimits(axes=axes)
+#
+#             axes.autoscale_view(scalex=scalex, scaley=scaley)
 
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
@@ -190,6 +198,7 @@ class PlotPanel(BasePanel):
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
         conf.set_trace_label(label)
+        conf.set_trace_datarange(datarange)
 
         if color:
             conf.set_trace_color(color)
@@ -206,6 +215,8 @@ class PlotPanel(BasePanel):
 
         conf.lines[n] = _lines
 
+        # now set plot limits:
+        self.set_viewlimits(axes=axes)
         if refresh:
             conf.refresh_trace(conf.ntrace)
             conf.relabel()
@@ -219,10 +230,8 @@ class PlotPanel(BasePanel):
         return _lines
 
     def calc_xylims(self, axes):
+        print 'calc xylims not used!'
         xylims = self.user_limits[axes][:]
-        for i in range(4):
-            if xylims[i] is None:
-                xylims[i] = self.data_range[axes][i]
         return xylims
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
@@ -257,9 +266,6 @@ class PlotPanel(BasePanel):
             self.conf.scatter_selectedge = selectedge
 
         axes = self.axes
-        self.data_range[axes] = [min(xdata), max(xdata),
-                                 min(ydata), max(ydata)]
-
         if xmin is not None: self.user_limits[axes][0] = xmin
         if xmax is not None: self.user_limits[axes][1] = xmax
         if ymin is not None: self.user_limits[axes][2] = ymin
@@ -282,8 +288,7 @@ class PlotPanel(BasePanel):
             transOffset= self.axes.transData)
         self.axes.add_collection(self.conf.scatter_coll)
 
-        if xylims is not None:
-            self.set_xylims(xylims, axes=axes)
+        # self.set_viewlimits(axes=axes)
 
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -318,20 +323,41 @@ class PlotPanel(BasePanel):
             self.lasso_callback(data = conf.scatter_coll.get_offsets(),
                                 selected = pts, mask=mask)
 
-    def set_xylims(self, lims, axes=None, side=None, autoscale=False):
+    def set_viewlimits(self, axes=None, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
-        # print ' plotpanel set_xylims ', side, lims
+        print 'set_viewlimits: ', axes==self.axes
         if axes is None:
             axes = self.axes
-        if side == 'right' and len(self.fig.get_axes()) == 2:
+        if axes != self.axes and len(self.fig.get_axes()) == 2:
             axes = self.fig.get_axes()[1]
-        xmin, xmax, ymin, ymax = lims
 
-        #axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
-        #axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
+        trace0 = self.axes_traces[axes][0]
+
+        limits = self.conf.get_trace_datarange(trace=trace0)
+        for i in self.axes_traces[axes]:
+            l =  self.conf.get_trace_datarange(trace=i)
+            limits = [min(limits[0], l[0]), max(limits[1], l[1]),
+                      min(limits[2], l[2]), max(limits[3], l[3])]
+        print '  Data limits: ', limits
+
+        # now apply any specified user limits:
+        for i, val in enumerate(self.user_limits[axes]):
+            if val is not None:
+                limits[i] = val
+        print ' User limits: ', limits
+        print ' Zoom? ', self.zoom_lims
+        # then apply zoom limits
+        if len(self.zoom_lims) >= 1:
+            limits = self.zoom_lims[-1][axes]
+
+        xmin, xmax, ymin, ymax = limits
+        print 'Final limits: ', limits
+        axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
+        axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
         axes.set_xlim((xmin, xmax), emit=True)
         axes.set_ylim((ymin, ymax), emit=True)
-        #axes.autoscale_view()
+        if autoscale:
+            axes.autoscale_view()
 
     def clear(self):
         """ clear plot """
@@ -349,13 +375,9 @@ class PlotPanel(BasePanel):
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
-        if len(self.zoom_lims) < 1:
-            self.axes.autoscale_view()
-            return
-        else:
-            for ax, lims in self.zoom_lims.pop().items():
-                self.set_xylims(lims=lims, axes=ax)
-
+        if len(self.zoom_lims) >= 1:
+            self.zoom_lims.pop()
+        self.set_viewlimits()
         self.canvas.draw()
 
     def toggle_legend(self, evt=None, show=None):
@@ -414,16 +436,16 @@ class PlotPanel(BasePanel):
 
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
-
+        x.datarange = [xdata.min(), xdata.max(), ydata.min(), ydata.max()]
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
         dr = self.data_range[axes]
-
-        self.data_range[axes] = [min(dr[0], xdata.min()),
-                                 max(dr[1], xdata.max()),
-                                 min(dr[2], ydata.min()),
-                                 max(dr[3], ydata.max())]
+        #
+        #         self.data_range[axes] = [min(dr[0], xdata.min()),
+        #                                  max(dr[1], xdata.max()),
+        #                                  min(dr[2], ydata.min()),
+        #                                  max(dr[3], ydata.max())]
         # print 'Update ', trace, side, axes == self.get_right_axes(), dr
         # this defeats zooming, which gets ugly in this fast-mode anyway.
         self.cursor_state = None

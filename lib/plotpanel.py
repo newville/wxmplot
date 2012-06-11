@@ -216,7 +216,7 @@ class PlotPanel(BasePanel):
         conf.lines[n] = _lines
 
         # now set plot limits:
-        self.set_viewlimits(axes=axes)
+        self.set_viewlimits()
         if refresh:
             conf.refresh_trace(conf.ntrace)
             conf.relabel()
@@ -323,41 +323,37 @@ class PlotPanel(BasePanel):
             self.lasso_callback(data = conf.scatter_coll.get_offsets(),
                                 selected = pts, mask=mask)
 
-    def set_viewlimits(self, axes=None, autoscale=False):
+    def set_viewlimits(self, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
-        print 'set_viewlimits: ', axes==self.axes
-        if axes is None:
-            axes = self.axes
-        if axes != self.axes and len(self.fig.get_axes()) == 2:
-            axes = self.fig.get_axes()[1]
+        for axes in self.fig.get_axes():
+            print 'AXES ', axes
+            trace0 = self.axes_traces[axes][0]
 
-        trace0 = self.axes_traces[axes][0]
+            limits = self.conf.get_trace_datarange(trace=trace0)
+            for i in self.axes_traces[axes]:
+                l =  self.conf.get_trace_datarange(trace=i)
+                limits = [min(limits[0], l[0]), max(limits[1], l[1]),
+                          min(limits[2], l[2]), max(limits[3], l[3])]
+            print '  Data limits: ', limits
 
-        limits = self.conf.get_trace_datarange(trace=trace0)
-        for i in self.axes_traces[axes]:
-            l =  self.conf.get_trace_datarange(trace=i)
-            limits = [min(limits[0], l[0]), max(limits[1], l[1]),
-                      min(limits[2], l[2]), max(limits[3], l[3])]
-        print '  Data limits: ', limits
+            # now apply any specified user limits:
+            for i, val in enumerate(self.user_limits[axes]):
+                if val is not None:
+                    limits[i] = val
+            print ' User limits: ', limits
+            print ' Zoom? ', self.zoom_lims
+            # then apply zoom limits
+            if len(self.zoom_lims) >= 1:
+                limits = self.zoom_lims[-1][axes]
 
-        # now apply any specified user limits:
-        for i, val in enumerate(self.user_limits[axes]):
-            if val is not None:
-                limits[i] = val
-        print ' User limits: ', limits
-        print ' Zoom? ', self.zoom_lims
-        # then apply zoom limits
-        if len(self.zoom_lims) >= 1:
-            limits = self.zoom_lims[-1][axes]
-
-        xmin, xmax, ymin, ymax = limits
-        print 'Final limits: ', limits
-        axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
-        axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
-        axes.set_xlim((xmin, xmax), emit=True)
-        axes.set_ylim((ymin, ymax), emit=True)
-        if autoscale:
-            axes.autoscale_view()
+            xmin, xmax, ymin, ymax = limits
+            print 'Final limits: ', limits
+            axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
+            axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
+            axes.set_xlim((xmin, xmax), emit=True)
+            axes.set_ylim((ymin, ymax), emit=True)
+            if autoscale:
+                axes.autoscale_view()
 
     def clear(self):
         """ clear plot """

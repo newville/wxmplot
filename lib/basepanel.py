@@ -119,7 +119,7 @@ class BasePanel(wx.Panel):
                 ax.set_ybound(ax.yaxis.get_major_locator(
                     ).view_limits(ymin, ymax))
         else:
-            self.set_viewlimits(axes=ax)
+            self.set_viewlimits()
             #self.set_xylims(lims=lims[self.axes], axes=self.axes,
             #                autoscale=False)
 
@@ -269,8 +269,8 @@ class BasePanel(wx.Panel):
                 ymin, ymax = ax.get_ylim()
                 zlims[ax] = [xmin, xmax, ymin, ymax]
             # self.zoom_lims.append(zlims)
-            # for multiple axes, we first collect all the new limits, and only
-            # then apply them
+            # for multiple axes, we first collect all the new limits, and
+            # only then apply them
             for ax in self.fig.get_axes():
                 ax_inv = ax.transData.inverted
                 try:
@@ -286,7 +286,7 @@ class BasePanel(wx.Panel):
                              min(y0, y1), max(y0, y1)]
             self.zoom_lims.append(tlims)
             # now apply limits:
-            self.set_viewlimits(axes=ax)
+            self.set_viewlimits()
             #for ax, lims in tlims.items():
             #    self.set_xylims(lims=lims, axes=ax, autoscale=False)
 

@@ -47,20 +47,16 @@ class MultiPlotFrame(BaseFrame):
         if panel is None: panel = self.current_panel
         self.panels[panel].oplot(x,y,**kw)
 
-    def update_line(self,t,x,y,panel=None,**kw):
+    def update_line(self, t, x, y, panel=None, **kw):
         """overwrite data for trace t """
-        if panel is None: panel = self.current_panel
-        self.panels[panel].update_line(t,x,y,**kw)
+        if panel is None:
+            panel = self.current_panel
+        self.panels[panel].update_line(t, x, y, **kw)
 
-    def set_xylims(self,xylims,panel=None,**kw):
+    def set_xylims(self, lims, axes=None, panel=None):
         """overwrite data for trace t """
         if panel is None: panel = self.current_panel
-        self.panels[panel].set_xylims(xylims,**kw)
-
-    def get_xylims(self,panel=None):
-        """overwrite data for trace t """
-        if panel is None: panel = self.current_panel
-        return self.panels[panel].get_xylims()
+        self.panels[panel].set_xylims(lims, axes=axes, **kw)
 
     def clear(self,panel=None):
         """clear plot """

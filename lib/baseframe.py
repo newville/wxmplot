@@ -74,22 +74,20 @@ Matt Newville <newville@cars.uchicago.edu>"""
         """write a message to the Status Bar"""
         self.SetStatusText(s, panel)
 
-    def set_xylims(self,xylims,**kw):
-        """overwrite data for trace t """
-        if self.panel is not None: self.panel.set_xylims(xylims,**kw)
-
-    def get_xylims(self):
+    def set_xylims(self, limits, axes=None):
         """overwrite data for trace t """
         if self.panel is not None:
-            return self.panel.get_xylims()
+            self.panel.set_xylims(limits, axes=axes)
 
     def clear(self):
         """clear plot """
-        if self.panel is not None: self.panel.clear()
+        if self.panel is not None:
+            self.panel.clear()
 
     def unzoom_all(self,event=None):
         """zoom out full data range """
-        if self.panel is not None: self.panel.unzoom_all(event=event)
+        if self.panel is not None:
+            self.panel.unzoom_all(event=event)
 
     def unzoom(self,event=None):
         """zoom out 1 level, or to full data range """

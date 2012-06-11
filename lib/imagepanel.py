@@ -47,6 +47,7 @@ class ImagePanel(BasePanel):
         self.ylab    = 'Y'
         self.xdata   = None
         self.ydata   = None
+        self.user_limits = {}
         self.BuildPanel()
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None, **kw):
@@ -82,7 +83,8 @@ class ImagePanel(BasePanel):
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kw)
 
-    def set_xylims(self, lims, axes=None, autoscale=True):
+
+    def set_viewlimits(self, axes=None, autoscale=True):
         """ update xy limits of a plot"""
         if axes is None:
             axes = self.axes
@@ -111,7 +113,7 @@ class ImagePanel(BasePanel):
         if autoscale:
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
-        self.conf.xylims = [xmin, xmax, ymin, ymax]
+        self.conf.datalimits = [xmin, xmax, ymin, ymax]
         self.redraw()
 
     def clear(self):
@@ -261,7 +263,7 @@ class ImagePanel(BasePanel):
             imin = np.log10(1 + 9.0*imin)
             imax = np.log10(1 + 9.0*imax)
         if conf.auto_intensity:
-            (xmin, xmax, ymin, ymax) = self.conf.xylims
+            (xmin, xmax, ymin, ymax) = self.conf.datalimits
             if xmin is None:  xmin = 0
             if xmax is None:  xmax = img.shape[1]
             if ymin is None:  ymin = 0

@@ -47,6 +47,7 @@ class BasePanel(wx.Panel):
         self.launch_dir  = os.getcwd()
 
         self.mouse_uptime = time.time()
+        self.user_limits = {}
         self.zoom_lims = []           # store x, y coords zoom levels
         self.zoom_ini  = (-1, -1, -1, -1)  # store init axes, x, y coords for zoom-box
         self.rbbox = None
@@ -120,8 +121,6 @@ class BasePanel(wx.Panel):
                     ).view_limits(ymin, ymax))
         else:
             self.set_viewlimits()
-            #self.set_xylims(lims=lims[self.axes], axes=self.axes,
-            #                autoscale=False)
 
         self.canvas.draw()
 
@@ -132,10 +131,11 @@ class BasePanel(wx.Panel):
 
         return self.fig.get_axes()[1]
 
-    def get_xylims(self):
-        x = self.axes.get_xlim()
-        y = self.axes.get_ylim()
-        return x, y
+    def set_xylims(self, limits, axes=None):
+        if axes not in self.user_limits:
+            axes = self.axes
+        self.user_limits[axes] = limits
+        self.unzoom_all()
 
     def set_title(self, s):
         "set plot title"
@@ -287,8 +287,6 @@ class BasePanel(wx.Panel):
             self.zoom_lims.append(tlims)
             # now apply limits:
             self.set_viewlimits()
-            #for ax, lims in tlims.items():
-            #    self.set_xylims(lims=lims, axes=ax, autoscale=False)
 
     def ForwardEvent(self, event=None):
         """finish wx event, forward it to other wx objects"""

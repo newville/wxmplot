@@ -121,8 +121,7 @@ class StripChartFrame(wx.Frame):
             self.write_message(" %i points in %8.4f s" % (n,etime))
 
         self.plotpanel.set_xylims((-abs(self.tmin), 0,
-                                   ydat[mask].min(), ydat[mask].max()),
-                                  autoscale=False)
+                                   ydat[mask].min(), ydat[mask].max()))
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",

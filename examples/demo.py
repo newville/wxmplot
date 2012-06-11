@@ -3,7 +3,7 @@ import time, os, sys
 
 from numpy import arange, sin, cos, exp, pi, linspace, ones, random
 
-from wxmplot.plotframe import PlotFrame
+from lib.plotframe import PlotFrame
 
 class TestFrame(wx.Frame):
     def __init__(self, parent, ID, *args,**kwds):
@@ -177,6 +177,7 @@ class TestFrame(wx.Frame):
         self.count    = 0
         self.up_count = 0
         self.n_update = 1
+        self.datrange = None
         self.time0    = time.time()
         self.start_mem= self.report_memory()
         self.timer.Start(10)
@@ -189,6 +190,7 @@ class TestFrame(wx.Frame):
         self.plotframe.write_message(s)
         self.time0 = 0
         self.count = 0
+        self.datrange = None        
 
     def onStopTimer(self,event=None):
         self.timer.Stop()
@@ -209,32 +211,39 @@ class TestFrame(wx.Frame):
             self.timer_results()
         elif n <= 3:
             self.plotframe.plot(self.x[:n], self.y1[:n])# , grid=False)
+
         else:
-            try:
-                self.plotframe.update_line(0, self.x[:n], self.y1[:n], draw=True)
-            except:
-                self.timer.Stop()
+            self.plotframe.update_line(0, self.x[:n], self.y1[:n], update_limits=n<10, draw=True)
 
             etime = time.time() - self.time0
-            # s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
-            #self.plotframe.write_message(s)
+            s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
+            self.plotframe.write_message(s)
 
-        xr    = min(self.x[:n]), max(self.x[:n])
-        yr    = min(self.y1[:n]),max(self.y1[:n])
-        xv, yv = self.plotframe.get_xylims()
-        if ((n > self.n_update-1) or
-            (xr[0] < xv[0]) or (xr[1] > xv[1]) or
-            (yr[0] < yv[0]) or (yr[1] > yv[1])):
-            nx = self.n_update = min(self.npts,3+int(self.n_update*2.0))
-            if nx > int(0.92*self.npts):
-                nx = self.n_update = self.npts
-                xylims = (min(self.x),max(self.x),
-                          min(self.y1),max(self.y1))
-            else:
-                xylims = (min(self.x[0:nx]),max(self.x[0:nx]),
-                          min(self.y1[0:nx]),max(self.y1[0:nx]))
-            self.up_count = self.up_count + 1
-            self.plotframe.panel.set_xylims(xylims,autoscale=False)
+        if self.datrange is None:
+            self.datrange = [min(self.x[:n]), max(self.x[:n]),
+                             min(self.y1[:n]),max(self.y1[:n])]
+
+
+        if max(self.x[:n]) > self.datrange[1] * 0.95:
+            self.datrange = [min(self.x[:n]), max(self.x[:n]), min(self.y1[:n]),max(self.y1[:n])]
+            if n < len(self.x):
+                nmax = min(int(n*1.6), len(self.x)-1)
+                self.datrange[1] = self.x[nmax]
+            self.plotframe.panel.set_xylims(self.datrange)
+                
+#        if (n > self.n_update-1) or
+#             (xr[0] < xv[0]) or (xr[1] > xv[1]) or
+#             (yr[0] < yv[0]) or (yr[1] > yv[1])):
+#             nx = self.n_update = min(self.npts,3+int(self.n_update*2.0))
+#             if nx > int(0.92*self.npts):
+#                 nx = self.n_update = self.npts
+#                 xylims = (min(self.x),max(self.x),
+#                           min(self.y1),max(self.y1))
+#             else:
+#                 xylims = (min(self.x[0:nx]),max(self.x[0:nx]),
+#                           min(self.y1[0:nx]),max(self.y1[0:nx]))
+#             self.up_count = self.up_count + 1
+#             self.plotframe.panel.set_xylims(xylims)
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This sample program shows some\n"

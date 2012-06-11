@@ -244,15 +244,17 @@ class BasePanel(wx.Panel):
         """ left button up: zoom in or handle lasso"""
         if event is None:
             return
+        print 'onLeftUp  ', self.cursor_state
         if self.cursor_state == 'zoom':
             self._onLeftUp_Zoom(event)
-
+            
         self.canvas.draw()
         self.cursor_state = None
         self.ForwardEvent(event=event.guiEvent)
 
     def _onLeftUp_Zoom(self, event=None):
         """ left up / zoom mode"""
+        print 'onLeftUp_Zoom!! '
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:
             dx = abs(ini_x - event.x)

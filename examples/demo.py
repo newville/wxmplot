@@ -3,7 +3,7 @@ import time, os, sys
 
 from numpy import arange, sin, cos, exp, pi, linspace, ones, random
 
-from lib.plotframe import PlotFrame
+from wxmplot.plotframe import PlotFrame
 
 class TestFrame(wx.Frame):
     def __init__(self, parent, ID, *args,**kwds):

@@ -293,7 +293,7 @@ class PlotPanel(BasePanel):
         self.user_limits[axes] = limits
         self.unzoom_all()
 
-           
+
     def set_viewlimits(self, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
         for axes in self.fig.get_axes():
@@ -325,6 +325,10 @@ class PlotPanel(BasePanel):
             axes.set_ylim((ymin, ymax), emit=True)
             if autoscale:
                 axes.autoscale_view()
+
+    def get_viewlimits(self, axes=None):
+        if axes is None: axes = self.axes
+        return  (axes.get_xlim(), axes.get_ylim())
 
     def clear(self):
         """ clear plot """

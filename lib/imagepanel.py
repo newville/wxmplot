@@ -86,7 +86,6 @@ class ImagePanel(BasePanel):
 
     def set_viewlimits(self, axes=None, autoscale=False):
         """ update xy limits of a plot"""
-        print 'Image set view limits'
         if axes is None:
             axes = self.axes
 
@@ -231,7 +230,7 @@ class ImagePanel(BasePanel):
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_viewlimits() #   xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
         self.canvas.draw()
-        
+
     def unzoom_all(self, event=None):
         """ zoom out full data range """
         self.zoom_lims = [None]

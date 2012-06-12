@@ -137,6 +137,12 @@ class BasePanel(wx.Panel):
         self.user_limits[axes] = limits
         self.unzoom_all()
 
+    def get_viewlimits(self, axes=None):
+        if axes is None: axes = self.axes
+        xmin, xmax = axes.get_xlim()
+        ymin, ymax = axes.get_ylim()
+        return (xmin, xmax, ymin, ymax)
+
     def set_title(self, s):
         "set plot title"
         self.conf.relabel(title=s)
@@ -244,17 +250,15 @@ class BasePanel(wx.Panel):
         """ left button up: zoom in or handle lasso"""
         if event is None:
             return
-        print 'onLeftUp  ', self.cursor_state
         if self.cursor_state == 'zoom':
             self._onLeftUp_Zoom(event)
-            
+
         self.canvas.draw()
         self.cursor_state = None
         self.ForwardEvent(event=event.guiEvent)
 
     def _onLeftUp_Zoom(self, event=None):
         """ left up / zoom mode"""
-        print 'onLeftUp_Zoom!! '
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:
             dx = abs(ini_x - event.x)

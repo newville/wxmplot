@@ -328,7 +328,9 @@ class PlotPanel(BasePanel):
 
     def get_viewlimits(self, axes=None):
         if axes is None: axes = self.axes
-        return  (axes.get_xlim(), axes.get_ylim())
+        xmin, xmax = axes.get_xlim()
+        ymin, ymax = axes.get_ylim()
+        return (xmin, xmax, ymin, ymax)
 
     def clear(self):
         """ clear plot """

@@ -4,7 +4,7 @@ import numpy as np
 
 import wx
 from wx.lib import masked
-
+from floatcontrol import FloatCtrl
 from wxmplot import PlotPanel
 
 def next_data():
@@ -59,12 +59,8 @@ class StripChartFrame(wx.Frame):
         b_off.Bind(wx.EVT_BUTTON, self.onStopTimer)
 
         tlabel = wx.StaticText(btnpanel, -1, '  Time range:')
-        self.time_range = masked.NumCtrl(btnpanel,  value=abs(self.tmin),
-                                         size=(75, -1), style=0,
-                                         integerWidth=5, fractionWidth=1,
-                                         allowNegative=False,
-                                         min=0, max=6000,
-                                         limited=True)
+        self.time_range = FloatCtrl(btnpanel,  size=(75, -1),
+                                    value=abs(self.tmin), precision=1)
 
         btnsizer.Add(b_on,   0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(b_off,  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
@@ -121,11 +117,17 @@ class StripChartFrame(wx.Frame):
             self.plotpanel.update_line(0, tdat, ydat, draw=True)
             self.write_message(" %i points in %8.4f s" % (n,etime))
 
+        lims = self.plotpanel.get_viewlimits()
+        try:
+            ymin, ymax = ydat[mask].min(), ydat[mask].max()
+        except:
+            ymin, ymax = ydat.min(), ydat.max()
         tmin = max(int(min(tdat)) - 1.0, -self.tmin)
-        if tmin != self.tmin_last:
+        if (ymin < lims[2] or ymax >  lims[3] or
+            tmin != self.tmin_last or time.time()-self.last_update > 2):
             self.tmin_last = tmin
-            print min(tdat), self.tmin, tmin
-            self.plotpanel.set_xylims((tmin, 0, ydat[mask].min(), ydat[mask].max()))
+            self.last_update = time.time()
+            self.plotpanel.set_xylims((tmin, 0, ymin, ymax))
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",

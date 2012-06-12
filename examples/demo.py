@@ -109,7 +109,7 @@ class TestFrame(wx.Frame):
             self.plotframe.Raise()
         if clear:
             self.plotframe.panel.clear()
-            self.plotframe.reset_config()            
+            self.plotframe.reset_config()
 
 
     def onPlot1(self,event=None):
@@ -190,7 +190,7 @@ class TestFrame(wx.Frame):
         self.plotframe.write_message(s)
         self.time0 = 0
         self.count = 0
-        self.datrange = None        
+        self.datrange = None
 
     def onStopTimer(self,event=None):
         self.timer.Stop()
@@ -223,14 +223,15 @@ class TestFrame(wx.Frame):
             self.datrange = [min(self.x[:n]), max(self.x[:n]),
                              min(self.y1[:n]),max(self.y1[:n])]
 
-
-        if max(self.x[:n]) > self.datrange[1] * 0.95:
-            self.datrange = [min(self.x[:n]), max(self.x[:n]), min(self.y1[:n]),max(self.y1[:n])]
+        dr = [min(self.x[:n]), max(self.x[:n]), min(self.y1[:n]),max(self.y1[:n])]
+        lims = self.plotframe.panel.get_viewlimits()
+        if dr[0] < lims[0] or dr[1] > lims[1] or dr[2] < lims[2] or dr[3] > lims[3]:
+            self.datrange = dr
             if n < len(self.x):
                 nmax = min(int(n*1.6), len(self.x)-1)
                 self.datrange[1] = self.x[nmax]
             self.plotframe.panel.set_xylims(self.datrange)
-                
+
 #        if (n > self.n_update-1) or
 #             (xr[0] < xv[0]) or (xr[1] > xv[1]) or
 #             (yr[0] < yv[0]) or (yr[1] > yv[1])):

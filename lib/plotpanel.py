@@ -235,10 +235,12 @@ class PlotPanel(BasePanel):
             self.conf.scatter_selectedge = selectedge
 
         axes = self.axes
-        if xmin is not None: self.user_limits[axes][0] = xmin
-        if xmax is not None: self.user_limits[axes][1] = xmax
-        if ymin is not None: self.user_limits[axes][2] = ymin
-        if ymax is not None: self.user_limits[axes][3] = ymax
+        self.user_limits[axes] = (xmin, xmax, ymin, ymax)
+
+        self.axes_traces = {axes: [0]}
+        self.conf.set_trace_label('scatterplot')
+        self.conf.set_trace_datarange((min(xdata), max(xdata),
+                                       min(ydata), max(ydata)))
 
         fcols = [to_rgba(self.conf.scatter_normalcolor) for x in xdata]
         ecols = [self.conf.scatter_normaledge]*len(xdata)
@@ -250,7 +252,6 @@ class PlotPanel(BasePanel):
             offsets=self.conf.scatter_data,
             transOffset= self.axes.transData)
         self.axes.add_collection(self.conf.scatter_coll)
-
         # self.set_viewlimits(axes=axes)
 
         if self.conf.show_grid:
@@ -297,7 +298,6 @@ class PlotPanel(BasePanel):
     def set_viewlimits(self, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
         for axes in self.fig.get_axes():
-            # print 'AXES ', axes
             trace0 = self.axes_traces[axes][0]
 
             limits = self.conf.get_trace_datarange(trace=trace0)
@@ -305,7 +305,6 @@ class PlotPanel(BasePanel):
                 l =  self.conf.get_trace_datarange(trace=i)
                 limits = [min(limits[0], l[0]), max(limits[1], l[1]),
                           min(limits[2], l[2]), max(limits[3], l[3])]
-            # print '  Data limits: ', limits
 
             # now apply any specified user limits:
             for i, val in enumerate(self.user_limits[axes]):

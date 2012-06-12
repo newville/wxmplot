@@ -59,12 +59,12 @@ class StripChartFrame(wx.Frame):
         b_off.Bind(wx.EVT_BUTTON, self.onStopTimer)
 
         tlabel = wx.StaticText(btnpanel, -1, '  Time range:')
-        self.time_range = masked.NumCtrl(btnpanel, -1,
-                                         value=abs(self.tmin),
-                                         name="target control",
-                                         size=(75, -1),
-                                         fractionWidth=1,  allowNegative=False,
-                                         allowNone=False, min=0.1, limited=True)
+        self.time_range = masked.NumCtrl(btnpanel,  value=abs(self.tmin),
+                                         size=(75, -1), style=0,
+                                         integerWidth=5, fractionWidth=1,
+                                         allowNegative=False,
+                                         min=0, max=6000,
+                                         limited=True)
 
         btnsizer.Add(b_on,   0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(b_off,  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
@@ -96,6 +96,7 @@ class StripChartFrame(wx.Frame):
         t0,y0 = next_data()
         self.ylist = [y0]
         self.tlist = [t0]
+        self.tmin_last = -10000
         self.time0    = time.time()
         self.timer.Start(50)
 
@@ -120,8 +121,11 @@ class StripChartFrame(wx.Frame):
             self.plotpanel.update_line(0, tdat, ydat, draw=True)
             self.write_message(" %i points in %8.4f s" % (n,etime))
 
-        self.plotpanel.set_xylims((-abs(self.tmin), 0,
-                                   ydat[mask].min(), ydat[mask].max()))
+        tmin = max(int(min(tdat)) - 1.0, -self.tmin)
+        if tmin != self.tmin_last:
+            self.tmin_last = tmin
+            print min(tdat), self.tmin, tmin
+            self.plotpanel.set_xylims((tmin, 0, ydat[mask].min(), ydat[mask].max()))
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",

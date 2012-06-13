@@ -59,7 +59,10 @@ class PlotPanel(BasePanel):
         self.axis_size = axis_size
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
+        self.data_range = {}
         self.zoom_lims = []
+        self.axes_traces = {}
+
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,

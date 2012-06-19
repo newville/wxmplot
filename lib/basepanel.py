@@ -274,7 +274,8 @@ class BasePanel(wx.Panel):
                 xmin, xmax = ax.get_xlim()
                 ymin, ymax = ax.get_ylim()
                 zlims[ax] = [xmin, xmax, ymin, ymax]
-            # self.zoom_lims.append(zlims)
+            if len(self.zoom_lims) == 0:
+                self.zoom_lims.append(zlims)
             # for multiple axes, we first collect all the new limits, and
             # only then apply them
             for ax in self.fig.get_axes():

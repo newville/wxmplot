@@ -242,13 +242,20 @@ class PlotConfig:
 
     def __mpline(self, trace):
         n = max(0, int(trace))
-        while n > len(self.traces):
+        while n >= len(self.traces):
             self.traces.append(LineProperties())
         try:
             return self.lines[n]
         except:
             return self.lines[n-1]
 
+    def __gettrace(self, trace):
+        if trace is None:
+            trace = self.ntrace
+        while trace >= len(self.traces):
+            self.traces.append(LineProperties())
+        return trace
+        
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x,y labels)"
         n = self.labelfont.get_size()
@@ -300,48 +307,47 @@ class PlotConfig:
 
 
     def refresh_trace(self,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].update(self.__mpline(trace))
 
     def set_trace_color(self,color,trace=None):
-        if trace is None:
-            trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_color(color,line=self.__mpline(trace))
 
     def set_trace_label(self, label, trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_label(label,line=self.__mpline(trace))
 
     def set_trace_style(self,style,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_style(style,line=self.__mpline(trace))
 
     def set_trace_drawstyle(self, style,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
 
     def set_trace_marker(self,marker,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_marker(marker,line=self.__mpline(trace))
 
     def set_trace_markersize(self,markersize,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_markersize(markersize,line=self.__mpline(trace))
 
     def set_trace_linewidth(self,linewidth,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
 
     def set_trace_datarange(self, datarange, trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         self.traces[trace].data_range = datarange
 
     def get_trace_datarange(self, trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         return self.traces[trace].data_range
 
     def get_mpl_line(self,trace=None):
-        if trace is None: trace = self.ntrace
+        trace = self.__gettrace(trace)
         return self.__mpline(trace)[0]
 
     def enable_grid(self, show=None):

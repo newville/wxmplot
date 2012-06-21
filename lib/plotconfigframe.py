@@ -5,6 +5,7 @@
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
+import wx.lib.scrolledpanel as scrolled
 import numpy as np
 
 import matplotlib
@@ -177,18 +178,18 @@ class PlotConfigFrame(wx.Frame):
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
 
-        bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
-        bok.Bind(wx.EVT_BUTTON,self.onExit)
-
-        btnsizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
+        #bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
+        #bok.Bind(wx.EVT_BUTTON,self.onExit)
+        
+        #btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+        #btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
 
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         mainsizer.Add(topsizer, 0, a, 3)
         mainsizer.Add(midsizer, 0, a, 3)
         mainsizer.Add(self.nb,  0, a, 3)
-        mainsizer.Add(btnsizer, 1, a, 2)
+        #mainsizer.Add(btnsizer, 1, a, 2)
         autopack(panel,mainsizer)
 
         s = wx.BoxSizer(wx.VERTICAL)
@@ -265,7 +266,11 @@ class PlotConfigFrame(wx.Frame):
 
     def make_linetrace_panel(self, parent, font=None):
         # list of traces
-        panel = wx.Panel(parent)
+
+        # panel = wx.Panel(parent)
+        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
+        
         if font is None:
             font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
@@ -279,7 +284,8 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
             i = i+1
         self.trace_labels = []
-        for i in range(1 + self.conf.ntrace): # len(self.axes.get_lines())):
+        ntrace_display = min(self.conf.ntrace+1, len(self.conf.traces))
+        for i in range(ntrace_display): # len(self.axes.get_lines())):
             irow += 1
             argu  = "trace %i" % i
             lin  = self.conf.traces[i]
@@ -330,6 +336,7 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(jsty,(irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
 
         autopack(panel,sizer)
+        panel.SetupScrolling()
         return panel
 
     def onColor(self, event, argu='grid'):

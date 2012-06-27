@@ -188,12 +188,12 @@ class PlotConfigFrame(wx.Frame):
         a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         mainsizer.Add(topsizer, 0, a, 3)
         mainsizer.Add(midsizer, 0, a, 3)
-        mainsizer.Add(self.nb,  0, a, 3)
+        mainsizer.Add(self.nb,  1, wx.GROW|a, 3)
         #mainsizer.Add(btnsizer, 1, a, 2)
         autopack(panel,mainsizer)
 
         s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(panel,   0, a, 5)
+        s.Add(panel,   1, a, 2)
         autopack(self,s)
         self.Show()
         self.Raise()

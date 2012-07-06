@@ -483,22 +483,23 @@ class BasePanel(wx.Panel):
         y0     = self.canvas.figure.bbox.height - ymax
 
         zdc = wx.ClientDC(self.canvas)
+        zdc = wx.ClientDC(self)
         zdc.SetLogicalFunction(wx.XOR)
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
-        pen = zdc.GetPen()
+        # pen = zdc.GetPen()
 
         zdc.ResetBoundingBox()
         zdc.BeginDrawing()
 
         # erase previous box
+        # print 'erase... ', self.rbbox
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
 
         self.rbbox = (x0, y0, width, height)
         zdc.DrawRectangle(*self.rbbox)
         zdc.EndDrawing()
-
 
     def reportMotion(self, event=None):
         fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)

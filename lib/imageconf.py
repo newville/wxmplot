@@ -9,8 +9,8 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 ColorMap_List = []
 
-for cm in ('gray', 'coolwarm', 'jet', 'cool', 'hot', 'copper', 'Reds',
-           'Greens', 'Blues', 'spring', 'summer', 'autumn', 'winter',
+for cm in ('gray', 'coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
+           'Blues', 'copper', 'spring', 'summer', 'autumn', 'winter',
            'hsv', 'Spectral', 'gist_earth', 'gist_yarg', 'gist_rainbow',
            'gist_heat', 'gist_stern', 'ocean', 'terrain', 'PiYG', 'PRGn',
            'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu',

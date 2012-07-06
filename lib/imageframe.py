@@ -21,6 +21,7 @@ class ImageFrame(BaseFrame):
     """
     def __init__(self, parent=None, size=(550, 450),
                  config_on_frame=True, lasso_callback=None,
+                 show_xsections=True,
                  output_title='Image',   **kws):
 
         self.config_on_frame = config_on_frame
@@ -28,13 +29,15 @@ class ImageFrame(BaseFrame):
         BaseFrame.__init__(self, parent=parent,
                            title  = 'Image Display Frame',
                            size=size, **kws)
-        self.BuildFrame()
+        self.BuildFrame(show_xsections=show_xsections)
 
-    def display(self, img, title=None, **kw):
+    def display(self, img, title=None, colormap=None, **kw):
         """plot after clearing current plot """
         if title is not None:
             self.SetTitle(title)
         self.panel.display(img, **kw)
+        if colormap is not None:
+            self.set_colormap(colormap)
 
     def BuildCustomMenus(self):
         "build menus"
@@ -47,6 +50,7 @@ class ImageFrame(BaseFrame):
         mids.ROT_CW    = wx.NewId()
         mids.CUR_ZOOM  = wx.NewId()
         mids.CUR_LASSO = wx.NewId()
+        mids.CUR_PROF  = wx.NewId()
         m = wx.Menu()
         m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
@@ -59,15 +63,18 @@ class ImageFrame(BaseFrame):
         # m.Append(mids.FLIP_O, 'Flip to Original', '')
         m.AppendSeparator()
         m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom to Box\tCtrl+B',
-                          'Lef-Drag Cursor to zoom to box')
+                          'Left-Drag Cursor to zoom to box')
+        m.AppendRadioItem(mids.CUR_PROF, 'Cursor Mode: Profile\tCtrl+K',
+                          'Left-Drag Cursor to select cut for profile')
         m.AppendRadioItem(mids.CUR_LASSO, 'Cursor Mode: Lasso\tCtrl+N',
-                          'Lef-Drag Cursor to select area')
+                          'Left-Drag Cursor to select points')
         m.AppendSeparator()
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_H)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_O)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
+        self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_PROF)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
 
         sm = wx.Menu()
@@ -76,6 +83,7 @@ class ImageFrame(BaseFrame):
             sm.AppendRadioItem(wid, itype, itype)
             self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
         self.user_menus  = [('&Options', m), ('Smoothing', sm)]
+
 
     def onInterp(self, evt=None, name=None):
         if name not in Interp_List:
@@ -87,8 +95,10 @@ class ImageFrame(BaseFrame):
         conf = self.panel.conf
         wid = event.GetId()
         conf.cursor_mode = 'zoom'
-        if wid == self.menuIDs.CUR_LASSO:
-            conf.cursor_mode = 'lasso'
+        if wid == self.menuIDs.CUR_PROF:
+            conf.cursor_mode = 'profile'
+        elif wid == self.menuIDs.CUR_LASSO:
+            conf.cursor_mode = 'lasso'            
 
     def onFlip(self, event=None):
         conf = self.panel.conf
@@ -105,7 +115,7 @@ class ImageFrame(BaseFrame):
             conf.rot = True
         self.panel.unzoom_all()
 
-    def BuildFrame(self):
+    def BuildFrame(self, show_xsections=True):
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
@@ -119,22 +129,37 @@ class ImageFrame(BaseFrame):
         self.BuildMenu()
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
+            
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
                                 lasso_callback=self.onLasso)
-                                # show_config_popup=(not self.config_on_frame),
-
-
-        self.panel.messenger = self.write_message
 
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
-            mainsizer.Add(lpanel, 0,
+            mainsizer.Add(lpanel, 0, 
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
+
+        # show_config_popup=(not self.config_on_frame),
+        img_panel_extent = (2, 2)
+        img_panel_locale = (0, 1)
+        
+        if not show_xsections:
+            print 'Show Cross Sections'
+            img_panel_extent = (1, 1)
+            img_panel_locale = (1, 1)
+            xtop = wx.StaticText(self, label='Top')
+            xside = wx.StaticText(self, label='Side')
+            xinfo = wx.StaticText(self, label='Info')
+            mainsizer.Add(xtop,  (0, 1), (1, 1), wx.EXPAND)
+            mainsizer.Add(xinfo, (0, 2), (1, 1), wx.EXPAND)
+            mainsizer.Add(xside, (1, 2), (1, 1), wx.EXPAND)
+            
+            
+        self.panel.messenger = self.write_message
 
         self.panel.fig.set_facecolor(self.bgcol)
 
-        mainsizer.Add(self.panel, 1, wx.EXPAND)
+        mainsizer.Add(self.panel, 1,  wx.EXPAND)
 
         self.BindMenuToPanel()
         mids = self.menuIDs
@@ -166,11 +191,13 @@ class ImageFrame(BaseFrame):
         if cmap_name.endswith('_r'):
             cmap_name = cmap_name[:-2]
         cmap_choice.SetStringSelection(cmap_name)
+        self.cmap_choice = cmap_choice
 
-        cmap_toggle = wx.CheckBox(lpanel, label='Reverse Table',
+        cmap_reverse = wx.CheckBox(lpanel, label='Reverse Table',
                                   size=(140, -1))
-        cmap_toggle.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
-        cmap_toggle.SetValue(conf.cmap_reverse)
+        cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
+        cmap_reverse.SetValue(conf.cmap_reverse)
+        self.cmap_reverse = cmap_reverse
 
         cmax = conf.cmap_range
         self.cmap_data   = numpy.outer(numpy.linspace(0, 1, cmax),
@@ -208,8 +235,8 @@ class ImageFrame(BaseFrame):
         iauto_toggle.Bind(wx.EVT_CHECKBOX, self.onInt_Autoscale)
         iauto_toggle.SetValue(conf.auto_intensity)
 
-        lsizer.Add(cmap_choice,      (1, 0), (1, 4), labstyle, 2)
-        lsizer.Add(cmap_toggle,      (2, 0), (1, 4), labstyle, 5)
+        lsizer.Add(self.cmap_choice, (1, 0), (1, 4), labstyle, 2)
+        lsizer.Add(self.cmap_reverse, (2, 0), (1, 4), labstyle, 5)
         lsizer.Add(self.cmap_lo_val, (3, 0), (1, 1), labstyle, 5)
         lsizer.Add(self.cmap_canvas, (3, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
         lsizer.Add(self.cmap_hi_val, (3, 3), (1, 1), labstyle, 5)
@@ -232,7 +259,7 @@ class ImageFrame(BaseFrame):
         return lpanel
 
     def onCMap(self, event=None):
-        self.update_cmap(event.GetString())
+        self.set_colormap(event.GetString())
 
     def onLasso(self, data=None, selected=None, mask=None, **kw):
         print 'lasso:' , selected[:10]
@@ -279,33 +306,36 @@ class ImageFrame(BaseFrame):
             self.imin_val.Enable()
         self.panel.redraw()
 
-
-#
-#         if isinstance(cmap_name, tuple):
-#             return
-#         if cmap_name.endswith('_r'):
-#             cmap_name = cmap_name[:-2]
-#         self.update_cmap(cmap_name)
-
     def onCMapReverse(self, event=None):
         self.panel.conf.cmap_reverse = event.IsChecked()
-        cmap_name = self.panel.conf.cmap.name
-        if isinstance(cmap_name, tuple):
-            return
-        if cmap_name.endswith('_r'):
-            cmap_name = cmap_name[:-2]
-        self.update_cmap(cmap_name)
+        try:
+            cmap_name = self.panel.conf.cmap.name
+            if cmap_name.endswith('_r'):
+                cmap_name = cmap_name[:-2]
+            self.set_colormap(cmap_name)
+        except:
+            pass
 
-    def update_cmap(self, cmap_name):
+    def set_colormap(self, cmap_name, reverse=None):
         conf = self.panel.conf
-        if  conf.cmap_reverse:
+        if reverse is None:
+            reverse = conf.cmap_reverse
+        self.cmap_reverse.SetValue(0)
+        if reverse:
             cmap_name = cmap_name + '_r'
+            self.cmap_reverse.SetValue(1)
+
+
+        this_cmap_name =self.cmap_choice.GetStringSelection()
+        if cmap_name != this_cmap_name:
+            self.cmap_choice.SetStringSelection(cmap_name)            
 
         conf.cmap = getattr(colormap, cmap_name)
         self.redraw_cmap()
 
     def redraw_cmap(self):
         conf = self.panel.conf
+        if not hasattr(conf, 'image'): return 
         conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
 

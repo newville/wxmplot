@@ -9,11 +9,12 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 ColorMap_List = []
 
-for cm in ('gray', 'coolwarm', 'cool', 'copper', 'Reds', 'Greens', 'Blues',
-           'spring', 'summer', 'autumn', 'winter', 'terrain', 'hot', 'jet',
+for cm in ('gray', 'coolwarm', 'jet', 'cool', 'hot', 'copper', 'Reds',
+           'Greens', 'Blues', 'spring', 'summer', 'autumn', 'winter',
            'hsv', 'Spectral', 'gist_earth', 'gist_yarg', 'gist_rainbow',
-           'gist_heat', 'gist_stern', 'ocean', 'PiYG', 'PRGn', 'Spectral',
-           'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
+           'gist_heat', 'gist_stern', 'ocean', 'terrain', 'PiYG', 'PRGn',
+           'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu',
+           'RdYlBu', 'RdYlGn'):
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 
@@ -210,15 +211,15 @@ class ImageConfigFrame(wx.Frame):
         self.canvas.draw()
 
     def onCMap(self,event=None):
-        self.update_cmap(event.GetString())
+        self.set_colormap(event.GetString())
 
     def onCMapReverse(self,event=None):
         self.conf.cmap_reverse = event.IsChecked()
         cmap_name = self.conf.cmap.name
         if  cmap_name.endswith('_r'): cmap_name = cmap_name[:-2]
-        self.update_cmap(cmap_name)
+        self.set_colormap(cmap_name)
 
-    def update_cmap(self, cmap_name):
+    def set_colormap(self, cmap_name):
         if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
         self.conf.cmap = getattr(colormap, cmap_name)
 

@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -417,6 +417,55 @@ order that can be connected by a continuous line.    A full list of arguments ar
 </dd></dl>
 
 <dl class="method">
+<dt id="add_text">
+<tt class="descname">add_text</tt><big>(</big><em>text</em>, <em>x</em>, <em>y</em>, <em>side='left'</em>, <em>rotation=None</em>, <em>ha='left'</em>, <em>va='center'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#add_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>add text to the plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>text</strong> -- text to write</li>
+<li><strong>x</strong> -- x coordinate for text</li>
+<li><strong>y</strong> -- y coordinate for text</li>
+<li><strong>side</strong> -- which axis to use ('left' or 'right') for coordinates.</li>
+<li><strong>rotation</strong> -- text rotation: angle in degrees or 'vertical' or 'horizontal'</li>
+<li><strong>ha</strong> -- horizontal alignment ('left', 'center', 'right')</li>
+<li><strong>va</strong> -- vertical alignment ('top', 'center', 'bottom', 'baseline')</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="add_arrow">
+<tt class="descname">add_arrow</tt><big>(</big><em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>side='left'</em>, <em>shape='full'</em>, <em>fg='black'</em>, <em>wdith=0.01</em>, <em>head_width=0.1</em>, <em>overhang=0</em><big>)</big><a class="headerlink" href="#add_arrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw arrow from (x1, y1) to (x2, y2).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x1</strong> -- starting x coordinate</li>
+<li><strong>y1</strong> -- starting y coordinate</li>
+<li><strong>x2</strong> -- endnig x coordinate</li>
+<li><strong>y2</strong> -- ending y coordinate</li>
+<li><strong>side</strong> -- which axis to use ('left' or 'right') for coordinates.</li>
+<li><strong>shape</strong> -- arrow head shape ('full', 'left', 'right')</li>
+<li><strong>fg</strong> -- arrow fill color ('black')</li>
+<li><strong>width</strong> -- width of arrow line (in points. default=0.01)</li>
+<li><strong>head_width</strong> -- width of arrow head (in points. default=0.1)</li>
+<li><strong>overhang</strong> -- amount the arrow is swept back (in points. default=0)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="set_xylims">
 <tt class="descname">set_xylims</tt><big>(</big><em>limits</em><span class="optional">[</span>, <em>axes=None</em><span class="optional">[</span>, <em>side=None</em><span class="optional">[</span>, <em>autoscale=True</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#set_xylims" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the x and y limits for a plot based on a 2x2 list.</p>
@@ -638,7 +687,7 @@ shows a dynamic, time-based plot.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

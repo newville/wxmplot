@@ -206,6 +206,31 @@ class PlotPanel(BasePanel):
         conf.ntrace = conf.ntrace + 1
         return _lines
 
+    def add_text(self, text, x, y, side='left',
+                 rotation=None, ha='left', va='center',
+                 family=None, **kws):
+        """add text at supplied x, y position"""
+        axes = self.axes
+        if side == 'right':
+            axes = self.get_right_axes()
+        axes.text(x, y, text, ha=ha, va=va,
+                  rotation=rotation, family=family, **kws)
+        
+    def add_arrow(self, x1, y1, x2, y2,  side='left',
+                  shape='full', fg='black', width=0.01,
+                  head_width=0.1, overhang=0, **kws):
+        """add arrow supplied x, y position"""
+        dx, dy = x2-x1, y2-y1
+        
+        axes = self.axes
+        if side == 'right':
+            axes = self.get_right_axes()
+        axes.arrow(x1, y1, dx, dy, shape=shape,
+                   length_includes_head=True,
+                   fc=fg,
+                   width=width, head_width=0.1, # head_width,
+                   overhang=0.0, **kws)
+
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,
                     selectcolor=None, selectedge=None,

@@ -18,6 +18,14 @@ class PlotFrame(BaseFrame):
                            size=size, **kws)
         self.BuildFrame()
 
+    def add_text(self, text, x, y, **kws):
+        """add text to plot"""
+        self.panel.add_text(text, x, y, **kws)
+
+    def add_arrow(self, x1, y1, x2, y2, **kws):
+        """add arrow to plot"""
+        self.panel.add_arrow(x1, y1, x2, y2, **kws)
+
     def plot(self, x, y, **kw):
         """plot after clearing current plot """
         self.panel.plot(x, y, **kw)

@@ -194,6 +194,34 @@ same meaning, as indicated by the right-most column.
 
    Clear the plot.
 
+.. method:: add_text(text, x, y, side='left', rotation=None, ha='left', va='center', **kws)
+
+   add text to the plot.
+
+   :param text: text to write
+   :param x:    x coordinate for text
+   :param y:    y coordinate for text
+   :param side: which axis to use ('left' or 'right') for coordinates.
+   :param rotation:  text rotation: angle in degrees or 'vertical' or 'horizontal'
+   :param ha:  horizontal alignment ('left', 'center', 'right')
+   :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
+
+.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', fg='black', wdith=0.01, head_width=0.1, overhang=0)
+
+
+   draw arrow from (x1, y1) to (x2, y2).
+
+   :param x1: starting x coordinate
+   :param y1: starting y coordinate
+   :param x2: endnig x coordinate
+   :param y2: ending y coordinate
+   :param side: which axis to use ('left' or 'right') for coordinates.
+   :param shape:  arrow head shape ('full', 'left', 'right')
+   :param fg:     arrow fill color ('black')
+   :param width:  width of arrow line (in points. default=0.01)
+   :param head_width:  width of arrow head (in points. default=0.1)
+   :param overhang:    amount the arrow is swept back (in points. default=0)
+
 
 .. method:: set_xylims(limits[, axes=None[, side=None[, autoscale=True]]])
 

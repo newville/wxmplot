@@ -290,6 +290,7 @@ class ImageFrame(BaseFrame):
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab,
                       nlevels=nlevels, style='contour')
+        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onContourToggle(self, event=None):
@@ -301,6 +302,7 @@ class ImageFrame(BaseFrame):
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)
+        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onCMap(self, event=None):
@@ -365,7 +367,10 @@ class ImageFrame(BaseFrame):
             reverse = conf.cmap_reverse
         self.cmap_reverse.SetValue(0)
         if reverse:
-            cmap_name = cmap_name + '_r'
+            if cmap_name.endswith('_r'):
+                cmap_name = cmap_name[:-2]
+            else:
+                cmap_name = cmap_name + '_r'
             self.cmap_reverse.SetValue(1)
 
         this_cmap_name =self.cmap_choice.GetStringSelection()
@@ -373,6 +378,15 @@ class ImageFrame(BaseFrame):
             self.cmap_choice.SetStringSelection(cmap_name)
 
         conf.cmap = getattr(colormap, cmap_name)
+        if hasattr(conf, 'contour'):
+            xmap = conf.cmap
+            cmap_name = xmap.name
+            if cmap_name.endswith('_r'):
+                xmap = getattr(colormap, cmap_name[:-2])
+            else:
+                xmap = getattr(colormap, cmap_name+'_r')
+            conf.contour.set_cmap(xmap)
+
         self.redraw_cmap()
 
     def redraw_cmap(self):
@@ -380,11 +394,6 @@ class ImageFrame(BaseFrame):
         if not hasattr(conf, 'image'): return
         conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
-        if hasattr(conf, 'contour'):
-            try:
-                conf.contour.set_cmap(conf.cmap)
-            except:
-                pass
 
         lo = conf.cmap_lo
         hi = conf.cmap_hi

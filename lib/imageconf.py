@@ -46,6 +46,8 @@ class ImageConfig:
         self.title = 'image'
         self.style = 'image'
         self.ncontour_levels = None
+        self.contour_levels = None
+        self.contour_labels = True
         self.cursor_mode = 'zoom'
         # self.zoombrush = wx.Brush('#141430',  wx.SOLID)
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
@@ -207,7 +209,6 @@ class ImageConfigFrame(wx.Frame):
         self.cmap_image.set_data(self.cmap_data)
         self.cmap_canvas.draw()
         cmax = 1.0*self.conf.cmap_range
-        print 'on stretch cmap ', cmax
         img = cmax * self.conf.data/(1.0*self.conf.data.max())
         self.conf.image.set_data(numpy.clip((cmax*(img-lo)/(hi-lo+1.e-5)), 0, int(cmax-1))/cmax)
         self.canvas.draw()
@@ -228,7 +229,12 @@ class ImageConfigFrame(wx.Frame):
         self.conf.image.set_cmap(self.conf.cmap)
         if hasattr(self.conf, 'contour'):
             try:
-                self.conf.contour.set_cmap(self.conf.cmap)
+                xmap = self.conf.cmap
+                if cmap_name.endswith('_r'):
+                    xmap = getattr(colormap, cmap_name[:-2])
+                else:
+                    xmap = getattr(colormap, cmap_name+'_r')
+                self.conf.contour.set_cmap(xmap)
             except:
                 pass
         self.canvas.draw()

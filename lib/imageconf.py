@@ -44,6 +44,8 @@ class ImageConfig:
         self.data = None
         self.indices = None
         self.title = 'image'
+        self.style = 'image'
+        self.ncontour_levels = None
         self.cursor_mode = 'zoom'
         # self.zoombrush = wx.Brush('#141430',  wx.SOLID)
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
@@ -222,9 +224,13 @@ class ImageConfigFrame(wx.Frame):
     def set_colormap(self, cmap_name):
         if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
         self.conf.cmap = getattr(colormap, cmap_name)
-
-        self.conf.image.set_cmap(self.conf.cmap)
         self.cmap_image.set_cmap(self.conf.cmap)
+        self.conf.image.set_cmap(self.conf.cmap)
+        if hasattr(self.conf, 'contour'):
+            try:
+                self.conf.contour.set_cmap(self.conf.cmap)
+            except:
+                pass
         self.canvas.draw()
         self.cmap_canvas.draw()
 

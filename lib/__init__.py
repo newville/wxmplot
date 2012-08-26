@@ -64,8 +64,8 @@ and provides these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.9'
-__date__     = '12-June-2012'
+__version__  = '0.9.10'
+__date__     = '26-Aug-2012'
 
 from plotframe import PlotFrame
 from plotpanel import PlotPanel

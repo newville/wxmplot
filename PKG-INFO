@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: WXMPlot
-Version: 0.9.9
+Version: 0.9.10
 Summary: A library for 2D plotting in wxPython using matplotlib.
 Home-page: http://newville.github.com/wxmplot/
 Author: Matthew Newville

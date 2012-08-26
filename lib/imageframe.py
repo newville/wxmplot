@@ -31,13 +31,17 @@ class ImageFrame(BaseFrame):
                            size=size, **kws)
         self.BuildFrame(show_xsections=show_xsections)
 
-    def display(self, img, title=None, colormap=None, **kw):
+    def display(self, img, title=None, colormap=None, style='image', **kw):
         """plot after clearing current plot """
         if title is not None:
             self.SetTitle(title)
-        self.panel.display(img, **kw)
+        self.panel.display(img, style=style, **kw)
         if colormap is not None:
             self.set_colormap(colormap)
+        contour_value = 0
+        if style == 'contour':
+            contour_value = 1
+        self.contour_toggle.SetValue(contour_value)
 
     def BuildCustomMenus(self):
         "build menus"
@@ -98,7 +102,7 @@ class ImageFrame(BaseFrame):
         if wid == self.menuIDs.CUR_PROF:
             conf.cursor_mode = 'profile'
         elif wid == self.menuIDs.CUR_LASSO:
-            conf.cursor_mode = 'lasso'            
+            conf.cursor_mode = 'lasso'
 
     def onFlip(self, event=None):
         conf = self.panel.conf
@@ -129,20 +133,20 @@ class ImageFrame(BaseFrame):
         self.BuildMenu()
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-            
+
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
                                 lasso_callback=self.onLasso)
 
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
-            mainsizer.Add(lpanel, 0, 
+            mainsizer.Add(lpanel, 0,
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
 
         # show_config_popup=(not self.config_on_frame),
         img_panel_extent = (2, 2)
         img_panel_locale = (0, 1)
-        
+
         if not show_xsections:
             print 'Show Cross Sections'
             img_panel_extent = (1, 1)
@@ -153,8 +157,8 @@ class ImageFrame(BaseFrame):
             mainsizer.Add(xtop,  (0, 1), (1, 1), wx.EXPAND)
             mainsizer.Add(xinfo, (0, 2), (1, 1), wx.EXPAND)
             mainsizer.Add(xside, (1, 2), (1, 1), wx.EXPAND)
-            
-            
+
+
         self.panel.messenger = self.write_message
 
         self.panel.fig.set_facecolor(self.bgcol)
@@ -235,12 +239,12 @@ class ImageFrame(BaseFrame):
         iauto_toggle.Bind(wx.EVT_CHECKBOX, self.onInt_Autoscale)
         iauto_toggle.SetValue(conf.auto_intensity)
 
-        lsizer.Add(self.cmap_choice, (1, 0), (1, 4), labstyle, 2)
+        lsizer.Add(self.cmap_choice,  (1, 0), (1, 4), labstyle, 2)
         lsizer.Add(self.cmap_reverse, (2, 0), (1, 4), labstyle, 5)
-        lsizer.Add(self.cmap_lo_val, (3, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.cmap_canvas, (3, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
-        lsizer.Add(self.cmap_hi_val, (3, 3), (1, 1), labstyle, 5)
-        lsizer.Add(iauto_toggle,     (4,0), (1,4), labstyle)
+        lsizer.Add(self.cmap_lo_val,  (3, 0), (1, 1), labstyle, 5)
+        lsizer.Add(self.cmap_canvas,  (3, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
+        lsizer.Add(self.cmap_hi_val,  (3, 3), (1, 1), labstyle, 5)
+        lsizer.Add(iauto_toggle,      (4, 0), (1, 4), labstyle)
 
         self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=40, labeltext='I min:',
                                    action = Closure(self.onThreshold, argu='lo'))
@@ -254,9 +258,50 @@ class ImageFrame(BaseFrame):
         lsizer.Add(self.imin_val, (5, 1), (1, 2), labstyle, 5)
         lsizer.Add(self.imax_val, (6, 1), (1, 2), labstyle, 5)
 
+        contour_toggle = wx.CheckBox(lpanel, label='As Contour Plot?',
+                                  size=(160, -1))
+        contour_toggle.Bind(wx.EVT_CHECKBOX, self.onContourToggle)
+        self.contour_toggle = contour_toggle
+        contour_value = 0
+        if conf.style == 'contour':
+            contour_value = 1
+        contour_toggle.SetValue(contour_value)
+        self.ncontours = LabelEntry(lpanel, 10, size=40, labeltext='N levels:',
+                                   action = Closure(self.onContourLevels))
+
+        lsizer.Add(self.contour_toggle,  (7, 0), (1, 4), labstyle, 5)
+        lsizer.Add(self.ncontours.label, (8, 0), (1, 1), labstyle, 5)
+        lsizer.Add(self.ncontours,       (8, 1), (1, 2), labstyle, 5)
+
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
         return lpanel
+
+    def onContourLevels(self, event=None):
+        try:
+            nlevels = int(event.GetString())
+        except:
+            return
+        panel = self.panel
+        conf  = panel.conf
+        if conf.style == 'image':
+            return
+        panel.axes.cla()
+        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+                      xlabel=panel.xlab, ylabel=panel.ylab,
+                      nlevels=nlevels, style='contour')
+        panel.redraw()
+
+    def onContourToggle(self, event=None):
+        panel = self.panel
+        conf  = panel.conf
+        conf.style = 'image'
+        if event.IsChecked():
+            conf.style = 'contour'
+        panel.axes.cla()
+        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+                      xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)
+        panel.redraw()
 
     def onCMap(self, event=None):
         self.set_colormap(event.GetString())
@@ -266,8 +311,6 @@ class ImageFrame(BaseFrame):
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
-
-
 
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
@@ -325,19 +368,23 @@ class ImageFrame(BaseFrame):
             cmap_name = cmap_name + '_r'
             self.cmap_reverse.SetValue(1)
 
-
         this_cmap_name =self.cmap_choice.GetStringSelection()
         if cmap_name != this_cmap_name:
-            self.cmap_choice.SetStringSelection(cmap_name)            
+            self.cmap_choice.SetStringSelection(cmap_name)
 
         conf.cmap = getattr(colormap, cmap_name)
         self.redraw_cmap()
 
     def redraw_cmap(self):
         conf = self.panel.conf
-        if not hasattr(conf, 'image'): return 
+        if not hasattr(conf, 'image'): return
         conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
+        if hasattr(conf, 'contour'):
+            try:
+                conf.contour.set_cmap(conf.cmap)
+            except:
+                pass
 
         lo = conf.cmap_lo
         hi = conf.cmap_hi

@@ -483,17 +483,15 @@ class BasePanel(wx.Panel):
         y0     = self.canvas.figure.bbox.height - ymax
 
         zdc = wx.ClientDC(self.canvas)
-        zdc = wx.ClientDC(self)
         zdc.SetLogicalFunction(wx.XOR)
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
-        # pen = zdc.GetPen()
 
         zdc.ResetBoundingBox()
         zdc.BeginDrawing()
 
         # erase previous box
-        # print 'erase... ', self.rbbox
+        print 'erase? draw?  ', self.rbbox
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
 

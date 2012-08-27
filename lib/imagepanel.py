@@ -51,7 +51,7 @@ class ImagePanel(BasePanel):
         self.BuildPanel()
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
-                style=None, nlevels=10, levels=None, contour_labels=True,
+                style=None, nlevels=10, levels=None, contour_labels=None,
                 **kws):
         """
         generic display, using imshow (default) or contour
@@ -93,10 +93,10 @@ class ImagePanel(BasePanel):
             self.conf.contour = self.axes.contour(data, #colors='k',
                                                   cmap=colormap.gray_r,
                                                   levels=clevels)
+            if contour_labels is None:
+                contour_labels = self.conf.contour_labels
             if contour_labels:
-                self.conf.contour_labels = True
                 self.axes.clabel(self.conf.contour, fontsize=11, inline=1)
-
 
         else: # image
             img = (data -data.min()) /(1.0*data.max() - data.min())

@@ -266,12 +266,18 @@ class ImageFrame(BaseFrame):
         if conf.style == 'contour':
             contour_value = 1
         contour_toggle.SetValue(contour_value)
+        contour_labels = wx.CheckBox(lpanel, label='Label Contours?',
+                                  size=(160, -1))
+        contour_labels.SetValue(1)
+        contour_labels.Bind(wx.EVT_CHECKBOX, self.onContourLabels)
+        self.contour_labels = contour_labels
         self.ncontours = LabelEntry(lpanel, 10, size=40, labeltext='N levels:',
                                    action = Closure(self.onContourLevels))
 
         lsizer.Add(self.contour_toggle,  (7, 0), (1, 4), labstyle, 5)
         lsizer.Add(self.ncontours.label, (8, 0), (1, 1), labstyle, 5)
         lsizer.Add(self.ncontours,       (8, 1), (1, 2), labstyle, 5)
+        lsizer.Add(self.contour_labels,  (9, 0), (1, 4), labstyle, 5)
 
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
@@ -290,7 +296,7 @@ class ImageFrame(BaseFrame):
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab,
                       nlevels=nlevels, style='contour')
-        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
+        # self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onContourToggle(self, event=None):
@@ -299,6 +305,16 @@ class ImageFrame(BaseFrame):
         conf.style = 'image'
         if event.IsChecked():
             conf.style = 'contour'
+        panel.axes.cla()
+        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+                      xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)
+        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
+        panel.redraw()
+
+    def onContourLabels(self, event=None):
+        panel = self.panel
+        conf  = panel.conf
+        conf.contour_labels = event.IsChecked()
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)

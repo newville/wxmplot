@@ -51,7 +51,7 @@ class ImagePanel(BasePanel):
         self.BuildPanel()
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
-                style=None, nlevels=10, levels=None, contour_labels=None,
+                style=None, nlevels=None, levels=None, contour_labels=None,
                 **kws):
         """
         generic display, using imshow (default) or contour
@@ -79,24 +79,39 @@ class ImagePanel(BasePanel):
         wx.CallAfter(self.calc_indices)
         cmap = self.conf.cmap
         if self.conf.style == 'contour':
-            if levels is not None:
-                self.contour_levels = levels
-            if self.conf.contour_levels is None or nlevels is not None:
-                if nlevels is not None:
-                    nlevels = max(3, nlevels)
-                    self.conf.ncontour_levels  = nlevels
-                nlevels = self.conf.ncontour_levels
-                clevels  = np.linspace(data.min(), data.max(), nlevels)
-                self.conf.contour_levels = clevels
+            if levels is None:
+                levels = self.conf.ncontour_levels
+            else:
+                self.conf.ncontour_levels = levels
+            if nlevels is None:
+                nlevels = self.conf.ncontour_levels = 9
+            nlevels = max(2, nlevels)
+            clevels  = np.linspace(data.min(), data.max(), nlevels+1)
+            self.conf.contour_levels = clevels
             self.conf.image = self.axes.contourf(data, cmap=self.conf.cmap,
                                                  levels=clevels)
-            self.conf.contour = self.axes.contour(data, #colors='k',
-                                                  cmap=colormap.gray_r,
+
+            self.conf.contour = self.axes.contour(data, cmap=self.conf.cmap,
                                                   levels=clevels)
+            # print 'Contour levels: '
+            # print ['%.3f' % i for i in self.conf.contour.cvalues]
+            cmap_name = self.conf.cmap.name
+            xname = 'gray'
+            try:
+                if cmap_name == 'gray_r':
+                    xname = 'Reds_r'
+                elif cmap_name == 'gray':
+                    xname = 'Reds'
+                elif cmap_name.endswith('_r'):
+                    xname = 'gray_r'
+            except:
+                pass
+            self.conf.contour.set_cmap(getattr(colormap, xname))
+
             if contour_labels is None:
                 contour_labels = self.conf.contour_labels
             if contour_labels:
-                self.axes.clabel(self.conf.contour, fontsize=11, inline=1)
+                self.axes.clabel(self.conf.contour, fontsize=10, inline=1)
 
         else: # image
             img = (data -data.min()) /(1.0*data.max() - data.min())

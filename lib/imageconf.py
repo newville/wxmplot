@@ -8,6 +8,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 ColorMap_List = []
+ColorContour_List = []
 
 for cm in ('gray', 'coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
            'Blues', 'copper', 'spring', 'summer', 'autumn', 'winter',
@@ -223,20 +224,21 @@ class ImageConfigFrame(wx.Frame):
         self.set_colormap(cmap_name)
 
     def set_colormap(self, cmap_name):
-        if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
-        self.conf.cmap = getattr(colormap, cmap_name)
-        self.cmap_image.set_cmap(self.conf.cmap)
-        self.conf.image.set_cmap(self.conf.cmap)
-        if hasattr(self.conf, 'contour'):
-            try:
-                xmap = self.conf.cmap
-                if cmap_name.endswith('_r'):
-                    xmap = getattr(colormap, cmap_name[:-2])
-                else:
-                    xmap = getattr(colormap, cmap_name+'_r')
-                self.conf.contour.set_cmap(xmap)
-            except:
-                pass
-        self.canvas.draw()
-        self.cmap_canvas.draw()
-
+        #if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
+        print 'Conf set colormap?'
+#         self.conf.cmap = getattr(colormap, cmap_name)
+#         self.cmap_image.set_cmap(self.conf.cmap)
+#         self.conf.image.set_cmap(self.conf.cmap)
+#         if hasattr(self.conf, 'contour'):
+#             try:
+#                 xmap = self.conf.cmap
+#                 if cmap_name.endswith('_r'):
+#                     xmap = getattr(colormap, cmap_name[:-2])
+#                 else:
+#                     xmap = getattr(colormap, cmap_name+'_r')
+#                 self.conf.contour.set_cmap(xmap)
+#             except:
+#                 pass
+#         self.canvas.draw()
+#         self.cmap_canvas.draw()
+#

@@ -37,11 +37,12 @@ class ImageFrame(BaseFrame):
             self.SetTitle(title)
         self.panel.display(img, style=style, **kw)
         if colormap is not None:
-            self.set_colormap(colormap)
+            self.set_colormap(name=colormap)
         contour_value = 0
         if style == 'contour':
             contour_value = 1
         self.contour_toggle.SetValue(contour_value)
+        self.panel.redraw()
 
     def BuildCustomMenus(self):
         "build menus"
@@ -148,7 +149,6 @@ class ImageFrame(BaseFrame):
         img_panel_locale = (0, 1)
 
         if not show_xsections:
-            print 'Show Cross Sections'
             img_panel_extent = (1, 1)
             img_panel_locale = (1, 1)
             xtop = wx.StaticText(self, label='Top')
@@ -292,11 +292,11 @@ class ImageFrame(BaseFrame):
         conf  = panel.conf
         if conf.style == 'image':
             return
+        self.set_colormap()
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab,
                       nlevels=nlevels, style='contour')
-        # self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onContourToggle(self, event=None):
@@ -305,24 +305,34 @@ class ImageFrame(BaseFrame):
         conf.style = 'image'
         if event.IsChecked():
             conf.style = 'contour'
+        try:
+            nlevels = int(self.ncontours.GetValue())
+        except:
+            nlevels = None
+        self.set_colormap()
         panel.axes.cla()
-        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+        panel.display(conf.data, x=panel.xdata, y = panel.ydata, nlevels=nlevels,
                       xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)
-        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onContourLabels(self, event=None):
         panel = self.panel
         conf  = panel.conf
         conf.contour_labels = event.IsChecked()
+        try:
+            nlevels = int(self.ncontours.GetValue())
+        except:
+            nlevels = None
+
         panel.axes.cla()
-        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+        self.set_colormap()
+        panel.display(conf.data, x=panel.xdata, y = panel.ydata, nlevels=nlevels,
                       xlabel=panel.xlab, ylabel=panel.ylab, style=conf.style)
-        self.set_colormap(conf.cmap.name, reverse = conf.cmap_reverse)
         panel.redraw()
 
     def onCMap(self, event=None):
-        self.set_colormap(event.GetString())
+        self.set_colormap(name=event.GetString())
+        self.panel.redraw()
 
     def onLasso(self, data=None, selected=None, mask=None, **kw):
         print 'lasso:' , selected[:10]
@@ -368,47 +378,37 @@ class ImageFrame(BaseFrame):
         self.panel.redraw()
 
     def onCMapReverse(self, event=None):
-        self.panel.conf.cmap_reverse = event.IsChecked()
-        try:
-            cmap_name = self.panel.conf.cmap.name
-            if cmap_name.endswith('_r'):
-                cmap_name = cmap_name[:-2]
-            self.set_colormap(cmap_name)
-        except:
-            pass
+        self.set_colormap()
+        self.panel.redraw()
 
-    def set_colormap(self, cmap_name, reverse=None):
+    def set_colormap(self, name=None):
         conf = self.panel.conf
-        if reverse is None:
-            reverse = conf.cmap_reverse
-        self.cmap_reverse.SetValue(0)
-        if reverse:
-            if cmap_name.endswith('_r'):
-                cmap_name = cmap_name[:-2]
-            else:
-                cmap_name = cmap_name + '_r'
-            self.cmap_reverse.SetValue(1)
+        if name is None:
+            name = self.cmap_choice.GetStringSelection()
 
-        this_cmap_name =self.cmap_choice.GetStringSelection()
-        if cmap_name != this_cmap_name:
-            self.cmap_choice.SetStringSelection(cmap_name)
-
-        conf.cmap = getattr(colormap, cmap_name)
-        if hasattr(conf, 'contour'):
-            xmap = conf.cmap
-            cmap_name = xmap.name
-            if cmap_name.endswith('_r'):
-                xmap = getattr(colormap, cmap_name[:-2])
-            else:
-                xmap = getattr(colormap, cmap_name+'_r')
-            conf.contour.set_cmap(xmap)
-
+        conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
+        if conf.cmap_reverse and not name.endswith('_r'):
+            name = name + '_r'
+        elif not conf.cmap_reverse and name.endswith('_r'):
+            name = name[:-2]
+        cmap_name = name
+        conf.cmap = getattr(colormap, name)
+        xname = 'gray'
+        if cmap_name == 'gray_r':
+            xname = 'Reds_r'
+        elif cmap_name == 'gray':
+            xname = 'Reds'
+        elif cmap_name.endswith('_r'):
+            xname = 'gray_r'
+        conf.contour.set_cmap(getattr(colormap, xname))
+        if hasattr(conf, 'image'):
+            conf.image.set_cmap(conf.cmap)
         self.redraw_cmap()
 
     def redraw_cmap(self):
         conf = self.panel.conf
         if not hasattr(conf, 'image'): return
-        conf.image.set_cmap(conf.cmap)
+        # conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
 
         lo = conf.cmap_lo
@@ -420,7 +420,6 @@ class ImageFrame(BaseFrame):
         self.cmap_data[hi:, :] = 1
         self.cmap_image.set_data(self.cmap_data)
         self.cmap_canvas.draw()
-        self.panel.redraw()
 
     def onStretchLow(self, event=None):
         self.StretchCMap(event.GetInt(), self.cmap_hi_val.GetValue())

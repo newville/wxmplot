@@ -491,7 +491,7 @@ class BasePanel(wx.Panel):
         zdc.BeginDrawing()
 
         # erase previous box
-        print 'erase? draw?  ', self.rbbox
+        # print 'erase? draw?  ', self.rbbox
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
 

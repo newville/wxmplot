@@ -393,14 +393,15 @@ class ImageFrame(BaseFrame):
             name = name[:-2]
         cmap_name = name
         conf.cmap = getattr(colormap, name)
-        xname = 'gray'
-        if cmap_name == 'gray_r':
-            xname = 'Reds_r'
-        elif cmap_name == 'gray':
-            xname = 'Reds'
-        elif cmap_name.endswith('_r'):
-            xname = 'gray_r'
-        conf.contour.set_cmap(getattr(colormap, xname))
+        if hasattr(conf, 'contour'):
+            xname = 'gray'
+            if cmap_name == 'gray_r':
+                xname = 'Reds_r'
+            elif cmap_name == 'gray':
+                xname = 'Reds'
+            elif cmap_name.endswith('_r'):
+                xname = 'gray_r'
+            conf.contour.set_cmap(getattr(colormap, xname))
         if hasattr(conf, 'image'):
             conf.image.set_cmap(conf.cmap)
         self.redraw_cmap()

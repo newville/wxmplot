@@ -93,8 +93,8 @@ class ImagePanel(BasePanel):
 
             self.conf.contour = self.axes.contour(data, cmap=self.conf.cmap,
                                                   levels=clevels)
-            # print 'Contour levels: '
-            # print ['%.3f' % i for i in self.conf.contour.cvalues]
+            #print 'Contour levels: '
+            #print ['%.3f' % i for i in self.conf.contour_levels]
             cmap_name = self.conf.cmap.name
             xname = 'gray'
             try:

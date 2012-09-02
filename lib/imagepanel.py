@@ -36,11 +36,12 @@ class ImagePanel(BasePanel):
         BasePanel.__init__(self, parent,
                            output_title=output_title,
                            messenger=messenger, **kws)
+        self.conf = ImageConfig()
         self.data_callback = data_callback
         self.lasso_callback = lasso_callback
-        self.conf = ImageConfig()
-        self.win_config = None
         self.cursor_callback = None
+        self.contour_callback = None
+        self.win_config = None
         self.figsize = size
         self.dpi     = dpi
         self.xlab    = 'X'
@@ -112,7 +113,8 @@ class ImagePanel(BasePanel):
                 contour_labels = self.conf.contour_labels
             if contour_labels:
                 self.axes.clabel(self.conf.contour, fontsize=10, inline=1)
-
+            if hasattr(self.contour_callback , '__call__'):
+                self.contour_callback(levels=clevels)
         else: # image
             img = (data -data.min()) /(1.0*data.max() - data.min())
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,

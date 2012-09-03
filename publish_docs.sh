@@ -7,11 +7,10 @@ make all
 
 echo '# Building tarball of docs'
 cd _build/html
-tar czf ../../_docs.tgz .
-cd ../..
-#
+tar czf ../../../_docs.tgz .
 
 echo "# Switching to gh-pages branch"
+cd ../../../
 git checkout gh-pages
 
 if  [ $? -ne 0 ]  ; then

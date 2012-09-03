@@ -14,7 +14,7 @@ if  [ $? -ne 0 ]  ; then
   exit
 fi
 
-tar xzf _docs.tgz .
+tar xzf _docs.tgz
 
 echo "# commit changes to gh-pages branch"
 git add *.html _images/* _static/*

@@ -6,14 +6,13 @@ from numpy import arange, sin, cos, exp, pi, linspace, ones, random
 from wxmplot.plotframe import PlotFrame
 
 class TestFrame(wx.Frame):
-    def __init__(self, parent, ID, *args,**kwds):
+    def __init__(self, parent=None, *args,**kwds):
 
         kwds["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
 
-        wx.Frame.__init__(self, parent, ID, '',
-                         wx.DefaultPosition, wx.Size(-1,-1),**kwds)
+        wx.Frame.__init__(self, parent, wx.NewId(), '',
+                         wx.DefaultPosition, wx.Size(-1,-1), **kwds)
         self.SetTitle(" WXMPlot Plotting Demo")
-
 
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
         menu = wx.Menu()
@@ -261,11 +260,8 @@ class TestFrame(wx.Frame):
             pass
         self.Destroy()
 
-def main():
-    app = wx.PySimpleApp()
+if __name__ == '__main__':
+    app = wx.App()
     f = TestFrame(None,-1)
     f.Show(True)
     app.MainLoop()
-
-#profile.run('main()')
-main()

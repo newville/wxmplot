@@ -11,7 +11,7 @@ y1  = numpy.sin(2*x)/(x+2)
 y2  = numpy.cos(2*x)*numpy.sin(2*x)
 y3  = numpy.cos(2*x) + x/3
 y4  = numpy.cos(2*x)*numpy.exp(-x/10.)
-app = wx.PySimpleApp()
+app = wx.App()
 
 pframe = wxmplot.MultiPlotFrame(rows=2,cols=3,panelsize=(2.5,1.75))
 pframe.plot(x,y1,panel=(0,0))

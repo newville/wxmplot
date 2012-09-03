@@ -13,7 +13,7 @@ def getPilatusImage(filename):
 
 img, dat = getPilatusImage('Pilatus.tiff')
 
-app = wx.PySimpleApp()
+app = wx.App()
 frame = ImageFrame()
 frame.display(dat)
 frame.Show()

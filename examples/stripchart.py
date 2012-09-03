@@ -138,7 +138,7 @@ class StripChartFrame(wx.Frame):
     def OnExit(self, event):
         self.Destroy()
 
-app = wx.PySimpleApp()
+app = wx.App()
 f = StripChartFrame(None,-1)
 f.Show(True)
 app.MainLoop()

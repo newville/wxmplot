@@ -12,7 +12,7 @@ y   = numpy.random.random(size=len(x))
 def onlasso(data=None, selected=None, mask=None):
     print ':: lasso ', selected
 
-app = wx.PySimpleApp()
+app = wx.App()
 
 pframe = wxmplot.PlotFrame()
 pframe.scatterplot(x, y, title='Scatter Plot', size=15,

@@ -3,6 +3,8 @@
 :class:`ImagePanel`:  A wx.Panel for Image Display
 ==========================================================
 
+.. module:: imagepanel
+
 The :class:`ImagePanel` class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
 :class:`ImagePanel` is derived from a :class:`wx.Panel` and so can be
@@ -78,6 +80,8 @@ image panel.
 
 :class:`ImageFrame`:  A wx.Frame for Image Display
 ==========================================================
+
+.. module:: imageframe
 
 In addition to providing a top-level window frame holding an
 :class:`ImagePanel`, an :class:`ImageFrame` provides the end-user with many ways to

@@ -3,6 +3,8 @@
 :class:`PlotPanel`:  A wx.Panel for Basic 2D Line Plots
 ==========================================================
 
+.. module:: plotpanel
+
 The :class:`PlotPanel` class supports standard 2 dimensional plots,
 including line plots and scatter plots.  It has both an easy-to-use
 programming interface, and a rich graphical user interface for manipulating
@@ -58,6 +60,7 @@ many additional methods to interact with the plots.
 
 :class:`PlotPanel` methods
 =============================================
+
 
 .. method:: plot(x, y, **kws)
 
@@ -292,6 +295,8 @@ same meaning, as indicated by the right-most column.
 :class:`PlotFrame`: a wx.Frame showing a :class:`PlotPanel`
 ====================================================================
 
+.. module:: plotframe
+
 As mentioned above, a :class:`PlotFrame` is a wx.Frame -- a separate plot
 window -- that contains a :class:`PlotPanel` and is decorated with a status
 bar and menubar with menu items for saving, printing and configuring plots.
@@ -331,6 +336,8 @@ the arguments along to the corresponding methods of the :class:`PlotPanel`.
 
 :class:`PlotApp`: a wx.App showing a :class:`PlotFrame`
 ====================================================================
+
+.. module:: plotapp
 
 A :class:`PlotApp` is a wx.App -- an application -- that consists of a
 :class:`PlotFrame`.  This show a frame that is decorated with a status bar

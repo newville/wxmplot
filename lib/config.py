@@ -255,7 +255,7 @@ class PlotConfig:
         while trace >= len(self.traces):
             self.traces.append(LineProperties())
         return trace
-        
+
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x,y labels)"
         n = self.labelfont.get_size()
@@ -371,7 +371,8 @@ class PlotConfig:
         try:
             lgn = self.mpl_legend
             if lgn:
-                for i in lgn.get_texts(): i.set_text('')
+                for i in lgn.get_texts():
+                    i.set_text('')
                 for i in lgn.get_lines():
                     i.set_linewidth(0)
                     i.set_markersize(0)
@@ -384,7 +385,9 @@ class PlotConfig:
         labs = []
         lins = []
         for ax in axes:
-            lins.extend(ax.get_lines())
+            for xline in ax.get_lines():
+                if xline.get_label() != '_nolegend_':
+                    lins.append(xline)
 
         for l in lins:
             xl = l.get_label()

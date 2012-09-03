@@ -24,8 +24,8 @@ applications to handle many use cases.
 The wxmplot package is aimed at programmers who want high quality
 scientific graphics for their applications that can be manipulated by the
 end-user.  If you're a python programmer who is comfortable writing
-matplotlib / pylab scripts, or plotting interactively from IPython, this
-package may seem to limiting for your needs.
+matplotlib / pylab scripts or plotting interactively from IPython, this
+package may seem too limiting for your needs.
 
 
 .. toctree::

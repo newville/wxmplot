@@ -1,9 +1,9 @@
 import wx
 from plotframe import PlotFrame
 
-class PlotApp:
+class PlotApp(object):
     def __init__(self):
-        self.app   = wx.PySimpleApp()
+        self.app   = wx.App()
         self.frame = PlotFrame()
 
     def plot(self,x,y,**kw):

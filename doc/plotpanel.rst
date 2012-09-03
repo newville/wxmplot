@@ -4,29 +4,35 @@
 ==========================================================
 
 The :class:`PlotPanel` class supports standard 2 dimensional plots,
-including line plots and scatter plots, with a simple-to-use programming
-interface.   This is derived from a :class:`wx.Panel` and so can be included
-in a wx GUI anywhere a :class:`wx.Panel` can be.  A :class:`PlotPanel`
-provides the following capabilities for the end-user:
+including line plots and scatter plots.  It has both an easy-to-use
+programming interface, and a rich graphical user interface for manipulating
+the plot after it has been drawn.  The :class:`PlotPanel` class is derived
+from a :class:`wx.Panel` and so that it can be included anywhere in a wx
+Windo object that a normal :class:`wx.Panel` can be.  In addition to
+drawing a plot, a :class:`PlotPanel` provides the following capabilities to
+the end-user:
 
    1. display x, y coordinates as the mouse move.
    2. display x, y coordinates of last left-click.
    3. zoom in on a particular region of the plot with left-drag in a
       lineplot, or draw an 'lasso' around selected points in a scatterplot.
-   4. customize titles, labels, legend, colors, linestyles, markers,
-      and whether a grid and a legend is shown.  A separate window is used
-      to give control of these settings.
+   4. customize titles, labels, legend, colors, linestyles, markers, and
+      whether a grid and a legend is shown.  A separate configuration
+      window is used to give control of these settings.
    5. save high-quality plot images (as PNGs), or copy to system
       clipboard, or print.
 
-These both classes have the
-basic plotting methods of :meth:`plot` to make a new plot with a single
-trace, and :meth:`oplot` to overplot another trace on top of an existing
-plot.  These each take 2 equal-length numpy arrays (abscissa, ordinate) for
-each trace.  The :class:`PlotPanel` and :class:`PlotFrame` have many
-additional methods to interact with the plots.
+In addition, there is a :class:`PlotFrame` widget which creates a
+stand-alone :class:`wx.Frame` that contains a :class:`PlotPanel`, a
+:class:`wx.StatusBar`, and a :class:`wx.MenuBar`.  Both :class:`PlotPanel`
+and :class:`PlotFrame` classes have the basic plotting methods of
+:meth:`plot` to make a new plot with a single trace, and :meth:`oplot` to
+overplot another trace on top of an existing plot.  These each take 2
+equal-length numpy arrays (abscissa, ordinate) for each trace, and a host
+of optional arguments.  The :class:`PlotPanel` and :class:`PlotFrame` have
+many additional methods to interact with the plots.
 
-.. class:: PlotPanel(parent[, size=(6.0, 3.7)[, dpi=96[, messenger=None[, show_config_popup=True[, **kws]]]]])
+.. class:: PlotPanel(parent, size=(6.0, 3.7), dpi=96, messenger=None, show_config_popup=True, **kws)
 
    Create a Plot Panel, a :class:`wx.Panel`
 
@@ -47,12 +53,11 @@ additional methods to interact with the plots.
    to showing a poup menu with options to zoom in or out, configure the
    plot, or save the image to a file.
 
-
-   Extra keyword parameters are sent to the wx.Panel.
+   Extra keyword parameters in ``**kws`` are sent to the wx.Panel.
 
 
 :class:`PlotPanel` methods
-====================================================================
+=============================================
 
 .. method:: plot(x, y, **kws)
 
@@ -168,7 +173,7 @@ same meaning, as indicated by the right-most column.
   All of these values, and a few more settings controlling whether and how to
   display a plot legend can be configured interactively (see Plot Configuration).
 
-.. method:: update_line(trace, x, y[, side='left'])
+.. method:: update_trace(trace, x, y[, side='left'])
 
    update an existing trace.
 
@@ -269,12 +274,12 @@ same meaning, as indicated by the right-most column.
 
 .. method:: write_message(message)
 
-   write a message to the messenger.  For a PlotPanel embedded in a PlotFrame,
-   this will go the the StatusBar.
+   write a message to the messenger.  For a :class:`PlotPanel` embedded in
+   a :class:`PlotFrame`, this will go the the Status Bar.
 
 .. method:: save_figure()
 
-   show a FileDialog to save a PNG image of the current plot.
+   shows a File Dialog to save a PNG image of the current plot.
 
 .. method:: configure()
 
@@ -288,10 +293,11 @@ same meaning, as indicated by the right-most column.
 :class:`PlotFrame`: a wx.Frame showing a :class:`PlotPanel`
 ====================================================================
 
-A :class:`PlotFrame` is a wx.Frame -- a separate plot window -- that
-contains a :class:`PlotPanel` and is decorated with a status bar and
-menubar with menu items for saving, printing and configuring plots.
-It inherits many of the methods of a :class:`PlotPanel`.
+As mentioned above, a :class:`PlotFrame` is a wx.Frame -- a separate plot
+window -- that contains a :class:`PlotPanel` and is decorated with a status
+bar and menubar with menu items for saving, printing and configuring plots.
+It inherits many of the methods of a :class:`PlotPanel`, and simply passes
+the arguments along to the corresponding methods of the :class:`PlotPanel`.
 
 .. class:: PlotFrame(parent[, size=(700, 450)[, title=None[, **kws]]])
 
@@ -302,7 +308,6 @@ It inherits many of the methods of a :class:`PlotPanel`.
 .. method:: plot(x, y, **kws)
 
    Passed to panel.plot
-
 
 .. method:: oplot(x, y, **kws)
 
@@ -316,9 +321,9 @@ It inherits many of the methods of a :class:`PlotPanel`.
 
    Passed to panel.clear
 
-.. method:: update_line(x, y, **kws)
+.. method:: update_trace(x, y, **kws)
 
-   Passed to panel.update_line
+   Passed to panel.update_trace
 
 .. method:: reset_config(x, y, **kws)
 
@@ -332,55 +337,38 @@ A :class:`PlotApp` is a wx.App -- an application -- that consists of a
 :class:`PlotFrame`.  This show a frame that is decorated with a status bar
 and menubar with menu items for saving, printing and configuring plots.
 
-.. class:: PlotAppp()
+.. class:: PlotApp()
 
    create a plot application.  This has methods :meth:`plot`, :meth:`oplot`, and
    :meth:`write_message`, which are sent to the underlying :class:`PlotPanel`.
-
    This allows very simple scripts which give plot interactivity and
-   customization::
-
-        from wxmplot import PlotApp
-        from numpy import arange, sin, cos, exp, pi
-
-        xx  = arange(0.0,12.0,0.1)
-        y1  = 1*sin(2*pi*xx/3.0)
-        y2  = 4*cos(2*pi*(xx-1)/5.0)/(6+xx)
-        y3  = -pi + 2*(xx/10. + exp(-(xx-3)/5.0))
-
-        p = PlotApp()
-        p.plot(xx, y1, color='blue',  style='dashed',
-               title='Example PlotApp',  label='a',
-               ylabel=r'$k^2\chi(k) $',
-               xlabel=r'$  k \ (\AA^{-1}) $' )
-
-        p.oplot(xx, y2,  marker='+', linewidth=0, label =r'$ x_1 $')
-        p.oplot(xx, y3,  style='solid',          label ='x_2')
-        p.write_message(Try Help->Quick Reference')
-        p.run()
+   customization.
 
 
 Examples and Screenshots
 ====================================================================
 
-A basic plot from a :class:`PlotFrame` looks like this:
+A basic plot can be made using a :class:`PlotApp` and a simple script like this:
+
+.. literalinclude:: ../examples/basic_screenshot.py
+
+This gives a window with a plot that looks like this:
 
 .. image:: images/basic_screenshot.png
-
+   :width: 85 %
 
 The configuration window (Options->Configuration or Ctrl-K) for this plot looks
 like this:
 
 .. image:: images/configuration_frame.png
+   :width: 95 %
 
-where all the options there will dynamically change the plot in the PlotPanel.
+where all the options and fields show will dynamically change the plot shown in the PlotPanel.
 
 An example scatterplot looks like this:
 
-
 .. image:: images/scatterplot.png
-
-
+   :width: 85 %
 
 Many more examples are given in the *examples* directory in the source
 distribution kit.  The *demo.py* script there will show several 2D Plot

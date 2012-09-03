@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Name:      wxmplot
-# Version:   0.9.8
+# Version:   0.9.10
 # Purpose:   Provide user-configurable 2D plotting module, using wxPython
 #            and matplotlib.
 # Author:    Matthew Newville
@@ -11,7 +11,7 @@
 #-----------------------------------------------------------------------------
 
 """
-MPlot:  Plotting Tools based on matplotlib and wxPython.
+WXMPlot:  Plotting Tools based on matplotlib and wxPython.
 
 Principle objects:
 
@@ -38,7 +38,7 @@ Principle objects:
   contains PlotPanel, dropdown menus from Save, Configure, Help, and so on,
   and a statusbar for messages and display of X,Y coordinates.
 
-MPlot.PlotPanel and PlotFrame plot data in 1D Numeric (or numarray) arrays,
+WXMPlot.PlotPanel and PlotFrame plot data in 1D Numeric (or numarray) arrays,
 and provides these basic methods:
    plot(x,y):  start a new plot, and plot data x,y
       optional arguments (all keyword/value types):
@@ -47,9 +47,9 @@ and provides these basic methods:
           linewidth=2     integer 0 (no line) to 10
           marker='None'   any of a wide range of marker symbols
           markersize=6    integer 0 to 30
-          xlabel=' '      label for X Axis (MPlot text)
-          ylabel=' '      label for Y Axis (MPlot text)
-          title=' '       title for top of PlotFrame (MPlot text)
+          xlabel=' '      label for X Axis
+          ylabel=' '      label for Y Axis
+          title=' '       title for top of PlotFrame
           grid=True       boolean for whether to show grid.
 
    oplot(x,y):  plot data x,y, on same plot as current data
@@ -65,7 +65,7 @@ and provides these basic methods:
 """
 
 __version__  = '0.9.10'
-__date__     = '26-Aug-2012'
+__date__     = '2-Sept-2012'
 
 from plotframe import PlotFrame
 from plotpanel import PlotPanel

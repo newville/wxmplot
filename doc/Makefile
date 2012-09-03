@@ -22,11 +22,10 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-$(MODULE).pdf: latex
-	cd $(BUILDDIR)/latex && make all-pdf
-	cp -pr $(BUILDDIR)/latex/*.pdf ./
+pdf: latexpdf
+	cp -pr $(BUILDDIR)/latex/*.pdf $(BUILDDIR)/html/.
 
-all: html $(MODULE).pdf
+all: html pdf
 
 install: all
 	cp -pr $(BUILDDIR)/latex/*.pdf $(INSTALLDIR)/.

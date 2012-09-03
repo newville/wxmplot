@@ -194,7 +194,6 @@ same meaning, as indicated by the right-most column.
    order that can be connected by a continuous line.    A full list of arguments are listed in
    :ref:`Table of Plot Arguments <plotopt_table>`.
 
-
 .. method:: clear()
 
    Clear the plot.
@@ -317,7 +316,7 @@ the arguments along to the corresponding methods of the :class:`PlotPanel`.
 
    Passed to panel.scatterplot
 
-.. method:: clear(x, y, **kws)
+.. method:: clear()
 
    Passed to panel.clear
 

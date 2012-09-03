@@ -4,17 +4,11 @@ cd doc
 echo '# Making docs'
 rm -rf _build/
 make all
-cd ../
 
 echo '# Building tarball of docs'
-mkdir _tmpdoc
-cp -pr doc/*.pdf     _tmpdoc/.
-cp -pr doc/_build/html/*   _tmpdoc/.
-cd _tmpdoc
+cd _build/html
 tar czf ../../_docs.tgz .
-cd ..
-rm -rf _tmpdoc
-
+cd ../..
 #
 
 echo "# Switching to gh-pages branch"
@@ -25,7 +19,7 @@ if  [ $? -ne 0 ]  ; then
   exit
 fi
 
-tar xzf ../_docs.tgz .
+tar xzf _docs.tgz .
 
 echo "# commit changes to gh-pages branch"
 git add *.html

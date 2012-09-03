@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.9',
+        VERSION:     '0.9.10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -47,6 +47,7 @@
   <ul>
 <li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
 <li><a class="reference internal" href="#imagepanel-methods"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> methods</a></li>
+<li><a class="reference internal" href="#imagepanel-callback-attributes"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> callback attributes</a></li>
 <li><a class="reference internal" href="#imageframe-a-wx-frame-for-image-display"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
 <li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <tt class="docutils literal"><span class="pre">ImageConfig</span></tt></a></li>
 <li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a></li>
@@ -85,17 +86,17 @@
             
   <div class="section" id="imagepanel-a-wx-panel-for-image-display">
 <h1><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>:  A wx.Panel for Image Display<a class="headerlink" href="#imagepanel-a-wx-panel-for-image-display" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display (ie, gray-scale and
-false-color intensity maps for 2-D arrays.  As with <a class="reference internal" href="plotpanel.html#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>,
-this is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be included in a wx GUI
-anywhere a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> can be.  While the image can be customized
-programmatically, the only interactivity built in to the
-<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is the ability to zoom in and out.</p>
-<p>In contrast, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides many more ways to manipulate
-an image, and will be discussed below.</p>
+<p>The <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display, including gray-scale
+and false-color maps or contour plots for 2-D arrays of intensity.
+<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be
+easily included in a wx GUI.</p>
+<p>While the image can be customized programmatically, the only interactivity
+built in to the <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> itself is the ability to zoom in and
+out.  In contrast, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides many more ways to
+manipulate the displayed image, as will be discussed below.</p>
 <dl class="class">
 <dt id="ImagePanel">
-<em class="property">class </em><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(4.5</em>, <em>4.0)</em><span class="optional">[</span>, <em>dpi=96</em><span class="optional">[</span>, <em>messenger=None</em><span class="optional">[</span>, <em>data_callback=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#ImagePanel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em>, <em>size=(4.5</em>, <em>4.0)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#ImagePanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -106,7 +107,6 @@ an image, and will be discussed below.</p>
 <li><strong>size</strong> -- figure size in inches.</li>
 <li><strong>dpi</strong> -- dots per inch for figure.</li>
 <li><strong>messenger</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
-<li><strong>data_callback</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function to call with new data, on <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -116,9 +116,6 @@ an image, and will be discussed below.</p>
 <tt class="xref py py-class docutils literal"><span class="pre">Figure</span></tt>.  The <em>messenger</em> should should be a function that
 accepts text messages from the panel for informational display.  The
 default value is to use <tt class="xref py py-func docutils literal"><span class="pre">sys.stdout.write()</span></tt>.</p>
-<p>The <em>data_callback</em> is useful if some parent frame wants to know if the
-data has been changed with <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a>.  <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> uses
-this to display the intensity max/min values.</p>
 <p>Extra keyword parameters are sent to the wx.Panel.</p>
 <p>The configuration settings for an image (its colormap, smoothing,
 orientation, and so on) are controlled through configuration
@@ -129,12 +126,51 @@ attributes.</p>
 <h2><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="display">
-<tt class="descname">display</tt><big>(</big><em>data</em><span class="optional">[</span>, <em>x=None</em><span class="optional">[</span>, <em>y=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">display</tt><big>(</big><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
-<em>x</em> and <em>y</em> values will be used for display purposes, as to give scales
-to the pixels of the data.</p>
-<p>Additional keyword arguments will be sent to a <em>data_callback</em> function,
-if that has been defined.</p>
+<em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
+display purposes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>clear the image</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="redraw">
+<tt class="descname">redraw</tt><big>(</big><big>)</big><a class="headerlink" href="#redraw" title="Permalink to this definition">¶</a></dt>
+<dd><p>redraw the image, as when the configuration attributes have been changed.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="imagepanel-callback-attributes">
+<h2><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
+image panel.</p>
+<dl class="data">
+<dt id="data_callback">
+<tt class="descname">data_callback</tt><a class="headerlink" href="#data_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="lasso_callback">
+<tt class="descname">lasso_callback</tt><a class="headerlink" href="#lasso_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="cursor_callback">
+<tt class="descname">cursor_callback</tt><a class="headerlink" href="#cursor_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="contour_callback">
+<tt class="descname">contour_callback</tt><a class="headerlink" href="#contour_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the contour levels each time <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called with <tt class="docutils literal"><span class="pre">style='contour'</span></tt>.</p>
 </dd></dl>
 
 </div>
@@ -158,8 +194,10 @@ manipulate the image:</p>
 configuration attributes and redrawing the image.</p>
 <dl class="class">
 <dt id="ImageFrame">
-<em class="property">class </em><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(550</em>, <em>450)</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#ImageFrame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an Image Frame, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt>.</p>
+<em class="property">class </em><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#ImageFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Image Frame, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt>.  This is a Frame with an
+<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> and several menus and controls for changing the color table and
+smoothing options as well as switching the display style between &quot;image&quot; and &quot;contour&quot;.</p>
 </dd></dl>
 
 </div>
@@ -197,9 +235,9 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <div><table border="1" class="docutils">
 <colgroup>
 <col width="20%" />
-<col width="15%" />
+<col width="14%" />
 <col width="11%" />
-<col width="55%" />
+<col width="54%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">attribute</th>
@@ -274,6 +312,26 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <td>None</td>
 <td>high intensity when autoscaling is off</td>
 </tr>
+<tr class="row-odd"><td>style</td>
+<td>string</td>
+<td>'image'</td>
+<td>'image' or 'contour'</td>
+</tr>
+<tr class="row-even"><td>ncontour_levels</td>
+<td>int</td>
+<td>10</td>
+<td>number of contour levels</td>
+</tr>
+<tr class="row-odd"><td>contour_levels</td>
+<td>list</td>
+<td>None</td>
+<td>list of contour levels</td>
+</tr>
+<tr class="row-even"><td>contour_labels</td>
+<td>list</td>
+<td>None</td>
+<td>list of contour labels</td>
+</tr>
 </tbody>
 </table>
 </div></blockquote>
@@ -291,20 +349,23 @@ same intensity intensity scale.</li>
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
 <p>A basic plot from a <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> looks like this:</p>
 <img alt="_images/imagedisplay.png" src="_images/imagedisplay.png" />
-<p>This screenshot shows a long list of choices for color table, a checkbox to
-reverse the color table, sliders to adjust the upper and lower level, a
-checkbox to auto-scale the intensity, or entries to set the intensity
-values for minimum and maximum intensity.  Clicking on the image will show
-its coordinates and intensity value.  Click-and-Drag will select a
-rectangular box to zoom in on a particular feature of the image.</p>
-<p>The File menu includes options to save an PNG file of the image (Ctrl-S),
-copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
-print-preview the image, or quit the application.   The Options menu
-includes Zoom Out (Ctrl-Z), applying a log-scale to the intensity (Ctrl-L),
-rotating the image clockwise (Ctrl-R), flipping the image top/bottom
-(Ctrl-T) or right/left (Ctrl-F), or saving an image of the colormap.
-The Smoothing menu allows you choose from one of several interpolation
-algorithms.</p>
+<p>This screenshot shows a long list of choices for color table, a checkbox to reverse the
+color table, sliders to adjust the upper and lower level, a checkbox to auto-scale the
+intensity, or entries to set the intensity values for minimum and maximum intensity.  In
+addition, one can toggle to a 'contour style' plot, in which the levels are made discrete
+with many fewer levels than the continuous image display.  A contour plot would look
+like this:</p>
+<img alt="_images/contour.png" src="_images/contour.png" />
+<p>For either display style, clicking on the image will show its coordinates and intensity
+value.  Click-and-Drag will select a rectangular box to zoom in on a particular feature
+of the image.</p>
+<p>The File menu includes options to save an PNG file of the image (Ctrl-S), copy the image
+to the system clipboard (Ctrl-C), print (Ctrl-P) or print-preview the image, or quit the
+application.  The Options menu includes Zoom Out (Ctrl-Z), applying a log-scale to the
+intensity (Ctrl-L), rotating the image clockwise (Ctrl-R), flipping the image top/bottom
+(Ctrl-T) or right/left (Ctrl-F) (note that flipping does not work for contour-style
+plots) or saving an image of the colormap.  The Smoothing menu allows you choose from one
+of several interpolation algorithms.</p>
 </div>
 </div>
 

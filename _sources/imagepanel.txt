@@ -3,17 +3,17 @@
 :class:`ImagePanel`:  A wx.Panel for Image Display
 ==========================================================
 
-The :class:`ImagePanel` class supports image display (ie, gray-scale and
-false-color intensity maps for 2-D arrays.  As with :class:`PlotPanel`,
-this is derived from a :class:`wx.Panel` and so can be included in a wx GUI
-anywhere a :class:`wx.Panel` can be.  While the image can be customized
-programmatically, the only interactivity built in to the
-:class:`ImagePanel` is the ability to zoom in and out.
+The :class:`ImagePanel` class supports image display, including gray-scale
+and false-color maps or contour plots for 2-D arrays of intensity.
+:class:`ImagePanel` is derived from a :class:`wx.Panel` and so can be
+easily included in a wx GUI.
 
-In contrast, an :class:`ImageFrame` provides many more ways to manipulate
-an image, and will be discussed below.
+While the image can be customized programmatically, the only interactivity
+built in to the :class:`ImagePanel` itself is the ability to zoom in and
+out.  In contrast, an :class:`ImageFrame` provides many more ways to
+manipulate the displayed image, as will be discussed below.
 
-.. class:: ImagePanel(parent[, size=(4.5, 4.0)[, dpi=96[, messenger=None[, data_callback=None[, **kws]]]]])
+.. class:: ImagePanel(parent, size=(4.5, 4.0), dpi=100, messenger=None, **kws)
 
    Create an Image Panel, a :class:`wx.Panel`
 
@@ -22,17 +22,11 @@ an image, and will be discussed below.
    :param dpi:    dots per inch for figure.
    :param messenger: function for accepting output messages.
    :type messenger: callable or ``None``
-   :param data_callback: function to call with new data, on :meth:`display`
-   :type data_callback: callable or ``None``
 
    The *size*, and *dpi* arguments are sent to matplotlib's
    :class:`Figure`.  The *messenger* should should be a function that
    accepts text messages from the panel for informational display.  The
    default value is to use :func:`sys.stdout.write`.
-
-   The *data_callback* is useful if some parent frame wants to know if the
-   data has been changed with :meth:`display`.  :class:`ImageFrame` uses
-   this to display the intensity max/min values.
 
    Extra keyword parameters are sent to the wx.Panel.
 
@@ -41,24 +35,46 @@ an image, and will be discussed below.
    attributes.
 
 :class:`ImagePanel` methods
-====================================================================
+===================================
 
-.. method:: display(data[, x=None[, y=None[, **kws]]])
+.. method:: display(data, x=None, y=None, style='image', **kws)
 
    display a new image from the 2-D numpy array *data*.  If provided, the
-   *x* and *y* values will be used for display purposes, as to give scales
-   to the pixels of the data.
+   *x* and *y* values will be used as coordinates for the pixels for
+   display purposes.
 
-   Additional keyword arguments will be sent to a *data_callback* function,
-   if that has been defined.
 
-.. method: clear()
+.. method:: clear()
 
   clear the image
 
-.. method: redraw()
+.. method:: redraw()
 
   redraw the image, as when the configuration attributes have been changed.
+
+:class:`ImagePanel` callback attributes
+=========================================
+
+An :class:`ImagePanel` instance has several **callback** attributes that can be used to get information from the
+image panel.
+
+
+.. data:: data_callback
+
+     A function that is called with the data and `x` and `y` values each time :meth:`display` is called.
+
+.. data:: lasso_callback
+
+     A function that is called with the data and selected points when the cursor is in **lasso mode** and a new set of points has been selected.
+
+.. data:: cursor_callback
+
+     A function that is called with the `x` and `y` position clicked on each left-button event.
+
+.. data:: contour_callback
+
+     A function that is called with the contour levels each time :meth:`display` is called with ``style='contour'``.
+
 
 :class:`ImageFrame`:  A wx.Frame for Image Display
 ==========================================================
@@ -78,10 +94,12 @@ manipulate the image:
 These options are all available programmatically as well, by setting the
 configuration attributes and redrawing the image.
 
-.. class:: ImageFrame(parent[, size=(550, 450)[, **kws]])
 
+.. class:: ImageFrame(parent, size=(550, 450), **kws)
 
-   Create an Image Frame, a :class:`wx.Frame`.
+   Create an Image Frame, a :class:`wx.Frame`.  This is a Frame with an
+   :class:`ImagePanel` and several menus and controls for changing the color table and
+   smoothing options as well as switching the display style between "image" and "contour".
 
 
 Image configuration with :class:`ImageConfig`
@@ -120,35 +138,43 @@ The list of configuration attributes and their meaning are given in the
 Table of Image Configuration attributes:  All of these are members of the
 *panel.conf* object, as shown in the example above.
 
-  +----------------+------------+---------+---------------------------------------------+
-  | attribute      |   type     | default | meaning                                     |
-  +================+============+=========+=============================================+
-  | rot            | bool       | False   | rotate image 90 degrees clockwise           |
-  +----------------+------------+---------+---------------------------------------------+
-  | flip_ud        | bool       | False   | flip image top/bottom                       |
-  +----------------+------------+---------+---------------------------------------------+
-  | flip_lr        | bool       | False   | flip image left/right                       |
-  +----------------+------------+---------+---------------------------------------------+
-  | log_scale      | bool       | False   | display log(image)                          |
-  +----------------+------------+---------+---------------------------------------------+
-  | auto_intensity | bool       | True    | auto-scale the intensity                    |
-  +----------------+------------+---------+---------------------------------------------+
-  | cmap           | colormap   | gray    | colormap for intensity scale                |
-  +----------------+------------+---------+---------------------------------------------+
-  | cmap_reverse   | bool       | False   | reverse colormap                            |
-  +----------------+------------+---------+---------------------------------------------+
-  | interp         | string     | nearest | interpolation, smoothing algorithm          |
-  +----------------+------------+---------+---------------------------------------------+
-  | xylims         | list       | None    | xmin, xmax, ymin, ymax for display          |
-  +----------------+------------+---------+---------------------------------------------+
-  | cmap_lo        | int        | 0       | low intensity percent for colormap mapping  |
-  +----------------+------------+---------+---------------------------------------------+
-  | cmap_hi        | int        | 100     | high intensity percent for colormap mapping |
-  +----------------+------------+---------+---------------------------------------------+
-  | int_lo         | float      | None    | low intensity when autoscaling is off       |
-  +----------------+------------+---------+---------------------------------------------+
-  | int_hi         | float      | None    | high intensity when autoscaling is off      |
-  +----------------+------------+---------+---------------------------------------------+
+  +-----------------+------------+---------+---------------------------------------------+
+  | attribute       |   type     | default | meaning                                     |
+  +=================+============+=========+=============================================+
+  | rot             | bool       | False   | rotate image 90 degrees clockwise           |
+  +-----------------+------------+---------+---------------------------------------------+
+  | flip_ud         | bool       | False   | flip image top/bottom                       |
+  +-----------------+------------+---------+---------------------------------------------+
+  | flip_lr         | bool       | False   | flip image left/right                       |
+  +-----------------+------------+---------+---------------------------------------------+
+  | log_scale       | bool       | False   | display log(image)                          |
+  +-----------------+------------+---------+---------------------------------------------+
+  | auto_intensity  | bool       | True    | auto-scale the intensity                    |
+  +-----------------+------------+---------+---------------------------------------------+
+  | cmap            | colormap   | gray    | colormap for intensity scale                |
+  +-----------------+------------+---------+---------------------------------------------+
+  | cmap_reverse    | bool       | False   | reverse colormap                            |
+  +-----------------+------------+---------+---------------------------------------------+
+  | interp          | string     | nearest | interpolation, smoothing algorithm          |
+  +-----------------+------------+---------+---------------------------------------------+
+  | xylims          | list       | None    | xmin, xmax, ymin, ymax for display          |
+  +-----------------+------------+---------+---------------------------------------------+
+  | cmap_lo         | int        | 0       | low intensity percent for colormap mapping  |
+  +-----------------+------------+---------+---------------------------------------------+
+  | cmap_hi         | int        | 100     | high intensity percent for colormap mapping |
+  +-----------------+------------+---------+---------------------------------------------+
+  | int_lo          | float      | None    | low intensity when autoscaling is off       |
+  +-----------------+------------+---------+---------------------------------------------+
+  | int_hi          | float      | None    | high intensity when autoscaling is off      |
+  +-----------------+------------+---------+---------------------------------------------+
+  | style           | string     | 'image' | 'image' or 'contour'                        |
+  +-----------------+------------+---------+---------------------------------------------+
+  | ncontour_levels | int        | 10      | number of contour levels                    |
+  +-----------------+------------+---------+---------------------------------------------+
+  | contour_levels  | list       | None    | list of contour levels                      |
+  +-----------------+------------+---------+---------------------------------------------+
+  | contour_labels  | list       | None    | list of contour labels                      |
+  +-----------------+------------+---------+---------------------------------------------+
 
 Some notes:
 
@@ -166,19 +192,25 @@ A basic plot from a :class:`ImageFrame` looks like this:
 
 .. image:: images/imagedisplay.png
 
-This screenshot shows a long list of choices for color table, a checkbox to
-reverse the color table, sliders to adjust the upper and lower level, a
-checkbox to auto-scale the intensity, or entries to set the intensity
-values for minimum and maximum intensity.  Clicking on the image will show
-its coordinates and intensity value.  Click-and-Drag will select a
-rectangular box to zoom in on a particular feature of the image.
+This screenshot shows a long list of choices for color table, a checkbox to reverse the
+color table, sliders to adjust the upper and lower level, a checkbox to auto-scale the
+intensity, or entries to set the intensity values for minimum and maximum intensity.  In
+addition, one can toggle to a 'contour style' plot, in which the levels are made discrete
+with many fewer levels than the continuous image display.  A contour plot would look
+like this:
 
-The File menu includes options to save an PNG file of the image (Ctrl-S),
-copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
-print-preview the image, or quit the application.   The Options menu
-includes Zoom Out (Ctrl-Z), applying a log-scale to the intensity (Ctrl-L),
-rotating the image clockwise (Ctrl-R), flipping the image top/bottom
-(Ctrl-T) or right/left (Ctrl-F), or saving an image of the colormap.
-The Smoothing menu allows you choose from one of several interpolation
-algorithms.
+.. image:: images/contour.png
+
+
+For either display style, clicking on the image will show its coordinates and intensity
+value.  Click-and-Drag will select a rectangular box to zoom in on a particular feature
+of the image.
+
+The File menu includes options to save an PNG file of the image (Ctrl-S), copy the image
+to the system clipboard (Ctrl-C), print (Ctrl-P) or print-preview the image, or quit the
+application.  The Options menu includes Zoom Out (Ctrl-Z), applying a log-scale to the
+intensity (Ctrl-L), rotating the image clockwise (Ctrl-R), flipping the image top/bottom
+(Ctrl-T) or right/left (Ctrl-F) (note that flipping does not work for contour-style
+plots) or saving an image of the colormap.  The Smoothing menu allows you choose from one
+of several interpolation algorithms.
 

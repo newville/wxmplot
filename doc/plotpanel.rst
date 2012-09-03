@@ -347,6 +347,12 @@ and menubar with menu items for saving, printing and configuring plots.
 Examples and Screenshots
 ====================================================================
 
+Here, a few examples and screenshots of the output of those examples are
+shown.
+
+Basic Example
+~~~~~~~~~~~~~~
+
 A basic plot can be made using a :class:`PlotApp` and a simple script like this:
 
 .. literalinclude:: ../examples/basic_screenshot.py
@@ -364,15 +370,38 @@ like this:
 
 where all the options and fields show will dynamically change the plot shown in the PlotPanel.
 
-An example scatterplot looks like this:
+Scatterplot Example
+~~~~~~~~~~~~~~~~~~~~~
+
+An example scatterplot can be produced with a script like this:
+
+.. literalinclude:: ../examples/scatterplot.py
+
+and gives a plot (after having selected by "lasso"ing) that looks like this:
 
 .. image:: images/scatterplot.png
    :width: 85 %
 
-Many more examples are given in the *examples* directory in the source
-distribution kit.  The *demo.py* script there will show several 2D Plot
-panel examples, including a plot which uses a timer to simulate a dynamic
-plot, updating the plot as fast as it can - typically 10 to 30 times per
-second, depending on your machine.  The *stripchart.py* example script also
-shows a dynamic, time-based plot.
+Using Left and Right Axes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An example using both right and left axes with different scales can be
+created with:
+
+.. literalinclude:: ../examples/leftright.py
+
+and gives a plot that looks like this:
+
+.. image:: images/two_axes.png
+   :width: 85 %
+
+More Examples
+~~~~~~~~~~~~~~~
+
+These and several other examples are given in the *examples* directory in
+the source distribution kit.  The *demo.py* script there will show several
+2D Plot panel examples, including a plot which uses a timer to simulate a
+dynamic plot, updating the plot as fast as it can - typically 10 to 30
+times per second, depending on your machine.  The *stripchart.py* example
+script also shows a dynamic, time-based plot.
 

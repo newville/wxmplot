@@ -36,6 +36,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
@@ -48,7 +51,7 @@
 <li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
 <li><a class="reference internal" href="#imagepanel-methods"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> methods</a></li>
 <li><a class="reference internal" href="#imagepanel-callback-attributes"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> callback attributes</a></li>
-<li><a class="reference internal" href="#imageframe-a-wx-frame-for-image-display"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#module-imageframe"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
 <li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <tt class="docutils literal"><span class="pre">ImageConfig</span></tt></a></li>
 <li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a></li>
 </ul>
@@ -84,19 +87,19 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="imagepanel-a-wx-panel-for-image-display">
-<h1><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>:  A wx.Panel for Image Display<a class="headerlink" href="#imagepanel-a-wx-panel-for-image-display" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display, including gray-scale
+  <div class="section" id="module-imagepanel">
+<span id="imagepanel-a-wx-panel-for-image-display"></span><h1><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display<a class="headerlink" href="#module-imagepanel" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
-<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be
+<a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be
 easily included in a wx GUI.</p>
 <p>While the image can be customized programmatically, the only interactivity
-built in to the <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> itself is the ability to zoom in and
-out.  In contrast, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides many more ways to
+built in to the <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> itself is the ability to zoom in and
+out.  In contrast, an <tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt> provides many more ways to
 manipulate the displayed image, as will be discussed below.</p>
 <dl class="class">
-<dt id="ImagePanel">
-<em class="property">class </em><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em>, <em>size=(4.5</em>, <em>4.0)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#ImagePanel" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.ImagePanel">
+<em class="property">class </em><tt class="descclassname">imagepanel.</tt><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em>, <em>size=(4.5</em>, <em>4.0)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -123,61 +126,61 @@ attributes.</p>
 </dd></dl>
 
 <div class="section" id="imagepanel-methods">
-<h2><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
-<dt id="display">
-<tt class="descname">display</tt><big>(</big><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.display">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">display</tt><big>(</big><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.clear">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="redraw">
-<tt class="descname">redraw</tt><big>(</big><big>)</big><a class="headerlink" href="#redraw" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.redraw">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">redraw</tt><big>(</big><big>)</big><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="imagepanel-callback-attributes">
-<h2><a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
-<p>An <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
+<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
 image panel.</p>
 <dl class="data">
-<dt id="data_callback">
-<tt class="descname">data_callback</tt><a class="headerlink" href="#data_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called.</p>
+<dt id="imagepanel.data_callback">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">data_callback</tt><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called.</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="lasso_callback">
-<tt class="descname">lasso_callback</tt><a class="headerlink" href="#lasso_callback" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.lasso_callback">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">lasso_callback</tt><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="cursor_callback">
-<tt class="descname">cursor_callback</tt><a class="headerlink" href="#cursor_callback" title="Permalink to this definition">¶</a></dt>
+<dt id="imagepanel.cursor_callback">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">cursor_callback</tt><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="contour_callback">
-<tt class="descname">contour_callback</tt><a class="headerlink" href="#contour_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that is called with the contour levels each time <a class="reference internal" href="#display" title="display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called with <tt class="docutils literal"><span class="pre">style='contour'</span></tt>.</p>
+<dt id="imagepanel.contour_callback">
+<tt class="descclassname">imagepanel.</tt><tt class="descname">contour_callback</tt><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the contour levels each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called with <tt class="docutils literal"><span class="pre">style='contour'</span></tt>.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="imageframe-a-wx-frame-for-image-display">
-<h2><a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>:  A wx.Frame for Image Display<a class="headerlink" href="#imageframe-a-wx-frame-for-image-display" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-imageframe">
+<span id="imageframe-a-wx-frame-for-image-display"></span><h2><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display<a class="headerlink" href="#module-imageframe" title="Permalink to this headline">¶</a></h2>
 <p>In addition to providing a top-level window frame holding an
-<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>, an <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides the end-user with many ways to
+<tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, an <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides the end-user with many ways to
 manipulate the image:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -193,19 +196,19 @@ manipulate the image:</p>
 <p>These options are all available programmatically as well, by setting the
 configuration attributes and redrawing the image.</p>
 <dl class="class">
-<dt id="ImageFrame">
-<em class="property">class </em><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#ImageFrame" title="Permalink to this definition">¶</a></dt>
+<dt id="imageframe.ImageFrame">
+<em class="property">class </em><tt class="descclassname">imageframe.</tt><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt>.  This is a Frame with an
-<a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> and several menus and controls for changing the color table and
+<tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between &quot;image&quot; and &quot;contour&quot;.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="image-configuration-with-imageconfig">
 <h2>Image configuration with <tt class="xref py py-class docutils literal"><span class="pre">ImageConfig</span></tt><a class="headerlink" href="#image-configuration-with-imageconfig" title="Permalink to this headline">¶</a></h2>
-<p>To change any of the attributes of the image on an <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>, you
+<p>To change any of the attributes of the image on an <tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, you
 can set the corresponding attribute of the panel's <tt class="xref py py-attr docutils literal"><span class="pre">conf</span></tt>.   That is,
-if you create an <a class="reference internal" href="#ImagePanel" title="ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a>, you can set the colormap with:</p>
+if you create an <tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, you can set the colormap with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cmap</span>
 <span class="n">im_panel</span> <span class="o">=</span> <span class="n">ImagePanel</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="n">im_panel</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">data_array</span><span class="p">)</span>
@@ -226,7 +229,7 @@ if you create an <a class="reference internal" href="#ImagePanel" title="ImagePa
 <span class="n">im_panel</span><span class="o">.</span><span class="n">redraw</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For a <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>, you can access this attribute as <em>frame.panel.conf.cmap</em>.</p>
+<p>For a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>, you can access this attribute as <em>frame.panel.conf.cmap</em>.</p>
 <p>The list of configuration attributes and their meaning are given in the
 <a class="reference internal" href="#imageconf-table"><em>Table of Image Configuration attributes</em></a></p>
 <p id="imageconf-table">Table of Image Configuration attributes:  All of these are members of the
@@ -347,7 +350,7 @@ same intensity intensity scale.</li>
 </div>
 <div class="section" id="examples-and-screenshots">
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
-<p>A basic plot from a <a class="reference internal" href="#ImageFrame" title="ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> looks like this:</p>
+<p>A basic plot from a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> looks like this:</p>
 <img alt="_images/imagedisplay.png" src="_images/imagedisplay.png" />
 <p>This screenshot shows a long list of choices for color table, a checkbox to reverse the
 color table, sliders to adjust the upper and lower level, a checkbox to auto-scale the
@@ -381,6 +384,9 @@ of several interpolation algorithms.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              >previous</a> |</li>

@@ -37,6 +37,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -51,9 +54,15 @@
   <ul>
 <li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt>:  A wx.Panel for Basic 2D Line Plots</a><ul>
 <li><a class="reference internal" href="#plotpanel-methods"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt> methods</a></li>
-<li><a class="reference internal" href="#plotframe-a-wx-frame-showing-a-plotpanel"><tt class="docutils literal"><span class="pre">PlotFrame</span></tt>: a wx.Frame showing a <tt class="docutils literal"><span class="pre">PlotPanel</span></tt></a></li>
-<li><a class="reference internal" href="#plotapp-a-wx-app-showing-a-plotframe"><tt class="docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <tt class="docutils literal"><span class="pre">PlotFrame</span></tt></a></li>
-<li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a></li>
+<li><a class="reference internal" href="#module-plotframe"><tt class="docutils literal"><span class="pre">PlotFrame</span></tt>: a wx.Frame showing a <tt class="docutils literal"><span class="pre">PlotPanel</span></tt></a></li>
+<li><a class="reference internal" href="#module-plotapp"><tt class="docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <tt class="docutils literal"><span class="pre">PlotFrame</span></tt></a></li>
+<li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic Example</a></li>
+<li><a class="reference internal" href="#scatterplot-example">Scatterplot Example</a></li>
+<li><a class="reference internal" href="#using-left-and-right-axes">Using Left and Right Axes</a></li>
+<li><a class="reference internal" href="#more-examples">More Examples</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -90,15 +99,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="plotpanel-a-wx-panel-for-basic-2d-line-plots">
-<h1><a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>:  A wx.Panel for Basic 2D Line Plots<a class="headerlink" href="#plotpanel-a-wx-panel-for-basic-2d-line-plots" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class supports standard 2 dimensional plots,
+  <div class="section" id="module-plotpanel">
+<span id="plotpanel-a-wx-panel-for-basic-2d-line-plots"></span><h1><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt>:  A wx.Panel for Basic 2D Line Plots<a class="headerlink" href="#module-plotpanel" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class supports standard 2 dimensional plots,
 including line plots and scatter plots.  It has both an easy-to-use
 programming interface, and a rich graphical user interface for manipulating
-the plot after it has been drawn.  The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class is derived
+the plot after it has been drawn.  The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> class is derived
 from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so that it can be included anywhere in a wx
 Windo object that a normal <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> can be.  In addition to
-drawing a plot, a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> provides the following capabilities to
+drawing a plot, a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> provides the following capabilities to
 the end-user:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -113,18 +122,18 @@ window is used to give control of these settings.</li>
 clipboard, or print.</li>
 </ol>
 </div></blockquote>
-<p>In addition, there is a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> widget which creates a
-stand-alone <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt> that contains a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, a
-<tt class="xref py py-class docutils literal"><span class="pre">wx.StatusBar</span></tt>, and a <tt class="xref py py-class docutils literal"><span class="pre">wx.MenuBar</span></tt>.  Both <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>
-and <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> classes have the basic plotting methods of
-<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> to make a new plot with a single trace, and <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> to
+<p>In addition, there is a <tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt> widget which creates a
+stand-alone <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt> that contains a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, a
+<tt class="xref py py-class docutils literal"><span class="pre">wx.StatusBar</span></tt>, and a <tt class="xref py py-class docutils literal"><span class="pre">wx.MenuBar</span></tt>.  Both <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>
+and <tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt> classes have the basic plotting methods of
+<a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> to make a new plot with a single trace, and <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> to
 overplot another trace on top of an existing plot.  These each take 2
 equal-length numpy arrays (abscissa, ordinate) for each trace, and a host
-of optional arguments.  The <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> have
+of optional arguments.  The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and <tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt> have
 many additional methods to interact with the plots.</p>
 <dl class="class">
-<dt id="PlotPanel">
-<em class="property">class </em><tt class="descname">PlotPanel</tt><big>(</big><em>parent</em>, <em>size=(6.0</em>, <em>3.7)</em>, <em>dpi=96</em>, <em>messenger=None</em>, <em>show_config_popup=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#PlotPanel" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.PlotPanel">
+<em class="property">class </em><tt class="descclassname">plotpanel.</tt><tt class="descname">PlotPanel</tt><big>(</big><em>parent</em>, <em>size=(6.0</em>, <em>3.7)</em>, <em>dpi=96</em>, <em>messenger=None</em>, <em>show_config_popup=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotpanel.PlotPanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Plot Panel, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -152,28 +161,28 @@ plot, or save the image to a file.</p>
 </dd></dl>
 
 <div class="section" id="plotpanel-methods">
-<h2><a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> methods<a class="headerlink" href="#plotpanel-methods" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> methods<a class="headerlink" href="#plotpanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
-<dt id="plot">
-<tt class="descname">plot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.plot">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">plot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotpanel.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, erasing any existing plot.  The
-displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> method
+displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> method
 has many optional parameters, all using keyword/value argument.  Since most
-of these are shared with the <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method, the full set of parameters
+of these are shared with the <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method, the full set of parameters
 is given in <a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="oplot">
-<tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#oplot" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.oplot">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotpanel.oplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overwriting any existing plot.</p>
-<p>The <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method has many optional parameters,  as listed in
+<p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> method has many optional parameters,  as listed in
 <a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a></p>
 </dd></dl>
 
-<p id="plotopt-table"><strong>Table of Plot Arguments</strong> These arguments apply for the <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a>, <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>, and
-<a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> methods.  Except where noted, the arguments are available for <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> and
-<a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>.  In addition, the <a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> method uses many of the same arguments for the
+<p id="plotopt-table"><strong>Table of Plot Arguments</strong> These arguments apply for the <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a>, <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>, and
+<a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> methods.  Except where noted, the arguments are available for <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> and
+<a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>.  In addition, the <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a> method uses many of the same arguments for the
 same meaning, as indicated by the right-most column.</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -238,7 +247,7 @@ same meaning, as indicated by the right-most column.</p>
 <tr class="row-odd"><td>use_dates</td>
 <td>bool</td>
 <td>False</td>
-<td>to show dates in xlabel (<a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
+<td>to show dates in xlabel (<a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> only)</td>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>linewidth</td>
@@ -326,7 +335,7 @@ same meaning, as indicated by the right-most column.</p>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>&nbsp;</td>
-<td colspan="3"><strong>arguments that apply only for</strong> <a class="reference internal" href="#scatterplot" title="scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a></td>
+<td colspan="3"><strong>arguments that apply only for</strong> <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><tt class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></tt></a></td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-odd"><td>size</td>
@@ -357,9 +366,9 @@ same meaning, as indicated by the right-most column.</p>
 </table>
 <p>As a general note, the configuration for the plot (title, labels, grid
 displays) and for each trace (color, linewidth, ...) are preserved for a
-<a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>. A few specific notes:</p>
+<a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>. A few specific notes:</p>
 <blockquote>
-<div><p>1. The title, label, and grid arguments to <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> default to <tt class="docutils literal"><span class="pre">None</span></tt>,
+<div><p>1. The title, label, and grid arguments to <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> default to <tt class="docutils literal"><span class="pre">None</span></tt>,
 which means to use the previously used value.</p>
 <p>2. The <em>use_dates</em> option is not very rich, and simply turns x-values that
 are Unix timestamps into x labels showing the dates.</p>
@@ -384,8 +393,8 @@ transition to a new value as a sudden step, you want 'steps-post'.</p>
 display a plot legend can be configured interactively (see Plot Configuration).</p>
 </div></blockquote>
 <dl class="method">
-<dt id="update_trace">
-<tt class="descname">update_trace</tt><big>(</big><em>trace</em>, <em>x</em>, <em>y</em><span class="optional">[</span>, <em>side='left'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#update_trace" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.update_trace">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">update_trace</tt><big>(</big><em>trace</em>, <em>x</em>, <em>y</em><span class="optional">[</span>, <em>side='left'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#plotpanel.update_trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>update an existing trace.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -402,29 +411,29 @@ display a plot legend can be configured interactively (see Plot Configuration).<
 </tbody>
 </table>
 <p>This function is particularly useful for data that is changing and you
-wish to update traces from a previous <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> or <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> with
+wish to update traces from a previous <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a> or <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a> with
 the new (x, y) data without completely redrawing the entire plot.  Using
 this method is substantially faster than replotting, and should be used
 for dynamic plots such as a StripChart.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scatterplot">
-<tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#scatterplot" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.scatterplot">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotpanel.scatterplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>draws a 2d scatterplot.   This is a collection of points that are not meant to imply a specific
 order that can be connected by a continuous line.    A full list of arguments are listed in
 <a class="reference internal" href="#plotopt-table"><em>Table of Plot Arguments</em></a>.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.clear">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the plot.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="add_text">
-<tt class="descname">add_text</tt><big>(</big><em>text</em>, <em>x</em>, <em>y</em>, <em>side='left'</em>, <em>rotation=None</em>, <em>ha='left'</em>, <em>va='center'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#add_text" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.add_text">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">add_text</tt><big>(</big><em>text</em>, <em>x</em>, <em>y</em>, <em>side='left'</em>, <em>rotation=None</em>, <em>ha='left'</em>, <em>va='center'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotpanel.add_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>add text to the plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -446,8 +455,8 @@ order that can be connected by a continuous line.    A full list of arguments ar
 </dd></dl>
 
 <dl class="method">
-<dt id="add_arrow">
-<tt class="descname">add_arrow</tt><big>(</big><em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>side='left'</em>, <em>shape='full'</em>, <em>fg='black'</em>, <em>wdith=0.01</em>, <em>head_width=0.1</em>, <em>overhang=0</em><big>)</big><a class="headerlink" href="#add_arrow" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.add_arrow">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">add_arrow</tt><big>(</big><em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>side='left'</em>, <em>shape='full'</em>, <em>fg='black'</em>, <em>wdith=0.01</em>, <em>head_width=0.1</em>, <em>overhang=0</em><big>)</big><a class="headerlink" href="#plotpanel.add_arrow" title="Permalink to this definition">¶</a></dt>
 <dd><p>draw arrow from (x1, y1) to (x2, y2).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -472,8 +481,8 @@ order that can be connected by a continuous line.    A full list of arguments ar
 </dd></dl>
 
 <dl class="method">
-<dt id="set_xylims">
-<tt class="descname">set_xylims</tt><big>(</big><em>limits</em><span class="optional">[</span>, <em>axes=None</em><span class="optional">[</span>, <em>side=None</em><span class="optional">[</span>, <em>autoscale=True</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#set_xylims" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_xylims">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_xylims</tt><big>(</big><em>limits</em><span class="optional">[</span>, <em>axes=None</em><span class="optional">[</span>, <em>side=None</em><span class="optional">[</span>, <em>autoscale=True</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#plotpanel.set_xylims" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the x and y limits for a plot based on a 2x2 list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -493,141 +502,141 @@ order that can be connected by a continuous line.    A full list of arguments ar
 </dd></dl>
 
 <dl class="method">
-<dt id="get_xylims">
-<tt class="descname">get_xylims</tt><big>(</big><big>)</big><a class="headerlink" href="#get_xylims" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.get_xylims">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">get_xylims</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.get_xylims" title="Permalink to this definition">¶</a></dt>
 <dd><p>return current x, y limits.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="unzoom">
-<tt class="descname">unzoom</tt><big>(</big><big>)</big><a class="headerlink" href="#unzoom" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.unzoom">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">unzoom</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.unzoom" title="Permalink to this definition">¶</a></dt>
 <dd><p>unzoom the plot.  The x, y limits for interactive zooms are stored, and this function unzooms one level.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="unzoom_all">
-<tt class="descname">unzoom_all</tt><big>(</big><big>)</big><a class="headerlink" href="#unzoom_all" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.unzoom_all">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">unzoom_all</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.unzoom_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>unzoom the plot to the full data range.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="set_title">
-<tt class="descname">set_title</tt><big>(</big><em>title</em><big>)</big><a class="headerlink" href="#set_title" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_title">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_title</tt><big>(</big><em>title</em><big>)</big><a class="headerlink" href="#plotpanel.set_title" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the plot title.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="set_xlabel">
-<tt class="descname">set_xlabel</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#set_xlabel" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_xlabel">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_xlabel</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#plotpanel.set_xlabel" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the label for the ordinate axis.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="set_ylabel">
-<tt class="descname">set_ylabel</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#set_ylabel" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_ylabel">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_ylabel</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#plotpanel.set_ylabel" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the label for the left-hand abscissa axis.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="set_y2label">
-<tt class="descname">set_y2label</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#set_y2label" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_y2label">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_y2label</tt><big>(</big><em>label</em><big>)</big><a class="headerlink" href="#plotpanel.set_y2label" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the label for the right-hand abscissa axis.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="set_bgcol">
-<tt class="descname">set_bgcol</tt><big>(</big><em>color</em><big>)</big><a class="headerlink" href="#set_bgcol" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.set_bgcol">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">set_bgcol</tt><big>(</big><em>color</em><big>)</big><a class="headerlink" href="#plotpanel.set_bgcol" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the background color for the PlotPanel.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="write_message">
-<tt class="descname">write_message</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#write_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>write a message to the messenger.  For a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> embedded in
-a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>, this will go the the Status Bar.</p>
+<dt id="plotpanel.write_message">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">write_message</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#plotpanel.write_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>write a message to the messenger.  For a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> embedded in
+a <tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt>, this will go the the Status Bar.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="save_figure">
-<tt class="descname">save_figure</tt><big>(</big><big>)</big><a class="headerlink" href="#save_figure" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.save_figure">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">save_figure</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.save_figure" title="Permalink to this definition">¶</a></dt>
 <dd><p>shows a File Dialog to save a PNG image of the current plot.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="configure">
-<tt class="descname">configure</tt><big>(</big><big>)</big><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.configure">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">configure</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>show plot configuration window for customizing plot.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="reset_config">
-<tt class="descname">reset_config</tt><big>(</big><big>)</big><a class="headerlink" href="#reset_config" title="Permalink to this definition">¶</a></dt>
+<dt id="plotpanel.reset_config">
+<tt class="descclassname">plotpanel.</tt><tt class="descname">reset_config</tt><big>(</big><big>)</big><a class="headerlink" href="#plotpanel.reset_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset the configuration to default settings.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="plotframe-a-wx-frame-showing-a-plotpanel">
-<h2><a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>: a wx.Frame showing a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a><a class="headerlink" href="#plotframe-a-wx-frame-showing-a-plotpanel" title="Permalink to this headline">¶</a></h2>
-<p>As mentioned above, a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> is a wx.Frame -- a separate plot
-window -- that contains a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a> and is decorated with a status
+<div class="section" id="module-plotframe">
+<span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a><a class="headerlink" href="#module-plotframe" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned above, a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a> is a wx.Frame -- a separate plot
+window -- that contains a <tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt> and is decorated with a status
 bar and menubar with menu items for saving, printing and configuring plots.
-It inherits many of the methods of a <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, and simply passes
-the arguments along to the corresponding methods of the <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>.</p>
+It inherits many of the methods of a <tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt>, and simply passes
+the arguments along to the corresponding methods of the <tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt>.</p>
 <dl class="class">
-<dt id="PlotFrame">
-<em class="property">class </em><tt class="descname">PlotFrame</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(700</em>, <em>450)</em><span class="optional">[</span>, <em>title=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#PlotFrame" title="Permalink to this definition">¶</a></dt>
+<dt id="plotframe.PlotFrame">
+<em class="property">class </em><tt class="descclassname">plotframe.</tt><tt class="descname">PlotFrame</tt><big>(</big><em>parent</em><span class="optional">[</span>, <em>size=(700</em>, <em>450)</em><span class="optional">[</span>, <em>title=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#plotframe.PlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a plot frame.  This frame will have a <tt class="xref py py-data docutils literal"><span class="pre">panel</span></tt> member
-holding the underlying <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>, and have menus and statusbar
+holding the underlying <tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt>, and have menus and statusbar
 for plot interaction.</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">plot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dt id="plotframe.plot">
+<tt class="descclassname">plotframe.</tt><tt class="descname">plot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotframe.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.plot</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dt id="plotframe.oplot">
+<tt class="descclassname">plotframe.</tt><tt class="descname">oplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotframe.oplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.oplot</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dt id="plotframe.scatterplot">
+<tt class="descclassname">plotframe.</tt><tt class="descname">scatterplot</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotframe.scatterplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.scatterplot</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">clear</tt><big>(</big><big>)</big></dt>
+<dt id="plotframe.clear">
+<tt class="descclassname">plotframe.</tt><tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#plotframe.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.clear</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">update_trace</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dt id="plotframe.update_trace">
+<tt class="descclassname">plotframe.</tt><tt class="descname">update_trace</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotframe.update_trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.update_trace</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">reset_config</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big></dt>
+<dt id="plotframe.reset_config">
+<tt class="descclassname">plotframe.</tt><tt class="descname">reset_config</tt><big>(</big><em>x</em>, <em>y</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#plotframe.reset_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passed to panel.reset_config</p>
 </dd></dl>
 
 </div>
-<div class="section" id="plotapp-a-wx-app-showing-a-plotframe">
-<h2><a class="reference internal" href="#PlotApp" title="PlotApp"><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt></a>: a wx.App showing a <a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a><a class="headerlink" href="#plotapp-a-wx-app-showing-a-plotframe" title="Permalink to this headline">¶</a></h2>
-<p>A <a class="reference internal" href="#PlotApp" title="PlotApp"><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt></a> is a wx.App -- an application -- that consists of a
-<a class="reference internal" href="#PlotFrame" title="PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a>.  This show a frame that is decorated with a status bar
+<div class="section" id="module-plotapp">
+<span id="plotapp-a-wx-app-showing-a-plotframe"></span><h2><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt></a><a class="headerlink" href="#module-plotapp" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="#plotapp.PlotApp" title="plotapp.PlotApp"><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt></a> is a wx.App -- an application -- that consists of a
+<tt class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></tt>.  This show a frame that is decorated with a status bar
 and menubar with menu items for saving, printing and configuring plots.</p>
 <dl class="class">
-<dt id="PlotApp">
-<em class="property">class </em><tt class="descname">PlotApp</tt><a class="headerlink" href="#PlotApp" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a plot application.  This has methods <a class="reference internal" href="#plot" title="plot"><tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt></a>, <a class="reference internal" href="#oplot" title="oplot"><tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt></a>, and
-<a class="reference internal" href="#write_message" title="write_message"><tt class="xref py py-meth docutils literal"><span class="pre">write_message()</span></tt></a>, which are sent to the underlying <a class="reference internal" href="#PlotPanel" title="PlotPanel"><tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt></a>.
+<dt id="plotapp.PlotApp">
+<em class="property">class </em><tt class="descclassname">plotapp.</tt><tt class="descname">PlotApp</tt><a class="headerlink" href="#plotapp.PlotApp" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a plot application.  This has methods <tt class="xref py py-meth docutils literal"><span class="pre">plot()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">oplot()</span></tt>, and
+<tt class="xref py py-meth docutils literal"><span class="pre">write_message()</span></tt>, which are sent to the underlying <tt class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></tt>.
 This allows very simple scripts which give plot interactivity and
 customization.</p>
 </dd></dl>
@@ -635,7 +644,11 @@ customization.</p>
 </div>
 <div class="section" id="examples-and-screenshots">
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
-<p>A basic plot can be made using a <a class="reference internal" href="#PlotApp" title="PlotApp"><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt></a> and a simple script like this:</p>
+<p>Here, a few examples and screenshots of the output of those examples are
+shown.</p>
+<div class="section" id="basic-example">
+<h3>Basic Example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h3>
+<p>A basic plot can be made using a <a class="reference internal" href="#plotapp.PlotApp" title="plotapp.PlotApp"><tt class="xref py py-class docutils literal"><span class="pre">PlotApp</span></tt></a> and a simple script like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
 <span class="c"># simple wxmplot example</span>
 
@@ -662,14 +675,80 @@ customization.</p>
 like this:</p>
 <img alt="_images/configuration_frame.png" src="_images/configuration_frame.png" style="width: 95%;" />
 <p>where all the options and fields show will dynamically change the plot shown in the PlotPanel.</p>
-<p>An example scatterplot looks like this:</p>
+</div>
+<div class="section" id="scatterplot-example">
+<h3>Scatterplot Example<a class="headerlink" href="#scatterplot-example" title="Permalink to this headline">¶</a></h3>
+<p>An example scatterplot can be produced with a script like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c">#</span>
+<span class="c"># scatterplot example, with lassoing and</span>
+<span class="c"># a user-level lasso-callback</span>
+
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">wxmplot</span>
+
+<span class="n">x</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mf">20.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">onlasso</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;:: lasso &#39;</span><span class="p">,</span> <span class="n">selected</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+
+<span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;Scatter Plot&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                   <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;$ x\, \mathrm{(\AA)}$&#39;</span><span class="p">,</span>
+                   <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;$ y\, \mathrm{(\AA^{-1})}$&#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lasso_callback</span> <span class="o">=</span> <span class="n">onlasso</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s">&#39;WXMPlot PlotFrame example: Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="c">#</span>
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and gives a plot (after having selected by &quot;lasso&quot;ing) that looks like this:</p>
 <img alt="_images/scatterplot.png" src="_images/scatterplot.png" style="width: 85%;" />
-<p>Many more examples are given in the <em>examples</em> directory in the source
-distribution kit.  The <em>demo.py</em> script there will show several 2D Plot
-panel examples, including a plot which uses a timer to simulate a dynamic
-plot, updating the plot as fast as it can - typically 10 to 30 times per
-second, depending on your machine.  The <em>stripchart.py</em> example script also
-shows a dynamic, time-based plot.</p>
+</div>
+<div class="section" id="using-left-and-right-axes">
+<h3>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Permalink to this headline">¶</a></h3>
+<p>An example using both right and left axes with different scales can be
+created with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c">#</span>
+<span class="c">#  example plot with left and right axes with different scales</span>
+
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">wxmplot</span>
+
+<span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+<span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
+
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;Test 2 Axes with different y scales&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;x (mm)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y1&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=-</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y2label</span><span class="o">=</span><span class="s">&#39;y2&#39;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and gives a plot that looks like this:</p>
+<img alt="_images/two_axes.png" src="_images/two_axes.png" style="width: 85%;" />
+</div>
+<div class="section" id="more-examples">
+<h3>More Examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">¶</a></h3>
+<p>These and several other examples are given in the <em>examples</em> directory in
+the source distribution kit.  The <em>demo.py</em> script there will show several
+2D Plot panel examples, including a plot which uses a timer to simulate a
+dynamic plot, updating the plot as fast as it can - typically 10 to 30
+times per second, depending on your machine.  The <em>stripchart.py</em> example
+script also shows a dynamic, time-based plot.</p>
+</div>
 </div>
 </div>
 
@@ -685,6 +764,9 @@ shows a dynamic, time-based plot.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
              >next</a> |</li>

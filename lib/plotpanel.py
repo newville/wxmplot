@@ -333,7 +333,7 @@ class PlotPanel(BasePanel):
             datlim = self.conf.get_trace_datarange(trace=trace0)
             for i in self.axes_traces[axes]:
                 l =  self.conf.get_trace_datarange(trace=i)
-                datlims= [min(datlim[0], l[0]), max(datlim[1], l[1]),
+                datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
                           min(datlim[2], l[2]), max(datlim[3], l[3])]
 
             xmin, xmax = axes.get_xlim()

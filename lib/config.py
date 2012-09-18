@@ -161,6 +161,13 @@ class PlotConfig:
                             'upper left', 'lower left',  'center left',
                             'upper center', 'lower center', 'center']
 
+        self.legend_abbrevs = {'ur': 'upper right' ,  'ul': 'upper left',
+                               'cr': 'center right',  'cr': 'center left',
+                               'lr': 'lower right',   'll': 'lower left',
+                               'uc': 'upper center',  'lc': 'lower center',
+                               'cc': 'center'}
+
+
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
 
@@ -405,4 +412,13 @@ class PlotConfig:
                                   prop=self.labelfont)
             self.mpl_legend.draw_frame(self.show_legend_frame)
         self.canvas.draw()
+
+    def set_legend_location(self, loc, onaxis):
+        "set legend location"
+        self.legend_onaxis = 'on axis'
+        if not onaxis: self.legend_onaxis = 'off axis'
+
+        if loc in self.legend_abbrevs: loc = self.legend_abbrevs[loc]
+        if loc in self.legend_locs:    self.legend_loc = loc
+
 

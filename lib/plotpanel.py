@@ -108,7 +108,8 @@ class PlotPanel(BasePanel):
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
-              autoscale=True, refresh=True, show_legend=None, **kws):
+              autoscale=True, refresh=True, show_legend=None,
+              legend_loc='ur', legend_on=True, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -130,6 +131,7 @@ class PlotPanel(BasePanel):
         if title  is not None:
             self.set_title(title)
         if show_legend is not None:
+            self.conf.set_legend_location(legend_loc, legend_on)
             self.conf.show_legend = show_legend
 
         if grid is not None:
@@ -215,13 +217,13 @@ class PlotPanel(BasePanel):
             axes = self.get_right_axes()
         axes.text(x, y, text, ha=ha, va=va,
                   rotation=rotation, family=family, **kws)
-        
+
     def add_arrow(self, x1, y1, x2, y2,  side='left',
                   shape='full', fg='black', width=0.01,
                   head_width=0.1, overhang=0, **kws):
         """add arrow supplied x, y position"""
         dx, dy = x2-x1, y2-y1
-        
+
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
@@ -333,14 +335,14 @@ class PlotPanel(BasePanel):
                 l =  self.conf.get_trace_datarange(trace=i)
                 datlims= [min(datlim[0], l[0]), max(datlim[1], l[1]),
                           min(datlim[2], l[2]), max(datlim[3], l[3])]
-           
+
             xmin, xmax = axes.get_xlim()
             ymin, ymax = axes.get_ylim()
             limits = [min(datlim[0], xmin),
                       max(datlim[1], xmax),
                       min(datlim[2], ymin),
                       max(datlim[3], ymax)]
-            
+
 
             if (self.user_limits[axes] != 4*[None] or
                 len(self.zoom_lims) > 0):
@@ -356,13 +358,13 @@ class PlotPanel(BasePanel):
                 axes.set_xlim((xmin, xmax), emit=True)
                 axes.set_ylim((ymin, ymax), emit=True)
 
-# 
+#
 #             implicit_limits = ( len(self.zoom_lims) == 0 and
 #                                 self.user_limits[axes] == [None]*4)
-#                 
+#
 #             # axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
 #             # axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
-# 
+#
 #             if implicit_limits:
 #                 xmin, xmax = axes.get_xlim()
 #                 ymin, ymax = axes.get_ylim()
@@ -371,7 +373,7 @@ class PlotPanel(BasePanel):
             #    self.zoom_lims.append({axes: [xmin, xmax, ymin, ymax]})
 
 
-                
+
     def get_viewlimits(self, axes=None):
         if axes is None: axes = self.axes
         xmin, xmax = axes.get_xlim()

@@ -162,7 +162,7 @@ class PlotConfig:
                             'upper center', 'lower center', 'center']
 
         self.legend_abbrevs = {'ur': 'upper right' ,  'ul': 'upper left',
-                               'cr': 'center right',  'cr': 'center left',
+                               'cr': 'center right',  'cl': 'center left',
                                'lr': 'lower right',   'll': 'lower left',
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}

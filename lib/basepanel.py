@@ -177,7 +177,7 @@ class BasePanel(wx.Panel):
             ofile = ofile.replace(c, '_')
 
         ofile = ofile + '.png'
-
+        orig_dir = os.path.abspath(os.curdir)
         dlg = wx.FileDialog(self, message='Save Plot Figure as...',
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,
@@ -190,6 +190,7 @@ class BasePanel(wx.Panel):
             if (path.find(self.launch_dir) ==  0):
                 path = path[len(self.launch_dir)+1:]
             self.write_message('Saved plot to %s' % path)
+        os.chdir(orig_dir)
 
     def set_bg(self, color= None):
         if color is None:

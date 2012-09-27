@@ -25,7 +25,7 @@ Valid marker names are:
 """
 
 from matplotlib.font_manager import FontProperties
-from matplotlib import rcParams, pyparsing
+from matplotlib import rcParams
 import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists

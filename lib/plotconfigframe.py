@@ -12,7 +12,6 @@ import matplotlib
 from matplotlib import rcParams
 from matplotlib.colors import colorConverter
 from matplotlib.font_manager import fontManager, FontProperties
-from matplotlib.pyparsing import ParseFatalException
 from matplotlib.colors import colorConverter
 to_rgba = colorConverter.to_rgba
 
@@ -180,7 +179,7 @@ class PlotConfigFrame(wx.Frame):
 
         #bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
         #bok.Bind(wx.EVT_BUTTON,self.onExit)
-        
+
         #btnsizer = wx.BoxSizer(wx.HORIZONTAL)
         #btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
 
@@ -270,7 +269,7 @@ class PlotConfigFrame(wx.Frame):
         # panel = wx.Panel(parent)
         panel = scrolled.ScrolledPanel(parent, size=(800, 200),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
-        
+
         if font is None:
             font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
@@ -480,7 +479,7 @@ class PlotConfigFrame(wx.Frame):
                 kws = {argu: s}
                 self.conf.relabel(**kws)
                 wid.SetBackgroundColour((255, 255, 255))
-            except ParseFatalException: # as from latex error!
+            except: # as from latex error!
                 wid.SetBackgroundColour((250, 250, 200))
         elif argu[:6] == 'trace ':
             try:

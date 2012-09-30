@@ -208,15 +208,20 @@ class PlotPanel(BasePanel):
         conf.ntrace = conf.ntrace + 1
         return _lines
 
-    def add_text(self, text, x, y, side='left',
+    def add_text(self, text, x, y, side='left', size=None,
                  rotation=None, ha='left', va='center',
                  family=None, **kws):
         """add text at supplied x, y position"""
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
-        axes.text(x, y, text, ha=ha, va=va,
-                  rotation=rotation, family=family, **kws)
+        dynamic_size = False
+        if size is None:
+            size = self.conf.legendfont.get_size()
+            dynamic_size = True
+        t = axes.text(x, y, text, ha=ha, va=va, size=size,
+                      rotation=rotation, family=family, **kws)
+        self.conf.added_texts.append((dynamic_size, t))
 
     def add_arrow(self, x1, y1, x2, y2,  side='left',
                   shape='full', color='black',

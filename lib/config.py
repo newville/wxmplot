@@ -180,6 +180,7 @@ class PlotConfig:
         self.xlabel = ' '
         self.ylabel = ' '
         self.y2label = ' '
+        self.added_texts = []
         self.plot_type = 'lineplot'
         self.cursor_mode = 'zoom'
         self.scatter_size = 6
@@ -294,18 +295,16 @@ class PlotConfig:
         for ax in axes[0].xaxis, axes[0].yaxis:
             for t in (ax.get_ticklabels() + ax.get_ticklines()):
                 t.set_color(self.textcolor)
+        self.set_added_text_size()
         self.canvas.draw()
 
-#         fr =  axes[0].get_frame()
-#         print 'Frame'
-#         showobj(fr)
-#         print fr.set_edgecolor('#00AA22')
-#         print fr.get_edgecolor()
-#         print fr.get_axes()
-#         showobj(axes[0])
-#         #         print 'Xaxis'
-#         showobj(axes[0].xaxis)
 
+    def set_added_text_size(self):
+        # for text added to plot, reset font size to match legend
+        n = self.legendfont.get_size()
+        for dynamic, txt in self.added_texts:
+            if dynamic:
+                txt.set_fontsize(n)
 
     def refresh_trace(self,trace=None):
         trace = self.__gettrace(trace)
@@ -405,6 +404,7 @@ class PlotConfig:
                                   loc=self.legend_loc,
                                   prop=self.legendfont)
             self.mpl_legend.draw_frame(self.show_legend_frame)
+        self.set_added_text_size()
         self.canvas.draw()
 
     def set_legend_location(self, loc, onaxis):

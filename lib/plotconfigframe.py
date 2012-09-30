@@ -79,23 +79,34 @@ class PlotConfigFrame(wx.Frame):
                                action = Closure(self.onText, argu='xlabel'))
 
         topsizer.Add(self.titl.label, (1, 0), (1, 1), labstyle, 5)
-        topsizer.Add(self.titl,       (1, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.titl,       (1, 1), (1, 4), labstyle, 5)
         topsizer.Add(self.ylab.label, (2, 0), (1, 1), labstyle, 5)
-        topsizer.Add(self.ylab,       (2, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.ylab,       (2, 1), (1, 4), labstyle, 5)
         topsizer.Add(self.y2lab.label,(3, 0), (1, 1), labstyle, 5)
-        topsizer.Add(self.y2lab,      (3, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.y2lab,      (3, 1), (1, 4), labstyle, 5)
         topsizer.Add(self.xlab.label, (4, 0), (1, 1), labstyle, 5)
-        topsizer.Add(self.xlab,       (4, 1), (1, 5), labstyle, 5)
+        topsizer.Add(self.xlab,       (4, 1), (1, 4), labstyle, 5)
 
 
-        tl2 = wx.StaticText(panel, -1, 'Text Size:', size=(-1, -1), style=labstyle)
+        tl2 = wx.StaticText(panel, -1, 'Label text size:', size=(-1, -1),
+                            style=labstyle)
         txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (55, 30))
-        txt_size.SetRange(5, 30)
+        txt_size.SetRange(2, 20)
         txt_size.SetValue(self.conf.labelfont.get_size())
-        txt_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='size'))
+        txt_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='labelsize'))
 
-        topsizer.Add(tl2,        (1, 6), (1, 1), labstyle, 2)
-        topsizer.Add(txt_size,   (1, 7), (1, 1), labstyle, 2)
+        topsizer.Add(tl2,        (1, 5), (1, 1), labstyle, 2)
+        topsizer.Add(txt_size,   (1, 6), (1, 1), labstyle, 2)
+
+        tl2 = wx.StaticText(panel, -1, 'Legend text size:', size=(-1, -1),
+                            style=labstyle)
+        leg_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (55, 30))
+        leg_size.SetRange(2, 20)
+        leg_size.SetValue(self.conf.legendfont.get_size())
+        leg_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='legendsize'))
+
+        topsizer.Add(tl2,        (2, 5), (1, 1), labstyle, 2)
+        topsizer.Add(leg_size,   (2, 6), (1, 1), labstyle, 2)
 
 
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
@@ -110,9 +121,9 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
-        topsizer.Add(show_grid, (2, 6), (1, 2), labstyle, 2)
-        topsizer.Add(show_leg,  (3, 6), (1, 2), labstyle, 2)
-        topsizer.Add(show_lfr,  (4, 6), (1, 2), labstyle, 2)
+        topsizer.Add(show_grid, (4, 5), (1, 1), labstyle, 2)
+        topsizer.Add(show_leg,  (3, 5), (1, 1), labstyle, 2)
+        topsizer.Add(show_lfr,  (3, 6), (1, 1), labstyle, 2)
 
 
         tcol = wx.StaticText(panel, -1, 'Colors',style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
@@ -441,7 +452,7 @@ class PlotConfigFrame(wx.Frame):
         self.canvas.draw()
 
     def onText(self, event, argu=''):
-        if argu=='size':
+        if argu=='labelsize':
             size = event.GetInt()
             self.conf.labelfont.set_size(size)
             self.conf.titlefont.set_size(size+1)
@@ -449,6 +460,12 @@ class PlotConfigFrame(wx.Frame):
                 for lab in ax.get_xticklabels()+ax.get_yticklabels():
                     lab.set_fontsize(size)
             self.conf.relabel()
+            return
+        if argu=='legendsize':
+            size = event.GetInt()
+            self.conf.legendfont.set_size(size)
+            # self.conf.relabel()
+            self.conf.draw_legend()
             return
         if argu == 'title':
             wid = self.titl

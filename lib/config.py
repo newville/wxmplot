@@ -201,6 +201,8 @@ class PlotConfig:
         f0 =  FontProperties()
         self.labelfont = f0.copy()
         self.titlefont = f0.copy()
+        self.legendfont = f0.copy()
+        self.legendfont.set_size(7)
         self.labelfont.set_size(9)
         self.titlefont.set_size(10)
         self.textcolor = '#000000'
@@ -264,7 +266,7 @@ class PlotConfig:
         return trace
 
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
-        " re draw labels (title, x,y labels)"
+        " re draw labels (title, x, y labels)"
         n = self.labelfont.get_size()
 
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
@@ -288,14 +290,6 @@ class PlotConfig:
         if (len(axes) > 1 and len(self.y2label) > 0 and
             self.y2label not in ('', None, 'None')):
             axes[1].set_ylabel(self.y2label, **kws)
-
-
-        def showobj(o):
-            print '============ ', o
-            for i in dir(o):
-                if i.startswith('get'):
-                    print i, getattr(o, i)
-            print '============'
 
         for ax in axes[0].xaxis, axes[0].yaxis:
             for t in (ax.get_ticklabels() + ax.get_ticklines()):
@@ -367,7 +361,6 @@ class PlotConfig:
             ax.grid(False)
         self.canvas.draw()
 
-
     def draw_legend(self, show=None):
         "redraw the legend"
         if show is not None:
@@ -393,7 +386,8 @@ class PlotConfig:
         lins = []
         for ax in axes:
             for xline in ax.get_lines():
-                if xline.get_label() != '_nolegend_':
+                xlab = xline.get_label()
+                if (xlab != '_nolegend_' and len(xlab)>0):
                     lins.append(xline)
 
         for l in lins:
@@ -409,7 +403,7 @@ class PlotConfig:
         if self.show_legend:
             self.mpl_legend = lgn(lins, labs,
                                   loc=self.legend_loc,
-                                  prop=self.labelfont)
+                                  prop=self.legendfont)
             self.mpl_legend.draw_frame(self.show_legend_frame)
         self.canvas.draw()
 

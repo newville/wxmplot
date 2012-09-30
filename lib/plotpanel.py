@@ -219,8 +219,8 @@ class PlotPanel(BasePanel):
                   rotation=rotation, family=family, **kws)
 
     def add_arrow(self, x1, y1, x2, y2,  side='left',
-                  shape='full', color='black', width=0.01,
-                  head_width=0.03, overhang=0, **kws):
+                  shape='full', color='black',
+                  width=0.01, head_width=0.03, overhang=0, **kws):
         """add arrow supplied x, y position"""
         dx, dy = x2-x1, y2-y1
 
@@ -231,7 +231,7 @@ class PlotPanel(BasePanel):
                    length_includes_head=True,
                    fc=color, edgecolor=color,
                    width=width, head_width=head_width,
-                   overhang=overhang)
+                   overhang=overhang, **kws)
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,

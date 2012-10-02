@@ -51,25 +51,25 @@ Also, these key bindings can be used
 
 """
 
-    about_msg =  """WXMPlot  version 0.9.8
+    about_msg =  """WXMPlot  version 0.9.10
 Matt Newville <newville@cars.uchicago.edu>"""
 
-    def __init__(self, parent=None, panel=None, title='',
-                 size=(700,450), dpi=150,
+    def __init__(self, parent=None, panel=None, title='', size=None,
                  axissize=None, axisbg=None, exit_callback=None,
                  output_title='Plot', **kws):
-
+        if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
         wx.Frame.__init__(self, parent, -1, title, **kws)
+
+        self.SetMinSize((250, 250))
         self.output_title = output_title
         self.exit_callback = exit_callback
         self.parent = parent
         self.panel  = panel
         self.menuIDs = Menu_IDs()
         self.top_menus = {'File':None,'Help':None}
-        self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
-        self.dpi = dpi
+        self.size = size
         self.axissize = axissize
         self.axisbg = axisbg
         self.Build_DefaultUserMenus()
@@ -134,8 +134,7 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.BuildMenu()
-        self.panel = PlotPanel(self,  dpi=self.dpi,
-                               figsize=self.figsize,
+        self.panel = PlotPanel(self, size=self.size,
                                axissize=self.axissize,
                                axisbg=self.axisbg,
                                output_title=self.output_title)

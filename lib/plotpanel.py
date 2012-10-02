@@ -28,11 +28,12 @@ class PlotPanel(BasePanel):
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
-    def __init__(self, parent,
-                 figsize=(4.00, 2.48), dpi=150,
+    def __init__(self, parent, size=None, dpi=150,
                  axissize=None, axisbg=None,
                  trace_color_callback=None,
                  output_title='plot', **kws):
+
+        if size is None: size=(700, 450)
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -51,7 +52,7 @@ class PlotPanel(BasePanel):
         self.cursor_callback = None
         self.lasso_callback = None
         self.parent    = parent
-        self.figsize = figsize
+        self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi     = dpi
 
         if axissize is None:  axissize = [0.16, 0.16, 0.72, 0.75]

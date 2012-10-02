@@ -51,12 +51,12 @@ Also, these key bindings can be used
 
 """
 
-
     about_msg =  """WXMPlot  version 0.9.8
 Matt Newville <newville@cars.uchicago.edu>"""
 
     def __init__(self, parent=None, panel=None, title='',
-                 size=(700,450), exit_callback=None,
+                 size=(700,450), dpi=150,
+                 axissize=None, axisbg=None, exit_callback=None,
                  output_title='Plot', **kws):
 
         kws['style'] = wx.DEFAULT_FRAME_STYLE
@@ -68,6 +68,10 @@ Matt Newville <newville@cars.uchicago.edu>"""
         self.panel  = panel
         self.menuIDs = Menu_IDs()
         self.top_menus = {'File':None,'Help':None}
+        self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
+        self.dpi = dpi
+        self.axissize = axissize
+        self.axisbg = axisbg
         self.Build_DefaultUserMenus()
 
     def write_message(self,s,panel=0):
@@ -130,7 +134,10 @@ Matt Newville <newville@cars.uchicago.edu>"""
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.BuildMenu()
-        self.panel = PlotPanel(self,
+        self.panel = PlotPanel(self,  dpi=self.dpi,
+                               figsize=self.figsize,
+                               axissize=self.axissize,
+                               axisbg=self.axisbg,
                                output_title=self.output_title)
         self.panel.messenger = self.write_message
         sizer.Add(self.panel, 1, wx.EXPAND)

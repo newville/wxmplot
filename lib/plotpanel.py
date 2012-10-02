@@ -28,8 +28,9 @@ class PlotPanel(BasePanel):
     For more features, see PlotFrame, which embeds a PlotPanel
     and also provides, a Menu, StatusBar, and Printing support.
     """
-    def __init__(self, parent, size=(4.00, 2.48), dpi=150,
-                 axis_size=None, axisbg=None,
+    def __init__(self, parent,
+                 figsize=(4.00, 2.48), dpi=150,
+                 axissize=None, axisbg=None,
                  trace_color_callback=None,
                  output_title='plot', **kws):
 
@@ -50,19 +51,18 @@ class PlotPanel(BasePanel):
         self.cursor_callback = None
         self.lasso_callback = None
         self.parent    = parent
-        self.figsize = size
+        self.figsize = figsize
         self.dpi     = dpi
 
-        if axis_size is None:  axis_size = [0.16, 0.16, 0.72, 0.75]
+        if axissize is None:  axissize = [0.16, 0.16, 0.72, 0.75]
         if axisbg is None:     axisbg='#FEFFFE'
         self.axisbg = axisbg
-        self.axis_size = axis_size
+        self.axissize = axissize
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
         self.data_range = {}
         self.zoom_lims = []
         self.axes_traces = {}
-
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
@@ -192,7 +192,11 @@ class PlotPanel(BasePanel):
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle)
 
-        conf.lines[n] = _lines
+        if n < len(conf.lines):
+            conf.lines[n] = _lines
+        else:
+            conf._init_trace(n, 'black', solid)
+            conf.lines[n] = _lines
 
         # now set plot limits:
         self.set_viewlimits()
@@ -222,6 +226,7 @@ class PlotPanel(BasePanel):
         t = axes.text(x, y, text, ha=ha, va=va, size=size,
                       rotation=rotation, family=family, **kws)
         self.conf.added_texts.append((dynamic_size, t))
+        self.canvas.draw()
 
     def add_arrow(self, x1, y1, x2, y2,  side='left',
                   shape='full', color='black',
@@ -237,6 +242,7 @@ class PlotPanel(BasePanel):
                    fc=color, edgecolor=color,
                    width=width, head_width=head_width,
                    overhang=overhang, **kws)
+        self.canvas.draw()
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,
@@ -296,7 +302,6 @@ class PlotPanel(BasePanel):
         else:
             axes.grid(False)
         self.set_viewlimits()
-
         self.canvas.draw()
 
     def lassoHandler(self, vertices):
@@ -434,7 +439,7 @@ class PlotPanel(BasePanel):
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
-        self.axes  = self.fig.add_axes(self.axis_size, axisbg=self.axisbg)
+        self.axes  = self.fig.add_axes(self.axissize, axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 

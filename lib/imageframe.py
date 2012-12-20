@@ -19,11 +19,11 @@ class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
     """
-    def __init__(self, parent=None, size=(550, 450),
+    def __init__(self, parent=None, size=None,
                  config_on_frame=True, lasso_callback=None,
                  show_xsections=True,
                  output_title='Image',   **kws):
-
+        if size is None: size = (550, 450)
         self.config_on_frame = config_on_frame
         self.lasso_callback = lasso_callback
         BaseFrame.__init__(self, parent=parent,

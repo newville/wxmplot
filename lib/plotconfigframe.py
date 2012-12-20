@@ -300,7 +300,7 @@ class PlotConfigFrame(wx.Frame):
             argu  = "trace %i" % i
             lin  = self.conf.traces[i]
             dlab = lin.label
-            dcol = lin.color
+            dcol = hexcolor(lin.color)
             dthk = lin.linewidth
             dmsz = lin.markersize
             dsty = lin.style

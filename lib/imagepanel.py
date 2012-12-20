@@ -77,7 +77,7 @@ class ImagePanel(BasePanel):
             self.ylab = ylabel
         self.conf.data = data
 
-        wx.CallAfter(self.calc_indices)
+        # wx.CallAfter(self.calc_indices)
         cmap = self.conf.cmap
         if self.conf.style == 'contour':
             if levels is None:

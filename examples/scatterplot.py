@@ -2,10 +2,15 @@
 #
 # scatterplot example, with lassoing and
 # a user-level lasso-callback
+import sys
+if not hasattr(sys, 'frozen'):
+    import wxversion
+    wxversion.ensureMinimal('2.8')
+
+import wxmplot
 
 import wx
 import numpy
-import wxmplot
 
 x   = numpy.arange(100)/20.0 + numpy.random.random(size=100)
 y   = numpy.random.random(size=len(x))

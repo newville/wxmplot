@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-# try:
-#     import lib.__version__ as version
-# except:
-#     version = 'unknown'
+try:
+    from lib import __version__ as version
+except:
+    version = 'unknown'
 
 long_desc = ''' A library for wxPython based on matplotlib for
 high-level, richly featured 2-D plotting and displaying 3-D data
@@ -13,7 +13,7 @@ Frame provide high-quality plots and allow some user interaction
 and customization of the plots.'''
 
 setup(name = 'wxmplot',
-      version = '0.9.10',
+      version = version,
       author = 'Matthew Newville',
       author_email = 'newville@cars.uchicago.edu',
       url = 'http://newville.github.com/wxmplot/',

@@ -64,8 +64,18 @@ and provides these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.10'
-__date__     = '2-Sept-2012'
+__version__  = '0.9.11'
+__date__     = '2013-Jan-8'
+
+import sys
+try:
+    if not hasattr(sys, 'frozen'):
+        import wxversion
+        wxversion.ensureMinimal('2.8')
+except ImportError:
+    pass
+except: # probably a useless exception from ensureMinimal() about wx already being Imported.
+    pass
 
 from plotframe import PlotFrame
 from plotpanel import PlotPanel

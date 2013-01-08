@@ -1,6 +1,10 @@
 #!/usr/bin/python
 import time
 import numpy as np
+import sys
+if not hasattr(sys, 'frozen'):
+    import wxversion
+    wxversion.ensureMinimal('2.8')
 
 import wx
 from wx.lib import masked

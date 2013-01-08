@@ -1,3 +1,8 @@
+import sys
+if not hasattr(sys, 'frozen'):
+    import wxversion
+    wxversion.ensureMinimal('2.8')
+
 import wx
 import numpy
 import Image

@@ -31,13 +31,3 @@ setup(name = 'wxmplot',
       package_dir = {'wxmplot': 'lib'},
       packages = ['wxmplot'],
 )
-
-m = '''
-Author: Matthew Newville
-Author-email: newville@cars.uchicago.edu
-Platform: Windows, Linux, Mac OS X
-Download-url: http://newville.github.com/wxmplot/
-Intended Audience :: Science/Research
-
-
-'''

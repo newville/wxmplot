@@ -3,6 +3,7 @@
 ## MPlot PlotFrame: a wx.Frame for 2D line plotting, using matplotlib
 ##
 
+from . import __version__
 import os
 import time
 import wx
@@ -51,8 +52,8 @@ Also, these key bindings can be used
 
 """
 
-    about_msg =  """WXMPlot  version 0.9.10
-Matt Newville <newville@cars.uchicago.edu>"""
+    about_msg =  """WXMPlot  version %s
+Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
                  axissize=None, axisbg=None, exit_callback=None,

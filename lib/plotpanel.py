@@ -338,14 +338,22 @@ class PlotPanel(BasePanel):
 
     def set_viewlimits(self, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
-        for axes in self.fig.get_axes():
 
-            trace0 = self.axes_traces[axes][0]
+        trace0 = None
+        while trace0 is None:
+            for axes in self.fig.get_axes():
+                if (axes in self.axes_traces and
+                   len(self.axes_traces[axes]) > 0):
+                    trace0 = self.axes_traces[axes][0]
+                    break
+
+        for axes in self.fig.get_axes():
             datlim = self.conf.get_trace_datarange(trace=trace0)
-            for i in self.axes_traces[axes]:
-                l =  self.conf.get_trace_datarange(trace=i)
-                datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
-                          min(datlim[2], l[2]), max(datlim[3], l[3])]
+            if axes in self.axes_traces:
+                for i in self.axes_traces[axes]:
+                    l =  self.conf.get_trace_datarange(trace=i)
+                    datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
+                              min(datlim[2], l[2]), max(datlim[3], l[3])]
 
             xmin, xmax = axes.get_xlim()
             ymin, ymax = axes.get_ylim()
@@ -354,9 +362,9 @@ class PlotPanel(BasePanel):
                       min(datlim[2], ymin),
                       max(datlim[3], ymax)]
 
-
-            if (self.user_limits[axes] != 4*[None] or
-                len(self.zoom_lims) > 0):
+            if (axes in self.user_limits and
+                (self.user_limits[axes] != 4*[None] or
+                len(self.zoom_lims) > 0)):
 
                 for i, val in enumerate(self.user_limits[axes]):
                     if val is not None:
@@ -365,25 +373,8 @@ class PlotPanel(BasePanel):
                 if len(self.zoom_lims) > 0:
                     limits_set = True
                     xmin, xmax, ymin, ymax = self.zoom_lims[-1][axes]
-
                 axes.set_xlim((xmin, xmax), emit=True)
                 axes.set_ylim((ymin, ymax), emit=True)
-
-#
-#             implicit_limits = ( len(self.zoom_lims) == 0 and
-#                                 self.user_limits[axes] == [None]*4)
-#
-#             # axes.set_xbound(axes.xaxis.get_major_locator().view_limits(xmin, xmax))
-#             # axes.set_ybound(axes.yaxis.get_major_locator().view_limits(ymin, ymax))
-#
-#             if implicit_limits:
-#                 xmin, xmax = axes.get_xlim()
-#                 ymin, ymax = axes.get_ylim()
-# ;
-            #if len(self.zoom_lims) == 0:
-            #    self.zoom_lims.append({axes: [xmin, xmax, ymin, ymax]})
-
-
 
     def get_viewlimits(self, axes=None):
         if axes is None: axes = self.axes

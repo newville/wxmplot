@@ -42,6 +42,7 @@ class ImagePanel(BasePanel):
         self.cursor_callback = None
         self.contour_callback = None
         self.win_config = None
+        self.data_shape = None
         self.figsize = size
         self.dpi     = dpi
         self.xlab    = 'X'
@@ -61,6 +62,7 @@ class ImagePanel(BasePanel):
             self.conf.style = style
         self.axes.cla()
         self.conf.rot = False
+        self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
         if x is not None:
             self.xdata = np.array(x)
@@ -339,8 +341,13 @@ class ImagePanel(BasePanel):
                 pos = ' %s=%.4g,' % (self.xlab, self.xdata[ix])
             if self.ydata is not None:
                 pos = '%s %s=%.4g,' % (pos, self.ylab, self.ydata[iy])
-            msg = "Pixel [%i, %i],%s Intensity=%.4g " % (ix, iy, pos,
-                                                         self.conf.data[iy, ix])
+            dval = self.conf.data[iy, ix]
+            if len(self.data_shape) == 3:
+                dval = "%.4g, %.4g, %.4g" % tuple(dval)
+            else:
+                dval = "%.4g" % dval
+            msg = "Pixel [%i, %i],%s Intensity=%s " % (ix, iy, pos, dval)
+
             self.write_message(msg, panel=0)
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)

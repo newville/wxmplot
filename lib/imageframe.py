@@ -35,6 +35,12 @@ class ImageFrame(BaseFrame):
         """plot after clearing current plot """
         if title is not None:
             self.SetTitle(title)
+        if len(img.shape) == 3:
+            for comp in self.config_panel.Children:
+                comp.Disable()
+        else:
+            for comp in self.config_panel.Children:
+                comp.Enable()
         self.panel.display(img, style=style, **kw)
         if colormap is not None:
             self.set_colormap(name=colormap)
@@ -158,9 +164,7 @@ class ImageFrame(BaseFrame):
             mainsizer.Add(xinfo, (0, 2), (1, 1), wx.EXPAND)
             mainsizer.Add(xside, (1, 2), (1, 1), wx.EXPAND)
 
-
         self.panel.messenger = self.write_message
-
         self.panel.fig.set_facecolor(self.bgcol)
 
         mainsizer.Add(self.panel, 1,  wx.EXPAND)
@@ -180,6 +184,7 @@ class ImageFrame(BaseFrame):
         lpanel = wx.Panel(self)
         lsizer = wx.GridBagSizer(7, 4)
 
+        self.config_panel = lpanel
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
 
         # interp_choice =  wx.Choice(lpanel, choices=Interp_List)

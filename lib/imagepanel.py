@@ -239,7 +239,12 @@ class ImagePanel(BasePanel):
         """calculates and stores the set of indices
         ix=[0, nx-1], iy=[0, ny-1] for data of shape (nx, ny)"""
         if self.conf.data is not None:
-            ny, nx = self.conf.data.shape
+            shape = self.conf.data.shape
+            if len(shape) == 2:
+                ny, nx = shape
+            elif len(shape) == 3:
+                ny, nx, nchan = shape
+
             inds = []
             for iy in range(ny):
                 inds.extend([(iy, ix) for ix in range(nx)])

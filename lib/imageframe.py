@@ -35,19 +35,21 @@ class ImageFrame(BaseFrame):
         """plot after clearing current plot """
         if title is not None:
             self.SetTitle(title)
-        if len(img.shape) == 3:
-            for comp in self.config_panel.Children:
-                comp.Disable()
-        else:
-            for comp in self.config_panel.Children:
-                comp.Enable()
+        if self.config_on_frame:
+            if len(img.shape) == 3:
+                for comp in self.config_panel.Children:
+                    comp.Disable()
+            else:
+                for comp in self.config_panel.Children:
+                    comp.Enable()
         self.panel.display(img, style=style, **kw)
         if colormap is not None:
             self.set_colormap(name=colormap)
         contour_value = 0
         if style == 'contour':
             contour_value = 1
-        self.contour_toggle.SetValue(contour_value)
+        if self.config_on_frame:
+            self.contour_toggle.SetValue(contour_value)
         self.panel.redraw()
 
     def BuildCustomMenus(self):
@@ -347,8 +349,9 @@ class ImageFrame(BaseFrame):
 
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
-        self.imin_val.SetValue("%.4g" % imin)
-        self.imax_val.SetValue("%.4g" % imax)
+        if self.config_on_frame:
+            self.imin_val.SetValue("%.4g" % imin)
+            self.imax_val.SetValue("%.4g" % imax)
         self.panel.conf.int_lo = imin
         self.panel.conf.int_hi = imax
 

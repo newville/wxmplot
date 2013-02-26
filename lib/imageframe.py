@@ -132,10 +132,10 @@ class ImageFrame(BaseFrame):
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
-        sfont.SetPointSize(12)
+        sfont.SetPointSize(10)
         sbar.SetFont(sfont)
 
-        self.SetStatusWidths([-3, -1])
+        self.SetStatusWidths([-2, -1])
         self.SetStatusText('', 0)
 
         self.BuildCustomMenus()

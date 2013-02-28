@@ -3,19 +3,26 @@ import os
 import numpy
 
 import matplotlib.cm as colormap
+from .colors import register_custom_colormaps
 from matplotlib.font_manager import FontProperties
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-ColorMap_List = []
+ColorMap_List = ['gray']
 ColorContour_List = []
 
-for cm in ('gray', 'coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
+cm_names = register_custom_colormaps()
+
+for cm in cm_names:
+    ColorMap_List.append(cm)
+
+for cm in ('coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
            'Blues', 'copper', 'spring', 'summer', 'autumn', 'winter',
            'hsv', 'Spectral', 'gist_earth', 'gist_yarg', 'gist_rainbow',
            'gist_heat', 'gist_stern', 'ocean', 'terrain', 'PiYG', 'PRGn',
            'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu',
            'RdYlBu', 'RdYlGn'):
+
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 

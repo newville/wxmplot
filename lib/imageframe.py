@@ -5,6 +5,7 @@ wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 import os
 import wx
 import numpy
+from   matplotlib.cm import get_cmap
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
@@ -400,7 +401,11 @@ class ImageFrame(BaseFrame):
         elif not conf.cmap_reverse and name.endswith('_r'):
             name = name[:-2]
         cmap_name = name
-        conf.cmap = getattr(colormap, name)
+        try:
+            conf.cmap = get_cmap(name)
+        except:
+            conf.cmap = getattr(colormap, name)
+
         if hasattr(conf, 'contour'):
             xname = 'gray'
             if cmap_name == 'gray_r':

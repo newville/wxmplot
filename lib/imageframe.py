@@ -452,6 +452,7 @@ class ImageFrame(BaseFrame):
         self.panel.conf.cmap_lo = lo
         self.panel.conf.cmap_hi = hi
         self.redraw_cmap()
+        self.panel.redraw()
 
     def onLogScale(self, event=None):
         self.panel.conf.log_scale = not self.panel.conf.log_scale

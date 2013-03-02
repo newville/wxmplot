@@ -227,10 +227,10 @@ class ImagePanel(BasePanel):
 
     def toggle_curmode(self, event=None):
         "toggle cursor mode"
-        if self.conf.cursor_mode == 'zoom':
-            self.conf.cursor_mode = 'lasso'
+        if self.cursor_mode == 'zoom':
+            self.cursor_mode = 'lasso'
         else:
-            self.conf.cursor_mode = 'zoom'
+            self.cursor_mode = 'zoom'
 
     ####
     ## GUI events, overriding BasePanel components
@@ -332,7 +332,7 @@ class ImagePanel(BasePanel):
             conf.image.set_interpolation(conf.interp)
         self.canvas.draw()
 
-    def reportLeftDown(self,event=None):
+    def report_leftdown(self,event=None):
         if event == None:
             return
         ix, iy = round(event.xdata), round(event.ydata)

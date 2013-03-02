@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 # simple example of MPlot
-
+import sys
 if not hasattr(sys, 'frozen'):
     import wxversion
     wxversion.ensureMinimal('2.8')

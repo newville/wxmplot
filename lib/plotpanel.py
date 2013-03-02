@@ -86,7 +86,7 @@ class PlotPanel(BasePanel):
         if side == 'right':
             axes = self.get_right_axes()
         self.conf.ntrace  = 0
-        self.conf.cursor_mode = 'zoom'
+        self.cursor_mode = 'zoom'
         self.conf.plot_type = 'lineplot'
         self.user_limits[axes] = [None, None, None, None]
 
@@ -266,7 +266,7 @@ class PlotPanel(BasePanel):
             self.lasso_callback = callback
 
         self.conf.plot_type = 'scatter'
-        self.conf.cursor_mode = 'lasso'
+        self.cursor_mode = 'lasso'
         if color is not None:
             self.conf.scatter_normalcolor = color
         if edgecolor is not None:
@@ -306,6 +306,7 @@ class PlotPanel(BasePanel):
         self.canvas.draw()
 
     def lassoHandler(self, vertices):
+        # print 'plotpanel.lassoHandler'
         conf = self.conf
         fcols = conf.scatter_coll.get_facecolors()
         ecols = conf.scatter_coll.get_edgecolors()
@@ -316,13 +317,15 @@ class PlotPanel(BasePanel):
             if i in pts:
                 ecols[i] = to_rgba(conf.scatter_selectedge)
                 fcols[i] = to_rgba(conf.scatter_selectcolor)
-                fcols[i][3] = 0.5
+                fcols[i][3] = 0.3
+                ecols[i][3] = 0.8
             else:
                 fcols[i] = to_rgba(conf.scatter_normalcolor)
                 ecols[i] = to_rgba(conf.scatter_normaledge)
 
         self.lasso = None
-        self.canvas.draw_idle()
+        self.canvas.draw()
+        # self.canvas.draw_idle()
         if (self.lasso_callback is not None and
             hasattr(self.lasso_callback , '__call__')):
             self.lasso_callback(data = conf.scatter_coll.get_offsets(),
@@ -473,7 +476,6 @@ class PlotPanel(BasePanel):
         #                                  max(dr[3], ydata.max())]
         # print 'Update ', trace, side, axes == self.get_right_axes(), dr
         # this defeats zooming, which gets ugly in this fast-mode anyway.
-        self.cursor_state = None
         if update_limits:
             self.set_viewlimits()
         if draw:
@@ -485,7 +487,7 @@ class PlotPanel(BasePanel):
     ####
     ## GUI events
     ####
-    def reportLeftDown(self, event=None):
+    def report_leftdown(self, event=None):
         if event is None:
             return
         ex, ey = event.x, event.y

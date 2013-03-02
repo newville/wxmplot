@@ -30,17 +30,22 @@ class ImagePanel(BasePanel):
     """
 
     def __init__(self, parent, messenger=None, data_callback=None,
-                 size=(4.50,4.00), dpi=100,
-                 output_title='Image', lasso_callback=None, **kws):
+                 cursor_callback=None, lasso_callback=None,
+                 contour_callback=None,
+                 size=(5.25, 4.50), dpi=100,
+                 output_title='Image', **kws):
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent,
                            output_title=output_title,
                            messenger=messenger, **kws)
         self.conf = ImageConfig()
         self.cursor_mode = 'zoom'
+
         self.data_callback = data_callback
+        self.cursor_callback = cursor_callback
         self.lasso_callback = lasso_callback
-        self.contour_callback = None
+        self.contour_callback = contour_callback
+
         self.win_config = None
         self.data_shape = None
         self.figsize = size
@@ -260,12 +265,10 @@ class ImagePanel(BasePanel):
         sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
         self.lasso = None
         self.canvas.draw()
+        print 'lassoHandler ', len(sel), sel[:3]
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
-
-    def reportMotion(self,event=None):
-        pass
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
@@ -277,7 +280,8 @@ class ImagePanel(BasePanel):
             self.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
-        self.set_viewlimits() #   xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
+        self.set_viewlimits()
+        #   xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
         self.canvas.draw()
 
     def unzoom_all(self, event=None):
@@ -354,5 +358,5 @@ class ImagePanel(BasePanel):
             msg = "Pixel [%i, %i],%s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
-            #if hasattr(self.cursor_callback , '__call__'):
-            #    self.cursor_callback(x=event.xdata, y=event.ydata)
+            if hasattr(self.cursor_callback , '__call__'):
+                self.cursor_callback(x=event.xdata, y=event.ydata)

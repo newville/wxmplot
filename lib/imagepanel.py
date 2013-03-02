@@ -37,9 +37,9 @@ class ImagePanel(BasePanel):
                            output_title=output_title,
                            messenger=messenger, **kws)
         self.conf = ImageConfig()
+        self.cursor_mode = 'zoom'
         self.data_callback = data_callback
         self.lasso_callback = lasso_callback
-        self.cursor_callback = None
         self.contour_callback = None
         self.win_config = None
         self.data_shape = None
@@ -259,7 +259,7 @@ class ImagePanel(BasePanel):
         mask = points_inside_poly(ind, vertices)
         sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
         self.lasso = None
-        self.canvas.draw_idle()
+        self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
@@ -354,5 +354,5 @@ class ImagePanel(BasePanel):
             msg = "Pixel [%i, %i],%s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
-            if hasattr(self.cursor_callback , '__call__'):
-                self.cursor_callback(x=event.xdata, y=event.ydata)
+            #if hasattr(self.cursor_callback , '__call__'):
+            #    self.cursor_callback(x=event.xdata, y=event.ydata)

@@ -106,13 +106,12 @@ class ImageFrame(BaseFrame):
         self.panel.redraw()
 
     def onCursorMode(self, event=None):
-        conf = self.panel.conf
         wid = event.GetId()
-        conf.cursor_mode = 'zoom'
+        self.panel.cursor_mode = 'zoom'
         if wid == self.menuIDs.CUR_PROF:
-            conf.cursor_mode = 'profile'
+            self.panel.cursor_mode = 'profile'
         elif wid == self.menuIDs.CUR_LASSO:
-            conf.cursor_mode = 'lasso'
+            self.panel.cursor_mode = 'lasso'
 
     def onFlip(self, event=None):
         conf = self.panel.conf
@@ -343,7 +342,6 @@ class ImageFrame(BaseFrame):
         self.panel.redraw()
 
     def onLasso(self, data=None, selected=None, mask=None, **kw):
-        print 'lasso:' , selected[:10]
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)

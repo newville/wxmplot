@@ -216,7 +216,6 @@ class BasePanel(wx.Panel):
              'motion':    motion,       'keyevent':  keyevent}
         self.cursor_modes[modename]  = d
 
-
     def cursor_mode_action(self,  eventname, **kws):
         mode = self.cursor_mode
         if mode not in self.cursor_modes:
@@ -254,7 +253,6 @@ class BasePanel(wx.Panel):
             return
         self.cursor_mode_action('leftdown', event=event)
         self.ForwardEvent(event=event.guiEvent)
-
 
     def onLeftUp(self, event=None):
         """ left button up"""

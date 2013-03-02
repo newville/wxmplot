@@ -182,7 +182,6 @@ class PlotConfig:
         self.y2label = ' '
         self.added_texts = []
         self.plot_type = 'lineplot'
-        self.cursor_mode = 'zoom'
         self.scatter_size = 6
         self.scatter_normalcolor = 'blue'
         self.scatter_normaledge  = 'blue'

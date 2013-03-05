@@ -39,6 +39,7 @@ class ImagePanel(BasePanel):
                            output_title=output_title,
                            messenger=messenger, **kws)
         self.conf = ImageConfig()
+        self.conf.title = output_title
         self.cursor_mode = 'zoom'
 
         self.data_callback = data_callback
@@ -265,7 +266,6 @@ class ImagePanel(BasePanel):
         sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
         self.lasso = None
         self.canvas.draw()
-        print 'lassoHandler ', len(sel), sel[:3]
         if hasattr(self.lasso_callback , '__call__'):
             self.lasso_callback(data=conf.data, selected=sel,
                                 mask=mask)
@@ -339,6 +339,9 @@ class ImagePanel(BasePanel):
     def report_leftdown(self,event=None):
         if event == None:
             return
+        if event.xdata is None or event.ydata is None:
+            return
+        
         ix, iy = round(event.xdata), round(event.ydata)
         if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
         if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix

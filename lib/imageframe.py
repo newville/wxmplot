@@ -29,6 +29,7 @@ class ImageFrame(BaseFrame):
         self.lasso_callback = lasso_callback
         BaseFrame.__init__(self, parent=parent,
                            title  = 'Image Display Frame',
+                           output_title=output_title,
                            size=size, **kws)
         self.BuildFrame(show_xsections=show_xsections)
 
@@ -145,7 +146,8 @@ class ImageFrame(BaseFrame):
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
-                                lasso_callback=self.onLasso)
+                                lasso_callback=self.onLasso,
+                                output_title=self.output_title)
 
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
@@ -341,10 +343,9 @@ class ImageFrame(BaseFrame):
         self.set_colormap(name=event.GetString())
         self.panel.redraw()
 
-    def onLasso(self, data=None, selected=None, mask=None, **kw):
+    def onLasso(self, data=None, selected=None, mask=None, **kws):
         if hasattr(self.lasso_callback , '__call__'):
-            self.lasso_callback(data=conf.data, selected=sel,
-                                mask=mask)
+            self.lasso_callback(data=data, selected=selected, mask=mask, **kws)
 
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()

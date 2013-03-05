@@ -1,7 +1,7 @@
 *.pyc
 *~
 *#
-*.egg-info 
+*.egg-info/*
 doc/_build
 doc/*.pdf
 build

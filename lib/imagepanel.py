@@ -67,7 +67,10 @@ class ImagePanel(BasePanel):
         if style is not None:
             self.conf.style = style
         self.axes.cla()
-        self.conf.rot = False
+        conf = self.conf
+        conf.rot, conf.log_scale   = False, False
+        conf.flip_ud, conf.flip_lr = False, False
+        conf.auto_intensity, conf.interp = True, 'nearest'
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
         if x is not None:
@@ -341,7 +344,7 @@ class ImagePanel(BasePanel):
             return
         if event.xdata is None or event.ydata is None:
             return
-        
+
         ix, iy = round(event.xdata), round(event.ydata)
         if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
         if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix

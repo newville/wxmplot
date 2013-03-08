@@ -497,7 +497,8 @@ class PlotPanel(BasePanel):
         except:
             x, y = event.xdata, event.ydata
 
-        msg = ("X,Y= %s, %s" % (self._xfmt, self._yfmt)) % (x, y)
+        if x is not None and y is not None:
+            msg = ("X,Y= %s, %s" % (self._xfmt, self._yfmt)) % (x, y)
 
         if len(self.fig.get_axes()) > 1:
             ax2 = self.fig.get_axes()[1]
@@ -511,4 +512,3 @@ class PlotPanel(BasePanel):
         if (self.cursor_callback is not None and
             hasattr(self.cursor_callback , '__call__')):
             self.cursor_callback(x=event.xdata, y=event.ydata)
-

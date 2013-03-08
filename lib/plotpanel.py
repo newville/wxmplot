@@ -29,7 +29,7 @@ class PlotPanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
     def __init__(self, parent, size=None, dpi=150,
-                 axissize=None, axisbg=None,
+                 axissize=None, axisbg=None, fontsize=9,
                  trace_color_callback=None,
                  output_title='plot', **kws):
 
@@ -38,9 +38,9 @@ class PlotPanel(BasePanel):
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
         matplotlib.rc('lines', linewidth=2)
-        matplotlib.rc('xtick', labelsize=9, color='k')
-        matplotlib.rc('ytick', labelsize=9, color='k')
-        matplotlib.rc('legend', fontsize=9)
+        matplotlib.rc('xtick', labelsize=fontsize, color='k')
+        matplotlib.rc('ytick', labelsize=fontsize, color='k')
+        matplotlib.rc('legend', fontsize=fontsize)
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
         BasePanel.__init__(self, parent,

@@ -3,7 +3,7 @@
 wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
 import wx
-from numpy import nonzero
+from numpy import nonzero, where
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -117,8 +117,11 @@ class PlotPanel(BasePanel):
             axes = self.get_right_axes()
         # set y scale to log/linear
         yscale = 'linear'
-        if ylog_scale and min(ydata) > 0:
+        if ylog_scale:
             yscale = 'log'
+            ymin = min(ydata[where(ydata>0)])
+            ydata[where(ydata<=0)] = ymin
+            
         axes.set_yscale(yscale, basey=10)
         if linewidth is None:
             linewidth = 2

@@ -445,6 +445,10 @@ class BasePanel(wx.Panel):
         if self.zoom_ini is None:
             return
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        if event.xdata is not None:
+            self.x_lastmove = event.xdata
+        if event.ydata is not None:
+            self.y_lastmove = event.ydata
         x0     = min(x, ini_x)
         ymax   = max(y, ini_y)
         width  = abs(x-ini_x)
@@ -467,7 +471,7 @@ class BasePanel(wx.Panel):
 
     def zoom_leftdown(self, event=None):
         """leftdown event handler for zoom mode"""
-
+        self.x_lastmove, self.y_lastmove = None, None
         self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
         self.report_leftdown(event=event)
 
@@ -498,7 +502,7 @@ class BasePanel(wx.Panel):
                 try:
                     x1, y1 = ax_inv().transform((event.x, event.y))
                 except:
-                    x1, y1 = event.xdata, event.ydata
+                    x1, y1 = self.x_lastmove, self.y_lastmove
                 try:
                     x0, y0 = ax_inv().transform((ini_x, ini_y))
                 except:

@@ -121,7 +121,7 @@ class PlotPanel(BasePanel):
             yscale = 'log'
             ymin = min(ydata[where(ydata>0)])
             ydata[where(ydata<=0)] = ymin
-            
+
         axes.set_yscale(yscale, basey=10)
         if linewidth is None:
             linewidth = 2

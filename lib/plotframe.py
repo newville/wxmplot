@@ -48,10 +48,6 @@ class PlotFrame(BaseFrame):
         "clear plot"
         self.panel.clear()
 
-    def clear(self):
-        "clear plot"
-        self.panel.clear()
-
     def reset_config(self):
         self.panel.reset_config()
 

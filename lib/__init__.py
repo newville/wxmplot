@@ -77,6 +77,7 @@ except ImportError:
 except: # probably a useless exception from ensureMinimal() about wx already being Imported.
     pass
 
+from baseframe import BaseFrame
 from plotframe import PlotFrame
 from plotpanel import PlotPanel
 from imagepanel import ImagePanel

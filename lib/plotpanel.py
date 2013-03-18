@@ -110,7 +110,7 @@ class PlotPanel(BasePanel):
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
-              legend_loc='ur', legend_on=True, **kws):
+              legend_loc='ur', legend_on=True, delay_draw=False, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -212,8 +212,10 @@ class PlotPanel(BasePanel):
         if self.conf.show_legend:
             conf.draw_legend()
 
-        self.canvas.draw()
-        self.canvas.Refresh()
+        if not delay_draw:
+            self.canvas.draw()
+            self.canvas.Refresh()
+
         conf.ntrace = conf.ntrace + 1
         return _lines
 

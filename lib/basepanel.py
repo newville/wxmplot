@@ -477,6 +477,9 @@ class BasePanel(wx.Panel):
 
     def zoom_leftup(self, event=None):
         """leftup event handler for zoom mode"""
+        if self.zoom_ini is None:
+            return
+
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:
             dx = abs(ini_x - event.x)
@@ -514,7 +517,6 @@ class BasePanel(wx.Panel):
             # now apply limits:
             self.set_viewlimits()
 
-
     def lasso_motion(self, event=None):
         """motion event handler for lasso mode"""
         self.report_motion(event=event)
@@ -522,15 +524,16 @@ class BasePanel(wx.Panel):
     def lasso_leftdown(self, event=None):
         """leftdown event handler for lasso mode"""
         self.report_leftdown(event=event)
-        self.lasso = Lasso(event.inaxes, (event.xdata, event.ydata),
-                           self.lassoHandler)
-        # set lasso color
-        cmap = getattr(self.conf, 'cmap', None)
-        color='goldenrod'
-        if cmap is not None:
-            rgb = (int(i*255)^255 for i in cmap._lut[0][:3])
-            color = '#%02x%02x%02x' % tuple(rgb)
-        self.lasso.line.set_color(color)
+        if event.inaxes:
+            # set lasso color
+            color='goldenrod'
+            cmap = getattr(self.conf, 'cmap', None)
+            if cmap is not None:
+                rgb = (int(i*255)^255 for i in cmap._lut[0][:3])
+                color = '#%02x%02x%02x' % tuple(rgb)
+            self.lasso = Lasso(event.inaxes, (event.xdata, event.ydata),
+                               self.lassoHandler)
+            self.lasso.line.set_color(color)
 
     def lasso_leftup(self, event=None):
         """leftup event handler for lasso mode"""

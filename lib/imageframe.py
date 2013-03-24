@@ -415,10 +415,9 @@ class ImageFrame(BaseFrame):
             name = name[:-2]
         cmap_name = name
         try:
-            conf.cmap = get_cmap(name)
-        except:
             conf.cmap = getattr(colormap, name)
-
+        except:
+            conf.cmap = get_cmap(name)
         if hasattr(conf, 'contour'):
             xname = 'gray'
             if cmap_name == 'gray_r':
@@ -430,14 +429,15 @@ class ImageFrame(BaseFrame):
             conf.contour.set_cmap(getattr(colormap, xname))
         if hasattr(conf, 'image'):
             conf.image.set_cmap(conf.cmap)
-        if hasattr(conf, 'highlight_areas'):
-            rgb  = (int(i*200)^255 for i in conf.cmap._lut[0][:3])
-            col  = '#%02x%02x%02x' % tuple(rgb)
-            for area in conf.highlight_areas:
-                for lin in area.collections:
-                    lin.set_color(col)
-
         self.redraw_cmap()
+
+        if hasattr(conf, 'highlight_areas'):
+            if hasattr(conf.cmap, '_lut'):
+                rgb  = (int(i*200)^255 for i in conf.cmap._lut[0][:3])
+                col  = '#%02x%02x%02x' % tuple(rgb)
+                for area in conf.highlight_areas:
+                    for lin in area.collections:
+                        lin.set_color(col)
 
     def redraw_cmap(self):
         conf = self.panel.conf

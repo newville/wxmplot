@@ -433,11 +433,11 @@ class ImageFrame(BaseFrame):
 
         if hasattr(conf, 'highlight_areas'):
             if hasattr(conf.cmap, '_lut'):
-                rgb  = (int(i*200)^255 for i in conf.cmap._lut[0][:3])
+                rgb  = (int(i*240)^255 for i in conf.cmap._lut[0][:3])
                 col  = '#%02x%02x%02x' % tuple(rgb)
                 for area in conf.highlight_areas:
-                    for lin in area.collections:
-                        lin.set_color(col)
+                    for w in area.collections + area.labelTexts:
+                        w.set_color(col)
 
     def redraw_cmap(self):
         conf = self.panel.conf

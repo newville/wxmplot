@@ -71,6 +71,7 @@ class ImagePanel(BasePanel):
         conf.rot, conf.log_scale   = False, False
         conf.flip_ud, conf.flip_lr = False, False
         conf.auto_intensity, conf.interp = True, 'nearest'
+        conf.highlight_areas = []
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
         if x is not None:
@@ -135,6 +136,24 @@ class ImagePanel(BasePanel):
         self.unzoom_all()
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kws)
+
+    def add_highlight_area(mask):
+        """add a highlighted area -- outline an arbitrarily shape --
+        as if drawn from a Lasso event.
+
+        This takes a mask, which should be a boolean array of the
+        same shape as the image.
+        """
+        patch = mask * ones(mask.shape) * 0.9
+
+        cmap = self.conf.cmap
+        area = self.axes.contour(patch, cmap=cmap, levels=[0.8])
+
+        self.conf.highlight_areas.append(area)
+        rgb  = (int(i*200)^255 for i in cmap._lut[0][:3])
+        col  = '#%02x%02x%02x' % tuple(rgb)
+        for l in area.collections:
+            l.set_color(col)
 
     def set_viewlimits(self, axes=None, autoscale=False):
         """ update xy limits of a plot"""

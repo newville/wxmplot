@@ -53,6 +53,7 @@ class ImageConfig:
         self.indices = None
         self.title = 'image'
         self.style = 'image'
+        self.highlight_areas = []
         self.ncontour_levels = None
         self.contour_levels = None
         self.contour_labels = True

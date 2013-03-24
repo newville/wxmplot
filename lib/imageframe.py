@@ -16,17 +16,30 @@ from baseframe import BaseFrame
 from colors import rgb2hex
 from utils import Closure, LabelEntry
 
+CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
+                               'Left-Drag to zoom to rectangular box'),
+                     'lasso': ('Select Points\tCtrl+X',
+                               'Left-Drag to select points freehand'),
+                     'prof':  ('Select Line Profile\tCtrl+K',
+                               'Left-Drag to select like for profile')}
+
 class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
     """
+
     def __init__(self, parent=None, size=None,
                  config_on_frame=True, lasso_callback=None,
-                 show_xsections=True,
+                 show_xsections=True, cursor_labels=None,
                  output_title='Image',   **kws):
         if size is None: size = (550, 450)
         self.config_on_frame = config_on_frame
         self.lasso_callback = lasso_callback
+        self.cursor_menulabels =  {}
+        self.cursor_menulabels.update(CURSOR_MENULABELS)
+        if cursor_labels is not None:
+            self.cursor_menulabels.update(cursor_labels)
+
         BaseFrame.__init__(self, parent=parent,
                            title  = 'Image Display Frame',
                            output_title=output_title,
@@ -77,12 +90,13 @@ class ImageFrame(BaseFrame):
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
         # m.Append(mids.FLIP_O, 'Flip to Original', '')
         m.AppendSeparator()
-        m.AppendRadioItem(mids.CUR_ZOOM, 'Cursor Mode: Zoom to Box\tCtrl+B',
-                          'Left-Drag Cursor to zoom to box')
-        m.AppendRadioItem(mids.CUR_PROF, 'Cursor Mode: Profile\tCtrl+K',
-                          'Left-Drag Cursor to select cut for profile')
-        m.AppendRadioItem(mids.CUR_LASSO, 'Cursor Mode: Lasso\tCtrl+N',
-                          'Left-Drag Cursor to select points')
+        m.Append(wx.NewId(), 'Cursor Modes : ',
+                 'Action taken on with Left-Click and Left-Drag')
+
+        clabs = self.cursor_menulabels
+        m.AppendRadioItem(mids.CUR_ZOOM,  clabs['zoom'][0],  clabs['zoom'][1])
+        m.AppendRadioItem(mids.CUR_LASSO, clabs['lasso'][0], clabs['lasso'][1])
+        m.AppendRadioItem(mids.CUR_PROF,  clabs['prof'][0],  clabs['prof'][1])
         m.AppendSeparator()
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_H)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
@@ -416,6 +430,13 @@ class ImageFrame(BaseFrame):
             conf.contour.set_cmap(getattr(colormap, xname))
         if hasattr(conf, 'image'):
             conf.image.set_cmap(conf.cmap)
+        if hasattr(conf, 'highlight_areas'):
+            rgb  = (int(i*200)^255 for i in cmap._lut[0][:3])
+            col  = '#%02x%02x%02x' % tuple(rgb)
+            for area in conf.highlight_areas:
+                for lin in area.collections:
+                    lin.set_color(col)
+
         self.redraw_cmap()
 
     def redraw_cmap(self):

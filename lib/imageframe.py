@@ -431,7 +431,7 @@ class ImageFrame(BaseFrame):
         if hasattr(conf, 'image'):
             conf.image.set_cmap(conf.cmap)
         if hasattr(conf, 'highlight_areas'):
-            rgb  = (int(i*200)^255 for i in cmap._lut[0][:3])
+            rgb  = (int(i*200)^255 for i in conf.cmap._lut[0][:3])
             col  = '#%02x%02x%02x' % tuple(rgb)
             for area in conf.highlight_areas:
                 for lin in area.collections:

@@ -137,7 +137,7 @@ class ImagePanel(BasePanel):
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kws)
 
-    def add_highlight_area(mask):
+    def add_highlight_area(self, mask):
         """add a highlighted area -- outline an arbitrarily shape --
         as if drawn from a Lasso event.
 

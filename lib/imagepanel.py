@@ -285,7 +285,7 @@ class ImagePanel(BasePanel):
 
             inds = []
             for iy in range(ny):
-                inds.extend([(iy, ix) for ix in range(nx)])
+                inds.extend([(ix, iy) for ix in range(nx)])
             self.conf.indices = np.array(inds)
 
     def lassoHandler(self, vertices):
@@ -296,6 +296,7 @@ class ImagePanel(BasePanel):
         ind = conf.indices
         mask = points_inside_poly(ind, vertices)
         sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
+        mask.shape = self.conf.data.shape
         self.lasso = None
         self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):

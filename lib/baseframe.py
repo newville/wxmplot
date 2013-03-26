@@ -165,7 +165,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mids = self.menuIDs
         m0 = wx.Menu()
 
-        m0.Append(mids.SAVE, "&Save\tCtrl+S",   "Save PNG Image of Plot")
+        m0.Append(mids.SAVE, "&Save PNG\tCtrl+S",   "Save PNG Image of Plot")
         m0.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
         m0.AppendSeparator()
         m0.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')

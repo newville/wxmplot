@@ -58,6 +58,7 @@ class ImageFrame(BaseFrame):
                 for comp in self.config_panel.Children:
                     comp.Enable()
         self.panel.display(img, style=style, **kw)
+        self.panel.conf.title = title
         if colormap is not None:
             self.set_colormap(name=colormap)
         contour_value = 0
@@ -66,6 +67,43 @@ class ImageFrame(BaseFrame):
         if self.config_on_frame:
             self.contour_toggle.SetValue(contour_value)
         self.panel.redraw()
+
+
+    def BuildMenu(self):
+        mids = self.menuIDs
+        m0 = wx.Menu()
+        mids.EXPORT = wx.NewId()
+        m0.Append(mids.SAVE,   "&Save Image\tCtrl+S",  "Save PNG Image of Plot")
+        m0.Append(mids.CLIPB,  "&Copy Image\tCtrl+C",  "Copy Image to Clipboard")
+        m0.Append(mids.EXPORT, "Export Data",   "Export to ASCII file")
+        m0.AppendSeparator()
+        m0.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
+        m0.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
+        m0.Append(mids.PRINT, "&Print\tCtrl+P", "Print Plot")
+        m0.AppendSeparator()
+        m0.Append(mids.EXIT, "E&xit\tCtrl+Q", "Exit the 2D Plot Window")
+
+        self.top_menus['File'] = m0
+
+        mhelp = wx.Menu()
+        mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
+        mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
+        self.top_menus['Help'] = mhelp
+
+        mbar = wx.MenuBar()
+
+        mbar.Append(self.top_menus['File'], "File")
+        for m in self.user_menus:
+            title,menu = m
+            mbar.Append(menu, title)
+        mbar.Append(self.top_menus['Help'], "&Help")
+
+
+        self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
+        self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
+        self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
+        self.Bind(wx.EVT_CLOSE,self.onExit)
 
     def BuildCustomMenus(self):
         "build menus"
@@ -167,6 +205,9 @@ class ImageFrame(BaseFrame):
             lpanel = self.BuildConfigPanel()
             mainsizer.Add(lpanel, 0,
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
+
+        mids = self.menuIDs
+        self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
 
         # show_config_popup=(not self.config_on_frame),
         img_panel_extent = (2, 2)

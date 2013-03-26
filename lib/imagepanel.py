@@ -7,6 +7,8 @@ import sys
 import time
 import os
 import wx
+from threading import Thread
+
 import numpy as np
 import matplotlib
 import matplotlib.cm as colormap
@@ -74,6 +76,8 @@ class ImagePanel(BasePanel):
         conf.highlight_areas = []
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
+
+
         if x is not None:
             self.xdata = np.array(x)
             if self.xdata.shape[0] != data.shape[1]:
@@ -89,7 +93,6 @@ class ImagePanel(BasePanel):
             self.ylab = ylabel
         self.conf.data = data
 
-        # wx.CallAfter(self.calc_indices)
         cmap = self.conf.cmap
         if self.conf.style == 'contour':
             if levels is None:
@@ -136,6 +139,11 @@ class ImagePanel(BasePanel):
         self.unzoom_all()
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kws)
+
+        self.conf.indices = None
+        self.indices_thread = Thread(target=self.calc_indices, args=(data.shape, ))
+        self.indices_thread.start()
+
 
     def add_highlight_area(self, mask, label=None):
         """add a highlighted area -- outline an arbitrarily shape --
@@ -273,34 +281,73 @@ class ImagePanel(BasePanel):
     ####
     ## GUI events, overriding BasePanel components
     ####
-    def calc_indices(self):
+    def exportASCII(self, event=None):
+        ofile = self.conf.title.strip()
+        if len(ofile) > 64:
+            ofile = ofile[:63].strip()
+        if len(ofile) < 1:
+            ofile = 'Image'
+
+        for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+            ofile = ofile.replace(c, '_')
+
+        while '__' in ofile:
+            ofile = ofile.replace('__', '_')
+
+        ofile = ofile + '.dat'
+        orig_dir = os.path.abspath(os.curdir)
+
+        dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
+                            defaultDir = os.getcwd(),
+                            defaultFile=ofile,
+                            style=wx.SAVE|wx.CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.writeASCIIFile(dlg.GetPath())
+
+    def writeASCIIFile(self, fname):
+
+        buff = ["# Map Data for %s" % self.conf.title.strip(),
+                "#------", "#   Y   X   Intensity"]
+        ny, nx = self.conf.data.shape
+        xdat = np.arange(nx)
+        ydat = np.arange(ny)
+        if self.xdata is not None: xdat = self.xdata
+        if self.ydata is not None: ydat = self.ydata
+
+        for iy in range(ny):
+            for ix in range(nx):
+                buff.append(" %.10g  %.10g  %.10g" % (
+                    ydat[iy], xdat[ix], self.conf.data[iy, ix]))
+
+        fout = open(fname, 'w')
+        fout.write("%s\n" % "\n".join(buff))
+        fout.close()
+
+    def calc_indices(self, shape):
         """calculates and stores the set of indices
         ix=[0, nx-1], iy=[0, ny-1] for data of shape (nx, ny)"""
-        if self.conf.data is not None:
-            shape = self.conf.data.shape
-            if len(shape) == 2:
-                ny, nx = shape
-            elif len(shape) == 3:
-                ny, nx, nchan = shape
+        if len(shape) == 2:
+            ny, nx = shape
+        elif len(shape) == 3:
+            ny, nx, nchan = shape
 
-            inds = []
-            for iy in range(ny):
-                inds.extend([(ix, iy) for ix in range(nx)])
-            self.conf.indices = np.array(inds)
+        inds = []
+        for iy in range(ny):
+            inds.extend([(ix, iy) for ix in range(nx)])
+        self.conf.indices = np.array(inds)
 
     def lassoHandler(self, vertices):
-        conf = self.conf
-        if conf.indices is None:
-            self.calc_indices()
-
-        ind = conf.indices
+        if self.conf.indices is None or self.indices_thread.is_alive():
+            self.indices_thread.join()
+        ind = self.conf.indices
         mask = points_inside_poly(ind, vertices)
         sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
         mask.shape = self.conf.data.shape
         self.lasso = None
         self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):
-            self.lasso_callback(data=conf.data, selected=sel,
+            self.lasso_callback(data=self.conf.data, selected=sel,
                                 mask=mask)
 
     def unzoom(self, event=None, set_bounds=True):

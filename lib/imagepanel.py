@@ -342,13 +342,11 @@ class ImagePanel(BasePanel):
             self.indices_thread.join()
         ind = self.conf.indices
         mask = points_inside_poly(ind, vertices)
-        sel = [(ind[i][0], ind[i][1]) for i in np.nonzero(mask)[0]]
         mask.shape = self.conf.data.shape
         self.lasso = None
         self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):
-            self.lasso_callback(data=self.conf.data, selected=sel,
-                                mask=mask)
+            self.lasso_callback(mask=mask)
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """

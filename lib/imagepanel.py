@@ -188,6 +188,12 @@ class ImagePanel(BasePanel):
         xmax = int(min(self.data_range[1], xmax) + 0.5)
         ymin = int(max(self.data_range[2], ymin) + 0.5)
         ymax = int(min(self.data_range[3], ymax) + 0.5)
+        if (xmax < self.data_range[0] or
+            xmin > self.data_range[1] or
+            ymax < self.data_range[2] or
+            ymin > self.data_range[3] ):
+            self.zoom_lims.pop()
+            return
 
         if abs(xmax-xmin) < 2:
             xmin = int(0.5*(xmax+xmin) - 1)

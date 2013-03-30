@@ -204,7 +204,10 @@ class ImagePanel(BasePanel):
             self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
             self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
         self.conf.datalimits = [xmin, xmax, ymin, ymax]
-        self.redraw()
+        try:
+            self.redraw()
+        except ValueError:
+            pass
 
     def clear(self):
         """ clear plot """

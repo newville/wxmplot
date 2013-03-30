@@ -153,15 +153,13 @@ class ImagePanel(BasePanel):
         same shape as the image.
         """
         patch = mask * np.ones(mask.shape) * 0.9
-
         cmap = self.conf.cmap
         area = self.axes.contour(patch, cmap=cmap, levels=[0.8])
         self.conf.highlight_areas.append(area)
-
         col = None
         if hasattr(cmap, '_lut'):
-            rgb  = (int(i*200)^255 for i in cmap._lut[0][:3])
-            col  = '#%02x%02x%02x' % tuple(rgb)
+            rgb  = [int(i*240)^255 for i in cmap._lut[0][:3]]
+            col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
 
         if label is not None:
             fmt = {0.8: label, 0.9: label}

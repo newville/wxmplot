@@ -21,8 +21,8 @@ The latest version is available from PyPI or CARS (Univ of Chicago):
 .. _wxmplot-0.9.12.tar.gz (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.tar.gz
 .. _wxmplot-0.9.12.zip    (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.zip
 
-.. _wxmplot-0.9.12win32-py2.6.exe:  http://pypi.python.org/packages/2.6/w/wxmplot/wxmplot-0.9.12win32-py2.6.exe
-.. _wxmplot-0.9.12win32-py2.7.exe:  http://pypi.python.org/packages/2.7/w/wxmplot/wxmplot-0.9.12win32-py2.7.exe
+.. _wxmplot-0.9.12.win32-py2.6.exe:  https://pypi.python.org/packages/2.6/w/wxmplot/wxmplot-0.9.12.win32-py2.6.exe
+.. _wxmplot-0.9.12.win32-py2.7.exe:  https://pypi.python.org/packages/2.7/w/wxmplot/wxmplot-0.9.12.win32-py2.7.exe
 
 .. _wxmplot github repository:   http://github.com/newville/wxmplot
 .. _Python Setup Tools:        http://pypi.python.org/pypi/setuptools
@@ -35,8 +35,8 @@ The latest version is available from PyPI or CARS (Univ of Chicago):
 |                     |                  | - `wxmplot-0.9.12.tar.gz (PyPI)`_        |
 |                     |                  | - `wxmplot-0.9.12.zip    (PyPI)`_        |
 +---------------------+------------------+------------------------------------------+
-| Windows Installers  | 2.6              | - `wxmplot-0.9.12win32-py2.6.exe`_       |
-|                     | 2.7              | - `wxmplot-0.9.12win32-py2.7.exe`_       |
+| Windows Installers  | 2.6              | - `wxmplot-0.9.12.win32-py2.6.exe`_      |
+|                     | 2.7              | - `wxmplot-0.9.12.win32-py2.7.exe`_      |
 +---------------------+------------------+------------------------------------------+
 | Development Version | all              | use `wxmplot github repository`_         |
 +---------------------+------------------+------------------------------------------+

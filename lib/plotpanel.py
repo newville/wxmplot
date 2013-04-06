@@ -407,7 +407,7 @@ class PlotPanel(BasePanel):
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
-        if len(self.zoom_lims) >= 1:
+        if len(self.zoom_lims) > 1:
             self.zoom_lims.pop()
         self.set_viewlimits()
         self.canvas.draw()

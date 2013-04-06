@@ -44,7 +44,7 @@ class ImageFrame(BaseFrame):
                            title  = 'Image Display Frame',
                            output_title=output_title,
                            size=size, **kws)
-        self.BuildFrame(show_xsections=show_xsections)
+        self.BuildFrame()
 
     def display(self, img, title=None, colormap=None, style='image', **kw):
         """plot after clearing current plot """
@@ -75,7 +75,7 @@ class ImageFrame(BaseFrame):
         mids.EXPORT = wx.NewId()
         m0.Append(mids.SAVE,   "&Save Image\tCtrl+S",  "Save PNG Image of Plot")
         m0.Append(mids.CLIPB,  "&Copy Image\tCtrl+C",  "Copy Image to Clipboard")
-        m0.Append(mids.EXPORT, "Export Data",   "Export to ASCII file")
+        m0.Append(mids.EXPORT, "Export Data to ASCII", "Export to ASCII file")
         m0.AppendSeparator()
         m0.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
         m0.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
@@ -134,15 +134,18 @@ class ImageFrame(BaseFrame):
         clabs = self.cursor_menulabels
         m.AppendRadioItem(mids.CUR_ZOOM,  clabs['zoom'][0],  clabs['zoom'][1])
         m.AppendRadioItem(mids.CUR_LASSO, clabs['lasso'][0], clabs['lasso'][1])
-        m.AppendRadioItem(mids.CUR_PROF,  clabs['prof'][0],  clabs['prof'][1])
+        # m.AppendRadioItem(mids.CUR_PROF,  clabs['prof'][0],  clabs['prof'][1])
         m.AppendSeparator()
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_H)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_O)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
-        self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_PROF)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
+        # self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_PROF)
+        m.AppendSeparator()
+        m.Append(wx.NewId(), 'Contour: ',
+                 'Action taken on with Left-Click and Left-Drag')
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -181,7 +184,7 @@ class ImageFrame(BaseFrame):
             conf.rot = True
         self.panel.unzoom_all()
 
-    def BuildFrame(self, show_xsections=True):
+    def BuildFrame(self):
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
@@ -193,49 +196,38 @@ class ImageFrame(BaseFrame):
 
         self.BuildCustomMenus()
         self.BuildMenu()
-        mainsizer = wx.BoxSizer(wx.HORIZONTAL)
-
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
+
+        self.panel.messenger = self.write_message
+        self.panel.fig.set_facecolor(self.bgcol)
+
+        mainsizer = wx.BoxSizer(wx.HORIZONTAL)
+
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
             mainsizer.Add(lpanel, 0,
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
 
-        mids = self.menuIDs
-        self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
-
-        # show_config_popup=(not self.config_on_frame),
-        img_panel_extent = (2, 2)
-        img_panel_locale = (0, 1)
-
-        if not show_xsections:
-            img_panel_extent = (1, 1)
-            img_panel_locale = (1, 1)
-            xtop = wx.StaticText(self, label='Top')
-            xside = wx.StaticText(self, label='Side')
-            xinfo = wx.StaticText(self, label='Info')
-            mainsizer.Add(xtop,  (0, 1), (1, 1), wx.EXPAND)
-            mainsizer.Add(xinfo, (0, 2), (1, 1), wx.EXPAND)
-            mainsizer.Add(xside, (1, 2), (1, 1), wx.EXPAND)
-
-        self.panel.messenger = self.write_message
-        self.panel.fig.set_facecolor(self.bgcol)
-
         mainsizer.Add(self.panel, 1,  wx.EXPAND)
 
-        self.BindMenuToPanel()
-        mids = self.menuIDs
-        self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
-        self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
+        self.BindMenuToPanel(panel=self.panel)
 
         self.SetAutoLayout(True)
         self.SetSizer(mainsizer)
         self.Fit()
+
+    def BindMenuToPanel(self, panel=None):
+        if panel is None: panel = self.panel
+        BaseFrame.BindMenuToPanel(self, panel=panel)
+        mids = self.menuIDs
+        self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
+        self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
+        self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
 
     def BuildConfigPanel(self):
         """config panel for left-hand-side of frame"""
@@ -331,7 +323,7 @@ class ImageFrame(BaseFrame):
             contour_value = 1
         contour_toggle.SetValue(contour_value)
         contour_labels = wx.CheckBox(lpanel, label='Label Contours?',
-                                  size=(160, -1))
+                                     size=(160, -1))
         contour_labels.SetValue(1)
         contour_labels.Bind(wx.EVT_CHECKBOX, self.onContourLabels)
         self.contour_labels = contour_labels
@@ -474,8 +466,8 @@ class ImageFrame(BaseFrame):
 
         if hasattr(conf, 'highlight_areas'):
             if hasattr(conf.cmap, '_lut'):
-                rgb  = (int(i*240)^255 for i in conf.cmap._lut[0][:3])
-                col  = '#%02x%02x%02x' % tuple(rgb)
+                rgb  = [int(i*240)^255 for i in conf.cmap._lut[0][:3]]
+                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
                 for area in conf.highlight_areas:
                     for w in area.collections + area.labelTexts:
                         w.set_color(col)

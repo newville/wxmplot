@@ -81,12 +81,11 @@ class ImagePanel(BasePanel):
         if x is not None:
             self.xdata = np.array(x)
             if self.xdata.shape[0] != data.shape[1]:
-                print 'Warning X array wrong size!'
+                self.xdata = None
         if y is not None:
             self.ydata = np.array(y)
             if self.ydata.shape[0] != data.shape[0]:
-                print 'Warning Y array wrong size!'
-
+                self.ydata = None
         if xlabel is not None:
             self.xlab = xlabel
         if ylabel is not None:

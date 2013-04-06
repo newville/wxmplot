@@ -289,7 +289,9 @@ class ImagePanel(BasePanel):
     ## GUI events, overriding BasePanel components
     ####
     def exportASCII(self, event=None):
-        ofile = self.conf.title.strip()
+        ofile  = ''
+        if self.conf.title is not None:
+            ofile = self.conf.title.strip()
         if len(ofile) > 64:
             ofile = ofile[:63].strip()
         if len(ofile) < 1:

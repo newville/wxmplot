@@ -245,7 +245,7 @@ class ImageFrame(BaseFrame):
         s.SetForegroundColour('Blue')
         lsizer.Add(s, (0, 0), (1, 3), labstyle, 5)
 
-        cmap_choice =  wx.Choice(lpanel, choices=ColorMap_List)
+        cmap_choice =  wx.Choice(lpanel, size=(120, -1), choices=ColorMap_List)
         cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
         cmap_name = conf.cmap.name
         if cmap_name.endswith('_r'):
@@ -263,7 +263,7 @@ class ImageFrame(BaseFrame):
         self.cmap_data   = numpy.outer(numpy.linspace(0, 1, cmax),
                                        numpy.ones(cmax/4))
 
-        self.cmap_fig   = Figure((0.80, 1.0), dpi=100)
+        self.cmap_fig   = Figure((0.20, 1.0), dpi=100)
         self.cmap_axes  = self.cmap_fig.add_axes([0, 0, 1, 1])
         self.cmap_axes.set_axis_off()
 
@@ -302,17 +302,17 @@ class ImageFrame(BaseFrame):
         lsizer.Add(self.cmap_hi_val,  (3, 3), (1, 1), labstyle, 5)
         lsizer.Add(iauto_toggle,      (4, 0), (1, 4), labstyle)
 
-        self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=40, labeltext='I min:',
+        self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=65, labeltext='I min:',
                                    action = Closure(self.onThreshold, argu='lo'))
-        self.imax_val = LabelEntry(lpanel, conf.int_hi,  size=40, labeltext='I max:',
+        self.imax_val = LabelEntry(lpanel, conf.int_hi,  size=65, labeltext='I max:',
                                    action = Closure(self.onThreshold, argu='hi'))
         self.imax_val.Disable()
         self.imin_val.Disable()
 
         lsizer.Add(self.imin_val.label, (5, 0), (1, 1), labstyle, 5)
         lsizer.Add(self.imax_val.label, (6, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.imin_val, (5, 1), (1, 2), labstyle, 5)
-        lsizer.Add(self.imax_val, (6, 1), (1, 2), labstyle, 5)
+        lsizer.Add(self.imin_val, (5, 1), (1, 3), labstyle, 5)
+        lsizer.Add(self.imax_val, (6, 1), (1, 3), labstyle, 5)
 
         contour_toggle = wx.CheckBox(lpanel, label='As Contour Plot?',
                                   size=(160, -1))
@@ -327,12 +327,12 @@ class ImageFrame(BaseFrame):
         contour_labels.SetValue(1)
         contour_labels.Bind(wx.EVT_CHECKBOX, self.onContourLabels)
         self.contour_labels = contour_labels
-        self.ncontours = LabelEntry(lpanel, 10, size=40, labeltext='N levels:',
+        self.ncontours = LabelEntry(lpanel, 10, size=65, labeltext='N levels:',
                                    action = Closure(self.onContourLevels))
 
         lsizer.Add(self.contour_toggle,  (7, 0), (1, 4), labstyle, 5)
         lsizer.Add(self.ncontours.label, (8, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.ncontours,       (8, 1), (1, 2), labstyle, 5)
+        lsizer.Add(self.ncontours,       (8, 1), (1, 3), labstyle, 5)
         lsizer.Add(self.contour_labels,  (9, 0), (1, 4), labstyle, 5)
 
         lpanel.SetSizer(lsizer)
@@ -397,8 +397,8 @@ class ImageFrame(BaseFrame):
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
         if self.config_on_frame:
-            self.imin_val.SetValue("%.4g" % imin)
-            self.imax_val.SetValue("%.4g" % imax)
+            self.imin_val.SetValue("%g" % imin)
+            self.imax_val.SetValue("%g" % imax)
         self.panel.conf.int_lo = imin
         self.panel.conf.int_hi = imax
 

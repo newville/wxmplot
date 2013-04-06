@@ -290,8 +290,9 @@ class ImagePanel(BasePanel):
     ####
     def exportASCII(self, event=None):
         ofile  = ''
+        title = 'unknown map'
         if self.conf.title is not None:
-            ofile = self.conf.title.strip()
+            title = ofile = self.conf.title.strip()
         if len(ofile) > 64:
             ofile = ofile[:63].strip()
         if len(ofile) < 1:
@@ -312,11 +313,10 @@ class ImagePanel(BasePanel):
                             style=wx.SAVE|wx.CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
-            self.writeASCIIFile(dlg.GetPath())
+            self.writeASCIIFile(dlg.GetPath(), title=title)
 
-    def writeASCIIFile(self, fname):
-
-        buff = ["# Map Data for %s" % self.conf.title.strip(),
+    def writeASCIIFile(self, fname, title='unknown map'):
+        buff = ["# Map Data for %s" % title,
                 "#------", "#   Y   X   Intensity"]
         ny, nx = self.conf.data.shape
         xdat = np.arange(nx)

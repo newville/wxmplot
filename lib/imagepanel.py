@@ -16,8 +16,8 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.nxutils import points_inside_poly
 
-from imageconf import ImageConfig, ImageConfigFrame
-from basepanel import BasePanel
+from .imageconf import ImageConfig, ImageConfigFrame
+from .basepanel import BasePanel
 
 class ImagePanel(BasePanel):
     """

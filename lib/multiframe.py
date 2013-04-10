@@ -6,10 +6,10 @@
 import wx
 import matplotlib
 
-from utils import Closure
+from .utils import Closure
 
-from plotpanel import PlotPanel
-from baseframe import BaseFrame
+from .plotpanel import PlotPanel
+from .baseframe import BaseFrame
 
 class MultiPlotFrame(BaseFrame):
     """
@@ -34,7 +34,7 @@ class MultiPlotFrame(BaseFrame):
         try:
             self.panel = self.panels[(ix,iy)]
         except KeyError:
-            print 'could not set self.panel'
+            print( 'could not set self.panel')
 
 
     def plot(self,x,y,panel=None,**kw):

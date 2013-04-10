@@ -2,8 +2,8 @@
 """
  MPlot PlotFrame: a wx.Frame for 2D line plotting, using matplotlib
 """
-from plotpanel import PlotPanel
-from baseframe import BaseFrame
+from .plotpanel import PlotPanel
+from .baseframe import BaseFrame
 
 class PlotFrame(BaseFrame):
     """

@@ -10,11 +10,11 @@ import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-from imagepanel import ImagePanel
-from imageconf import ColorMap_List, Interp_List
-from baseframe import BaseFrame
-from colors import rgb2hex
-from utils import Closure, LabelEntry
+from .imagepanel import ImagePanel
+from .imageconf import ColorMap_List, Interp_List
+from .baseframe import BaseFrame
+from .colors import rgb2hex
+from .utils import Closure, LabelEntry
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),

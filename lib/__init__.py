@@ -77,10 +77,10 @@ except ImportError:
 except: # probably a useless exception from ensureMinimal() about wx already being Imported.
     pass
 
-from baseframe import BaseFrame
-from plotframe import PlotFrame
-from plotpanel import PlotPanel
-from imagepanel import ImagePanel
-from imageframe import ImageFrame
-from multiframe import MultiPlotFrame
-from plotapp  import PlotApp
+from .baseframe import BaseFrame
+from .plotframe import PlotFrame
+from .plotpanel import PlotPanel
+from .imagepanel import ImagePanel
+from .imageframe import ImageFrame
+from .multiframe import MultiPlotFrame
+from .plotapp  import PlotApp

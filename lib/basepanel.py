@@ -10,7 +10,7 @@ import wx
 import matplotlib
 from matplotlib.widgets import Lasso
 
-from utils import Printer
+from .utils import Printer
 
 class BasePanel(wx.Panel):
     """

@@ -3,9 +3,11 @@
 # simple example of MPlot
 import sys
 if not hasattr(sys, 'frozen'):
-    import wxversion
-    wxversion.ensureMinimal('2.8')
-
+    try:
+        import wxversion
+        wxversion.ensureMinimal('2.8')
+    except:
+        pass
 import wx
 import numpy
 import wxmplot

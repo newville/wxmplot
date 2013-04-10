@@ -8,7 +8,7 @@ import os
 import time
 import wx
 import matplotlib
-from plotpanel import PlotPanel
+from .plotpanel import PlotPanel
 
 class Menu_IDs:
     def __init__(self):
@@ -124,7 +124,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ## create GUI
     ####
     def BuildFrame(self):
-        sbar = self.CreateStatusBar(2,wx.CAPTION|wx.THICK_FRAME)
+        # Python3 note: wxPython has no THICK_FRAME
+        sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)

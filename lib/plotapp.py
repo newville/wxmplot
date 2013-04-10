@@ -1,5 +1,5 @@
 import wx
-from plotframe import PlotFrame
+from .plotframe import PlotFrame
 
 class PlotApp(object):
     def __init__(self):

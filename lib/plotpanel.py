@@ -13,9 +13,9 @@ from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
 from matplotlib.nxutils import points_inside_poly
 
-from plotconfigframe import PlotConfigFrame
-from basepanel import BasePanel
-from config import PlotConfig
+from .plotconfigframe import PlotConfigFrame
+from .basepanel import BasePanel
+from .config import PlotConfig
 
 to_rgba = colorConverter.to_rgba
 class PlotPanel(BasePanel):

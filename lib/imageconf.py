@@ -233,7 +233,8 @@ class ImageConfigFrame(wx.Frame):
 
     def set_colormap(self, cmap_name):
         #if  self.conf.cmap_reverse:  cmap_name = cmap_name + '_r'
-        print 'Conf set colormap?'
+        pass
+    # print 'Conf set colormap?'
 #         self.conf.cmap = getattr(colormap, cmap_name)
 #         self.cmap_image.set_cmap(self.conf.cmap)
 #         self.conf.image.set_cmap(self.conf.cmap)

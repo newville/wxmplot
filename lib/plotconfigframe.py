@@ -5,6 +5,7 @@
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
+
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
 
@@ -15,9 +16,9 @@ from matplotlib.font_manager import fontManager, FontProperties
 from matplotlib.colors import colorConverter
 to_rgba = colorConverter.to_rgba
 
-from utils import Closure, LabelEntry
-from config import PlotConfig
-from colors import hexcolor
+from .utils import Closure, LabelEntry
+from .config import PlotConfig
+from .colors import hexcolor
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 

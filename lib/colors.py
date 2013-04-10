@@ -322,6 +322,7 @@ def rgb2hex(rgb):
 def hexcolor(color):
     " returns hex color given a tuple, wx.Color, or X11 named color"
     # first, if this is a hex color already, return!
+    # Python 3: needs rewrite for str/unicode change
     if isinstance(color, (str, unicode)):
         if color[0] == '#' and len(color)==7:
             return color

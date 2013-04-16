@@ -43,6 +43,7 @@ class PlotPanel(BasePanel):
         matplotlib.rc('legend', fontsize=fontsize)
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
+
         BasePanel.__init__(self, parent,
                            output_title=output_title, **kws)
 
@@ -110,7 +111,8 @@ class PlotPanel(BasePanel):
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
-              legend_loc='ur', legend_on=True, delay_draw=False, **kws):
+              legend_loc='ur', legend_on=True, delay_draw=False,
+              zorder=1, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -170,14 +172,14 @@ class PlotPanel(BasePanel):
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(conf.grid_color)
-            axes.grid(True)
+            axes.grid(True, zorder=-20)
         else:
             axes.grid(False)
 
         if dy is None:
-            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle)
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
-            _lines = axes.errorbar(xdata, ydata, yerr=dy)
+            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
@@ -305,7 +307,7 @@ class PlotPanel(BasePanel):
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(self.conf.grid_color)
-            axes.grid(True)
+            axes.grid(True, zorder=-20)
         else:
             axes.grid(False)
         self.set_viewlimits()

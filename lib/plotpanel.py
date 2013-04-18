@@ -112,7 +112,7 @@ class PlotPanel(BasePanel):
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
               legend_loc='ur', legend_on=True, delay_draw=False,
-              zorder=1, **kws):
+              zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -164,6 +164,8 @@ class PlotPanel(BasePanel):
 
         conf  = self.conf
         n    = conf.ntrace
+        if zorder is None:
+            zorder = 10*(n+1)
         if axes not in self.axes_traces:
             self.axes_traces[axes] = []
         self.axes_traces[axes].append(n)
@@ -172,11 +174,10 @@ class PlotPanel(BasePanel):
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(conf.grid_color)
-                i.set_zorder(-100)
+                i.set_zorder(0)
             axes.grid(True)
         else:
             axes.grid(False)
-        ## print 'Plot with zorder = ', zorder
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:

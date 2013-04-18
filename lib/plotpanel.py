@@ -172,10 +172,11 @@ class PlotPanel(BasePanel):
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(conf.grid_color)
-            axes.grid(True, zorder=-20)
+                i.set_zorder(-100)
+            axes.grid(True)
         else:
             axes.grid(False)
-
+        ## print 'Plot with zorder = ', zorder
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
@@ -307,7 +308,8 @@ class PlotPanel(BasePanel):
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(self.conf.grid_color)
-            axes.grid(True, zorder=-20)
+                i.set_zorder(-100)
+            axes.grid(True)
         else:
             axes.grid(False)
         self.set_viewlimits()

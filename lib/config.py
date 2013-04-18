@@ -355,7 +355,7 @@ class PlotConfig:
         if show is not None:
             self.show_grid = show
         axes = self.canvas.figure.get_axes()
-        axes[0].grid(self.show_grid, zorder=-20)
+        axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)
         self.canvas.draw()

@@ -112,7 +112,9 @@ class PlotPanel(BasePanel):
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
               legend_loc='ur', legend_on=True, delay_draw=False,
-              zorder=None, **kws):
+              bgcol=None, framecolor=None, gridcolor=None,
+              labelfontsize=None, legendfontsize=None,
+              fullbox=True, zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -188,6 +190,11 @@ class PlotPanel(BasePanel):
         conf.set_trace_label(label)
         conf.set_trace_datarange(datarange)
 
+        if bgcol is not None:
+            axes.set_axis_bgcolor(bgcol)
+        if framecolor is not None:
+            self.canvas.figure.set_facecolor(framecolor)
+
         if color:
             conf.set_trace_color(color)
         if style:
@@ -200,6 +207,13 @@ class PlotPanel(BasePanel):
             conf.set_trace_markersize(markersize)
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle)
+
+        if gridcolor is not None:
+            conf.grid_color = gridcolor
+        if labelfontsize is not None:
+            conf.labelfont.set_size(labelfontsize)
+        if legendfontsize is not None:
+            conf.legendfont.set_size(legendfontsize)
 
         if n < len(conf.lines):
             conf.lines[n] = _lines
@@ -215,6 +229,12 @@ class PlotPanel(BasePanel):
 
         if self.conf.show_legend:
             conf.draw_legend()
+
+        if not fullbox:  # show only left and bottom lines
+            axes.xaxis.tick_bottom()
+            axes.yaxis.tick_left()
+            axes.spines['top'].set_visible(False)
+            axes.spines['right'].set_visible(False)
 
         if not delay_draw:
             self.canvas.draw()

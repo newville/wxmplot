@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+# from setuptools import setup
+from distutils.core import setup
 try:
     from lib import __version__ as version
 except:

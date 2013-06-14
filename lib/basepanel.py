@@ -174,7 +174,7 @@ class BasePanel(wx.Panel):
 
     def save_figure(self, event=None):
         """ save figure image to file"""
-        file_choices = "PNG (*.png)|*.png"
+        file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|JPG (*.jpg)|*.jpg"
         ofile = self.conf.title.strip()
         if len(ofile) > 64:
             ofile = ofile[:63].strip()

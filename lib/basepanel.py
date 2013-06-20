@@ -175,7 +175,10 @@ class BasePanel(wx.Panel):
     def save_figure(self, event=None):
         """ save figure image to file"""
         file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|JPG (*.jpg)|*.jpg"
-        ofile = self.conf.title.strip()
+        try:
+            ofile = self.conf.title.strip()
+        except:
+            ofile = 'Image'
         if len(ofile) > 64:
             ofile = ofile[:63].strip()
         if len(ofile) < 1:
@@ -194,7 +197,10 @@ class BasePanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            self.canvas.print_figure(path, dpi=600)
+            if hasattr(self, 'fig'):
+                self.fig.savefig(path, transparent=True, dpi=600)
+            else:
+                self.canvas.print_figure(path, dpi=600)
             if (path.find(self.launch_dir) ==  0):
                 path = path[len(self.launch_dir)+1:]
             self.write_message('Saved plot to %s' % path)

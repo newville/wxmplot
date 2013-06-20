@@ -202,17 +202,19 @@ class ImageFrame(BaseFrame):
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
-        self.panel.messenger = self.write_message
+        # self.panel.SetBackgroundColour(self.bgcol)
+        # self.SetBackgroundColour(self.bgcol)
 
-        self.panel.fig.set_facecolor(self.bgcol)
-        self.panel.SetBackgroundColour(self.bgcol)
-        self.SetBackgroundColour(self.bgcol)
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self.config_on_frame:
             lpanel = self.BuildConfigPanel()
             mainsizer.Add(lpanel, 0,
                           wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
+
+
+        self.panel.messenger = self.write_message
+        self.panel.fig.set_facecolor(self.bgcol)
 
         mainsizer.Add(self.panel, 1,  wx.EXPAND)
 

@@ -112,7 +112,7 @@ class PlotPanel(BasePanel):
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
               legend_loc='ur', legend_on=True, delay_draw=False,
-              bgcol=None, framecolor=None, gridcolor=None,
+              bgcolor=None, framecolor=None, gridcolor=None,
               labelfontsize=None, legendfontsize=None,
               fullbox=True, zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
@@ -190,8 +190,8 @@ class PlotPanel(BasePanel):
         conf.set_trace_label(label)
         conf.set_trace_datarange(datarange)
 
-        if bgcol is not None:
-            axes.set_axis_bgcolor(bgcol)
+        if bgcolor is not None:
+            axes.set_axis_bgcolor(bgcolor)
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
 

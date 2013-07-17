@@ -52,6 +52,7 @@ class ImageFrame(BaseFrame):
             self.SetTitle(title)
         if self.config_on_frame:
             if len(img.shape) == 3:
+                print 'Image shape is ', img.shape
                 for comp in self.config_panel.Children:
                     comp.Disable()
             else:
@@ -64,8 +65,8 @@ class ImageFrame(BaseFrame):
         contour_value = 0
         if style == 'contour':
             contour_value = 1
-        if self.config_on_frame:
-            self.contour_toggle.SetValue(contour_value)
+        #if self.config_on_frame:
+        #    self.contour_toggle.SetValue(contour_value)
         self.panel.redraw()
 
 
@@ -73,30 +74,30 @@ class ImageFrame(BaseFrame):
         mids = self.menuIDs
         m0 = wx.Menu()
         mids.EXPORT = wx.NewId()
-        m0.Append(mids.SAVE,   "&Save Image\tCtrl+S",  "Save PNG Image of Plot")
-        m0.Append(mids.CLIPB,  "&Copy Image\tCtrl+C",  "Copy Image to Clipboard")
-        m0.Append(mids.EXPORT, "Export Data to ASCII", "Export to ASCII file")
+        m0.Append(mids.SAVE,   '&Save Image\tCtrl+S',  'Save PNG Image of Plot')
+        m0.Append(mids.CLIPB,  '&Copy Image\tCtrl+C',  'Copy Image to Clipboard')
+        m0.Append(mids.EXPORT, 'Export Data to ASCII', 'Export to ASCII file')
         m0.AppendSeparator()
-        m0.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
+        m0.Append(mids.PSETUP,  'Page Setup...',    'Printer Setup')
         m0.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
-        m0.Append(mids.PRINT, "&Print\tCtrl+P", "Print Plot")
+        m0.Append(mids.PRINT,   '&Print\tCtrl+P',   'Print Plot')
         m0.AppendSeparator()
-        m0.Append(mids.EXIT, "E&xit\tCtrl+Q", "Exit the 2D Plot Window")
+        m0.Append(mids.EXIT, 'E&xit\tCtrl+Q', 'Exit the 2D Plot Window')
 
         self.top_menus['File'] = m0
 
         mhelp = wx.Menu()
-        mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
-        mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
+        mhelp.Append(mids.HELP, 'Quick Reference',  'Quick Reference for WXMPlot')
+        mhelp.Append(mids.ABOUT, 'About', 'About WXMPlot')
         self.top_menus['Help'] = mhelp
 
         mbar = wx.MenuBar()
 
-        mbar.Append(self.top_menus['File'], "File")
+        mbar.Append(self.top_menus['File'], 'File')
         for m in self.user_menus:
             title,menu = m
             mbar.Append(menu, title)
-        mbar.Append(self.top_menus['Help'], "&Help")
+        mbar.Append(self.top_menus['Help'], '&Help')
 
 
         self.SetMenuBar(mbar)
@@ -106,7 +107,7 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_CLOSE,self.onExit)
 
     def BuildCustomMenus(self):
-        "build menus"
+        'build menus'
         mids = self.menuIDs
         mids.SAVE_CMAP = wx.NewId()
         mids.LOG_SCALE = wx.NewId()
@@ -118,11 +119,11 @@ class ImageFrame(BaseFrame):
         mids.CUR_LASSO = wx.NewId()
         mids.CUR_PROF  = wx.NewId()
         m = wx.Menu()
-        m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range")
-        m.Append(mids.SAVE_CMAP, "Save Image of Colormap")
+        m.Append(mids.UNZOOM, 'Zoom Out\tCtrl+Z',
+                 'Zoom out to full data range')
+        m.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
         m.AppendSeparator()
-        m.Append(mids.LOG_SCALE, "Log Scale Intensity\tCtrl+L", "", wx.ITEM_CHECK)
+        m.Append(mids.LOG_SCALE, 'Log Scale Intensity\tCtrl+L', '', wx.ITEM_CHECK)
         m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
         m.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
@@ -143,9 +144,17 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
         # self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_PROF)
-        m.AppendSeparator()
-        m.Append(wx.NewId(), 'Contour: ',
-                 'Action taken on with Left-Click and Left-Drag')
+        # m.AppendSeparator()
+        # contour_toggle.Bind(wx.EVT_CHECKBOX, self.onContourToggle)
+        mids.CONTOUR  = wx.NewId()
+        m.Append(mids.CONTOUR, 'As Contour', 'Show as contour map', kind=wx.ITEM_CHECK)
+        m.Check(mids.CONTOUR, False)
+        self.Bind(wx.EVT_MENU, self.onContourToggle, id=mids.CONTOUR)
+
+        mids.CONTOURLAB  = wx.NewId()
+        m.Append(mids.CONTOURLAB, 'Label Contours', 'Show labels on contours', kind=wx.ITEM_CHECK)
+        m.Check(mids.CONTOURLAB, False)
+        self.Bind(wx.EVT_MENU, self.onContourLabels, id=mids.CONTOURLAB)
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -202,9 +211,6 @@ class ImageFrame(BaseFrame):
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
-        # self.panel.SetBackgroundColour(self.bgcol)
-        # self.SetBackgroundColour(self.bgcol)
-
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self.config_on_frame:
@@ -245,9 +251,9 @@ class ImageFrame(BaseFrame):
         # interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
 
         s = wx.StaticText(lpanel, label=' Color Table:', size=(100, -1))
-        s.SetForegroundColour('Blue')
         lsizer.Add(s, (0, 0), (1, 3), labstyle, 5)
 
+        # color map
         cmap_choice =  wx.Choice(lpanel, size=(120, -1), choices=ColorMap_List)
         cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
         cmap_name = conf.cmap.name
@@ -263,83 +269,91 @@ class ImageFrame(BaseFrame):
         self.cmap_reverse = cmap_reverse
 
         cmax = conf.cmap_range
-        self.cmap_data   = numpy.outer(numpy.linspace(0, 1, cmax),
-                                       numpy.ones(cmax/4))
-
-        self.cmap_fig   = Figure((0.20, 1.0), dpi=100)
-        self.cmap_axes  = self.cmap_fig.add_axes([0, 0, 1, 1])
-        self.cmap_axes.set_axis_off()
-
-        self.cmap_canvas = FigureCanvasWxAgg(lpanel, -1,
-                                             figure=self.cmap_fig)
 
         self.bgcol = rgb2hex(lpanel.GetBackgroundColour()[:3])
-        self.cmap_fig.set_facecolor(self.bgcol)
+
+        cm_wid   = 0.9
+        cm_ratio = 0.15
+        self.cmap_data   = numpy.outer(numpy.ones(cmax*cm_ratio),
+                                       numpy.linspace(0, 1, cmax))
+
+        self.cmap_fig   = Figure((cm_wid, cm_wid*cm_ratio), dpi=150)
+
+        self.cmap_axes  = self.cmap_fig.add_axes([0, 0, 1, 1])
+        self.cmap_axes.set_axis_off()
+        self.cmap_canvas = FigureCanvasWxAgg(lpanel, -1,
+                                             figure=self.cmap_fig)
 
         self.cmap_image = self.cmap_axes.imshow(self.cmap_data,
                                                 cmap=conf.cmap,
                                                 interpolation='bilinear')
 
-        self.cmap_axes.set_ylim((0, cmax), emit=True)
-
         self.cmap_lo_val = wx.Slider(lpanel, -1, conf.cmap_lo, 0,
-                                     conf.cmap_range, size=(-1, 180),
-                                     style=wx.SL_INVERSE|wx.SL_VERTICAL)
+                                     conf.cmap_range,
+                                     style=wx.SL_HORIZONTAL)
 
         self.cmap_hi_val = wx.Slider(lpanel, -1, conf.cmap_hi, 0,
-                                     conf.cmap_range, size=(-1, 180),
-                                     style=wx.SL_INVERSE|wx.SL_VERTICAL)
+                                     conf.cmap_range,
+                                     style=wx.SL_HORIZONTAL)
 
         self.cmap_lo_val.Bind(wx.EVT_SCROLL,  self.onStretchLow)
         self.cmap_hi_val.Bind(wx.EVT_SCROLL,  self.onStretchHigh)
+        irow = 1
+        lsizer.Add(self.cmap_choice,  (1, 0), (1, 3), labstyle, 2)
+        lsizer.Add(self.cmap_reverse, (2, 0), (1, 3), labstyle, 2)
+        lsizer.Add(self.cmap_hi_val,  (3, 0), (1, 4), labstyle, 2)
+        lsizer.Add(self.cmap_canvas,  (4, 0), (1, 4), wx.ALIGN_CENTER, 0)
+        lsizer.Add(self.cmap_lo_val,  (5, 0), (1, 4), labstyle, 2)
+        irow = 5
 
         iauto_toggle = wx.CheckBox(lpanel, label='Autoscale Intensity?',
                                   size=(160, -1))
         iauto_toggle.Bind(wx.EVT_CHECKBOX, self.onInt_Autoscale)
         iauto_toggle.SetValue(conf.auto_intensity)
 
-        lsizer.Add(self.cmap_choice,  (1, 0), (1, 4), labstyle, 2)
-        lsizer.Add(self.cmap_reverse, (2, 0), (1, 4), labstyle, 5)
-        lsizer.Add(self.cmap_lo_val,  (3, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.cmap_canvas,  (3, 1), (1, 2), wx.ALIGN_CENTER|labstyle)
-        lsizer.Add(self.cmap_hi_val,  (3, 3), (1, 1), labstyle, 5)
-        lsizer.Add(iauto_toggle,      (4, 0), (1, 4), labstyle)
-
-        self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=65, labeltext='I min:',
+        self.imin_val = LabelEntry(lpanel, conf.int_lo,  size=60, labeltext='Imin:',
                                    action = Closure(self.onThreshold, argu='lo'))
-        self.imax_val = LabelEntry(lpanel, conf.int_hi,  size=65, labeltext='I max:',
+        self.imax_val = LabelEntry(lpanel, conf.int_hi,  size=60, labeltext='Imax:',
                                    action = Closure(self.onThreshold, argu='hi'))
-        self.imax_val.Disable()
-        self.imin_val.Disable()
 
-        lsizer.Add(self.imin_val.label, (5, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.imax_val.label, (6, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.imin_val, (5, 1), (1, 3), labstyle, 5)
-        lsizer.Add(self.imax_val, (6, 1), (1, 3), labstyle, 5)
+        irow += 1
+        lsizer.Add(iauto_toggle,        (irow,   0), (1, 4), labstyle)
+        irow += 1
+        lsizer.Add(self.imin_val.label, (irow, 0), (1, 1), labstyle, 1)
+        lsizer.Add(self.imin_val,       (irow, 1), (1, 2), labstyle, 1)
+        irow += 1
+        lsizer.Add(self.imax_val.label, (irow, 0), (1, 1), labstyle, 1)
+        lsizer.Add(self.imax_val,       (irow, 1), (1, 2), labstyle, 1)
 
-        contour_toggle = wx.CheckBox(lpanel, label='As Contour Plot?',
-                                  size=(160, -1))
-        contour_toggle.Bind(wx.EVT_CHECKBOX, self.onContourToggle)
-        self.contour_toggle = contour_toggle
-        contour_value = 0
-        if conf.style == 'contour':
-            contour_value = 1
-        contour_toggle.SetValue(contour_value)
-        contour_labels = wx.CheckBox(lpanel, label='Label Contours?',
-                                     size=(160, -1))
-        contour_labels.SetValue(1)
-        contour_labels.Bind(wx.EVT_CHECKBOX, self.onContourLabels)
-        self.contour_labels = contour_labels
-        self.ncontours = LabelEntry(lpanel, 10, size=65, labeltext='N levels:',
-                                   action = Closure(self.onContourLevels))
+        irow += 1
+        lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
+                   (irow, 0), (1, 4), labstyle, 1)
 
-        lsizer.Add(self.contour_toggle,  (7, 0), (1, 4), labstyle, 5)
-        lsizer.Add(self.ncontours.label, (8, 0), (1, 1), labstyle, 5)
-        lsizer.Add(self.ncontours,       (8, 1), (1, 3), labstyle, 5)
-        lsizer.Add(self.contour_labels,  (9, 0), (1, 4), labstyle, 5)
+        # contour_toggle = wx.CheckBox(lpanel, label='As Contour Plot?',
+        #                          size=(160, -1))
+        # contour_toggle.Bind(wx.EVT_CHECKBOX, self.onContourToggle)
+        # self.contour_toggle = contour_toggle
+        # contour_value = 0
+        # if conf.style == 'contour':
+        #    contour_value = 1
+        # contour_toggle.SetValue(contour_value)
+        # contour_labels = wx.CheckBox(lpanel, label='Label Contours?',
+        #                             size=(160, -1))
+        # contour_labels.SetValue(1)
+        # contour_labels.Bind(wx.EVT_CHECKBOX, self.onContourLabels)
+        # self.contour_labels = contour_labels
+        # self.ncontours = LabelEntry(lpanel, 10, size=65, labeltext='N levels:',
+        #                            action = Closure(self.onContourLevels))
+        # irow += 1
+        # lsizer.Add(self.contour_toggle,  (irow, 0), (1, 4), labstyle, 5)
+        # lsizer.Add(self.ncontours.label, (irow+1, 0), (1, 1), labstyle, 5)
+        # lsizer.Add(self.ncontours,       (irow+1, 1), (1, 3), labstyle, 5)
+        # lsizer.Add(self.contour_labels,  (irow+2, 0), (1, 4), labstyle, 5)
 
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
+        self.imax_val.Disable()
+        self.imin_val.Disable()
         return lpanel
 
     def onContourLevels(self, event=None):
@@ -400,8 +414,10 @@ class ImageFrame(BaseFrame):
     def onDataChange(self, data, x=None, y=None, **kw):
         imin, imax = data.min(), data.max()
         if self.config_on_frame:
-            self.imin_val.SetValue("%g" % imin)
-            self.imax_val.SetValue("%g" % imax)
+            self.imin_val.SetValue('%g' % imin)
+            self.imax_val.SetValue('%g' % imax)
+            self.imax_val.Disable()
+            self.imin_val.Disable()
         self.panel.conf.int_lo = imin
         self.panel.conf.int_hi = imax
 
@@ -480,14 +496,12 @@ class ImageFrame(BaseFrame):
         if not hasattr(conf, 'image'): return
         # conf.image.set_cmap(conf.cmap)
         self.cmap_image.set_cmap(conf.cmap)
-
         lo = conf.cmap_lo
         hi = conf.cmap_hi
         cmax = 1.0 * conf.cmap_range
-        wid = numpy.ones(cmax/4)
-        self.cmap_data[:lo, :] = 0
-        self.cmap_data[lo:hi] = numpy.outer(numpy.linspace(0., 1., hi-lo), wid)
-        self.cmap_data[hi:, :] = 1
+        self.cmap_data[:, :lo] = 0
+        self.cmap_data[:, lo:hi]  = numpy.linspace(0., 1., hi-lo)
+        self.cmap_data[:, hi:] = 1
         self.cmap_image.set_data(self.cmap_data)
         self.cmap_canvas.draw()
 
@@ -502,7 +516,6 @@ class ImageFrame(BaseFrame):
         if (hi-lo)<2:
             hi = min(hi, self.panel.conf.cmap_range)
             lo = max(lo, 0)
-
         self.cmap_lo_val.SetValue(lo)
         self.cmap_hi_val.SetValue(hi)
         self.panel.conf.cmap_lo = lo
@@ -516,7 +529,7 @@ class ImageFrame(BaseFrame):
 
     def onCMapSave(self, event=None):
         """save color table image"""
-        file_choices = "PNG (*.png)|*.png"
+        file_choices = 'PNG (*.png)|*.png'
         ofile = 'Colormap.png'
 
         dlg = wx.FileDialog(self, message='Save Colormap as...',
@@ -526,5 +539,4 @@ class ImageFrame(BaseFrame):
                             style=wx.SAVE|wx.CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            self.cmap_canvas.print_figure(path, dpi=300)
+            self.cmap_canvas.print_figure(dlg.GetPath(), dpi=600)

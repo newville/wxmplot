@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.nxutils import points_inside_poly
 
-from .imageconf import ImageConfig, ImageConfigFrame
+from .imageconf import ImageConfig
 from .basepanel import BasePanel
 
 class ImagePanel(BasePanel):
@@ -217,11 +217,7 @@ class ImagePanel(BasePanel):
         self.axes.cla()
         self.conf.title  = ''
 
-    def configure(self,event=None):
-        try:
-            self.win_config.Raise()
-        except:
-            self.win_config = ImageConfigFrame(parent=self, conf=self.conf)
+
     ####
     ## create GUI
     ####
@@ -260,15 +256,12 @@ class ImagePanel(BasePanel):
         self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
         self.popup_menu.AppendSeparator()
         self.popup_menu.Append(self.popup_rot90,   'Rotate 90deg (CW)')
-        # self.popup_menu.Append(self.popup_curmode, 'Toggle Cursor Mode')
-
-        #if self.show_config_popup:
-        #    self.popup_menu.Append(self.popup_config,'Configure')
 
         self.popup_menu.Append(self.popup_save,  'Save Image')
         self.Bind(wx.EVT_MENU, self.unzoom,       id=self.popup_unzoom_one)
         self.Bind(wx.EVT_MENU, self.unzoom_all,   id=self.popup_unzoom_all)
         self.Bind(wx.EVT_MENU, self.save_figure,  id=self.popup_save)
+        # self.popup_menu.Append(self.popup_curmode, 'Toggle Cursor Mode')
         # self.Bind(wx.EVT_MENU, self.toggle_curmode,  id=self.popup_curmode)
         self.Bind(wx.EVT_MENU, self.rotate90,  id=self.popup_rot90)
 

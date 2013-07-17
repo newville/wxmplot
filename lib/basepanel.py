@@ -211,6 +211,8 @@ class BasePanel(wx.Panel):
             color = '#FDFDFB'
         self.fig.set_facecolor(color)
 
+    def configure(self, evt=None, **kws):
+        pass
 
     ## cursor modes:
     def add_cursor_mode(self, modename, leftdown=None, leftup=None,

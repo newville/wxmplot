@@ -11,10 +11,11 @@ for cm in cm_names:
 
 for cm in ('coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
            'Blues', 'copper', 'spring', 'summer', 'autumn', 'winter',
-           'hsv', 'Spectral', 'gist_earth', 'gist_yarg', 'gist_rainbow',
-           'gist_heat', 'gist_stern', 'ocean', 'terrain', 'PiYG', 'PRGn',
-           'Spectral', 'Accent', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu',
-           'RdYlBu', 'RdYlGn'):
+           'hsv', 'Spectral'):
+    # 'gist_earth', 'gist_yarg', 'gist_rainbow',
+    # 'gist_stern',
+    # 'PiYG', 'PRGn', 'Spectral', 'Accent', 'YlGn', 'YlGnBu',
+    # 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn', 'ocean', 'terrain'
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 
@@ -28,7 +29,7 @@ class ImageConfig:
         self.axes   = axes
         self.fig  = fig
         self.canvas  = canvas
-        self.cmap  = colormap.gray
+        self.cmap  = {'int': colormap.gray}
         self.cmap_reverse = False
         self.interp = 'nearest'
         self.log_scale = False
@@ -36,11 +37,12 @@ class ImageConfig:
         self.flip_lr = False
         self.rot  = False
         self.datalimits = [None, None, None, None]
-        self.cmap_lo = 0
-        self.cmap_hi = self.cmap_range = 100
+        self.cmap_lo = {'int': 0}
+        self.cmap_hi = {'int': 100}
+        self.cmap_range = 100
         self.auto_intensity = True
-        self.int_lo = ''
-        self.int_hi = ''
+        self.int_lo = {'int': '', 'red': '', 'green': '', 'blue': ''}
+        self.int_hi = {'int': '', 'red': '', 'green': '', 'blue': ''}
         self.data = None
         self.indices = None
         self.title = 'image'

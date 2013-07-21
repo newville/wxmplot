@@ -15,6 +15,8 @@ from .imageconf import ColorMap_List, Interp_List
 from .baseframe import BaseFrame
 from .colors import rgb2hex
 from .utils import Closure, LabelEntry
+from .contourdialog import ContourDialog
+
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
@@ -31,7 +33,7 @@ class ImageFrame(BaseFrame):
     def __init__(self, parent=None, size=None,
                  config_on_frame=True, lasso_callback=None,
                  show_xsections=True, cursor_labels=None,
-                 output_title='Image',   **kws):
+                 output_title='Image', subtitles=None,  **kws):
         if size is None: size = (550, 450)
         self.config_on_frame = config_on_frame
         self.lasso_callback = lasso_callback
@@ -52,7 +54,9 @@ class ImageFrame(BaseFrame):
         self.cmap_canvas = {}
         self.imin_val = {}
         self.imax_val = {}
-
+        self.subtitles = {}
+        if subtitles is not None:
+            self.subtitles = subtitles
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
@@ -67,7 +71,7 @@ class ImageFrame(BaseFrame):
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
-                                size=(6.5, 3.75), dpi=100,
+                                size=(6.5, 4.5), dpi=100,
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
@@ -89,12 +93,14 @@ class ImageFrame(BaseFrame):
         self.SetSizer(mainsizer)
         self.Fit()
 
-
-    def display(self, img, title=None, colormap=None, style='image', **kw):
-        """plot after clearing current plot """
+    def display(self, img, title=None, colormap=None, style='image',
+                subtitles=None, **kw):
+        """plot after clearing current plot
+        """
         if title is not None:
             self.SetTitle(title)
-
+        if subtitles is not None:
+            self.subtitles = subtitles
         if self.config_on_frame:
             for comp in self.config_panel.Children:
                 comp.Destroy()
@@ -165,7 +171,7 @@ class ImageFrame(BaseFrame):
         mids.CUR_ZOOM  = wx.NewId()
         mids.CUR_LASSO = wx.NewId()
         mids.CUR_PROF  = wx.NewId()
-        m = wx.Menu()
+        m = self.opts_menu = wx.Menu()
         m.Append(mids.UNZOOM, 'Zoom Out\tCtrl+Z',
                  'Zoom out to full data range')
         m.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
@@ -191,18 +197,14 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
-        # self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_PROF)
-        # m.AppendSeparator()
-        # contour_toggle.Bind(wx.EVT_CHECKBOX, self.onContourToggle)
         mids.CONTOUR  = wx.NewId()
         m.Append(mids.CONTOUR, 'As Contour', 'Show as contour map', kind=wx.ITEM_CHECK)
         m.Check(mids.CONTOUR, False)
         self.Bind(wx.EVT_MENU, self.onContourToggle, id=mids.CONTOUR)
 
         mids.CONTOURLAB  = wx.NewId()
-        m.Append(mids.CONTOURLAB, 'Label Contours', 'Show labels on contours', kind=wx.ITEM_CHECK)
-        m.Check(mids.CONTOURLAB, False)
-        self.Bind(wx.EVT_MENU, self.onContourLabels, id=mids.CONTOURLAB)
+        m.Append(mids.CONTOURLAB, 'Configure Contours', 'Configure Contours')
+        self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -259,14 +261,19 @@ class ImageFrame(BaseFrame):
 
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         irow = -1
+        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP, 0)
+        self.opts_menu.Enable(self.menuIDs.CONTOUR, 0)
+        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, 0)
 
         for col in ('red', 'green', 'blue'):
-            s = wx.StaticText(lpanel, label=col.title(), size=(100, -1))
+            stitle = self.subtitles.get(col, '')
+            lab = "%s: %s" % (col.title(), stitle)
+            s = wx.StaticText(lpanel, label=lab, size=(100, -1))
             irow += 1
-            lsizer.Add(s, (irow, 0), (1, 4), labstyle, 2)
+            lsizer.Add(s, (irow, 0), (1, 4), labstyle, 0)
 
             cm_wid   = 1.00
-            cm_ratio = 0.12
+            cm_ratio = 0.07
             cmax = 100.0
             self.cmap_dat[col]   = numpy.outer(numpy.ones(cmax*cm_ratio),
                                                numpy.linspace(0, 1, cmax))
@@ -294,31 +301,29 @@ class ImageFrame(BaseFrame):
 
             #         self.cmap_hi_val.Bind(wx.EVT_SCROLL,  self.onStretchHigh)
             irow += 1
-            lsizer.Add(self.cmap_hi[col],    (irow, 0), (1, 4), labstyle, 2)
+            lsizer.Add(self.cmap_hi[col],    (irow, 0), (1, 4), labstyle, 0)
             irow += 1
             lsizer.Add(self.cmap_canvas[col],  (irow, 0), (1, 4), wx.ALIGN_CENTER, 0)
             irow += 1
-            lsizer.Add(self.cmap_lo[col],     (irow, 0), (1, 4), labstyle, 2)
-
+            lsizer.Add(self.cmap_lo[col],     (irow, 0), (1, 4), labstyle, 0)
 
             self.imin_val[col] = LabelEntry(lpanel, conf.int_lo[col],
-                                            size=60, labeltext='Range:',
+                                            size=65, labeltext='Range:',
                                             action = Closure(self.onThreshold,
                                                              argu='lo', col=col))
             self.imax_val[col] = LabelEntry(lpanel, conf.int_hi[col],
-                                            size=60, labeltext=':',
+                                            size=65, labeltext=':',
                                             action = Closure(self.onThreshold,
                                                              argu='hi', col=col))
-
             irow += 1
             lsizer.Add(self.imin_val[col].label, (irow, 0), (1, 1), labstyle, 1)
-            lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 1)
-            lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 1)
-            lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 1)
+            lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 0)
+            lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 0)
+            lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 0)
 
-        irow += 1
-        lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
-                   (irow, 0), (1, 4), labstyle, 1)
+            irow += 1
+            lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
+                       (irow, 0), (1, 4), labstyle, 0)
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
 
@@ -327,13 +332,14 @@ class ImageFrame(BaseFrame):
     def Build_ConfigPanel_Int(self):
         """config panel for left-hand-side of frame"""
         conf = self.panel.conf
+        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP, 1)
+        self.opts_menu.Enable(self.menuIDs.CONTOUR, 1)
+        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, 1)
+
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
 
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
-
-        # interp_choice =  wx.Choice(lpanel, choices=Interp_List)
-        # interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
 
         s = wx.StaticText(lpanel, label=' Color Table:', size=(100, -1))
         lsizer.Add(s, (0, 0), (1, 4), labstyle, 2)
@@ -392,17 +398,17 @@ class ImageFrame(BaseFrame):
         irow = 5
 
         self.imin_val[col] = LabelEntry(lpanel, conf.int_lo[col],
-                                   size=60, labeltext='Range:',
+                                   size=65, labeltext='Range:',
                                    action = Closure(self.onThreshold, argu='lo'))
         self.imax_val[col] = LabelEntry(lpanel, conf.int_hi[col],
-                                   size=60, labeltext=':',
+                                   size=65, labeltext=':',
                                    action = Closure(self.onThreshold, argu='hi'))
 
         irow += 1
         lsizer.Add(self.imin_val[col].label, (irow, 0), (1, 1), labstyle, 1)
-        lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 1)
-        lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 1)
-        lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 1)
+        lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 0)
+        lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 0)
+        lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 0)
 
         irow += 1
         lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
@@ -414,53 +420,40 @@ class ImageFrame(BaseFrame):
         self.imin_val[col].Enable()
         return lpanel
 
-    def onContourLevels(self, event=None):
-        try:
-            nlevels = int(event.GetString())
-        except:
-            return
+    def onContourConfig(self, event=None):
         panel = self.panel
-        conf  = panel.conf
-        if conf.style == 'image':
+        conf = panel.conf
+        dlg = ContourDialog(parent=self, conf=conf)
+        dlg.CenterOnScreen()
+        val = dlg.ShowModal()
+        if val == wx.ID_OK:
+            pass
+        dlg.Destroy()
+        if conf.style != 'contour':
             return
         self.set_colormap()
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab,
-                      nlevels=nlevels, style='contour')
+                      contour_labels=conf.contour_labels,
+                      nlevels=conf.ncontour_levels, style='contour')
         panel.redraw()
 
     def onContourToggle(self, event=None):
+        if len(self.panel.conf.data.shape) > 2:
+            return
         panel = self.panel
         conf  = panel.conf
         conf.style = 'image'
         if event.IsChecked():
             conf.style = 'contour'
-        try:
-            nlevels = int(self.ncontours.GetValue())
-        except:
-            nlevels = None
+        nlevels = int(conf.ncontour_levels)
         self.set_colormap()
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
-                      nlevels=nlevels, xlabel=panel.xlab,
-                      ylabel=panel.ylab, style=conf.style)
-        panel.redraw()
-
-    def onContourLabels(self, event=None):
-        panel = self.panel
-        conf  = panel.conf
-        conf.contour_labels = event.IsChecked()
-        try:
-            nlevels = int(self.ncontours.GetValue())
-        except:
-            nlevels = None
-
-        panel.axes.cla()
-        self.set_colormap()
-        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
-                      nlevels=nlevels, xlabel=panel.xlab,
-                      ylabel=panel.ylab, style=conf.style)
+                      nlevels=nlevels, contour_labels=conf.contour_labels,
+                      xlabel=panel.xlab, ylabel=panel.ylab,
+                      style=conf.style)
         panel.redraw()
 
     def onCMap(self, event=None):
@@ -475,8 +468,8 @@ class ImageFrame(BaseFrame):
         conf = self.panel.conf
         if len(data.shape) == 2: # intensity map
             imin, imax = data.min(), data.max()
-            self.imin_val[col].SetValue('%g' % imin)
-            self.imax_val[col].SetValue('%g' % imax)
+            self.imin_val[col].SetValue('%.4g' % imin)
+            self.imax_val[col].SetValue('%.4g' % imax)
             self.imax_val[col].Enable()
             self.imin_val[col].Enable()
             conf.int_lo['int'] = imin
@@ -486,13 +479,12 @@ class ImageFrame(BaseFrame):
                 imin, imax = data[:,:,ix].min(), data[:,:,ix].max()
                 conf.int_lo[cnam] = imin
                 conf.int_hi[cnam] = imax
-                self.imin_val[cnam].SetValue('%g' % imin)
-                self.imax_val[cnam].SetValue('%g' % imax)
+                self.imin_val[cnam].SetValue('%.4g' % imin)
+                self.imax_val[cnam].SetValue('%.4g' % imax)
                 self.imax_val[cnam].Enable()
                 self.imin_val[cnam].Enable()
 
     def onThreshold(self, event=None, argu='hi', col='int'):
-        print 'on thresh ', col, argu
         if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
             try:
                 val =  float(str(event.GetString()).strip())
@@ -533,9 +525,11 @@ class ImageFrame(BaseFrame):
 
     def set_colormap(self, name=None, col='int'):
         conf = self.panel.conf
-        if name is None:
-            name = self.cmap_choice.GetStringSelection()
-
+        try:
+            if name is None:
+                name = self.cmap_choice.GetStringSelection()
+        except:
+            return
         conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
         if conf.cmap_reverse and not name.endswith('_r'):
             name = name + '_r'

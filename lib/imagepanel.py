@@ -340,7 +340,7 @@ class ImagePanel(BasePanel):
             self.indices_thread.join()
         ind = self.conf.indices
         mask = points_inside_poly(ind, vertices)
-        mask.shape = self.conf.data.shape
+        mask.shape = (self.conf.data.shape[0], self.conf.data.shape[1])
         self.lasso = None
         self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):
@@ -357,7 +357,6 @@ class ImagePanel(BasePanel):
             xmin, xmax, ymin, ymax = self.data_range
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_viewlimits()
-        #   xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
         self.canvas.draw()
 
     def unzoom_all(self, event=None):
@@ -372,7 +371,6 @@ class ImagePanel(BasePanel):
         color map
         interpolation
         """
-
         conf = self.conf
         # note: rotation re-calls display(), to reset the image
         # other transformations will just do .set_data() on image
@@ -389,12 +387,12 @@ class ImagePanel(BasePanel):
         if self.conf.style == 'image':
             if conf.flip_ud:   img = np.flipud(img)
             if conf.flip_lr:   img = np.fliplr(img)
-            if conf.log_scale: img = np.log10(1 + 9.0*img)
+            if conf.log_scale:
+                img = np.log10(1 + 9.0*img)
 
         # apply intensity scale for current limited (zoomed) image
-        imin = conf.int_lo[col]
-        imax = conf.int_hi[col]
-
+        imin = float(conf.int_lo[col])
+        imax = float(conf.int_hi[col])
         if conf.log_scale:
             imin = np.log10(1 + 9.0*imin)
             imax = np.log10(1 + 9.0*imax)
@@ -422,6 +420,14 @@ class ImagePanel(BasePanel):
             gmax = float(conf.int_hi['green'])
             bmin = float(conf.int_lo['blue'])
             bmax = float(conf.int_hi['blue'])
+            if conf.log_scale:
+                rmin = np.log10(1 + 9.0*rmin)
+                rmax = np.log10(1 + 9.0*rmax)
+                gmin = np.log10(1 + 9.0*gmin)
+                gmax = np.log10(1 + 9.0*gmax)
+                bmin = np.log10(1 + 9.0*bmin)
+                bmax = np.log10(1 + 9.0*bmax)
+
             rlo = conf.cmap_lo['red']/(1.0*conf.cmap_range)
             rhi = conf.cmap_hi['red']/(1.0*conf.cmap_range)
             glo = conf.cmap_lo['green']/(1.0*conf.cmap_range)

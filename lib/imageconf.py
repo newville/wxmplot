@@ -41,14 +41,14 @@ class ImageConfig:
         self.cmap_hi = {'int': 100}
         self.cmap_range = 100
         self.auto_intensity = True
-        self.int_lo = {'int': '', 'red': '', 'green': '', 'blue': ''}
-        self.int_hi = {'int': '', 'red': '', 'green': '', 'blue': ''}
+        self.int_lo = {'int': '0', 'red': '0', 'green': '0', 'blue': '0'}
+        self.int_hi = {'int': '1', 'red': '1', 'green': '1', 'blue': '1'}
         self.data = None
         self.indices = None
         self.title = 'image'
         self.style = 'image'
         self.highlight_areas = []
-        self.ncontour_levels = None
+        self.ncontour_levels = 10
         self.contour_levels = None
         self.contour_labels = True
         self.cursor_mode = 'zoom'

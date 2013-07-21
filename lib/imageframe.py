@@ -31,11 +31,10 @@ class ImageFrame(BaseFrame):
     """
 
     def __init__(self, parent=None, size=None,
-                 config_on_frame=True, lasso_callback=None,
+                 lasso_callback=None,
                  show_xsections=True, cursor_labels=None,
                  output_title='Image', subtitles=None,  **kws):
         if size is None: size = (550, 450)
-        self.config_on_frame = config_on_frame
         self.lasso_callback = lasso_callback
         self.cursor_menulabels =  {}
         self.cursor_menulabels.update(CURSOR_MENULABELS)
@@ -65,6 +64,18 @@ class ImageFrame(BaseFrame):
 
         self.SetStatusWidths([-2, -1])
         self.SetStatusText('', 0)
+
+        mids = self.menuIDs
+        mids.SAVE_CMAP = wx.NewId()
+        mids.LOG_SCALE = wx.NewId()
+        mids.AUTO_SCALE = wx.NewId()
+        mids.FLIP_H    = wx.NewId()
+        mids.FLIP_V    = wx.NewId()
+        mids.FLIP_O    = wx.NewId()
+        mids.ROT_CW    = wx.NewId()
+        mids.CUR_ZOOM  = wx.NewId()
+        mids.CUR_LASSO = wx.NewId()
+        mids.CUR_PROF  = wx.NewId()
 
         self.BuildCustomMenus()
         self.BuildMenu()
@@ -101,14 +112,13 @@ class ImageFrame(BaseFrame):
             self.SetTitle(title)
         if subtitles is not None:
             self.subtitles = subtitles
-        if self.config_on_frame:
-            for comp in self.config_panel.Children:
-                comp.Destroy()
-            if len(img.shape) == 3:
-                self.Build_ConfigPanel_RGB()
+        for comp in self.config_panel.Children:
+            comp.Destroy()
+        if len(img.shape) == 3:
+            self.Build_ConfigPanel_RGB()
+        else:
+            self.Build_ConfigPanel_Int()
 
-            else:
-                self.Build_ConfigPanel_Int()
         self.panel.display(img, style=style, **kw)
         self.panel.conf.title = title
         if colormap is not None:
@@ -117,10 +127,18 @@ class ImageFrame(BaseFrame):
         if style == 'contour':
             contour_value = 1
 
-        #if self.config_on_frame:
-        #    self.contour_toggle.SetValue(contour_value)
         self.panel.redraw()
+        self.config_panel.Refresh()
+        self.SendSizeEvent()
+        wx.CallAfter(self.EnableMenus)
 
+
+    def EnableMenus(self, evt=None):
+        isIntMap = {True:1, False:0}[len(self.panel.conf.data.shape) == 2]
+        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
+        self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
+        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
+        self.onInt_Autoscale(event=None, val=False)
 
     def BuildMenu(self):
         mids = self.menuIDs
@@ -157,21 +175,12 @@ class ImageFrame(BaseFrame):
         self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
         self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
         self.Bind(wx.EVT_CLOSE,self.onExit)
+        # print 'done with BuildMenu'
 
     def BuildCustomMenus(self):
         'build menus'
-        mids = self.menuIDs
-        mids.SAVE_CMAP = wx.NewId()
-        mids.LOG_SCALE = wx.NewId()
-        mids.AUTO_SCALE = wx.NewId()
-        mids.FLIP_H    = wx.NewId()
-        mids.FLIP_V    = wx.NewId()
-        mids.FLIP_O    = wx.NewId()
-        mids.ROT_CW    = wx.NewId()
-        mids.CUR_ZOOM  = wx.NewId()
-        mids.CUR_LASSO = wx.NewId()
-        mids.CUR_PROF  = wx.NewId()
         m = self.opts_menu = wx.Menu()
+        mids = self.menuIDs
         m.Append(mids.UNZOOM, 'Zoom Out\tCtrl+Z',
                  'Zoom out to full data range')
         m.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
@@ -212,7 +221,7 @@ class ImageFrame(BaseFrame):
             sm.AppendRadioItem(wid, itype, itype)
             self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
         self.user_menus  = [('&Options', m), ('Smoothing', sm)]
-
+        # print 'done Build Custom Menus'
 
     def onInterp(self, evt=None, name=None):
         if name not in Interp_List:
@@ -243,11 +252,11 @@ class ImageFrame(BaseFrame):
             conf.rot = True
         self.panel.unzoom_all()
 
-
     def BindMenuToPanel(self, panel=None):
         if panel is None: panel = self.panel
         BaseFrame.BindMenuToPanel(self, panel=panel)
         mids = self.menuIDs
+
         self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
         self.Bind(wx.EVT_MENU, self.onInt_Autoscale, id=mids.AUTO_SCALE)
@@ -261,9 +270,6 @@ class ImageFrame(BaseFrame):
 
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         irow = -1
-        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP, 0)
-        self.opts_menu.Enable(self.menuIDs.CONTOUR, 0)
-        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, 0)
 
         for col in ('red', 'green', 'blue'):
             stitle = self.subtitles.get(col, '')
@@ -324,18 +330,23 @@ class ImageFrame(BaseFrame):
             irow += 1
             lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
                        (irow, 0), (1, 4), labstyle, 0)
+        irow += 1
+        self.CustomConfig(lpanel, lsizer, irow)
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
 
         return lpanel
 
+    def CustomConfig(self, lpanel, lsizer, irow):
+        """ override to add custom config panel items
+        to bottom of config panel
+        """
+        pass
+
     def Build_ConfigPanel_Int(self):
         """config panel for left-hand-side of frame"""
         conf = self.panel.conf
-        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP, 1)
-        self.opts_menu.Enable(self.menuIDs.CONTOUR, 1)
-        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, 1)
-
+        # print 'Build ConfigPanel INT ', dir(self.menuIDs)
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
 
@@ -413,11 +424,11 @@ class ImageFrame(BaseFrame):
         irow += 1
         lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
                    (irow, 0), (1, 4), labstyle, 1)
+        irow += 1
+        self.CustomConfig(lpanel, lsizer, irow)
 
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
-        self.imax_val[col].Enable()
-        self.imin_val[col].Enable()
         return lpanel
 
     def onContourConfig(self, event=None):
@@ -470,8 +481,6 @@ class ImageFrame(BaseFrame):
             imin, imax = data.min(), data.max()
             self.imin_val[col].SetValue('%.4g' % imin)
             self.imax_val[col].SetValue('%.4g' % imax)
-            self.imax_val[col].Enable()
-            self.imin_val[col].Enable()
             conf.int_lo['int'] = imin
             conf.int_hi['int'] = imax
         else:
@@ -481,8 +490,10 @@ class ImageFrame(BaseFrame):
                 conf.int_hi[cnam] = imax
                 self.imin_val[cnam].SetValue('%.4g' % imin)
                 self.imax_val[cnam].SetValue('%.4g' % imax)
-                self.imax_val[cnam].Enable()
-                self.imin_val[cnam].Enable()
+        for ix, iwid in self.imax_val.items():
+            iwid.Enable()
+        for ix, iwid in self.imin_val.items():
+            iwid.Enable()
 
     def onThreshold(self, event=None, argu='hi', col='int'):
         if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
@@ -500,8 +511,9 @@ class ImageFrame(BaseFrame):
             self.panel.conf.int_hi[col] = val
         self.panel.redraw()
 
-    def onInt_Autoscale(self, event=None):
-        val = self.panel.conf.auto_intensity = event.IsChecked()
+    def onInt_Autoscale(self, event=None, val=None):
+        if val is None:
+            val = self.panel.conf.auto_intensity = event.IsChecked()
         if val:
             try:
                 self.onDataChange(self.panel.conf.data)

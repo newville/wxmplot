@@ -72,7 +72,6 @@ class ImagePanel(BasePanel):
         conf = self.conf
         conf.rot, conf.log_scale   = False, False
         conf.flip_ud, conf.flip_lr = False, False
-        conf.auto_intensity, conf.interp = True, 'nearest'
         conf.highlight_areas = []
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
@@ -445,8 +444,6 @@ class ImagePanel(BasePanel):
             if self.conf.style == 'image':
                 conf.image.set_data(inew)
                 conf.image.set_interpolation(conf.interp)
-
-
         self.canvas.draw()
 
     def report_leftdown(self,event=None):

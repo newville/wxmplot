@@ -40,7 +40,7 @@ class ImageConfig:
         self.cmap_lo = {'int': 0}
         self.cmap_hi = {'int': 100}
         self.cmap_range = 100
-        self.auto_intensity = True
+        self.auto_intensity = False
         self.int_lo = {'int': '0', 'red': '0', 'green': '0', 'blue': '0'}
         self.int_hi = {'int': '1', 'red': '1', 'green': '1', 'blue': '1'}
         self.data = None

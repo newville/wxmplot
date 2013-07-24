@@ -31,7 +31,7 @@ class ImageFrame(BaseFrame):
     """
 
     def __init__(self, parent=None, size=None,
-                 lasso_callback=None,
+                 lasso_callback=None, mode='intensity',
                  show_xsections=True, cursor_labels=None,
                  output_title='Image', subtitles=None,  **kws):
         if size is None: size = (550, 450)
@@ -51,9 +51,8 @@ class ImageFrame(BaseFrame):
         self.cmap_img = {}
         self.cmap_dat = {}
         self.cmap_canvas = {}
-        self.imin_val = {}
-        self.imax_val = {}
         self.subtitles = {}
+        self.config_mode = None
         if subtitles is not None:
             self.subtitles = subtitles
         sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
@@ -87,6 +86,13 @@ class ImageFrame(BaseFrame):
                                 output_title=self.output_title)
 
         self.config_panel = wx.Panel(self)
+        if mode.lower().startswith('int'):
+            self.config_mode = 'int'
+            self.Build_ConfigPanel_Int()
+        elif mode.lower().startswith('rgb'):
+            self.config_mode = 'rgb'
+            self.Build_ConfigPanel_RGB()
+
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         mainsizer.Add(self.config_panel, 0,
@@ -112,11 +118,17 @@ class ImageFrame(BaseFrame):
             self.SetTitle(title)
         if subtitles is not None:
             self.subtitles = subtitles
-        for comp in self.config_panel.Children:
-            comp.Destroy()
         if len(img.shape) == 3:
+            if self.config_mode != 'rgb':
+                for comp in self.config_panel.Children:
+                    comp.Destroy()
+            self.config_mode = 'rgb'
             self.Build_ConfigPanel_RGB()
         else:
+            if self.config_mode != 'int':
+                for comp in self.config_panel.Children:
+                    comp.Destroy()
+            self.config_mode = 'int'
             self.Build_ConfigPanel_Int()
 
         self.panel.display(img, style=style, **kw)
@@ -126,7 +138,6 @@ class ImageFrame(BaseFrame):
         contour_value = 0
         if style == 'contour':
             contour_value = 1
-
         self.panel.redraw()
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -264,6 +275,8 @@ class ImageFrame(BaseFrame):
 
     def Build_ConfigPanel_RGB(self):
         """config panel for left-hand-side of frame: RGB Maps"""
+        self.imin_val = {}
+        self.imax_val = {}
         conf = self.panel.conf
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
@@ -345,6 +358,8 @@ class ImageFrame(BaseFrame):
 
     def Build_ConfigPanel_Int(self):
         """config panel for left-hand-side of frame"""
+        self.imin_val = {}
+        self.imax_val = {}
         conf = self.panel.conf
         # print 'Build ConfigPanel INT ', dir(self.menuIDs)
         lpanel = self.config_panel
@@ -491,9 +506,15 @@ class ImageFrame(BaseFrame):
                 self.imin_val[cnam].SetValue('%.4g' % imin)
                 self.imax_val[cnam].SetValue('%.4g' % imax)
         for ix, iwid in self.imax_val.items():
-            iwid.Enable()
+            try:
+                iwid.Enable()
+            except pyDeadObjectError:
+                pass
         for ix, iwid in self.imin_val.items():
-            iwid.Enable()
+            try:
+                iwid.Enable()
+            except pyDeadObjectError:
+                pass
 
     def onThreshold(self, event=None, argu='hi', col='int'):
         if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):

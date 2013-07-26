@@ -319,7 +319,7 @@ class PlotConfigFrame(wx.Frame):
             thk.SetValue(dthk)
             thk.Bind(wx.EVT_SPINCTRL, Closure(self.onThickness, argu=argu))
 
-            sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(100,-1))
+            sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(120,-1))
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
 

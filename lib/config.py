@@ -39,7 +39,12 @@ MarkerMap = OrderedDict()
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
 
-for k,v in (('solid','-'), ('dashed','--'), ('dotted',':'), ('dash-dot','-.')):
+for k,v in (('solid', ('-', None)),
+            ('dashed', ('--', (6, 6))),
+            ('long dashed', ('--', (12, 4))),
+            ('short dashed', ('--',(4, 1))),
+            ('dotted', (':', None)),
+            ('dash-dot', ('-.', None))):
     StyleMap[k]=v
 
 
@@ -114,7 +119,10 @@ class LineProperties:
                 if v == style:  sty = k
         self.style = sty
         if line:
-            line[0].set_linestyle(StyleMap[sty])
+            _key, _opts = StyleMap[sty]
+            line[0].set_linestyle(_key)
+            if _key == '--' and _opts is not None:
+                line[0].set_dashes(_opts)
 
     def set_drawstyle(self, style, line=None):
         sty = 'default'

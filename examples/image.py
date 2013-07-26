@@ -27,7 +27,7 @@ dat = 0.2 + (0.3*random.random(size=nx*ny).reshape(ny, nx) +
 
 
 app = wx.App()
-frame = ImageFrame(config_on_frame=True)
+frame = ImageFrame(mode='intensity')
 frame.display(dat, x=ox, y=oy)
 frame.Show()
 app.MainLoop()

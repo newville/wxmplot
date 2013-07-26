@@ -92,7 +92,6 @@ class ImageFrame(BaseFrame):
         elif mode.lower().startswith('rgb'):
             self.config_mode = 'rgb'
             self.Build_ConfigPanel_RGB()
-
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         mainsizer.Add(self.config_panel, 0,
@@ -119,18 +118,17 @@ class ImageFrame(BaseFrame):
         if subtitles is not None:
             self.subtitles = subtitles
         if len(img.shape) == 3:
-            if self.config_mode != 'rgb':
+            if not self.config_mode.lower().startswith('rgb'):
                 for comp in self.config_panel.Children:
                     comp.Destroy()
-            self.config_mode = 'rgb'
-            self.Build_ConfigPanel_RGB()
+                self.config_mode = 'rgb'
+                self.Build_ConfigPanel_RGB()
         else:
-            if self.config_mode != 'int':
+            if not self.config_mode.lower().startswith('int'):
                 for comp in self.config_panel.Children:
                     comp.Destroy()
-            self.config_mode = 'int'
-            self.Build_ConfigPanel_Int()
-
+                self.config_mode = 'int'
+                self.Build_ConfigPanel_Int()
         self.panel.display(img, style=style, **kw)
         self.panel.conf.title = title
         if colormap is not None:
@@ -149,7 +147,7 @@ class ImageFrame(BaseFrame):
         self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
-        self.onInt_Autoscale(event=None, val=False)
+        # self.onInt_Autoscale(event=None, val=False)
 
     def BuildMenu(self):
         mids = self.menuIDs
@@ -361,7 +359,6 @@ class ImageFrame(BaseFrame):
         self.imin_val = {}
         self.imax_val = {}
         conf = self.panel.conf
-        # print 'Build ConfigPanel INT ', dir(self.menuIDs)
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
 
@@ -426,6 +423,7 @@ class ImageFrame(BaseFrame):
         self.imin_val[col] = LabelEntry(lpanel, conf.int_lo[col],
                                    size=65, labeltext='Range:',
                                    action = Closure(self.onThreshold, argu='lo'))
+        # print 'imin: ', self.imin_val
         self.imax_val[col] = LabelEntry(lpanel, conf.int_hi[col],
                                    size=65, labeltext=':',
                                    action = Closure(self.onThreshold, argu='hi'))
@@ -514,6 +512,7 @@ class ImageFrame(BaseFrame):
             try:
                 iwid.Enable()
             except pyDeadObjectError:
+                # print 'dead imin ', ix, iwid
                 pass
 
     def onThreshold(self, event=None, argu='hi', col='int'):
@@ -540,6 +539,7 @@ class ImageFrame(BaseFrame):
                 self.onDataChange(self.panel.conf.data)
             except:
                 pass
+            self.panel.redraw()
             for ix, iwid in self.imax_val.items():
                 iwid.Disable()
             for ix, iwid in self.imin_val.items():
@@ -549,8 +549,6 @@ class ImageFrame(BaseFrame):
                 iwid.Enable()
             for ix, iwid in self.imin_val.items():
                 iwid.Enable()
-
-        self.panel.redraw()
 
     def onCMapReverse(self, event=None):
         self.set_colormap()

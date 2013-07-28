@@ -337,29 +337,40 @@ class PlotPanel(BasePanel):
         self.canvas.draw()
 
     def lassoHandler(self, vertices):
-        # print 'plotpanel.lassoHandler'
         conf = self.conf
-        fcols = conf.scatter_coll.get_facecolors()
-        ecols = conf.scatter_coll.get_edgecolors()
-        mask = points_inside_poly(conf.scatter_data, vertices)
-        pts = nonzero(mask)[0]
-        self.conf.scatter_mask = mask
-        for i in range(len(conf.scatter_data)):
-            if i in pts:
-                ecols[i] = to_rgba(conf.scatter_selectedge)
-                fcols[i] = to_rgba(conf.scatter_selectcolor)
-                fcols[i][3] = 0.3
-                ecols[i][3] = 0.8
-            else:
-                fcols[i] = to_rgba(conf.scatter_normalcolor)
-                ecols[i] = to_rgba(conf.scatter_normaledge)
-
+       
+        if self.conf.plot_type == 'scatter':
+            fcols = conf.scatter_coll.get_facecolors()
+            ecols = conf.scatter_coll.get_edgecolors()
+            sdat = con.scatter_data
+            mask = points_inside_poly(sdat, vertices)
+            pts = nonzero(mask)[0]
+            self.conf.scatter_mask = mask
+            for i in range(len(sdat)):
+                if i in pts:
+                    ecols[i] = to_rgba(conf.scatter_selectedge)
+                    fcols[i] = to_rgba(conf.scatter_selectcolor)
+                    fcols[i][3] = 0.3
+                    ecols[i][3] = 0.8
+                else:
+                    fcols[i] = to_rgba(conf.scatter_normalcolor)
+                    ecols[i] = to_rgba(conf.scatter_normaledge)
+        else:
+            xdata = self.axes.lines[0].get_xdata()
+            ydata = self.axes.lines[0].get_ydata()
+            sdat = [(x, y) for x, y in zip(xdata, ydata)]
+            #print  len(xdata), sdat[:20]
+            mask = points_inside_poly(sdat, vertices)
+            # print mask
+            pts = nonzero(mask)[0]
+            #print 'Points selected = ', pts
+            
         self.lasso = None
         self.canvas.draw()
         # self.canvas.draw_idle()
         if (self.lasso_callback is not None and
             hasattr(self.lasso_callback , '__call__')):
-            self.lasso_callback(data = conf.scatter_coll.get_offsets(),
+            self.lasso_callback(data = sdat,
                                 selected = pts, mask=mask)
 
     def set_xylims(self, limits, axes=None):

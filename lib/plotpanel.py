@@ -230,11 +230,11 @@ class PlotPanel(BasePanel):
         if self.conf.show_legend:
             conf.draw_legend()
 
+        # axes style ('box' or 'open')
+        conf.axes_style = 'box'
         if not fullbox:  # show only left and bottom lines
-            axes.xaxis.tick_bottom()
-            axes.yaxis.tick_left()
-            axes.spines['top'].set_visible(False)
-            axes.spines['right'].set_visible(False)
+            conf.axes_style = 'open'
+        conf.set_axes_style()
 
         if not delay_draw:
             self.canvas.draw()

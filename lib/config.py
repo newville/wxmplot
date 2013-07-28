@@ -176,7 +176,7 @@ class PlotConfig:
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}
 
-
+        self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
 
@@ -206,6 +206,8 @@ class PlotConfig:
         self.show_grid   = True
         self.show_legend = False
         self.show_legend_frame = False
+        self.axes_style = 'box'
+
         # self.trace_color_callback = trace_color_callback
         f0 =  FontProperties()
         self.labelfont = f0.copy()
@@ -366,6 +368,25 @@ class PlotConfig:
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)
+        self.canvas.draw()
+
+    def set_axes_style(self, style=None):
+        """set axes style -- either 'box' or 'open' to show full box
+        or open axes
+        """
+        if style is not None:
+            self.axes_style = style
+        axes0 = self.canvas.figure.get_axes()[0]
+        if self.axes_style.lower().startswith('box'):
+            axes0.xaxis.set_ticks_position('both')
+            axes0.yaxis.set_ticks_position('both')
+            axes0.spines['top'].set_visible(True)
+            axes0.spines['right'].set_visible(True)
+        else:
+            axes0.xaxis.set_ticks_position('bottom')
+            axes0.yaxis.set_ticks_position('left')
+            axes0.spines['top'].set_visible(False)
+            axes0.spines['right'].set_visible(False)
         self.canvas.draw()
 
     def draw_legend(self, show=None):

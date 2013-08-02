@@ -11,7 +11,12 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
-from matplotlib.nxutils import points_inside_poly
+# nxutils is deprecated since matplotlib 1.2
+vmatplotlib = matplotlib.__version__
+if (vmatplotlib < '1.2'):
+    from matplotlib.nxutils import points_inside_poly
+else:
+    from matplotlib.path import Path
 
 from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
@@ -341,7 +346,10 @@ class PlotPanel(BasePanel):
         conf = self.conf
         fcols = conf.scatter_coll.get_facecolors()
         ecols = conf.scatter_coll.get_edgecolors()
-        mask = points_inside_poly(conf.scatter_data, vertices)
+        if(vmatplotlib < '1.2'):
+            mask = points_inside_poly(conf.scatter_data, vertices)
+        else:
+            mask = Path(vertices).contains_points(conf.scatter_data)
         pts = nonzero(mask)[0]
         self.conf.scatter_mask = mask
         for i in range(len(conf.scatter_data)):

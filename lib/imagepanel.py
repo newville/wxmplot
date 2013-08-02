@@ -68,7 +68,7 @@ class ImagePanel(BasePanel):
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
-                **kws):
+                col='int', **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -78,11 +78,9 @@ class ImagePanel(BasePanel):
         conf = self.conf
         conf.rot, conf.log_scale   = False, False
         conf.flip_ud, conf.flip_lr = False, False
-        conf.auto_intensity, conf.interp = True, 'nearest'
         conf.highlight_areas = []
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
-
 
         if x is not None:
             self.xdata = np.array(x)
@@ -98,7 +96,7 @@ class ImagePanel(BasePanel):
             self.ylab = ylabel
         self.conf.data = data
 
-        cmap = self.conf.cmap
+        cmap = self.conf.cmap[col]
         if self.conf.style == 'contour':
             if levels is None:
                 levels = self.conf.ncontour_levels
@@ -109,14 +107,12 @@ class ImagePanel(BasePanel):
             nlevels = max(2, nlevels)
             clevels  = np.linspace(data.min(), data.max(), nlevels+1)
             self.conf.contour_levels = clevels
-            self.conf.image = self.axes.contourf(data, cmap=self.conf.cmap,
+            self.conf.image = self.axes.contourf(data, cmap=self.conf.cmap[col],
                                                  levels=clevels)
 
-            self.conf.contour = self.axes.contour(data, cmap=self.conf.cmap,
+            self.conf.contour = self.axes.contour(data, cmap=self.conf.cmap[col],
                                                   levels=clevels)
-            #print 'Contour levels: '
-            #print ['%.3f' % i for i in self.conf.contour_levels]
-            cmap_name = self.conf.cmap.name
+            cmap_name = self.conf.cmap[col].name
             xname = 'gray'
             try:
                 if cmap_name == 'gray_r':
@@ -137,7 +133,7 @@ class ImagePanel(BasePanel):
                 self.contour_callback(levels=clevels)
         else: # image
             img = (data -data.min()) /(1.0*data.max() - data.min())
-            self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap,
+            self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
 
         self.axes.set_axis_off()
@@ -150,7 +146,7 @@ class ImagePanel(BasePanel):
         self.indices_thread.start()
 
 
-    def add_highlight_area(self, mask, label=None):
+    def add_highlight_area(self, mask, label=None, col='int'):
         """add a highlighted area -- outline an arbitrarily shape --
         as if drawn from a Lasso event.
 
@@ -158,7 +154,7 @@ class ImagePanel(BasePanel):
         same shape as the image.
         """
         patch = mask * np.ones(mask.shape) * 0.9
-        cmap = self.conf.cmap
+        cmap = self.conf.cmap[col]
         area = self.axes.contour(patch, cmap=cmap, levels=[0.8])
         self.conf.highlight_areas.append(area)
         col = None
@@ -352,7 +348,7 @@ class ImagePanel(BasePanel):
             mask = points_inside_poly(ind, vertices)
         else:
             mask = Path(vertices).contains_points(ind)
-        mask.shape = self.conf.data.shape
+        mask.shape = (self.conf.data.shape[0], self.conf.data.shape[1])
         self.lasso = None
         self.canvas.draw()
         if hasattr(self.lasso_callback , '__call__'):
@@ -369,7 +365,6 @@ class ImagePanel(BasePanel):
             xmin, xmax, ymin, ymax = self.data_range
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_viewlimits()
-        #   xylims(lims=lims[self.axes], axes=self.axes, autoscale=False)
         self.canvas.draw()
 
     def unzoom_all(self, event=None):
@@ -377,14 +372,13 @@ class ImagePanel(BasePanel):
         self.zoom_lims = [None]
         self.unzoom(event)
 
-    def redraw(self):
+    def redraw(self, col='int'):
         """redraw image, applying the following:
         rotation, flips, log scale
         max/min values from sliders or explicit intensity ranges
         color map
         interpolation
         """
-
         conf = self.conf
         # note: rotation re-calls display(), to reset the image
         # other transformations will just do .set_data() on image
@@ -396,14 +390,17 @@ class ImagePanel(BasePanel):
                          y=self.xdata, ylabel=self.xlab)
         # flips, log scales
         img = conf.data
+        if len(img.shape) == 2:
+            col = 'int'
         if self.conf.style == 'image':
             if conf.flip_ud:   img = np.flipud(img)
             if conf.flip_lr:   img = np.fliplr(img)
-            if conf.log_scale: img = np.log10(1 + 9.0*img)
+            if conf.log_scale:
+                img = np.log10(1 + 9.0*img)
 
         # apply intensity scale for current limited (zoomed) image
-        imin = conf.int_lo
-        imax = conf.int_hi
+        imin = float(conf.int_lo[col])
+        imax = float(conf.int_hi[col])
         if conf.log_scale:
             imin = np.log10(1 + 9.0*imin)
             imax = np.log10(1 + 9.0*imax)
@@ -416,12 +413,46 @@ class ImagePanel(BasePanel):
             imin = np.min(img[ymin:ymax, xmin:xmax])
             imax = np.max(img[ymin:ymax, xmin:xmax])
         # apply clipped color scale, as from sliders
-        img = (img - imin)/(imax - imin + 1.e-8)
-        mlo = conf.cmap_lo/(1.0*conf.cmap_range)
-        mhi = conf.cmap_hi/(1.0*conf.cmap_range)
-        if self.conf.style == 'image':
-            conf.image.set_data(np.clip((img - mlo)/(mhi - mlo + 1.e-8), 0, 1))
-            conf.image.set_interpolation(conf.interp)
+        if len(img.shape) == 2:
+            img = (img - imin)/(imax - imin + 1.e-8)
+            mlo = conf.cmap_lo[col]/(1.0*conf.cmap_range)
+            mhi = conf.cmap_hi[col]/(1.0*conf.cmap_range)
+            if self.conf.style == 'image':
+                conf.image.set_data(np.clip((img - mlo)/(mhi - mlo + 1.e-8), 0, 1))
+                conf.image.set_interpolation(conf.interp)
+        else:
+            r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
+            rmin = float(conf.int_lo['red'])
+            rmax = float(conf.int_hi['red'])
+            gmin = float(conf.int_lo['green'])
+            gmax = float(conf.int_hi['green'])
+            bmin = float(conf.int_lo['blue'])
+            bmax = float(conf.int_hi['blue'])
+            if conf.log_scale:
+                rmin = np.log10(1 + 9.0*rmin)
+                rmax = np.log10(1 + 9.0*rmax)
+                gmin = np.log10(1 + 9.0*gmin)
+                gmax = np.log10(1 + 9.0*gmax)
+                bmin = np.log10(1 + 9.0*bmin)
+                bmax = np.log10(1 + 9.0*bmax)
+
+            rlo = conf.cmap_lo['red']/(1.0*conf.cmap_range)
+            rhi = conf.cmap_hi['red']/(1.0*conf.cmap_range)
+            glo = conf.cmap_lo['green']/(1.0*conf.cmap_range)
+            ghi = conf.cmap_hi['green']/(1.0*conf.cmap_range)
+            blo = conf.cmap_lo['blue']/(1.0*conf.cmap_range)
+            bhi = conf.cmap_hi['blue']/(1.0*conf.cmap_range)
+            r = (r - rmin)/(rmax - rmin + 1.e-8)
+            g = (g - gmin)/(gmax - gmin + 1.e-8)
+            b = (b - bmin)/(bmax - bmin + 1.e-8)
+            inew = img*1.0
+            inew[:,:,0] = np.clip((r - rlo)/(rhi - rlo + 1.e-8), 0, 1)
+            inew[:,:,1] = np.clip((g - glo)/(ghi - glo + 1.e-8), 0, 1)
+            inew[:,:,2] = np.clip((b - blo)/(bhi - blo + 1.e-8), 0, 1)
+
+            if self.conf.style == 'image':
+                conf.image.set_data(inew)
+                conf.image.set_interpolation(conf.interp)
         self.canvas.draw()
 
     def report_leftdown(self,event=None):

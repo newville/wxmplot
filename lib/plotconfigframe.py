@@ -109,10 +109,13 @@ class PlotConfigFrame(wx.Frame):
         topsizer.Add(tl2,        (2, 5), (1, 1), labstyle, 2)
         topsizer.Add(leg_size,   (2, 6), (1, 1), labstyle, 2)
 
-
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(self.conf.show_grid)
+
+        show_box  = wx.CheckBox(panel,-1, 'Top/Right Axes', (-1, -1), (-1, -1))
+        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
+        show_box.SetValue(self.conf.axes_style == 'box')
 
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='legend'))
@@ -123,6 +126,7 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.SetValue(self.conf.show_legend_frame)
 
         topsizer.Add(show_grid, (4, 5), (1, 1), labstyle, 2)
+        topsizer.Add(show_box,  (4, 6), (1, 1), labstyle, 2)
         topsizer.Add(show_leg,  (3, 5), (1, 1), labstyle, 2)
         topsizer.Add(show_lfr,  (3, 6), (1, 1), labstyle, 2)
 
@@ -319,7 +323,7 @@ class PlotConfigFrame(wx.Frame):
             thk.SetValue(dthk)
             thk.Bind(wx.EVT_SPINCTRL, Closure(self.onThickness, argu=argu))
 
-            sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(100,-1))
+            sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(120,-1))
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
 
@@ -508,6 +512,11 @@ class PlotConfigFrame(wx.Frame):
 
     def onShowGrid(self,event):
         self.conf.enable_grid(show=event.IsChecked())
+
+    def onShowBox(self, event=None):
+        style='box'
+        if not event.IsChecked(): style='open'
+        self.conf.set_axes_style(style=style)
 
     def onShowLegend(self,event,argu=''):
         if (argu == 'legend'):

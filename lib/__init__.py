@@ -64,8 +64,8 @@ and provides these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.12'
-__date__     = '2013-Apr-02'
+__version__  = '0.9.13'
+__date__     = '2013-July-21'
 
 import sys
 try:

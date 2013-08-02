@@ -15,15 +15,9 @@ import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-# nxutils is deprecated since matplotlib 1.2
-vmatplotlib = matplotlib.__version__
-if (vmatplotlib < '1.2'):
-    from matplotlib.nxutils import points_inside_poly
-else:
-    from matplotlib.path import Path
-
 from .imageconf import ImageConfig
 from .basepanel import BasePanel
+from .utils import inside_poly
 
 class ImagePanel(BasePanel):
     """
@@ -344,10 +338,7 @@ class ImagePanel(BasePanel):
         if self.conf.indices is None or self.indices_thread.is_alive():
             self.indices_thread.join()
         ind = self.conf.indices
-        if(vmatplotlib < '1.2'):
-            mask = points_inside_poly(ind, vertices)
-        else:
-            mask = Path(vertices).contains_points(ind)
+        mask = inside_poly(vertices,ind)
         mask.shape = (self.conf.data.shape[0], self.conf.data.shape[1])
         self.lasso = None
         self.canvas.draw()

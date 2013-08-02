@@ -11,16 +11,11 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
-# nxutils is deprecated since matplotlib 1.2
-vmatplotlib = matplotlib.__version__
-if (vmatplotlib < '1.2'):
-    from matplotlib.nxutils import points_inside_poly
-else:
-    from matplotlib.path import Path
 
 from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
 from .config import PlotConfig
+from .utils import inside_poly
 
 to_rgba = colorConverter.to_rgba
 class PlotPanel(BasePanel):
@@ -347,8 +342,8 @@ class PlotPanel(BasePanel):
         if self.conf.plot_type == 'scatter':
             fcols = conf.scatter_coll.get_facecolors()
             ecols = conf.scatter_coll.get_edgecolors()
-            sdat = con.scatter_data
-            mask = points_inside_poly(sdat, vertices)
+            sdat = conf.scatter_data
+            mask = inside_poly(vertices,sdat)
             pts = nonzero(mask)[0]
             self.conf.scatter_mask = mask
             for i in range(len(sdat)):
@@ -364,11 +359,8 @@ class PlotPanel(BasePanel):
             xdata = self.axes.lines[0].get_xdata()
             ydata = self.axes.lines[0].get_ydata()
             sdat = [(x, y) for x, y in zip(xdata, ydata)]
+            mask = inside_poly(vertices,sdat)
             #print  len(xdata), sdat[:20]
-            if(vmatplotlib < '1.2'):
-                mask = points_inside_poly(sdat, vertices)
-            else:
-                mask = Path(vertices).contains_points(sdat)
             # print mask
             pts = nonzero(mask)[0]
             #print 'Points selected = ', pts

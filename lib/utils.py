@@ -3,6 +3,11 @@
 
 import wx
 import sys
+import matplotlib
+if (matplotlib.__version__ < '1.2'):
+    from matplotlib.nxutils import points_inside_poly
+else:
+    from matplotlib.path import Path
 
 class Closure:
     """A very simple callback class to emulate a closure (reference to
@@ -249,4 +254,13 @@ class Printer:
             Perhaps your current printer is not set correctly?""",
                           "Printing", wx.OK)
         printout.Destroy()
+
+def inside_poly(vertices,data):
+    if(matplotlib.__version__ < '1.2'):
+        mask = points_inside_poly(data, vertices)
+    else:
+        mask = Path(vertices).contains_points(data)
+
+    return mask
+
 

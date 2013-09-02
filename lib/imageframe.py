@@ -647,7 +647,6 @@ class ImageFrame(BaseFrame):
 
     def save_figure(self,event=None, transparent=True, dpi=600):
         """ save figure image to file"""
-        print 'IMAGE FRAME save fig ', transparent
         if self.panel is not None:
             self.panel.save_figure(event=event,
                                    transparent=transparent, dpi=dpi)

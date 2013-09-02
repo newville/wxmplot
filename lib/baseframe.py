@@ -113,9 +113,11 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         if self.panel is not None: self.panel.set_ylabel(s)
         self.panel.canvas.draw()
 
-    def save_figure(self,event=None):
+    def save_figure(self,event=None, transparent=False, dpi=600):
         """ save figure image to file"""
-        if self.panel is not None: self.panel.save_figure(event=event)
+        if self.panel is not None:
+            self.panel.save_figure(event=event,
+                                   transparent=transparent, dpi=dpi)
 
     def configure(self,event=None):
         if self.panel is not None: self.panel.configure(event=event)
@@ -208,7 +210,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
             self.Bind(wx.EVT_MENU, panel.unzoom,       id=mids.UNZOOM)
 
-            self.Bind(wx.EVT_MENU, panel.save_figure,  id=mids.SAVE)
+            self.Bind(wx.EVT_MENU, self.save_figure,  id=mids.SAVE)
             self.Bind(wx.EVT_MENU, panel.Print,        id=mids.PRINT)
             self.Bind(wx.EVT_MENU, panel.PrintSetup,   id=mids.PSETUP)
             self.Bind(wx.EVT_MENU, panel.PrintPreview, id=mids.PREVIEW)

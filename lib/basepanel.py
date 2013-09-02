@@ -172,7 +172,7 @@ class BasePanel(wx.Panel):
         (possibly going to GUI statusbar)"""
         self.messenger(s, panel=panel)
 
-    def save_figure(self, event=None):
+    def save_figure(self, event=None, transparent=False, dpi=600):
         """ save figure image to file"""
         file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|JPG (*.jpg)|*.jpg|PDF (*.pdf)|*.pdf"
         try:
@@ -198,9 +198,9 @@ class BasePanel(wx.Panel):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if hasattr(self, 'fig'):
-                self.fig.savefig(path, transparent=True, dpi=600)
+                self.fig.savefig(path, transparent=transparent, dpi=dpi)
             else:
-                self.canvas.print_figure(path, dpi=600)
+                self.canvas.print_figure(path, transparent=transparent, dpi=dpi)
             if (path.find(self.launch_dir) ==  0):
                 path = path[len(self.launch_dir)+1:]
             self.write_message('Saved plot to %s' % path)

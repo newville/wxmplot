@@ -171,7 +171,6 @@ class PlotPanel(BasePanel):
         if axes not in self.axes_traces:
             self.axes_traces[axes] = []
         self.axes_traces[axes].append(n)
-
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -338,7 +337,7 @@ class PlotPanel(BasePanel):
 
     def lassoHandler(self, vertices):
         conf = self.conf
-       
+
         if self.conf.plot_type == 'scatter':
             fcols = conf.scatter_coll.get_facecolors()
             ecols = conf.scatter_coll.get_edgecolors()
@@ -364,7 +363,7 @@ class PlotPanel(BasePanel):
             # print mask
             pts = nonzero(mask)[0]
             #print 'Points selected = ', pts
-            
+
         self.lasso = None
         self.canvas.draw()
         # self.canvas.draw_idle()
@@ -373,13 +372,14 @@ class PlotPanel(BasePanel):
             self.lasso_callback(data = sdat,
                                 selected = pts, mask=mask)
 
-    def set_xylims(self, limits, axes=None):
+    def set_xylims(self, limits, axes=None, side='left'):
         "set user-defined limits and apply them"
-        if axes not in self.user_limits:
+        if axes is None:
             axes = self.axes
+            if side == 'right':
+                axes = self.get_right_axes()
         self.user_limits[axes] = limits
         self.unzoom_all()
-
 
     def set_viewlimits(self, autoscale=False):
         """ update xy limits of a plot, as used with .update_line() """
@@ -541,7 +541,6 @@ class PlotPanel(BasePanel):
 
         if x is not None and y is not None:
             msg = ("X,Y= %s, %s" % (self._xfmt, self._yfmt)) % (x, y)
-
         if len(self.fig.get_axes()) > 1:
             ax2 = self.fig.get_axes()[1]
             try:

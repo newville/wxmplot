@@ -371,21 +371,32 @@ class PlotConfig:
         self.canvas.draw()
 
     def set_axes_style(self, style=None):
-        """set axes style -- either 'box' or 'open' to show full box
-        or open axes
+        """set axes style: one of
+           'box' / 'fullbox'  : show all four axes borders
+           'open' / 'leftbot' : show left and bottom axes
+           'bottom'           : show bottom axes only
         """
         if style is not None:
             self.axes_style = style
         axes0 = self.canvas.figure.get_axes()[0]
-        if self.axes_style.lower().startswith('box'):
+        _sty = self.axes_style.lower()
+        if  _sty in ('fullbox', 'full'): _sty = 'box'
+        if  _sty == 'leftbot':           _sty = 'open'
+        
+        if _sty == 'box':
             axes0.xaxis.set_ticks_position('both')
             axes0.yaxis.set_ticks_position('both')
             axes0.spines['top'].set_visible(True)
             axes0.spines['right'].set_visible(True)
-        else:
+        elif _sty == 'open':
             axes0.xaxis.set_ticks_position('bottom')
             axes0.yaxis.set_ticks_position('left')
             axes0.spines['top'].set_visible(False)
+            axes0.spines['right'].set_visible(False)
+        elif _sty == 'bottom':
+            axes0.xaxis.set_ticks_position('bottom')
+            axes0.spines['top'].set_visible(False)
+            axes0.spines['left'].set_visible(False)
             axes0.spines['right'].set_visible(False)
         self.canvas.draw()
 

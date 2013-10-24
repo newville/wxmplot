@@ -114,7 +114,7 @@ class PlotPanel(BasePanel):
               legend_loc='ur', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None,
               labelfontsize=None, legendfontsize=None,
-              fullbox=True, zorder=None, **kws):
+              fullbox=None, axes_style=None, zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
         axes = self.axes
         if side == 'right':
@@ -231,8 +231,10 @@ class PlotPanel(BasePanel):
 
         # axes style ('box' or 'open')
         conf.axes_style = 'box'
-        if not fullbox:  # show only left and bottom lines
-            conf.axes_style = 'open'
+        if fullbox is not None and not fullbox:
+            conf.axes_style = 'open'            
+        if axes_style in ('open', 'box', 'bottom'):
+            conf.axes_style = axes_style            
         conf.set_axes_style()
 
         if not delay_draw:

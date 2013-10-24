@@ -62,7 +62,7 @@ class ImagePanel(BasePanel):
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
-                col='int', **kws):
+                store_data=True,  col='int', **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -88,7 +88,8 @@ class ImagePanel(BasePanel):
             self.xlab = xlabel
         if ylabel is not None:
             self.ylab = ylabel
-        self.conf.data = data
+        if store_data:
+            self.conf.data = data
 
         cmap = self.conf.cmap[col]
         if self.conf.style == 'contour':
@@ -381,6 +382,7 @@ class ImagePanel(BasePanel):
                          y=self.xdata, ylabel=self.xlab)
         # flips, log scales
         img = conf.data
+        if img is None: return
         if len(img.shape) == 2:
             col = 'int'
         if self.conf.style == 'image':

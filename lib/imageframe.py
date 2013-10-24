@@ -17,6 +17,14 @@ from .colors import rgb2hex
 from .utils import Closure, LabelEntry
 from .contourdialog import ContourDialog
 
+HAS_SKIMAGE = False
+# try:
+#     import skimage
+#     from skimage import exposure
+#     HAS_SKIMAGE = True
+# except ImportError:
+#     pass
+# 
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
@@ -141,9 +149,10 @@ class ImageFrame(BaseFrame):
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
 
-
     def EnableMenus(self, evt=None):
-        isIntMap = {True:1, False:0}[len(self.panel.conf.data.shape) == 2]
+        isIntMap = True
+        if self.panel.conf.data is not None:
+            isIntMap = {True:1, False:0}[len(self.panel.conf.data.shape) == 2]
         self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
@@ -343,6 +352,17 @@ class ImageFrame(BaseFrame):
                        (irow, 0), (1, 4), labstyle, 0)
         irow += 1
         self.CustomConfig(lpanel, lsizer, irow)
+        if HAS_SKIMAGE:
+            cont_mode = wx.RadioBox(lpanel, -1, "Enhance Contrast:",
+                                    wx.DefaultPosition, wx.DefaultSize,
+                                    ('No enhancement',
+                                     'Stretch Contrast',
+                                     'Equalize Histogram'),
+                                    1, wx.RA_SPECIFY_COLS)
+            cont_mode.Bind(wx.EVT_RADIOBOX, self.onContrastMode)
+            lsizer.Add(cont_mode,  (irow+1, 0), (1, 4), labstyle, 3)
+            irow += 1
+        
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
 
@@ -439,6 +459,16 @@ class ImageFrame(BaseFrame):
                    (irow, 0), (1, 4), labstyle, 1)
         irow += 1
         self.CustomConfig(lpanel, lsizer, irow)
+        if HAS_SKIMAGE:
+            cont_mode = wx.RadioBox(lpanel, -1, "Enhance Contrast:",
+                                    wx.DefaultPosition, wx.DefaultSize,
+                                    ('No enhancement',
+                                     'Stretch Contrast',
+                                     'Equalize Histogram'),
+                                    1, wx.RA_SPECIFY_COLS)
+            cont_mode.Bind(wx.EVT_RADIOBOX, self.onContrastMode)
+            lsizer.Add(cont_mode,  (irow+1, 0), (1, 4), labstyle, 3)
+            irow += 1
 
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
@@ -515,6 +545,25 @@ class ImageFrame(BaseFrame):
                 # print 'dead imin ', ix, iwid
                 pass
 
+    def onContrastMode(self, event=None):
+        """change image contrast, using scikit-image exposure routines"""
+        level =  event.GetInt()
+        if not HAS_SKIMAGE:
+            return
+        map = self.panel.conf.data
+        print map.min(), map.max(), map.mean(), map.std()
+        if level == 1:  # 'Stretch Contrast'
+            # Contrast stretching
+            p02 = numpy.percentile(map,  2)
+            p98 = numpy.percentile(map, 98)
+            map = exposure.rescale_intensity(map, in_range=(p02, p98))
+        elif level == 2: # 'Histogram Equalization',
+            map = exposure.equalize_hist(map.astype('int'))
+
+        print map.min(), map.max(), map.mean(), map.std()
+        self.panel.display(map, store_data=False)
+        self.panel.redraw()
+        
     def onThreshold(self, event=None, argu='hi', col='int'):
         if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
             try:

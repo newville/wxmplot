@@ -59,6 +59,7 @@ class ImageFrame(BaseFrame):
         self.cmap_img = {}
         self.cmap_dat = {}
         self.cmap_canvas = {}
+        self.wids_subtitles = {}
         self.subtitles = {}
         self.config_mode = None
         if subtitles is not None:
@@ -138,6 +139,12 @@ class ImageFrame(BaseFrame):
                 self.config_mode = 'int'
                 self.Build_ConfigPanel_Int()
         self.panel.display(img, style=style, **kw)
+
+        if subtitles is not None:
+            for key, val in subtitles.items():
+                if key in self.wids_subtitles:
+                    self.wids_subtitles[key].SetLabel(val)
+        
         self.panel.conf.title = title
         if colormap is not None:
             self.set_colormap(name=colormap)
@@ -297,7 +304,8 @@ class ImageFrame(BaseFrame):
             s = wx.StaticText(lpanel, label=lab, size=(100, -1))
             irow += 1
             lsizer.Add(s, (irow, 0), (1, 4), labstyle, 0)
-
+            self.wids_subtitles[col] = s
+            
             cm_wid   = 1.00
             cm_ratio = 0.07
             cmax = 100.0
@@ -443,7 +451,6 @@ class ImageFrame(BaseFrame):
         self.imin_val[col] = LabelEntry(lpanel, conf.int_lo[col],
                                    size=65, labeltext='Range:',
                                    action = Closure(self.onThreshold, argu='lo'))
-        # print 'imin: ', self.imin_val
         self.imax_val[col] = LabelEntry(lpanel, conf.int_hi[col],
                                    size=65, labeltext=':',
                                    action = Closure(self.onThreshold, argu='hi'))
@@ -542,7 +549,6 @@ class ImageFrame(BaseFrame):
             try:
                 iwid.Enable()
             except pyDeadObjectError:
-                # print 'dead imin ', ix, iwid
                 pass
 
     def onContrastMode(self, event=None):
@@ -551,7 +557,6 @@ class ImageFrame(BaseFrame):
         if not HAS_SKIMAGE:
             return
         map = self.panel.conf.data
-        print map.min(), map.max(), map.mean(), map.std()
         if level == 1:  # 'Stretch Contrast'
             # Contrast stretching
             p02 = numpy.percentile(map,  2)

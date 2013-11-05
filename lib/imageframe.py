@@ -18,13 +18,13 @@ from .utils import Closure, LabelEntry
 from .contourdialog import ContourDialog
 
 HAS_SKIMAGE = False
-# try:
-#     import skimage
-#     from skimage import exposure
-#     HAS_SKIMAGE = True
-# except ImportError:
-#     pass
-# 
+try:
+    import skimage
+    from skimage import exposure
+    HAS_SKIMAGE = True
+except ImportError:
+    pass
+ 
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),

@@ -25,7 +25,7 @@ class Menu_IDs:
         self.SELECT_COLOR = wx.NewId()
         self.SELECT_SMOOTH= wx.NewId()
         self.TOGGLE_LEGEND = wx.NewId()
-        self.TOGGLE_GRID = wx.NewId()
+        self.TOGGLE_GRID  = wx.NewId()
 
 class BaseFrame(wx.Frame):
     """
@@ -57,7 +57,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
                  axissize=None, axisbg=None, exit_callback=None,
-                 output_title='Plot', **kws):
+                 output_title='Plot', dpi=150, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
@@ -68,6 +68,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.exit_callback = exit_callback
         self.parent = parent
         self.panel  = panel
+        self.dpi    = dpi
         self.menuIDs = Menu_IDs()
         self.top_menus = {'File':None,'Help':None}
         self.size = size
@@ -207,7 +208,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
             self.Bind(wx.EVT_MENU, panel.toggle_legend, id=mids.TOGGLE_LEGEND)
             self.Bind(wx.EVT_MENU, panel.toggle_grid, id=mids.TOGGLE_GRID)
-            self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
             self.Bind(wx.EVT_MENU, panel.unzoom,       id=mids.UNZOOM)
 
             self.Bind(wx.EVT_MENU, self.save_figure,  id=mids.SAVE)

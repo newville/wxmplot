@@ -11,11 +11,9 @@ import numpy
 from wxmplot import ImageFrame
 
 def getPilatusImage(filename):
-    img = Image.open(filename)
-    dat = numpy.array(img.getdata()).reshape((195,487))
-    return img, dat
+    return numpy.array(Image.open(filename))
 
-img, dat = getPilatusImage('Pilatus.tiff')
+dat = getPilatusImage('Pilatus.tiff')
 
 app = wx.App()
 frame = ImageFrame()

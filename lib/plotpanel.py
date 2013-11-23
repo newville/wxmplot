@@ -528,6 +528,8 @@ class PlotPanel(BasePanel):
     def draw(self):
         self.canvas.draw()
 
+    def get_figure(self):
+        return self.fig
     ####
     ## GUI events
     ####

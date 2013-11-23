@@ -20,6 +20,10 @@ class PlotFrame(BaseFrame):
                            **kws)
         self.BuildFrame()
 
+    def get_figure(self):
+        """return MPL plot figure"""
+        return self.panel.fig
+        
     def add_text(self, text, x, y, **kws):
         """add text to plot"""
         self.panel.add_text(text, x, y, **kws)

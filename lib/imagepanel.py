@@ -70,8 +70,9 @@ class ImagePanel(BasePanel):
             self.conf.style = style
         self.axes.cla()
         conf = self.conf
-        conf.rot, conf.log_scale   = False, False
-        conf.flip_ud, conf.flip_lr = False, False
+        conf.enhance  = False
+        conf.log_scale = False
+        conf.rot, conf.flip_ud, conf.flip_lr = False, False, False
         conf.highlight_areas = []
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]

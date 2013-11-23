@@ -17,13 +17,6 @@ from .colors import rgb2hex
 from .utils import Closure, LabelEntry
 from .contourdialog import ContourDialog
 
-HAS_SKIMAGE = False
-try:
-    import skimage
-    from skimage import exposure
-    HAS_SKIMAGE = True
-except ImportError:
-    pass
  
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
@@ -37,6 +30,39 @@ class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
     """
+
+    help_msg =  """Quick help:
+
+Left-Click:   to display X,Y coordinates and Intensity
+Left-Drag:    to zoom in on region
+Right-Click:  display popup menu with choices:
+               Zoom out 1 level
+               Zoom all the way out
+               --------------------
+               Rotate Image
+               Save Image
+
+Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
+  Saving Images:
+     Ctrl-S:     Save image to file
+     Ctrl-C:     Copy image to clipboard
+     Ctrl-P:     Print Image
+
+  Zooming:
+     Ctrl-Z:     Zoom all the way out
+  
+  Rotating/Flipping:
+     Ctrl-R:     Rotate Clockwise
+     Ctrl-T:     Flip Top/Bottom
+     Ctrl-F:     Flip Left/Right     
+
+  Image Enhancement:
+     Ctrl-L:     Log-Scale Intensity
+     Ctrl-E:     Enhance Contrast
+
+  
+"""
+    
 
     def __init__(self, parent=None, size=None,
                  lasso_callback=None, mode='intensity',
@@ -77,6 +103,7 @@ class ImageFrame(BaseFrame):
         mids.SAVE_CMAP = wx.NewId()
         mids.LOG_SCALE = wx.NewId()
         mids.AUTO_SCALE = wx.NewId()
+        mids.ENHANCE   = wx.NewId()
         mids.FLIP_H    = wx.NewId()
         mids.FLIP_V    = wx.NewId()
         mids.FLIP_O    = wx.NewId()
@@ -210,8 +237,7 @@ class ImageFrame(BaseFrame):
                  'Zoom out to full data range')
         m.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
         m.AppendSeparator()
-        m.Append(mids.LOG_SCALE, 'Log Scale Intensity\tCtrl+L', '', wx.ITEM_CHECK)
-        m.Append(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A', '', wx.ITEM_CHECK)
+
         m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
         m.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
         m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
@@ -240,12 +266,17 @@ class ImageFrame(BaseFrame):
         m.Append(mids.CONTOURLAB, 'Configure Contours', 'Configure Contours')
         self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
 
+        em = wx.Menu()
+        em.Append(mids.LOG_SCALE, 'Log Scale Intensity\tCtrl+L', '', wx.ITEM_CHECK)
+        em.Append(mids.ENHANCE,    'Enhance Contrast\tCtrl+E', '', wx.ITEM_CHECK)
+        # m.Append(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A', '', wx.ITEM_CHECK)
+        
         sm = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()
             sm.AppendRadioItem(wid, itype, itype)
             self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
-        self.user_menus  = [('&Options', m), ('Smoothing', sm)]
+        self.user_menus  = [('&Options', m), ('Contrast', em), ('Smoothing', sm)]
         # print 'done Build Custom Menus'
 
     def onInterp(self, evt=None, name=None):
@@ -284,6 +315,7 @@ class ImageFrame(BaseFrame):
 
         self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
+        self.Bind(wx.EVT_MENU, self.onEnhanceContrast, id=mids.ENHANCE)
         self.Bind(wx.EVT_MENU, self.onInt_Autoscale, id=mids.AUTO_SCALE)
         self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
 
@@ -360,17 +392,7 @@ class ImageFrame(BaseFrame):
                        (irow, 0), (1, 4), labstyle, 0)
         irow += 1
         self.CustomConfig(lpanel, lsizer, irow)
-        if HAS_SKIMAGE:
-            cont_mode = wx.RadioBox(lpanel, -1, "Enhance Contrast:",
-                                    wx.DefaultPosition, wx.DefaultSize,
-                                    ('No enhancement',
-                                     'Stretch Contrast',
-                                     'Equalize Histogram'),
-                                    1, wx.RA_SPECIFY_COLS)
-            cont_mode.Bind(wx.EVT_RADIOBOX, self.onContrastMode)
-            lsizer.Add(cont_mode,  (irow+1, 0), (1, 4), labstyle, 3)
-            irow += 1
-        
+
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
 
@@ -466,17 +488,6 @@ class ImageFrame(BaseFrame):
                    (irow, 0), (1, 4), labstyle, 1)
         irow += 1
         self.CustomConfig(lpanel, lsizer, irow)
-        if HAS_SKIMAGE:
-            cont_mode = wx.RadioBox(lpanel, -1, "Enhance Contrast:",
-                                    wx.DefaultPosition, wx.DefaultSize,
-                                    ('No enhancement',
-                                     'Stretch Contrast',
-                                     'Equalize Histogram'),
-                                    1, wx.RA_SPECIFY_COLS)
-            cont_mode.Bind(wx.EVT_RADIOBOX, self.onContrastMode)
-            lsizer.Add(cont_mode,  (irow+1, 0), (1, 4), labstyle, 3)
-            irow += 1
-
         lpanel.SetSizer(lsizer)
         lpanel.Fit()
         return lpanel
@@ -551,22 +562,29 @@ class ImageFrame(BaseFrame):
             except pyDeadObjectError:
                 pass
 
-    def onContrastMode(self, event=None):
+    def onEnhanceContrast(self, event=None):
         """change image contrast, using scikit-image exposure routines"""
-        level =  event.GetInt()
-        if not HAS_SKIMAGE:
-            return
-        map = self.panel.conf.data
-        if level == 1:  # 'Stretch Contrast'
-            # Contrast stretching
-            p02 = numpy.percentile(map,  2)
-            p98 = numpy.percentile(map, 98)
-            map = exposure.rescale_intensity(map, in_range=(p02, p98))
-        elif level == 2: # 'Histogram Equalization',
-            map = exposure.equalize_hist(map.astype('int'))
+        enhance = event.IsChecked()
+        conf = self.panel.conf
+        data = self.panel.conf.data
+        if len(data.shape) == 2: # intensity map        
+            imin, imax = data.min(), data.max()
+            if enhance:  
+                imin, imax = numpy.percentile(data, [1, 99])
+            conf.int_lo['int'] = imin
+            conf.int_hi['int'] = imax
+            self.imin_val['int'].SetValue('%.4g' % imin)
+            self.imax_val['int'].SetValue('%.4g' % imax)
+        if len(data.shape) == 3: # rgb map        
+            for ix, cnam in ((0, 'red'), (1, 'green'), (2, 'blue')):
+                imin, imax = data[:,:,ix].min(), data[:,:,ix].max()
+                if enhance:  
+                    imin, imax = numpy.percentile(data[:,:,ix], [1, 99])
+                conf.int_lo[cnam] = imin
+                conf.int_hi[cnam] = imax
+                self.imin_val[cnam].SetValue('%.4g' % imin)
+                self.imax_val[cnam].SetValue('%.4g' % imax)
 
-        print map.min(), map.max(), map.mean(), map.std()
-        self.panel.display(map, store_data=False)
         self.panel.redraw()
         
     def onThreshold(self, event=None, argu='hi', col='int'):

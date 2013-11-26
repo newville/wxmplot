@@ -192,7 +192,7 @@ Some notes:
 Examples and Screenshots
 ====================================================================
 
-A basic plot from a :class:`ImageFrame` looks like this::
+A basic plot from a :class:`ImageFrame` looks like this:
 
 .. literalinclude:: ../examples/image.py
 
@@ -205,8 +205,12 @@ This screenshot shows a long list of choices for color table, a checkbox to reve
 color table, sliders to adjust the upper and lower level, a checkbox to auto-scale the
 intensity, or entries to set the intensity values for minimum and maximum intensity.  In
 addition, one can toggle to a 'contour style' plot, in which the levels are made discrete
-with many fewer levels than the continuous image display.  A contour plot would look
-like this:
+with many fewer levels than the continuous image display.  A contour
+plot can be created like this:
+
+.. literalinclude:: ../examples/image.py 
+
+giving a plot that would look like this:
 
 .. image:: images/contour.png
 

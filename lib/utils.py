@@ -220,9 +220,11 @@ class Printer:
         """ generate Print Preview with wx Print mechanism"""
         if title is None:
             title = self.title
-        po1  = PrintoutWx(self.canvas, title=title,
+        if self.canvas is None:
+            self.canvas = self.parent.canvas
+        po1  = PrintoutWx(self.parent.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
-        po2  = PrintoutWx(self.canvas, title=title,
+        po2  = PrintoutWx(self.parent.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
         self.preview = wx.PrintPreview(po1,po2,self.printerData)
 
@@ -245,7 +247,7 @@ class Printer:
         printer  = wx.Printer(pdd)
         if title is None:
             title = self.title
-        printout = PrintoutWx(self.canvas, title=title,
+        printout = PrintoutWx(self.parent.canvas, title=title,
                               width=self.pwidth, margin=self.pmargin)
         print_ok = printer.Print(self.parent, printout, True)
 

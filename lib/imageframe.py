@@ -6,7 +6,7 @@ import os
 import wx
 import numpy
 from   matplotlib.cm import get_cmap
-import matplotlib.cm as colormap
+import matplotlib.cm as mpl_colormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
@@ -116,11 +116,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.BuildMenu()
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
+        # self.bgcol
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
-                                size=(6.5, 4.5), dpi=100,
+                                size=(650, 450), dpi=100,
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
+        self.SetBackgroundColour('#F8F8F4')
+        
         self.config_panel = wx.Panel(self)
         if mode.lower().startswith('int'):
             self.config_mode = 'int'
@@ -133,15 +136,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mainsizer.Add(self.config_panel, 0,
                       wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
 
-
         self.panel.messenger = self.write_message
-        self.panel.fig.set_facecolor(self.bgcol)
+        # self.panel.fig.set_facecolor(self.bgcol)
 
-        mainsizer.Add(self.panel, 1,  wx.EXPAND)
+        mainsizer.Add(self.panel, 1, wx.ALL|wx.GROW)
 
         self.BindMenuToPanel(panel=self.panel)
 
-        self.SetAutoLayout(True)
+        # self.SetAutoLayout(True)
         self.SetSizer(mainsizer)
         self.Fit()
 
@@ -326,9 +328,19 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = self.panel.conf
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
-
+        
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
-        irow = -1
+
+        s = wx.StaticText(lpanel, label='Zero Intensity Color:', size=(120, -1))
+        lsizer.Add(s, (0, 0), (1, 2), labstyle, 2)
+
+        bg_choice = wx.Choice(lpanel, size=(75, -1), choices=('black', 'white'))
+        bg_choice.Bind(wx.EVT_CHOICE,  self.onTriColorBG)
+        bg_choice.SetSelection(0)
+        
+        lsizer.Add(bg_choice, (0, 2), (1, 2), labstyle, 2)
+
+        irow = 0
 
         for col in ('red', 'green', 'blue'):
             stitle = self.subtitles.get(col, '')
@@ -398,6 +410,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         return lpanel
 
+    
     def CustomConfig(self, lpanel, lsizer, irow):
         """ override to add custom config panel items
         to bottom of config panel
@@ -528,6 +541,22 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                       style=conf.style)
         panel.redraw()
 
+    def onTriColorBG(self, event=None):
+        col = event.GetString()
+        conf = self.panel.conf        
+        if col == conf.tricolor_bg:
+            return
+        
+        conf.tricolor_bg = col
+        cmaps = ('red', 'green', 'blue')
+        if col.startswith('wh'):
+            cmaps = ('Reds', 'Greens', 'Blues')
+        
+        self.set_colormap(name=cmaps[0], col='red')
+        self.set_colormap(name=cmaps[1], col='green')
+        self.set_colormap(name=cmaps[2], col='blue')
+        self.panel.redraw()
+        
     def onCMap(self, event=None):
         self.set_colormap(name=event.GetString())
         self.panel.redraw()
@@ -633,14 +662,18 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 name = self.cmap_choice.GetStringSelection()
         except:
             return
-        conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
+        conf.cmap_reverse = False
+        try:
+            conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
+        except:
+            pass
         if conf.cmap_reverse and not name.endswith('_r'):
             name = name + '_r'
         elif not conf.cmap_reverse and name.endswith('_r'):
             name = name[:-2]
         cmap_name = name
         try:
-            conf.cmap[col] = getattr(colormap, name)
+            conf.cmap[col] = getattr(mpl_colormap, name)
         except:
             conf.cmap[col] = get_cmap(name)
         if hasattr(conf, 'contour'):
@@ -651,7 +684,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 xname = 'Reds'
             elif cmap_name.endswith('_r'):
                 xname = 'gray_r'
-            conf.contour.set_cmap(getattr(colormap, xname))
+            conf.contour.set_cmap(getattr(mpl_colormap, xname))
         if hasattr(conf, 'image'):
             conf.image.set_cmap(conf.cmap[col])
         self.redraw_cmap(col=col)

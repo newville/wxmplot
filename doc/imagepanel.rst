@@ -192,6 +192,9 @@ Some notes:
 Examples and Screenshots
 ====================================================================
 
+Basic example
+--------------
+
 A basic plot from a :class:`ImageFrame` looks like this:
 
 .. literalinclude:: ../examples/image.py
@@ -201,12 +204,36 @@ giving the following image:
 
 .. image:: images/imagedisplay.png
 
-This screenshot shows a long list of choices for color table, a checkbox to reverse the
-color table, sliders to adjust the upper and lower level, a checkbox to auto-scale the
-intensity, or entries to set the intensity values for minimum and maximum intensity.  In
-addition, one can toggle to a 'contour style' plot, in which the levels are made discrete
-with many fewer levels than the continuous image display.  A contour
-plot can be created like this:
+This screenshot shows a long list of choices for color table, a checkbox to
+reverse the color table, sliders to adjust the upper and lower level, and
+entries to explicitly set the minimum and maximum intensity.  
+
+
+Clicking on the image will show its coordinates and intensity value.
+Click-and-Drag will select a rectangular box to zoom in on a particular
+feature of the image.
+
+The File menu includes options to save an PNG file of the image (Ctrl-S),
+copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
+print-preview the image, save the image to an ASCII file (table of
+numbers), or quit the application.
+
+The Options menu includes Zoom Out (Ctrl-Z), rotating the image clockwise
+(Ctrl-R), flipping the image top/bottom (Ctrl-T) or right/left (Ctrl-F)
+(note that flipping does not work for contour-style plots) or saving an
+image of the colormap.
+
+
+The Contrast menu lets you toggle a log intensity scale (Ctrl-L), or
+enhance the contrast (Ctrl-E).  The Smoothing menu allows you choose from
+one of several interpolation algorithms.
+
+Contour Example
+---------------
+
+From the Options menu, one can toggle to a 'contour style' plot, in which
+the levels are made discrete with many fewer levels than the continuous
+image display.  A contour plot can be created like this:
 
 .. literalinclude:: ../examples/image.py 
 
@@ -215,15 +242,22 @@ giving a plot that would look like this:
 .. image:: images/contour.png
 
 
-For either display style, clicking on the image will show its coordinates and intensity
-value.  Click-and-Drag will select a rectangular box to zoom in on a particular feature
-of the image.
+In addition, one can bring up a screen to set the number of contour levels.
 
-The File menu includes options to save an PNG file of the image (Ctrl-S), copy the image
-to the system clipboard (Ctrl-C), print (Ctrl-P) or print-preview the image, or quit the
-application.  The Options menu includes Zoom Out (Ctrl-Z), applying a log-scale to the
-intensity (Ctrl-L), rotating the image clockwise (Ctrl-R), flipping the image top/bottom
-(Ctrl-T) or right/left (Ctrl-F) (note that flipping does not work for contour-style
-plots) or saving an image of the colormap.  The Smoothing menu allows you choose from one
-of several interpolation algorithms.
+3-Color Example
+-----------------
+
+If the data array has three dimensions, and has a shape of (NY, NX, 3), it
+is assumed to be  a 3 color map.  In this case, the scales for the
+individual colors can be manipulated separately.
+For example::
+
+.. literalinclude:: ../examples/rgb_image.py 
+
+giving a plot that would look like this:
+
+.. image:: images/image_3colors.png
+
+
+
 

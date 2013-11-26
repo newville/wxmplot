@@ -412,7 +412,7 @@ The configuration window (Options->Configuration or Ctrl-K) for this plot looks
 like this:
 
 .. image:: images/configuration_frame.png
-   :width: 95 %
+   :width: 85 %
 
 where all the options and fields show will dynamically change the plot shown in the PlotPanel.
 

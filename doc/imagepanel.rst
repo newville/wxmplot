@@ -203,6 +203,7 @@ giving the following image:
 
 
 .. image:: images/imagedisplay.png
+   :width: 85%
 
 This screenshot shows a long list of choices for color table, a checkbox to
 reverse the color table, sliders to adjust the upper and lower level, and
@@ -240,7 +241,7 @@ image display.  A contour plot can be created like this:
 giving a plot that would look like this:
 
 .. image:: images/contour.png
-
+   :width: 85%
 
 In addition, one can bring up a screen to set the number of contour levels.
 
@@ -250,13 +251,14 @@ In addition, one can bring up a screen to set the number of contour levels.
 If the data array has three dimensions, and has a shape of (NY, NX, 3), it
 is assumed to be  a 3 color map.  In this case, the scales for the
 individual colors can be manipulated separately.
-For example::
+For example:
 
 .. literalinclude:: ../examples/rgb_image.py 
 
 giving a plot that would look like this:
 
-.. image:: images/image_3colors.png
+.. image:: images/image_3color.png
+   :width: 85%
 
 
 

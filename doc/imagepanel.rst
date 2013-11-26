@@ -192,7 +192,12 @@ Some notes:
 Examples and Screenshots
 ====================================================================
 
-A basic plot from a :class:`ImageFrame` looks like this:
+A basic plot from a :class:`ImageFrame` looks like this::
+
+.. literalinclude:: ../examples/image.py
+
+giving the following image:
+
 
 .. image:: images/imagedisplay.png
 

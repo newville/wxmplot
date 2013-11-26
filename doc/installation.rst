@@ -1,13 +1,14 @@
 ====================================
 Downloading and Installation
-==================================
+====================================
+
 Prerequisites
 ~~~~~~~~~~~~~~~
 
 The wxmplot package requires Python, wxPython, numpy, and matplotlib.  Some
 of the example applications rely on the Image module as well.
 
-As of this writing (April, 2013), wxPython has been demonstrated to run on
+As of this writing (November, 2013), wxPython has been demonstrated to run on
 Python 3, but no testing of wxmplot has been done with Python 3.
 
 Downloads
@@ -15,16 +16,16 @@ Downloads
 
 The latest version is available from PyPI or CARS (Univ of Chicago):
 
-.. _wxmplot-0.9.12.tar.gz (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.12.tar.gz
-.. _wxmplot-0.9.12.zip    (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.12.zip
+.. _wxmplot-0.9.14.tar.gz (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.14.tar.gz
+.. _wxmplot-0.9.14.zip    (CARS): http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.14.zip
 
-.. _wxmplot-0.9.12.tar.gz (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.tar.gz
-.. _wxmplot-0.9.12.zip    (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.zip
+.. _wxmplot-0.9.14.tar.gz (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.tar.gz
+.. _wxmplot-0.9.14.zip    (PyPI): http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.zip
 
-.. _wxmplot-0.9.12.win32-py2.6.exe (CARS):  http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.12.win32-py2.6.exe
-.. _wxmplot-0.9.12.win32-py2.7.exe (CARS):  http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.12.win32-py2.7.exe
-.. _wxmplot-0.9.12.win32-py2.6.exe:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.win32-py2.6.exe
-.. _wxmplot-0.9.12.win32-py2.7.exe:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.12.win32-py2.7.exe
+.. _wxmplot-0.9.14.win32-py2.6.exe (CARS):  http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.14.win32-py2.6.exe
+.. _wxmplot-0.9.14.win32-py2.7.exe (CARS):  http://cars9.uchicago.edu/software/python/wxmplot/src/wxmplot-0.9.14.win32-py2.7.exe
+.. _wxmplot-0.9.14.win32-py2.6.exe:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.win32-py2.6.exe
+.. _wxmplot-0.9.14.win32-py2.7.exe:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.win32-py2.7.exe
 
 .. _wxmplot github repository:   http://github.com/newville/wxmplot
 .. _Python Setup Tools:          http://pypi.python.org/pypi/setuptools
@@ -32,13 +33,13 @@ The latest version is available from PyPI or CARS (Univ of Chicago):
 +---------------------+------------------+------------------------------------------+
 |  Download Option    | Python Versions  |  Location                                |
 +=====================+==================+==========================================+
-| Source Kit          | 2.6, 2.7         | - `wxmplot-0.9.12.tar.gz (CARS)`_        |
-|                     |                  | - `wxmplot-0.9.12.zip    (CARS)`_        |
-|                     |                  | - `wxmplot-0.9.12.tar.gz (PyPI)`_        |
-|                     |                  | - `wxmplot-0.9.12.zip    (PyPI)`_        |
+| Source Kit          | 2.6, 2.7         | - `wxmplot-0.9.14.tar.gz (CARS)`_        |
+|                     |                  | - `wxmplot-0.9.14.zip    (CARS)`_        |
+|                     |                  | - `wxmplot-0.9.14.tar.gz (PyPI)`_        |
+|                     |                  | - `wxmplot-0.9.14.zip    (PyPI)`_        |
 +---------------------+------------------+------------------------------------------+
-| Windows Installers  | 2.6              | - `wxmplot-0.9.12.win32-py2.6.exe`_      |
-|                     | 2.7              | - `wxmplot-0.9.12.win32-py2.7.exe`_      |
+| Windows Installers  | 2.6              | - `wxmplot-0.9.14.win32-py2.6.exe`_      |
+|                     | 2.7              | - `wxmplot-0.9.14.win32-py2.7.exe`_      |
 +---------------------+------------------+------------------------------------------+
 | Development Version | all              | use `wxmplot github repository`_         |
 +---------------------+------------------+------------------------------------------+
@@ -60,8 +61,8 @@ Installation
 
 wxmplot is a pure python module, so installation on all platforms can use the source kit::
 
-   tar xvzf wxmplot-0.9.12.tar.gz  or unzip wxmplot-0.9.12.zip
-   cd wxmplot-0.9.12/
+   tar xvzf wxmplot-0.9.14.tar.gz  or unzip wxmplot-0.9.14.zip
+   cd wxmplot-0.9.14/
    python setup.py install
 
 or, again using ``easy_install -U wxmplot``.
@@ -71,7 +72,7 @@ License
 
 The wxmplot code is distribution under the following license:
 
-  Copyright (c) 2012 Matthew Newville, The University of Chicago
+  Copyright (c) 2013 Matthew Newville, The University of Chicago
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby

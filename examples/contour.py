@@ -13,7 +13,7 @@ def gauss2d(x, y, x0, y0, sx, sy):
 
 if __name__ == '__main__':
     app = wx.App()
-    frame = ImageFrame(config_on_frame=True)
+    frame = ImageFrame()
     ny, nx = 350, 400
     x = arange(nx)
     y = arange(ny)

@@ -34,7 +34,7 @@ class ImagePanel(BasePanel):
     def __init__(self, parent, messenger=None, data_callback=None,
                  cursor_callback=None, lasso_callback=None,
                  contour_callback=None,
-                 size=(5.25, 4.50), dpi=100,
+                 size=(525, 450), dpi=100,
                  output_title='Image', **kws):
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent,
@@ -51,7 +51,7 @@ class ImagePanel(BasePanel):
 
         self.win_config = None
         self.data_shape = None
-        self.figsize = size
+        self.size    = size
         self.dpi     = dpi
         self.xlab    = 'X'
         self.ylab    = 'Y'
@@ -221,23 +221,21 @@ class ImagePanel(BasePanel):
     ####
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
-
-        self.fig   = Figure(self.figsize, dpi=self.dpi)
-        self.axes  = self.fig.add_axes([0.02, 0.02, 0.96, 0.96])
+        figsize = (1.0*self.size[0]/self.dpi, 1.0*self.size[1]/self.dpi)
+        self.fig   = Figure(figsize, dpi=self.dpi)
+        self.axes  = self.fig.add_axes([0.0, 0.0, 1.0, 1.0])
 
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
-        self.fig.set_facecolor('#FBABA8')
-
+        self.fig.set_facecolor('#FFFFFD')
+        
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
         self.conf.canvas= self.canvas
-
-        self.canvas.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-
+        
+        # self.canvas.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         # This way of adding to sizer allows resizing
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.canvas, 2, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND|wx.ALL, 0)
-        self.SetAutoLayout(True)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(self.canvas, 1, wx.ALL|wx.GROW)
         self.SetSizer(sizer)
         self.Fit()
         self.addCanvasEvents()
@@ -416,6 +414,7 @@ class ImagePanel(BasePanel):
                 conf.image.set_interpolation(conf.interp)
         else:
             r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
+
             rmin = float(conf.int_lo['red'])
             rmax = float(conf.int_hi['red'])
             gmin = float(conf.int_lo['green'])
@@ -439,11 +438,14 @@ class ImagePanel(BasePanel):
             r = (r - rmin)/(rmax - rmin + 1.e-8)
             g = (g - gmin)/(gmax - gmin + 1.e-8)
             b = (b - bmin)/(bmax - bmin + 1.e-8)
+
             inew = img*1.0
             inew[:,:,0] = np.clip((r - rlo)/(rhi - rlo + 1.e-8), 0, 1)
             inew[:,:,1] = np.clip((g - glo)/(ghi - glo + 1.e-8), 0, 1)
             inew[:,:,2] = np.clip((b - blo)/(bhi - blo + 1.e-8), 0, 1)
-
+            if conf.tricolor_bg.startswith('wh'):
+                inew = conf.tricolor_white_bg(inew)
+              
             if self.conf.style == 'image':
                 conf.image.set_data(inew)
                 conf.image.set_interpolation(conf.interp)

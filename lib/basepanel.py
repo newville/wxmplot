@@ -267,7 +267,7 @@ class BasePanel(wx.Panel):
         if event is None:
             return
         self.cursor_mode_action('leftup', event=event)
-        self.canvas.draw()
+        self.canvas.draw_idle()
         self.ForwardEvent(event=event.guiEvent)
 
     def ForwardEvent(self, event=None):

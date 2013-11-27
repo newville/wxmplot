@@ -1,6 +1,5 @@
 import wx
 import matplotlib.cm as colormap
-from scipy.interpolate import splrep, splev
 from .colors import register_custom_colormaps
 
 ColorMap_List = ['gray']
@@ -68,41 +67,29 @@ class ImageConfig:
     def set_zoompen(self,color, style):
         self.zoompen = wx.Pen(color, 3, style)
 
-    def make_spline_tables(self):
-        for i, nam in enumerate(('Reds', 'Greens', 'Blues')):
-            dat =  colormap.get_cmap(nam)._segmentdata
-            xr = [1.*i[0] for i in dat['red']]
-            yr = [1.*i[1] for i in dat['red']]
-            xg = [1.*i[0] for i in dat['green']]
-            yg = [1.*i[1] for i in dat['green']]
-            xb = [1.*i[0] for i in dat['blue']]
-            yb = [1.*i[1] for i in dat['blue']]
-
-            oname = nam[:-1].lower()
-            self.cmap_splines[oname] = [splrep(xr, yr),
-                                        splrep(xg, yg),
-                                        splrep(xb, yb)]
     def tricolor_white_bg(self, img):
-        imin, imax = img.min(), img.max()
-        img = (img - imin) / (imax - imin)
-        if self.cmap_splines['red'] is None:
-            self.make_spline_tables()
-        cr = self.cmap_splines['red']
-        cg = self.cmap_splines['green']
-        cb = self.cmap_splines['blue']
-        inew = img*0.0
-        sh = inew.shape[0], inew.shape[1]
-        inew[:,:,0] += splev(img[:,:,0].flatten(), cr[0]).reshape(sh)
-        inew[:,:,1] += splev(img[:,:,0].flatten(), cr[1]).reshape(sh)
-        inew[:,:,2] += splev(img[:,:,0].flatten(), cr[2]).reshape(sh)
+        """transforms image from RGB with (0,0,0)
+        showing black to  RGB with 0,0,0 showing white
+
+        takes the Red intensity and sets
+        the new intensity to go
+        from (0, 0.5, 0.5) (for Red=0)  to (0, 0, 0) (for Red=1)
+        and so on for the Green and Blue maps.
         
-        inew[:,:,0] += splev(img[:,:,1].flatten(), cg[0]).reshape(sh)
-        inew[:,:,1] += splev(img[:,:,1].flatten(), cg[1]).reshape(sh)
-        inew[:,:,2] += splev(img[:,:,1].flatten(), cg[2]).reshape(sh)
-        
-        inew[:,:,0] += splev(img[:,:,2].flatten(), cb[0]).reshape(sh)
-        inew[:,:,1] += splev(img[:,:,2].flatten(), cb[1]).reshape(sh)
-        inew[:,:,2] += splev(img[:,:,2].flatten(), cb[2]).reshape(sh)
-        return inew/ inew.max()
+        Thus the image will be transformed from
+          old intensity                new intensity
+          (0.0, 0.0, 0.0) (black)   (1.0, 1.0, 1.0) (white)
+          (1.0, 1.0, 1.0) (white)   (0.0, 0.0, 0.0) (black)
+          (1.0, 0.0, 0.0) (red)     (1.0, 0.5, 0.5) (red)
+          (0.0, 1.0, 0.0) (green)   (0.5, 1.0, 0.5) (green)
+          (0.0, 0.0, 1.0) (blue)    (0.5, 0.5, 1.0) (blue)
+
+        """
+        tmp = 0.5*(1.0 - (img - img.min())/(img.max() - img.min()))
+        out = tmp*0.0
+        out[:,:,0] = tmp[:,:,1] + tmp[:,:,2]
+        out[:,:,1] = tmp[:,:,0] + tmp[:,:,2]
+        out[:,:,2] = tmp[:,:,0] + tmp[:,:,1]
+        return out
         
 

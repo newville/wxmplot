@@ -270,4 +270,5 @@ looks like:
    :width: 85%
 
 
-
+This gives a slightly different view of the same data, and the images may be
+more suitable for printed documents and presentations.

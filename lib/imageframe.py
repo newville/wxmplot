@@ -269,9 +269,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
 
         em = wx.Menu()
-        em.Append(mids.LOG_SCALE, 'Log Scale Intensity\tCtrl+L', '', wx.ITEM_CHECK)
-        em.Append(mids.ENHANCE,    'Enhance Contrast\tCtrl+E', '', wx.ITEM_CHECK)
-        # m.Append(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A', '', wx.ITEM_CHECK)
+        em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
+                  'use logarithm to set intensity scale', wx.ITEM_CHECK)
+        em.Append(mids.ENHANCE,    'Enhance Contrast\tCtrl+E',
+                  'use 1% / 99% levels to set intensity scale', wx.ITEM_CHECK)
+        em.Append(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A',
+                  'reset intensity scale from data range', wx.ITEM_CHECK)
         
         sm = wx.Menu()
         for itype in Interp_List:
@@ -633,23 +636,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.panel.redraw()
 
     def onInt_Autoscale(self, event=None, val=None):
-        if val is None:
-            val = self.panel.conf.auto_intensity = event.IsChecked()
-        if val:
+        self.panel.conf.auto_intensity = event.IsChecked()
+        if event.IsChecked():
             try:
                 self.onDataChange(self.panel.conf.data)
             except:
                 pass
             self.panel.redraw()
-            for ix, iwid in self.imax_val.items():
-                iwid.Disable()
-            for ix, iwid in self.imin_val.items():
-                iwid.Disable()
-        else:
-            for ix, iwid in self.imax_val.items():
-                iwid.Enable()
-            for ix, iwid in self.imin_val.items():
-                iwid.Enable()
 
     def onCMapReverse(self, event=None):
         self.set_colormap()

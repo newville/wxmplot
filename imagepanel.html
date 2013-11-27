@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.14',
+        VERSION:     '0.9.12',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -458,9 +458,9 @@ image display.  A contour plot can be created like this:</p>
 <div class="section" id="color-example">
 <h3>3-Color Example<a class="headerlink" href="#color-example" title="Permalink to this headline">¶</a></h3>
 <p>If the data array has three dimensions, and has a shape of (NY, NX, 3), it
-is assumed to be  a 3 color map.  In this case, the scales for the
-individual colors can be manipulated separately.
-For example:</p>
+is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
+In this case, the Image Frame will show sliders and min/max controls for
+each of the three colors.  For example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example showing display of R, G, B maps</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -502,6 +502,12 @@ For example:</p>
 </div>
 <p>giving a plot that would look like this:</p>
 <a class="reference internal image-reference" href="_images/image_3color.png"><img alt="_images/image_3color.png" src="_images/image_3color.png" style="width: 85%;" /></a>
+<p>Note that there is also a selection for the <a href="#id1"><span class="problematic" id="id2">*</span></a>Zero Intensity Color' which
+can either be 'black' or 'white'.   The same image with a white background
+looks like:</p>
+<a class="reference internal image-reference" href="_images/image_3color_white.png"><img alt="_images/image_3color_white.png" src="_images/image_3color_white.png" style="width: 85%;" /></a>
+<p>This gives a slightly different view of the same data, and the images may be
+more suitable for printed documents and presentations.</p>
 </div>
 </div>
 </div>
@@ -529,7 +535,7 @@ For example:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

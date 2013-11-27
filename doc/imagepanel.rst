@@ -249,9 +249,9 @@ In addition, one can bring up a screen to set the number of contour levels.
 -----------------
 
 If the data array has three dimensions, and has a shape of (NY, NX, 3), it
-is assumed to be  a 3 color map.  In this case, the scales for the
-individual colors can be manipulated separately.
-For example:
+is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
+In this case, the Image Frame will show sliders and min/max controls for
+each of the three colors.  For example:
 
 .. literalinclude:: ../examples/rgb_image.py 
 
@@ -260,6 +260,14 @@ giving a plot that would look like this:
 .. image:: images/image_3color.png
    :width: 85%
 
+
+Note that there is also a selection for the *Zero Intensity Color' which
+can either be 'black' or 'white'.   The same image with a white background
+looks like: 
+
+
+.. image:: images/image_3color_white.png
+   :width: 85%
 
 
 

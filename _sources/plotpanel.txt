@@ -7,20 +7,20 @@
 
 The :class:`PlotPanel` class supports standard 2 dimensional plots,
 including line plots and scatter plots.  It has both an easy-to-use
-programming interface, and a rich graphical user interface for manipulating
-the plot after it has been drawn.  The :class:`PlotPanel` class is derived
-from a :class:`wx.Panel` and so that it can be included anywhere in a wx
-Windo object that a normal :class:`wx.Panel` can be.  In addition to
-drawing a plot, a :class:`PlotPanel` provides the following capabilities to
-the end-user:
+programming interface, and a rich graphical user interface for
+manipulating the plot after it has been drawn.  The :class:`PlotPanel`
+class is derived from a :class:`wx.Panel` and so that it can be
+included anywhere in a wx Windo object that a normal :class:`wx.Panel`
+can be put.  In addition to drawing a plot, a :class:`PlotPanel`
+provides the following capabilities to the end-user:
 
    1. display x, y coordinates as the mouse move.
    2. display x, y coordinates of last left-click.
    3. zoom in on a particular region of the plot with left-drag in a
-      lineplot, or draw an 'lasso' around selected points in a scatterplot.
+      lineplot, or draw a 'lasso' around selected points in a scatterplot.
    4. customize titles, labels, legend, colors, linestyles, markers, and
       whether a grid and a legend is shown.  A separate configuration
-      window is used to give control of these settings.
+      window is displayed to give users control of these settings.
    5. save high-quality plot images (as PNGs), or copy to system
       clipboard, or print.
 
@@ -34,15 +34,27 @@ equal-length numpy arrays (abscissa, ordinate) for each trace, and a host
 of optional arguments.  The :class:`PlotPanel` and :class:`PlotFrame` have
 many additional methods to interact with the plots.
 
-.. class:: PlotPanel(parent, size=(6.0, 3.7), dpi=96, messenger=None, show_config_popup=True, **kws)
+.. class:: PlotPanel(parent, size=(700, 450), dpi=150, **kws)
 
-   Create a Plot Panel, a :class:`wx.Panel`
+   Create a Plot Panel, a :class:`wx.Panel` with a matplotlib Figure.
+   This takes many optional arguments:
 
    :param parent: wx parent object.
-   :param size:   figure size in inches.
-   :param dpi:    dots per inch for figure.
-   :param messenger: function for accepting output messages.
-   :type messenger: callable or ``None``
+   :param size:   figure size in wxPython pixel coordinates ((700, 450)).
+   :type  size:    wx.Size  or tuple of 2 integers.
+   :param dpi:    dots per inch for figure (150).
+   :type  dpi:    integer
+   :param axissize:  size for maplotlib Axis   ([0.16, 0.16, 0.72, 0.72])
+   :type  axissize:  list of 4 floats
+   :param axisbg:    background colour for Axis ('#FEFEFE').
+   :type  axisbg:  valid colour name
+   :param fontsize:  font size for wxFont for labels and ticks (9).
+   :type  fontsize:  integer
+   :param output_tilte:  string to use for output plots ('plot').
+   :param messenger:     function to use for writing output messages  (``None``).
+   :type  messenger: callable or ``None``
+   :param trace_color_callback: function to call when a color changes (``None``).
+   :type  trace_color_callback: callable or ``None``
    :param show_config_popup: whether to enable a popup-menu on right-click.
    :type show_config_popup: ``True``/``False``
 
@@ -55,7 +67,7 @@ many additional methods to interact with the plots.
    to showing a poup menu with options to zoom in or out, configure the
    plot, or save the image to a file.
 
-   Extra keyword parameters in ``**kws`` are sent to the wx.Panel.
+   Keyword parameters in ``**kws`` other than those listed above are sent to the wx.Panel.
 
 
 :class:`PlotPanel` methods
@@ -84,99 +96,129 @@ many additional methods to interact with the plots.
 :meth:`oplot`.  In addition, the :meth:`scatterplot` method uses many of the same arguments for the
 same meaning, as indicated by the right-most column.
 
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | argument    |   type     | default | meaning                                        | scatterplot?|
-  +=============+============+=========+================================================+=============+
-  | title       | string     | None    | Plot title                                     |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | ylabel      | string     | None    | abscissa label                                 |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | y2label     | string     | None    | right-hand abscissa label                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | label       | string     | None    | trace label (defaults to 'trace N')            |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | side        | left/right | left    | side for y-axis and label                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | grid        | None/bool  | None    | to show grid lines                             |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | color       | string     | blue    | color to use for trace                         |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | use_dates   | bool       | False   | to show dates in xlabel (:meth:`plot` only)    |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | linewidth   | int        | 2       | linewidth for trace                            |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | style       | string     | solid   | line-style for trace (solid, dashed, ...)      |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | drawstyle   | string     | line    | style connecting points of trace               |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | marker      | string     | None    | symbol to show for each point (+, o, ....)     |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | markersize  | int        | 8       | size of marker shown for each point            |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | dy          | array      | None    | uncertainties for y values; error bars         |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | ylog_scale  | bool       | False   | draw y axis with log(base 10) scale            |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | xmin        | float      | None    | minimum displayed x value                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | xmax        | float      | None    | maximum displayed x value                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | ymin        | float      | None    | minimum displayed y value                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | ymax        | float      | None    | maximum displayed y value                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | autoscale   | bool       | True    | whether to automatically set plot limits       |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | draw_legend | None/bool  | None    | whether to display legend (None: leave as is)  |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | refresh     | bool       | True    | whether to refresh display                     |  no         |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  |             | **arguments that apply only for** :meth:`scatterplot`                 |             |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | size        | int        | 10      | size of marker                                 |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | edgecolor   | string     | black   | edge color of marker                           |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | selectcolor | string     | red     | color for selected points                      |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
-  | callback    | function   | None    | user-supplied callback to run on selection     |  yes        |
-  +-------------+------------+---------+------------------------------------------------+-------------+
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | argument       |   type     | default | meaning                                        |note | scatterplot?|
+  +================+============+=========+================================================+=====+=============+
+  | title          | string     | None    | Plot title                                     |  1  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | ylabel         | string     | None    | abscissa label                                 |  1  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | y2label        | string     | None    | right-hand abscissa label                      |  1  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | label          | string     | None    | trace label (defaults to 'trace N')            |  1  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | color          | string     | blue    | color to use for trace                         |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | bgcolor        | string     | #FEFEFE | color for background of Axis (plot area)       |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | framecolor     | string     | white   | color for frame outside Axis                   |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | gridcolor      | string     | #E5E5E5 | color for grid lines                           |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | linewidth      | int        | 2       | linewidth for trace                            |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  3  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  4  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | drawstyle      | string     | line    | style connecting points of trace               |  5  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | side           | left/right | left    | side for y-axis and label                      |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  6  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | markersize     | int        | 8       | size of marker shown for each point            |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | legendfontsize | int        | 7       | text size for legend                           |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | labelfontsize  | int        | 9       | text size for Axis labels                      |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | dy             | array      | None    | uncertainties for y values; error bars         |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | xmin           | float      | None    | minimum displayed x value                      |  7  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | xmax           | float      | None    | maximum displayed x value                      |  7  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | ymin           | float      | None    | minimum displayed y value                      |  7  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | ymax           | float      | None    | maximum displayed y value                      |  7  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | autoscale      | bool       | True    | whether to automatically set plot limits       |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  8  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  8  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | grid           | None/bool  | None    | to show grid lines                             |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | show_legend    | None/bool  | None    | whether to display legend (None: leave as is)  |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | legend_loc     | string     | 'ur'    | location of legend                             |  9  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | legend_on      | bool       | True    | whether legend is on Axis                      |  9  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | delay_draw     | bool       | False   | whether to delay draw until later.             |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | refresh        | bool       | True    | whether to refresh display                     |     |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 10  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | size           | int        | 10      | size of marker                                 |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | edgecolor      | string     | black   | edge color of marker                           |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | selectcolor    | string     | red     | color for selected points                      |  2  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | callback       | function   | None    | user-supplied callback to run on selection     |     |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
 
   As a general note, the configuration for the plot (title, labels, grid
   displays) and for each trace (color, linewidth, ...) are preserved for a
   :class:`PlotPanel`. A few specific notes:
 
    1. The title, label, and grid arguments to :meth:`plot` default to ``None``,
-   which means to use the previously used value.
+      which means to use the previously used value.
 
-   2. The *use_dates* option is not very rich, and simply turns x-values that
-   are Unix timestamps into x labels showing the dates.
+   2. All *color* arguments can be a common color name ("blue", "red", "black", etc), a standard X11 color
+      names ("cadetblue3", "darkgreen", etc), or an RGB hex color string of the form "#RRGGBB".
 
-   3. While the default is to auto-scale the plot from the data ranges,
-   specifying any of the limits will override the corresponding limit(s).
+   3. *zorder* is the depth (that is, height above the plane of the screen) to draw the object at.  By
+      default, each :meth:`oplot` plots at a zorder of 10*(n+1), where n is the counter for the trace.
+      That is, each subsequent trace is drawn *over* the previous, by defualt.
 
-   4. The *color* argument can be any color name ("blue", "red", "black", etc),
-   standard X11 color names ("cadetblue3", "darkgreen", etc), or an RGB hex
-   color string of the form "#RRGGBB".
+   4. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or 'dash-dot')
 
-   5. Valid *style* arguments are 'solid', 'dashed', 'dotted', or 'dash-dot',
-   with 'solid' as the default.
+   5. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').  ``None`` connects
+      points with a straight line between points.  The others give horizontal lines with a vertical step
+      at the starting point ('step-pre'), mid-point ('step-mid') the ending point ('steps-post').  Note
+      that if displaying discrete values as a function of time, left-to-right, and want to show a
+      transition to a new value as a sudden step, you want 'steps-post'.
 
-   6. Valid *marker* arguments are '+', 'o', 'x', '^', 'v', '>', '<', '|', '_',
-   'square', 'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or
-   'tripod 2'.
+   6. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square', 'diamond', 'thin
+      diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
 
-   7. Valid *drawstyles* are None (which connects points with a straight line),
-   'steps-pre', 'steps-mid', or 'steps-post', which give a step between the
-   points, either just after a point ('steps-pre'), midway between them
-   ('steps-mid') or just before each point ('steps-post').   Note that if displaying
-   discrete values as a function of time, left-to-right, and want to show a
-   transition to a new value as a sudden step, you want 'steps-post'.
+   7. By default, xmin, xmax, ymin, and ymax are set from the data.
 
-  All of these values, and a few more settings controlling whether and how to
-  display a plot legend can be configured interactively (see Plot Configuration).
+   8. *fullbox* can be used to turn on or off the top and right Axes lines (or spines), giving a more open
+      figure.  The 'axes_style' option gives a little more control -- you can set this to either 'box' for
+      a complete box, 'open' for left and right Axes lines only (same as *fullbox=False*), or 'bottom'
+      which will suppress the top, right, and left Axes.
 
-.. method:: update_trace(trace, x, y[, side='left'])
+   9. *legend_loc* sets the position of the leggend on the plot, and is one of ('ur', 'ul', 'cr', 'cl',
+      'lr' 'll', 'uc', 'lc', or 'cc'') for ('upper right' , 'upper left', 'center right', 'center left',
+      'lower right', 'lower left', 'upper center', 'lower center', or 'center').
+
+   10. The *use_dates* option is not very rich, and simply turns x-values that are Unix timestamps into x
+       labels showing the dates. 
+
+  All of these values, and a few more settings controlling whether and how to display a plot legend can be
+  configured interactively (see Plot Configuration).
+
+.. method:: update_line(trace, x, y[, side='left'])
 
    update an existing trace.
 
@@ -213,7 +255,7 @@ same meaning, as indicated by the right-most column.
    :param ha:  horizontal alignment ('left', 'center', 'right')
    :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
 
-.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', fg='black', wdith=0.01, head_width=0.1, overhang=0)
+.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', fg='black', wdith=0.01, head_width=0.03, overhang=0)
 
 
    draw arrow from (x1, y1) to (x2, y2).
@@ -230,7 +272,7 @@ same meaning, as indicated by the right-most column.
    :param overhang:    amount the arrow is swept back (in points. default=0)
 
 
-.. method:: set_xylims(limits[, axes=None[, side=None[, autoscale=True]]])
+.. method:: set_xylims(limits[, axes=None[, side=None]])
 
    Set the x and y limits for a plot based on a 2x2 list.
 
@@ -238,9 +280,6 @@ same meaning, as indicated by the right-most column.
    :type limits: a 4-element list: [xmin, xmax, ymin, ymax]
    :param axes: instance of matplotlib axes to use (i.e, for right or left side y axes)
    :param side: set to 'right' to get right-hand axes.
-   :param autoscale: whether to automatically scale to data range.
-
-   That is, if `autoscale=False` is passed in, then the limits are used.
 
 .. method:: get_xylims()
 
@@ -373,7 +412,7 @@ The configuration window (Options->Configuration or Ctrl-K) for this plot looks
 like this:
 
 .. image:: images/configuration_frame.png
-   :width: 95 %
+   :width: 85 %
 
 where all the options and fields show will dynamically change the plot shown in the PlotPanel.
 

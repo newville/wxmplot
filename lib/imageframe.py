@@ -192,7 +192,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
-        # self.onInt_Autoscale(event=None, val=False)
 
     def BuildMenu(self):
         mids = self.menuIDs
@@ -271,12 +270,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         em = wx.Menu()
         em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
-        em.AppendSeparator()
-        em.AppendRadioItem(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A',
-                           'reset intensity scale from data range')
-        em.AppendRadioItem(mids.ENHANCE,  'Enhance Contrast\tCtrl+E',
-                           'use 1% / 99% levels to set intensity scale')
-        em.AppendSeparator()        
+        em.Append(mids.ENHANCE,  'Toggle Enhance Contrast\tCtrl+E',
+                  'toggle use of  1%/99% levels to set intensity scale', kind=wx.ITEM_CHECK)
+
         sm = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()
@@ -322,8 +318,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
         self.Bind(wx.EVT_MENU, self.onEnhanceContrast, id=mids.ENHANCE)
-        self.Bind(wx.EVT_MENU, self.onInt_Autoscale, id=mids.AUTO_SCALE)
         self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
+
 
     def Build_ConfigPanel_RGB(self):
         """config panel for left-hand-side of frame: RGB Maps"""
@@ -598,6 +594,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
     def onEnhanceContrast(self, event=None):
         """change image contrast, using scikit-image exposure routines"""
         enhance = event.IsChecked()
+
+        self.panel.conf.auto_intensity = not enhance
         conf = self.panel.conf
         data = self.panel.conf.data
         if len(data.shape) == 2: # intensity map        
@@ -635,15 +633,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         else:
             self.panel.conf.int_hi[col] = val
         self.panel.redraw()
-
-    def onInt_Autoscale(self, event=None, val=None):
-        self.panel.conf.auto_intensity = event.IsChecked()
-        if event.IsChecked():
-            try:
-                self.onDataChange(self.panel.conf.data)
-            except:
-                pass
-            self.panel.redraw()
 
     def onCMapReverse(self, event=None):
         self.set_colormap()

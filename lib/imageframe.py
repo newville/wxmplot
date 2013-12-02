@@ -271,11 +271,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         em = wx.Menu()
         em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
-        em.Append(mids.ENHANCE,    'Enhance Contrast\tCtrl+E',
-                  'use 1% / 99% levels to set intensity scale', wx.ITEM_CHECK)
-        em.Append(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A',
-                  'reset intensity scale from data range', wx.ITEM_CHECK)
-        
+        em.AppendSeparator()
+        em.AppendRadioItem(mids.AUTO_SCALE, 'Auto Scale Intensity\tCtrl+A',
+                           'reset intensity scale from data range')
+        em.AppendRadioItem(mids.ENHANCE,  'Enhance Contrast\tCtrl+E',
+                           'use 1% / 99% levels to set intensity scale')
+        em.AppendSeparator()        
         sm = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()

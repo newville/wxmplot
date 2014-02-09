@@ -4,6 +4,8 @@ wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 """
 import os
 import wx
+from wx._core import PyDeadObjectError
+
 import numpy as np
 from   matplotlib.cm import get_cmap
 import matplotlib.cm as mpl_colormap
@@ -104,6 +106,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mids.LOG_SCALE = wx.NewId()
         mids.AUTO_SCALE = wx.NewId()
         mids.ENHANCE   = wx.NewId()
+        mids.BGCOL     = wx.NewId()
         mids.FLIP_H    = wx.NewId()
         mids.FLIP_V    = wx.NewId()
         mids.FLIP_O    = wx.NewId()
@@ -197,6 +200,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
         self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
+        self.intensity_menu.Enable(self.menuIDs.BGCOL, not isIntMap)
 
     def BuildMenu(self):
         mids = self.menuIDs
@@ -272,19 +276,21 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         m.Append(mids.CONTOURLAB, 'Configure Contours', 'Configure Contours')
         self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
 
-        em = wx.Menu()
+        em = self.intensity_menu = wx.Menu()
         em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
         em.Append(mids.ENHANCE,  'Toggle Contrast Enhancement\tCtrl+E',
                   'Toggle contrast between 1%/99% and full intensity scale', wx.ITEM_CHECK)
+
+        em.Append(mids.BGCOL, 'Toggle Background Color (Black/White)\tCtrl+W',
+                  'Toggle background color for 3-color images', wx.ITEM_CHECK)
 
         sm = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()
             sm.AppendRadioItem(wid, itype, itype)
             self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
-        self.user_menus  = [('&Options', m), ('Contrast', em), ('Smoothing', sm)]
-        # print 'done Build Custom Menus'
+        self.user_menus  = [('&View', m), ('Intensity', em), ('Smoothing', sm)]
 
     def onInterp(self, evt=None, name=None):
         if name not in Interp_List:
@@ -323,6 +329,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onCMapSave, id=mids.SAVE_CMAP)
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
         self.Bind(wx.EVT_MENU, self.onEnhanceContrast, id=mids.ENHANCE)
+        self.Bind(wx.EVT_MENU, self.onTriColorBG, id=mids.BGCOL)
         self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
 
 
@@ -334,17 +341,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
 
-        s = wx.StaticText(lpanel, label='Zero Intensity Color:', size=(120, -1))
-        lsizer.Add(s, (0, 0), (1, 2), labstyle, 2)
-
-        bg_choice = wx.Choice(lpanel, size=(75, -1), choices=('black', 'white'))
-        bg_choice.Bind(wx.EVT_CHOICE,  self.onTriColorBG)
-        bg_choice.SetSelection(0)
-        
-        lsizer.Add(bg_choice, (0, 2), (1, 2), labstyle, 2)
-
-        irow = 0
-
+        irow = -1
         for col in ('red', 'green', 'blue'):
             stitle = self.subtitles.get(col, '')
             lab = "%s: %s" % (col.title(), stitle)
@@ -551,7 +548,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         panel.redraw()
 
     def onTriColorBG(self, event=None):
-        col = event.GetString()
+        col = {True:'white', False:'black'}[event.IsChecked()]
         conf = self.panel.conf        
         if col == conf.tricolor_bg:
             return
@@ -592,12 +589,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         for ix, iwid in self.imax_val.items():
             try:
                 iwid.Enable()
-            except pyDeadObjectError:
+            except PyDeadObjectError:
                 pass
         for ix, iwid in self.imin_val.items():
             try:
                 iwid.Enable()
-            except pyDeadObjectError:
+            except PyDeadObjectError:
                 pass
 
     def onEnhanceContrast(self, event=None):

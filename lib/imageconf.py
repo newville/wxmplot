@@ -36,13 +36,13 @@ class ImageConfig:
         self.flip_ud = False
         self.flip_lr = False
         self.rot  = False
+        self.auto_contrast = False
         self.datalimits = [None, None, None, None]
         self.cmap_lo = {'int': 0}
-        self.cmap_hi = {'int': 100}
-        self.cmap_range = 100
+        self.cmap_hi = {'int': 1000}
+        self.cmap_range = 1000
         self.tricolor_bg = 'black'        
         self.cmap_splines = {'int': None, 'red': None, 'green': None, 'blue': None}
-        self.auto_intensity = False
         self.int_lo = {'int': '0', 'red': '0', 'green': '0', 'blue': '0'}
         self.int_hi = {'int': '1', 'red': '1', 'green': '1', 'blue': '1'}
         self.data = None

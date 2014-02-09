@@ -33,7 +33,7 @@ class ImagePanel(BasePanel):
 
     def __init__(self, parent, messenger=None, data_callback=None,
                  cursor_callback=None, lasso_callback=None,
-                 contour_callback=None,
+                 contour_callback=None, 
                  size=(525, 450), dpi=100,
                  output_title='Image', **kws):
         matplotlib.rc('lines', linewidth=2)
@@ -43,7 +43,6 @@ class ImagePanel(BasePanel):
         self.conf = ImageConfig()
         self.conf.title = output_title
         self.cursor_mode = 'zoom'
-
         self.data_callback = data_callback
         self.cursor_callback = cursor_callback
         self.lasso_callback = lasso_callback
@@ -396,7 +395,9 @@ class ImagePanel(BasePanel):
         if conf.log_scale:
             imin = np.log10(1 + 9.0*imin)
             imax = np.log10(1 + 9.0*imax)
-        if conf.auto_intensity:
+            
+        # apply clipped color scale, as from sliders
+        if len(img.shape) == 2:
             (xmin, xmax, ymin, ymax) = self.conf.datalimits
             if xmin is None:  xmin = 0
             if xmax is None:  xmax = img.shape[1]
@@ -404,8 +405,7 @@ class ImagePanel(BasePanel):
             if ymax is None:  ymax = img.shape[0]
             imin = np.min(img[ymin:ymax, xmin:xmax])
             imax = np.max(img[ymin:ymax, xmin:xmax])
-        # apply clipped color scale, as from sliders
-        if len(img.shape) == 2:
+                
             img = (img - imin)/(imax - imin + 1.e-8)
             mlo = conf.cmap_lo[col]/(1.0*conf.cmap_range)
             mhi = conf.cmap_hi[col]/(1.0*conf.cmap_range)

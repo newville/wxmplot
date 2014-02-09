@@ -4,7 +4,7 @@ wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 """
 import os
 import wx
-import numpy
+import numpy as np
 from   matplotlib.cm import get_cmap
 import matplotlib.cm as mpl_colormap
 from matplotlib.figure import Figure
@@ -125,6 +125,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.SetBackgroundColour('#F8F8F4')
         
         self.config_panel = wx.Panel(self)
+        self.imin_val = {}
+        self.imax_val = {}
+        self.islider_range = {}
+        
         if mode.lower().startswith('int'):
             self.config_mode = 'int'
             self.Build_ConfigPanel_Int()
@@ -180,6 +184,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         contour_value = 0
         if style == 'contour':
             contour_value = 1
+        self.set_contrast_levels()
         self.panel.redraw()
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -259,7 +264,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
         mids.CONTOUR  = wx.NewId()
-        m.Append(mids.CONTOUR, 'As Contour', 'Show as contour map', kind=wx.ITEM_CHECK)
+        m.Append(mids.CONTOUR, 'As Contour', 'Shown as contour map', kind=wx.ITEM_CHECK)
         m.Check(mids.CONTOUR, False)
         self.Bind(wx.EVT_MENU, self.onContourToggle, id=mids.CONTOUR)
 
@@ -270,8 +275,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         em = wx.Menu()
         em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
-        em.Append(mids.ENHANCE,  'Toggle Enhance Contrast\tCtrl+E',
-                  'toggle use of  1%/99% levels to set intensity scale', kind=wx.ITEM_CHECK)
+        em.Append(mids.ENHANCE,  'Toggle Contrast Enhancement\tCtrl+E',
+                  'Toggle contrast between 1%/99% and full intensity scale', wx.ITEM_CHECK)
 
         sm = wx.Menu()
         for itype in Interp_List:
@@ -323,8 +328,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def Build_ConfigPanel_RGB(self):
         """config panel for left-hand-side of frame: RGB Maps"""
-        self.imin_val = {}
-        self.imax_val = {}
         conf = self.panel.conf
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
@@ -352,9 +355,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             
             cm_wid   = 1.00
             cm_ratio = 0.07
-            cmax = 100.0
-            self.cmap_dat[col]   = numpy.outer(numpy.ones(cmax*cm_ratio),
-                                               numpy.linspace(0, 1, cmax))
+            cmax = 1.0*conf.cmap_range
+            self.cmap_dat[col]   = np.outer(np.ones(cmax*cm_ratio),
+                                               np.linspace(0, 1, cmax))
 
             fig  = Figure((cm_wid, cm_wid*cm_ratio), dpi=150)
 
@@ -364,15 +367,15 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
             cmap = get_cmap(col)
             conf.cmap[col] = cmap
-            conf.cmap_lo[col] = 0
-            conf.cmap_hi[col] = 100
+            conf.cmap_lo[col] = 0.0
+            conf.cmap_hi[col] = conf.cmap_range
             self.cmap_img[col] = ax.imshow(self.cmap_dat[col],
                                            cmap=cmap,
                                            interpolation='bilinear')
 
-            self.cmap_lo[col] = wx.Slider(lpanel, -1, 0, 0, 100,
+            self.cmap_lo[col] = wx.Slider(lpanel, -1, 0, 0, conf.cmap_range,
                                             style=wx.SL_HORIZONTAL)
-            self.cmap_hi[col] = wx.Slider(lpanel, -1, 100, 0, 100,
+            self.cmap_hi[col] = wx.Slider(lpanel, -1, conf.cmap_range, 0, conf.cmap_range,
                                             style=wx.SL_HORIZONTAL)
             self.cmap_lo[col].Bind(wx.EVT_SCROLL,  Closure(self.onStretchLow, col=col))
             self.cmap_hi[col].Bind(wx.EVT_SCROLL,  Closure(self.onStretchHigh, col=col))
@@ -393,11 +396,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                             size=65, labeltext=':',
                                             action = Closure(self.onThreshold,
                                                              argu='hi', col=col))
+            self.islider_range[col] = wx.StaticText(lpanel, label='Shown: ', 
+                                                    size=(120, -1))            
+
             irow += 1
             lsizer.Add(self.imin_val[col].label, (irow, 0), (1, 1), labstyle, 1)
             lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 0)
             lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 0)
             lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 0)
+            irow += 1
+            lsizer.Add(self.islider_range[col],  (irow, 0), (1, 4), labstyle, 0)
 
             irow += 1
             lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
@@ -419,8 +427,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def Build_ConfigPanel_Int(self):
         """config panel for left-hand-side of frame"""
-        self.imin_val = {}
-        self.imax_val = {}
         conf = self.panel.conf
         lpanel = self.config_panel
         lsizer = wx.GridBagSizer(7, 4)
@@ -452,8 +458,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         cm_wid   = 1.00
         cm_ratio = 0.12
         col = 'int'
-        self.cmap_dat[col] = numpy.outer(numpy.ones(cmax*cm_ratio),
-                                       numpy.linspace(0, 1, cmax))
+        self.cmap_dat[col] = np.outer(np.ones(cmax*cm_ratio),
+                                       np.linspace(0, 1, cmax))
 
         fig = Figure((cm_wid, cm_wid*cm_ratio), dpi=150)
 
@@ -489,12 +495,15 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.imax_val[col] = LabelEntry(lpanel, conf.int_hi[col],
                                    size=65, labeltext=':',
                                    action = Closure(self.onThreshold, argu='hi'))
-
+        self.islider_range[col] = wx.StaticText(lpanel, label='Shown: ', 
+                                                size=(120, -1))                    
         irow += 1
         lsizer.Add(self.imin_val[col].label, (irow, 0), (1, 1), labstyle, 1)
         lsizer.Add(self.imin_val[col],       (irow, 1), (1, 1), labstyle, 0)
         lsizer.Add(self.imax_val[col].label, (irow, 2), (1, 1), labstyle, 0)
         lsizer.Add(self.imax_val[col],       (irow, 3), (1, 1), labstyle, 0)
+        irow += 1
+        lsizer.Add(self.islider_range[col],  (irow, 0), (1, 4), labstyle, 0)
 
         irow += 1
         lsizer.Add(wx.StaticLine(lpanel, size=(50, 2), style=wx.LI_HORIZONTAL),
@@ -593,31 +602,51 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def onEnhanceContrast(self, event=None):
         """change image contrast, using scikit-image exposure routines"""
-        enhance = event.IsChecked()
-
-        self.panel.conf.auto_intensity = not enhance
-        conf = self.panel.conf
-        data = self.panel.conf.data
-        if len(data.shape) == 2: # intensity map        
-            imin, imax = data.min(), data.max()
-            if enhance:  
-                imin, imax = numpy.percentile(data, [1, 99])
-            conf.int_lo['int'] = imin
-            conf.int_hi['int'] = imax
-            self.imin_val['int'].SetValue('%.4g' % imin)
-            self.imax_val['int'].SetValue('%.4g' % imax)
-        if len(data.shape) == 3: # rgb map        
-            for ix, cnam in ((0, 'red'), (1, 'green'), (2, 'blue')):
-                imin, imax = data[:,:,ix].min(), data[:,:,ix].max()
-                if enhance:  
-                    imin, imax = numpy.percentile(data[:,:,ix], [1, 99])
-                conf.int_lo[cnam] = imin
-                conf.int_hi[cnam] = imax
-                self.imin_val[cnam].SetValue('%.4g' % imin)
-                self.imax_val[cnam].SetValue('%.4g' % imax)
-
+        self.panel.conf.auto_contrast = event.IsChecked()        
+        self.set_contrast_levels()
         self.panel.redraw()
         
+    def set_contrast_levels(self):
+        """enhance contrast levels, or use full data range
+        according to value of self.panel.conf.auto_contrast
+        """
+        conf = self.panel.conf
+        img  = self.panel.conf.data
+        enhance = conf.auto_contrast
+        if len(img.shape) == 2: # intensity map        
+            col = 'int'
+            jmin = imin = img.min()
+            jmax = imax = img.max()
+            self.imin_val[col].SetValue('%.4g' % imin)
+            self.imax_val[col].SetValue('%.4g' % imax)
+            if enhance:
+                jmin, jmax = np.percentile(img, [1, 99])
+            xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
+            xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
+            self.cmap_hi[col].SetValue(xhi)
+            self.cmap_lo[col].SetValue(xlo)
+            conf.cmap_hi[col] = xhi
+            conf.cmap_lo[col] = xlo
+            self.islider_range[col].SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
+            self.redraw_cmap(col=col)
+        if len(img.shape) == 3: # rgb map        
+            for ix, col in ((0, 'red'), (1, 'green'), (2, 'blue')):
+                jmin = imin = img[:,:,ix].min()
+                jmax = imax = img[:,:,ix].max()
+                self.imin_val[col].SetValue('%.4g' % imin)
+                self.imax_val[col].SetValue('%.4g' % imax)                
+                if enhance:
+                    jmin, jmax = np.percentile(img[:,:,ix], [1, 99])
+                
+                xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
+                xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
+                self.cmap_hi[col].SetValue(xhi)
+                self.cmap_lo[col].SetValue(xlo)
+                conf.cmap_hi[col] = xhi
+                conf.cmap_lo[col] = xlo
+                self.islider_range[col].SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
+                self.redraw_cmap(col=col)
+
     def onThreshold(self, event=None, argu='hi', col='int'):
         if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
             try:
@@ -686,11 +715,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             return
         # conf.image.set_cmap(conf.cmap)
         self.cmap_img[col].set_cmap(conf.cmap[col])
-        lo = conf.cmap_lo[col]
-        hi = conf.cmap_hi[col]
-        cmax = 1.0 * conf.cmap_range
+        lo = int(conf.cmap_lo[col])
+        hi = int(conf.cmap_hi[col])
+
         self.cmap_dat[col][:, :lo] = 0
-        self.cmap_dat[col][:, lo:hi]  = numpy.linspace(0., 1., hi-lo)
+        self.cmap_dat[col][:, lo:hi]  = np.linspace(0., 1., hi-lo)
         self.cmap_dat[col][:, hi:] = 1
         self.cmap_img[col].set_data(self.cmap_dat[col])
         self.cmap_canvas[col].draw()
@@ -710,8 +739,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             lo = max(lo, 0)
         self.cmap_lo[col].SetValue(lo)
         self.cmap_hi[col].SetValue(hi)
-        self.panel.conf.cmap_lo[col] = lo
-        self.panel.conf.cmap_hi[col] = hi
+        conf = self.panel.conf
+        conf.cmap_lo[col] = lo
+        conf.cmap_hi[col] = hi
+        imin = float(self.imin_val[col].GetValue())
+        imax = float(self.imax_val[col].GetValue())
+        xlo = imin + (imax-imin)*lo/conf.cmap_range
+        xhi = imin + (imax-imin)*hi/conf.cmap_range
+        self.islider_range[col].SetLabel('Shown: [%.4g: %.4g]' % (xlo, xhi))
         self.redraw_cmap(col=col)
         self.panel.redraw(col=col)
 
@@ -725,7 +760,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         ofile = 'Colormap.png'
 
         dlg = wx.FileDialog(self, message='Save Colormap as...',
-                            defaultDir = os.getcwd(),
+                            defaltDir = os.getcwd(),
                             defaultFile=ofile,
                             wildcard=file_choices,
                             style=wx.SAVE|wx.CHANGE_DIR)

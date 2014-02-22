@@ -9,6 +9,7 @@ import os
 import wx
 import matplotlib
 from matplotlib.widgets import Lasso
+from matplotlib import dates
 
 from .utils import Printer
 
@@ -310,19 +311,18 @@ class BasePanel(wx.Panel):
         """ formatter for date x-data. primitive, and probably needs
         improvement, following matplotlib's date methods.
         """
-        interval = self.axes.xaxis.get_view_interval()
-        ticks = self.axes.xaxis.get_major_locator()()
-        span = max(interval) - min(interval)
+        span = self.axes.xaxis.get_view_interval()
+        tmin = time.mktime(dates.num2date(min(span)).timetuple())
+        tmax = time.mktime(dates.num2date(max(span)).timetuple())
+        nhours = (tmax - tmin)/3600.0
         fmt = "%m/%d"
-        if span < 1800:
-            fmt = "%I%p \n%M:%S"
-        elif span < 86400*5:
-            fmt = "%m/%d \n%H:%M"
-        elif span < 86400*20:
-            fmt = "%m/%d"
-        # print 'date formatter  span: ', span, fmt
-        s = time.strftime(fmt, time.localtime(x))
-        return s
+        if nhours < 0.1:
+            fmt = "%H:%M\n%Ssec"
+        elif nhours < 4:
+            fmt = "%m/%d\n%H:%M"
+        elif nhours < 24*8:
+            fmt = "%m/%d\n%H:%M"
+        return time.strftime(fmt, dates.num2date(x).timetuple())
 
     def xformatter(self, x, pos):
         " x-axis formatter "

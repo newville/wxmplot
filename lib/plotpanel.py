@@ -5,6 +5,9 @@ wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 import wx
 from numpy import nonzero, where, ma
 import matplotlib
+
+from datetime import datetime
+from matplotlib import dates
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -101,7 +104,6 @@ class PlotPanel(BasePanel):
             self.set_title(title)
         if use_dates is not None:
             self.use_dates  = use_dates
-
         return self.oplot(xdata, ydata, side=side, **kws)
 
     def oplot(self, xdata, ydata, side='left', label=None,
@@ -128,6 +130,12 @@ class PlotPanel(BasePanel):
             ydata[where(ydata<=0)] = None
 
         axes.set_yscale(yscale, basey=10)
+        axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        if self.use_dates:
+            x_dates = [datetime.fromtimestamp(i) for i in xdata] 
+            xdata = dates.date2num(x_dates)
+            axes.xaxis.set_major_locator(dates.AutoDateLocator())
+
         if linewidth is None:
             linewidth = 2
 
@@ -162,8 +170,6 @@ class PlotPanel(BasePanel):
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
-
         conf  = self.conf
         n    = conf.ntrace
         if zorder is None:
@@ -171,18 +177,19 @@ class PlotPanel(BasePanel):
         if axes not in self.axes_traces:
             self.axes_traces[axes] = []
         self.axes_traces[axes].append(n)
+        if dy is None:
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
+        else:
+            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
-            for i in axes.get_xgridlines()+axes.get_ygridlines():
+            for i in axes.get_xgridlines() + axes.get_ygridlines():
                 i.set_color(conf.grid_color)
                 i.set_zorder(0)
             axes.grid(True)
         else:
             axes.grid(False)
-        if dy is None:
-            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
-        else:
-            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)

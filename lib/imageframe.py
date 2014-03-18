@@ -658,6 +658,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.panel.conf.int_lo[col] = val
         else:
             self.panel.conf.int_hi[col] = val
+        lo = self.panel.conf.int_lo[col]
+        hi = self.panel.conf.int_hi[col]
+        self.islider_range[col].SetLabel('Shown: [ %.4g :  %.4g ]' % (lo, hi))
         self.panel.redraw()
 
     def onCMapReverse(self, event=None):

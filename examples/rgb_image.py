@@ -17,13 +17,13 @@ if __name__ == '__main__':
     y = arange(ny)
     ox =  x / 100.0
     oy = -1 + y / 200.0
-    red  = 0.3 * random.random(size=nx*ny).reshape(ny, nx)
+    red  = 2. * random.random(size=nx*ny).reshape(ny, nx)
     red =  red + 0.25 + (6.0*gauss2d(x, y, 90,   76,  5,  6) +
                          3.0*gauss2d(x, y, 160, 190,  70,  33) +
                          2.0*gauss2d(x, y, 180, 100,  12,  6))
-    green  = 0.1 * random.random(size=nx*ny).reshape(ny, nx)
-    green = green  + (1.0*gauss2d(x, y, 175,  98,  3,  7) +
-                      1.2*gauss2d(x, y, 270, 230, 78, 63))
+    green  = 0.3 * random.random(size=nx*ny).reshape(ny, nx)
+    green = green  + 0.11 + (1.0*gauss2d(x, y, 175,  98,  3,  7) +
+                             1.2*gauss2d(x, y, 270, 230, 78, 63))
 
     blue = 0.6 * random.random(size=nx*ny).reshape(ny, nx)
     blue = blue + (2.9*gauss2d(x, y, 240, 265,  78,  23) +

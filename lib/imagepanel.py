@@ -403,9 +403,9 @@ class ImagePanel(BasePanel):
             if xmax is None:  xmax = img.shape[1]
             if ymin is None:  ymin = 0
             if ymax is None:  ymax = img.shape[0]
-            imin = np.min(img[ymin:ymax, xmin:xmax])
-            imax = np.max(img[ymin:ymax, xmin:xmax])
-                
+            # imin = np.min(img[ymin:ymax, xmin:xmax])
+            # imax = np.max(img[ymin:ymax, xmin:xmax])
+            
             img = (img - imin)/(imax - imin + 1.e-8)
             mlo = conf.cmap_lo[col]/(1.0*conf.cmap_range)
             mhi = conf.cmap_hi[col]/(1.0*conf.cmap_range)

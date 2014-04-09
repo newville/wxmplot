@@ -84,6 +84,7 @@ class ImagePanel(BasePanel):
             self.ydata = np.array(y)
             if self.ydata.shape[0] != data.shape[0]:
                 self.ydata = None
+        
         if xlabel is not None:
             self.xlab = xlabel
         if ylabel is not None:
@@ -375,6 +376,9 @@ class ImagePanel(BasePanel):
         if conf.rot:
             if self.xdata is not None:
                 self.xdata = self.xdata[::-1]
+            if self.ydata is not None:
+                self.ydata = self.ydata[:]
+           
             self.display(np.rot90(conf.data),
                          x=self.ydata, xlabel=self.ylab,
                          y=self.xdata, ylabel=self.xlab)

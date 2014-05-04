@@ -56,7 +56,7 @@ Also, these key bindings can be used
 Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
-                 axissize=None, axisbg=None, exit_callback=None,
+                 axissize=None, axisbg=None, exit_callback=None, user_menus=None,
                  output_title='Plot', dpi=150, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
@@ -69,12 +69,11 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.parent = parent
         self.panel  = panel
         self.dpi    = dpi
+        self.user_menus = user_menus
         self.menuIDs = Menu_IDs()
-        self.top_menus = {'File':None,'Help':None}
         self.size = size
         self.axissize = axissize
         self.axisbg = axisbg
-        self.Build_DefaultUserMenus()
 
     def write_message(self,s,panel=0):
         """write a message to the Status Bar"""
@@ -151,47 +150,44 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.SetSizer(sizer)
         self.Fit()
 
-    def Build_DefaultUserMenus(self):
-        mids = self.menuIDs
-        m = wx.Menu()
-        m.Append(mids.CONFIG, "Configure Plot\tCtrl+K",
-                 "Configure Plot styles, colors, labels, etc")
-        m.Append(mids.TOGGLE_LEGEND, "Toggle Legend\tCtrl+L",
-                 "Toggle Legend Display")
-        m.Append(mids.TOGGLE_GRID, "Toggle Grid\tCtrl+G",
-                 "Toggle Grid Display")
-        m.AppendSeparator()
-        m.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range")
-        self.user_menus  = [('&Options',m)]
+
 
     def BuildMenu(self):
         mids = self.menuIDs
-        m0 = wx.Menu()
-        m0.Append(mids.SAVE, "&Save Image\tCtrl+S",
+        mfile = wx.Menu()
+        mfile.Append(mids.SAVE, "&Save Image\tCtrl+S",
                   "Save Image of Plot (PNG, SVG, JPG)")
-        m0.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
-        m0.AppendSeparator()
-        m0.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
-        m0.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
-        m0.Append(mids.PRINT, "&Print\tCtrl+P", "Print Plot")
-        m0.AppendSeparator()
-        m0.Append(mids.EXIT, "E&xit\tCtrl+Q", "Exit the 2D Plot Window")
+        mfile.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
+        mfile.AppendSeparator()
+        mfile.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
+        mfile.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
+        mfile.Append(mids.PRINT, "&Print\tCtrl+P", "Print Plot")
+        mfile.AppendSeparator()
+        mfile.Append(mids.EXIT, "E&xit\tCtrl+Q", "Exit the 2D Plot Window")
 
-        self.top_menus['File'] = m0
-
+        mopts = wx.Menu()
+        mopts.Append(mids.CONFIG, "Configure Plot\tCtrl+K",
+                 "Configure Plot styles, colors, labels, etc")
+        mopts.Append(mids.TOGGLE_LEGEND, "Toggle Legend\tCtrl+L",
+                 "Toggle Legend Display")
+        mopts.Append(mids.TOGGLE_GRID, "Toggle Grid\tCtrl+G",
+                 "Toggle Grid Display")
+        mopts.AppendSeparator()
+        mopts.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range")
+        
         mhelp = wx.Menu()
         mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
         mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
-        self.top_menus['Help'] = mhelp
 
         mbar = wx.MenuBar()
-
-        mbar.Append(self.top_menus['File'], "File")
-        for m in self.user_menus:
-            title,menu = m
-            mbar.Append(menu, title)
-        mbar.Append(self.top_menus['Help'], "&Help")
+        mbar.Append(mfile, 'File')
+        mbar.Append(mopts, '&Options')
+        if self.user_menus is not None:
+            for title, menu in self.user_menus:
+                mbar.Append(menu, title)
+        
+        mbar.Append(mhelp, '&Help')
 
 
         self.SetMenuBar(mbar)

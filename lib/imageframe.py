@@ -68,10 +68,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def __init__(self, parent=None, size=None,
                  lasso_callback=None, mode='intensity',
-                 show_xsections=True, cursor_labels=None,
-                 output_title='Image', subtitles=None,  **kws):
+                 show_xsections=False, cursor_labels=None,
+                 output_title='Image', subtitles=None,  
+                 user_menus=None, **kws):
         if size is None: size = (550, 450)
         self.lasso_callback = lasso_callback
+        self.user_menus = user_menus
         self.cursor_menulabels =  {}
         self.cursor_menulabels.update(CURSOR_MENULABELS)
         if cursor_labels is not None:
@@ -114,8 +116,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mids.CUR_ZOOM  = wx.NewId()
         mids.CUR_LASSO = wx.NewId()
         mids.CUR_PROF  = wx.NewId()
+        mids.EXPORT = wx.NewId()
+        mids.CONTOUR  = wx.NewId()
+        mids.CONTOURLAB  = wx.NewId()
 
-        self.BuildCustomMenus()
         self.BuildMenu()
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
@@ -197,101 +201,98 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         isIntMap = True
         if self.panel.conf.data is not None:
             isIntMap = {True:1, False:0}[len(self.panel.conf.data.shape) == 2]
-        self.opts_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
-        self.opts_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
-        self.opts_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
+        self.view_menu.Enable(self.menuIDs.SAVE_CMAP,  isIntMap)
+        self.view_menu.Enable(self.menuIDs.CONTOUR,    isIntMap)
+        self.view_menu.Enable(self.menuIDs.CONTOURLAB, isIntMap)
         self.intensity_menu.Enable(self.menuIDs.BGCOL, not isIntMap)
 
     def BuildMenu(self):
         mids = self.menuIDs
-        m0 = wx.Menu()
-        mids.EXPORT = wx.NewId()
-        m0.Append(mids.SAVE,   '&Save Image\tCtrl+S',  'Save PNG Image of Plot')
-        m0.Append(mids.CLIPB,  '&Copy Image\tCtrl+C',  'Copy Image to Clipboard')
-        m0.Append(mids.EXPORT, 'Export Data to ASCII', 'Export to ASCII file')
-        m0.AppendSeparator()
-        m0.Append(mids.PSETUP,  'Page Setup...',    'Printer Setup')
-        m0.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
-        m0.Append(mids.PRINT,   '&Print\tCtrl+P',   'Print Plot')
-        m0.AppendSeparator()
-        m0.Append(mids.EXIT, 'E&xit\tCtrl+Q', 'Exit the 2D Plot Window')
 
-        self.top_menus['File'] = m0
+        # file menu
+        mfile = wx.Menu()
+        mfile.Append(mids.SAVE,   '&Save Image\tCtrl+S',  'Save PNG Image of Plot')
+        mfile.Append(mids.CLIPB,  '&Copy Image\tCtrl+C',  'Copy Image to Clipboard')
+        mfile.Append(mids.EXPORT, 'Export Data to ASCII', 'Export to ASCII file')
+        mfile.AppendSeparator()
+        mfile.Append(mids.PSETUP,  'Page Setup...',    'Printer Setup')
+        mfile.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
+        mfile.Append(mids.PRINT,   '&Print\tCtrl+P',   'Print Plot')
+        mfile.AppendSeparator()
+        mfile.Append(mids.EXIT, 'E&xit\tCtrl+Q', 'Exit the 2D Plot Window')
 
-        mhelp = wx.Menu()
-        mhelp.Append(mids.HELP, 'Quick Reference',  'Quick Reference for WXMPlot')
-        mhelp.Append(mids.ABOUT, 'About', 'About WXMPlot')
-        self.top_menus['Help'] = mhelp
-
-        mbar = wx.MenuBar()
-
-        mbar.Append(self.top_menus['File'], 'File')
-        for m in self.user_menus:
-            title,menu = m
-            mbar.Append(menu, title)
-        mbar.Append(self.top_menus['Help'], '&Help')
-
-
-        self.SetMenuBar(mbar)
-        self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
-        self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
-        self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
-        self.Bind(wx.EVT_CLOSE,self.onExit)
-        # print 'done with BuildMenu'
-
-    def BuildCustomMenus(self):
-        'build menus'
-        m = self.opts_menu = wx.Menu()
-        mids = self.menuIDs
-        m.Append(mids.UNZOOM, 'Zoom Out\tCtrl+Z',
+        # view menu
+        mview = self.view_menu = wx.Menu()
+        mview.Append(mids.UNZOOM, 'Zoom Out\tCtrl+Z',
                  'Zoom out to full data range')
-        m.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
-        m.AppendSeparator()
+        mview.Append(mids.SAVE_CMAP, 'Save Image of Colormap')
+        mview.AppendSeparator()
 
-        m.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
-        m.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
-        m.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
-        # m.Append(mids.FLIP_O, 'Flip to Original', '')
-        m.AppendSeparator()
-        m.Append(wx.NewId(), 'Cursor Modes : ',
+        mview.Append(mids.ROT_CW, 'Rotate clockwise\tCtrl+R', '')
+        mview.Append(mids.FLIP_V, 'Flip Top/Bottom\tCtrl+T', '')
+        mview.Append(mids.FLIP_H, 'Flip Left/Right\tCtrl+F', '')
+        # mview.Append(mids.FLIP_O, 'Flip to Original', '')
+        mview.AppendSeparator()
+        mview.Append(wx.NewId(), 'Cursor Modes : ',
                  'Action taken on with Left-Click and Left-Drag')
 
         clabs = self.cursor_menulabels
-        m.AppendRadioItem(mids.CUR_ZOOM,  clabs['zoom'][0],  clabs['zoom'][1])
-        m.AppendRadioItem(mids.CUR_LASSO, clabs['lasso'][0], clabs['lasso'][1])
-        # m.AppendRadioItem(mids.CUR_PROF,  clabs['prof'][0],  clabs['prof'][1])
-        m.AppendSeparator()
+        mview.AppendRadioItem(mids.CUR_ZOOM,  clabs['zoom'][0],  clabs['zoom'][1])
+        mview.AppendRadioItem(mids.CUR_LASSO, clabs['lasso'][0], clabs['lasso'][1])
+        mview.AppendSeparator()
+
+        mview.Append(mids.CONTOUR, 'As Contour', 'Shown as contour map', kind=wx.ITEM_CHECK)
+        mview.Check(mids.CONTOUR, False)
+        self.Bind(wx.EVT_MENU, self.onContourToggle, id=mids.CONTOUR)
+
+        mview.Append(mids.CONTOURLAB, 'Configure Contours', 'Configure Contours')
+        self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_H)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_V)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.FLIP_O)
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
-        mids.CONTOUR  = wx.NewId()
-        m.Append(mids.CONTOUR, 'As Contour', 'Shown as contour map', kind=wx.ITEM_CHECK)
-        m.Check(mids.CONTOUR, False)
-        self.Bind(wx.EVT_MENU, self.onContourToggle, id=mids.CONTOUR)
 
-        mids.CONTOURLAB  = wx.NewId()
-        m.Append(mids.CONTOURLAB, 'Configure Contours', 'Configure Contours')
-        self.Bind(wx.EVT_MENU, self.onContourConfig, id=mids.CONTOURLAB)
-
-        em = self.intensity_menu = wx.Menu()
-        em.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
+        # intensity 
+        mint = self.intensity_menu = wx.Menu()
+        mint.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
-        em.Append(mids.ENHANCE,  'Toggle Contrast Enhancement\tCtrl+E',
+        mint.Append(mids.ENHANCE,  'Toggle Contrast Enhancement\tCtrl+E',
                   'Toggle contrast between 1%/99% and full intensity scale', wx.ITEM_CHECK)
 
-        em.Append(mids.BGCOL, 'Toggle Background Color (Black/White)\tCtrl+W',
+        mint.Append(mids.BGCOL, 'Toggle Background Color (Black/White)\tCtrl+W',
                   'Toggle background color for 3-color images', wx.ITEM_CHECK)
 
-        sm = wx.Menu()
+        # smoothing
+        msmoo = wx.Menu()
         for itype in Interp_List:
             wid = wx.NewId()
-            sm.AppendRadioItem(wid, itype, itype)
+            msmoo.AppendRadioItem(wid, itype, itype)
             self.Bind(wx.EVT_MENU, Closure(self.onInterp, name=itype), id=wid)
-        self.user_menus  = [('&View', m), ('Intensity', em), ('Smoothing', sm)]
 
+        # help
+        mhelp = wx.Menu()
+        mhelp.Append(mids.HELP, 'Quick Reference',  'Quick Reference for WXMPlot')
+        mhelp.Append(mids.ABOUT, 'About', 'About WXMPlot')
+
+        # add all sub-menus, including user-added
+        submenus = [('File', mfile), ('&View', mview), 
+                    ('Intensity', mint), ('Smoothing', msmoo)]
+        if self.user_menus is not None:
+            submenus.extend(self.user_menus)
+        submenus.append(('&Help', mhelp))
+
+        mbar = wx.MenuBar()
+        for title, menu in submenus:
+            mbar.Append(menu, title)
+
+        self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
+        self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
+        self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
+        self.Bind(wx.EVT_CLOSE,self.onExit)
+ 
     def onInterp(self, evt=None, name=None):
         if name not in Interp_List:
             name = Interp_List[0]

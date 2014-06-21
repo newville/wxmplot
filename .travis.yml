@@ -22,7 +22,7 @@ before_install:
     - sudo apt-get install $PYTHON-setuptools
     - sudo apt-get install $PYTHON-numpy
     - sudo apt-get install $PYTHON-matplotlib
-    - sudo apt-get install $PYTHON-wx
+    - sudo apt-get install $PYTHON-wxgtk2.8
     - sudo apt-get install $PYTHON-nose
 
 install:

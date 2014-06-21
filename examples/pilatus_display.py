@@ -6,14 +6,10 @@ if not hasattr(sys, 'frozen'):
     wxversion.ensureMinimal('2.8')
 
 import wx
-import Image
-import numpy
+from tifffile import imread
 from wxmplot import ImageFrame
 
-def getPilatusImage(filename):
-    return numpy.array(Image.open(filename))
-
-dat = getPilatusImage('Pilatus.tiff')
+dat = imread('Pilatus.tiff')
 
 app = wx.App()
 frame = ImageFrame()

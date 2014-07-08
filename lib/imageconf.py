@@ -9,13 +9,13 @@ cm_names = register_custom_colormaps()
 for cm in cm_names:
     ColorMap_List.append(cm)
 
-for cm in ('coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens',
-           'Blues', 'copper', 'spring', 'summer', 'autumn', 'winter',
-           'hsv', 'Spectral'):
-    # 'gist_earth', 'gist_yarg', 'gist_rainbow',
-    # 'gist_stern',
-    # 'PiYG', 'PRGn', 'Spectral', 'Accent', 'YlGn', 'YlGnBu',
-    # 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn', 'ocean', 'terrain'
+for cm in ('coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens', 'Blues',
+           'copper', 'spring', 'summer', 'autumn', 'winter', 'hsv',
+           'Spectral', 'PiYG', 'PRGn', 'Spectral', 'Accent', 'YlGn',
+           'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn', 'ocean',
+           'terrain', 'gist_earth', 'gist_yarg', 'gist_rainbow',
+           'gist_stern'):
+    
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 

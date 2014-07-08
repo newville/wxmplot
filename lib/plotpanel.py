@@ -127,7 +127,7 @@ class PlotPanel(BasePanel):
             yscale = 'log'
             # ydata = ma.masked_where(ydata<=0, 1.0*ydata)
             # ymin = min(ydata[where(ydata>0)])
-            # ydata[where(ydata<=0)] = None
+            ydata[where(ydata<=0)] = None
 
         axes.set_yscale(yscale, basey=10)
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))

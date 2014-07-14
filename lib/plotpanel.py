@@ -132,7 +132,7 @@ class PlotPanel(BasePanel):
         axes.set_yscale(yscale, basey=10)
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
-            x_dates = [datetime.fromtimestamp(i) for i in xdata] 
+            x_dates = [datetime.fromtimestamp(i) for i in xdata]
             xdata = dates.date2num(x_dates)
             axes.xaxis.set_major_locator(dates.AutoDateLocator())
 
@@ -153,7 +153,6 @@ class PlotPanel(BasePanel):
 
         if grid is not None:
             self.conf.show_grid = grid
-
         # set data range for this trace
         datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
 
@@ -186,7 +185,7 @@ class PlotPanel(BasePanel):
             # I'm sure there's a better way...
             for i in axes.get_xgridlines() + axes.get_ygridlines():
                 i.set_color(conf.grid_color)
-                i.set_zorder(0)
+                i.set_zorder(-100)
             axes.grid(True)
         else:
             axes.grid(False)
@@ -239,9 +238,9 @@ class PlotPanel(BasePanel):
         # axes style ('box' or 'open')
         conf.axes_style = 'box'
         if fullbox is not None and not fullbox:
-            conf.axes_style = 'open'            
+            conf.axes_style = 'open'
         if axes_style in ('open', 'box', 'bottom'):
-            conf.axes_style = axes_style            
+            conf.axes_style = axes_style
         conf.set_axes_style()
 
         if not delay_draw:

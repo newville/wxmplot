@@ -137,7 +137,7 @@ class PlotConfigFrame(wx.Frame):
 
         ax = self.axes[0]
 
-        col = mpl_color(ax.get_xgridlines()[0].get_color(), default=(240, 240, 240))
+        col = to_rgba(self.conf.grid_color)
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
 
         col = mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252))

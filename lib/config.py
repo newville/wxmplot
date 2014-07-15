@@ -357,8 +357,14 @@ class PlotConfig:
         return self.traces[trace].data_range
 
     def get_mpl_line(self,trace=None):
-        trace = self.__gettrace(trace)
-        return self.__mpline(trace)[0]
+        this = self.__mpline(self.__gettrace(trace))
+        if this is None:
+            trace = 5
+            while this is None and trace > 0:
+                trace = trace - 1
+                this = self.__mpline(self.__gettrace(trace))
+        return this[0]
+
 
     def enable_grid(self, show=None):
         "enable/disable grid display"

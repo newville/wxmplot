@@ -365,6 +365,10 @@ class PlotConfig:
         if show is not None:
             self.show_grid = show
         axes = self.canvas.figure.get_axes()
+        ax0 = axes[0]
+        for i in ax0.get_xgridlines() + ax0.get_ygridlines():
+            i.set_color(self.grid_color)
+            i.set_zorder(-100)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)

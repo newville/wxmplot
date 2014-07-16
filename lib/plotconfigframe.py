@@ -137,7 +137,6 @@ class PlotConfigFrame(wx.Frame):
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
 
         ax = self.axes[0]
-
         col = mpl_color(self.conf.grid_color)
         gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(50, 30))
 
@@ -158,7 +157,7 @@ class PlotConfigFrame(wx.Frame):
 
         btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
-        midsizer  = wx.GridBagSizer(5, 8)
+        midsizer  = wx.GridBagSizer(2, 8)
 
         midsizer.Add(tcol,      (0, 0), (1, 1), labstyle, 2)
         midsizer.Add(gridcol,   (0, 1), (1, 1), btnstyle, 2)
@@ -177,10 +176,52 @@ class PlotConfigFrame(wx.Frame):
         leg_onax.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
-
         midsizer.Add(tl1,      (0, 5), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, 2)
         midsizer.Add(leg_loc,  (0, 6), (1, 1), labstyle, 2)
         midsizer.Add(leg_onax, (0, 7), (1, 1), labstyle, 2)
+
+        bbox = ax.get_position()
+        _left  = "%.2f"  % bbox.xmin
+        _right = "%.2f"  % (1.0 - bbox.xmax)
+        _bot   = "%.2f"  % bbox.ymin
+        _top   = "%.2f"  % (1.0 - bbox.ymax)
+        marginpanel = panel
+
+        mtitle = wx.StaticText(marginpanel, -1, 'Margins:   ', 
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
+        ltitle = wx.StaticText(marginpanel, -1, ' left: ', 
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
+        rtitle = wx.StaticText(marginpanel, -1, ' right: ', 
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
+        btitle = wx.StaticText(marginpanel, -1, ' bottom: ', 
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
+        ttitle = wx.StaticText(marginpanel, -1, ' top: ', 
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
+        
+        lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_left,
+                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+        lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        rmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_right,
+                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+        rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        bmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_bot,
+                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+        bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        tmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_top,
+                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+        tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+
+        self.margins = [lmarg, rmarg, bmarg, tmarg]
+        marginsizer = wx.BoxSizer(wx.HORIZONTAL)
+        marginsizer.Add(mtitle,   0, labstyle, 5)
+        marginsizer.Add(ltitle,   0, labstyle, 5)
+        marginsizer.Add(lmarg,    0, labstyle, 5)
+        marginsizer.Add(rtitle,   0, labstyle, 5)
+        marginsizer.Add(rmarg,    0, labstyle, 5)
+        marginsizer.Add(btitle,   0, labstyle, 5)
+        marginsizer.Add(bmarg,    0, labstyle, 5)
+        marginsizer.Add(ttitle,   0, labstyle, 5)
+        marginsizer.Add(tmarg,    0, labstyle, 5)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
 
@@ -204,6 +245,7 @@ class PlotConfigFrame(wx.Frame):
         a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         mainsizer.Add(topsizer, 0, a, 3)
         mainsizer.Add(midsizer, 0, a, 3)
+        mainsizer.Add(marginsizer, 0, a, 3)
         mainsizer.Add(self.nb,  1, wx.GROW|a, 3)
         #mainsizer.Add(btnsizer, 1, a, 2)
         autopack(panel,mainsizer)
@@ -419,6 +461,16 @@ class PlotConfigFrame(wx.Frame):
             self.canvas.draw()
         except:
             return
+
+    def onMargins(self, event=None):
+        try:
+            left, right, bot, top = [float(wid.GetValue()) for wid in self.margins]
+        except:
+            return
+        width  = 1.0 - (left + right)
+        height = 1.0 - (bot + top)
+        self.axes[0].set_position([left, bot, width, height])
+        self.canvas.draw()
 
     def onScatter(self, event, argu=None):
 

@@ -5,6 +5,7 @@
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
+from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
 
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
@@ -318,10 +319,9 @@ class PlotConfigFrame(wx.Frame):
             col = csel.ColourSelect(panel,  -1, "", dcol, size=wx.DefaultSize)
             col.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu=argu))
 
-            thk = wx.SpinCtrl(panel, -1, "", (-1,-1),(55,30))
-            thk.SetRange(0, 20)
-            thk.SetValue(dthk)
-            thk.Bind(wx.EVT_SPINCTRL, Closure(self.onThickness, argu=argu))
+            thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(55,30), value=dthk,
+                            min_val=0, max_val=10, increment=0.5, digits=1)
+            thk.Bind(EVT_FLOATSPIN, Closure(self.onThickness, argu=argu))
 
             sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(120,-1))
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
@@ -411,9 +411,10 @@ class PlotConfigFrame(wx.Frame):
         except:
             return
 
-    def onThickness(self, event,argu=''):
+    def onThickness(self, event, argu=''):
+        val = event.GetEventObject().GetValue()
         try:
-            self.conf.set_trace_linewidth(event.GetInt(),trace=int(argu[6:]))
+            self.conf.set_trace_linewidth(val, trace=int(argu[6:]))
             self.redraw_legend()
             self.canvas.draw()
         except:

@@ -567,7 +567,7 @@ class PlotPanel(BasePanel):
     def get_figure(self):
         return self.fig
 
-    def onExport(self, event=None):
+    def onExport(self, event=None, **kws):
         ofile  = ''
         title = 'unknown plot'
         if self.conf.title is not None:
@@ -585,14 +585,18 @@ class PlotPanel(BasePanel):
 
         ofile = ofile + '.dat'
         orig_dir = os.path.abspath(os.curdir)
-
-        dlg = wx.FileDialog(self, message='Export Plot Data to ASCII...',
-                            defaultDir = os.getcwd(),
+        thisdir = os.getcwd()
+        file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
+        dlg = wx.FileDialog(self,
+                            message='Export Plot Data to ASCII...',
+                            defaultDir=thisdir,
                             defaultFile=ofile,
+                            wildcard=file_choices,                            
                             style=wx.SAVE|wx.CHANGE_DIR)
-
+        
         if dlg.ShowModal() == wx.ID_OK:
             self.writeASCIIFile(dlg.GetPath(), title=title)
+        os.chdir(orig_dir)
 
     def writeASCIIFile(self, fname, title='unknown plot'):
         "save plot data to external file"

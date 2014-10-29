@@ -157,7 +157,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mids = self.menuIDs
         mfile = wx.Menu()
         mfile.Append(mids.SAVE, "&Save Image\tCtrl+S",
-                  "Save Image of Plot (PNG, SVG, JPG)")
+                     "Save Image of Plot (PNG, SVG, JPG)")
         mfile.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
         mfile.Append(mids.EXPORT, "Export Data",
                      "Export Data to ASCII Column file")
@@ -217,11 +217,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                       id=mids.CLIPB)
 
     def onExport(self, event=None):
-        try:
+        if self.panel is not None:
             self.panel.onExport(event=event)
-        except:
-            pass
-        
+
     def onAbout(self, event=None):
         dlg = wx.MessageDialog(self, self.about_msg, "About WXMPlot",
                                wx.OK | wx.ICON_INFORMATION)

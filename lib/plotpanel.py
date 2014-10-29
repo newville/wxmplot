@@ -2,8 +2,9 @@
 """
 wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
+import os
 import wx
-from numpy import nonzero, where, ma
+from numpy import nonzero, where, ma, nan
 import matplotlib
 
 from datetime import datetime
@@ -21,6 +22,35 @@ from .config import PlotConfig
 from .utils import inside_poly
 
 to_rgba = colorConverter.to_rgba
+
+
+def gformat(val, length=14):
+    """format a number with '%g'-like format, except that
+    the return will be length ``length`` (default=12)
+    and have at least length-6 significant digits
+    """
+    length = max(length, 7)
+    fmt = '{: .%ig}' % (length-6)
+    if isinstance(val, int):
+        out = ('{: .%ig}' % (length-2)).format(val)
+        if len(out) > length:
+            out = fmt.format(val)
+    else:
+        out = fmt.format(val)
+    if len(out) < length:
+        if 'e' in out:
+            ie = out.find('e')
+            if '.' not in out[:ie]:
+                out = out[:ie] + '.' + out[ie:]
+            out = out.replace('e', '0'*(length-len(out))+'e')
+        else:
+            fmt = '{: .%ig}' % (length-1)
+            out = fmt.format(val)[:length]
+            if len(out) < length:
+                pad = '0' if '.' in  out else ' '
+                out += pad*(length-len(out))
+    return out
+
 class PlotPanel(BasePanel):
     """
     MatPlotlib 2D plot as a wx.Panel, suitable for embedding
@@ -536,6 +566,77 @@ class PlotPanel(BasePanel):
 
     def get_figure(self):
         return self.fig
+
+    def onExport(self, event=None):
+        ofile  = ''
+        title = 'unknown plot'
+        if self.conf.title is not None:
+            title = ofile = self.conf.title.strip()
+        if len(ofile) > 64:
+            ofile = ofile[:63].strip()
+        if len(ofile) < 1:
+            ofile = 'plot'
+
+        for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+            ofile = ofile.replace(c, '_')
+
+        while '__' in ofile:
+            ofile = ofile.replace('__', '_')
+
+        ofile = ofile + '.dat'
+        orig_dir = os.path.abspath(os.curdir)
+
+        dlg = wx.FileDialog(self, message='Export Plot Data to ASCII...',
+                            defaultDir = os.getcwd(),
+                            defaultFile=ofile,
+                            style=wx.SAVE|wx.CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.writeASCIIFile(dlg.GetPath(), title=title)
+
+    def writeASCIIFile(self, fname, title='unknown plot'):
+        "save plot data to external file"
+        
+        buff = ["# Plot Data for %s" % title, "#------"]
+        
+        out = []
+        labs = []
+        itrace = 0
+        for ax in self.fig.get_axes():
+            for line in ax.lines:
+                itrace += 1
+                x = line.get_xdata()
+                y = line.get_ydata()
+                ylab = line.get_label()
+
+                if len(ylab) < 1: ylab = ' Y%i' % itrace
+                if len(ylab) < 4: ylab = ' %s%s' % (' '*4, lab)
+                for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+                    ylab = ylab.replace(c, '_')
+                
+                pad = max(1, 13-len(ylab))
+                lab = '     X%i   %s%s  ' % (itrace, ' '*pad, ylab)
+                out.extend([x, y])
+                labs.append(lab)
+        buff.append('# %s ' % (' '.join(labs)))
+                    
+        npts = [len(a) for a in out]
+        for i in range(max(npts)):
+            oline = []
+            for a in out:
+                d = nan
+                if i < len(a):  d = a[i]
+                oline.append(gformat(d))
+            buff.append(' '.join(oline))
+
+        if itrace > 0:
+            fout = open(fname, 'w')
+            fout.write("%s\n" % "\n".join(buff))
+            fout.close()
+            self.write_message("Exported data to '%s'" % fname,
+                               panel=0)
+        
+        
     ####
     ## GUI events
     ####

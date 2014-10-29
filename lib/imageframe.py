@@ -331,7 +331,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
         self.Bind(wx.EVT_MENU, self.onEnhanceContrast, id=mids.ENHANCE)
         self.Bind(wx.EVT_MENU, self.onTriColorBG, id=mids.BGCOL)
-        self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
+        self.Bind(wx.EVT_MENU, self.panel.onExport, id=mids.EXPORT)
 
 
     def Build_ConfigPanel_RGB(self):

@@ -276,7 +276,7 @@ class ImagePanel(BasePanel):
     ####
     ## GUI events, overriding BasePanel components
     ####
-    def exportASCII(self, event=None):
+    def onExport(self, event=None):
         ofile  = ''
         title = 'unknown map'
         if self.conf.title is not None:

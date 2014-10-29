@@ -256,6 +256,9 @@ class BasePanel(wx.Panel):
             return
         self.write_message("%f, %f" % (event.xdata, event.ydata), panel=1)
 
+    def onExport(self, event=None):
+        pass
+    
     def onLeftDown(self, event=None):
         """ left button down: report x,y coords, start zooming mode"""
         if event is None:

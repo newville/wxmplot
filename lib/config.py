@@ -446,7 +446,7 @@ class PlotConfig:
         labs = tuple(labs)
 
         lgn = axes[0].legend
-        if self.legend_onaxis == 'off plot':
+        if self.legend_onaxis == 'off axis':
             lgn = self.canvas.figure.legend
 
         if self.show_legend:

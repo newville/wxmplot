@@ -14,6 +14,7 @@ class Menu_IDs:
     def __init__(self):
         self.EXIT   = wx.NewId()
         self.SAVE   = wx.NewId()
+        self.EXPORT = wx.NewId()
         self.CONFIG = wx.NewId()
         self.UNZOOM = wx.NewId()
         self.HELP   = wx.NewId()
@@ -158,6 +159,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mfile.Append(mids.SAVE, "&Save Image\tCtrl+S",
                   "Save Image of Plot (PNG, SVG, JPG)")
         mfile.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
+        mfile.Append(mids.EXPORT, "Save Data to File",
+                     "Save (X, Y) data to ASCII File")
         mfile.AppendSeparator()
         mfile.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
         mfile.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
@@ -175,7 +178,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mopts.AppendSeparator()
         mopts.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range")
-        
+
         mhelp = wx.Menu()
         mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
         mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
@@ -186,11 +189,11 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         if self.user_menus is not None:
             for title, menu in self.user_menus:
                 mbar.Append(menu, title)
-        
+
         mbar.Append(mhelp, '&Help')
 
-
         self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_MENU, self.onExport,          id=mids.EXPORT)
         self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
         self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
         self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
@@ -219,6 +222,16 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         dlg.ShowModal()
         dlg.Destroy()
 
+    def onExport(self, event=None):
+        if self.panel is not None:
+            self.panel.onExport(event=event)
+        else:
+            dlg = wx.MessageDialog(self, "Export Data not available",
+                                   "Export Data to ASCII",
+                                   wx.OK | wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+
     def onHelp(self, event=None):
         dlg = wx.MessageDialog(self, self.help_msg, "WXMPlot Quick Reference",
                                wx.OK | wx.ICON_INFORMATION)
@@ -243,4 +256,3 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             self.Destroy()
         except:
             pass
-

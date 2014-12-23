@@ -15,15 +15,15 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from .imagepanel import ImagePanel
 from .imageconf import ColorMap_List, Interp_List
 from .baseframe import BaseFrame
+from .plotframe import PlotFrame
 from .colors import rgb2hex
 from .utils import Closure, LabelEntry
 from .contourdialog import ContourDialog
 
 
-
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
-                     'lasso': ('Select Points\tCtrl+X',
+                     'lasso': ('Select Points\tCtrl+V',
                                'Left-Drag to select points freehand'),
                      'prof':  ('Select Line Profile\tCtrl+K',
                                'Left-Drag to select like for profile')}
@@ -112,6 +112,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mids.FLIP_H    = wx.NewId()
         mids.FLIP_V    = wx.NewId()
         mids.FLIP_O    = wx.NewId()
+        mids.PROJ_X    = wx.NewId()
+        mids.PROJ_Y    = wx.NewId()
         mids.ROT_CW    = wx.NewId()
         mids.CUR_ZOOM  = wx.NewId()
         mids.CUR_LASSO = wx.NewId()
@@ -240,6 +242,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mview.AppendRadioItem(mids.CUR_ZOOM,  clabs['zoom'][0],  clabs['zoom'][1])
         mview.AppendRadioItem(mids.CUR_LASSO, clabs['lasso'][0], clabs['lasso'][1])
         mview.AppendSeparator()
+        mview.Append(mids.PROJ_X, 'Projet Horizontally\tCtrl+X', '')
+        mview.Append(mids.PROJ_Y, 'Projet Vertically\tCtrl+Y', '')
+        mview.AppendSeparator()
 
         mview.Append(mids.CONTOUR, 'As Contour', 'Shown as contour map', kind=wx.ITEM_CHECK)
         mview.Check(mids.CONTOUR, False)
@@ -253,7 +258,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onFlip,       id=mids.ROT_CW)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_ZOOM)
         self.Bind(wx.EVT_MENU, self.onCursorMode, id=mids.CUR_LASSO)
-
+        self.Bind(wx.EVT_MENU, self.onProject,    id=mids.PROJ_X)
+        self.Bind(wx.EVT_MENU, self.onProject,    id=mids.PROJ_Y)
         # intensity
         mint = self.intensity_menu = wx.Menu()
         mint.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
@@ -307,6 +313,23 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         elif wid == self.menuIDs.CUR_LASSO:
             self.panel.cursor_mode = 'lasso'
 
+    def onProject(self, event=None):
+        wid = event.GetId()
+        if wid == self.menuIDs.PROJ_X:
+            x = self.panel.ydata
+            y = self.panel.conf.data.sum(axis=1)
+            axname = 'horizontal'
+        else:
+            x = self.panel.xdata
+            y = self.panel.conf.data.sum(axis=0)
+            axname = 'vertical'
+        title = '%s: sum along %s axis' % (self.GetTitle(), axname)
+
+        pf = PlotFrame(title=title, parent=self, size=(500, 250))
+        pf.plot(x, y)
+        pf.Raise()
+        pf.Show()
+
     def onFlip(self, event=None):
         conf = self.panel.conf
         wid = event.GetId()
@@ -331,7 +354,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Bind(wx.EVT_MENU, self.onLogScale, id=mids.LOG_SCALE)
         self.Bind(wx.EVT_MENU, self.onEnhanceContrast, id=mids.ENHANCE)
         self.Bind(wx.EVT_MENU, self.onTriColorBG, id=mids.BGCOL)
-        self.Bind(wx.EVT_MENU, self.panel.exportASCII, id=mids.EXPORT)
+        self.Bind(wx.EVT_MENU, self.panel.onExport, id=mids.EXPORT)
 
 
     def Build_ConfigPanel_RGB(self):
@@ -774,4 +797,3 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if self.panel is not None:
             self.panel.save_figure(event=event,
                                    transparent=transparent, dpi=dpi)
-

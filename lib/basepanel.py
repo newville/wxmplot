@@ -436,6 +436,8 @@ class BasePanel(wx.Panel):
         handle_event = handlers.get((button, event.name), None)
         if hasattr(handle_event, '__call__'):
             handle_event(event)
+        event.guiEvent.Skip()
+
 
     def __onMouseMotionEvent(self, event=None):
         """Draw a cursor over the axes"""
@@ -573,4 +575,3 @@ class BasePanel(wx.Panel):
 
     def PrintSetup(self, event=None, **kw):
         self.printer.Setup(event=event, **kw)
-

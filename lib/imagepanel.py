@@ -33,7 +33,7 @@ class ImagePanel(BasePanel):
 
     def __init__(self, parent, messenger=None, data_callback=None,
                  cursor_callback=None, lasso_callback=None,
-                 contour_callback=None, 
+                 contour_callback=None,
                  size=(525, 450), dpi=100,
                  output_title='Image', **kws):
         matplotlib.rc('lines', linewidth=2)
@@ -84,7 +84,7 @@ class ImagePanel(BasePanel):
             self.ydata = np.array(y)
             if self.ydata.shape[0] != data.shape[0]:
                 self.ydata = None
-        
+
         if xlabel is not None:
             self.xlab = xlabel
         if ylabel is not None:
@@ -227,11 +227,11 @@ class ImagePanel(BasePanel):
 
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
         self.fig.set_facecolor('#FFFFFD')
-        
+
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
         self.conf.canvas= self.canvas
-        
+
         # self.canvas.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         # This way of adding to sizer allows resizing
         sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -276,7 +276,7 @@ class ImagePanel(BasePanel):
     ####
     ## GUI events, overriding BasePanel components
     ####
-    def exportASCII(self, event=None):
+    def onExport(self, event=None):
         ofile  = ''
         title = 'unknown map'
         if self.conf.title is not None:
@@ -378,7 +378,7 @@ class ImagePanel(BasePanel):
                 self.xdata = self.xdata[::-1]
             if self.ydata is not None:
                 self.ydata = self.ydata[:]
-           
+
             self.display(np.rot90(conf.data),
                          x=self.ydata, xlabel=self.ylab,
                          y=self.xdata, ylabel=self.xlab)
@@ -399,7 +399,7 @@ class ImagePanel(BasePanel):
         if conf.log_scale:
             imin = np.log10(1 + 9.0*imin)
             imax = np.log10(1 + 9.0*imax)
-            
+
         # apply clipped color scale, as from sliders
         if len(img.shape) == 2:
             (xmin, xmax, ymin, ymax) = self.conf.datalimits
@@ -409,7 +409,7 @@ class ImagePanel(BasePanel):
             if ymax is None:  ymax = img.shape[0]
             # imin = np.min(img[ymin:ymax, xmin:xmax])
             # imax = np.max(img[ymin:ymax, xmin:xmax])
-            
+
             img = (img - imin)/(imax - imin + 1.e-8)
             mlo = conf.cmap_lo[col]/(1.0*conf.cmap_range)
             mhi = conf.cmap_hi[col]/(1.0*conf.cmap_range)
@@ -449,7 +449,7 @@ class ImagePanel(BasePanel):
             inew[:,:,2] = np.clip((b - blo)/(bhi - blo + 1.e-8), 0, 1)
             if conf.tricolor_bg.startswith('wh'):
                 inew = conf.tricolor_white_bg(inew)
-              
+
             if self.conf.style == 'image':
                 conf.image.set_data(inew)
                 conf.image.set_interpolation(conf.interp)

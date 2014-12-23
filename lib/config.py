@@ -374,7 +374,7 @@ class PlotConfig:
         ax0 = axes[0]
         for i in ax0.get_xgridlines() + ax0.get_ygridlines():
             i.set_color(self.grid_color)
-            i.set_zorder(-100)
+            i.set_zorder(-30)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)
@@ -392,7 +392,7 @@ class PlotConfig:
         _sty = self.axes_style.lower()
         if  _sty in ('fullbox', 'full'): _sty = 'box'
         if  _sty == 'leftbot':           _sty = 'open'
-        
+
         if _sty == 'box':
             axes0.xaxis.set_ticks_position('both')
             axes0.yaxis.set_ticks_position('both')

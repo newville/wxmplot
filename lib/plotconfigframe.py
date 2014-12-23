@@ -187,17 +187,17 @@ class PlotConfigFrame(wx.Frame):
         _top   = "%.2f"  % (1.0 - bbox.ymax)
         marginpanel = panel
 
-        mtitle = wx.StaticText(marginpanel, -1, 'Margins:   ', 
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
-        ltitle = wx.StaticText(marginpanel, -1, ' left: ', 
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
-        rtitle = wx.StaticText(marginpanel, -1, ' right: ', 
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
-        btitle = wx.StaticText(marginpanel, -1, ' bottom: ', 
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
-        ttitle = wx.StaticText(marginpanel, -1, ' top: ', 
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)        
-        
+        mtitle = wx.StaticText(marginpanel, -1, 'Margins:   ',
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        ltitle = wx.StaticText(marginpanel, -1, ' left: ',
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        rtitle = wx.StaticText(marginpanel, -1, ' right: ',
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        btitle = wx.StaticText(marginpanel, -1, ' bottom: ',
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        ttitle = wx.StaticText(marginpanel, -1, ' top: ',
+                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+
         lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_left,
                           min_val=0.0, max_val=1.00, increment=0.01, digits=2)
         lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
@@ -410,6 +410,7 @@ class PlotConfigFrame(wx.Frame):
             for ax in self.axes:
                 for i in ax.get_xgridlines()+ax.get_ygridlines():
                     i.set_color(color)
+                    i.set_zorder(-30)
         elif argu == 'bg':
             for ax in self.axes:
                 ax.set_axis_bgcolor(color)

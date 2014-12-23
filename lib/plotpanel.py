@@ -336,7 +336,7 @@ class PlotPanel(BasePanel):
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
                 i.set_color(self.conf.grid_color)
-                i.set_zorder(-100)
+                i.set_zorder(-30)
             axes.grid(True)
         else:
             axes.grid(False)
@@ -536,6 +536,58 @@ class PlotPanel(BasePanel):
 
     def get_figure(self):
         return self.fig
+
+    def onExport(self, event=None):
+        if self.conf.title is not None:
+            title = ofile = self.conf.title.strip()
+        if len(ofile) > 64:
+            ofile = ofile[:63].strip()
+        if len(ofile) < 1:
+            ofile = 'plot'
+
+        for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+            ofile = ofile.replace(c, '_')
+
+        while '__' in ofile:
+            ofile = ofile.replace('__', '_')
+
+        ofile = ofile + '.dat'
+
+        dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
+                            defaultDir = os.getcwd(),
+                            defaultFile=ofile,
+                            style=wx.SAVE|wx.CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.writeASCIIFile(dlg.GetPath(), title=title)
+
+    def writeASCIIFile(self, fname, title='unknown plot'):
+        buff = ["# X,Y Data for %s" % title,
+                "#------------", "#     X     Y"]
+        lines= self.axes.get_lines()
+        x0 = lines[0].get_xaxis()
+        y0 = lines[0].get_yaxis()
+        lab0 = lines[0].get_label().strip()
+        if len(lab0) < 1: lab0 =  'Y'
+        buff.append("#   X    %s" % lab0)
+        outa = [x0, y0]
+        npts = len(x0)
+        if len(lines)  > 1:
+            for ix, line in enumerate(lines[1:]):
+                lab = ['#   ', '       ',
+                       line.get_label().strip()]
+                x = line.get_xdata()
+                y = line.get_ydata()
+                npts = max(npts, len(y))
+                if not all(x==x0):
+                    lab0[1]  = ' X%i ' % (ix+2)
+                    out.append(x)
+                out.append(line.get_ydata())
+
+        fout = open(fname, 'w')
+        fout.write("%s\n" % "\n".join(buff))
+        fout.close()
+
     ####
     ## GUI events
     ####

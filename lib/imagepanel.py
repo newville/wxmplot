@@ -294,10 +294,11 @@ class ImagePanel(BasePanel):
 
         ofile = ofile + '.dat'
         orig_dir = os.path.abspath(os.curdir)
-
+        file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
         dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,
+                            wildcard=file_choices,
                             style=wx.SAVE|wx.CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:

@@ -470,7 +470,8 @@ class PlotConfigFrame(wx.Frame):
             return
         width  = 1.0 - (left + right)
         height = 1.0 - (bot + top)
-        self.axes[0].set_position([left, bot, width, height])
+        for ax in self.canvas.figure.get_axes():
+            ax.set_position([left, bot, width, height])
         self.canvas.draw()
 
     def onScatter(self, event, argu=None):

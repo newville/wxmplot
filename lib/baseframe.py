@@ -157,10 +157,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mids = self.menuIDs
         mfile = wx.Menu()
         mfile.Append(mids.SAVE, "&Save Image\tCtrl+S",
-                  "Save Image of Plot (PNG, SVG, JPG)")
+                     "Save Image of Plot (PNG, SVG, JPG)")
         mfile.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
-        mfile.Append(mids.EXPORT, "Save Data to File",
-                     "Save (X, Y) data to ASCII File")
+        mfile.Append(mids.EXPORT, "Export Data",
+                     "Export Data to ASCII Column file")
         mfile.AppendSeparator()
         mfile.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
         mfile.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
@@ -197,6 +197,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
         self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
         self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
+        self.Bind(wx.EVT_MENU, self.onExport ,         id=mids.EXPORT)
         self.Bind(wx.EVT_CLOSE,self.onExit)
 
     def BindMenuToPanel(self, panel=None):
@@ -215,6 +216,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             self.Bind(wx.EVT_MENU, panel.PrintPreview, id=mids.PREVIEW)
             self.Bind(wx.EVT_MENU, panel.canvas.Copy_to_Clipboard,
                       id=mids.CLIPB)
+
+    def onExport(self, event=None):
+        if self.panel is not None:
+            self.panel.onExport(event=event)
 
     def onAbout(self, event=None):
         dlg = wx.MessageDialog(self, self.about_msg, "About WXMPlot",

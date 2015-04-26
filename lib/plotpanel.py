@@ -3,6 +3,7 @@
 wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
 import os
+import sys
 import wx
 from numpy import nonzero, where, ma, nan
 import matplotlib
@@ -517,6 +518,9 @@ class PlotPanel(BasePanel):
         self.axes  = self.fig.add_axes(self.axissize, axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
+        if sys.platform.lower().startswith('darw'):
+            def swallow_mouse(*args): pass
+            self.canvas.CaptureMouse = swallow_mouse
 
         self.printer.canvas = self.canvas
         self.set_bg()

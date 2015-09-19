@@ -279,7 +279,7 @@ class BasePanel(wx.Panel):
         """finish wx event, forward it to other wx objects"""
         if event is not None:
             event.Skip()
-            if os.name == 'posix' or  self.HasCapture():
+            if self.HasCapture():
                 try:
                     self.ReleaseMouse()
                 except:

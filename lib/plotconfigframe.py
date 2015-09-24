@@ -2,10 +2,12 @@
 #
 # MPlot GUI to Configure (2D) Plots
 #
+import os
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
-from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
+from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN, FS_LEFT
+
 
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
@@ -23,6 +25,12 @@ from .colors import hexcolor
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
+ISPINSIZE = 110
+FSPINSIZE = 135
+#if os.name == 'nt':
+#    ISPINSIZE = 55
+#    FSPINSIZE = 75
+    
 def mpl_color(c, default = (242, 243, 244)):
     try:
         r = map(lambda x: int(x*255), colorConverter.to_rgb(c))
@@ -92,7 +100,7 @@ class PlotConfigFrame(wx.Frame):
 
         tl2 = wx.StaticText(panel, -1, 'Label text size:', size=(-1, -1),
                             style=labstyle)
-        txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (55, 30))
+        txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
         txt_size.SetRange(2, 20)
         txt_size.SetValue(self.conf.labelfont.get_size())
         txt_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='labelsize'))
@@ -102,7 +110,7 @@ class PlotConfigFrame(wx.Frame):
 
         tl2 = wx.StaticText(panel, -1, 'Legend text size:', size=(-1, -1),
                             style=labstyle)
-        leg_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (55, 30))
+        leg_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
         leg_size.SetRange(2, 20)
         leg_size.SetValue(self.conf.legendfont.get_size())
         leg_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='legendsize'))
@@ -198,16 +206,16 @@ class PlotConfigFrame(wx.Frame):
         ttitle = wx.StaticText(marginpanel, -1, ' top: ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 
-        lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_left,
+        lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_left,
                           min_val=0.0, max_val=1.00, increment=0.01, digits=2)
         lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        rmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_right,
+        rmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_right,
                           min_val=0.0, max_val=1.00, increment=0.01, digits=2)
         rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        bmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_bot,
+        bmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_bot,
                           min_val=0.0, max_val=1.00, increment=0.01, digits=2)
         bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        tmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(75,30), value=_top,
+        tmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_top,
                           min_val=0.0, max_val=1.00, increment=0.01, digits=2)
         tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
 
@@ -265,7 +273,7 @@ class PlotConfigFrame(wx.Frame):
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
         slab = wx.StaticText(panel, -1, 'Symbol Size:', size=(-1,-1),style=labstyle)
-        ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (55,30))
+        ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
         ssize.SetRange(1, 100)
         ssize.SetValue(self.conf.scatter_size)
         ssize.Bind(wx.EVT_SPINCTRL, Closure(self.onScatter, argu='size'))
@@ -358,10 +366,10 @@ class PlotConfigFrame(wx.Frame):
                                action = Closure(self.onText,argu=argu))
             self.trace_labels.append(lab)
 
-            col = csel.ColourSelect(panel,  -1, "", dcol, size=wx.DefaultSize)
+            col = csel.ColourSelect(panel,  -1, "", dcol, size=(30, 30))
             col.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu=argu))
 
-            thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(55,30), value=dthk,
+            thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
             thk.Bind(EVT_FLOATSPIN, Closure(self.onThickness, argu=argu))
 
@@ -369,9 +377,10 @@ class PlotConfigFrame(wx.Frame):
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
 
-            msz = wx.SpinCtrl(panel, -1, "", (-1,-1),(55,30))
+            msz = wx.SpinCtrl(panel, -1, "", (-1,-1),(ISPINSIZE, 30))
             msz.SetRange(0, 30)
             msz.SetValue(dmsz)
+            print dir(msz)
             msz.Bind(wx.EVT_SPINCTRL, Closure(self.onMarkerSize, argu=argu))
 
             sym = wx.Choice(panel, -1, choices=self.conf.symbols, size=(120,-1))
@@ -456,6 +465,7 @@ class PlotConfigFrame(wx.Frame):
 
     def onThickness(self, event, argu=''):
         val = event.GetEventObject().GetValue()
+        print 'onthick ', event, argu, val
         try:
             self.conf.set_trace_linewidth(val, trace=int(argu[6:]))
             self.redraw_legend()

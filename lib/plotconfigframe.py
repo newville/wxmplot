@@ -8,7 +8,6 @@ import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
 from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN, FS_LEFT
 
-
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
 
@@ -27,9 +26,9 @@ FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BU
 
 ISPINSIZE = 110
 FSPINSIZE = 135
-#if os.name == 'nt':
-#    ISPINSIZE = 55
-#    FSPINSIZE = 75
+if os.name == 'nt':
+    ISPINSIZE = 60
+    FSPINSIZE = 80
     
 def mpl_color(c, default = (242, 243, 244)):
     try:
@@ -380,7 +379,7 @@ class PlotConfigFrame(wx.Frame):
             msz = wx.SpinCtrl(panel, -1, "", (-1,-1),(ISPINSIZE, 30))
             msz.SetRange(0, 30)
             msz.SetValue(dmsz)
-            print dir(msz)
+
             msz.Bind(wx.EVT_SPINCTRL, Closure(self.onMarkerSize, argu=argu))
 
             sym = wx.Choice(panel, -1, choices=self.conf.symbols, size=(120,-1))
@@ -465,7 +464,6 @@ class PlotConfigFrame(wx.Frame):
 
     def onThickness(self, event, argu=''):
         val = event.GetEventObject().GetValue()
-        print 'onthick ', event, argu, val
         try:
             self.conf.set_trace_linewidth(val, trace=int(argu[6:]))
             self.redraw_legend()

@@ -29,8 +29,10 @@ from matplotlib import rcParams
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
-from collections import OrderedDict
-# from .ordereddict import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from .ordereddict import OrderedDict
 
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()

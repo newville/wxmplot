@@ -13,7 +13,7 @@ from matplotlib import dates
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-
+from matplotlib.gridspec import GridSpec
 from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
 
@@ -515,9 +515,17 @@ class PlotPanel(BasePanel):
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
-        self.axes  = self.fig.add_axes(self.axissize, axisbg=self.axisbg)
+        # 1 axes for now
+        self.gridspec = GridSpec(1,1)
+        # Replace later axissize by axesmargins :
+        # axesmargins : margins in px left/top/right/bottom
+        self.axesmargins = getattr(self,"axesmargins",[30,30,30,30])
+        self.axes  = self.fig.add_subplot(self.gridspec[0], axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
+        # modification of the canvas.draw function that is all over the libs
+        self._updateCanvasDraw()
+        
         if sys.platform.lower().startswith('darw'):
             def swallow_mouse(*args): pass
             self.canvas.CaptureMouse = swallow_mouse
@@ -539,7 +547,53 @@ class PlotPanel(BasePanel):
         self.Fit()
 
         self.addCanvasEvents()
+    
+    def _updateCanvasDraw(self):
+        """ Overload of the draw function that update 
+        axes position before each draw"""
+        fn = self.canvas.draw
+        def draw2(*a,**k):
+            self._updateGridSpec()
+            return fn(*a,**k)
+        self.canvas.draw = draw2
+        
+    def _updateGridSpec(self):
+        """ Update GridSpec attributes :
+        "left", "bottom", "right", "top"
+        according to the specified margins (in pixels)
+        and axes extent (taking into account labels,
+        title, axis)
+        """
+        # coordinates in px -> [0,1] in figure coordinates
+        transFn = self.fig.transFigure.inverted().transform
+        
+        # Static margins
+        leftP,topP,rightP,bottomP = self.axesmargins
+        (leftR,bottomR),(rightR,topR) = transFn(((leftP,bottomP),(rightP,topP)))
 
+        # Extent
+        (x0R,y0R),(x1R,y1R) = self.axes.get_position().get_points()
+        (o_x0P,o_y0P),(o_x1P,o_y1P) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
+        (o_x0R,o_y0R),(o_x1R,o_y1R) = transFn(((o_x0P,o_y0P),(o_x1P,o_y1P)))
+        
+        o_left = max(x0R - o_x0R,0)
+        o_top = max(o_y1R - y1R,0)
+        o_right = max(o_x1R - x1R,0)
+        o_bottom = max(y0R - o_y0R,0)
+
+        # GridSpec update
+        kw = {
+              "left" : leftR+o_left,
+              "top" : 1- (topR+o_top),
+              "right" : 1 - (rightR+o_right),
+              "bottom" : bottomR+o_bottom, 
+              }
+        self.gridspec.update(**kw)
+        
+        # Axes positions update
+        self.axes.update_params()
+        self.axes.set_position(self.axes.figbox)
+        
     def update_line(self, trace, xdata, ydata, side='left', draw=False,
                     update_limits=True):
         """ update a single trace, for faster redraw """

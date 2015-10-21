@@ -473,14 +473,14 @@ class BasePanel(wx.Panel):
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
         zdc.ResetBoundingBox()
-        zdc.BeginDrawing()
+#        zdc.BeginDrawing()
 
         # erase previous box
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
         self.rbbox = (x0, y0, width, height)
         zdc.DrawRectangle(*self.rbbox)
-        zdc.EndDrawing()
+#        zdc.EndDrawing()
 
     def zoom_leftdown(self, event=None):
         """leftdown event handler for zoom mode"""

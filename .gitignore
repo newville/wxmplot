@@ -7,3 +7,5 @@ doc/*.pdf
 build
 dist
 NonGit
+.project
+.pydevproject

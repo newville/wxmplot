@@ -63,7 +63,7 @@ class PlotPanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
     def __init__(self, parent, size=None, dpi=150,
-                 axissize=None, axisbg=None, fontsize=9,
+                 axesmargins=(30,30,30,30), axisbg=None, fontsize=9,
                  trace_color_callback=None,
                  output_title='plot', **kws):
 
@@ -90,10 +90,10 @@ class PlotPanel(BasePanel):
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi     = dpi
 
-        if axissize is None:  axissize = [0.16, 0.16, 0.72, 0.75]
         if axisbg is None:     axisbg='#FEFFFE'
         self.axisbg = axisbg
-        self.axissize = axissize
+        # axesmargins : margins in px left/top/right/bottom
+        self.axesmargins = axesmargins
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
         self.data_range = {}
@@ -517,9 +517,6 @@ class PlotPanel(BasePanel):
         self.fig   = Figure(self.figsize, dpi=self.dpi)
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
-        # Replace later axissize by axesmargins :
-        # axesmargins : margins in px left/top/right/bottom
-        self.axesmargins = getattr(self,"axesmargins",[30,30,30,30])
         self.axes  = self.fig.add_subplot(self.gridspec[0], axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)

@@ -2,7 +2,7 @@
 #
 # MPlot GUI to Configure (2D) Plots
 #
-import os
+import os, sys
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
@@ -26,10 +26,11 @@ FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BU
 
 ISPINSIZE = 110
 FSPINSIZE = 135
-if os.name == 'nt':
+if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
     ISPINSIZE = 60
     FSPINSIZE = 80
-    
+
+
 def mpl_color(c, default = (242, 243, 244)):
     try:
         r = map(lambda x: int(x*255), colorConverter.to_rgb(c))
@@ -220,6 +221,9 @@ class PlotConfigFrame(wx.Frame):
         tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
 
         self.margins = [lmarg, rmarg, bmarg, tmarg]
+        if self.conf.auto_margins:
+            [m.Disable() for m in self.margins]
+
         marginsizer = wx.BoxSizer(wx.HORIZONTAL)
         marginsizer.Add(mtitle,   0, labstyle, 5)
         marginsizer.Add(ltitle,   0, labstyle, 5)
@@ -473,13 +477,8 @@ class PlotConfigFrame(wx.Frame):
             return
 
     def onMargins(self, event=None):
-        try:
-            left, right, bot, top = [float(wid.GetValue()) for wid in self.margins]
-            plotPanel = self.GetParent()
-            plotPanel.axesmargins = left, top, right, bot
-        except:
-            return
-        
+        panel = self.GetParent()
+        panel.axesmargins = self.conf.margins = [float(w.GetValue()) for w in self.margins]
         self.canvas.draw()
 
     def onScatter(self, event, argu=None):

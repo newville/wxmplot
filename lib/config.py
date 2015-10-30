@@ -202,6 +202,8 @@ class PlotConfig:
         self.scatter_coll = None
         self.scatter_mask = None
 
+        self.margins = None
+        self.auto_margins = True
         self.legend_loc    =  'upper right'
         self.legend_onaxis =  'on plot'
         self.mpl_legend  = None
@@ -466,5 +468,3 @@ class PlotConfig:
 
         if loc in self.legend_abbrevs: loc = self.legend_abbrevs[loc]
         if loc in self.legend_locs:    self.legend_loc = loc
-
-

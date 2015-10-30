@@ -275,7 +275,7 @@ class PlotPanel(BasePanel):
         conf.set_axes_style()
 
         if not delay_draw:
-            self.canvas.draw()
+            self.draw()
             self.canvas.Refresh()
 
         conf.ntrace = conf.ntrace + 1
@@ -295,7 +295,7 @@ class PlotPanel(BasePanel):
         t = axes.text(x, y, text, ha=ha, va=va, size=size,
                       rotation=rotation, family=family, **kws)
         self.conf.added_texts.append((dynamic_size, t))
-        self.canvas.draw()
+        self.draw()
 
     def add_arrow(self, x1, y1, x2, y2,  side='left',
                   shape='full', color='black',
@@ -311,7 +311,7 @@ class PlotPanel(BasePanel):
                    fc=color, edgecolor=color,
                    width=width, head_width=head_width,
                    overhang=overhang, **kws)
-        self.canvas.draw()
+        self.draw()
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,
@@ -372,7 +372,7 @@ class PlotPanel(BasePanel):
         else:
             axes.grid(False)
         self.set_viewlimits()
-        self.canvas.draw()
+        self.draw()
 
     def lassoHandler(self, vertices):
         conf = self.conf
@@ -404,7 +404,7 @@ class PlotPanel(BasePanel):
             #print 'Points selected = ', pts
 
         self.lasso = None
-        self.canvas.draw()
+        self.draw()
         # self.canvas.draw_idle()
         if (self.lasso_callback is not None and
             hasattr(self.lasso_callback , '__call__')):
@@ -485,7 +485,7 @@ class PlotPanel(BasePanel):
         if len(self.zoom_lims) > 1:
             self.zoom_lims.pop()
         self.set_viewlimits()
-        self.canvas.draw()
+        self.draw()
 
     def toggle_legend(self, evt=None, show=None):
         "toggle legend display"
@@ -520,9 +520,7 @@ class PlotPanel(BasePanel):
         self.axes  = self.fig.add_subplot(self.gridspec[0], axisbg=self.axisbg)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
-        # modification of the canvas.draw function that is all over the libs
-        self._updateCanvasDraw()
-        
+
         if sys.platform.lower().startswith('darw'):
             def swallow_mouse(*args): pass
             self.canvas.CaptureMouse = swallow_mouse
@@ -540,57 +538,65 @@ class PlotPanel(BasePanel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.canvas, 2, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND, 0)
         self.SetAutoLayout(True)
+        self.autoset_margins()
         self.SetSizer(sizer)
         self.Fit()
 
+        canvas_draw = self.canvas.draw
+        def draw(*args, **kws):
+            self.autoset_margins()
+            canvas_draw(*args, **kws)
+        self.canvas.draw = draw
         self.addCanvasEvents()
-    
+
     def _updateCanvasDraw(self):
-        """ Overload of the draw function that update 
+        """ Overload of the draw function that update
         axes position before each draw"""
         fn = self.canvas.draw
         def draw2(*a,**k):
             self._updateGridSpec()
             return fn(*a,**k)
         self.canvas.draw = draw2
-        
-    def _updateGridSpec(self):
-        """ Update GridSpec attributes :
-        "left", "bottom", "right", "top"
+
+    def autoset_margins(self):
+        """auto-set margins  left, bottom, right, top
         according to the specified margins (in pixels)
         and axes extent (taking into account labels,
         title, axis)
         """
+        if not self.conf.auto_margins:
+            return
         # coordinates in px -> [0,1] in figure coordinates
-        transFn = self.fig.transFigure.inverted().transform
-        
+        trans = self.fig.transFigure.inverted().transform
+
         # Static margins
         leftP,topP,rightP,bottomP = self.axesmargins
-        (leftR,bottomR),(rightR,topR) = transFn(((leftP,bottomP),(rightP,topP)))
+        l, t, r, b = self.axesmargins
+        (l, b), (r, t) = trans(((l, b), (r, t)))
+
 
         # Extent
-        (x0R,y0R),(x1R,y1R) = self.axes.get_position().get_points()
-        (o_x0P,o_y0P),(o_x1P,o_y1P) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
-        (o_x0R,o_y0R),(o_x1R,o_y1R) = transFn(((o_x0P,o_y0P),(o_x1P,o_y1P)))
-        
-        o_left = max(x0R - o_x0R,0)
-        o_top = max(o_y1R - y1R,0)
-        o_right = max(o_x1R - x1R,0)
-        o_bottom = max(y0R - o_y0R,0)
+        (x0, y0),(x1, y1) = self.axes.get_position().get_points()
+        (ox0, oy0), (ox1, oy1) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
+        (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
 
-        # GridSpec update
-        kw = {
-              "left" : leftR+o_left,
-              "top" : 1- (topR+o_top),
-              "right" : 1 - (rightR+o_right),
-              "bottom" : bottomR+o_bottom, 
-              }
-        self.gridspec.update(**kw)
-        
+        dl = max(x0 - ox0, 0)
+        dt = max(oy1 - y1, 0)
+        dr = max(ox1 - x1, 0)
+        db = max(y0 - oy0, 0)
+
+
+        left, top, right, bottom =  l + dl, t + dt, r + dr, b + db
+        self.conf.margins =  left, top, right, bottom
+        self.gridspec.update(left=left, top=1-top, right=1-right, bottom=bottom)
+        # print self.conf.margins
         # Axes positions update
         self.axes.update_params()
         self.axes.set_position(self.axes.figbox)
-        
+
+    def draw(self):
+        self.canvas.draw()
+
     def update_line(self, trace, xdata, ydata, side='left', draw=False,
                     update_limits=True):
         """ update a single trace, for faster redraw """
@@ -614,10 +620,8 @@ class PlotPanel(BasePanel):
         if update_limits:
             self.set_viewlimits()
         if draw:
-            self.canvas.draw()
+            self.draw()
 
-    def draw(self):
-        self.canvas.draw()
 
     def get_figure(self):
         return self.fig

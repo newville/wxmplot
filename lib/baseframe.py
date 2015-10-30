@@ -57,7 +57,7 @@ Also, these key bindings can be used
 Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
-                 axissize=None, axisbg=None, exit_callback=None, user_menus=None,
+                 axesmargins=(30,30,30,30), axisbg=None, exit_callback=None, user_menus=None,
                  output_title='Plot', dpi=150, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
@@ -73,7 +73,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.user_menus = user_menus
         self.menuIDs = Menu_IDs()
         self.size = size
-        self.axissize = axissize
+        self.axesmargins = axesmargins
         self.axisbg = axisbg
 
     def write_message(self,s,panel=0):
@@ -140,7 +140,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.BuildMenu()
         self.panel = PlotPanel(self, size=self.size,
-                               axissize=self.axissize,
+                               axesmargins=self.axesmargins,
                                axisbg=self.axisbg,
                                output_title=self.output_title)
         self.panel.messenger = self.write_message

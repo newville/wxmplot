@@ -187,11 +187,12 @@ class PlotConfigFrame(wx.Frame):
         midsizer.Add(leg_loc,  (0, 6), (1, 1), labstyle, 2)
         midsizer.Add(leg_onax, (0, 7), (1, 1), labstyle, 2)
 
-        bbox = ax.get_position()
-        _left  = "%.2f"  % bbox.xmin
-        _right = "%.2f"  % (1.0 - bbox.xmax)
-        _bot   = "%.2f"  % bbox.ymin
-        _top   = "%.2f"  % (1.0 - bbox.ymax)
+        plotPanel = self.GetParent()
+        l,t,r,b = plotPanel.axesmargins
+        _left  = "%.2f"  % l
+        _right = "%.2f"  % r
+        _bot   = "%.2f"  % b
+        _top   = "%.2f"  % t
         marginpanel = panel
 
         mtitle = wx.StaticText(marginpanel, -1, 'Margins:   ',
@@ -206,16 +207,16 @@ class PlotConfigFrame(wx.Frame):
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 
         lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_left,
-                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+                          min_val=0.0, max_val=None, increment=1, digits=2)
         lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
         rmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_right,
-                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+                          min_val=0.0, max_val=None, increment=1, digits=2)
         rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
         bmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_bot,
-                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+                          min_val=0.0, max_val=None, increment=1, digits=2)
         bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
         tmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_top,
-                          min_val=0.0, max_val=1.00, increment=0.01, digits=2)
+                          min_val=0.0, max_val=None, increment=1, digits=2)
         tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
 
         self.margins = [lmarg, rmarg, bmarg, tmarg]
@@ -474,12 +475,11 @@ class PlotConfigFrame(wx.Frame):
     def onMargins(self, event=None):
         try:
             left, right, bot, top = [float(wid.GetValue()) for wid in self.margins]
+            plotPanel = self.GetParent()
+            plotPanel.axesmargins = left, top, right, bot
         except:
             return
-        width  = 1.0 - (left + right)
-        height = 1.0 - (bot + top)
-        for ax in self.canvas.figure.get_axes():
-            ax.set_position([left, bot, width, height])
+        
         self.canvas.draw()
 
     def onScatter(self, event, argu=None):

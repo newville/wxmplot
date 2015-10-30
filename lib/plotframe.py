@@ -10,13 +10,13 @@ class PlotFrame(BaseFrame):
     MatPlotlib 2D plot as a wx.Frame, using PlotPanel
     """
     def __init__(self, parent=None, size=None,
-                 axissize=None, axisbg=None,
+                 axesmargins=(30,30,30,30), axisbg=None,
                  title=None, **kws):
         if title is None:
             title = '2D Plot Frame'
         BaseFrame.__init__(self, parent=parent,
                            title=title, size=size,
-                           axissize=axissize, axisbg=axisbg,
+                           axesmargins=axesmargins, axisbg=axisbg,
                            **kws)
         self.BuildFrame()
 

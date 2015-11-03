@@ -558,6 +558,26 @@ class PlotPanel(BasePanel):
             return fn(*a,**k)
         self.canvas.draw = draw2
 
+    def get_default_margins(self):
+        """get default margins"""
+        trans = self.fig.transFigure.inverted().transform
+
+        # Static margins
+        l, t, r, b = self.axesmargins
+        (l, b), (r, t) = trans(((l, b), (r, t)))
+
+        # print "AutoSet Margins 0b: (%.3f, %.3f, %.3f, %.3f)" %  (l, t, r, b)
+        # Extent
+        (x0, y0),(x1, y1) = self.axes.get_position().get_points()
+        (ox0, oy0), (ox1, oy1) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
+        (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
+
+        dl = max(x0 - ox0, 0)
+        dt = max(oy1 - y1, 0)
+        dr = max(ox1 - x1, 0)
+        db = max(y0 - oy0, 0)
+        return (l + dl, t + dt, r + dr, b + db)
+
     def autoset_margins(self):
         """auto-set margins  left, bottom, right, top
         according to the specified margins (in pixels)
@@ -570,26 +590,9 @@ class PlotPanel(BasePanel):
         trans = self.fig.transFigure.inverted().transform
 
         # Static margins
-        leftP,topP,rightP,bottomP = self.axesmargins
-        l, t, r, b = self.axesmargins
-        (l, b), (r, t) = trans(((l, b), (r, t)))
+        self.conf.margins = l, t, r, b = self.get_default_margins()
+        self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
 
-
-        # Extent
-        (x0, y0),(x1, y1) = self.axes.get_position().get_points()
-        (ox0, oy0), (ox1, oy1) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
-        (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
-
-        dl = max(x0 - ox0, 0)
-        dt = max(oy1 - y1, 0)
-        dr = max(ox1 - x1, 0)
-        db = max(y0 - oy0, 0)
-
-
-        left, top, right, bottom =  l + dl, t + dt, r + dr, b + db
-        self.conf.margins =  left, top, right, bottom
-        self.gridspec.update(left=left, top=1-top, right=1-right, bottom=bottom)
-        # print self.conf.margins
         # Axes positions update
         self.axes.update_params()
         self.axes.set_position(self.axes.figbox)

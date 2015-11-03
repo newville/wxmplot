@@ -188,44 +188,45 @@ class PlotConfigFrame(wx.Frame):
         midsizer.Add(leg_loc,  (0, 6), (1, 1), labstyle, 2)
         midsizer.Add(leg_onax, (0, 7), (1, 1), labstyle, 2)
 
-        plotPanel = self.GetParent()
-        l,t,r,b = plotPanel.axesmargins
-        _left  = "%.2f"  % l
-        _right = "%.2f"  % r
-        _bot   = "%.2f"  % b
-        _top   = "%.2f"  % t
-        marginpanel = panel
+        # margins
+        ppanel = self.GetParent()
+        _left, _top, _right, _bot = ["%.3f"% x for x in ppanel.get_default_margins()]
 
-        mtitle = wx.StaticText(marginpanel, -1, 'Margins:   ',
+        mtitle = wx.StaticText(panel, -1, 'Margins:   ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        ltitle = wx.StaticText(marginpanel, -1, ' left: ',
+        ltitle = wx.StaticText(panel, -1, ' left: ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        rtitle = wx.StaticText(marginpanel, -1, ' right: ',
+        rtitle = wx.StaticText(panel, -1, ' right: ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        btitle = wx.StaticText(marginpanel, -1, ' bottom: ',
+        btitle = wx.StaticText(panel, -1, ' bottom: ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        ttitle = wx.StaticText(marginpanel, -1, ' top: ',
+        ttitle = wx.StaticText(panel, -1, ' top: ',
                                style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 
-        lmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_left,
-                          min_val=0.0, max_val=None, increment=1, digits=2)
+        lmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_left,
+                          min_val=0.0, max_val=None, increment=0.01, digits=3)
         lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        rmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_right,
-                          min_val=0.0, max_val=None, increment=1, digits=2)
+        rmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_right,
+                          min_val=0.0, max_val=None, increment=0.01, digits=3)
         rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        bmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_bot,
-                          min_val=0.0, max_val=None, increment=1, digits=2)
+        bmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_bot,
+                          min_val=0.0, max_val=None, increment=0.01, digits=3)
         bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        tmarg = FloatSpin(marginpanel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_top,
-                          min_val=0.0, max_val=None, increment=1, digits=2)
+        tmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_top,
+                          min_val=0.0, max_val=None, increment=0.01, digits=3)
         tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
 
-        self.margins = [lmarg, rmarg, bmarg, tmarg]
+        self.margins = [lmarg, tmarg, rmarg, bmarg]
         if self.conf.auto_margins:
             [m.Disable() for m in self.margins]
 
+        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
+        auto_m.SetValue(self.conf.auto_margins)
+
         marginsizer = wx.BoxSizer(wx.HORIZONTAL)
         marginsizer.Add(mtitle,   0, labstyle, 5)
+        marginsizer.Add(auto_m,   0, labstyle, 5)
         marginsizer.Add(ltitle,   0, labstyle, 5)
         marginsizer.Add(lmarg,    0, labstyle, 5)
         marginsizer.Add(rtitle,   0, labstyle, 5)
@@ -476,9 +477,24 @@ class PlotConfigFrame(wx.Frame):
         except:
             return
 
+    def onAutoMargin(self,event):
+        self.conf.auto_margins = event.IsChecked()
+        if self.conf.auto_margins:
+            [m.Disable() for m in self.margins]
+        else:
+            ppanel = self.GetParent()
+            vals = ppanel.get_default_margins()
+            for m, v in zip(self.margins, vals):
+                m.Enable()
+                m.SetValue(v)
+
     def onMargins(self, event=None):
         panel = self.GetParent()
-        panel.axesmargins = self.conf.margins = [float(w.GetValue()) for w in self.margins]
+        self.conf.margins = [float(w.GetValue()) for w in self.margins]
+        left, top, right, bottom = self.conf.margins
+        panel.gridspec.update(left=left, top=1-top, right=1-right, bottom=bottom)
+        panel.axes.update_params()
+        panel.axes.set_position(panel.axes.figbox)
         self.canvas.draw()
 
     def onScatter(self, event, argu=None):
@@ -574,6 +590,7 @@ class PlotConfigFrame(wx.Frame):
 
     def onShowGrid(self,event):
         self.conf.enable_grid(show=event.IsChecked())
+
 
     def onShowBox(self, event=None):
         style='box'

@@ -174,8 +174,8 @@ class ImagePanel(BasePanel):
             axes = self.axes
 
         xmin, xmax, ymin, ymax = self.data_range
-        if not autoscale and len(self.zoom_lims) >1:
-            zlims = self.zoom_lims[-1]
+        if not autoscale and len(self.conf.zoom_lims) >1:
+            zlims = self.conf.zoom_lims[-1]
             if axes in zlims:
                 xmin, xmax, ymin, ymax = zlims[axes]
 
@@ -187,7 +187,7 @@ class ImagePanel(BasePanel):
             xmin > self.data_range[1] or
             ymax < self.data_range[2] or
             ymin > self.data_range[3] ):
-            self.zoom_lims.pop()
+            self.conf.zoom_lims.pop()
             return
 
         if abs(xmax-xmin) < 2:
@@ -349,11 +349,11 @@ class ImagePanel(BasePanel):
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         lims = None
-        if len(self.zoom_lims) > 1:
-            lims = self.zoom_lims.pop()
+        if len(self.conf.zoom_lims) > 1:
+            lims = self.conf.zoom_lims.pop()
         ax = self.axes
         if lims is None: # auto scale
-            self.zoom_lims = [None]
+            self.conf.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_viewlimits()
@@ -361,7 +361,7 @@ class ImagePanel(BasePanel):
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """
-        self.zoom_lims = [None]
+        self.conf.zoom_lims = [None]
         self.unzoom(event)
 
     def redraw(self, col='int'):

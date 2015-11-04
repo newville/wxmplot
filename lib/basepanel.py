@@ -48,7 +48,7 @@ class BasePanel(wx.Panel):
 
         self.mouse_uptime = time.time()
         self.user_limits = {}
-        self.zoom_lims = []    # x, y coords zoom levels
+        # self.zoom_lims = []    # x, y coords zoom levels
         self.zoom_ini  = None  # x, y coords for zoom-box
         self.rbbox = None
         self.zdc = None
@@ -106,19 +106,19 @@ class BasePanel(wx.Panel):
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """
-        if len(self.zoom_lims) > 0:
-            self.zoom_lims = [self.zoom_lims[0]]
+        if len(self.conf.zoom_lims) > 0:
+            self.conf.zoom_lims = [self.conf.zoom_lims[0]]
         self.unzoom(event)
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
         lims = None
-        if len(self.zoom_lims) > 1:
-            lims = self.zoom_lims.pop()
+        if len(self.conf.zoom_lims) > 1:
+            lims = self.conf.zoom_lims.pop()
         ax = self.axes
         # print 'base unzoom ', lims, set_bounds
         if lims is None: # auto scale
-            self.zoom_lims = [None]
+            self.conf.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
             ax.set_xlim((xmin, xmax), emit=True)
             ax.set_ylim((ymin, ymax), emit=True)
@@ -258,7 +258,7 @@ class BasePanel(wx.Panel):
 
     def onExport(self, event=None):
         pass
-    
+
     def onLeftDown(self, event=None):
         """ left button down: report x,y coords, start zooming mode"""
         if event is None:
@@ -509,8 +509,8 @@ class BasePanel(wx.Panel):
                 xmin, xmax = ax.get_xlim()
                 ymin, ymax = ax.get_ylim()
                 zlims[ax] = [xmin, xmax, ymin, ymax]
-            if len(self.zoom_lims) == 0:
-                self.zoom_lims.append(zlims)
+            if len(self.conf.zoom_lims) == 0:
+                self.conf.zoom_lims.append(zlims)
             # for multiple axes, we first collect all the new limits, and
             # only then apply them
             for ax in self.fig.get_axes():
@@ -526,7 +526,7 @@ class BasePanel(wx.Panel):
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
                              min(y0, y1), max(y0, y1)]
-            self.zoom_lims.append(tlims)
+            self.conf.zoom_lims.append(tlims)
             # now apply limits:
             self.set_viewlimits()
 

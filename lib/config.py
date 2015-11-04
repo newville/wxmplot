@@ -186,8 +186,9 @@ class PlotConfig:
         self.zoom_x = 0
         self.zoom_y = 0
         self.zoom_init = (0, 1)
-
+        self.zoom_lims = []
         self.title  = ' '
+        self.yscale = 'linear'
         self.xlabel = ' '
         self.ylabel = ' '
         self.y2label = ' '

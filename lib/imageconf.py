@@ -15,7 +15,7 @@ for cm in ('coolwarm', 'cool', 'hot', 'jet', 'Reds', 'Greens', 'Blues',
            'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn', 'ocean',
            'terrain', 'gist_earth', 'gist_yarg', 'gist_rainbow',
            'gist_stern'):
-    
+
     if hasattr(colormap, cm):
         ColorMap_List.append(cm)
 
@@ -41,7 +41,7 @@ class ImageConfig:
         self.cmap_lo = {'int': 0}
         self.cmap_hi = {'int': 1000}
         self.cmap_range = 1000
-        self.tricolor_bg = 'black'        
+        self.tricolor_bg = 'black'
         self.cmap_splines = {'int': None, 'red': None, 'green': None, 'blue': None}
         self.int_lo = {'int': '0', 'red': '0', 'green': '0', 'blue': '0'}
         self.int_hi = {'int': '1', 'red': '1', 'green': '1', 'blue': '1'}
@@ -56,6 +56,7 @@ class ImageConfig:
         self.cursor_mode = 'zoom'
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
         self.zoompen   = wx.Pen('#101090',  3, wx.SOLID)
+        self.zoom_lims = []
 
     def relabel(self):
         " re draw labels (title, x,y labels)"
@@ -75,7 +76,7 @@ class ImageConfig:
         the new intensity to go
         from (0, 0.5, 0.5) (for Red=0)  to (0, 0, 0) (for Red=1)
         and so on for the Green and Blue maps.
-        
+
         Thus the image will be transformed from
           old intensity                new intensity
           (0.0, 0.0, 0.0) (black)   (1.0, 1.0, 1.0) (white)
@@ -91,5 +92,3 @@ class ImageConfig:
         out[:,:,1] = tmp[:,:,0] + tmp[:,:,2]
         out[:,:,2] = tmp[:,:,0] + tmp[:,:,1]
         return out
-        
-

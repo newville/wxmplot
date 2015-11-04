@@ -568,14 +568,18 @@ class PlotPanel(BasePanel):
 
         # print "AutoSet Margins 0b: (%.3f, %.3f, %.3f, %.3f)" %  (l, t, r, b)
         # Extent
-        (x0, y0),(x1, y1) = self.axes.get_position().get_points()
-        (ox0, oy0), (ox1, oy1) = self.axes.get_tightbbox(self.canvas.get_renderer()).get_points()
-        (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
+        dl, dt, dr, db = 0, 0, 0, 0
+        for i, ax in enumerate(self.fig.get_axes()):
+            (x0, y0),(x1, y1) = ax.get_position().get_points()
+            (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
+            (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
 
-        dl = max(x0 - ox0, 0)
-        dt = max(oy1 - y1, 0)
-        dr = max(ox1 - x1, 0)
-        db = max(y0 - oy0, 0)
+            dl = max(dl, (x0 - ox0))
+            dt = max(dt, (oy1 - y1))
+            dr = max(dr, (ox1 - x1))
+            db = max(db, (y0 - oy0))
+
+        # print(" > %.3f %.3f %.3f %.3f " % (dl, dt, dr, db))
         return (l + dl, t + dt, r + dr, b + db)
 
     def autoset_margins(self):
@@ -594,8 +598,9 @@ class PlotPanel(BasePanel):
         self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
 
         # Axes positions update
-        self.axes.update_params()
-        self.axes.set_position(self.axes.figbox)
+        for ax in self.fig.get_axes():
+            ax.update_params()
+            ax.set_position(ax.figbox)
 
     def draw(self):
         self.canvas.draw()

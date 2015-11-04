@@ -493,8 +493,9 @@ class PlotConfigFrame(wx.Frame):
         self.conf.margins = [float(w.GetValue()) for w in self.margins]
         left, top, right, bottom = self.conf.margins
         panel.gridspec.update(left=left, top=1-top, right=1-right, bottom=bottom)
-        panel.axes.update_params()
-        panel.axes.set_position(panel.axes.figbox)
+        for ax in panel.fig.get_axes():
+            ax.update_params()
+            ax.set_position(ax.figbox)
         self.canvas.draw()
 
     def onScatter(self, event, argu=None):

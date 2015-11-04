@@ -97,7 +97,7 @@ class PlotPanel(BasePanel):
         self.BuildPanel()
         self.user_limits = {} # [None, None, None, None]
         self.data_range = {}
-        self.zoom_lims = []
+        self.conf.zoom_lims = []
         self.axes_traces = {}
 
     def plot(self, xdata, ydata, side='left', title=None,
@@ -121,6 +121,7 @@ class PlotPanel(BasePanel):
         if side == 'right':
             axes = self.get_right_axes()
         self.conf.ntrace  = 0
+        self.conf.yscale = 'linear'
         self.cursor_mode = 'zoom'
         self.conf.plot_type = 'lineplot'
         self.user_limits[axes] = [None, None, None, None]
@@ -139,7 +140,7 @@ class PlotPanel(BasePanel):
 
     def oplot(self, xdata, ydata, side='left', label=None,
               xlabel=None, ylabel=None, y2label=None, title=None,
-              dy=None, ylog_scale=False, grid=None,
+              dy=None, ylog_scale=None, grid=None,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
@@ -153,14 +154,14 @@ class PlotPanel(BasePanel):
         if side == 'right':
             axes = self.get_right_axes()
         # set y scale to log/linear
-        yscale = 'linear'
-        if ylog_scale:
-            yscale = 'log'
+        if ylog_scale is not None:
+            self.conf.yscale = {False:'linear', True:'log'}[ylog_scale]
+
             # ydata = ma.masked_where(ydata<=0, 1.0*ydata)
             # ymin = min(ydata[where(ydata>0)])
             # ydata[where(ydata<=0)] = None
 
-        axes.set_yscale(yscale, basey=10)
+        axes.set_yscale(self.conf.yscale, basey=10)
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
             x_dates = [datetime.fromtimestamp(i) for i in xdata]
@@ -448,15 +449,15 @@ class PlotPanel(BasePanel):
 
             if (axes in self.user_limits and
                 (self.user_limits[axes] != 4*[None] or
-                len(self.zoom_lims) > 0)):
+                len(self.conf.zoom_lims) > 0)):
 
                 for i, val in enumerate(self.user_limits[axes]):
                     if val is not None:
                         limits[i] = val
                 xmin, xmax, ymin, ymax = limits
-                if len(self.zoom_lims) > 0:
+                if len(self.conf.zoom_lims) > 0:
                     limits_set = True
-                    xmin, xmax, ymin, ymax = self.zoom_lims[-1][axes]
+                    xmin, xmax, ymin, ymax = self.conf.zoom_lims[-1][axes]
                 axes.set_xlim((xmin, xmax), emit=True)
                 axes.set_ylim((ymin, ymax), emit=True)
 
@@ -482,8 +483,8 @@ class PlotPanel(BasePanel):
 
     def unzoom(self, event=None, set_bounds=True):
         """ zoom out 1 level, or to full data range """
-        if len(self.zoom_lims) > 1:
-            self.zoom_lims.pop()
+        if len(self.conf.zoom_lims) > 1:
+            self.conf.zoom_lims.pop()
         self.set_viewlimits()
         self.draw()
 

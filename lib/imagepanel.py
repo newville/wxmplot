@@ -151,7 +151,7 @@ class ImagePanel(BasePanel):
         """
         patch = mask * np.ones(mask.shape) * 0.9
         cmap = self.conf.cmap[col]
-        area = self.axes.contour(patch, cmap=cmap, levels=[0.8])
+        area = self.axes.contour(patch, cmap=cmap, levels=[0, 1])
         self.conf.highlight_areas.append(area)
         col = None
         if hasattr(cmap, '_lut'):

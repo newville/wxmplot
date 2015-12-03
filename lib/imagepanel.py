@@ -159,8 +159,9 @@ class ImagePanel(BasePanel):
             col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
 
         if label is not None:
-            fmt = {0.8: label, 0.9: label}
-            self.axes.clabel(area, fontsize=9, inline=1, fmt=fmt, colors=col)
+            def fmt(*args, **kws): return label
+            self.axes.clabel(area, fontsize=9, fmt=fmt,
+                             colors=col, rightside_up=True)
 
         if col is not None:
             for l in area.collections:

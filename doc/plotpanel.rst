@@ -10,7 +10,7 @@ including line plots and scatter plots.  It has both an easy-to-use
 programming interface, and a rich graphical user interface for
 manipulating the plot after it has been drawn.  The :class:`PlotPanel`
 class is derived from a :class:`wx.Panel` and so that it can be
-included anywhere in a wx Windo object that a normal :class:`wx.Panel`
+included anywhere in a wx Window object that a normal :class:`wx.Panel`
 can be put.  In addition to drawing a plot, a :class:`PlotPanel`
 provides the following capabilities to the end-user:
 
@@ -44,15 +44,13 @@ many additional methods to interact with the plots.
    :type  size:    wx.Size  or tuple of 2 integers.
    :param dpi:    dots per inch for figure (150).
    :type  dpi:    integer
-   :param axissize:  size for maplotlib Axis   ([0.16, 0.16, 0.72, 0.72])
-   :type  axissize:  list of 4 floats
    :param axisbg:    background colour for Axis ('#FEFEFE').
    :type  axisbg:  valid colour name
    :param fontsize:  font size for wxFont for labels and ticks (9).
    :type  fontsize:  integer
-   :param output_tilte:  string to use for output plots ('plot').
+   :param output_title:  string to use for output plots ('plot').
    :param messenger:     function to use for writing output messages  (``None``).
-   :type  messenger: callable or ``None``
+   :type  messenger:     callable or ``None``
    :param trace_color_callback: function to call when a color changes (``None``).
    :type  trace_color_callback: callable or ``None``
    :param show_config_popup: whether to enable a popup-menu on right-click.
@@ -213,7 +211,7 @@ same meaning, as indicated by the right-most column.
       'lower right', 'lower left', 'upper center', 'lower center', or 'center').
 
    10. The *use_dates* option is not very rich, and simply turns x-values that are Unix timestamps into x
-       labels showing the dates. 
+       labels showing the dates.
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
   configured interactively (see Plot Configuration).
@@ -450,4 +448,3 @@ the source distribution kit.  The *demo.py* script there will show several
 dynamic plot, updating the plot as fast as it can - typically 10 to 30
 times per second, depending on your machine.  The *stripchart.py* example
 script also shows a dynamic, time-based plot.
-

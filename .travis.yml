@@ -20,7 +20,6 @@ install:
     - source activate test_env
     - conda install wxpython
     - python setup.py install
-    - sudo $PYTHON setup.py install
 
 script:
     - nosetests

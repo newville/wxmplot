@@ -8,35 +8,20 @@ Prerequisites
 The wxmplot package requires Python, wxPython, numpy, and matplotlib.  Some
 of the example applications rely on the Image module as well.
 
-As of this writing (November, 2013), wxPython has been demonstrated to run on
-Python 3, but support for wxPhoenix and matplotlib WX backend seems poor, and
-no testing of wxmplot has been done with wPhoenix or Python 3.
+With wxPython and the WX matplotlib backend supported well on Python 2.7,
+but poorly for Python 3, little testing has been done with wxPhoenix or the
+matplotlib WX backend.
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest version is available from PyPI or CARS (Univ of Chicago):
+.. _github:   http://github.com/newwville/wxmplot
+.. _PyPI:     http://pypi.python.org/pypi/wxmplot
 
-.. _wxmplot-0.9.14.tar.gz:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.tar.gz
-.. _wxmplot-0.9.14.win32-py2.7.exe:  http://pypi.python.org/packages/source/w/wxmplot/wxmplot-0.9.14.win32-py2.7.exe
+The latest version is available from `PyPI`_ or `github`_, and the package
+can be installed with::
 
-.. _wxmplot github repository:   http://github.com/newville/wxmplot
-.. _Python Setup Tools:          http://pypi.python.org/pypi/setuptools
-
-+---------------------+------------------+---------------------------------------+
-|  Download Option    | Python Versions  |  Location                             |
-+=====================+==================+=======================================+
-| Source Kit          | 2.6, 2.7         | - `wxmplot-0.9.14.tar.gz`_            |
-+---------------------+------------------+---------------------------------------+
-| Windows Installers  | 2.7              | - `wxmplot-0.9.14.win32-py2.7.exe`_   |
-+---------------------+------------------+---------------------------------------+
-| Development Version | all              | use `wxmplot github repository`_      |
-+---------------------+------------------+---------------------------------------+
-
-if you have `Python Setup Tools`_  installed, you can download and install
-the package simply with::
-
-   easy_install -U wxmplot
+   pip install wxmplot
 
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,23 +30,24 @@ To get the latest development version, use::
 
    git clone http://github.com/newville/wxmplot.git
 
-Installation
-~~~~~~~~~~~~~~~~~
+Installation from Source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 wxmplot is a pure python module, so installation on all platforms can use the source kit::
 
-   tar xvzf wxmplot-0.9.14.tar.gz  
-   cd wxmplot-0.9.14/
+   tar xvzf wxmplot-0.9.XX.tar.gz
+   cd wxmplot-0.9.XX/
    python setup.py install
 
-or, again using ``easy_install -U wxmplot``.
+You can also install with ``pip install wxmplot``, or for Anaconda Python,
+using ``conda install -c newville wxmplot``
 
 License
 ~~~~~~~~~~~~~
 
 The wxmplot code is distribution under the following license:
 
-  Copyright (c) 2013 Matthew Newville, The University of Chicago
+  Copyright (c) 2015 Matthew Newville, The University of Chicago
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby
@@ -78,5 +64,3 @@ The wxmplot code is distribution under the following license:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THIS SOFTWARE.
-
-

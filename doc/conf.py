@@ -37,7 +37,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'wxmplot'
-copyright = u'2011, Matthew Newville, The University of Chicago'
+copyright = u'2015, Matthew Newville, The University of Chicago'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -110,10 +110,10 @@ html_theme = 'sphinxdoc'
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 #html_title = None
-html_title = 'WXMPlot: 2d plotting widgets for wxPython, using matplotlib'
+html_title = 'WXMPlot: Plotting widgets for wxPython with matplotlib'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = 'WXMPlot: 2d plotting widgets for wxPython, using matplotlib'
+html_short_title = 'WXMPlot: Plotting widgets for wxPython with matplotlib'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.

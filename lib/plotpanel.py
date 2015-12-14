@@ -162,7 +162,11 @@ class PlotPanel(BasePanel):
             # ymin = min(ydata[where(ydata>0)])
             # ydata[where(ydata<=0)] = None
 
-        axes.set_yscale(self.conf.yscale, basey=10)
+        try:
+            axes.set_yscale(self.conf.yscale, basey=10)
+        except:
+            axes.set_yscale('linear')
+            
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
             x_dates = [datetime.fromtimestamp(i) for i in xdata]

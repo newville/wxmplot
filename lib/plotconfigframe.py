@@ -116,7 +116,7 @@ class PlotConfigFrame(wx.Frame):
         topsizer.Add(leg_size,   (1, 5), (1, 1), labstyle)
 
         tl1 = wx.StaticText(panel, -1, 'Legend location:', size=(-1, -1), style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(100, -1))
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(125, -1))
         leg_loc.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
@@ -241,7 +241,9 @@ class PlotConfigFrame(wx.Frame):
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
-
+        for i in range(self.nb.GetPageCount()):
+            self.nb.GetPage(i).SetBackgroundColour(self.bgcol)
+        
         #bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
         #bok.Bind(wx.EVT_BUTTON,self.onExit)
 

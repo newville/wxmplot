@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ImagePanel: A wx.Panel for Image Display &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
+    <title>ImagePanel: A wx.Panel for Image Display &mdash; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.12',
+        VERSION:     '0.9.17',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="WXMPlot: 2d plotting widgets for wxPython, using matplotlib" href="index.html" />
+    <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
     <link rel="prev" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,18 +39,18 @@
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
-<li><a class="reference internal" href="#imagepanel-methods"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> methods</a></li>
-<li><a class="reference internal" href="#imagepanel-callback-attributes"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> callback attributes</a></li>
-<li><a class="reference internal" href="#module-imageframe"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
-<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <tt class="docutils literal"><span class="pre">ImageConfig</span></tt></a></li>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
+<li><a class="reference internal" href="#imagepanel-methods"><code class="docutils literal"><span class="pre">ImagePanel</span></code> methods</a></li>
+<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="docutils literal"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
+<li><a class="reference internal" href="#module-imageframe"><code class="docutils literal"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="docutils literal"><span class="pre">ImageConfig</span></code></a></li>
 <li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a><ul>
 <li><a class="reference internal" href="#basic-example">Basic example</a></li>
 <li><a class="reference internal" href="#contour-example">Contour Example</a></li>
@@ -63,13 +63,15 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="plotpanel.html"
-                        title="previous chapter"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt>:  A wx.Panel for Basic 2D Line Plots</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/imagepanel.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="previous chapter"><code class="docutils literal"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imagepanel.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -88,22 +90,22 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-imagepanel">
-<span id="imagepanel-a-wx-panel-for-image-display"></span><h1><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display<a class="headerlink" href="#module-imagepanel" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> class supports image display, including gray-scale
+<span id="imagepanel-a-wx-panel-for-image-display"></span><h1><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display<a class="headerlink" href="#module-imagepanel" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
-<a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> is derived from a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt> and so can be
+<a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> is derived from a <code class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></code> and so can be
 easily included in a wx GUI.</p>
 <p>While the image can be customized programmatically, the only interactivity
-built in to the <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> itself is the ability to zoom in and
-out.  In contrast, an <tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt> provides many more ways to
+built in to the <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> itself is the ability to zoom in and
+out.  In contrast, an <code class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></code> provides many more ways to
 manipulate the displayed image, as will be discussed below.</p>
 <dl class="class">
 <dt id="imagepanel.ImagePanel">
-<em class="property">class </em><tt class="descclassname">imagepanel.</tt><tt class="descname">ImagePanel</tt><big>(</big><em>parent</em>, <em>size=(4.5</em>, <em>4.0)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an Image Panel, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></tt></p>
+<em class="property">class </em><code class="descclassname">imagepanel.</code><code class="descname">ImagePanel</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(4.5</em>, <em>4.0)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Image Panel, a <code class="xref py py-class docutils literal"><span class="pre">wx.Panel</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -112,16 +114,16 @@ manipulate the displayed image, as will be discussed below.</p>
 <li><strong>parent</strong> -- wx parent object.</li>
 <li><strong>size</strong> -- figure size in inches.</li>
 <li><strong>dpi</strong> -- dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) -- function for accepting output messages.</li>
+<li><strong>messenger</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) -- function for accepting output messages.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>The <em>size</em>, and <em>dpi</em> arguments are sent to matplotlib's
-<tt class="xref py py-class docutils literal"><span class="pre">Figure</span></tt>.  The <em>messenger</em> should should be a function that
+<code class="xref py py-class docutils literal"><span class="pre">Figure</span></code>.  The <em>messenger</em> should should be a function that
 accepts text messages from the panel for informational display.  The
-default value is to use <tt class="xref py py-func docutils literal"><span class="pre">sys.stdout.write()</span></tt>.</p>
+default value is to use <code class="xref py py-func docutils literal"><span class="pre">sys.stdout.write()</span></code>.</p>
 <p>Extra keyword parameters are sent to the wx.Panel.</p>
 <p>The configuration settings for an image (its colormap, smoothing,
 orientation, and so on) are controlled through configuration
@@ -129,10 +131,10 @@ attributes.</p>
 </dd></dl>
 
 <div class="section" id="imagepanel-methods">
-<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="imagepanel.display">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">display</tt><big>(</big><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imagepanel.</code><code class="descname">display</code><span class="sig-paren">(</span><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
@@ -140,50 +142,50 @@ display purposes.</p>
 
 <dl class="method">
 <dt id="imagepanel.clear">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imagepanel.</code><code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="imagepanel.redraw">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">redraw</tt><big>(</big><big>)</big><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imagepanel.</code><code class="descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="imagepanel-callback-attributes">
-<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
-<p>An <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
+<h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
 image panel.</p>
 <dl class="data">
 <dt id="imagepanel.data_callback">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">data_callback</tt><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called.</p>
+<code class="descclassname">imagepanel.</code><code class="descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><code class="xref py py-meth docutils literal"><span class="pre">display()</span></code></a> is called.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.lasso_callback">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">lasso_callback</tt><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imagepanel.</code><code class="descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.cursor_callback">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">cursor_callback</tt><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imagepanel.</code><code class="descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.contour_callback">
-<tt class="descclassname">imagepanel.</tt><tt class="descname">contour_callback</tt><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that is called with the contour levels each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><tt class="xref py py-meth docutils literal"><span class="pre">display()</span></tt></a> is called with <tt class="docutils literal"><span class="pre">style='contour'</span></tt>.</p>
+<code class="descclassname">imagepanel.</code><code class="descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that is called with the contour levels each time <a class="reference internal" href="#imagepanel.display" title="imagepanel.display"><code class="xref py py-meth docutils literal"><span class="pre">display()</span></code></a> is called with <code class="docutils literal"><span class="pre">style='contour'</span></code>.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-imageframe">
-<span id="imageframe-a-wx-frame-for-image-display"></span><h2><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display<a class="headerlink" href="#module-imageframe" title="Permalink to this headline">¶</a></h2>
+<span id="imageframe-a-wx-frame-for-image-display"></span><h2><code class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display<a class="headerlink" href="#module-imageframe" title="Permalink to this headline">¶</a></h2>
 <p>In addition to providing a top-level window frame holding an
-<tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, an <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> provides the end-user with many ways to
+<code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>, an <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></code></a> provides the end-user with many ways to
 manipulate the image:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -200,18 +202,18 @@ manipulate the image:</p>
 configuration attributes and redrawing the image.</p>
 <dl class="class">
 <dt id="imageframe.ImageFrame">
-<em class="property">class </em><tt class="descclassname">imageframe.</tt><tt class="descname">ImageFrame</tt><big>(</big><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an Image Frame, a <tt class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></tt>.  This is a Frame with an
-<tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt> and several menus and controls for changing the color table and
+<em class="property">class </em><code class="descclassname">imageframe.</code><code class="descname">ImageFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
+<code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between &quot;image&quot; and &quot;contour&quot;.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="image-configuration-with-imageconfig">
-<h2>Image configuration with <tt class="xref py py-class docutils literal"><span class="pre">ImageConfig</span></tt><a class="headerlink" href="#image-configuration-with-imageconfig" title="Permalink to this headline">¶</a></h2>
-<p>To change any of the attributes of the image on an <tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, you
-can set the corresponding attribute of the panel's <tt class="xref py py-attr docutils literal"><span class="pre">conf</span></tt>.   That is,
-if you create an <tt class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></tt>, you can set the colormap with:</p>
+<h2>Image configuration with <code class="xref py py-class docutils literal"><span class="pre">ImageConfig</span></code><a class="headerlink" href="#image-configuration-with-imageconfig" title="Permalink to this headline">¶</a></h2>
+<p>To change any of the attributes of the image on an <code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>, you
+can set the corresponding attribute of the panel's <code class="xref py py-attr docutils literal"><span class="pre">conf</span></code>.   That is,
+if you create an <code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>, you can set the colormap with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cmap</span>
 <span class="n">im_panel</span> <span class="o">=</span> <span class="n">ImagePanel</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="n">im_panel</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">data_array</span><span class="p">)</span>
@@ -232,9 +234,9 @@ if you create an <tt class="xref py py-class docutils literal"><span class="pre"
 <span class="n">im_panel</span><span class="o">.</span><span class="n">redraw</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a>, you can access this attribute as <em>frame.panel.conf.cmap</em>.</p>
+<p>For a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></code></a>, you can access this attribute as <em>frame.panel.conf.cmap</em>.</p>
 <p>The list of configuration attributes and their meaning are given in the
-<a class="reference internal" href="#imageconf-table"><em>Table of Image Configuration attributes</em></a></p>
+<a class="reference internal" href="#imageconf-table"><span>Table of Image Configuration attributes</span></a></p>
 <p id="imageconf-table">Table of Image Configuration attributes:  All of these are members of the
 <em>panel.conf</em> object, as shown in the example above.</p>
 <blockquote>
@@ -347,7 +349,7 @@ if you create an <tt class="xref py py-class docutils literal"><span class="pre"
 <li><em>cmap_lo</em> and <em>cmap_hi</em> set the low and high values for the sliders that compress the
 colormap, and are on a scale from 0 to 100.</li>
 <li>In contrast, <em>int_lo</em> and <em>int_hi</em> set the map intensity values that are used when
-<em>auto_intensity</em> is <tt class="docutils literal"><span class="pre">False</span></tt>.  These can be used to put two different maps on the
+<em>auto_intensity</em> is <code class="docutils literal"><span class="pre">False</span></code>.  These can be used to put two different maps on the
 same intensity intensity scale.</li>
 </ol>
 </div>
@@ -355,7 +357,7 @@ same intensity intensity scale.</li>
 <h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="basic-example">
 <h3>Basic example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h3>
-<p>A basic plot from a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><tt class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></tt></a> looks like this:</p>
+<p>A basic plot from a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageFrame</span></code></a> looks like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&#39;frozen&#39;</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">wxversion</span>
@@ -480,13 +482,13 @@ each of the three colors.  For example:</p>
     <span class="n">y</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">)</span>
     <span class="n">ox</span> <span class="o">=</span>  <span class="n">x</span> <span class="o">/</span> <span class="mf">100.0</span>
     <span class="n">oy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">y</span> <span class="o">/</span> <span class="mf">200.0</span>
-    <span class="n">red</span>  <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">red</span>  <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
     <span class="n">red</span> <span class="o">=</span>  <span class="n">red</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="p">(</span><span class="mf">6.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span>   <span class="mi">76</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">6</span><span class="p">)</span> <span class="o">+</span>
                          <span class="mf">3.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span>  <span class="mi">70</span><span class="p">,</span>  <span class="mi">33</span><span class="p">)</span> <span class="o">+</span>
                          <span class="mf">2.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span>  <span class="mi">12</span><span class="p">,</span>  <span class="mi">6</span><span class="p">))</span>
-    <span class="n">green</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">green</span> <span class="o">=</span> <span class="n">green</span>  <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span>  <span class="mi">98</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">7</span><span class="p">)</span> <span class="o">+</span>
-                      <span class="mf">1.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">63</span><span class="p">))</span>
+    <span class="n">green</span>  <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">green</span> <span class="o">=</span> <span class="n">green</span>  <span class="o">+</span> <span class="mf">0.11</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span>  <span class="mi">98</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">7</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">63</span><span class="p">))</span>
 
     <span class="n">blue</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
     <span class="n">blue</span> <span class="o">=</span> <span class="n">blue</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.9</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">265</span><span class="p">,</span>  <span class="mi">78</span><span class="p">,</span>  <span class="mi">23</span><span class="p">)</span> <span class="o">+</span>
@@ -518,7 +520,7 @@ more suitable for printed documents and presentations.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -530,12 +532,12 @@ more suitable for printed documents and presentations.</p>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              >previous</a> |</li>
-        <li><a href="index.html">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WXMPLOT: simple, rich plotting widgets for wxPython using matplotlib &mdash; WXMPlot: 2d plotting widgets for wxPython, using matplotlib</title>
+    <title>WXMPLOT: Plotting widgets for wxPython with matplotlib &mdash; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.12',
+        VERSION:     '0.9.17',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="WXMPlot: 2d plotting widgets for wxPython, using matplotlib" href="#" />
+    <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="#" />
     <link rel="next" title="Downloading and Installation" href="installation.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,28 +39,24 @@
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Downloads</h3>
-<p>Current version: <b>0.9.12</b></p>
+<p>Current version: <b>0.9.17</b></p>
 <p>Downloads:
 <ul>
-  <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/wxmplot/src/">cars.uchicago.edu</a>
   <li>&nbsp; &nbsp; <a href="http://pypi.python.org/pypi/wxmplot/">PyPI (Python.org)</a> <p>
-       try <tt>easy_install -U wxmplot</tt>
+       try <tt>pip install wxmplot</tt>
 </ul>
 <p>
 
 Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxmplot/">github.com</a> <br>
 
-<h3>Documentation</h3>
-
- <a href="wxmplot.pdf">  PDF Format</a>
 <hr>
 <p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -79,52 +75,53 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxm
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="wxmplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib">
-<h1>WXMPLOT:  simple, rich plotting widgets for wxPython using matplotlib<a class="headerlink" href="#wxmplot-simple-rich-plotting-widgets-for-wxpython-using-matplotlib" title="Permalink to this headline">¶</a></h1>
-<p>The wxmplot python package provides easy-to-use, richly featured
-plotting widgets for <a class="reference external" href="http://www.wxpython.org/">wxPython</a> built on top of the wonderful
-<a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> library.  While matplotlib provides excellent general
-purpose plotting functionality, and supports a variety of GUI and
-non-GUI backends, it does not have a very tight integration with any
-particular GUI toolkit.  Similarly, while wxPython has some plotting
-functionality, it has nothing as good as matplotlib.  The wxmplot
-package attempts to bridge this gap, providing wx.Panels for basic 2D
-line plots and image display that are richly featured and provide
-end-users with interactivity (zooming, reading positions, rotating
-images) and customization (line types, labels, marker type, colors,
-and color tables) of the graphics without having to know matplotlib.
-Wxmplot does not expose all of matplotlib's capabilities, but does
-provide 2D plotting and image display Panels and Frames can be used
+  <div class="section" id="wxmplot-plotting-widgets-for-wxpython-with-matplotlib">
+<h1>WXMPLOT:  Plotting widgets for wxPython with matplotlib<a class="headerlink" href="#wxmplot-plotting-widgets-for-wxpython-with-matplotlib" title="Permalink to this headline">¶</a></h1>
+<p>The wxmplot python package provides easy-to-use, richly featured plotting
+widgets for <a class="reference external" href="http://www.wxpython.org/">wxPython</a> built on top of the wonderful <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>
+library.  While matplotlib provides excellent general purpose plotting
+functionality, and supports a variety of GUI and non-GUI backends, it does
+not have a very tight integration with any particular GUI toolkit.
+Similarly, while wxPython has some plotting functionality, it has nothing
+as good as matplotlib.  The wxmplot package attempts to bridge this gap,
+providing wx.Panels for basic 2D line plots and image display that are
+richly featured and provide end-users with interactivity (zooming, reading
+positions, rotating images) and customization (line types, labels, marker
+type, colors, and color tables) of the graphics without having to know
+matplotlib.  Wxmplot does not expose all of matplotlib's capabilities, but
+does provide 2D plotting and image display Panels and Frames can be used
 simply in wxPython applications to handle many use cases.</p>
 <p>The wxmplot package is aimed at programmers who want to include high
-quality scientific graphics in their applications that can be
-manipulated by the end-user.  If you're a python programmer who is
-comfortable writing pylab scripts or plotting interactively from
-IPython, this package may seem too limiting for your needs.</p>
+quality scientific graphics in their applications that can be manipulated
+by the end-user.  If you're a python programmer who is comfortable writing
+complex pylab scripts or plotting interactively from IPython, this package
+may seem too limiting for your needs.  On the other hand, wxmplot provides
+better defaults and better customizations than matplotlib's Navigation
+toolbars.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#downloads">Downloads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-from-source">Installation from Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt>:  A wx.Panel for Basic 2D Line Plots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#plotpanel-methods"><tt class="docutils literal"><span class="pre">PlotPanel</span></tt> methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotframe"><tt class="docutils literal"><span class="pre">PlotFrame</span></tt>: a wx.Frame showing a <tt class="docutils literal"><span class="pre">PlotPanel</span></tt></a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotapp"><tt class="docutils literal"><span class="pre">PlotApp</span></tt>: a wx.App showing a <tt class="docutils literal"><span class="pre">PlotFrame</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="docutils literal"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#plotpanel-methods"><code class="docutils literal"><span class="pre">PlotPanel</span></code> methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotframe"><code class="docutils literal"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="docutils literal"><span class="pre">PlotPanel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotapp"><code class="docutils literal"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="docutils literal"><span class="pre">PlotFrame</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#examples-and-screenshots">Examples and Screenshots</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt>:  A wx.Panel for Image Display</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-methods"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-callback-attributes"><tt class="docutils literal"><span class="pre">ImagePanel</span></tt> callback attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#module-imageframe"><tt class="docutils literal"><span class="pre">ImageFrame</span></tt>:  A wx.Frame for Image Display</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#image-configuration-with-imageconfig">Image configuration with <tt class="docutils literal"><span class="pre">ImageConfig</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="docutils literal"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-methods"><code class="docutils literal"><span class="pre">ImagePanel</span></code> methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-callback-attributes"><code class="docutils literal"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#module-imageframe"><code class="docutils literal"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagepanel.html#image-configuration-with-imageconfig">Image configuration with <code class="docutils literal"><span class="pre">ImageConfig</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#examples-and-screenshots">Examples and Screenshots</a></li>
 </ul>
 </li>
@@ -138,7 +135,7 @@ IPython, this package may seem too limiting for your needs.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -150,12 +147,12 @@ IPython, this package may seem too limiting for your needs.</p>
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              >next</a> |</li>
-        <li><a href="#">WXMPlot: 2d plotting widgets for wxPython, using matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -114,7 +114,7 @@ class PlotPanel(BasePanel):
                 self.fig.delaxes(ax)
 
         self.data_range = {}
-        self.zoom_lims = []
+        self.conf.zoom_lims = []
         self.axes_traces = {}
         self.clear()
         axes = self.axes

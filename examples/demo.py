@@ -1,8 +1,4 @@
 import sys
-if not hasattr(sys, 'frozen'):
-    import wxversion
-    wxversion.ensureMinimal('2.8')
-
 import wx
 import time, os, sys
 

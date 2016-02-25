@@ -5,13 +5,6 @@ This is a collection of general purpose utility functions and classes,
 especially useful for wx functionality
 """
 import sys
-try:
-    if not hasattr(sys, 'frozen'):
-        import wxversion
-        wxversion.ensureMinimal('2.8')
-except:
-    pass
-
 import wx
 import wx.lib.masked as masked
 

@@ -10,7 +10,6 @@ if is_wxPhoenix:
 else:
     from wx._core import PyDeadObjectError
 
-print( 'IS PHOENIX', is_wxPhoenix, PyDeadObjectError)
 import numpy as np
 from   matplotlib.cm import get_cmap
 import matplotlib.cm as mpl_colormap

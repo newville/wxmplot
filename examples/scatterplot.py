@@ -3,13 +3,8 @@
 # scatterplot example, with lassoing and
 # a user-level lasso-callback
 import sys
-if not hasattr(sys, 'frozen'):
-    import wxversion
-    wxversion.ensureMinimal('2.8')
-
-import wxmplot
-
 import wx
+import wxmplot
 import numpy
 
 x   = numpy.arange(100)/20.0 + numpy.random.random(size=100)

@@ -1,9 +1,7 @@
 import sys
-if not hasattr(sys, 'frozen'):
-    import wxversion
-    wxversion.ensureMinimal('2.8')
 
 import wx
+print(wx.PlatformInfo)
 from numpy import exp, random, arange, outer
 from wxmplot import ImageFrame
 

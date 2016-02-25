@@ -5,6 +5,12 @@ wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 import os
 import sys
 import wx
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+if is_wxPhoenix:
+    wxCursor = wx.Cursor
+else:
+    wxCursor = wx.StockCursor
+    
 from numpy import nonzero, where, ma, nan
 import matplotlib
 
@@ -534,7 +540,7 @@ class PlotPanel(BasePanel):
         self.printer.canvas = self.canvas
         self.set_bg()
         self.conf.canvas = self.canvas
-        self.canvas.SetCursor(wx.StockCursor(wx.CURSOR_CROSS))
+        self.canvas.SetCursor(wxCursor(wx.CURSOR_CROSS))
 
         # overwrite ScalarFormatter from ticker.py here:
         self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))

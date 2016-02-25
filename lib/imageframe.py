@@ -4,8 +4,13 @@ wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 """
 import os
 import wx
-from wx._core import PyDeadObjectError
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+if is_wxPhoenix:
+    PyDeadObjectError = RuntimeError
+else:
+    from wx._core import PyDeadObjectError
 
+print( 'IS PHOENIX', is_wxPhoenix, PyDeadObjectError)
 import numpy as np
 from   matplotlib.cm import get_cmap
 import matplotlib.cm as mpl_colormap
@@ -94,7 +99,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.config_mode = None
         if subtitles is not None:
             self.subtitles = subtitles
-        sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
+        sbar = self.CreateStatusBar(2, wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)

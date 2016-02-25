@@ -127,7 +127,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ####
     def BuildFrame(self):
         # Python3 note: wxPython has no THICK_FRAME
-        sbar = self.CreateStatusBar(2, wx.CAPTION|wx.THICK_FRAME)
+        sbar = self.CreateStatusBar(2, wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)

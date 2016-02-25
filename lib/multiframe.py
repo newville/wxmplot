@@ -101,7 +101,7 @@ class MultiPlotFrame(BaseFrame):
     ## create GUI
     ####
     def BuildFrame(self):
-        sbar = self.CreateStatusBar(2,wx.CAPTION|wx.THICK_FRAME)
+        sbar = self.CreateStatusBar(2,wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)

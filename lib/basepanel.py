@@ -7,6 +7,8 @@ import sys
 import time
 import os
 import wx
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+
 import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
@@ -473,14 +475,16 @@ class BasePanel(wx.Panel):
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
         zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
         zdc.ResetBoundingBox()
-        zdc.BeginDrawing()
+        if not is_wxPhoenix:
+            zdc.BeginDrawing()
 
         # erase previous box
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
         self.rbbox = (x0, y0, width, height)
         zdc.DrawRectangle(*self.rbbox)
-        zdc.EndDrawing()
+        if not is_wxPhoenix:
+            zdc.EndDrawing()
 
     def zoom_leftdown(self, event=None):
         """leftdown event handler for zoom mode"""

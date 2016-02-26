@@ -119,7 +119,7 @@ class MultiPlotFrame(BaseFrame):
                 self.panels[(i,j)] = PlotPanel(self, size=self.panelsize)
                 self.panels[(i,j)].messenger = self.write_message
                 panel = self.panels[(i,j)]
-                self.Build_DefaultUserMenus()
+
                 sizer.Add(panel,(i,j),(1,1),flag=wx.EXPAND|wx.ALIGN_CENTER)
                 panel.reportLeftDown = Closure(self.reportLeftDown,
                                                panelkey=(i,j))
@@ -147,4 +147,3 @@ class MultiPlotFrame(BaseFrame):
             self.BindMenuToPanel(panel=self.panel)
             self.panel.set_bg('#FEFEFA')
             self.panel.canvas.draw()
-

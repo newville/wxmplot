@@ -64,18 +64,11 @@ these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.18'
-__date__     = '2015-Dec-14'
+__version__  = '0.9.19'
+__date__     = '2016-Feb-25'
 
 import sys
-try:
-    if not hasattr(sys, 'frozen'):
-        import wxversion
-        wxversion.ensureMinimal('2.8')
-except ImportError:
-    pass
-except: # probably a useless exception from ensureMinimal() about wx already being Imported.
-    pass
+import wx
 
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame

@@ -1,7 +1,7 @@
 import sys
 
 import wx
-print(wx.PlatformInfo)
+
 from numpy import exp, random, arange, outer
 from wxmplot import ImageFrame
 

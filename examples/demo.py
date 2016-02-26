@@ -1,5 +1,11 @@
 import sys
 import wx
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+if is_wxPhoenix:
+    PyDeadObjectError = RuntimeError
+else:
+    from wx._core import PyDeadObjectError
+
 import time, os, sys
 
 from numpy import arange, sin, cos, exp, pi, linspace, ones, random
@@ -18,7 +24,6 @@ class TestFrame(wx.Frame):
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
         menu = wx.Menu()
         ID_EXIT  = wx.NewId()
-        ID_TIMER = wx.NewId()
 
         menu.Append(ID_EXIT, "E&xit", "Terminate the program")
 
@@ -26,9 +31,9 @@ class TestFrame(wx.Frame):
         menuBar.Append(menu, "&File");
         self.SetMenuBar(menuBar)
 
-        wx.EVT_MENU(self, ID_EXIT,  self.OnExit)
+        self.Bind(wx.EVT_MENU, self.OnExit)
 
-        self.Bind(wx.EVT_CLOSE,self.OnExit) # CloseEvent)
+        self.Bind(wx.EVT_CLOSE, self.OnExit) # CloseEvent)
 
         self.plotframe  = None
 
@@ -75,8 +80,8 @@ class TestFrame(wx.Frame):
         self.SetSizer(framesizer)
         framesizer.Fit(self)
 
-        wx.EVT_TIMER(self, ID_TIMER, self.onTimer)
-        self.timer = wx.Timer(self, ID_TIMER)
+        self.Bind(wx.EVT_TIMER, self.onTimer)
+        self.timer = wx.Timer(self)
         self.Refresh()
 
     def create_data(self):
@@ -101,7 +106,7 @@ class TestFrame(wx.Frame):
             self.has_plot = False
         try:
             self.plotframe.Show()
-        except wx.PyDeadObjectError:
+        except PyDeadObjectError:
             self.plotframe = PlotFrame(self)
             self.plotframe.Show()
 

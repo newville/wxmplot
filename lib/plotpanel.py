@@ -10,7 +10,7 @@ if is_wxPhoenix:
     wxCursor = wx.Cursor
 else:
     wxCursor = wx.StockCursor
-    
+
 from numpy import nonzero, where, ma, nan
 import matplotlib
 
@@ -172,7 +172,7 @@ class PlotPanel(BasePanel):
             axes.set_yscale(self.conf.yscale, basey=10)
         except:
             axes.set_yscale('linear')
-            
+
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
             x_dates = [datetime.fromtimestamp(i) for i in xdata]
@@ -611,7 +611,10 @@ class PlotPanel(BasePanel):
 
         # Axes positions update
         for ax in self.fig.get_axes():
-            ax.update_params()
+            try:
+                ax.update_params()
+            except ValueError:
+                pass
             ax.set_position(ax.figbox)
 
     def draw(self):

@@ -672,7 +672,7 @@ class PlotPanel(BasePanel):
         dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,
-                            style=wx.SAVE|wx.CHANGE_DIR)
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
             self.writeASCIIFile(dlg.GetPath(), title=title)
@@ -712,7 +712,7 @@ class PlotPanel(BasePanel):
                             defaultDir=thisdir,
                             defaultFile=ofile,
                             wildcard=file_choices,
-                            style=wx.SAVE|wx.CHANGE_DIR)
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
             self.writeASCIIFile(dlg.GetPath(), title=title)

@@ -2,6 +2,8 @@
 #
 
 import wx
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+
 import sys
 import matplotlib
 if (matplotlib.__version__ < '1.2'):
@@ -50,7 +52,7 @@ class LabelEntry(wx.TextCtrl):
 #                     style=wx.ALIGN_LEFT|wx.ST_NO_AUTORESIZE)
 #  row   = wx.BoxSizer(wx.HORIZONTAL)
 #  row.Add(entry.label, 1,wx.ALIGN_LEFT|wx.EXPAND)
-#  row.Add(entry,    1,wx.ALIGN_LEFT|wx.EXPAND)        
+#  row.Add(entry,    1,wx.ALIGN_LEFT|wx.EXPAND)
 
     """
     def __init__(self,parent,value,size=-1,
@@ -64,7 +66,7 @@ class LabelEntry(wx.TextCtrl):
         if action is None:
             action = self.GetValue
         self.action = action
-        
+
         if labeltext is not None:
             self.label = wx.StaticText(parent, -1, labeltext,
                                        size = (labelsize,-1),
@@ -92,13 +94,13 @@ class LabelEntry(wx.TextCtrl):
             self.SetForegroundColour(color)
         if bgcolor:
             self.SetBackgroundColour(bgcolor)
-        
+
     def __act(self,event=None):
         self.action(event=event)
         val = self.GetValue()
         event.Skip()
         return val
-    
+
 class PrintoutWx(wx.Printout):
     """Simple wrapper around wx Printout class -- all the real work
     here is scaling the matplotlib canvas bitmap to the current
@@ -109,7 +111,7 @@ class PrintoutWx(wx.Printout):
                  title=None):
         if title is None:
             title = self._title_
-    
+
         wx.Printout.__init__(self, title=title)
         self.canvas = canvas
         self.width  = width
@@ -126,7 +128,10 @@ class PrintoutWx(wx.Printout):
 
         ppw,pph = self.GetPPIPrinter()      # printer's pixels per in
         pgw,pgh = self.GetPageSizePixels()  # page size in pixels
-        grw,grh = self.canvas.GetSizeTuple()
+        if is_wxPhoenix:
+            grw, grh = self.canvas.GetSize()
+        else:
+            grw, grh = self.canvas.GetSizeTuple()
         dc      = self.GetDC()
         dcw,dch = dc.GetSize()
 
@@ -150,7 +155,7 @@ class PrintoutWx(wx.Printout):
             self.canvas.draw()
         except:
             return
-        
+
         # page may need additional scaling on preview
         page_scale = 1.0
         if self.IsPreview():   page_scale = float(dcw)/pgw
@@ -264,5 +269,3 @@ def inside_poly(vertices,data):
         mask = Path(vertices).contains_points(data)
 
     return mask
-
-

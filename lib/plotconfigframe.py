@@ -243,7 +243,7 @@ class PlotConfigFrame(wx.Frame):
                         self.conf.plot_type == 'scatter')
         for i in range(self.nb.GetPageCount()):
             self.nb.GetPage(i).SetBackgroundColour(self.bgcol)
-        
+
         #bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
         #bok.Bind(wx.EVT_BUTTON,self.onExit)
 
@@ -373,10 +373,9 @@ class PlotConfigFrame(wx.Frame):
                             min_val=0, max_val=10, increment=0.5, digits=1)
             thk.Bind(EVT_FLOATSPIN, Closure(self.onThickness, argu=argu))
 
-            sty = wx.Choice(panel, -1, choices=self.conf.styles, size=(120,-1))
+            sty = wx.Choice(panel, choices=self.conf.styles, size=(120,-1))
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
-
 
             msz = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dmsz,
                             min_val=0, max_val=30, increment=1, digits=0)

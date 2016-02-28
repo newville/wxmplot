@@ -164,9 +164,9 @@ class PlotConfig:
     def __init__(self, canvas=None): # trace_color_callback=None):
         self.canvas = canvas
 
-        self.styles      = StyleMap.keys()
-        self.drawstyles  = DrawStyleMap.keys()
-        self.symbols     = MarkerMap.keys()
+        self.styles      = list(StyleMap.keys())
+        self.drawstyles  = list(DrawStyleMap.keys())
+        self.symbols     = list(MarkerMap.keys())
 
         self.legend_locs = ['upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',

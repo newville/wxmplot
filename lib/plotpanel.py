@@ -514,12 +514,15 @@ class PlotPanel(BasePanel):
 
     def configure(self, event=None):
         """show configuration frame"""
-        try:
-            self.win_config.Raise()
-        except:
+        if self.win_config is None:
             self.win_config = PlotConfigFrame(parent=self,
                                               config=self.conf,
                                               trace_color_callback=self.trace_color_callback)
+
+        try:
+            self.win_config.Raise()
+        except:
+            pass
 
     ####
     ## create GUI

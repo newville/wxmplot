@@ -4,6 +4,7 @@ color support for MPlot.
 
 """
 import numpy as np
+import six
 
 HAS_MPL = False
 try:
@@ -327,7 +328,7 @@ def hexcolor(color):
     " returns hex color given a tuple, wx.Color, or X11 named color"
     # first, if this is a hex color already, return!
     # Python 3: needs rewrite for str/unicode change
-    if isinstance(color, (str, unicode)):
+    if isinstance(color, six.string_types):
         if color[0] == '#' and len(color)==7:
             return color
 
@@ -337,7 +338,7 @@ def hexcolor(color):
         rgb = color
     elif isinstance(color, list):
         rgb = tuple(color)
-    elif isinstance(color, (str, unicode)):
+    elif isinstance(color, six.string_types):
         c = color.lower()
         if c.find(' ')>-1:    c = c.replace(' ','')
         if c.find('gray')>-1: c = c.replace('gray','grey')
@@ -404,7 +405,7 @@ def register_custom_colormaps():
     """
     registers custom color maps
     """
-    if not HAS_MPL: 
+    if not HAS_MPL:
         return ()
     makemap = LinearSegmentedColormap.from_list
     for name, val in custom_colormap_data.items():
@@ -417,4 +418,3 @@ def register_custom_colormaps():
 
     return ('stdgamma', 'red_heat', 'green_heat', 'blue_heat',
             'red', 'green', 'blue')
-

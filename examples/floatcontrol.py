@@ -8,7 +8,6 @@ import sys
 import wx
 import wx.lib.masked as masked
 
-import fpformat
 import numpy
 
 
@@ -203,7 +202,8 @@ class FloatCtrl(wx.TextCtrl):
 
     def GetValue(self):
         if self.__prec > 0:
-            return set_float(fpformat.fix(self.__val, self.__prec))
+            fmt = "{{:.{:d}f}}".format(self.__prec)
+            return set_float(fmt.format(self.__val))
         else:
             return int(self.__val)
 
@@ -245,5 +245,3 @@ class FloatCtrl(wx.TextCtrl):
         self.SetForegroundColour(fgcol)
         self.SetBackgroundColour(bgcol)
         self.Refresh()
-
-

@@ -10,7 +10,7 @@ import numpy
 x   = numpy.arange(100)/20.0 + numpy.random.random(size=100)
 y   = numpy.random.random(size=len(x))
 def onlasso(data=None, selected=None, mask=None):
-    print ':: lasso ', selected
+    print( ':: lasso ', selected)
 
 app = wx.App()
 
@@ -23,5 +23,3 @@ pframe.write_message('WXMPlot PlotFrame example: Try Help->Quick Reference')
 pframe.Show()
 #
 app.MainLoop()
-
-

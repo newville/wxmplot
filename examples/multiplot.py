@@ -14,6 +14,8 @@ y4  = numpy.cos(2*x)*numpy.exp(-x/10.)
 app = wx.App()
 
 pframe = wxmplot.MultiPlotFrame(rows=2,cols=3,panelsize=(2.5,1.75))
+
+
 pframe.plot(x,y1,panel=(0,0))
 pframe.plot(x,y2,panel=(0,1))
 pframe.plot(x,y3,panel=(1,1))
@@ -26,4 +28,3 @@ pframe.Show()
 pframe.Raise()
 
 app.MainLoop()
-

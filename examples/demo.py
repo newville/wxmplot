@@ -25,13 +25,13 @@ class TestFrame(wx.Frame):
         menu = wx.Menu()
         ID_EXIT  = wx.NewId()
 
-        menu.Append(ID_EXIT, "E&xit", "Terminate the program")
+        menu_exit = menu.Append(ID_EXIT, "E&xit", "Terminate the program")
 
         menuBar = wx.MenuBar()
         menuBar.Append(menu, "&File");
         self.SetMenuBar(menuBar)
 
-        self.Bind(wx.EVT_MENU, self.OnExit)
+        self.Bind(wx.EVT_MENU, self.OnExit, menu_exit)
 
         self.Bind(wx.EVT_CLOSE, self.OnExit) # CloseEvent)
 

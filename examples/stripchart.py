@@ -30,16 +30,17 @@ class StripChartFrame(wx.Frame):
         ID_EXIT  = wx.NewId()
         ID_TIMER = wx.NewId()
 
-        menu.Append(ID_EXIT, "E&xit", "Terminate the program")
+        menu_exit = menu.Append(ID_EXIT, "E&xit",
+                                "Terminate the program")
 
         menuBar = wx.MenuBar()
         menuBar.Append(menu, "&File");
         self.SetMenuBar(menuBar)
 
-        wx.EVT_MENU(self, ID_EXIT,  self.OnExit)
+        self.Bind(wx.EVT_MENU,  self.OnExit, menu_exit)
         self.Bind(wx.EVT_CLOSE, self.OnExit)
 
-        sbar = self.CreateStatusBar(2,wx.CAPTION|wx.THICK_FRAME)
+        sbar = self.CreateStatusBar(2,wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(11)
@@ -79,8 +80,8 @@ class StripChartFrame(wx.Frame):
         self.SetSizer(mainsizer)
         mainsizer.Fit(self)
 
-        wx.EVT_TIMER(self, ID_TIMER, self.onTimer)
-        self.timer = wx.Timer(self, ID_TIMER)
+        self.Bind(wx.EVT_TIMER, self.onTimer)
+        self.timer = wx.Timer(self)
         self.Refresh()
 
     def write_message(self, msg, panel=0):

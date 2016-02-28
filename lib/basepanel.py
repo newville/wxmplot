@@ -196,7 +196,7 @@ class BasePanel(wx.Panel):
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,
                             wildcard=file_choices,
-                            style=wx.SAVE|wx.CHANGE_DIR)
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()

@@ -3,7 +3,7 @@ import wx
 from tifffile import imread
 from wxmplot import ImageFrame
 
-img = imread("ceo2.tiff")
+img = imread('Pilatus.tiff')
 
 app = wx.App()
 frame = ImageFrame()

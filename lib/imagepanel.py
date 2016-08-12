@@ -73,6 +73,8 @@ class ImagePanel(BasePanel):
         conf.log_scale = False
         conf.rot, conf.flip_ud, conf.flip_lr = False, False, False
         conf.highlight_areas = []
+        if 1 in data.shape:
+            data = data.squeeze()
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
 

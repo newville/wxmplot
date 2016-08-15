@@ -43,6 +43,35 @@ def autopack(panel, sizer):
     panel.SetSizer(sizer)
     sizer.Fit(panel)
 
+def clean_texmath(txt):
+    """
+    clean tex math string, preserving control sequences
+    (incluing \n, so also '\nu') inside $ $, while allowing
+    \n and \t to be meaningful in the text string
+    """
+    s = "%s " % txt
+    out = []
+    i = 0
+    while i < len(s)-1:
+        if s[i] == '\\' and s[i+1] in ('n', 't'):
+            if s[i+1] == 'n':
+                out.append('\n')
+            elif s[i+1] == 't':
+                out.append('\t')
+            i += 1
+        elif s[i] == '$':
+            j = s[i+1:].find('$')
+            if j < 0:
+                j = len(s)
+            out.append(s[i:j+2])
+            i += j+2
+        else:
+            out.append(s[i])
+        i += 1
+        if i > 5000:
+            break
+    return ''.join(out).strip()    
+
 class PlotConfigFrame(wx.Frame):
     """ GUI Configure Frame"""
     def __init__(self, parent=None, config=None, trace_color_callback=None):
@@ -572,8 +601,9 @@ class PlotConfigFrame(wx.Frame):
         except TypeError:
             s = ''
 
-        if '\\n' in s:
-            s = s.replace('\\n', '\n')
+        if '\\' in s and '$' in s:
+            s = clean_texmath(s)
+            # print(" s = ", s)
         if argu in ('xlabel', 'ylabel', 'y2label', 'title'):
             try:
                 kws = {argu: s}

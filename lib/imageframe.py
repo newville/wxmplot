@@ -483,7 +483,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         cm_wid   = 1.00
         cm_ratio = 0.12
         col = 'int'
-        self.cmap_dat[col] = np.outer(np.ones(cmax*cm_ratio),
+        self.cmap_dat[col] = np.outer(np.ones(int(cmax*cm_ratio)),
                                        np.linspace(0, 1, cmax))
 
         fig = Figure((cm_wid, cm_wid*cm_ratio), dpi=150)

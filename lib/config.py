@@ -311,6 +311,9 @@ class PlotConfig:
             for t in (ax.get_ticklabels() + ax.get_ticklines()):
                 t.set_color(self.textcolor)
         self.set_added_text_size()
+        if self.mpl_legend is not None:
+            for t in self.mpl_legend.get_texts():
+                t.set_color(self.textcolor)
         self.canvas.draw()
 
 
@@ -458,7 +461,11 @@ class PlotConfig:
             self.mpl_legend = lgn(lins, labs,
                                   loc=self.legend_loc,
                                   prop=self.legendfont)
+            for t in self.mpl_legend.get_texts():
+                t.set_color(self.textcolor)
             self.mpl_legend.draw_frame(self.show_legend_frame)
+            self.mpl_legend.legendPatch.set_facecolor(axes[0].get_axis_bgcolor())
+
         self.set_added_text_size()
         self.canvas.draw()
 

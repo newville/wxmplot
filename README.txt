@@ -52,9 +52,9 @@ user can zoom in, rotate, or flip the image, and adjust the smoothing of
 the image and adjust the color table and intensity scale.
 
 Programmatically, one can make the same adjustments to an ImagePanel by
-changing its configuaration attributes and runnign the redraw() method.
+changing its configuaration attributes and running the redraw() method.
 
 =====
 
-last update: 2011-Nov-20   Matt Newville <newville@cars.uchicago.edu>
+last update: 2016-Oct-24   Matt Newville <newville@cars.uchicago.edu>
 

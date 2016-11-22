@@ -2,7 +2,7 @@
 #
 # Name:      wxmplot
 # Version:   0.9.20
-user-configurable 2D plotting module, using wxPython
+# user-configurable 2D plotting module, using wxPython
 #            and matplotlib.
 # Author:    Matthew Newville
 # Copyright: Matthew Newville, The University of Chicago, 2016

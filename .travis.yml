@@ -19,7 +19,7 @@ install:
     - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy matplotlib nose
     - source activate test_env
     - conda config --add channels conda-forge
-    - conda install yaml pango pcre wxpython wxutils
+    - conda install yaml pango pcre wxpython
     - python setup.py install
 
 script:

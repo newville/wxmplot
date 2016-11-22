@@ -82,7 +82,8 @@ many additional methods to interact with the plots.
 
 .. method:: oplot(x, y, **kws)
 
-   Draw a plot of the numpy arrays *x* and *y*, overwriting any existing plot.
+   Draw a plot of the numpy arrays *x* and *y*, overplotting any existing
+   plot, so that both traces are visible.
 
    The :meth:`oplot` method has many optional parameters,  as listed in
    :ref:`Table of Plot Arguments <plotopt_table>`

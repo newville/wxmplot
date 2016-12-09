@@ -465,7 +465,7 @@ class ImagePanel(BasePanel):
         if event.xdata is None or event.ydata is None:
             return
 
-        ix, iy = round(event.xdata), round(event.ydata)
+        ix, iy = int(round(event.xdata)), int(round(event.ydata))
         if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
         if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix
 

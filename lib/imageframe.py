@@ -32,6 +32,57 @@ CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                      'prof':  ('Select Line Profile\tCtrl+K',
                                'Left-Drag to select like for profile')}
 
+class AutoContrastDialog(wx.Dialog):
+    """Configure Auto-Contrast Level"""
+    msg = '''Configure Auto-Contrast'''
+    def __init__(self, parent=None, conf=None,
+                 title='Auto-Contrast Configuration',
+                 size=wx.DefaultSize, pos=wx.DefaultPosition,
+                 style=wx.DEFAULT_DIALOG_STYLE):
+        self.conf = conf
+        if conf is None:
+            return
+        wid = -1
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
+
+        sizer = wx.GridBagSizer(4, 4)
+        clevel = float(conf.auto_contrast_level)
+
+        label = wx.StaticText(self, -1, "Contrast Percent Level:")
+        self.level = wx.TextCtrl(self, -1, "%.2f" % clevel, size=(100,-1))
+
+        sizer.Add(label,        (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.level,   (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(line, (2, 0), (1, 2),
+                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
+
+        btnsizer = wx.StdDialogButtonSizer()
+
+        btn1 = wx.Button(self, wx.ID_OK)
+        btn2 = wx.Button(self, wx.ID_CANCEL)
+        btn1.Bind(wx.EVT_BUTTON, self.onOK)
+        btn1.SetDefault()
+        btnsizer.AddButton(btn1)
+        btnsizer.AddButton(btn2)
+        btnsizer.Realize()
+
+        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def onOK(self, evt=None):
+        try:
+            val = float(self.level.GetValue())
+        except:
+            val = 1.0
+        self.conf.auto_contrast_level = val
+        evt.Skip()
+        return wx.ID_OK
+
+
 class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
@@ -112,6 +163,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mids.LOG_SCALE = wx.NewId()
         mids.AUTO_SCALE = wx.NewId()
         mids.ENHANCE   = wx.NewId()
+        mids.ENHANCECONFIG = wx.NewId()
         mids.BGCOL     = wx.NewId()
         mids.FLIP_H    = wx.NewId()
         mids.FLIP_V    = wx.NewId()
@@ -269,7 +321,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mint.Append(mids.LOG_SCALE,  'Log Scale Intensity\tCtrl+L',
                   'use logarithm to set intensity scale', wx.ITEM_CHECK)
         mint.Append(mids.ENHANCE,  'Toggle Contrast Enhancement\tCtrl+E',
-                  'Toggle contrast between 1%/99% and full intensity scale', wx.ITEM_CHECK)
+                  'Toggle contrast between auto-scale and full-scale', wx.ITEM_CHECK)
+
+        mint.Append(mids.ENHANCECONFIG,  'Set Auto-Contrast Level'
+                    'Set auto-contrast scale')
+
+        self.Bind(wx.EVT_MENU, self.onContrastConfig, id=mids.ENHANCECONFIG)
 
         mint.Append(mids.BGCOL, 'Toggle Background Color (Black/White)\tCtrl+W',
                   'Toggle background color for 3-color images', wx.ITEM_CHECK)
@@ -539,6 +596,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         lpanel.Fit()
         return lpanel
 
+
+    def onContrastConfig(self, event=None):
+        dlg = AutoContrastDialog(parent=self, conf=self.panel.conf)
+        dlg.CenterOnScreen()
+        val = dlg.ShowModal()
+        if val == wx.ID_OK:
+            pass
+        dlg.Destroy()
+
+
     def onContourConfig(self, event=None):
         panel = self.panel
         conf = panel.conf
@@ -638,6 +705,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = self.panel.conf
         img  = self.panel.conf.data
         enhance = conf.auto_contrast
+        clevel = conf.auto_contrast_level
+
         if len(img.shape) == 2: # intensity map
             col = 'int'
             jmin = imin = img.min()
@@ -645,7 +714,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.imin_val[col].SetValue('%.4g' % imin)
             self.imax_val[col].SetValue('%.4g' % imax)
             if enhance:
-                jmin, jmax = np.percentile(img, [1, 99])
+                jmin, jmax = np.percentile(img, [clevel, 100.0-clevel])
             xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
             xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
             self.cmap_hi[col].SetValue(xhi)

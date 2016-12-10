@@ -6,10 +6,7 @@ is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 
 import sys
 import matplotlib
-if (matplotlib.__version__ < '1.2'):
-    from matplotlib.nxutils import points_inside_poly
-else:
-    from matplotlib.path import Path
+from matplotlib.path import Path
 
 class Closure:
     """A very simple callback class to emulate a closure (reference to
@@ -42,6 +39,27 @@ class Closure:
             self.args = args
             return self.func(*self.args, **self.kws)
 
+def pack(window, sizer, expand=1.1):
+    "simple wxPython pack function"
+    tsize =  window.GetSize()
+    msize =  window.GetMinSize()
+    window.SetSizer(sizer)
+    sizer.Fit(window)
+    nsize = (10*int(expand*(max(msize[0], tsize[0])/10)),
+             10*int(expand*(max(msize[1], tsize[1])/10.)))
+    window.SetSize(nsize)
+
+
+
+def MenuItem(parent, menu, label='', longtext='', action=None, **kws):
+    """Add Item to a Menu, with action
+    m = Menu(parent, menu, label, longtext, action=None)
+    """
+    wid = wx.NewId()
+    item = menu.Append(wid, label, longtext, **kws)
+    if callable(action):
+        parent.Bind(wx.EVT_MENU, action, item)
+    return item
 
 class LabelEntry(wx.TextCtrl):
     """
@@ -233,7 +251,8 @@ class Printer:
                           width=self.pwidth,   margin=self.pmargin)
         self.preview = wx.PrintPreview(po1,po2,self.printerData)
 
-        if self.preview.Ok():
+        if ((is_wxPhoenix and self.preview.IsOk()) or
+            (not is_wxPhoenix and self.preview.Ok())):
             self.preview.SetZoom(65)
             frameInst= self.parent
             while not isinstance(frameInst, wx.Frame):

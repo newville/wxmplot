@@ -9,28 +9,15 @@ import time
 import wx
 import matplotlib
 from .plotpanel import PlotPanel
+from .utils import MenuItem
 
 class Menu_IDs:
     def __init__(self):
-        self.EXIT   = wx.NewId()
-        self.SAVE   = wx.NewId()
-        self.EXPORT = wx.NewId()
-        self.CONFIG = wx.NewId()
-        self.UNZOOM = wx.NewId()
-        self.HELP   = wx.NewId()
-        self.ABOUT  = wx.NewId()
-        self.PRINT  = wx.NewId()
-        self.PSETUP = wx.NewId()
-        self.PREVIEW= wx.NewId()
-        self.CLIPB  = wx.NewId()
-        self.SELECT_COLOR = wx.NewId()
-        self.SELECT_SMOOTH= wx.NewId()
-        self.TOGGLE_LEGEND = wx.NewId()
-        self.TOGGLE_GRID  = wx.NewId()
+        pass
 
 class BaseFrame(wx.Frame):
     """
-    MatPlotlib 2D plot as a wx.Frame, using PlotPanel
+    MatPlotlib 2DRadio plot as a wx.Frame, using PlotPanel
     """
     help_msg =  """Quick help:
 
@@ -71,7 +58,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.panel  = panel
         self.dpi    = dpi
         self.user_menus = user_menus
-        self.menuIDs = Menu_IDs()
         self.size = size
         self.axisbg = axisbg
 
@@ -137,49 +123,67 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.SetStatusText('',0)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        self.BuildMenu()
         self.panel = PlotPanel(self, size=self.size,
                                axisbg=self.axisbg,
                                output_title=self.output_title)
         self.panel.messenger = self.write_message
         sizer.Add(self.panel, 1, wx.EXPAND)
-        self.BindMenuToPanel()
+        self.BuildMenu()
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.Fit()
 
 
+    def Build_FileMenu(self):
+        mfile = wx.Menu()
+        ox = MenuItem(self, mfile, "&Save Image\tCtrl+S",
+                      "Save Image of Plot (PNG, SVG, JPG)",
+                      action=self.save_figure)
+        MenuItem(self, mfile, "&Copy\tCtrl+C",
+                 "Copy Plot Image to Clipboard",
+                 self.panel.canvas.Copy_to_Clipboard)
+
+        MenuItem(self, mfile, "Export Data",
+                "Export Data to ASCII Column file",
+                self.onExport)
+
+        mfile.AppendSeparator()
+        MenuItem(self, mfile, 'Page Setup...', 'Printer Setup',
+                 self.panel.PrintSetup)
+
+        MenuItem(self, mfile, 'Print Preview...', 'Print Preview',
+                 self.panel.PrintPreview)
+
+        MenuItem(self, mfile, "&Print\tCtrl+P", "Print Plot",
+                 self.panel.Print)
+
+        mfile.AppendSeparator()
+        MenuItem(self, mfile, "E&xit\tCtrl+Q", "Exit", self.onExit)
+        return mfile
 
     def BuildMenu(self):
-        mids = self.menuIDs
-        mfile = wx.Menu()
-        mfile.Append(mids.SAVE, "&Save Image\tCtrl+S",
-                     "Save Image of Plot (PNG, SVG, JPG)")
-        mfile.Append(mids.CLIPB, "&Copy\tCtrl+C",  "Copy Plot Image to Clipboard")
-        mfile.Append(mids.EXPORT, "Export Data",
-                     "Export Data to ASCII Column file")
-        mfile.AppendSeparator()
-        mfile.Append(mids.PSETUP, 'Page Setup...', 'Printer Setup')
-        mfile.Append(mids.PREVIEW, 'Print Preview...', 'Print Preview')
-        mfile.Append(mids.PRINT, "&Print\tCtrl+P", "Print Plot")
-        mfile.AppendSeparator()
-        mfile.Append(mids.EXIT, "E&xit\tCtrl+Q", "Exit the 2D Plot Window")
+        mfile = self.Build_FileMenu()
 
         mopts = wx.Menu()
-        mopts.Append(mids.CONFIG, "Configure Plot\tCtrl+K",
-                 "Configure Plot styles, colors, labels, etc")
-        mopts.Append(mids.TOGGLE_LEGEND, "Toggle Legend\tCtrl+L",
-                 "Toggle Legend Display")
-        mopts.Append(mids.TOGGLE_GRID, "Toggle Grid\tCtrl+G",
-                 "Toggle Grid Display")
+        MenuItem(self, mopts, "Configure Plot\tCtrl+K",
+                 "Configure Plot styles, colors, labels, etc",
+                 self.panel.configure)
+        MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
+                 "Toggle Legend Display",
+                 self.panel.toggle_legend)
+        MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
+                 "Toggle Grid Display",
+                 self.panel.toggle_grid)
+
         mopts.AppendSeparator()
-        mopts.Append(mids.UNZOOM, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range")
+        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.panel.unzoom)
 
         mhelp = wx.Menu()
-        mhelp.Append(mids.HELP, "Quick Reference",  "Quick Reference for WXMPlot")
-        mhelp.Append(mids.ABOUT, "About", "About WXMPlot")
+        MenuItem(self, mhelp, "Quick Reference",  "Quick Reference for WXMPlot", self.onHelp)
+        MenuItem(self, mhelp, "About", "About WXMPlot", self.onAbout)
 
         mbar = wx.MenuBar()
         mbar.Append(mfile, 'File')
@@ -191,33 +195,11 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mbar.Append(mhelp, '&Help')
 
         self.SetMenuBar(mbar)
-        self.Bind(wx.EVT_MENU, self.onExport,          id=mids.EXPORT)
-        self.Bind(wx.EVT_MENU, self.onHelp,            id=mids.HELP)
-        self.Bind(wx.EVT_MENU, self.onAbout,           id=mids.ABOUT)
-        self.Bind(wx.EVT_MENU, self.onExit ,           id=mids.EXIT)
-        self.Bind(wx.EVT_MENU, self.onExport ,         id=mids.EXPORT)
         self.Bind(wx.EVT_CLOSE,self.onExit)
 
     def BindMenuToPanel(self, panel=None):
-        if panel is None: panel = self.panel
-        if panel is not None:
-            p = panel
-            mids = self.menuIDs
-            self.Bind(wx.EVT_MENU, panel.configure,    id=mids.CONFIG)
-            self.Bind(wx.EVT_MENU, panel.toggle_legend, id=mids.TOGGLE_LEGEND)
-            self.Bind(wx.EVT_MENU, panel.toggle_grid, id=mids.TOGGLE_GRID)
-            self.Bind(wx.EVT_MENU, panel.unzoom,       id=mids.UNZOOM)
+        pass
 
-            self.Bind(wx.EVT_MENU, self.save_figure,  id=mids.SAVE)
-            self.Bind(wx.EVT_MENU, panel.Print,        id=mids.PRINT)
-            self.Bind(wx.EVT_MENU, panel.PrintSetup,   id=mids.PSETUP)
-            self.Bind(wx.EVT_MENU, panel.PrintPreview, id=mids.PREVIEW)
-            self.Bind(wx.EVT_MENU, panel.canvas.Copy_to_Clipboard,
-                      id=mids.CLIPB)
-
-    def onExport(self, event=None):
-        if self.panel is not None:
-            self.panel.onExport(event=event)
 
     def onAbout(self, event=None):
         dlg = wx.MessageDialog(self, self.about_msg, "About WXMPlot",

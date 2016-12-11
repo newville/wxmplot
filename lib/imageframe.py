@@ -38,7 +38,7 @@ class ColorMapPanel(wx.Panel):
     """color map interface"""
     def __init__(self, parent, imgpanel, color='int',
                  colormap_list=None, default=None,
-                 title='Color Table', maxval=1000, minval=0, **kws):
+                 title='Color Table',  **kws):
         wx.Panel.__init__(self, parent, -1,  **kws)
 
         self.imgpanel = imgpanel
@@ -75,7 +75,7 @@ class ColorMapPanel(wx.Panel):
             cmap = 'gray'
         self.imgpanel.conf.cmap[color] = get_cmap(cmap)
 
-        self.maxval = maxval
+        maxval = self.imgpanel.conf.cmap_range
         wd, ht = 1.00, 0.125
 
         self.cmap_dat = np.outer(np.ones(int(maxval*ht)),
@@ -89,13 +89,12 @@ class ColorMapPanel(wx.Panel):
 
         self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmap,
                                   interpolation='bilinear')
-        self.cmap_lo = wx.Slider(self, -1, minval, 0, maxval,
+        self.cmap_lo = wx.Slider(self, -1, 0, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
 
         self.cmap_hi = wx.Slider(self, -1, maxval, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
 
-        print("ColorMap ", color, default, maxval)
 
         self.cmap_lo.Bind(wx.EVT_SCROLL,  self.onStretchLow)
         self.cmap_hi.Bind(wx.EVT_SCROLL,  self.onStretchHigh)
@@ -114,7 +113,7 @@ class ColorMapPanel(wx.Panel):
         irow += 1
         sizer.Add(self.cmap_lo,      (irow, 0), (1, 4), labstyle, 2)
 
-        self.imin_val = LabelEntry(self, minval, size=65, labeltext='Range:',
+        self.imin_val = LabelEntry(self, 0, size=65, labeltext='Range:',
                                    action=partial(self.onThreshold, argu='lo'))
         self.imax_val = LabelEntry(self, maxval, size=65, labeltext=':',
                                    action=partial(self.onThreshold, argu='hi'))
@@ -160,8 +159,6 @@ class ColorMapPanel(wx.Panel):
             conf.cmap[col] = getattr(mpl_colormap, name)
         except:
             conf.cmap[col] = get_cmap(name)
-        print(" SET COLORMAP ", col)
-
         if hasattr(conf, 'contour'):
             xname = 'gray'
             if cmap_name == 'gray_r':
@@ -209,11 +206,10 @@ class ColorMapPanel(wx.Panel):
         conf = self.imgpanel.conf
         if not hasattr(conf, 'image'):
             return
-        # print(" redraw colormap ", col, self.cmap_img, conf.cmap[col])
+
         self.cmap_img.set_cmap(conf.cmap[col])
         lo = int(conf.cmap_lo[col])
         hi = int(conf.cmap_hi[col])
-        print("ColorMap CMAP_HI=", conf.cmap_hi)
         self.cmap_dat[:, :lo] = 0
         self.cmap_dat[:, lo:hi]  = np.linspace(0., 1., hi-lo)
         self.cmap_dat[:, hi:] = 1
@@ -237,7 +233,6 @@ class ColorMapPanel(wx.Panel):
         if (hi-lo)<2:
             hi = min(hi, conf.cmap_range)
             lo = max(lo, 0)
-        print("StretchCMap:  ", col, lo, hi, conf.cmap_range)
         self.cmap_lo.SetValue(lo)
         self.cmap_hi.SetValue(hi)
         conf.cmap_lo[col] = lo
@@ -441,8 +436,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     self.wids_subtitles[key].SetLabel(val)
 
         self.panel.conf.title = title
-        if colormap is not None:
-            self.set_colormap(name=colormap)
+        if colormap is not None and self.config_mode == 'int':
+            self.cmap_panels['int'].set_colormap(name=colormap)
         contour_value = 0
         if style == 'contour':
             contour_value = 1
@@ -564,14 +559,25 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             x = self.panel.ydata
             y = self.panel.conf.data.sum(axis=1)
             axname = 'horizontal'
+            if x is None:
+                x = np.arange(y.shape[0])
+
         else:
             x = self.panel.xdata
             y = self.panel.conf.data.sum(axis=0)
+            if x is None:
+                x = np.arange(y.shape[0])
+
             axname = 'vertical'
         title = '%s: sum along %s axis' % (self.GetTitle(), axname)
 
         pf = PlotFrame(title=title, parent=self, size=(500, 250))
-        pf.plot(x, y)
+        if len(y.shape) == 2 and y.shape[1] == 3:
+            pf.plot(x, y[:,0], color='red')
+            pf.oplot(x, y[:,1], color='green')
+            pf.oplot(x, y[:,2], color='blue')
+        else:
+            pf.plot(x, y)
         pf.Raise()
         pf.Show()
 
@@ -593,7 +599,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         lsty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
-        print(" Build Config Panel mode ", self.config_mode)
+
         if self.config_mode == 'rgb':
             for col in ('red', 'green', 'blue'):
                 self.cmap_panels[col] =  ColorMapPanel(self.config_panel,
@@ -603,17 +609,22 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                                        default=col,
                                                        colormap_list=None)
 
-                sizer.Add(self.cmap_panels[col], 1, lsty, 1)
+                sizer.Add(self.cmap_panels[col], 0, lsty, 2)
+
+                sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
+                                        style=wx.LI_HORIZONTAL), 0, lsty, 2)
+
+
         else:
             self.cmap_panels['int'] =  ColorMapPanel(self.config_panel,
                                                      self.panel,
                                                      color='int', default='gray',
                                                      colormap_list=ColorMap_List)
 
-            sizer.Add(self.cmap_panels['int'],  1, lsty, 1)
+            sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
+                                    style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
-        sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
-                                style=wx.LI_HORIZONTAL), 0, lsty, 1)
+            sizer.Add(self.cmap_panels['int'],  0, lsty, 1)
 
         cust = self.CustomConfig(self.config_panel, None, 0)
         if cust is not None:
@@ -648,7 +659,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         dlg.Destroy()
         if conf.style != 'contour':
             return
-        self.set_colormap()
+
+        if self.config_mode == 'int':
+            self.cmap_panels['int'].set_colormap()
+
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       xlabel=panel.xlab, ylabel=panel.ylab,
@@ -665,7 +679,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if event.IsChecked():
             conf.style = 'contour'
         nlevels = int(conf.ncontour_levels)
-        self.set_colormap()
+        if self.config_mode == 'int':
+            self.cmap_panels['int'].set_colormap()
         panel.axes.cla()
         panel.display(conf.data, x=panel.xdata, y = panel.ydata,
                       nlevels=nlevels, contour_labels=conf.contour_labels,
@@ -684,9 +699,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if col.startswith('wh'):
             cmaps = ('Reds', 'Greens', 'Blues')
 
-        self.set_colormap(name=cmaps[0], col='red')
-        self.set_colormap(name=cmaps[1], col='green')
-        self.set_colormap(name=cmaps[2], col='blue')
+        self.cmap_panels['red'].set_colormap(name=cmaps[0])
+        self.cmap_panels['green'].set_colormap(name=cmaps[1])
+        self.cmap_panels['blue'].set_colormap(name=cmaps[2])
         self.panel.redraw()
 
     def onLasso(self, data=None, selected=None, mask=None, **kws):
@@ -697,12 +712,18 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = self.panel.conf
         if len(data.shape) == 2: # intensity map
             imin, imax = data.min(), data.max()
-            self.cmap_panels['int'].imin_val.SetValue('%.4g' % imin)
-            self.cmap_panels['int'].imax_val.SetValue('%.4g' % imax)
-            self.cmap_panels['int'].imin_val.Enable()
-            self.cmap_panels['int'].imax_val.Enable()
             conf.int_lo['int'] = imin
             conf.int_hi['int'] = imax
+            cpan = self.cmap_panels['int']
+
+            cpan.cmap_lo.SetValue(imin)
+            cpan.cmap_hi.SetValue(imax)
+
+            cpan.imin_val.SetValue('%.4g' % imin)
+            cpan.imax_val.SetValue('%.4g' % imax)
+            cpan.imin_val.Enable()
+            cpan.imax_val.Enable()
+
         else:
             for ix, cnam in ((0, 'red'), (1, 'green'), (2, 'blue')):
                 imin, imax = data[:,:,ix].min(), data[:,:,ix].max()
@@ -710,7 +731,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 conf.int_hi[cnam] = imax
                 self.cmap_panels[cnam].imin_val.SetValue('%.4g' % imin)
                 self.cmap_panels[cnam].imax_val.SetValue('%.4g' % imax)
-
+                self.cmap_panels[cnam].imin_val.Enable()
+                self.cmap_panels[cnam].imax_val.Enable()
 
     def onEnhanceContrast(self, event=None):
         """change image contrast, using scikit-image exposure routines"""
@@ -738,6 +760,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             conf.cmap_lo[col] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
             conf.cmap_hi[col] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
 
+            # print("Set contrast level =", conf.cmap_hi, conf.cmap_range)
+
             self.cmap_panels[col].cmap_hi.SetValue(xhi)
             self.cmap_panels[col].cmap_lo.SetValue(xlo)
             self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
@@ -754,71 +778,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
                 conf.cmap_lo[col] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
                 conf.cmap_hi[col] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
-                print(" set contrast level ", col, imin, imax, conf.cmap_range, xlo, xhi)
                 self.cmap_panels[col].cmap_hi.SetValue(xhi)
                 self.cmap_panels[col].cmap_lo.SetValue(xlo)
 
                 self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
                 self.cmap_panels[col].redraw_cmap()
-
-
-    def set_colormap(self, name=None, col='int'):
-        conf = self.panel.conf
-        try:
-            if name is None:
-                name = self.cmap_choice.GetStringSelection()
-        except:
-            return
-        conf.cmap_reverse = False
-        try:
-            conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
-        except:
-            pass
-        if conf.cmap_reverse and not name.endswith('_r'):
-            name = name + '_r'
-        elif not conf.cmap_reverse and name.endswith('_r'):
-            name = name[:-2]
-        cmap_name = name
-        try:
-            conf.cmap[col] = getattr(mpl_colormap, name)
-        except:
-            conf.cmap[col] = get_cmap(name)
-        if hasattr(conf, 'contour'):
-            xname = 'gray'
-            if cmap_name == 'gray_r':
-                xname = 'Reds_r'
-            elif cmap_name == 'gray':
-                xname = 'Reds'
-            elif cmap_name.endswith('_r'):
-                xname = 'gray_r'
-            conf.contour.set_cmap(getattr(mpl_colormap, xname))
-        if hasattr(conf, 'image'):
-            conf.image.set_cmap(conf.cmap[col])
-        self.redraw_cmap(col=col)
-
-        if hasattr(conf, 'highlight_areas'):
-            if hasattr(conf.cmap[col], '_lut'):
-                rgb  = [int(i*240)^255 for i in conf.cmap[col]._lut[0][:3]]
-                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-                for area in conf.highlight_areas:
-                    for w in area.collections + area.labelTexts:
-                        w.set_color(col)
-
-    def redraw_cmap(self, col='int'):
-        conf = self.panel.conf
-        if not hasattr(conf, 'image'):
-            return
-        # conf.image.set_cmap(conf.cmap)
-        self.cmap_img[col].set_cmap(conf.cmap[col])
-        lo = int(conf.cmap_lo[col])
-        hi = int(conf.cmap_hi[col])
-
-        self.cmap_dat[col][:, :lo] = 0
-        self.cmap_dat[col][:, lo:hi]  = np.linspace(0., 1., hi-lo)
-        self.cmap_dat[col][:, hi:] = 1
-        self.cmap_img[col].set_data(self.cmap_dat[col])
-        self.cmap_canvas[col].draw()
-
 
     def onLogScale(self, event=None):
         self.panel.conf.log_scale = not self.panel.conf.log_scale

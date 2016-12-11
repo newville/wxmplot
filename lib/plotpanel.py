@@ -70,10 +70,12 @@ class PlotPanel(BasePanel):
     """
 
     def __init__(self, parent, size=None, dpi=150, axisbg=None, fontsize=9,
-                 trace_color_callback=None, output_title='plot', **kws):
+                 trace_color_callback=None, output_title='plot',
+                 no_mouse_capture=False, **kws):
 
         if size is None:
             size=(700, 450)
+        self.no_mouse_capture = no_mouse_capture
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -539,8 +541,9 @@ class PlotPanel(BasePanel):
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 
-        if sys.platform.lower().startswith('darw'):
-            def swallow_mouse(*args): pass
+        if sys.platform.lower().startswith('darw') or self.no_mouse_capture:
+            def swallow_mouse(*args):
+                pass
             self.canvas.CaptureMouse = swallow_mouse
 
         self.printer.canvas = self.canvas

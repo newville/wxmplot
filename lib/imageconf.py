@@ -40,8 +40,8 @@ class ImageConfig:
         self.auto_contrast_level = 1.0
         self.datalimits = [None, None, None, None]
         self.cmap_lo = {'int': 0, 'red': 0, 'green': 0, 'blue': 0}
-        self.cmap_hi = {'int': 256, 'red': 256, 'green': 256, 'blue': 256}
-        self.cmap_range = 256
+        self.cmap_hi = {'int': 1000, 'red': 1000, 'green': 1000, 'blue': 1000}
+        self.cmap_range = 1000
         self.tricolor_bg = 'black'
         self.cmap_splines = {'int': None, 'red': None, 'green': None, 'blue': None}
         self.int_lo = {'int': '0', 'red': '0', 'green': '0', 'blue': '0'}

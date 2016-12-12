@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
-# from setuptools import setup
-from distutils.core import setup
+from setuptools import setup
+
 try:
     from lib import __version__ as version
 except:
     version = 'unknown'
 
-long_desc = ''' A library for wxPython based on matplotlib for
-high-level, richly featured 2-D plotting and displaying 3-D data
-as intensity maps and contour plots.  Easy-to-use wx Panels and
-Frame provide high-quality plots and allow some user interaction
-and customization of the plots.'''
+long_desc = '''A library for wxPython based on matplotlib for high-level,
+richly featured 2-D plotting and displaying 3-D data as intensity maps and
+contour plots.  Easy-to-use wx Panels and Frame provide high-quality plots
+and allow some user interaction and customization of the plots.  '''
 
 setup(name = 'wxmplot',
       version = version,

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PlotPanel: A wx.Panel for Basic 2D Line Plots &mdash; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
+    <title>PlotPanel: A wx.Panel for Basic 2D Line Plots &#8212; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.18',
+        VERSION:     '0.9.22',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
     <link rel="next" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
     <link rel="prev" title="Downloading and Installation" href="installation.html" /> 
@@ -43,7 +45,7 @@
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -81,14 +83,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -174,15 +173,16 @@ plot, or save the image to a file.</p>
 displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal"><span class="pre">plot()</span></code></a> method
 has many optional parameters, all using keyword/value argument.  Since most
 of these are shared with the <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal"><span class="pre">oplot()</span></code></a> method, the full set of parameters
-is given in <a class="reference internal" href="#plotopt-table"><span>Table of Plot Arguments</span></a></p>
+is given in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="plotpanel.oplot">
 <code class="descclassname">plotpanel.</code><code class="descname">oplot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overwriting any existing plot.</p>
+<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overplotting any existing
+plot, so that both traces are visible.</p>
 <p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal"><span class="pre">oplot()</span></code></a> method has many optional parameters,  as listed in
-<a class="reference internal" href="#plotopt-table"><span>Table of Plot Arguments</span></a></p>
+<a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
 </dd></dl>
 
 <p id="plotopt-table"><strong>Table of Plot Arguments</strong> These arguments apply for the <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal"><span class="pre">oplot()</span></code></a>, and
@@ -539,7 +539,7 @@ for dynamic plots such as a StripChart.</p>
 <code class="descclassname">plotpanel.</code><code class="descname">scatterplot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.scatterplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>draws a 2d scatterplot.   This is a collection of points that are not meant to imply a specific
 order that can be connected by a continuous line.    A full list of arguments are listed in
-<a class="reference internal" href="#plotopt-table"><span>Table of Plot Arguments</span></a>.</p>
+<a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -764,11 +764,11 @@ shown.</p>
 <div class="section" id="basic-example">
 <h3>Basic Example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h3>
 <p>A basic plot can be made using a <a class="reference internal" href="#plotapp.PlotApp" title="plotapp.PlotApp"><code class="xref py py-class docutils literal"><span class="pre">PlotApp</span></code></a> and a simple script like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
-<span class="c"># simple wxmplot example</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># simple wxmplot example</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">random</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="kn">import</span> <span class="n">PlotApp</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">PlotApp</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">PlotApp</span><span class="p">()</span>
 
@@ -776,12 +776,13 @@ shown.</p>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.7</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.3</span><span class="p">))</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;WXMPlot Demo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;decaying sine&#39;</span><span class="p">,</span>
-         <span class="n">ylabel</span><span class="o">=</span><span class="s">r&#39;$\chi(x)$&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;$x \ (\AA)$&#39;</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;noisy cosine&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WXMPlot Demo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;decaying sine&#39;</span><span class="p">,</span>
+         <span class="n">ylabel</span><span class="o">=</span><span class="s1">r&#39;$\chi(x)$&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$x \ (\AA)$&#39;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;noisy cosine&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s">&#39;Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
 </pre></div>
 </div>
 <p>This gives a window with a plot that looks like this:</p>
@@ -794,35 +795,30 @@ like this:</p>
 <div class="section" id="scatterplot-example">
 <h3>Scatterplot Example<a class="headerlink" href="#scatterplot-example" title="Permalink to this headline">¶</a></h3>
 <p>An example scatterplot can be produced with a script like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
-<span class="c">#</span>
-<span class="c"># scatterplot example, with lassoing and</span>
-<span class="c"># a user-level lasso-callback</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">#</span>
+<span class="c1"># scatterplot example, with lassoing and</span>
+<span class="c1"># a user-level lasso-callback</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&#39;frozen&#39;</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">wxversion</span>
-    <span class="n">wxversion</span><span class="o">.</span><span class="n">ensureMinimal</span><span class="p">(</span><span class="s">&#39;2.8&#39;</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">wxmplot</span>
-
 <span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">wxmplot</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 
 <span class="n">x</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mf">20.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">y</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">onlasso</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">print</span> <span class="s">&#39;:: lasso &#39;</span><span class="p">,</span> <span class="n">selected</span>
+<span class="k">def</span> <span class="nf">onlasso</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="s1">&#39;:: lasso &#39;</span><span class="p">,</span> <span class="n">selected</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
 
 <span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
-<span class="n">pframe</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;Scatter Plot&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-                   <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;$ x\, \mathrm{(\AA)}$&#39;</span><span class="p">,</span>
-                   <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;$ y\, \mathrm{(\AA^{-1})}$&#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scatter Plot&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                   <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$ x\, \mathrm{(\AA)}$&#39;</span><span class="p">,</span>
+                   <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;$ y\, \mathrm{(\AA^{-1})}$&#39;</span><span class="p">)</span>
 <span class="n">pframe</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lasso_callback</span> <span class="o">=</span> <span class="n">onlasso</span>
-<span class="n">pframe</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s">&#39;WXMPlot PlotFrame example: Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;WXMPlot PlotFrame example: Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
 <span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
-<span class="c">#</span>
+<span class="c1">#</span>
 <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -833,33 +829,32 @@ like this:</p>
 <h3>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Permalink to this headline">¶</a></h3>
 <p>An example using both right and left axes with different scales can be
 created with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
-<span class="c">#</span>
-<span class="c">#  example plot with left and right axes with different scales</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">#</span>
+<span class="c1">#  example plot with left and right axes with different scales</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&#39;frozen&#39;</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">wxversion</span>
-    <span class="n">wxversion</span><span class="o">.</span><span class="n">ensureMinimal</span><span class="p">(</span><span class="s">&#39;2.8&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">wxmplot</span>
 
 <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">7</span><span class="n">e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
 <span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
 
-<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;Test 2 Axes with different y scales&#39;</span><span class="p">,</span>
-            <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;x (mm)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y1&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=-</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
-<span class="n">pframe</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y2label</span><span class="o">=</span><span class="s">&#39;y2&#39;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Test 2 Axes with different y scales&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y1&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=-</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y2label</span><span class="o">=</span><span class="s1">&#39;y2&#39;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
 <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+
+
 </pre></div>
 </div>
 <p>and gives a plot that looks like this:</p>
@@ -898,12 +893,12 @@ script also shows a dynamic, time-based plot.</p>
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2015, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

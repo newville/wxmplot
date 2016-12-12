@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Downloading and Installation &mdash; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
+    <title>Downloading and Installation &#8212; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.18',
+        VERSION:     '0.9.22',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
     <link rel="next" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
     <link rel="prev" title="WXMPLOT: Plotting widgets for wxPython with matplotlib" href="index.html" /> 
@@ -43,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="WXMPLOT: Plotting widgets for wxPython with matplotlib"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -76,14 +78,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -98,33 +97,36 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The wxmplot package requires Python, wxPython, numpy, and matplotlib.  Some
-of the example applications rely on the Image module as well.</p>
-<p>With wxPython and the WX matplotlib backend supported well on Python 2.7,
-but poorly for Python 3, little testing has been done with wxPhoenix or the
-matplotlib WX backend.</p>
+<p>The wxmplot package requires wxpython, matplotlib, numpy, and six.</p>
+<p>For wxPython Classic, wxmplot works well with Python 2.7, but not Python 3.
+Since matplotlib 1.5 introduced support for wxPython Phoenix, wxmplot also
+works with matplotlib 1.5, wxPython Phoenix 3.0.3, and with both Python 2.7
+and Python 3.5.  As wxPython Phoenix is still in development (available at
+<a class="reference external" href="http://wxpython.org/Phoenix/snapshot-builds/">http://wxpython.org/Phoenix/snapshot-builds/</a>), support for it should be
+viewed as provisional.  Testing with Phoenix and with Python 3.5 has been
+modest, but all wxmplot functionality appears to work.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
 <p>The latest version is available from <a class="reference external" href="http://pypi.python.org/pypi/wxmplot">PyPI</a> or <a class="reference external" href="http://github.com/newwville/wxmplot">github</a>, and the package
 can be installed with:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install wxmplot
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">wxmplot</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
 <p>To get the latest development version, use:</p>
-<div class="highlight-python"><div class="highlight"><pre>git clone http://github.com/newville/wxmplot.git
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">newville</span><span class="o">/</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="installation-from-source">
 <h2>Installation from Source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h2>
 <p>wxmplot is a pure python module, so installation on all platforms can use the source kit:</p>
-<div class="highlight-python"><div class="highlight"><pre>tar xvzf wxmplot-0.9.XX.tar.gz
-cd wxmplot-0.9.XX/
-python setup.py install
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="n">xvzf</span> <span class="n">wxmplot</span><span class="o">-</span><span class="mf">0.9</span><span class="o">.</span><span class="n">XX</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cd</span> <span class="n">wxmplot</span><span class="o">-</span><span class="mf">0.9</span><span class="o">.</span><span class="n">XX</span><span class="o">/</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>You can also install with <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">wxmplot</span></code>, or for Anaconda Python,
@@ -174,12 +176,12 @@ DEALINGS IN THIS SOFTWARE.</p>
         <li class="right" >
           <a href="index.html" title="WXMPLOT: Plotting widgets for wxPython with matplotlib"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2015, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

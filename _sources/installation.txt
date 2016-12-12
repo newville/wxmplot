@@ -5,12 +5,15 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The wxmplot package requires Python, wxPython, numpy, and matplotlib.  Some
-of the example applications rely on the Image module as well.
+The wxmplot package requires wxpython, matplotlib, numpy, and six.
 
-With wxPython and the WX matplotlib backend supported well on Python 2.7,
-but poorly for Python 3, little testing has been done with wxPhoenix or the
-matplotlib WX backend.
+For wxPython Classic, wxmplot works well with Python 2.7, but not Python 3.
+Since matplotlib 1.5 introduced support for wxPython Phoenix, wxmplot also
+works with matplotlib 1.5, wxPython Phoenix 3.0.3, and with both Python 2.7
+and Python 3.5.  As wxPython Phoenix is still in development (available at
+http://wxpython.org/Phoenix/snapshot-builds/), support for it should be
+viewed as provisional.  Testing with Phoenix and with Python 3.5 has been
+modest, but all wxmplot functionality appears to work.
 
 Downloads
 ~~~~~~~~~~~~~

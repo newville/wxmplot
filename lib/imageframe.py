@@ -206,9 +206,6 @@ class ColorMapPanel(wx.Panel):
     def redraw_cmap(self):
         col = self.icol
         conf = self.imgpanel.conf
-        if not hasattr(conf, 'image'):
-            return
-
         self.cmap_img.set_cmap(conf.cmap[col])
         lo = int(conf.cmap_lo[col])
         hi = int(conf.cmap_hi[col])
@@ -219,12 +216,10 @@ class ColorMapPanel(wx.Panel):
         self.cmap_canvas.draw()
 
     def onStretchLow(self, event=None):
-        col = self.icol
         high = self.cmap_hi.GetValue()
         self.StretchCMap(event.GetInt(), high)
 
     def onStretchHigh(self, event=None):
-        col = self.icol
         low = self.cmap_lo.GetValue()
         self.StretchCMap(low, event.GetInt())
 

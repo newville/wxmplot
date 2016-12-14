@@ -8,7 +8,7 @@ import wx
 import matplotlib
 
 from functools import partial
-from .utils import pack
+from .utils import pack, MenuItem
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
 
@@ -139,6 +139,52 @@ class StackedPlotFrame(BaseFrame):
         self.SetSizerAndFit(sizer)
         self.BuildMenu()
 
+    def BuildMenu(self):
+        mfile = self.Build_FileMenu()
+
+        mopts = wx.Menu()
+        MenuItem(self, mopts, "Configure Plot\tCtrl+K",
+                 "Configure Plot styles, colors, labels, etc",
+                 self.panel.configure)
+        MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
+                 "Toggle Legend Display",
+                 self.panel.toggle_legend)
+        MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
+                 "Toggle Grid Display",
+                 self.panel.toggle_grid)
+
+        mopts.AppendSeparator()
+        MenuItem(self, mopts, "Configure Lower Plot",
+                 "Configure Plot styles, colors, labels, etc",
+                 self.panel_bot.configure)
+        MenuItem(self, mopts, "Toggle Legend, Lower Plot",
+                 "Toggle Legend Display",
+                 self.panel_bot.toggle_legend)
+        MenuItem(self, mopts, "Toggle Grid, Lower Plot",
+                 "Toggle Grid Display",
+                 self.panel_bot.toggle_grid)
+
+        mopts.AppendSeparator()
+
+        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.panel.unzoom)
+
+        mhelp = wx.Menu()
+        MenuItem(self, mhelp, "Quick Reference",  "Quick Reference for WXMPlot", self.onHelp)
+        MenuItem(self, mhelp, "About", "About WXMPlot", self.onAbout)
+
+        mbar = wx.MenuBar()
+        mbar.Append(mfile, 'File')
+        mbar.Append(mopts, '&Options')
+        if self.user_menus is not None:
+            for title, menu in self.user_menus:
+                mbar.Append(menu, title)
+
+        mbar.Append(mhelp, '&Help')
+
+        self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_CLOSE,self.onExit)
 
     def set_viewlimits(self, autoscale=False, panel='top'):
         """update xy limits of a plot, as used with .update_line() """

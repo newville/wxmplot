@@ -376,7 +376,7 @@ class PlotPanel(BasePanel):
             offsets=self.conf.scatter_data,
             transOffset= self.axes.transData)
         self.axes.add_collection(self.conf.scatter_coll)
-        # self.set_viewlimits(axes=axes)
+        self.set_viewlimits()
 
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():

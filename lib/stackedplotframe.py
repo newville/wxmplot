@@ -5,8 +5,9 @@
 ##   being 1/4 the height (configurable) and the dependent panel
 
 import wx
+import numpy as np
 import matplotlib
-
+from matplotlib.ticker import NullFormatter, NullLocator
 from functools import partial
 from .utils import pack, MenuItem
 from .plotpanel import PlotPanel
@@ -17,7 +18,7 @@ class StackedPlotFrame(BaseFrame):
     Top/Bottom MatPlotlib panels in a single frame
     """
     def __init__(self, parent=None, title ='Stacked Plot Frame',
-                 framesize=(950,550), panelsize=(650,550),
+                 framesize=(850,450), panelsize=(550,450),
                  ratio=3.0, **kws):
 
         BaseFrame.__init__(self, parent=parent, title=title,
@@ -26,6 +27,7 @@ class StackedPlotFrame(BaseFrame):
         self.panelsize = panelsize
         self.panel = None
         self.panel_bot = None
+        self.xlabel = None
         self.BuildFrame()
 
     def get_panel(self, panelname):
@@ -33,15 +35,24 @@ class StackedPlotFrame(BaseFrame):
             return self.panel_bot
         return self.panel
 
-    def plot(self, x, y, panel='top', **kws):
+    def plot(self, x, y, panel='top', xlabel=None, **kws):
         """plot after clearing current plot """
         panel = self.get_panel(panel)
-        panel.plot(x,y,**kws)
+        panel.plot(x, y, **kws)
+        if xlabel is not None:
+            self.xlabel = xlabel
+        if self.xlabel is not None:
+            self.panel_bot.set_xlabel(self.xlabel)
 
-    def oplot(self, x, y, panel='top', **kws):
+    def oplot(self, x, y, panel='top', xlabel=None, **kws):
         """plot method, overplotting any existing plot """
         panel = self.get_panel(panel)
-        panel.oplot(x,y,**kws)
+        panel.oplot(x, y, **kws)
+        if xlabel is not None:
+            self.xlabel = xlabel
+        if self.xlabel is not None:
+            self.panel_bot.set_xlabel(self.xlabel)
+
 
     def update_line(self, t, x, y, panel='top', **kws):
         """overwrite data for trace t """
@@ -76,8 +87,7 @@ class StackedPlotFrame(BaseFrame):
 
     def set_xlabel(self,s, panel='top'):
         "set plot xlabel"
-        panel = self.get_panel(panel)
-        panel.set_xlabel(s)
+        self.panel_bot.set_xlabel(s)
 
     def set_ylabel(self,s, panel='top'):
         "set plot xlabel"
@@ -109,11 +119,13 @@ class StackedPlotFrame(BaseFrame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         botsize = self.panelsize[0], self.panelsize[1]/self.ratio
-        margins = {'top': dict(left=0.15, bottom=0.15, top=0.90, right=0.95),
-                   'bot': dict(left=0.15, bottom=0.15, top=0.95, right=0.95)}
+        margins = {'top': dict(left=0.15, bottom=0.01, top=0.90, right=0.95),
+                   'bot': dict(left=0.15, bottom=0.40, top=0.99, right=0.95)}
 
         self.panel     = PlotPanel(self, size=self.panelsize)
         self.panel_bot = PlotPanel(self, size=botsize)
+        self.panel.xformatter = self.null_formatter
+        self.panel_bot.yformatter = self.bot_yformatter
 
         for pan, pname in ((self.panel, 'top'), (self.panel_bot, 'bot')):
             pan.messenger = self.write_message
@@ -129,6 +141,8 @@ class StackedPlotFrame(BaseFrame):
         null_events = {'leftdown': None, 'leftup': None, 'rightdown': None,
                        'rightup': None, 'motion': None, 'keyevent': None}
         self.panel_bot.cursor_modes = {'zoom': null_events}
+        self.panel_bot.axes.xaxis.set_major_formatter(NullFormatter())
+        self.panel_bot.axes.tick_params(axis='y', labelsize=8)
 
         sizer.Add(self.panel,self.ratio, wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
         sizer.Add(self.panel_bot, 1,     wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
@@ -242,3 +256,59 @@ class StackedPlotFrame(BaseFrame):
             p.conf.zoom_lims = None
 
             p.unzoom(event)
+
+    def null_formatter(self, x, pos, type='x'):
+        return ''
+
+
+    def bot_yformatter(self, val, type=''):
+        """custom formatter for FuncFormatter() and bottom panel"""
+        fmt, v = '%1.5g','%1.5g'
+
+        ax = self.panel_bot.axes.yaxis
+        try:
+            dtick = 0.1 * ax.get_view_interval().span()
+        except:
+            dtick = 0.2
+
+        try:
+            ticks = ax.get_major_locator()()
+            dtick = abs(ticks[1] - ticks[0])
+        except:
+            pass
+
+        ival = 0
+        if val > ticks[0]:
+            ival = max(np.where(ticks <= val)[0])
+
+        if len(ticks) > 4 and ival % 2 == 1 or ival > len(ticks)-2:
+            return ''
+        if   dtick > 29999:
+            fmt, v = ('%1.5g', '%1.6g')
+        elif dtick > 1.99:
+            fmt, v = ('%1.0f', '%1.2f')
+        elif dtick > 0.099:
+            fmt, v = ('%1.1f', '%1.3f')
+        elif dtick > 0.0099:
+            fmt, v = ('%1.2f', '%1.4f')
+        elif dtick > 0.00099:
+            fmt, v = ('%1.3f', '%1.5f')
+        elif dtick > 0.000099:
+            fmt, v = ('%1.4f', '%1.6e')
+        elif dtick > 0.0000099:
+            fmt, v = ('%1.5f', '%1.6e')
+
+        s =  fmt % val
+        s.strip()
+        s = s.replace('+', '')
+        while s.find('e0')>0:
+            s = s.replace('e0','e')
+        while s.find('-0')>0:
+            s = s.replace('-0','-')
+        if type == 'y':
+            self._yfmt = v
+        if type == 'y2':
+            self._y2fmt = v
+        if type == 'x':
+            self._xfmt = v
+        return s

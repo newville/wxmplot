@@ -137,9 +137,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def Build_FileMenu(self):
         mfile = wx.Menu()
-        ox = MenuItem(self, mfile, "&Save Image\tCtrl+S",
-                      "Save Image of Plot (PNG, SVG, JPG)",
-                      action=self.save_figure)
+        MenuItem(self, mfile, "&Save Image\tCtrl+S",
+                 "Save Image of Plot (PNG, SVG, JPG)",
+                 action=self.save_figure)
         MenuItem(self, mfile, "&Copy\tCtrl+C",
                  "Copy Plot Image to Clipboard",
                  self.panel.canvas.Copy_to_Clipboard)

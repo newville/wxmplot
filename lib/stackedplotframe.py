@@ -160,23 +160,16 @@ class StackedPlotFrame(BaseFrame):
         MenuItem(self, mopts, "Configure Plot\tCtrl+K",
                  "Configure Plot styles, colors, labels, etc",
                  self.panel.configure)
+        MenuItem(self, mopts, "Configure Lower Plot",
+                 "Configure Plot styles, colors, labels, etc",
+                 self.panel_bot.configure)
         MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
                  "Toggle Legend Display",
                  self.panel.toggle_legend)
         MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
                  "Toggle Grid Display",
-                 self.panel.toggle_grid)
+                 self.toggle_grid)
 
-        mopts.AppendSeparator()
-        MenuItem(self, mopts, "Configure Lower Plot",
-                 "Configure Plot styles, colors, labels, etc",
-                 self.panel_bot.configure)
-        MenuItem(self, mopts, "Toggle Legend, Lower Plot",
-                 "Toggle Legend Display",
-                 self.panel_bot.toggle_legend)
-        MenuItem(self, mopts, "Toggle Grid, Lower Plot",
-                 "Toggle Grid Display",
-                 self.panel_bot.toggle_grid)
 
         mopts.AppendSeparator()
 
@@ -199,6 +192,15 @@ class StackedPlotFrame(BaseFrame):
 
         self.SetMenuBar(mbar)
         self.Bind(wx.EVT_CLOSE,self.onExit)
+
+    def toggle_grid(self, event=None, show=None):
+        "toggle grid on top/bottom panels"
+        if show is None:
+            show = not self.panel.conf.show_grid
+        for p in (self.panel, self.panel_bot):
+            p.conf.enable_grid(show)
+
+
 
     def set_viewlimits(self, autoscale=False, panel='top'):
         """update xy limits of a plot, as used with .update_line() """

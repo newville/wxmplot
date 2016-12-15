@@ -11,17 +11,17 @@ import wx
 import numpy
 from wxmplot import StackedPlotFrame
 
-x = numpy.arange(0.0, 10.0, 0.1)
-noise = numpy.random.normal(size=len(x), scale=0.06)
+x = numpy.arange(0.0, 30.0, 0.1)
+noise = numpy.random.normal(size=len(x), scale=0.096)
 
 y1 = numpy.sin(2*x)/(x+2)
 y2 = y1 + noise
 
 app = wx.App()
 
-pframe = StackedPlotFrame(title='Stacked Example', ratio=3.0)
+pframe = StackedPlotFrame(title='Stacked Example', ratio=3.000)
 
-pframe.plot(x, y2, label='data(fake)', ylabel='signal',xlabel='x')
+pframe.plot(x, y2, label='data(fake)', ylabel='signal', xlabel='x', title='some fit')
 
 pframe.oplot(x, y1, label='simple theory', show_legend=True)
 pframe.plot(x, noise, panel='bottom', ylabel='residual')

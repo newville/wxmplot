@@ -26,7 +26,7 @@ class BasePanel(wx.Panel):
          bindings for keyboard short-cuts
     """
     def __init__(self, parent, messenger=None,
-                 show_config_popup=True,
+                 show_config_popup=True, zoom_callback=None,
                  output_title=None, **kws):
 
         wx.Panel.__init__(self, parent, -1, **kws)
@@ -52,6 +52,7 @@ class BasePanel(wx.Panel):
         self.user_limits = {}
         # self.zoom_lims = []    # x, y coords zoom levels
         self.zoom_ini  = None  # x, y coords for zoom-box
+        self.zoom_callback = zoom_callback
         self.rbbox = None
         self.zdc = None
         self.cursor_modes = {}
@@ -82,6 +83,7 @@ class BasePanel(wx.Panel):
             def swallow_mouse(*args):
                 pass
             self.canvas.CaptureMouse = swallow_mouse
+            self.canvas.ReleaseeMouse = swallow_mouse
 
         self.BuildPopup()
 
@@ -540,13 +542,20 @@ class BasePanel(wx.Panel):
             # now apply limits:
             self.set_viewlimits()
 
+            if callable(self.zoom_callback):
+                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
+
     def lasso_motion(self, event=None):
         """motion event handler for lasso mode"""
         self.report_motion(event=event)
 
     def lasso_leftdown(self, event=None):
         """leftdown event handler for lasso mode"""
-        self.report_leftdown(event=event)
+        try:
+            self.report_leftdown(event=event)
+        except:
+            return
+
         if event.inaxes:
             # set lasso color
             color='goldenrod'

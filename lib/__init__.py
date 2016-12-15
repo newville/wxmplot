@@ -78,3 +78,4 @@ from .imageframe import ImageFrame
 from .multiframe import MultiPlotFrame
 from .stackedplotframe import StackedPlotFrame
 from .plotapp  import PlotApp
+from .imagematrixframe import ImageMatrixFrame

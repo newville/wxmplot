@@ -33,7 +33,7 @@ class BasePanel(wx.Panel):
 
         self.is_macosx = False
         if os.name == 'posix':
-            if os.uname()[0] == 'Darwin':
+            if sys.platform.lower().startswith('darw'):
                 self.is_macosx = True
 
         self.messenger = messenger
@@ -77,6 +77,12 @@ class BasePanel(wx.Panel):
                                 self.__onMouseButtonEvent)
         self.canvas.mpl_connect("key_press_event",
                                 self.__onKeyEvent)
+
+        if os.name == 'posix':
+            def swallow_mouse(*args):
+                pass
+            self.canvas.CaptureMouse = swallow_mouse
+
         self.BuildPopup()
 
     def BuildPopup(self):

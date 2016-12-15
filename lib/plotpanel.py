@@ -541,11 +541,6 @@ class PlotPanel(BasePanel):
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 
-        if sys.platform.lower().startswith('darw') or self.no_mouse_capture:
-            def swallow_mouse(*args):
-                pass
-            self.canvas.CaptureMouse = swallow_mouse
-
         self.printer.canvas = self.canvas
         self.set_bg()
         self.conf.canvas = self.canvas

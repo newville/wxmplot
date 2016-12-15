@@ -33,13 +33,16 @@ class ImagePanel(BasePanel):
 
     def __init__(self, parent, messenger=None, data_callback=None,
                  cursor_callback=None, lasso_callback=None,
-                 contour_callback=None,
-                 size=(525, 450), dpi=100,
+                 redraw_callback=None, zoom_callback=None,
+                 contour_callback=None, size=(525, 450), dpi=100,
                  output_title='Image', **kws):
+
         matplotlib.rc('lines', linewidth=2)
         BasePanel.__init__(self, parent,
                            output_title=output_title,
-                           messenger=messenger, **kws)
+                           messenger=messenger,
+                           zoom_callback=zoom_callback, **kws)
+
         self.conf = ImageConfig()
         self.conf.title = output_title
         self.cursor_mode = 'zoom'
@@ -47,6 +50,7 @@ class ImagePanel(BasePanel):
         self.cursor_callback = cursor_callback
         self.lasso_callback = lasso_callback
         self.contour_callback = contour_callback
+        self.redraw_callback = redraw_callback
 
         self.win_config = None
         self.data_shape = None
@@ -463,6 +467,9 @@ class ImagePanel(BasePanel):
                 conf.image.set_data(inew)
                 conf.image.set_interpolation(conf.interp)
         self.canvas.draw()
+        if callable(self.redraw_callback):
+            self.redraw_callback(wid=self.GetId())
+
 
     def report_leftdown(self,event=None):
         if event == None:

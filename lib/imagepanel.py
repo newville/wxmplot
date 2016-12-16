@@ -186,10 +186,10 @@ class ImagePanel(BasePanel):
             if axes in zlims:
                 xmin, xmax, ymin, ymax = zlims[axes]
 
-        xmin = int(max(self.data_range[0], xmin) + 0.5)
-        xmax = int(min(self.data_range[1], xmax) + 0.5)
-        ymin = int(max(self.data_range[2], ymin) + 0.5)
-        ymax = int(min(self.data_range[3], ymax) + 0.5)
+        xmin = max(self.data_range[0], xmin)
+        xmax = min(self.data_range[1], xmax)
+        ymin = max(self.data_range[2], ymin)
+        ymax = min(self.data_range[3], ymax)
         if (xmax < self.data_range[0] or
             xmin > self.data_range[1] or
             ymax < self.data_range[2] or
@@ -205,17 +205,14 @@ class ImagePanel(BasePanel):
             ymin = int(0.5*(ymax+xmin) - 1)
             ymax = ymin + 2
 
-        self.axes.set_xlim((xmin,xmax),emit=True)
-        self.axes.set_ylim((ymin,ymax),emit=True)
-        self.axes.update_datalim(((xmin,ymin),(xmax,ymax)))
+        self.axes.set_xlim((xmin, xmax),emit=True)
+        self.axes.set_ylim((ymin, ymax),emit=True)
+        self.axes.update_datalim(((xmin, ymin), (xmax, ymax)))
         if autoscale:
-            self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin,xmax))
-            self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin,ymax))
+            self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin, xmax))
+            self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin, ymax))
         self.conf.datalimits = [xmin, xmax, ymin, ymax]
-        try:
-            self.redraw()
-        except ValueError:
-            pass
+        self.redraw()
 
     def clear(self):
         """ clear plot """
@@ -365,6 +362,52 @@ class ImagePanel(BasePanel):
             lims = {self.axes: [xmin, xmax, ymin, ymax]}
         self.set_viewlimits()
         self.canvas.draw()
+
+    def zoom_leftup(self, event=None):
+        """leftup event handler for zoom mode  in images"""
+        if self.zoom_ini is None:
+            return
+
+        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        try:
+            dx = abs(ini_x - event.x)
+            dy = abs(ini_y - event.y)
+        except:
+            dx, dy = 0, 0
+        t0 = time.time()
+        self.rbbox = None
+        self.zoom_ini = None
+        if (dx > 3) and (dy > 3) and (t0-self.mouse_uptime)>0.1:
+            self.mouse_uptime = t0
+            zlims, tlims = {}, {}
+            ax =  self.axes
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
+
+            zlims[ax] = [xmin, xmax, ymin, ymax]
+
+            if len(self.conf.zoom_lims) == 0:
+                self.conf.zoom_lims.append(zlims)
+
+
+            ax_inv = ax.transData.inverted
+            try:
+                x1, y1 = ax_inv().transform((event.x, event.y))
+            except:
+                x1, y1 = self.x_lastmove, self.y_lastmove
+            try:
+                x0, y0 = ax_inv().transform((ini_x, ini_y))
+            except:
+                x0, y0 = ini_xd, ini_yd
+
+            tlims[ax] = [int(round(min(x0, x1))), int(round(max(x0, x1))),
+                         int(round(min(y0, y1))), int(round(max(y0, y1)))]
+            self.conf.zoom_lims.append(tlims)
+            # now apply limits:
+            self.set_viewlimits()
+            if callable(self.zoom_callback):
+                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
+
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """

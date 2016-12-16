@@ -66,9 +66,6 @@ class ImageMatrixFrame(BaseFrame):
         self.SetStatusText('', 0)
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
-
-        self.SetBackgroundColour('#F8F8F4')
-
         splitter  = wx.SplitterWindow(self, style=wx.SP_LIVE_UPDATE)
         splitter.SetMinimumPaneSize(200)
 
@@ -223,8 +220,6 @@ class ImageMatrixFrame(BaseFrame):
         out.save(path)
         self.write_message('Saved plot to %s' % path)
 
-
-
     def BuildMenu(self):
         # file menu
         mfile = wx.Menu()
@@ -281,12 +276,14 @@ class ImageMatrixFrame(BaseFrame):
             iy >= 0 and iy < self.map1.shape[0]):
             pos = ''
             if self.xdata is not None:
-                pos = ' %s=%.4g,' % (self.xlab, self.xdata[ix])
+                pos = ' %s=%.4g,' % (self.xlabel, self.xdata[ix])
             if self.ydata is not None:
-                pos = '%s %s=%.4g,' % (pos, self.ylab, self.ydata[iy])
+                pos = '%s %s=%.4g,' % (pos, self.ylabel, self.ydata[iy])
 
             d1, d2 = (self.map1[iy, ix], self.map2[iy, ix])
-            msg = "Pixel [%i, %i],%s Map1=%.4g, Map2=%.4g" % (ix, iy, pos, d1, d2)
+            msg = "Pixel [%i, %i],%s %s=%.4g, %s=%.4g" % (ix, iy, pos,
+                                                          self.name1, d1,
+                                                          self.name2, d2)
             self.write_message(msg, panel=0)
 
             if callable(self.cursor_callback):
@@ -321,22 +318,24 @@ class ImageMatrixFrame(BaseFrame):
         if wid in (self.img1_panel.GetId(), self.img2_panel.GetId()):
             self.dualimage_needs_update = True
 
-    def display(self, map1, map2, title=None, xlabel=None, ylabel=None,
-                x=None, y=None, xoff=None, yoff=None, **kws):
+    def display(self, map1, map2, title=None, name1='Map1', name2='Map2',
+                xlabel='x', ylabel='y', x=None, y=None):
         self.map1 = map1
         self.map2 = map2
+        self.name1 = name1
+        self.name2 = name2
         self.xdata = x
         self.ydata = y
+        self.xlabel = xlabel
+        self.ylabel = ylabel
         self.xzoom = slice(0, map1.shape[1]+1)
         self.yzoom = slice(0, map1.shape[0]+1)
 
-        self.xlabel = xlabel
-        self.ylabel = ylabel
         self.img1_panel.display(map1, x=x, y=y)
         self.img2_panel.display(map2, x=x, y=y)
 
-        self.cmap_panels[0].title.SetLabel(xlabel)
-        self.cmap_panels[1].title.SetLabel(ylabel)
+        self.cmap_panels[0].title.SetLabel(name1)
+        self.cmap_panels[1].title.SetLabel(name2)
         self.update_scatterplot(map1, map2)
 
         self.set_contrast_levels()
@@ -356,7 +355,7 @@ class ImageMatrixFrame(BaseFrame):
         self.plot_panel.scatterplot(_x, _y, size=3,
                                     min=xmin, xmax=xmax,
                                     ymin=ymin, ymax=ymax,
-                                    xlabel=self.xlabel, ylabel=self.ylabel,
+                                    xlabel=self.name1, ylabel=self.name2,
                                     callback=self.on_corplot_lasso)
 
     def set_contrast_levels(self):
@@ -392,34 +391,32 @@ class ImageMatrixFrame(BaseFrame):
             return
 
         self.dualimage_needs_update = False
-        try:
-            col1 = self.img1_panel.conf.cmap[0].name
-            dat1 = self.map1
-            conf = self.img1_panel.conf
-            ilo1 = float(conf.int_lo[0])
-            ihi1 = float(conf.int_hi[0])
-            mlo1 = float(conf.cmap_lo[0])/(1.0*conf.cmap_range)
-            mhi1 = float(conf.cmap_hi[0])/(1.0*conf.cmap_range)
 
-            col2 = self.img2_panel.conf.cmap[0].name
-            dat2 = self.map2
-            conf = self.img2_panel.conf
-            ilo2 = float(conf.int_lo[0])
-            ihi2 = float(conf.int_hi[0])
-            mlo2 = float(conf.cmap_lo[0])/(1.0*conf.cmap_range)
-            mhi2 = float(conf.cmap_hi[0])/(1.0*conf.cmap_range)
-            ihi2 = float(self.img2_panel.conf.int_hi[0])
-        except:
-            return
+        ctabs = [] # [col1, col2]
+        dimgs = [] # [dat1, dat2]
 
-        dat1 = (dat1 - ilo1) / (ihi1 - ilo1 + 1.e-8)
-        dat2 = (dat2 - ilo2) / (ihi2 - ilo2 + 1.e-8)
+        for panel, dmap in zip((self.img1_panel, self.img2_panel),
+                               (self.map1, self.map2)):
+            try:
+                col = panel.conf.cmap[0].name
+                dat = dmap
+                conf = panel.conf
+                ilo = float(conf.int_lo[0])
+                ihi = float(conf.int_hi[0])
+                mlo = float(conf.cmap_lo[0])/(1.0*conf.cmap_range)
+                mhi = float(conf.cmap_hi[0])/(1.0*conf.cmap_range)
 
-        dat1 = (dat1 - mlo1) / (mhi1 - mlo1 + 1.e-8)
-        dat2 = (dat2 - mlo2) / (mhi2 - mlo2 + 1.e-8)
+                dat = (dat - ilo) / (ihi - ilo)
+                dat = (dat - mlo) / (mhi - mlo)
+                dat[np.where(dat<0)] = 0.0
+                dat[np.where(dat>1)] = 1.0
+                ctabs.append(col)
+                dimgs.append(dat)
+            except:
+                return
 
         mr, mg, mb =(1, 1, 1)
-        for col in (col1, col2):
+        for col in ctabs:
             if col.startswith('red'):
                 mr = 0
             elif col.startswith('green'):
@@ -427,11 +424,12 @@ class ImageMatrixFrame(BaseFrame):
             elif col.startswith('blue'):
                 mb = 0
             elif col.startswith('cyan'):
-                mg, mb = 0, 0
+                mb = mg = 0
             elif col.startswith('yellow'):
-                mr, mg  = 0, 0
+                mr = mg = 0
             elif col.startswith('magenta'):
-                mr, mb = 0, 0
+                mr = mb = 0
+
         maskcolor = {(1, 0, 0): 'red',
                      (0, 1, 0): 'green',
                      (0, 0, 1): 'blue',
@@ -441,13 +439,11 @@ class ImageMatrixFrame(BaseFrame):
                      (0, 1, 1): 'cyan',
                      (1, 0, 1): 'magenta'}.get((mr, mg, mb), 'white')
 
-        ctabs = [col1, col2]
-        dimgs = [dat1, dat2]
         if self.sel_mask is not None:
             ctabs.append(maskcolor)
             dimgs.append(self.sel_mask)
 
-        w, h = dat1.shape
+        w, h = dimgs[0].shape
         img = np.zeros(3*w*h).reshape(w, h, 3)
 
         for col, dimg in zip(ctabs, dimgs):

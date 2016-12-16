@@ -13,11 +13,19 @@
 #     +-------------+--------------+
 ##
 
+import os
 import wx
 import numpy as np
 import matplotlib
 
 from functools import partial
+
+HAS_IMAGE = False
+try:
+    from PIL import Image
+    HAS_IMAGE = True
+except ImportError:
+    pass
 
 from .baseframe  import BaseFrame
 from .plotpanel  import PlotPanel
@@ -37,15 +45,16 @@ class ImageMatrixFrame(BaseFrame):
     """
     wx.Frame, with 3 ImagePanels and correlation plot for 2 map arrays
     """
-    def __init__(self, parent=None, size=(900,600), cursor_callback=None, **kws):
+    def __init__(self, parent=None, size=(900,600),
+                 cursor_callback=None, title='Image Matrix', **kws):
 
         self.sel_mask = None
         self.xdata = None
         self.ydata = None
         self.cursor_callback = cursor_callback
         BaseFrame.__init__(self, parent=parent,
-                           title  = 'Image Matrix', size=size, **kws)
-
+                           title=title, size=size, **kws)
+        self.title = title
         self.cmap_panels= {}
         sbar = self.CreateStatusBar(2, wx.CAPTION)
         sfont = sbar.GetFont()
@@ -104,7 +113,6 @@ class ImageMatrixFrame(BaseFrame):
             csizer.Add(self.cmap_panels[i], 0, lsty, 2)
             csizer.Add(wx.StaticLine(conf_panel, size=(100, 2),
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
-
 
         cust = self.CustomConfig(conf_panel)
         if cust is not None:
@@ -175,7 +183,46 @@ class ImageMatrixFrame(BaseFrame):
             p.unzoom_all()
 
     def save_figure(self, event=None):
-        print(" Save Figure not implemented yet")
+        if not HAS_IMAGE:
+            return
+
+        file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|PDF (*.pdf)|*.pdf"
+        ofile = self.title + '.png'
+        dlg = wx.FileDialog(self, message='Save Figure as...',
+                            defaultDir = os.getcwd(),
+                            defaultFile=ofile,
+                            wildcard=file_choices,
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
+
+        if dlg.ShowModal() != wx.ID_OK:
+            return
+
+        h, w = 0, 0
+        def GetImage(panel):
+            wximg = panel.canvas.bitmap.ConvertToImage()
+            w, h = wximg.GetWidth(), wximg.GetHeight()
+            img = Image.new( 'RGB', (w, h))
+            img.frombytes(bytes(wximg.GetData()))
+            return img, w, h
+
+        img1, w1, h1 = GetImage(self.img1_panel)
+        img2, w2, h2 = GetImage(self.img2_panel)
+        dual, w3, h3 = GetImage(self.dual_panel)
+        plot, w4, h4 = GetImage(self.plot_panel)
+
+        w = (w1 + w2 + w3 + w4 ) / 4
+        h = (h1 + h2 + h3 + h4 ) / 4
+
+        out = Image.new('RGB', (2*w+2, 2*h+2))
+        out.paste(img1, (0,   0))
+        out.paste(img2, (1+w, 1+h))
+        out.paste(dual, (1+w, 0))
+        out.paste(plot, (0,   1+h))
+
+        path = dlg.GetPath()
+        out.save(path)
+        self.write_message('Saved plot to %s' % path)
+
 
 
     def BuildMenu(self):

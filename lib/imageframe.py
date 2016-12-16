@@ -41,11 +41,12 @@ class ColorMapPanel(wx.Panel):
     """color map interface"""
     def __init__(self, parent, imgpanel, color=0,
                  colormap_list=None, default=None,
-                 title='Color Table',  **kws):
+                 cmap_callback=None, title='Color Table',  **kws):
         wx.Panel.__init__(self, parent, -1,  **kws)
 
         self.imgpanel = imgpanel
         self.icol = color
+        self.cmap_callback = cmap_callback
 
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         sizer = wx.GridBagSizer(2, 2)
@@ -136,6 +137,9 @@ class ColorMapPanel(wx.Panel):
     def onCMap(self, event=None):
         self.set_colormap(name=event.GetString())
         self.imgpanel.redraw()
+        if callable(self.cmap_callback):
+            self.cmap_callback(name=event.GetString())
+
 
     def onCMapReverse(self, event=None):
         self.set_colormap()
@@ -352,7 +356,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.cmap_panels = {}
 
-        self.wids_subtitles = {}
         self.subtitles = {}
         self.config_mode = None
         if subtitles is not None:
@@ -408,7 +411,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Fit()
 
     def display(self, img, title=None, colormap=None, style='image',
-                subtitles=None, **kw):
+                subtitles=None, **kws):
         """plot after clearing current plot
         """
         if title is not None:
@@ -430,16 +433,18 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     comp.Destroy()
                 self.config_mode = 'int'
                 self.Build_ConfigPanel()
-        self.panel.display(img, style=style, **kw)
-
-        if subtitles is not None:
-            for key, val in subtitles.items():
-                if key in self.wids_subtitles:
-                    self.wids_subtitles[key].SetLabel(val)
+        self.panel.display(img, style=style, **kws)
 
         self.panel.conf.title = title
         if colormap is not None and self.config_mode == 'int':
             self.cmap_panels[0].set_colormap(name=colormap)
+
+        if subtitles is not None:
+            if isinstance(subtitles, dict):
+                self.set_subtitles(**subtitles)
+            elif self.config_mode == 'int':
+                self.set_subtitles(red=subtitles)
+
         contour_value = 0
         if style == 'contour':
             contour_value = 1
@@ -448,6 +453,20 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.config_panel.Refresh()
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
+
+    def set_subtitles(self, red=None, green=None, blue=None):
+        if self.config_mode.startswith('int') and red is not None:
+            self.cmap_panels[0].title.SetLabel(red)
+
+        if self.config_mode.startswith('rgb') and red is not None:
+            self.cmap_panels[0].title.SetLabel(red)
+
+        if self.config_mode.startswith('rgb') and green is not None:
+            self.cmap_panels[1].title.SetLabel(green)
+
+        if self.config_mode.startswith('rgb') and blue is not None:
+            self.cmap_panels[2].title.SetLabel(blue)
+
 
     def EnableMenus(self, evt=None):
         is_3color = len(self.panel.conf.data.shape) > 2

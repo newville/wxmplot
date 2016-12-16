@@ -64,8 +64,8 @@ these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.22'
-__date__     = '2016-Dec-12'
+__version__  = '0.9.23'
+__date__     = '2016-Dec-16'
 
 import sys
 import wx
@@ -77,5 +77,5 @@ from .imagepanel import ImagePanel
 from .imageframe import ImageFrame
 from .multiframe import MultiPlotFrame
 from .stackedplotframe import StackedPlotFrame
-from .plotapp  import PlotApp
 from .imagematrixframe import ImageMatrixFrame
+from .plotapp  import PlotApp

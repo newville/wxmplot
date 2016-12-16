@@ -412,10 +412,8 @@ class PlotPanel(BasePanel):
             ydata = self.axes.lines[0].get_ydata()
             sdat = [(x, y) for x, y in zip(xdata, ydata)]
             mask = inside_poly(vertices,sdat)
-            #print  len(xdata), sdat[:20]
             # print mask
             pts = nonzero(mask)[0]
-            #print 'Points selected = ', pts
 
         self.lasso = None
         self.draw()

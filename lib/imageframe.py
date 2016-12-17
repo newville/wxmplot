@@ -58,7 +58,7 @@ class ColorMapPanel(wx.Panel):
         reverse = False
         cmap = default
         if colormap_list is not None:
-            cmap_choice =  wx.Choice(self, size=(150, -1), choices=colormap_list)
+            cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
             cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
             self.cmap_choice = cmap_choice
 
@@ -70,7 +70,7 @@ class ColorMapPanel(wx.Panel):
                 cmap = cmap[:-2]
             cmap_choice.SetStringSelection(cmap)
 
-            cmap_reverse = wx.CheckBox(self, label='Reverse Table', size=(140, -1))
+            cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
             cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
             cmap_reverse.SetValue(reverse)
             self.cmap_reverse = cmap_reverse
@@ -106,9 +106,8 @@ class ColorMapPanel(wx.Panel):
         irow = 0
         if self.cmap_choice is not None:
             irow += 1
-            sizer.Add(self.cmap_choice,  (irow, 0), (1, 4), labstyle, 2)
-            irow += 1
-            sizer.Add(self.cmap_reverse, (irow, 0), (1, 4), labstyle, 2)
+            sizer.Add(self.cmap_choice,  (irow, 0), (1, 2), labstyle, 2)
+            sizer.Add(self.cmap_reverse, (irow, 2), (1, 2), labstyle, 2)
 
         irow += 1
         sizer.Add(self.cmap_hi,      (irow, 0), (1, 4), labstyle, 2)
@@ -117,12 +116,13 @@ class ColorMapPanel(wx.Panel):
         irow += 1
         sizer.Add(self.cmap_lo,      (irow, 0), (1, 4), labstyle, 2)
 
-        self.imin_val = LabelEntry(self, 0, size=65, labeltext='Range:',
+        self.imin_val = LabelEntry(self, 0, size=80,
+                                   labeltext='Range:',
                                    action=partial(self.onThreshold, argu='lo'))
-        self.imax_val = LabelEntry(self, maxval, size=65, labeltext=':',
+        self.imax_val = LabelEntry(self, maxval, size=80, labeltext=':',
                                    action=partial(self.onThreshold, argu='hi'))
         self.islider_range = wx.StaticText(self, label='Shown: ',
-                                                size=(120, -1))
+                                                size=(90, -1))
         irow += 1
         sizer.Add(self.imin_val.label, (irow, 0), (1, 1), labstyle, 1)
         sizer.Add(self.imin_val,       (irow, 1), (1, 1), labstyle, 0)

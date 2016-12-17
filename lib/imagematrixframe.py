@@ -35,6 +35,7 @@ from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack
 
 COLORMAPS = ('blue', 'red', 'green', 'magenta', 'cyan', 'yellow')
+###, 'Reds', 'Greens', 'Blues')
 
 def color_complements(color):
     colors = list(COLORMAPS)
@@ -67,7 +68,7 @@ class ImageMatrixFrame(BaseFrame):
 
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
         splitter  = wx.SplitterWindow(self, style=wx.SP_LIVE_UPDATE)
-        splitter.SetMinimumPaneSize(200)
+        splitter.SetMinimumPaneSize(225)
 
         conf_panel = wx.Panel(splitter)
         main_panel = wx.Panel(splitter)
@@ -108,7 +109,7 @@ class ImageMatrixFrame(BaseFrame):
                                                  cmap_callback=partial(self.onColorMap, index=i))
 
             csizer.Add(self.cmap_panels[i], 0, lsty, 2)
-            csizer.Add(wx.StaticLine(conf_panel, size=(100, 2),
+            csizer.Add(wx.StaticLine(conf_panel, size=(200, 2),
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         cust = self.CustomConfig(conf_panel)
@@ -227,7 +228,7 @@ class ImageMatrixFrame(BaseFrame):
                  "Save Image of Plot (PNG, SVG, JPG)",
                  action=self.save_figure)
 
-        MenuItem(self, mfile, "E&xit\tCtrl+Q", "Exit", self.onExit)
+        MenuItem(self, mfile, "E&xit\tCtrl+Q", "Exit", self.onClose)
 
         mview =  wx.Menu()
         MenuItem(self, mview, "Zoom Out\tCtrl+Z",
@@ -246,7 +247,11 @@ class ImageMatrixFrame(BaseFrame):
         mbar.Append(mview, 'Options')
 
         self.SetMenuBar(mbar)
-        self.Bind(wx.EVT_CLOSE,self.onExit)
+        self.Bind(wx.EVT_CLOSE,self.onClose)
+
+    def onClose(self, event=None):
+        self.dualimage_timer.Stop()
+        self.Destroy()
 
     def onEnhanceContrast(self, event=None):
         """change image contrast, using scikit-image exposure routines"""

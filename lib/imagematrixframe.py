@@ -31,6 +31,7 @@ from .baseframe  import BaseFrame
 from .plotpanel  import PlotPanel
 from .imagepanel import ImagePanel
 from .imageframe import ColorMapPanel, AutoContrastDialog
+from .imageconf import ColorMap_List, Interp_List
 from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack
 
@@ -41,6 +42,12 @@ def color_complements(color):
     colors = list(COLORMAPS)
     colors.remove(color)
     return colors
+
+def image2wxbitmap(img):
+    "PIL image 2 wx bitmap"
+    wximg = wx.Image(*img.size)
+    wximg.SetData(img.tobytes())
+    return wximg.ConvertToBitmap()
 
 class ImageMatrixFrame(BaseFrame):
     """
@@ -55,6 +62,7 @@ class ImageMatrixFrame(BaseFrame):
         self.cursor_callback = cursor_callback
         BaseFrame.__init__(self, parent=parent,
                            title=title, size=size, **kws)
+
         self.title = title
         self.cmap_panels= {}
         sbar = self.CreateStatusBar(2, wx.CAPTION)
@@ -180,6 +188,43 @@ class ImageMatrixFrame(BaseFrame):
         for p in self.imgpanels:
             p.unzoom_all()
 
+    def BuildMenu(self):
+        # file menu
+        mfile = self.Build_FileMenu()
+
+        mview =  wx.Menu()
+
+        MenuItem(self, mview, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.unzoom)
+
+        mcont =  wx.Menu()
+        MenuItem(self, mcont, 'Toggle Contrast Enhancement\tCtrl+E',
+                 'Toggle contrast between auto-scale and full-scale',
+                 self.onEnhanceContrast, kind=wx.ITEM_CHECK)
+
+        MenuItem(self, mcont, 'Set Auto-Contrast Level',
+                 'Set auto-contrast scale',
+                 self.onContrastConfig)
+
+
+        # smoothing
+        msmoo = wx.Menu()
+        for itype in Interp_List:
+            wid = wx.NewId()
+            msmoo.AppendRadioItem(wid, itype, itype)
+            self.Bind(wx.EVT_MENU, partial(self.onInterp, name=itype), id=wid)
+
+        mbar = wx.MenuBar()
+        mbar.Append(mfile, 'File')
+        mbar.Append(mview, 'Image')
+        mbar.Append(mcont, 'Contrast')
+        mbar.Append(msmoo, 'Smoothing')
+
+        self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_CLOSE,self.onExit)
+
+
     def save_figure(self, event=None):
         if not HAS_IMAGE:
             return
@@ -195,6 +240,12 @@ class ImageMatrixFrame(BaseFrame):
         if dlg.ShowModal() != wx.ID_OK:
             return
 
+        path = dlg.GetPath()
+        img = self.make_composite_image()
+        img.save(path)
+        self.write_message('Saved plot to %s' % path)
+
+    def make_composite_image(self):
         h, w = 0, 0
         def GetImage(panel):
             wximg = panel.canvas.bitmap.ConvertToImage()
@@ -211,45 +262,54 @@ class ImageMatrixFrame(BaseFrame):
         w = (w1 + w2 + w3 + w4 ) / 4
         h = (h1 + h2 + h3 + h4 ) / 4
 
-        out = Image.new('RGB', (2*w+2, 2*h+2))
-        out.paste(img1, (0,   0))
-        out.paste(img2, (1+w, 1+h))
-        out.paste(dual, (1+w, 0))
-        out.paste(plot, (0,   1+h))
+        img = Image.new('RGB', (2*w+2, 2*h+2))
+        img.paste(img1, (0,   0))
+        img.paste(img2, (1+w, 1+h))
+        img.paste(dual, (1+w, 0))
+        img.paste(plot, (0,   1+h))
+        return img
 
-        path = dlg.GetPath()
-        out.save(path)
-        self.write_message('Saved plot to %s' % path)
+    def Copy_to_Clipboard(self, event=None):
+        img = self.make_composite_image()
+        bmp_obj = wx.BitmapDataObject()
+        bmp_obj.SetBitmap(image2wxbitmap(img))
 
-    def BuildMenu(self):
-        # file menu
-        mfile = wx.Menu()
-        MenuItem(self, mfile, "&Save Image\tCtrl+S",
-                 "Save Image of Plot (PNG, SVG, JPG)",
-                 action=self.save_figure)
+        if not wx.TheClipboard.IsOpened():
+            open_success = wx.TheClipboard.Open()
+            if open_success:
+                wx.TheClipboard.SetData(bmp_obj)
+                wx.TheClipboard.Close()
+                wx.TheClipboard.Flush()
 
-        MenuItem(self, mfile, "E&xit\tCtrl+Q", "Exit", self.onClose)
+    def PrintSetup(self, event=None):
+        dlg = wx.MessageDialog(self, "Printing not Available",
+                               "Save Image or Copy to Clipboard",
+                               wx.OK | wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
-        mview =  wx.Menu()
-        MenuItem(self, mview, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range",
-                 self.unzoom)
-        MenuItem(self, mview, 'Toggle Contrast Enhancement\tCtrl+E',
-                 'Toggle contrast between auto-scale and full-scale',
-                 self.onEnhanceContrast, kind=wx.ITEM_CHECK)
+    def PrintPreview(self, event=None):
+        dlg = wx.MessageDialog(self, "Printing not Available",
+                               "Save Image or Copy to Clipboard",
+                               wx.OK | wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
-        MenuItem(self, mview, 'Set Auto-Contrast Level',
-                 'Set auto-contrast scale',
-                 self.onContrastConfig)
+    def Print(self, event=None):
+        dlg = wx.MessageDialog(self, "Printing not Available",
+                               "Save Image or Copy to Clipboard",
+                               wx.OK | wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
-        mbar = wx.MenuBar()
-        mbar.Append(mfile, 'File')
-        mbar.Append(mview, 'Options')
+    def onInterp(self, event=None, name=None):
+        if name not in Interp_List:
+            name = Interp_List[0]
+        for ipanel in self.imgpanels:
+            ipanel.conf.interp = name
+            ipanel.redraw()
 
-        self.SetMenuBar(mbar)
-        self.Bind(wx.EVT_CLOSE,self.onClose)
-
-    def onClose(self, event=None):
+    def onExit(self, event=None):
         self.dualimage_timer.Stop()
         self.Destroy()
 

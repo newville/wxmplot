@@ -135,32 +135,49 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.Fit()
 
 
-    def Build_FileMenu(self):
+    def Build_FileMenu(self, extras=None):
         mfile = wx.Menu()
         MenuItem(self, mfile, "&Save Image\tCtrl+S",
                  "Save Image of Plot (PNG, SVG, JPG)",
                  action=self.save_figure)
         MenuItem(self, mfile, "&Copy\tCtrl+C",
                  "Copy Plot Image to Clipboard",
-                 self.panel.canvas.Copy_to_Clipboard)
+                 self.Copy_to_Clipboard)
 
         MenuItem(self, mfile, "Export Data",
                 "Export Data to ASCII Column file",
                 self.onExport)
 
+        if extras is not None:
+            for text, helptext, callback in extras:
+                MenuItem(self, mfile, text, helptext, callback)
+
+
         mfile.AppendSeparator()
         MenuItem(self, mfile, 'Page Setup...', 'Printer Setup',
-                 self.panel.PrintSetup)
+                 self.PrintSetup)
 
         MenuItem(self, mfile, 'Print Preview...', 'Print Preview',
-                 self.panel.PrintPreview)
+                 self.PrintPreview)
 
         MenuItem(self, mfile, "&Print\tCtrl+P", "Print Plot",
-                 self.panel.Print)
+                 self.Print)
 
         mfile.AppendSeparator()
         MenuItem(self, mfile, "E&xit\tCtrl+Q", "Exit", self.onExit)
         return mfile
+
+    def Copy_to_Clipboard(self, event=None):
+        self.panel.canvas.Copy_to_Clipboard(event=event)
+
+    def PrintSetup(self, event=None):
+        self.panel.PrintSetup(event=event)
+
+    def PrintPreview(self, event=None):
+        self.panel.PrintPreview(event=event)
+
+    def Print(self, event=None):
+        self.panel.Print(event=event)
 
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
@@ -182,7 +199,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                  self.panel.unzoom)
 
         mhelp = wx.Menu()
-        MenuItem(self, mhelp, "Quick Reference",  "Quick Reference for WXMPlot", self.onHelp)
+        MenuItem(self, mhelp, "Quick Reference",
+                 "Quick Reference for WXMPlot", self.onHelp)
         MenuItem(self, mhelp, "About", "About WXMPlot", self.onAbout)
 
         mbar = wx.MenuBar()

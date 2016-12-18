@@ -26,7 +26,6 @@ from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack
 from .contourdialog import ContourDialog
 
-
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
                      'lasso': ('Select Points\tCtrl+V',
@@ -475,7 +474,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def BuildMenu(self):
         # file menu
-        mfile = self.Build_FileMenu()
+        mfile = self.Build_FileMenu(extras=(('Save Image of Colormap',
+                                     'Save Image of Colormap',
+                                      self.onCMapSave),))
 
         # options menu
         mview = self.view_menu = wx.Menu()
@@ -483,10 +484,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  "Zoom out to full data range",
                  self.panel.unzoom)
 
-        m = MenuItem(self, mview, 'Save Image of Colormap',
-                     'Save Image of Colormap',  self.onCMapSave)
+        m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
+                     'Toggle background color for 3-color images',
+                     self.onTriColorBG, kind=wx.ITEM_CHECK)
 
-        self.optional_menus.append((m, False))
+        self.optional_menus.append((m, True))
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
@@ -512,7 +514,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onContourConfig)
         self.optional_menus.append((m, False))
 
-        # intensity
+        # intensity contrast
         mint =self.intensity_menu = wx.Menu()
         MenuItem(self, mint,  'Log Scale Intensity\tCtrl+L',
                  'use logarithm to set intensity scale',
@@ -526,13 +528,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mint, 'Set Auto-Contrast Level',
                  'Set auto-contrast scale',
                  self.onContrastConfig)
-
-        m = MenuItem(self, mint, 'Toggle Background Color (Black/White)\tCtrl+W',
-                     'Toggle background color for 3-color images',
-                     self.onTriColorBG, kind=wx.ITEM_CHECK)
-
-        self.optional_menus.append((m, True))
-
 
         # smoothing
         msmoo = wx.Menu()
@@ -548,8 +543,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mhelp, 'About', 'About WXMPlot', self.onAbout)
 
         # add all sub-menus, including user-added
-        submenus = [('File', mfile), ('Options', mview),
-                    ('Intensity', mint), ('Smoothing', msmoo)]
+        submenus = [('File', mfile),
+                    ('Image', mview),
+                    ('Contrast', mint),
+                    ('Smoothing', msmoo)]
         if self.user_menus is not None:
             submenus.extend(self.user_menus)
         submenus.append(('&Help', mhelp))

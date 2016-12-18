@@ -12,7 +12,9 @@ def next_data():
     t0 = time.time()
     lt = time.localtime(t0)
     tmin, tsec = lt[4],lt[5]
-    x = np.sin(tmin/12.0) + tsec/30. + np.random.random()/5.0
+    u = np.random.random()
+    v = np.random.random()
+    x = np.sin( (u + tsec)/3.0) + tmin/30. + v/5.0
     return t0, x
 
 class StripChartFrame(wx.Frame):
@@ -60,13 +62,13 @@ class StripChartFrame(wx.Frame):
         b_off.Bind(wx.EVT_BUTTON, self.onStopTimer)
 
         tlabel = wx.StaticText(btnpanel, -1, '  Time range:')
-        self.time_range = FloatCtrl(btnpanel,  size=(75, -1),
+        self.time_range = FloatCtrl(btnpanel,  size=(100, -1),
                                     value=abs(self.tmin), precision=1)
 
         btnsizer.Add(b_on,   0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(b_off,  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(tlabel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
-        btnsizer.Add(self.time_range, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
+        btnsizer.Add(self.time_range, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
 
         btnpanel.SetSizer(btnsizer)
         btnsizer.Fit(btnpanel)
@@ -74,15 +76,18 @@ class StripChartFrame(wx.Frame):
         self.plotpanel = PlotPanel(self, messenger=self.write_message)
         self.plotpanel.BuildPanel()
         self.plotpanel.set_xlabel('Time from Present (s)')
-        mainsizer.Add(btnpanel,       0, wx.GROW|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
-
-        mainsizer.Add(self.plotpanel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
+        mainsizer.Add(btnpanel,       0,
+                      wx.GROW|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
+        mainsizer.Add(self.plotpanel, 1,
+                      wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         self.SetSizer(mainsizer)
         mainsizer.Fit(self)
 
         self.Bind(wx.EVT_TIMER, self.onTimer)
         self.timer = wx.Timer(self)
+        self.count    = 0
         self.Refresh()
+        wx.CallAfter(self.onStartTimer)
 
     def write_message(self, msg, panel=0):
         """write a message to the Status Bar"""

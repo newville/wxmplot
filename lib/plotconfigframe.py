@@ -183,7 +183,7 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.SetValue(self.conf.show_legend_frame)
 
         topsizer.Add(show_leg,  (2, 4), (1, 1), labstyle)
-        topsizer.Add(drag_leg,  (2, 5), (1, 2), labstyle)
+        topsizer.Add(drag_leg,  (2, 5), (1, 3), labstyle)
         topsizer.Add(show_lfr,  (3, 4), (1, 1), labstyle)
         topsizer.Add(hide_leg,  (3, 5), (1, 3), labstyle)
         topsizer.Add(show_grid, (4, 4), (1, 1), labstyle)

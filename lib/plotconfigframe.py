@@ -27,8 +27,8 @@ FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BU
 ISPINSIZE = 110
 FSPINSIZE = 135
 if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
-    ISPINSIZE = 60
-    FSPINSIZE = 80
+    ISPINSIZE = 50
+    FSPINSIZE = 70
 
 
 def mpl_color(c, default = (242, 243, 244)):
@@ -70,7 +70,7 @@ def clean_texmath(txt):
         i += 1
         if i > 5000:
             break
-    return ''.join(out).strip()    
+    return ''.join(out).strip()
 
 class PlotConfigFrame(wx.Frame):
     """ GUI Configure Frame"""
@@ -95,22 +95,22 @@ class PlotConfigFrame(wx.Frame):
         font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
 
-        topsizer  = wx.GridBagSizer(5,8)
+        topsizer  = wx.GridBagSizer(3, 3)
         topsizer.SetHGap(2)
         topsizer.SetVGap(2)
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
         self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
-                               labeltext='Title: ',size=350,
+                               labeltext='Title: ',size=325,
                                action = Closure(self.onText, argu='title'))
         self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
-                               labeltext='Y Label: ',size=350,
+                               labeltext='Y Label: ',size=325,
                                action = Closure(self.onText, argu='ylabel'))
         self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
-                               labeltext='Y2 Label: ',size=350,
+                               labeltext='Y2 Label: ',size=325,
                                action = Closure(self.onText, argu='y2label'))
         self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
-                               labeltext='X Label: ',size=350,
+                               labeltext='X Label: ',size=325,
                                action = Closure(self.onText, argu='xlabel'))
 
         topsizer.Add(self.titl.label, (0, 0), (1, 1), labstyle)
@@ -123,7 +123,7 @@ class PlotConfigFrame(wx.Frame):
         topsizer.Add(self.xlab,       (3, 1), (1, 3), labstyle)
 
 
-        tl2 = wx.StaticText(panel, -1, 'Label Text Size:', size=(-1, -1),
+        tl2 = wx.StaticText(panel, -1, 'Text Sizes: Labels:', size=(-1, -1),
                             style=labstyle)
         txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 25))
         txt_size.SetRange(2, 20)
@@ -133,7 +133,7 @@ class PlotConfigFrame(wx.Frame):
         topsizer.Add(tl2,        (0, 4), (1, 1), labstyle)
         topsizer.Add(txt_size,   (0, 5), (1, 1), labstyle)
 
-        tl2 = wx.StaticText(panel, -1, 'Legend Text Size:', size=(-1, -1),
+        tl2 = wx.StaticText(panel, -1, ' Legends:', size=(-1, -1),
                             style=labstyle)
 
         leg_size = wx.SpinCtrl(panel, -1, " ", (-1, -1), (ISPINSIZE, 25))
@@ -141,11 +141,11 @@ class PlotConfigFrame(wx.Frame):
         leg_size.SetValue(self.conf.legendfont.get_size())
         leg_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='legendsize'))
 
-        topsizer.Add(tl2,        (1, 4), (1, 1), labstyle)
-        topsizer.Add(leg_size,   (1, 5), (1, 1), labstyle)
+        topsizer.Add(tl2,        (0, 6), (1, 1), labstyle)
+        topsizer.Add(leg_size,   (0, 7), (1, 1), labstyle)
 
         tl1 = wx.StaticText(panel, -1, 'Legend location:', size=(-1, -1), style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(125, -1))
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
         leg_loc.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
@@ -154,9 +154,9 @@ class PlotConfigFrame(wx.Frame):
         leg_onax.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
-        topsizer.Add(tl1,      (2, 4), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        topsizer.Add(leg_loc,  (2, 5), (1, 1), labstyle)
-        topsizer.Add(leg_onax, (2, 6), (1, 1), labstyle)
+        topsizer.Add(tl1,      (1, 4), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        topsizer.Add(leg_loc,  (1, 5), (1, 2), labstyle)
+        topsizer.Add(leg_onax, (1, 7), (1, 1), labstyle)
 
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
@@ -166,18 +166,28 @@ class PlotConfigFrame(wx.Frame):
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(self.conf.axes_style == 'box')
 
+        drag_leg  = wx.CheckBox(panel,-1, 'Draggable Legend', (-1, -1), (-1, -1))
+        drag_leg.Bind(wx.EVT_CHECKBOX, self.onDragLegend)
+        drag_leg.SetValue(self.conf.draggable_legend)
+
+        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to how/Hide Line', (-1, -1), (-1, -1))
+        hide_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
+        hide_leg.SetValue(self.conf.hidewith_legend)
+
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='legend'))
         show_leg.SetValue(self.conf.show_legend)
 
-        show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
+        show_lfr = wx.CheckBox(panel,-1, 'Legend Frame', (-1, -1), (-1, -1))
         show_lfr.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
-        topsizer.Add(show_leg,  (3, 4), (1, 1), labstyle)
-        topsizer.Add(show_lfr,  (3, 5), (1, 2), labstyle)
+        topsizer.Add(show_leg,  (2, 4), (1, 1), labstyle)
+        topsizer.Add(drag_leg,  (2, 5), (1, 2), labstyle)
+        topsizer.Add(show_lfr,  (3, 4), (1, 1), labstyle)
+        topsizer.Add(hide_leg,  (3, 5), (1, 3), labstyle)
         topsizer.Add(show_grid, (4, 4), (1, 1), labstyle)
-        topsizer.Add(show_box,  (4, 5), (1, 2), labstyle)
+        topsizer.Add(show_box,  (4, 5), (1, 3), labstyle)
 
         tcol = wx.StaticText(panel, -1, 'Colors',style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 
@@ -273,19 +283,13 @@ class PlotConfigFrame(wx.Frame):
         for i in range(self.nb.GetPageCount()):
             self.nb.GetPage(i).SetBackgroundColour(self.bgcol)
 
-        #bok = wx.Button(panel, -1, 'OK',    size=(-1,-1))
-        #bok.Bind(wx.EVT_BUTTON,self.onExit)
-
-        #btnsizer = wx.BoxSizer(wx.HORIZONTAL)
-        #btnsizer.Add(bok,0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 2)
 
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         mainsizer.Add(topsizer, 0, a, 3)
         mainsizer.Add(marginsizer, 0, a, 3)
         mainsizer.Add(self.nb,  1, wx.GROW|a, 3)
-        #mainsizer.Add(btnsizer, 1, a, 2)
-        autopack(panel,mainsizer)
+        autopack(panel, mainsizer)
 
         s = wx.BoxSizer(wx.VERTICAL)
         s.Add(panel,   1, a, 2)
@@ -369,14 +373,14 @@ class PlotConfigFrame(wx.Frame):
         if font is None:
             font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
-        sizer = wx.GridBagSizer(5, 5)
+        sizer = wx.GridBagSizer(2, 2)
         i = 0
         irow = 0
         for t in ('#','Label','Color', 'Line Style',
-                  'Thickness','Symbol',' Size', 'Join Style'):
+                  'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)
             x.SetFont(font)
-            sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
             i = i+1
         self.trace_labels = []
         ntrace_display = min(self.conf.ntrace+1, len(self.conf.traces))
@@ -390,19 +394,20 @@ class PlotConfigFrame(wx.Frame):
             dmsz = lin.markersize
             dsty = lin.style
             djsty = lin.drawstyle
+            dzord = lin.zorder
             dsym = lin.marker
-            lab = LabelEntry(panel, dlab, size=140,labeltext="%i" % (i+1),
+            lab = LabelEntry(panel, dlab, size=125,labeltext="%i" % (i+1),
                                action = Closure(self.onText,argu=argu))
             self.trace_labels.append(lab)
 
-            col = csel.ColourSelect(panel,  -1, "", dcol, size=(30, 30))
+            col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
             col.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu=argu))
 
             thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
             thk.Bind(EVT_FLOATSPIN, Closure(self.onThickness, argu=argu))
 
-            sty = wx.Choice(panel, choices=self.conf.styles, size=(120,-1))
+            sty = wx.Choice(panel, choices=self.conf.styles, size=(110,-1))
             sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
 
@@ -410,10 +415,10 @@ class PlotConfigFrame(wx.Frame):
                             min_val=0, max_val=30, increment=1, digits=0)
             msz.Bind(EVT_FLOATSPIN, Closure(self.onMarkerSize, argu=argu))
 
-            #msz = wx.SpinCtrl(panel, -1, "", (-1,-1),(ISPINSIZE, 30))
-            #msz.SetRange(0, 30)
-            #msz.SetValue(dmsz)
-            #msz.Bind(wx.EVT_SPINCTRL, Closure(self.onMarkerSize, argu=argu))
+            zor = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30),
+                            value=dzord,
+                            min_val=-500, max_val=500, increment=1, digits=0)
+            zor.Bind(EVT_FLOATSPIN, Closure(self.onZorder, argu=argu))
 
             sym = wx.Choice(panel, -1, choices=self.conf.symbols, size=(120,-1))
             sym.Bind(wx.EVT_CHOICE,Closure(self.onSymbol,argu=argu))
@@ -425,13 +430,14 @@ class PlotConfigFrame(wx.Frame):
             jsty.SetStringSelection(djsty)
 
             sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(lab,(irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(col,(irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(sty,(irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(thk,(irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(sym,(irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(msz,(irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(jsty,(irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(col, (irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(sty, (irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(thk, (irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(sym, (irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(msz, (irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(zor, (irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            sizer.Add(jsty, (irow,8),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
 
         autopack(panel,sizer)
         panel.SetupScrolling()
@@ -491,6 +497,15 @@ class PlotConfigFrame(wx.Frame):
         val = event.GetEventObject().GetValue()
         try:
             self.conf.set_trace_markersize(val, trace=int(argu[6:]))
+            self.redraw_legend()
+            self.canvas.draw()
+        except:
+            return
+
+    def onZorder(self, event,argu=''):
+        val = event.GetEventObject().GetValue()
+        try:
+            self.conf.set_trace_zorder(val, trace=int(argu[6:]))
             self.redraw_legend()
             self.canvas.draw()
         except:
@@ -621,21 +636,30 @@ class PlotConfigFrame(wx.Frame):
     def onShowGrid(self,event):
         self.conf.enable_grid(show=event.IsChecked())
 
-
     def onShowBox(self, event=None):
         style='box'
         if not event.IsChecked(): style='open'
         self.conf.set_axes_style(style=style)
 
     def onShowLegend(self,event,argu=''):
+        auto_location = True
         if (argu == 'legend'):
             self.conf.show_legend  = event.IsChecked()
         elif (argu=='frame'):
             self.conf.show_legend_frame = event.IsChecked()
         elif (argu=='loc'):
             self.conf.legend_loc  = event.GetString()
+            auto_location = False
         elif (argu=='onaxis'):
             self.conf.legend_onaxis  = event.GetString()
+        self.conf.draw_legend(auto_location=auto_location)
+
+    def onDragLegend(self, event=None):
+        self.conf.draggable_legend = event.IsChecked()
+        self.conf.draw_legend()
+
+    def onHideWithLegend(self, event=None):
+        self.conf.hidewith_legend = event.IsChecked()
         self.conf.draw_legend()
 
     def redraw_legend(self):

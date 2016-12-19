@@ -66,7 +66,7 @@ class LineProperties:
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=6,
-                 markercolor=None, label=''):
+                 markercolor=None, zorder=0, label=''):
         self.color      = color
         self.style      = style
         self.drawstyle  = drawstyle
@@ -75,6 +75,7 @@ class LineProperties:
         self.markersize = markersize
         self.markercolor= markercolor
         self.label      = label
+        self.zorder     = zorder
         self.data_range = [None, None, None, None]
 
     def update(self, line=None):
@@ -111,6 +112,11 @@ class LineProperties:
         self.label = label
         if line:
             line[0].set_label(self.label)
+
+    def set_zorder(self, zorder, line=None):
+        self.zorder = zorder
+        if line:
+            line[0].set_zorder(zorder)
 
     def set_style(self, style, line=None):
         sty = 'solid'
@@ -209,6 +215,8 @@ class PlotConfig:
         self.legend_onaxis =  'on plot'
         self.mpl_legend  = None
         self.show_grid   = True
+        self.draggable_legend = False
+        self.hidewith_legend = True
         self.show_legend = False
         self.show_legend_frame = False
         self.axes_style = 'box'
@@ -250,7 +258,7 @@ class PlotConfig:
         self._init_trace(20, 'black',     'solid', marker='o')
 
     def _init_trace(self, n,  color, style,
-                    linewidth=2, marker=None, markersize=8):
+                    linewidth=2.5, zorder=None, marker=None, markersize=8):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProperties())
@@ -258,6 +266,9 @@ class PlotConfig:
         label = "trace %i" % (n+1)
         line.label = label
         line.drawstyle = 'default'
+        if zorder     is None:
+            zorder = 5 * (n+1)
+        line.zorder = zorder
         if color      is not None: line.color = color
         if style      is not None: line.style = style
         if linewidth  is not None: line.linewidth = linewidth
@@ -331,6 +342,10 @@ class PlotConfig:
     def set_trace_color(self,color,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_color(color,line=self.__mpline(trace))
+
+    def set_trace_zorder(self, zorder, trace=None):
+        trace = self.__gettrace(trace)
+        self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
 
     def set_trace_label(self, label, trace=None):
         trace = self.__gettrace(trace)
@@ -418,7 +433,7 @@ class PlotConfig:
             axes0.spines['right'].set_visible(False)
         self.canvas.draw()
 
-    def draw_legend(self, show=None):
+    def draw_legend(self, show=None, auto_location=True):
         "redraw the legend"
         if show is not None:
             self.show_legend = show
@@ -454,17 +469,26 @@ class PlotConfig:
         labs = tuple(labs)
 
         lgn = axes[0].legend
-        if self.legend_onaxis == 'off axis':
+        if self.legend_onaxis.startswith('off'):
             lgn = self.canvas.figure.legend
 
         if self.show_legend:
-            self.mpl_legend = lgn(lins, labs,
-                                  loc=self.legend_loc,
-                                  prop=self.legendfont)
-            for t in self.mpl_legend.get_texts():
-                t.set_color(self.textcolor)
+            self.mpl_legend = lgn(lins, labs, prop=self.legendfont,
+                                  loc=self.legend_loc)
             self.mpl_legend.draw_frame(self.show_legend_frame)
             self.mpl_legend.legendPatch.set_facecolor(axes[0].get_axis_bgcolor())
+            if self.draggable_legend:
+                self.mpl_legend.draggable(True, update='loc')
+            self.legend_map = {}
+            for legline, legtext, mainline in zip(self.mpl_legend.get_lines(),
+                                                  self.mpl_legend.get_texts(),
+                                                  lins):
+                legline.set_picker(5)
+                legtext.set_picker(5)
+                self.legend_map[legline] = (mainline, legline, legtext)
+                self.legend_map[legtext] = (mainline, legline, legtext)
+                legtext.set_color(self.textcolor)
+
 
         self.set_added_text_size()
         self.canvas.draw()

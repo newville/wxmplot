@@ -174,7 +174,7 @@ class PlotConfig:
         self.drawstyles  = list(DrawStyleMap.keys())
         self.symbols     = list(MarkerMap.keys())
 
-        self.legend_locs = ['upper right' , 'lower right', 'center right',
+        self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
                             'upper center', 'lower center', 'center']
 
@@ -211,7 +211,7 @@ class PlotConfig:
 
         self.margins = None
         self.auto_margins = True
-        self.legend_loc    =  'upper right'
+        self.legend_loc    =  'best'
         self.legend_onaxis =  'on plot'
         self.mpl_legend  = None
         self.show_grid   = True
@@ -471,6 +471,9 @@ class PlotConfig:
         lgn = axes[0].legend
         if self.legend_onaxis.startswith('off'):
             lgn = self.canvas.figure.legend
+            # 'best' and 'off axis' not implemented yet
+            if self.legend_loc == 'best':
+                self.legend_loc = 'upper right'
 
         if self.show_legend:
             self.mpl_legend = lgn(lins, labs, prop=self.legendfont,
@@ -496,7 +499,11 @@ class PlotConfig:
     def set_legend_location(self, loc, onaxis):
         "set legend location"
         self.legend_onaxis = 'on axis'
-        if not onaxis: self.legend_onaxis = 'off axis'
-
-        if loc in self.legend_abbrevs: loc = self.legend_abbrevs[loc]
-        if loc in self.legend_locs:    self.legend_loc = loc
+        if not onaxis:
+            self.legend_onaxis = 'off axis'
+            if loc == 'best':
+                loc = 'upper right'
+        if loc in self.legend_abbrevs:
+            loc = self.legend_abbrevs[loc]
+        if loc in self.legend_locs:
+            self.legend_loc = loc

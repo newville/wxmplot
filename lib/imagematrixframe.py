@@ -15,6 +15,8 @@
 
 import os
 import wx
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+
 import numpy as np
 import matplotlib
 
@@ -45,7 +47,10 @@ def color_complements(color):
 
 def image2wxbitmap(img):
     "PIL image 2 wx bitmap"
-    wximg = wx.Image(*img.size)
+    if is_wxPhoenix:
+        wximg = wx.Image(*img.size)
+    else:
+        wximg = wx.EmptyImage(*img.size)
     wximg.SetData(img.tobytes())
     return wximg.ConvertToBitmap()
 
@@ -230,7 +235,7 @@ class ImageMatrixFrame(BaseFrame):
             return
 
         file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|PDF (*.pdf)|*.pdf"
-        ofile = self.title + '.png'
+        ofile = "%s.png" % self.title
         dlg = wx.FileDialog(self, message='Save Figure as...',
                             defaultDir = os.getcwd(),
                             defaultFile=ofile,

@@ -31,10 +31,8 @@ class BasePanel(wx.Panel):
 
         wx.Panel.__init__(self, parent, -1, **kws)
 
-        self.is_macosx = False
-        if os.name == 'posix':
-            if sys.platform.lower().startswith('darw'):
-                self.is_macosx = True
+        self.is_macosx = (os.name == 'posix' and
+                          sys.platform.lower().startswith('darw'))
 
         self.messenger = messenger
         if messenger is None:

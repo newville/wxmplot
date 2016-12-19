@@ -211,8 +211,8 @@ class PlotConfig:
 
         self.margins = None
         self.auto_margins = True
-        self.legend_loc    =  'best'
-        self.legend_onaxis =  'on plot'
+        self.legend_loc    = 'best'
+        self.legend_onaxis = 'on plot'
         self.mpl_legend  = None
         self.show_grid   = True
         self.draggable_legend = False
@@ -498,9 +498,9 @@ class PlotConfig:
 
     def set_legend_location(self, loc, onaxis):
         "set legend location"
-        self.legend_onaxis = 'on axis'
+        self.legend_onaxis = 'on plot'
         if not onaxis:
-            self.legend_onaxis = 'off axis'
+            self.legend_onaxis = 'off plot'
             if loc == 'best':
                 loc = 'upper right'
         if loc in self.legend_abbrevs:

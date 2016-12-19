@@ -69,13 +69,8 @@ class PlotPanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
 
-    def __init__(self, parent, size=None, dpi=150, axisbg=None, fontsize=9,
-                 trace_color_callback=None, output_title='plot',
-                 no_mouse_capture=False, **kws):
-
-        if size is None:
-            size=(700, 450)
-        self.no_mouse_capture = no_mouse_capture
+    def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None, fontsize=9,
+                 trace_color_callback=None, output_title='plot', **kws):
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -217,7 +212,7 @@ class PlotPanel(BasePanel):
         conf  = self.conf
         n    = conf.ntrace
         if zorder is None:
-            zorder = 10*(n+1)
+            zorder = 5*(n+1)
         if axes not in self.axes_traces:
             self.axes_traces[axes] = []
         self.axes_traces[axes].append(n)
@@ -245,6 +240,7 @@ class PlotPanel(BasePanel):
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
 
+        conf.set_trace_zorder(zorder)
         if color:
             conf.set_trace_color(color)
         if style:
@@ -543,6 +539,7 @@ class PlotPanel(BasePanel):
         self.set_bg()
         self.conf.canvas = self.canvas
         self.canvas.SetCursor(wxCursor(wx.CURSOR_CROSS))
+        self.canvas.mpl_connect("pick_event", self.__onPickEvent)
 
         # overwrite ScalarFormatter from ticker.py here:
         self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
@@ -650,6 +647,24 @@ class PlotPanel(BasePanel):
 
     def get_figure(self):
         return self.fig
+
+    def __onPickEvent(self, event=None):
+        """pick events"""
+        legline = event.artist
+        trace = self.conf.legend_map.get(legline, None)
+        visible = True
+        if trace is not None and self.conf.hidewith_legend:
+            line, legline, legtext = trace
+            visible = not line.get_visible()
+            line.set_visible(visible)
+            if visible:
+                legline.set_zorder(10.00)
+                legline.set_alpha(1.00)
+                legtext.set_zorder(10.00)
+                legtext.set_alpha(1.00)
+            else:
+                legline.set_alpha(0.50)
+                legtext.set_alpha(0.50)
 
 
     def onExport(self, event=None, **kws):

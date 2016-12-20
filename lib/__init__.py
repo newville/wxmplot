@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #
 # Name:      wxmplot
-# Version:   0.9.21
+# Version:   0.9.23
 # user-configurable 2D plotting module, using wxPython
 #            and matplotlib.
 # Author:    Matthew Newville
 # Copyright: Matthew Newville, The University of Chicago, 2016
 # Licence:   BSD license
-# Updated:   2016/11/22
+# Updated:   2016-Dec-20
 #-----------------------------------------------------------------------------
 
 """
@@ -65,7 +65,7 @@ these basic methods:
 """
 
 __version__  = '0.9.23'
-__date__     = '2016-Dec-16'
+__date__     = '2016-Dec-20'
 
 import sys
 import wx

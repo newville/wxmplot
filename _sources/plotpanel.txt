@@ -34,7 +34,7 @@ equal-length numpy arrays (abscissa, ordinate) for each trace, and a host
 of optional arguments.  The :class:`PlotPanel` and :class:`PlotFrame` have
 many additional methods to interact with the plots.
 
-.. class:: PlotPanel(parent, size=(700, 450), dpi=150, **kws)
+.. class:: PlotPanel(parent, size=(700, 450), dpi=150, fontsize=9, **kws)
 
    Create a Plot Panel, a :class:`wx.Panel` with a matplotlib Figure.
    This takes many optional arguments:
@@ -254,7 +254,7 @@ same meaning, as indicated by the right-most column.
    :param ha:  horizontal alignment ('left', 'center', 'right')
    :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
 
-.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', fg='black', wdith=0.01, head_width=0.03, overhang=0)
+.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', color='black', wdith=0.01, head_width=0.03, overhang=0)
 
 
    draw arrow from (x1, y1) to (x2, y2).
@@ -265,7 +265,7 @@ same meaning, as indicated by the right-most column.
    :param y2: ending y coordinate
    :param side: which axis to use ('left' or 'right') for coordinates.
    :param shape:  arrow head shape ('full', 'left', 'right')
-   :param fg:     arrow fill color ('black')
+   :param color:  arrow fill color ('black')
    :param width:  width of arrow line (in points. default=0.01)
    :param head_width:  width of arrow head (in points. default=0.1)
    :param overhang:    amount the arrow is swept back (in points. default=0)
@@ -335,12 +335,16 @@ same meaning, as indicated by the right-most column.
 
 .. module:: plotframe
 
-As mentioned above, a :class:`PlotFrame` is a wx.Frame -- a separate plot
-window -- that contains a :class:`PlotPanel` and is decorated with a status
-bar and menubar with menu items for saving, printing and configuring plots.
-It inherits many of the methods of a :class:`PlotPanel`, and simply passes
-the arguments along to the corresponding methods of the :class:`PlotPanel`.
-
+A :class:`PlotFrame` is a wx.Frame -- a separate window -- that
+contains a :class:`PlotPanel` and is decorated with a status bar and
+menubar.  A :class:`PlotFrame` inherits many of the methods of a
+:class:`PlotPanel`, and simply passes the arguments along to the
+corresponding methods of the :class:`PlotPanel`.  The statusbar will
+display live coordintes as the mouse moves on the plot.  The built-in
+menus include methods for saving, printing and copying an image of the
+plot to the system Clipboard, as well as ways to configure many of the
+plot attributes.
+ 
 .. class:: PlotFrame(parent[, size=(700, 450)[, title=None[, **kws]]])
 
    create a plot frame.  This frame will have a :data:`panel` member
@@ -407,13 +411,65 @@ This gives a window with a plot that looks like this:
 .. image:: images/basic_screenshot.png
    :width: 85 %
 
-The configuration window (Options->Configuration or Ctrl-K) for this plot looks
-like this:
 
-.. image:: images/configuration_frame.png
+User Interaction
+~~~~~~~~~~~~~~~~~~~~~
+
+The plot image shown above supports zooming with a box: Pressing down
+the left mouse button and dragging will draw a rectangular box, and
+releasing the mouse button will zoom in to that rectangle.  This can
+be repeated multiple time. Typing "Ctrl-Z" (or "Apple-Z" for Mac
+OS X) will zoom out to the previous zoom level, or show the full plot. 
+
+From the File menu, the user can save an image of the plot, copy that
+image to system clipboard, or setup and preview printing.  The data in
+the plot can also be exported to an ASCII column file.  The Options
+menu allows the user to configure the plot, toggle the display of the
+legend and grid, and zoom out to the full plot range.
+
+The configuration window (Options->Configuration or Ctrl-K) is a
+tabbed window, with sections for configuring Line Traces, Colors and
+Margins, Text and Labels, Legend, and Scatterplot.
+
+.. image:: images/PlotConfig_LineProps.png
    :width: 85 %
 
-where all the options and fields show will dynamically change the plot shown in the PlotPanel.
+The Line Traces tab allows the user to configure the label, color,
+line style, line width, symbol to use for a marker, marker size,
+z-order, and join style for each line or curve drawn.
+
+.. image:: images/PlotConfig_Colors.png
+   :width: 85 %
+
+The Colors and Margins tab allows the user to set the colors for
+background, frame, text, and also toggle the display of the grid and
+upper and right-hand axes spines. In addition, the margins for the
+plot window can be configured to be automatically set, or fine-tuned.
+
+.. image:: images/PlotConfig_Text.png
+   :width: 85 %
+
+The Text and Labels tab allows the user to set the title and labels
+for the X and Y axes, and to adjust the fontsize for these text and the text
+shown in the plot legend.
+
+
+.. image:: images/PlotConfig_Legend.png
+   :width: 85 %
+
+The Legend tab allows the user to control the display and placement of
+the plot legend, and whether it can be used interactively. When "Click
+Legend to Show/Hide Line" is selected, the user can click on the
+Legend line indicator or text to toggle the corresponding line off and
+on.  The "Draggable Legend" option allows the user to drag the legend
+on the plot to fine-tune its placement.
+
+.. image:: images/PlotConfig_Scatter.png
+   :width: 85 %
+
+The Scatterplot tab allows the user to set the colors and marker sizes
+for scatter plots.
+
 
 Scatterplot Example
 ~~~~~~~~~~~~~~~~~~~~~

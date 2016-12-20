@@ -36,6 +36,7 @@ manipulate the displayed image, as will be discussed below.
    orientation, and so on) are controlled through configuration
    attributes.
 
+
 :class:`ImagePanel` methods
 ===================================
 
@@ -260,10 +261,10 @@ giving a plot that would look like this:
 .. image:: images/image_3color.png
    :width: 85%
 
-
-Note that there is also a selection for the *Zero Intensity Color' which
-can either be 'black' or 'white'.   The same image with a white background
-looks like: 
+Note that there is also an Image->Toggle Background Color
+(Black/White) menu selection that can switch the zero intensity color
+between black and white.  The same image with a white background looks
+like:
 
 
 .. image:: images/image_3color_white.png

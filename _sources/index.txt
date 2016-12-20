@@ -37,3 +37,4 @@ toolbars.
    installation
    plotpanel
    imagepanel
+   other

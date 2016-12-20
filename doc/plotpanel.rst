@@ -34,7 +34,7 @@ equal-length numpy arrays (abscissa, ordinate) for each trace, and a host
 of optional arguments.  The :class:`PlotPanel` and :class:`PlotFrame` have
 many additional methods to interact with the plots.
 
-.. class:: PlotPanel(parent, size=(700, 450), dpi=150, **kws)
+.. class:: PlotPanel(parent, size=(700, 450), dpi=150, fontsize=9, **kws)
 
    Create a Plot Panel, a :class:`wx.Panel` with a matplotlib Figure.
    This takes many optional arguments:
@@ -254,7 +254,7 @@ same meaning, as indicated by the right-most column.
    :param ha:  horizontal alignment ('left', 'center', 'right')
    :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
 
-.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', fg='black', wdith=0.01, head_width=0.03, overhang=0)
+.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', color='black', wdith=0.01, head_width=0.03, overhang=0)
 
 
    draw arrow from (x1, y1) to (x2, y2).
@@ -265,7 +265,7 @@ same meaning, as indicated by the right-most column.
    :param y2: ending y coordinate
    :param side: which axis to use ('left' or 'right') for coordinates.
    :param shape:  arrow head shape ('full', 'left', 'right')
-   :param fg:     arrow fill color ('black')
+   :param color:  arrow fill color ('black')
    :param width:  width of arrow line (in points. default=0.01)
    :param head_width:  width of arrow head (in points. default=0.1)
    :param overhang:    amount the arrow is swept back (in points. default=0)

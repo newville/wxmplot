@@ -109,7 +109,7 @@ class PlotConfigFrame(wx.Frame):
         self.nb.AddPage(self.make_text_panel(parent=self.nb, font=font),
                         'Text and Labels', True)
         self.nb.AddPage(self.make_legend_panel(parent=self.nb, font=font),
-                        'Legend Setteings', True)
+                        'Legend Settings', True)
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
@@ -149,19 +149,19 @@ class PlotConfigFrame(wx.Frame):
         nfcol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(conf.scatter_normalcolor,
                                             default=(0, 0, 128)),
-                                  size=(45, 30))
+                                  size=(25, 25))
         necol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(conf.scatter_normaledge,
                                             default=(0, 0, 200)),
-                                  size=(45, 30))
+                                  size=(25, 25))
         sfcol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(conf.scatter_selectcolor,
                                             default=(128, 0, 0)),
-                                  size=(45, 30))
+                                  size=(25, 25))
         secol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(conf.scatter_selectedge,
                                            default=(200, 0, 0)),
-                                  size=(45, 30))
+                                  size=(25, 25))
         nfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_nf'))
         necol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_ne'))
         sfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_sf'))
@@ -209,7 +209,7 @@ class PlotConfigFrame(wx.Frame):
         ax = self.axes[0]
 
         t0 = wx.StaticText(panel, -1, 'Text Size:', style=labstyle)
-        t1 = wx.StaticText(panel, -1, 'Labels/Titles:',  style=labstyle)
+        t1 = wx.StaticText(panel, -1, 'Labels and Titles:',  style=labstyle)
         t2 = wx.StaticText(panel, -1, 'Legends:',  style=labstyle)
 
         t_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 25))
@@ -267,7 +267,7 @@ class PlotConfigFrame(wx.Frame):
 
         ax = self.axes[0]
 
-        tl1 = wx.StaticText(panel, -1, 'Plot Legend location:', size=(-1, -1), style=labstyle)
+        tl1 = wx.StaticText(panel, -1, 'Legend location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
         leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
@@ -281,7 +281,7 @@ class PlotConfigFrame(wx.Frame):
         drag_leg.Bind(wx.EVT_CHECKBOX, self.onDragLegend)
         drag_leg.SetValue(self.conf.draggable_legend)
 
-        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to how/Hide Line', (-1, -1), (-1, -1))
+        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to Show/Hide Line', (-1, -1), (-1, -1))
         hide_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
         hide_leg.SetValue(self.conf.hidewith_legend)
 
@@ -293,14 +293,14 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
-        sizer.Add(tl1,      (1, 0), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add(leg_loc,  (1, 1), (1, 2), labstyle)
-        sizer.Add(leg_onax, (1, 3), (1, 1), labstyle)
+        sizer.Add(tl1,      (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(leg_loc,  (0, 1), (1, 2), labstyle)
+        sizer.Add(leg_onax, (0, 3), (1, 1), labstyle)
 
-        sizer.Add(show_leg,  (2, 0), (1, 2), labstyle)
-        sizer.Add(show_lfr,  (3, 0), (1, 2), labstyle)
-        sizer.Add(hide_leg,  (4, 0), (1, 2), labstyle)
-        sizer.Add(drag_leg,  (5, 0), (1, 2), labstyle)
+        sizer.Add(show_leg,  (1, 0), (1, 2), labstyle)
+        sizer.Add(show_lfr,  (2, 0), (1, 2), labstyle)
+        sizer.Add(hide_leg,  (3, 0), (1, 2), labstyle)
+        sizer.Add(drag_leg,  (4, 0), (1, 3), labstyle)
 
         autopack(panel, sizer)
         return panel
@@ -324,26 +324,25 @@ class PlotConfigFrame(wx.Frame):
 
         title = wx.StaticText(panel, -1, 'Colors:', style=labstyle)
 
-        ltext = wx.StaticText(panel, -1, 'Text/Titles:', style=labstyle)
-        lgrid = wx.StaticText(panel, -1, 'Grid:',       style=labstyle)
-        lbgr  = wx.StaticText(panel, -1, 'Background:', style=labstyle)
-        lframe= wx.StaticText(panel, -1, 'Plot Frame:', style=labstyle)
+        ltext = wx.StaticText(panel, -1, ' Labels and Titles:', style=labstyle)
+        lgrid = wx.StaticText(panel, -1, ' Grid:',       style=labstyle)
+        lbgr  = wx.StaticText(panel, -1, ' Background:', style=labstyle)
+        lframe= wx.StaticText(panel, -1, ' Plot Frame:', style=labstyle)
 
         textcol = csel.ColourSelect(panel,  -1, "",
                                     mpl_color(self.conf.textcolor, default=(2, 2, 2)),
-                                    size=(30, 30))
+                                    size=(25, 25))
         gridcol = csel.ColourSelect(panel, -1, "",
                                     mpl_color(self.conf.grid_color),
-                                    size=(30, 30))
-
+                                    size=(25, 25))
         bgcol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252)),
-                                  size=(30, 30))
+                                  size=(25, 25))
 
 
         fbgcol = csel.ColourSelect(panel,  -1, "",
                                    mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252)),
-                                   size=(30, 30))
+                                   size=(25, 25))
 
         bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
         fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='fbg'))
@@ -353,12 +352,12 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(title,     (0, 0), (1, 1), labstyle, 2)
         sizer.Add(ltext,     (0, 1), (1, 1), labstyle, 2)
         sizer.Add(textcol,   (0, 2), (1, 1), labstyle, 2)
-        sizer.Add(lgrid,     (0, 3), (1, 1), labstyle, 2)
-        sizer.Add(gridcol,   (0, 4), (1, 1), labstyle, 2)
-        sizer.Add(lbgr,      (0, 5), (1, 1), labstyle, 2)
-        sizer.Add(bgcol,     (0, 6), (1, 1), labstyle, 2)
-        sizer.Add(lframe,    (0, 7), (1, 1), labstyle, 2)
-        sizer.Add(fbgcol,    (0, 8), (1, 1), labstyle, 2)
+        sizer.Add(lbgr,      (1, 1), (1, 1), labstyle, 2)
+        sizer.Add(bgcol,     (1, 2), (1, 1), labstyle, 2)
+        sizer.Add(lgrid,     (2, 1), (1, 1), labstyle, 2)
+        sizer.Add(gridcol,   (2, 2), (1, 1), labstyle, 2)
+        sizer.Add(lframe,    (3, 1), (1, 1), labstyle, 2)
+        sizer.Add(fbgcol,    (3, 2), (1, 1), labstyle, 2)
 
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
@@ -367,9 +366,6 @@ class PlotConfigFrame(wx.Frame):
         show_box  = wx.CheckBox(panel,-1, 'Show Top/Right Axes', (-1, -1), (-1, -1))
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(self.conf.axes_style == 'box')
-
-        sizer.Add(show_grid,  (2, 0), (1, 3), btnstyle, 2)
-        sizer.Add(show_box,   (2, 3), (1, 3), btnstyle, 2)
 
         # margins
         ppanel = self.GetParent()
@@ -413,6 +409,9 @@ class PlotConfigFrame(wx.Frame):
         msizer.Add(tmarg,    0, labstyle, 5)
 
         sizer.Add(msizer, (4, 0), (1, 9), labstyle, 2)
+
+        sizer.Add(show_grid,  (5, 0), (1, 3), btnstyle, 2)
+        sizer.Add(show_box,   (6, 0), (1, 3), btnstyle, 2)
 
         autopack(panel, sizer)
         return panel

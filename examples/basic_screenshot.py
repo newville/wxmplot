@@ -16,7 +16,7 @@ app.plot(x, y, title='WXMPlot example',
          label='decaying sine',
          ylabel=r'$\phi(x)$', 
          xlabel=r'$x \> \rm (\AA)$')
-app.oplot(x, z, label='noisy cosine', marker='+')
+app.oplot(x, z, label='noisy cosine', marker='+', show_legend=True)
 
 app.write_message('Try Help->Quick Reference')
 app.run()

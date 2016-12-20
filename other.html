@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Speciality WXMPLOT displays &#8212; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.23',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
+    <link rel="prev" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Speciality WXMPLOT displays</a><ul>
+<li><a class="reference internal" href="#multiplotframe">MultiPlotFrame</a><ul>
+<li><a class="reference internal" href="#multiplotframe-example">MultiPlotFrame Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stackedplotframe">StackedPlotFrame</a><ul>
+<li><a class="reference internal" href="#stackedplotframe-example">StackedPlotFrame Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#imagematrixframe">ImageMatrixFrame</a><ul>
+<li><a class="reference internal" href="#imagematrixframe-example">ImageMatrixFrame Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imagepanel.html"
+                        title="previous chapter"><code class="docutils literal"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/other.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="speciality-wxmplot-displays">
+<h1>Speciality WXMPLOT displays<a class="headerlink" href="#speciality-wxmplot-displays" title="Permalink to this headline">¶</a></h1>
+<p>There are a few custom classes for speciality plots included in
+wxmplot.  Since these build on the <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> and
+<code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code> clases, these are described briefly here and an
+example shown for each.</p>
+<div class="section" id="multiplotframe">
+<h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="MultiPlotFrame">
+<em class="property">class </em><code class="descname">MultiPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>rows=1</em>, <em>cols=1</em>, <em>framesize=(600</em>, <em>350)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A MultiPlotFrame supports a grid of <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> on a single plot frame.</p>
+<p>This supports the standard methods from <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code>, with each
+method taking and additional <cite>panel</cite> keyword argument that contains a
+two-element tuple for the address of that panel in the grid of
+<code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> .  The address starts at (0, 0) for the upper left
+plot panel, and counts to left to right and top to bottom.</p>
+<dl class="method">
+<dt id="plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel=(0</em>, <em>0)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot to specified panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel=(0</em>, <em>0)</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<dd><p>overplot to specified panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em>, <em>panel=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>clear plot in specified panel</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="configure">
+<code class="descname">configure</code><span class="sig-paren">(</span><em>self</em>, <em>panel=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>configure plot in specified panel</p>
+</dd></dl>
+
+<p>Many more methods are supported -- essentially all of those for <code class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></code>.</p>
+<div class="section" id="multiplotframe-example">
+<h3>MultiPlotFrame Example<a class="headerlink" href="#multiplotframe-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">#</span>
+<span class="c1"># simple example of MPlot</span>
+
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">wxmplot</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">x</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">10.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">y1</span>  <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y2</span>  <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y3</span>  <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">y4</span>  <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+
+<span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">MultiPlotFrame</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">panelsize</span><span class="o">=</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">1.75</span><span class="p">))</span>
+
+
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y3</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y4</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test Plot&#39;</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Plot2&#39;</span><span class="p">,</span><span class="n">panel</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">r&#39; $ R  (\AA) $ &#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;MPlot PlotFrame example: Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">Raise</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This gives a window with a plot that looks like this:</p>
+<a class="reference internal image-reference" href="_images/multiplot.png"><img alt="_images/multiplot.png" src="_images/multiplot.png" style="width: 85%;" /></a>
+</div>
+</div>
+<div class="section" id="stackedplotframe">
+<h2>StackedPlotFrame<a class="headerlink" href="#stackedplotframe" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StackedPlotFrame">
+<em class="property">class </em><code class="descname">StackedPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>framesize=(850</em>, <em>450)</em>, <em>panelsize=(550</em>, <em>450)</em>, <em>ratio=3</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This supports two <code class="xref py py-class docutils literal"><span class="pre">PlotPanel`s</span> <span class="pre">stacked</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">one</span> <span class="pre">another,</span>
+<span class="pre">and</span> <span class="pre">sharing</span> <span class="pre">an</span> <span class="pre">X</span> <span class="pre">axis.</span>&#160; <span class="pre">Since</span> <span class="pre">the</span> <span class="pre">two</span> <span class="pre">plots</span> <span class="pre">are</span> <span class="pre">meant</span> <span class="pre">to</span> <span class="pre">share</span> <span class="pre">axes,</span>
+<span class="pre">there</span> <span class="pre">is</span> <span class="pre">very</span> <span class="pre">little</span> <span class="pre">space</span> <span class="pre">between</span> <span class="pre">the</span> <span class="pre">plots,</span> <span class="pre">so</span> <span class="pre">that</span> <span class="pre">they</span> <span class="pre">share</span> <span class="pre">axes</span>
+<span class="pre">labels.</span>&#160; <span class="pre">Furthermore,</span> <span class="pre">zooming</span> <span class="pre">in</span> <span class="pre">on</span> <span class="pre">either</span> <span class="pre">plot</span> <span class="pre">panel</span> <span class="pre">zooms</span> <span class="pre">into</span> <span class="pre">the</span>
+<span class="pre">corresponding</span> <span class="pre">X</span> <span class="pre">range</span> <span class="pre">for</span> <span class="pre">both</span> <span class="pre">panels.</span> <span class="pre">qThe</span> <span class="pre">`ratio</span></code> parameter sets the
+ratio of the height of the top panel to the height of the bottom
+panel.</p>
+<p><a class="reference internal" href="#StackedPlotFrame" title="StackedPlotFrame"><code class="xref py py-class docutils literal"><span class="pre">StackedPlotFrame</span></code></a> supports most of the methods of
+<code class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></code>, with the specific panel addressed either as
+<cite>panel='top'</cite> or <cite>panel='bot'</cite>.</p>
+<dl class="method">
+<dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel='top'</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<dd><p>plot to specified panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel='top'</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<dd><p>overplot to specified panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em>, <em>panel='top'</em><span class="sig-paren">)</span></dt>
+<dd><p>clear plot in specified panel</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">configure</code><span class="sig-paren">(</span><em>self</em>, <em>panel='top'</em><span class="sig-paren">)</span></dt>
+<dd><p>configure plot in specified panel</p>
+</dd></dl>
+
+<div class="section" id="stackedplotframe-example">
+<h3>StackedPlotFrame Example<a class="headerlink" href="#stackedplotframe-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">#</span>
+<span class="c1"># Stacked Plot shows two related plots stacked top and bottom that are</span>
+<span class="c1"># expected to share an X axis.</span>
+
+<span class="c1"># The upper panel is a standard PlotPanel. The bottom panel is compressed</span>
+<span class="c1"># in height, and follows the X-range when zooming the top panel, and does</span>
+<span class="c1"># not respond to most other mouse events.</span>
+
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">StackedPlotFrame</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.096</span><span class="p">)</span>
+
+<span class="n">y1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+
+<span class="n">pframe</span> <span class="o">=</span> <span class="n">StackedPlotFrame</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Stacked Example&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">3.000</span><span class="p">)</span>
+
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data(fake)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;some fit&#39;</span><span class="p">)</span>
+
+<span class="n">pframe</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;simple theory&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">panel</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;residual&#39;</span><span class="p">)</span>
+
+
+<span class="n">pframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="n">pframe</span><span class="o">.</span><span class="n">Raise</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This gives a window with a plot that looks like this:</p>
+<a class="reference internal image-reference" href="_images/stackedplot.png"><img alt="_images/stackedplot.png" src="_images/stackedplot.png" style="width: 70%;" /></a>
+</div>
+</div>
+<div class="section" id="imagematrixframe">
+<h2>ImageMatrixFrame<a class="headerlink" href="#imagematrixframe" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ImageMatrixFrame">
+<em class="property">class </em><code class="descname">ImageMatrixFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(900</em>, <em>600)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>An <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageMatrixFrame</span></code></a> supports the simultaneous display of 2
+related images, such as 2-dimensional data taken at different
+wavelengths or at different sampling times.  The display is presented
+as a 2 x 2 grid, with the individual images displayed along the
+diagonal (upper left to lower right).  These can be shown in any of
+the simple color schemes of (red, green, blue, magenta, cyan, or
+yellow), with user-controllable levels.</p>
+<p>The upper right panel shows the superposition of the two individual
+images.  The lower left panel shows the simple scatter plot of the
+intensities of each image for every pixel in the image, illustrating
+the correlation between the two images.</p>
+<p>The user can zoom in on any of the images, and the other panels will
+follow that zoom level.  Using the scatter plot, the user can draw a
+lasso around any of the pixels.  These will then be highlighted on the
+superposition image in the upper right panel.</p>
+<dl class="method">
+<dt id="display">
+<code class="descname">display</code><span class="sig-paren">(</span><em>map1</em>, <em>map2</em>, <em>title=None</em>, <em>name1='Map1'</em>, <em>name2='Map2'</em>, <em>xlabel='x'</em>, <em>ylabel='y'</em>, <em>x=None</em>, <em>y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageMatrixFrame</span></code></a></p>
+<div class="section" id="imagematrixframe-example">
+<h3>ImageMatrixFrame Example<a class="headerlink" href="#imagematrixframe-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">example showing display of C, M, Y maps</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">ImageMatrixFrame</span>
+
+<span class="k">def</span> <span class="nf">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">outer</span><span class="p">(</span> <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">y</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
+                  <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sx</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">ImageMatrixFrame</span><span class="p">()</span>
+    <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">51</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+    <span class="n">ox</span> <span class="o">=</span>  <span class="n">x</span> <span class="o">/</span> <span class="mf">10.0</span>
+    <span class="n">oy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">y</span> <span class="o">/</span> <span class="mf">20.0</span>
+
+    <span class="n">map1</span>  <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">map1</span> <span class="o">+=</span> <span class="mf">0.02</span> <span class="o">+</span> <span class="p">(</span><span class="mf">16.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">.</span><span class="mi">50</span><span class="p">,</span>  <span class="o">.</span><span class="mi">25</span><span class="p">,</span>   <span class="o">.</span><span class="mi">09</span><span class="p">,</span>  <span class="o">.</span><span class="mi">08</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="mf">18.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="o">.</span><span class="mi">12</span><span class="p">,</span> <span class="o">-.</span><span class="mi">06</span><span class="p">,</span>  <span class="o">.</span><span class="mi">23</span><span class="p">,</span>  <span class="o">.</span><span class="mi">21</span><span class="p">))</span>
+    <span class="n">map2</span>  <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">map2</span> <span class="o">+=</span> <span class="mf">0.11</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="o">.</span><span class="mi">44</span><span class="p">,</span>  <span class="o">.</span><span class="mi">3</span><span class="p">,</span>   <span class="o">.</span><span class="mi">1</span><span class="p">,</span>  <span class="o">.</span><span class="mi">15</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="mf">1.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="o">.</span><span class="mi">7</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">.</span><span class="mi">09</span><span class="p">,</span> <span class="o">.</span><span class="mi">11</span><span class="p">))</span>
+
+    <span class="n">frame</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">map1</span><span class="p">,</span> <span class="n">map2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">name1</span><span class="o">=</span><span class="s1">&#39;Iron&#39;</span><span class="p">,</span> <span class="n">name2</span><span class="o">=</span><span class="s1">&#39;Carbon&#39;</span><span class="p">,</span>
+                  <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This gives a window with a plot that looks like this:</p>
+<a class="reference internal image-reference" href="_images/imagematrix.png"><img alt="_images/imagematrix.png" src="_images/imagematrix.png" style="width: 85%;" /></a>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
+  </body>
+</html>

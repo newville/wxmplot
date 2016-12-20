@@ -630,20 +630,11 @@ class PlotPanel(BasePanel):
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
-        # print 'update line ', trace, datarange
-        # dr = self.data_range[axes]
-        #
-        #         self.data_range[axes] = [min(dr[0], xdata.min()),
-        #                                  max(dr[1], xdata.max()),
-        #                                  min(dr[2], ydata.min()),
-        #                                  max(dr[3], ydata.max())]
-        # print 'Update ', trace, side, axes == self.get_right_axes(), dr
-        # this defeats zooming, which gets ugly in this fast-mode anyway.
+
         if update_limits:
             self.set_viewlimits()
         if draw:
             self.draw()
-
 
     def get_figure(self):
         return self.fig

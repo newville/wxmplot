@@ -87,7 +87,7 @@ class PlotConfigFrame(wx.Frame):
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL
-        wx.Frame.__init__(self, self.parent, -1, 'Configure 2D Plot', style=style)
+        wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
         bgcol = mpl_color(self.canvas.figure.get_facecolor())
         self.bgcol = bgcol
         panel = wx.Panel(self, -1)

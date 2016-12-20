@@ -3,6 +3,7 @@
 # WXMPlot GUI to Configure (2D) Plots
 #
 import os, sys
+from functools import partial
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
@@ -89,185 +90,11 @@ class PlotConfigFrame(wx.Frame):
         wx.Frame.__init__(self, self.parent, -1, 'Configure 2D Plot', style=style)
         bgcol = mpl_color(self.canvas.figure.get_facecolor())
         self.bgcol = bgcol
-        panel = self.mainpanel = wx.Panel(self, -1)
+        panel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
         font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
-
-        topsizer  = wx.GridBagSizer(3, 3)
-        topsizer.SetHGap(2)
-        topsizer.SetVGap(2)
-        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-
-        self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
-                               labeltext='Title: ',size=325,
-                               action = Closure(self.onText, argu='title'))
-        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
-                               labeltext='Y Label: ',size=325,
-                               action = Closure(self.onText, argu='ylabel'))
-        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
-                               labeltext='Y2 Label: ',size=325,
-                               action = Closure(self.onText, argu='y2label'))
-        self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
-                               labeltext='X Label: ',size=325,
-                               action = Closure(self.onText, argu='xlabel'))
-
-        topsizer.Add(self.titl.label, (0, 0), (1, 1), labstyle)
-        topsizer.Add(self.titl,       (0, 1), (1, 3), labstyle)
-        topsizer.Add(self.ylab.label, (1, 0), (1, 1), labstyle)
-        topsizer.Add(self.ylab,       (1, 1), (1, 3), labstyle)
-        topsizer.Add(self.y2lab.label,(2, 0), (1, 1), labstyle)
-        topsizer.Add(self.y2lab,      (2, 1), (1, 3), labstyle)
-        topsizer.Add(self.xlab.label, (3, 0), (1, 1), labstyle)
-        topsizer.Add(self.xlab,       (3, 1), (1, 3), labstyle)
-
-
-        tl2 = wx.StaticText(panel, -1, 'Text Sizes: Labels:', size=(-1, -1),
-                            style=labstyle)
-        txt_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 25))
-        txt_size.SetRange(2, 20)
-        txt_size.SetValue(self.conf.labelfont.get_size())
-        txt_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='labelsize'))
-
-        topsizer.Add(tl2,        (0, 4), (1, 1), labstyle)
-        topsizer.Add(txt_size,   (0, 5), (1, 1), labstyle)
-
-        tl2 = wx.StaticText(panel, -1, ' Legends:', size=(-1, -1),
-                            style=labstyle)
-
-        leg_size = wx.SpinCtrl(panel, -1, " ", (-1, -1), (ISPINSIZE, 25))
-        leg_size.SetRange(2, 20)
-        leg_size.SetValue(self.conf.legendfont.get_size())
-        leg_size.Bind(wx.EVT_SPINCTRL, Closure(self.onText, argu='legendsize'))
-
-        topsizer.Add(tl2,        (0, 6), (1, 1), labstyle)
-        topsizer.Add(leg_size,   (0, 7), (1, 1), labstyle)
-
-        tl1 = wx.StaticText(panel, -1, 'Legend location:', size=(-1, -1), style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
-        leg_loc.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='loc'))
-        leg_loc.SetStringSelection(self.conf.legend_loc)
-
-        leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
-                             size=(80, -1))
-        leg_onax.Bind(wx.EVT_CHOICE,Closure(self.onShowLegend,argu='onaxis'))
-        leg_onax.SetStringSelection(self.conf.legend_onaxis)
-
-        topsizer.Add(tl1,      (1, 4), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        topsizer.Add(leg_loc,  (1, 5), (1, 2), labstyle)
-        topsizer.Add(leg_onax, (1, 7), (1, 1), labstyle)
-
-        show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
-        show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
-        show_grid.SetValue(self.conf.show_grid)
-
-        show_box  = wx.CheckBox(panel,-1, 'Show Top/Right Axes', (-1, -1), (-1, -1))
-        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
-        show_box.SetValue(self.conf.axes_style == 'box')
-
-        drag_leg  = wx.CheckBox(panel,-1, 'Draggable Legend', (-1, -1), (-1, -1))
-        drag_leg.Bind(wx.EVT_CHECKBOX, self.onDragLegend)
-        drag_leg.SetValue(self.conf.draggable_legend)
-
-        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to how/Hide Line', (-1, -1), (-1, -1))
-        hide_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
-        hide_leg.SetValue(self.conf.hidewith_legend)
-
-        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
-        show_leg.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='legend'))
-        show_leg.SetValue(self.conf.show_legend)
-
-        show_lfr = wx.CheckBox(panel,-1, 'Legend Frame', (-1, -1), (-1, -1))
-        show_lfr.Bind(wx.EVT_CHECKBOX,Closure(self.onShowLegend,argu='frame'))
-        show_lfr.SetValue(self.conf.show_legend_frame)
-
-        topsizer.Add(show_leg,  (2, 4), (1, 1), labstyle)
-        topsizer.Add(drag_leg,  (2, 5), (1, 3), labstyle)
-        topsizer.Add(show_lfr,  (3, 4), (1, 1), labstyle)
-        topsizer.Add(hide_leg,  (3, 5), (1, 3), labstyle)
-        topsizer.Add(show_grid, (4, 4), (1, 1), labstyle)
-        topsizer.Add(show_box,  (4, 5), (1, 3), labstyle)
-
-        tcol = wx.StaticText(panel, -1, 'Colors',style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-
-        ax = self.axes[0]
-        col = mpl_color(self.conf.grid_color)
-        gridcol = csel.ColourSelect(panel, -1, "Grid", col, size=(70, 30))
-
-        col = mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252))
-        bgcol = csel.ColourSelect(panel,  -1, "Background", col, size=(110, 30))
-
-        col = mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252))
-        fbgcol = csel.ColourSelect(panel,  -1, "Frame", col, size=(70, 30))
-
-        col = mpl_color(self.conf.textcolor, default=(2, 2, 2))
-        textcol = csel.ColourSelect(panel,  -1, "Text", col, size=(70, 30))
-
-
-        bgcol.Bind(csel.EVT_COLOURSELECT,   Closure(self.onColor, argu='bg'))
-        fbgcol.Bind(csel.EVT_COLOURSELECT,  Closure(self.onColor, argu='fbg'))
-        gridcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onColor, argu='grid'))
-        textcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onColor, argu='text'))
-
-        btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
-
-        colsizer  = wx.BoxSizer(wx.HORIZONTAL)
-        colsizer.AddMany([textcol, bgcol, fbgcol, gridcol])
-
-        topsizer.Add(tcol,      (4, 0), (1, 1), labstyle, 2)
-        topsizer.Add(colsizer,  (4, 1), (1, 2), btnstyle, 2)
-
-
-        # margins
-        ppanel = self.GetParent()
-        _left, _top, _right, _bot = ["%.3f"% x for x in ppanel.get_default_margins()]
-
-        mtitle = wx.StaticText(panel, -1, 'Margins:   ',
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        ltitle = wx.StaticText(panel, -1, ' left: ',
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        rtitle = wx.StaticText(panel, -1, ' right: ',
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        btitle = wx.StaticText(panel, -1, ' bottom: ',
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        ttitle = wx.StaticText(panel, -1, ' top: ',
-                               style=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-
-        lmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_left,
-                          min_val=0.0, max_val=None, increment=0.01, digits=3)
-        lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        rmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_right,
-                          min_val=0.0, max_val=None, increment=0.01, digits=3)
-        rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        bmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_bot,
-                          min_val=0.0, max_val=None, increment=0.01, digits=3)
-        bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        tmarg = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=_top,
-                          min_val=0.0, max_val=None, increment=0.01, digits=3)
-        tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-
-        self.margins = [lmarg, tmarg, rmarg, bmarg]
-        if self.conf.auto_margins:
-            [m.Disable() for m in self.margins]
-
-        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
-        auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
-        auto_m.SetValue(self.conf.auto_margins)
-
-        marginsizer = wx.BoxSizer(wx.HORIZONTAL)
-        marginsizer.Add(mtitle,   0, labstyle, 5)
-        marginsizer.Add(auto_m,   0, labstyle, 5)
-        marginsizer.Add(ltitle,   0, labstyle, 5)
-        marginsizer.Add(lmarg,    0, labstyle, 5)
-        marginsizer.Add(rtitle,   0, labstyle, 5)
-        marginsizer.Add(rmarg,    0, labstyle, 5)
-        marginsizer.Add(btitle,   0, labstyle, 5)
-        marginsizer.Add(bmarg,    0, labstyle, 5)
-        marginsizer.Add(ttitle,   0, labstyle, 5)
-        marginsizer.Add(tmarg,    0, labstyle, 5)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
 
@@ -277,23 +104,27 @@ class PlotConfigFrame(wx.Frame):
         self.nb.SetActiveTabTextColour((100, 10, 10))
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Line Traces', True)
+        self.nb.AddPage(self.make_colors_panel(parent=self.nb, font=font),
+                        'Colors and Margins', True)
+        self.nb.AddPage(self.make_text_panel(parent=self.nb, font=font),
+                        'Text and Labels', True)
+        self.nb.AddPage(self.make_legend_panel(parent=self.nb, font=font),
+                        'Legend Setteings', True)
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
         for i in range(self.nb.GetPageCount()):
             self.nb.GetPage(i).SetBackgroundColour(self.bgcol)
 
+        self.nb.SetSelection(0)
 
-        mainsizer = wx.BoxSizer(wx.VERTICAL)
-        a = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
-        mainsizer.Add(topsizer, 0, a, 3)
-        mainsizer.Add(marginsizer, 0, a, 3)
-        mainsizer.Add(self.nb,  1, wx.GROW|a, 3)
-        autopack(panel, mainsizer)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
 
-        s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(panel,   1, a, 2)
-        autopack(self,s)
+        sizer.Add(self.nb,  1, wx.GROW|sty, 3)
+        autopack(panel, sizer)
+        self.SetMinSize((750, 200))
+        self.SetSize((850, 400))
         self.Show()
         self.Raise()
 
@@ -309,7 +140,7 @@ class PlotConfigFrame(wx.Frame):
         ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
         ssize.SetRange(1, 100)
         ssize.SetValue(self.conf.scatter_size)
-        ssize.Bind(wx.EVT_SPINCTRL, Closure(self.onScatter, argu='size'))
+        ssize.Bind(wx.EVT_SPINCTRL, partial(self.onScatter, argu='size'))
 
         sizer.Add(slab,  (0, 0), (1,1), labstyle, 5)
         sizer.Add(ssize, (0, 1), (1,1), labstyle, 5)
@@ -331,10 +162,10 @@ class PlotConfigFrame(wx.Frame):
                                   mpl_color(conf.scatter_selectedge,
                                            default=(200, 0, 0)),
                                   size=(45, 30))
-        nfcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_nf'))
-        necol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_ne'))
-        sfcol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_sf'))
-        secol.Bind(csel.EVT_COLOURSELECT, Closure(self.onScatter, argu='scatt_se'))
+        nfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_nf'))
+        necol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_ne'))
+        sfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_sf'))
+        secol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_se'))
 
         btnstyle= wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
@@ -359,6 +190,229 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(sfcol,   (2, 2), (1,1), btnstyle,2)
         sizer.Add(secol,   (3, 2), (1,1), btnstyle,2)
 
+        autopack(panel, sizer)
+        return panel
+
+
+    def make_text_panel(self, parent, font=None):
+        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
+        if font is None:
+            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+
+        sizer = wx.GridBagSizer(2, 2)
+        i = 0
+        irow = 0
+        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+
+        ax = self.axes[0]
+
+        t0 = wx.StaticText(panel, -1, 'Text Size:', style=labstyle)
+        t1 = wx.StaticText(panel, -1, 'Labels/Titles:',  style=labstyle)
+        t2 = wx.StaticText(panel, -1, 'Legends:',  style=labstyle)
+
+        t_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 25))
+        t_size.SetRange(2, 20)
+        t_size.SetValue(self.conf.labelfont.get_size())
+        t_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, argu='labelsize'))
+
+        l_size = wx.SpinCtrl(panel, -1, " ", (-1, -1), (ISPINSIZE, 25))
+        l_size.SetRange(2, 20)
+        l_size.SetValue(self.conf.legendfont.get_size())
+        l_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, argu='legendsize'))
+
+        sizer.Add(t0,      (0, 0), (1, 1), labstyle)
+        sizer.Add(t1,      (0, 1), (1, 1), labstyle)
+        sizer.Add(t_size,  (0, 2), (1, 1), labstyle)
+        sizer.Add(t2,      (0, 3), (1, 1), labstyle)
+        sizer.Add(l_size,  (0, 4), (1, 1), labstyle)
+
+        self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
+                               labeltext='Title: ',size=400,
+                               action = partial(self.onText, argu='title'))
+        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
+                               labeltext='Y Label: ',size=400,
+                               action = partial(self.onText, argu='ylabel'))
+        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
+                               labeltext='Y2 Label: ',size=400,
+                               action = partial(self.onText, argu='y2label'))
+        self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
+                               labeltext='X Label: ',size=400,
+                               action = partial(self.onText, argu='xlabel'))
+
+        sizer.Add(self.titl.label, (1, 0), (1, 1), labstyle)
+        sizer.Add(self.titl,       (1, 1), (1, 4), labstyle)
+        sizer.Add(self.ylab.label, (2, 0), (1, 1), labstyle)
+        sizer.Add(self.ylab,       (2, 1), (1, 4), labstyle)
+        sizer.Add(self.y2lab.label,(3, 0), (1, 1), labstyle)
+        sizer.Add(self.y2lab,      (3, 1), (1, 4), labstyle)
+        sizer.Add(self.xlab.label, (4, 0), (1, 1), labstyle)
+        sizer.Add(self.xlab,       (4, 1), (1, 4), labstyle)
+
+        autopack(panel, sizer)
+        return panel
+
+    def make_legend_panel(self, parent, font=None):
+        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
+        if font is None:
+            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+
+        sizer = wx.GridBagSizer(2, 2)
+        i = 0
+        irow = 0
+        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+
+        ax = self.axes[0]
+
+        tl1 = wx.StaticText(panel, -1, 'Plot Legend location:', size=(-1, -1), style=labstyle)
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
+        leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='loc'))
+        leg_loc.SetStringSelection(self.conf.legend_loc)
+
+        leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
+                             size=(80, -1))
+        leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='onaxis'))
+        leg_onax.SetStringSelection(self.conf.legend_onaxis)
+
+        drag_leg  = wx.CheckBox(panel,-1, 'Draggable Legend (experimental)', (-1, -1), (-1, -1))
+        drag_leg.Bind(wx.EVT_CHECKBOX, self.onDragLegend)
+        drag_leg.SetValue(self.conf.draggable_legend)
+
+        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to how/Hide Line', (-1, -1), (-1, -1))
+        hide_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
+        hide_leg.SetValue(self.conf.hidewith_legend)
+
+        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
+        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='legend'))
+        show_leg.SetValue(self.conf.show_legend)
+
+        show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
+        show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='frame'))
+        show_lfr.SetValue(self.conf.show_legend_frame)
+
+        sizer.Add(tl1,      (1, 0), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(leg_loc,  (1, 1), (1, 2), labstyle)
+        sizer.Add(leg_onax, (1, 3), (1, 1), labstyle)
+
+        sizer.Add(show_leg,  (2, 0), (1, 2), labstyle)
+        sizer.Add(show_lfr,  (3, 0), (1, 2), labstyle)
+        sizer.Add(hide_leg,  (4, 0), (1, 2), labstyle)
+        sizer.Add(drag_leg,  (5, 0), (1, 2), labstyle)
+
+        autopack(panel, sizer)
+        return panel
+
+
+    def make_colors_panel(self, parent, font=None):
+        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
+        if font is None:
+            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+
+        sizer = wx.GridBagSizer(2, 2)
+        i = 0
+        irow = 0
+        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+        btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+
+        ax = self.axes[0]
+
+
+        title = wx.StaticText(panel, -1, 'Colors:', style=labstyle)
+
+        ltext = wx.StaticText(panel, -1, 'Text/Titles:', style=labstyle)
+        lgrid = wx.StaticText(panel, -1, 'Grid:',       style=labstyle)
+        lbgr  = wx.StaticText(panel, -1, 'Background:', style=labstyle)
+        lframe= wx.StaticText(panel, -1, 'Plot Frame:', style=labstyle)
+
+        textcol = csel.ColourSelect(panel,  -1, "",
+                                    mpl_color(self.conf.textcolor, default=(2, 2, 2)),
+                                    size=(30, 30))
+        gridcol = csel.ColourSelect(panel, -1, "",
+                                    mpl_color(self.conf.grid_color),
+                                    size=(30, 30))
+
+        bgcol = csel.ColourSelect(panel,  -1, "",
+                                  mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252)),
+                                  size=(30, 30))
+
+
+        fbgcol = csel.ColourSelect(panel,  -1, "",
+                                   mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252)),
+                                   size=(30, 30))
+
+        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
+        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='fbg'))
+        gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='grid'))
+        textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='text'))
+
+        sizer.Add(title,     (0, 0), (1, 1), labstyle, 2)
+        sizer.Add(ltext,     (0, 1), (1, 1), labstyle, 2)
+        sizer.Add(textcol,   (0, 2), (1, 1), labstyle, 2)
+        sizer.Add(lgrid,     (0, 3), (1, 1), labstyle, 2)
+        sizer.Add(gridcol,   (0, 4), (1, 1), labstyle, 2)
+        sizer.Add(lbgr,      (0, 5), (1, 1), labstyle, 2)
+        sizer.Add(bgcol,     (0, 6), (1, 1), labstyle, 2)
+        sizer.Add(lframe,    (0, 7), (1, 1), labstyle, 2)
+        sizer.Add(fbgcol,    (0, 8), (1, 1), labstyle, 2)
+
+        show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
+        show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
+        show_grid.SetValue(self.conf.show_grid)
+
+        show_box  = wx.CheckBox(panel,-1, 'Show Top/Right Axes', (-1, -1), (-1, -1))
+        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
+        show_box.SetValue(self.conf.axes_style == 'box')
+
+        sizer.Add(show_grid,  (2, 0), (1, 3), btnstyle, 2)
+        sizer.Add(show_box,   (2, 3), (1, 3), btnstyle, 2)
+
+        # margins
+        ppanel = self.GetParent()
+        _left, _top, _right, _bot = ["%.3f"% x for x in ppanel.get_default_margins()]
+
+        mtitle = wx.StaticText(panel, -1, 'Margins:   ', style=labstyle)
+        ltitle = wx.StaticText(panel, -1, ' left: ',     style=labstyle)
+        rtitle = wx.StaticText(panel, -1, ' right: ',  style=labstyle)
+        btitle = wx.StaticText(panel, -1, ' bottom: ', style=labstyle)
+        ttitle = wx.StaticText(panel, -1, ' top: ', style=labstyle)
+
+        opts = dict(min_val=0.0, max_val=None, increment=0.01, digits=3,
+                    pos=(-1,-1), size=(FSPINSIZE, 30))
+        lmarg = FloatSpin(panel, -1, value=_left, **opts)
+        lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        rmarg = FloatSpin(panel, -1, value=_right, **opts)
+        rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        bmarg = FloatSpin(panel, -1, value=_bot, **opts)
+        bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        tmarg = FloatSpin(panel, -1, value=_top, **opts)
+        tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+
+        self.margins = [lmarg, tmarg, rmarg, bmarg]
+        if self.conf.auto_margins:
+            [m.Disable() for m in self.margins]
+
+        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
+        auto_m.SetValue(self.conf.auto_margins)
+
+        msizer = wx.BoxSizer(wx.HORIZONTAL)
+        msizer.Add(mtitle,   0, labstyle, 5)
+        msizer.Add(auto_m,   0, labstyle, 5)
+        msizer.Add(ltitle,   0, labstyle, 5)
+        msizer.Add(lmarg,    0, labstyle, 5)
+        msizer.Add(rtitle,   0, labstyle, 5)
+        msizer.Add(rmarg,    0, labstyle, 5)
+        msizer.Add(btitle,   0, labstyle, 5)
+        msizer.Add(bmarg,    0, labstyle, 5)
+        msizer.Add(ttitle,   0, labstyle, 5)
+        msizer.Add(tmarg,    0, labstyle, 5)
+
+        sizer.Add(msizer, (4, 0), (1, 9), labstyle, 2)
 
         autopack(panel, sizer)
         return panel
@@ -397,36 +451,36 @@ class PlotConfigFrame(wx.Frame):
             dzord = lin.zorder
             dsym = lin.marker
             lab = LabelEntry(panel, dlab, size=125,labeltext="%i" % (i+1),
-                               action = Closure(self.onText,argu=argu))
+                               action = partial(self.onText,argu=argu))
             self.trace_labels.append(lab)
 
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
-            col.Bind(csel.EVT_COLOURSELECT,Closure(self.onColor,argu=argu))
+            col.Bind(csel.EVT_COLOURSELECT,partial(self.onColor,argu=argu))
 
             thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
-            thk.Bind(EVT_FLOATSPIN, Closure(self.onThickness, argu=argu))
+            thk.Bind(EVT_FLOATSPIN, partial(self.onThickness, argu=argu))
 
             sty = wx.Choice(panel, choices=self.conf.styles, size=(110,-1))
-            sty.Bind(wx.EVT_CHOICE,Closure(self.onStyle,argu=argu))
+            sty.Bind(wx.EVT_CHOICE,partial(self.onStyle,argu=argu))
             sty.SetStringSelection(dsty)
 
             msz = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dmsz,
                             min_val=0, max_val=30, increment=1, digits=0)
-            msz.Bind(EVT_FLOATSPIN, Closure(self.onMarkerSize, argu=argu))
+            msz.Bind(EVT_FLOATSPIN, partial(self.onMarkerSize, argu=argu))
 
             zor = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30),
                             value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0)
-            zor.Bind(EVT_FLOATSPIN, Closure(self.onZorder, argu=argu))
+            zor.Bind(EVT_FLOATSPIN, partial(self.onZorder, argu=argu))
 
             sym = wx.Choice(panel, -1, choices=self.conf.symbols, size=(120,-1))
-            sym.Bind(wx.EVT_CHOICE,Closure(self.onSymbol,argu=argu))
+            sym.Bind(wx.EVT_CHOICE,partial(self.onSymbol,argu=argu))
 
             sym.SetStringSelection(dsym)
 
             jsty = wx.Choice(panel, -1, choices=self.conf.drawstyles, size=(100,-1))
-            jsty.Bind(wx.EVT_CHOICE,Closure(self.onJoinStyle, argu=argu))
+            jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, argu=argu))
             jsty.SetStringSelection(djsty)
 
             sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)

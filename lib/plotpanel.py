@@ -149,7 +149,7 @@ class PlotPanel(BasePanel):
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
               autoscale=True, refresh=True, show_legend=None,
-              legend_loc='ur', legend_on=True, delay_draw=False,
+              legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None,
               labelfontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, **kws):

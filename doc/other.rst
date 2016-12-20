@@ -3,9 +3,11 @@
 Speciality WXMPLOT displays
 ==========================================================
 
+There are a few custom classes for speciality plots included in
+wxmplot.  Since these build on the :class:`PlotPanel` and
+:class:`ImagePanel` clases, these are described briefly here and an
+example shown for each. 
 
-
-There are a few custom classes in wxmplot for speciality plots.
 
 MultiPlotFrame
 ==========================================================

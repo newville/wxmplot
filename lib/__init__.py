@@ -77,5 +77,6 @@ from .imagepanel import ImagePanel
 from .imageframe import ImageFrame
 from .multiframe import MultiPlotFrame
 from .stackedplotframe import StackedPlotFrame
+from .residualplotframe import ResidualPlotFrame
 from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp

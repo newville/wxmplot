@@ -8,16 +8,15 @@ app = PlotApp()
 
 random.seed(1)
 
-x = linspace(0.0, 10.0, 101)
+x = linspace(0.0, 15.0, 151)
 y = 5*sin(4*x)/(x*x+6)
 z = cos(0.7*(x+0.3)) + random.normal(size=len(x), scale=0.11)
 
-app.plot(x, y, title='WXMPlot example', 
+app.plot(x, y, title='WXMPlot example',
          label='decaying sine',
-         ylabel=r'$\phi(x)$', 
+         ylabel=r'$\phi(x)$',
          xlabel=r'$x \> \rm (\AA)$')
 app.oplot(x, z, label='noisy cosine', marker='+', show_legend=True)
 
 app.write_message('Try Help->Quick Reference')
 app.run()
-

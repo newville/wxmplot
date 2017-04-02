@@ -324,10 +324,10 @@ class PlotConfigFrame(wx.Frame):
 
         ctitle = wx.StaticText(panel, -1, 'Colors:', style=labstyle)
 
-        ltext = wx.StaticText(panel, -1, ' Labels and Titles:', style=labstyle)
-        lgrid = wx.StaticText(panel, -1, ' Grid:',       style=labstyle)
-        lbgr  = wx.StaticText(panel, -1, ' Background:', style=labstyle)
-        lframe= wx.StaticText(panel, -1, ' Plot Frame:', style=labstyle)
+        ltext = wx.StaticText(panel, -1, 'Text:', style=labstyle)
+        lgrid = wx.StaticText(panel, -1, 'Grid:',       style=labstyle)
+        lbgr  = wx.StaticText(panel, -1, 'Background:', style=labstyle)
+        lframe= wx.StaticText(panel, -1, 'Outer Frame:', style=labstyle)
 
         textcol = csel.ColourSelect(panel,  -1, "",
                                     mpl_color(self.conf.textcolor, default=(2, 2, 2)),
@@ -335,8 +335,13 @@ class PlotConfigFrame(wx.Frame):
         gridcol = csel.ColourSelect(panel, -1, "",
                                     mpl_color(self.conf.grid_color),
                                     size=(25, 25))
+        if matplotlib.__version__ < '2.0':
+            axis_bgcol = ax.get_axis_bgcolor()
+        else:
+            axis_bgcol = ax.get_facecolor()
+
         bgcol = csel.ColourSelect(panel,  -1, "",
-                                  mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252)),
+                                  mpl_color(axis_bgcol, default=(255, 255, 252)),
                                   size=(25, 25))
 
 
@@ -352,14 +357,14 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(ctitle,    (0, 0), (1, 1), labstyle, 2)
         sizer.Add(ltext,     (0, 1), (1, 1), labstyle, 2)
         sizer.Add(textcol,   (0, 2), (1, 1), labstyle, 2)
-        sizer.Add(lbgr,      (1, 1), (1, 1), labstyle, 2)
-        sizer.Add(bgcol,     (1, 2), (1, 1), labstyle, 2)
-        sizer.Add(lgrid,     (2, 1), (1, 1), labstyle, 2)
-        sizer.Add(gridcol,   (2, 2), (1, 1), labstyle, 2)
-        sizer.Add(lframe,    (3, 1), (1, 1), labstyle, 2)
-        sizer.Add(fbgcol,    (3, 2), (1, 1), labstyle, 2)
+        sizer.Add(lgrid,     (0, 3), (1, 1), labstyle, 2)
+        sizer.Add(gridcol,   (0, 4), (1, 1), labstyle, 2)
+        sizer.Add(lbgr,      (0, 5), (1, 1), labstyle, 2)
+        sizer.Add(bgcol,     (0, 6), (1, 1), labstyle, 2)
+        sizer.Add(lframe,    (0, 7), (1, 1), labstyle, 2)
+        sizer.Add(fbgcol,    (0, 8), (1, 1), labstyle, 2)
 
-        ctitle = wx.StaticText(panel, -1, ' Plot Components:', style=labstyle)
+        ctitle = wx.StaticText(panel, -1, 'Options:', style=labstyle)
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(self.conf.show_grid)
@@ -367,20 +372,20 @@ class PlotConfigFrame(wx.Frame):
         show_box  = wx.CheckBox(panel,-1, 'Show Top/Right Axes', (-1, -1), (-1, -1))
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(self.conf.axes_style == 'box')
-        
-        sizer.Add(ctitle,     (0, 3), (1, 2), labstyle, 2)
-        sizer.Add(show_grid,  (1, 4), (1, 2), labstyle, 2)
-        sizer.Add(show_box,   (2, 4), (1, 2), labstyle, 2)
+
+        sizer.Add(ctitle,     (4, 0), (1, 1), labstyle, 2)
+        sizer.Add(show_grid,  (4, 1), (1, 2), labstyle, 2)
+        sizer.Add(show_box,   (4, 3), (1, 2), labstyle, 2)
 
         # margins
         ppanel = self.GetParent()
         _left, _top, _right, _bot = ["%.3f"% x for x in ppanel.get_default_margins()]
 
-        mtitle = wx.StaticText(panel, -1, 'Margins: ', style=labstyle)
-        ltitle = wx.StaticText(panel, -1, ' left: ',   style=labstyle)
-        rtitle = wx.StaticText(panel, -1, ' right: ',  style=labstyle)
-        btitle = wx.StaticText(panel, -1, ' bottom: ', style=labstyle)
-        ttitle = wx.StaticText(panel, -1, ' top: ',    style=labstyle)
+        mtitle = wx.StaticText(panel, -1, 'Margins: ')
+        ltitle = wx.StaticText(panel, -1, 'Left:   ')
+        rtitle = wx.StaticText(panel, -1, 'Right:  ')
+        btitle = wx.StaticText(panel, -1, 'Bottom: ')
+        ttitle = wx.StaticText(panel, -1, 'Top:    ')
 
         opts = dict(min_val=0.0, max_val=None, increment=0.01, digits=3,
                     pos=(-1,-1), size=(FSPINSIZE, 30))
@@ -401,16 +406,16 @@ class PlotConfigFrame(wx.Frame):
         auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
         auto_m.SetValue(self.conf.auto_margins)
 
-        sizer.Add(mtitle,   (4, 0), (1, 1), labstyle, 2)
-        sizer.Add(auto_m,   (4, 1), (1, 2), labstyle, 5)
-        sizer.Add(ltitle,   (5, 1), (1, 1), labstyle, 5)
-        sizer.Add(lmarg,    (5, 2), (1, 2), labstyle, 5)
-        sizer.Add(rtitle,   (6, 1), (1, 1), labstyle, 5)
-        sizer.Add(rmarg,    (6, 2), (1, 2), labstyle, 5)
-        sizer.Add(btitle,   (7, 1), (1, 1), labstyle, 5)
-        sizer.Add(bmarg,    (7, 2), (1, 2), labstyle, 5)
-        sizer.Add(ttitle,   (8, 1), (1, 1), labstyle, 5)
-        sizer.Add(tmarg,    (8, 2), (1, 2), labstyle, 5)
+        sizer.Add(mtitle,   (2, 0), (1, 1), labstyle, 2)
+        sizer.Add(auto_m,   (2, 1), (1, 2), labstyle, 2)
+        sizer.Add(ltitle,   (2, 3), (1, 1), labstyle, 2)
+        sizer.Add(lmarg,    (2, 4), (1, 1), labstyle, 2)
+        sizer.Add(rtitle,   (2, 5), (1, 1), labstyle, 2)
+        sizer.Add(rmarg,    (2, 6), (1, 1), labstyle, 2)
+        sizer.Add(btitle,   (2, 7), (1, 1), labstyle, 2)
+        sizer.Add(bmarg,    (2, 8), (1, 1), labstyle, 2)
+        sizer.Add(ttitle,   (2, 9), (1, 1), labstyle, 2)
+        sizer.Add(tmarg,    (2, 10), (1, 1), labstyle, 2)
 
         autopack(panel, sizer)
         return panel
@@ -512,7 +517,11 @@ class PlotConfigFrame(wx.Frame):
                     i.set_zorder(-30)
         elif argu == 'bg':
             for ax in self.axes:
-                ax.set_axis_bgcolor(color)
+                if matplotlib.__version__ < '2.0':
+                    ax.set_axis_bgcolor(color)
+                else:
+                    ax.set_facecolor(color)
+
         elif argu == 'fbg':
             self.canvas.figure.set_facecolor(color)
         elif argu == 'text':

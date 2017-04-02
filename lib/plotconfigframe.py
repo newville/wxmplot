@@ -21,7 +21,7 @@ to_rgba = colorConverter.to_rgba
 
 from .utils import Closure, LabelEntry
 from .config import PlotConfig
-from .colors import hexcolor
+from .colors import hexcolor, hex2rgb
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
@@ -88,8 +88,7 @@ class PlotConfigFrame(wx.Frame):
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL
         wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
-        bgcol = mpl_color(self.canvas.figure.get_facecolor())
-        self.bgcol = bgcol
+        bgcol =  hex2rgb(self.conf.color_themes['light']['bg'])
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
@@ -99,7 +98,7 @@ class PlotConfigFrame(wx.Frame):
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
 
         self.nb.SetActiveTabColour((253, 253, 230))
-        self.nb.SetTabAreaColour((self.bgcol[0]-2, self.bgcol[1]-2, self.bgcol[2]-2))
+        self.nb.SetTabAreaColour((bgcol[0]-8, bgcol[1]-8, bgcol[2]-8))
         self.nb.SetNonActiveTabTextColour((10, 10, 100))
         self.nb.SetActiveTabTextColour((100, 10, 10))
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
@@ -114,7 +113,7 @@ class PlotConfigFrame(wx.Frame):
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
         for i in range(self.nb.GetPageCount()):
-            self.nb.GetPage(i).SetBackgroundColour(self.bgcol)
+            self.nb.GetPage(i).SetBackgroundColour(bgcol)
 
         self.nb.SetSelection(0)
 
@@ -320,10 +319,20 @@ class PlotConfigFrame(wx.Frame):
         btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
         ax = self.axes[0]
-
+        if matplotlib.__version__ < '2.0':
+            axis_bgcol = ax.get_axis_bgcolor()
+        else:
+            axis_bgcol = ax.get_facecolor()
 
         ctitle = wx.StaticText(panel, -1, 'Colors:', style=labstyle)
 
+        themes = list(self.conf.color_themes.keys())
+
+        coltheme = wx.Choice(panel, choices=themes, size=(100,-1))
+        coltheme.SetStringSelection(self.conf.color_theme)
+        coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
+
+        ltheme = wx.StaticText(panel, -1, 'Theme:', style=labstyle)
         ltext = wx.StaticText(panel, -1, 'Text:', style=labstyle)
         lgrid = wx.StaticText(panel, -1, 'Grid:',       style=labstyle)
         lbgr  = wx.StaticText(panel, -1, 'Background:', style=labstyle)
@@ -332,37 +341,39 @@ class PlotConfigFrame(wx.Frame):
         textcol = csel.ColourSelect(panel,  -1, "",
                                     mpl_color(self.conf.textcolor, default=(2, 2, 2)),
                                     size=(25, 25))
+
         gridcol = csel.ColourSelect(panel, -1, "",
-                                    mpl_color(self.conf.grid_color),
+                                    mpl_color(self.conf.gridcolor),
                                     size=(25, 25))
-        if matplotlib.__version__ < '2.0':
-            axis_bgcol = ax.get_axis_bgcolor()
-        else:
-            axis_bgcol = ax.get_facecolor()
 
         bgcol = csel.ColourSelect(panel,  -1, "",
                                   mpl_color(axis_bgcol, default=(255, 255, 252)),
                                   size=(25, 25))
 
-
         fbgcol = csel.ColourSelect(panel,  -1, "",
-                                   mpl_color(self.canvas.figure.get_facecolor(), default=(255,255,252)),
+                                   mpl_color(self.canvas.figure.get_facecolor(),
+                                             default=(255,255,252)),
                                    size=(25, 25))
 
+        self.colwids = {'text': textcol, 'bg': bgcol,
+                        'grid': gridcol, 'frame': fbgcol}
+
         bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
-        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='fbg'))
+        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='frame'))
         gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='grid'))
         textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='text'))
 
         sizer.Add(ctitle,    (0, 0), (1, 1), labstyle, 2)
-        sizer.Add(ltext,     (0, 1), (1, 1), labstyle, 2)
-        sizer.Add(textcol,   (0, 2), (1, 1), labstyle, 2)
-        sizer.Add(lgrid,     (0, 3), (1, 1), labstyle, 2)
-        sizer.Add(gridcol,   (0, 4), (1, 1), labstyle, 2)
-        sizer.Add(lbgr,      (0, 5), (1, 1), labstyle, 2)
-        sizer.Add(bgcol,     (0, 6), (1, 1), labstyle, 2)
-        sizer.Add(lframe,    (0, 7), (1, 1), labstyle, 2)
-        sizer.Add(fbgcol,    (0, 8), (1, 1), labstyle, 2)
+        sizer.Add(ltheme,    (0, 1), (1, 1), labstyle, 2)
+        sizer.Add(coltheme,  (0, 2), (1, 1), labstyle, 2)
+        sizer.Add(ltext,     (0, 3), (1, 1), labstyle, 2)
+        sizer.Add(textcol,   (0, 4), (1, 1), labstyle, 2)
+        sizer.Add(lgrid,     (0, 5), (1, 1), labstyle, 2)
+        sizer.Add(gridcol,   (0, 6), (1, 1), labstyle, 2)
+        sizer.Add(lbgr,      (0, 7), (1, 1), labstyle, 2)
+        sizer.Add(bgcol,     (0, 8), (1, 1), labstyle, 2)
+        sizer.Add(lframe,    (0, 9), (1, 1), labstyle, 2)
+        sizer.Add(fbgcol,    (0, 10), (1, 1), labstyle, 2)
 
         ctitle = wx.StaticText(panel, -1, 'Options:', style=labstyle)
         show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
@@ -500,8 +511,9 @@ class PlotConfigFrame(wx.Frame):
         panel.SetupScrolling()
         return panel
 
-    def onColor(self, event, argu='grid'):
-        color = hexcolor( event.GetValue() )
+    def onColor(self, event=None, color=None, argu='grid', draw=True):
+        if color is None and event is not None:
+            color = hexcolor( event.GetValue() )
         if argu[:6] == 'trace ':
             trace = int(argu[6:])
             self.conf.set_trace_color(color,trace=trace)
@@ -510,27 +522,44 @@ class PlotConfigFrame(wx.Frame):
             self.redraw_legend()
 
         elif argu == 'grid':
-            self.conf.grid_color = color
+            self.conf.gridcolor = color
             for ax in self.axes:
                 for i in ax.get_xgridlines()+ax.get_ygridlines():
                     i.set_color(color)
                     i.set_zorder(-30)
         elif argu == 'bg':
+            self.conf.bgcolor = color
             for ax in self.axes:
                 if matplotlib.__version__ < '2.0':
                     ax.set_axis_bgcolor(color)
                 else:
                     ax.set_facecolor(color)
 
-        elif argu == 'fbg':
+        elif argu in ('frame', 'fbg'):
             self.canvas.figure.set_facecolor(color)
         elif argu == 'text':
             self.conf.textcolor = color
             self.conf.relabel()
             return
-        self.canvas.draw()
+        if draw:
+            self.canvas.draw()
 
-    def onStyle(self,event,argu='grid'):
+    def onColorThemeStyle(self, event):
+        theme = event.GetString()
+        conf = self.conf
+        conf.set_color_theme(theme)
+
+        self.colwids['text'].SetColour(conf.textcolor)
+        self.colwids['grid'].SetColour(conf.gridcolor)
+        self.colwids['bg'].SetColour(conf.bgcolor)
+        self.colwids['frame'].SetColour(conf.framecolor)
+
+        self.onColor(color=conf.bgcolor,    argu='bg',    draw=False)
+        self.onColor(color=conf.gridcolor,  argu='grid',  draw=False)
+        self.onColor(color=conf.framecolor, argu='frame', draw=False)
+        self.onColor(color=conf.textcolor,  argu='text',  draw=False)
+
+    def onStyle(self, event, argu='grid'):
         try:
             self.conf.set_trace_style(event.GetString(),trace=int(argu[6:]))
             self.redraw_legend()

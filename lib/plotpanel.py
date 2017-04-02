@@ -94,13 +94,10 @@ class PlotPanel(BasePanel):
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi     = dpi
 
-        # handle axis bg color for mpl 1.* and 2.*
         if facecolor is not None:
-            axisbg = facecolor
-            facecolor = axisbg
-            if facecolor is None:
-                axisbg='#FEFFFE'
-        self.axisbg = axisbg
+            self.conf.bgcolor = facecolor
+        if axisbg is not None:
+            self.conf.bgcolor = axisbg
 
         # axesmargins : margins in px left/top/right/bottom
         self.axesmargins = (30, 30, 30, 30)
@@ -231,7 +228,7 @@ class PlotPanel(BasePanel):
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
             for i in axes.get_xgridlines() + axes.get_ygridlines():
-                i.set_color(conf.grid_color)
+                i.set_color(conf.gridcolor)
                 i.set_zorder(-100)
             axes.grid(True)
         else:
@@ -243,6 +240,7 @@ class PlotPanel(BasePanel):
         conf.set_trace_datarange(datarange)
 
         if bgcolor is not None:
+            self.conf.bgcolor = bgcolor
             axes.set_axis_bgcolor(bgcolor)
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
@@ -262,7 +260,7 @@ class PlotPanel(BasePanel):
             conf.set_trace_drawstyle(drawstyle)
 
         if gridcolor is not None:
-            conf.grid_color = gridcolor
+            conf.gridcolor = gridcolor
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
         if legendfontsize is not None:
@@ -383,7 +381,7 @@ class PlotPanel(BasePanel):
 
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
-                i.set_color(self.conf.grid_color)
+                i.set_color(self.conf.gridcolor)
                 i.set_zorder(-30)
             axes.grid(True)
         else:
@@ -506,7 +504,7 @@ class PlotPanel(BasePanel):
         "toggle legend display"
         if show is None:
             show = not self.conf.show_legend
-        self.conf.show_legend = show
+            self.conf.show_legend = show
         self.conf.draw_legend()
 
     def toggle_grid(self, evt=None, show=None):
@@ -537,16 +535,16 @@ class PlotPanel(BasePanel):
         self.fig   = Figure(self.figsize, dpi=self.dpi)
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
-        kwargs = {'facecolor': self.axisbg}
+        kwargs = {'facecolor': self.conf.bgcolor}
         if matplotlib.__version__ < "2.0":
-            kwargs = {'axisbg': self.axisbg}
+            kwargs = {'axisbg': self.conf.bgcolor}
 
         self.axes  = self.fig.add_subplot(self.gridspec[0], **kwargs)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 
         self.printer.canvas = self.canvas
-        self.set_bg()
+        self.set_bg(self.conf.framecolor)
         self.conf.canvas = self.canvas
         self.canvas.SetCursor(wxCursor(wx.CURSOR_CROSS))
         self.canvas.mpl_connect("pick_event", self.__onPickEvent)

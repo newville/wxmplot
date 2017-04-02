@@ -59,6 +59,13 @@ for k,v in (('no symbol','None'), ('+','+'), ('o','o'), ('x','x'),
     MarkerMap[k] = v
 
 
+ColorThemes = OrderedDict()
+ColorThemes['light'] = {'bg': '#FEFEFE', 'text': '#000000',
+                        'grid': '#E5E5E5', 'frame': '#F8F8F8'}
+ColorThemes['dark'] = {'bg': '#242424', 'text': '#FDFD80',
+                       'grid': '#404040', 'frame': '#181818'}
+
+
 class LineProperties:
     """ abstraction for Line2D properties, closely related to a
     MatPlotlib Line2D.  used to set internal line properties, and
@@ -230,8 +237,10 @@ class PlotConfig:
         self.legendfont.set_size(7)
         self.labelfont.set_size(9)
         self.titlefont.set_size(10)
-        self.textcolor = '#000000'
-        self.grid_color = '#E5E5E5'
+        self.color_themes = ColorThemes
+        self.color_theme = 'light'
+        self.set_color_theme(self.color_theme)
+
         # preload some traces
         self.ntrace = 0
         self.lines  = [None]*30
@@ -249,6 +258,14 @@ class PlotConfig:
                 i += 1
                 self._init_trace(i, color, style, marker=marker)
 
+    def set_color_theme(self, theme='light'):
+        if theme in self.color_themes:
+            self.color_theme = theme
+        theme = self.color_theme
+        self.bgcolor    = self.color_themes[theme]['bg']
+        self.textcolor  = self.color_themes[theme]['text']
+        self.gridcolor  = self.color_themes[theme]['grid']
+        self.framecolor = self.color_themes[theme]['frame']
 
     def _init_trace(self, n,  color, style,
                     linewidth=2.5, zorder=None, marker=None, markersize=8):
@@ -389,7 +406,7 @@ class PlotConfig:
         axes = self.canvas.figure.get_axes()
         ax0 = axes[0]
         for i in ax0.get_xgridlines() + ax0.get_ygridlines():
-            i.set_color(self.grid_color)
+            i.set_color(self.gridcolor)
             i.set_zorder(-30)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
@@ -406,8 +423,10 @@ class PlotConfig:
             self.axes_style = style
         axes0 = self.canvas.figure.get_axes()[0]
         _sty = self.axes_style.lower()
-        if  _sty in ('fullbox', 'full'): _sty = 'box'
-        if  _sty == 'leftbot':           _sty = 'open'
+        if  _sty in ('fullbox', 'full'):
+            _sty = 'box'
+        if  _sty == 'leftbot':
+            _sty = 'open'
 
         if _sty == 'box':
             axes0.xaxis.set_ticks_position('both')

@@ -24,6 +24,7 @@ Valid marker names are:
 
 """
 
+import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
 from . import colors
@@ -42,11 +43,11 @@ for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
 
 for k,v in (('solid', ('-', None)),
-            ('dashed', ('--', (6, 6))),
-            ('long dashed', ('--', (12, 4))),
             ('short dashed', ('--',(4, 1))),
+            ('dash-dot', ('-.', None)),
+            ('dashed', ('--', (6, 6))),
             ('dotted', (':', None)),
-            ('dash-dot', ('-.', None))):
+            ('long dashed', ('--', (12, 4)))):
     StyleMap[k]=v
 
 
@@ -235,27 +236,19 @@ class PlotConfig:
         self.ntrace = 0
         self.lines  = [None]*30
         self.traces = []
-        self._init_trace( 0, 'blue',      'solid')
-        self._init_trace( 1, 'red',       'solid')
-        self._init_trace( 2, 'black',     'solid')
-        self._init_trace( 3, 'magenta',   'solid')
-        self._init_trace( 4, 'green3',    'solid')
-        self._init_trace( 5, 'maroon',    'solid')
-        self._init_trace( 6, 'blue',     'dashed')
-        self._init_trace( 7, 'red',      'dashed')
-        self._init_trace( 8, 'black',    'dashed')
-        self._init_trace( 9, 'magenta',  'dashed')
-        self._init_trace(10, 'green3',   'dashed')
-        self._init_trace(11, 'maroon',   'dashed')
-        self._init_trace(12, 'blue',     'dotted')
-        self._init_trace(13, 'red',      'dotted')
-        self._init_trace(14, 'black',    'dotted')
-        self._init_trace(15, 'magenta',  'dotted')
-        self._init_trace(16, 'green3',   'dotted')
-        self._init_trace(17, 'maroon',   'dotted')
-        self._init_trace(18, 'blue',      'solid', marker='+')
-        self._init_trace(19, 'red',       'solid', marker='+')
-        self._init_trace(20, 'black',     'solid', marker='o')
+
+        i = -1
+
+        for style, marker in (('solid', None), ('short dashed', None),
+                               ('dash-dot', None), ('solid', 'o'),
+                               ('solid', '+')):
+
+            for color in ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
+                          '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
+                          '#bcbd22', '#17becf'):
+                i += 1
+                self._init_trace(i, color, style, marker=marker)
+
 
     def _init_trace(self, n,  color, style,
                     linewidth=2.5, zorder=None, marker=None, markersize=8):
@@ -479,7 +472,12 @@ class PlotConfig:
             self.mpl_legend = lgn(lins, labs, prop=self.legendfont,
                                   loc=self.legend_loc)
             self.mpl_legend.draw_frame(self.show_legend_frame)
-            self.mpl_legend.legendPatch.set_facecolor(axes[0].get_axis_bgcolor())
+            if matplotlib.__version__ < '2.0':
+                facecol = axes[0].get_axis_bgcolor()
+            else:
+                facecol = axes[0].get_facecolor()
+
+            self.mpl_legend.legendPatch.set_facecolor(facecol)
             if self.draggable_legend:
                 self.mpl_legend.draggable(True, update='loc')
             self.legend_map = {}

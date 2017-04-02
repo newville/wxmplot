@@ -9,19 +9,16 @@ class PlotFrame(BaseFrame):
     """
     MatPlotlib 2D plot as a wx.Frame, using PlotPanel
     """
-    def __init__(self, parent=None, size=None, axisbg=None, title=None, **kws):
+    def __init__(self, parent=None, title=None, **kws):
         if title is None:
             title = '2D Plot Frame'
-
-        BaseFrame.__init__(self, parent=parent, title=title, size=size,
-                           axisbg=axisbg, **kws)
-
+        BaseFrame.__init__(self, parent=parent, title=title, **kws)
         self.BuildFrame()
 
     def get_figure(self):
         """return MPL plot figure"""
         return self.panel.fig
-        
+
     def add_text(self, text, x, y, **kws):
         """add text to plot"""
         self.panel.add_text(text, x, y, **kws)

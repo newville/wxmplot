@@ -69,8 +69,9 @@ class PlotPanel(BasePanel):
     and also provides, a Menu, StatusBar, and Printing support.
     """
 
-    def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None, fontsize=9,
-                 trace_color_callback=None, output_title='plot', **kws):
+    def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None,
+                 facecolor=None, fontsize=9, trace_color_callback=None,
+                 output_title='plot', **kws):
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -93,8 +94,14 @@ class PlotPanel(BasePanel):
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi     = dpi
 
-        if axisbg is None:     axisbg='#FEFFFE'
+        # handle axis bg color for mpl 1.* and 2.*
+        if facecolor is not None:
+            axisbg = facecolor
+            facecolor = axisbg
+            if facecolor is None:
+                axisbg='#FEFFFE'
         self.axisbg = axisbg
+
         # axesmargins : margins in px left/top/right/bottom
         self.axesmargins = (30, 30, 30, 30)
 
@@ -522,7 +529,6 @@ class PlotPanel(BasePanel):
                                               trace_color_callback=self.trace_color_callback)
             self.win_config.Raise()
 
-
     ####
     ## create GUI
     ####
@@ -531,7 +537,11 @@ class PlotPanel(BasePanel):
         self.fig   = Figure(self.figsize, dpi=self.dpi)
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
-        self.axes  = self.fig.add_subplot(self.gridspec[0], axisbg=self.axisbg)
+        kwargs = {'facecolor': self.axisbg}
+        if matplotlib.__version__ < "2.0":
+            kwargs = {'axisbg': self.axisbg}
+
+        self.axes  = self.fig.add_subplot(self.gridspec[0], **kwargs)
 
         self.canvas = FigureCanvas(self, -1, self.fig)
 

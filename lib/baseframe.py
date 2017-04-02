@@ -43,9 +43,10 @@ Also, these key bindings can be used
     about_msg =  """WXMPlot  version %s
 Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
+
     def __init__(self, parent=None, panel=None, title='', size=None,
-                 axisbg=None, exit_callback=None, user_menus=None,
-                 output_title='Plot', dpi=150, **kws):
+                 exit_callback=None, user_menus=None, panelkws=None,
+                 axisbg=None, output_title='Plot', dpi=150, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
@@ -59,7 +60,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.dpi    = dpi
         self.user_menus = user_menus
         self.size = size
-        self.axisbg = axisbg
+        self.panelkws = panelkws or {}
+        if axisbg is not None:
+            self.panelkws['axisbg'] = axisbg
 
     def write_message(self,s,panel=0):
         """write a message to the Status Bar"""
@@ -123,9 +126,12 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.SetStatusText('',0)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        self.panel = PlotPanel(self, size=self.size,
-                               axisbg=self.axisbg,
-                               output_title=self.output_title)
+        panelkws = self.panelkws
+        if self.size is not None:
+            panelkws.update({'size': self.size})
+        panelkws.update({'output_title': self.output_title})
+
+        self.panel = PlotPanel(self, **panelkws)
         self.panel.messenger = self.write_message
         sizer.Add(self.panel, 1, wx.EXPAND)
         self.BuildMenu()

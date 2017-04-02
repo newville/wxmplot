@@ -344,7 +344,7 @@ display live coordintes as the mouse moves on the plot.  The built-in
 menus include methods for saving, printing and copying an image of the
 plot to the system Clipboard, as well as ways to configure many of the
 plot attributes.
- 
+
 .. class:: PlotFrame(parent[, size=(700, 450)[, title=None[, **kws]]])
 
    create a plot frame.  This frame will have a :data:`panel` member
@@ -419,7 +419,7 @@ The plot image shown above supports zooming with a box: Pressing down
 the left mouse button and dragging will draw a rectangular box, and
 releasing the mouse button will zoom in to that rectangle.  This can
 be repeated multiple time. Typing "Ctrl-Z" (or "Apple-Z" for Mac
-OS X) will zoom out to the previous zoom level, or show the full plot. 
+OS X) will zoom out to the previous zoom level, or show the full plot.
 
 From the File menu, the user can save an image of the plot, copy that
 image to system clipboard, or setup and preview printing.  The data in
@@ -428,41 +428,32 @@ menu allows the user to configure the plot, toggle the display of the
 legend and grid, and zoom out to the full plot range.
 
 The configuration window (Options->Configuration or Ctrl-K) is a
-tabbed window, with sections for configuring Line Traces, Colors and
-Margins, Text and Labels, Legend, and Scatterplot.
+tabbed window, with sections for configuring Colors and Line Properties,
+Text, Labels, and Legend, and Scatterplot.
 
 .. image:: images/PlotConfig_LineProps.png
    :width: 85 %
 
-The Line Traces tab allows the user to configure the label, color,
-line style, line width, symbol to use for a marker, marker size,
-z-order, and join style for each line or curve drawn.
+The Colors and Line Properties tab allows the user to configure the basic
+colors for the plot, toggling the display of the grid lines and upper and
+right axes, and setting of the main properties for each trace.  The label,
+color, line style, line width, symbol to use for a marker, marker size,
+z-order, and join style for each trace drawn can be customized.
 
-.. image:: images/PlotConfig_Colors.png
-   :width: 85 %
-
-The Colors and Margins tab allows the user to set the colors for
-background, frame, text, and also toggle the display of the grid and
-upper and right-hand axes spines. In addition, the margins for the
-plot window can be configured to be automatically set, or fine-tuned.
 
 .. image:: images/PlotConfig_Text.png
    :width: 85 %
 
-The Text and Labels tab allows the user to set the title and labels
-for the X and Y axes, and to adjust the fontsize for these text and the text
-shown in the plot legend.
+The Text and Labels tab allows the user to set the title and labels for the
+X and Y axes, and to adjust the fontsize for these text and the text shown
+in the plot legend.  The legend can also be customized: whether it is
+shown, it's location, and whether the legend entries can be clicked on to
+toggle the display of the corresponding line.  The experimental "Draggable
+Legend" option allows the user to drag the legend on the plot to fine-tune
+its placement. In addition, the margins for the
+plot window can be configured to be automatically set, or fine-tuned.
 
 
-.. image:: images/PlotConfig_Legend.png
-   :width: 85 %
-
-The Legend tab allows the user to control the display and placement of
-the plot legend, and whether it can be used interactively. When "Click
-Legend to Show/Hide Line" is selected, the user can click on the
-Legend line indicator or text to toggle the corresponding line off and
-on.  The "Draggable Legend" option allows the user to drag the legend
-on the plot to fine-tune its placement.
 
 .. image:: images/PlotConfig_Scatter.png
    :width: 85 %

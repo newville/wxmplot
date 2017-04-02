@@ -92,7 +92,7 @@ class PlotConfigFrame(wx.Frame):
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
-        font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+        font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
@@ -102,13 +102,9 @@ class PlotConfigFrame(wx.Frame):
         self.nb.SetNonActiveTabTextColour((10, 10, 100))
         self.nb.SetActiveTabTextColour((100, 10, 10))
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
-                        'Line Traces', True)
-        self.nb.AddPage(self.make_colors_panel(parent=self.nb, font=font),
-                        'Colors and Margins', True)
+                        'Colors and Line Properties', True)
         self.nb.AddPage(self.make_text_panel(parent=self.nb, font=font),
-                        'Text and Labels', True)
-        self.nb.AddPage(self.make_legend_panel(parent=self.nb, font=font),
-                        'Legend Settings', True)
+                        'Text, Labels, Legends', True)
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
@@ -120,7 +116,7 @@ class PlotConfigFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
 
-        sizer.Add(self.nb,  1, wx.GROW|sty, 3)
+        sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
         self.SetMinSize((750, 200))
         self.SetSize((850, 400))
@@ -131,7 +127,7 @@ class PlotConfigFrame(wx.Frame):
         # list of traces
         panel = wx.Panel(parent)
         if font is None:
-            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+            font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
         sizer = wx.GridBagSizer(4, 4)
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
@@ -197,7 +193,7 @@ class PlotConfigFrame(wx.Frame):
         panel = scrolled.ScrolledPanel(parent, size=(800, 200),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
         if font is None:
-            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+            font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
         sizer = wx.GridBagSizer(2, 2)
         i = 0
@@ -221,11 +217,6 @@ class PlotConfigFrame(wx.Frame):
         l_size.SetValue(self.conf.legendfont.get_size())
         l_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, argu='legendsize'))
 
-        sizer.Add(t0,      (0, 0), (1, 1), labstyle)
-        sizer.Add(t1,      (0, 1), (1, 1), labstyle)
-        sizer.Add(t_size,  (0, 2), (1, 1), labstyle)
-        sizer.Add(t2,      (0, 3), (1, 1), labstyle)
-        sizer.Add(l_size,  (0, 4), (1, 1), labstyle)
 
         self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
                                labeltext='Title: ',size=400,
@@ -240,33 +231,29 @@ class PlotConfigFrame(wx.Frame):
                                labeltext='X Label: ',size=400,
                                action = partial(self.onText, argu='xlabel'))
 
-        sizer.Add(self.titl.label, (1, 0), (1, 1), labstyle)
-        sizer.Add(self.titl,       (1, 1), (1, 4), labstyle)
-        sizer.Add(self.ylab.label, (2, 0), (1, 1), labstyle)
-        sizer.Add(self.ylab,       (2, 1), (1, 4), labstyle)
-        sizer.Add(self.y2lab.label,(3, 0), (1, 1), labstyle)
-        sizer.Add(self.y2lab,      (3, 1), (1, 4), labstyle)
-        sizer.Add(self.xlab.label, (4, 0), (1, 1), labstyle)
-        sizer.Add(self.xlab,       (4, 1), (1, 4), labstyle)
+        sizer.Add(self.titl.label, (0, 0), (1, 1), labstyle)
+        sizer.Add(self.titl,       (0, 1), (1, 4), labstyle)
+        sizer.Add(self.ylab.label, (1, 0), (1, 1), labstyle)
+        sizer.Add(self.ylab,       (1, 1), (1, 4), labstyle)
+        sizer.Add(self.y2lab.label,(2, 0), (1, 1), labstyle)
+        sizer.Add(self.y2lab,      (2, 1), (1, 4), labstyle)
+        sizer.Add(self.xlab.label, (3, 0), (1, 1), labstyle)
+        sizer.Add(self.xlab,       (3, 1), (1, 4), labstyle)
 
-        autopack(panel, sizer)
-        return panel
+        sizer.Add(t0,      (4, 0), (1, 1), labstyle)
+        sizer.Add(t1,      (4, 1), (1, 1), labstyle)
+        sizer.Add(t_size,  (4, 2), (1, 1), labstyle)
+        sizer.Add(t2,      (4, 3), (1, 1), labstyle)
+        sizer.Add(l_size,  (4, 4), (1, 1), labstyle)
 
-    def make_legend_panel(self, parent, font=None):
-        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
-                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
-        if font is None:
-            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
-
-        sizer = wx.GridBagSizer(2, 2)
-        i = 0
-        irow = 0
+        # Legend
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
         ax = self.axes[0]
 
-        tl1 = wx.StaticText(panel, -1, 'Legend location:', size=(-1, -1), style=labstyle)
+        leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
+        loc_ttl = wx.StaticText(panel, -1, '   Location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
         leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
@@ -292,111 +279,31 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
-        sizer.Add(tl1,      (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add(leg_loc,  (0, 1), (1, 2), labstyle)
-        sizer.Add(leg_onax, (0, 3), (1, 1), labstyle)
+        lsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        sizer.Add(show_leg,  (1, 0), (1, 2), labstyle)
-        sizer.Add(show_lfr,  (2, 0), (1, 2), labstyle)
-        sizer.Add(hide_leg,  (3, 0), (1, 2), labstyle)
-        sizer.Add(drag_leg,  (4, 0), (1, 3), labstyle)
+        lsizer.Add(show_leg, 1, labstyle, 2)
+        lsizer.Add(show_lfr, 0, labstyle, 2)
+        lsizer.Add(loc_ttl,  0, labstyle, 2)
+        lsizer.Add(leg_loc,  0, labstyle, 2)
+        lsizer.Add(leg_onax, 0, labstyle, 2)
 
-        autopack(panel, sizer)
-        return panel
+        sizer.Add(leg_ttl,   (6, 0), (1, 1), labstyle, 2)
+        sizer.Add(lsizer,    (6, 1), (1, 5), labstyle, 2)
+
+        sizer.Add(hide_leg,  (7, 1), (1, 2), labstyle, 2)
+        sizer.Add(drag_leg,  (7, 4), (1, 3), labstyle, 2)
 
 
-    def make_colors_panel(self, parent, font=None):
-        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
-                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
-        if font is None:
-            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
-
-        sizer = wx.GridBagSizer(2, 2)
-        i = 0
-        irow = 0
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-        btnstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-
-        ax = self.axes[0]
-        if matplotlib.__version__ < '2.0':
-            axis_bgcol = ax.get_axis_bgcolor()
-        else:
-            axis_bgcol = ax.get_facecolor()
-
-        ctitle = wx.StaticText(panel, -1, 'Colors:', style=labstyle)
-
-        themes = list(self.conf.color_themes.keys())
-
-        coltheme = wx.Choice(panel, choices=themes, size=(100,-1))
-        coltheme.SetStringSelection(self.conf.color_theme)
-        coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
-
-        ltheme = wx.StaticText(panel, -1, 'Theme:', style=labstyle)
-        ltext = wx.StaticText(panel, -1, 'Text:', style=labstyle)
-        lgrid = wx.StaticText(panel, -1, 'Grid:',       style=labstyle)
-        lbgr  = wx.StaticText(panel, -1, 'Background:', style=labstyle)
-        lframe= wx.StaticText(panel, -1, 'Outer Frame:', style=labstyle)
-
-        textcol = csel.ColourSelect(panel,  -1, "",
-                                    mpl_color(self.conf.textcolor, default=(2, 2, 2)),
-                                    size=(25, 25))
-
-        gridcol = csel.ColourSelect(panel, -1, "",
-                                    mpl_color(self.conf.gridcolor),
-                                    size=(25, 25))
-
-        bgcol = csel.ColourSelect(panel,  -1, "",
-                                  mpl_color(axis_bgcol, default=(255, 255, 252)),
-                                  size=(25, 25))
-
-        fbgcol = csel.ColourSelect(panel,  -1, "",
-                                   mpl_color(self.canvas.figure.get_facecolor(),
-                                             default=(255,255,252)),
-                                   size=(25, 25))
-
-        self.colwids = {'text': textcol, 'bg': bgcol,
-                        'grid': gridcol, 'frame': fbgcol}
-
-        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
-        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='frame'))
-        gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='grid'))
-        textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='text'))
-
-        sizer.Add(ctitle,    (0, 0), (1, 1), labstyle, 2)
-        sizer.Add(ltheme,    (0, 1), (1, 1), labstyle, 2)
-        sizer.Add(coltheme,  (0, 2), (1, 1), labstyle, 2)
-        sizer.Add(ltext,     (0, 3), (1, 1), labstyle, 2)
-        sizer.Add(textcol,   (0, 4), (1, 1), labstyle, 2)
-        sizer.Add(lgrid,     (0, 5), (1, 1), labstyle, 2)
-        sizer.Add(gridcol,   (0, 6), (1, 1), labstyle, 2)
-        sizer.Add(lbgr,      (0, 7), (1, 1), labstyle, 2)
-        sizer.Add(bgcol,     (0, 8), (1, 1), labstyle, 2)
-        sizer.Add(lframe,    (0, 9), (1, 1), labstyle, 2)
-        sizer.Add(fbgcol,    (0, 10), (1, 1), labstyle, 2)
-
-        ctitle = wx.StaticText(panel, -1, 'Options:', style=labstyle)
-        show_grid  = wx.CheckBox(panel,-1, 'Show Grid', (-1, -1), (-1, -1))
-        show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
-        show_grid.SetValue(self.conf.show_grid)
-
-        show_box  = wx.CheckBox(panel,-1, 'Show Top/Right Axes', (-1, -1), (-1, -1))
-        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
-        show_box.SetValue(self.conf.axes_style == 'box')
-
-        sizer.Add(ctitle,     (4, 0), (1, 1), labstyle, 2)
-        sizer.Add(show_grid,  (4, 1), (1, 2), labstyle, 2)
-        sizer.Add(show_box,   (4, 3), (1, 2), labstyle, 2)
-
-        # margins
+        # Margins
         ppanel = self.GetParent()
-        _left, _top, _right, _bot = ["%.3f"% x for x in ppanel.get_default_margins()]
+        _left, _top, _right, _bot = ["%.3f"% x for x in
+                                     ppanel.get_default_margins()]
 
         mtitle = wx.StaticText(panel, -1, 'Margins: ')
-        ltitle = wx.StaticText(panel, -1, 'Left:   ')
-        rtitle = wx.StaticText(panel, -1, 'Right:  ')
-        btitle = wx.StaticText(panel, -1, 'Bottom: ')
-        ttitle = wx.StaticText(panel, -1, 'Top:    ')
+        ltitle = wx.StaticText(panel, -1, ' Left:   ')
+        rtitle = wx.StaticText(panel, -1, ' Right:  ')
+        btitle = wx.StaticText(panel, -1, ' Bottom: ')
+        ttitle = wx.StaticText(panel, -1, ' Top:    ')
 
         opts = dict(min_val=0.0, max_val=None, increment=0.01, digits=3,
                     pos=(-1,-1), size=(FSPINSIZE, 30))
@@ -417,33 +324,90 @@ class PlotConfigFrame(wx.Frame):
         auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
         auto_m.SetValue(self.conf.auto_margins)
 
-        sizer.Add(mtitle,   (2, 0), (1, 1), labstyle, 2)
-        sizer.Add(auto_m,   (2, 1), (1, 2), labstyle, 2)
-        sizer.Add(ltitle,   (2, 3), (1, 1), labstyle, 2)
-        sizer.Add(lmarg,    (2, 4), (1, 1), labstyle, 2)
-        sizer.Add(rtitle,   (2, 5), (1, 1), labstyle, 2)
-        sizer.Add(rmarg,    (2, 6), (1, 1), labstyle, 2)
-        sizer.Add(btitle,   (2, 7), (1, 1), labstyle, 2)
-        sizer.Add(bmarg,    (2, 8), (1, 1), labstyle, 2)
-        sizer.Add(ttitle,   (2, 9), (1, 1), labstyle, 2)
-        sizer.Add(tmarg,    (2, 10), (1, 1), labstyle, 2)
+        msizer = wx.BoxSizer(wx.HORIZONTAL)
+        msizer.AddMany((mtitle, auto_m, ltitle, lmarg, rtitle, rmarg,
+                        btitle, bmarg, ttitle, tmarg))
+
+        sizer.Add(msizer,  (9, 0), (1, 8), labstyle, 2)
 
         autopack(panel, sizer)
         return panel
 
     def make_linetrace_panel(self, parent, font=None):
-        # list of traces
+        """colours and line properties"""
 
-        # panel = wx.Panel(parent)
         panel = scrolled.ScrolledPanel(parent, size=(800, 200),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
 
         if font is None:
-            font = wx.Font(13,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+            font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
 
         sizer = wx.GridBagSizer(2, 2)
         i = 0
-        irow = 0
+
+        ax = self.axes[0]
+        if matplotlib.__version__ < '2.0':
+            axis_bgcol = ax.get_axis_bgcolor()
+        else:
+            axis_bgcol = ax.get_facecolor()
+
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+
+        opts = dict(size=(-1, 25), style=labstyle)
+
+        ctitle = wx.StaticText(panel, -1, 'Colors:  ')
+        ltheme = wx.StaticText(panel, -1, 'Use Color Theme: ')
+
+        themes = list(self.conf.color_themes.keys())
+
+        coltheme = wx.Choice(panel, choices=themes,  size=(80,-1))
+        coltheme.SetStringSelection(self.conf.color_theme)
+        coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
+
+        textcol = csel.ColourSelect(panel, label=" Text ",
+                                    colour=mpl_color(self.conf.textcolor), **opts)
+
+        gridcol = csel.ColourSelect(panel, label=" Grid ",
+                                    colour=mpl_color(self.conf.gridcolor), **opts)
+
+        bgcol = csel.ColourSelect(panel, label=" Background ",
+                                  colour=mpl_color(axis_bgcol),  **opts)
+
+        fbgcol = csel.ColourSelect(panel,  label=" Outer Frame ",
+                                   colour=mpl_color(self.canvas.figure.get_facecolor()),
+                                   **opts)
+
+        self.colwids = {'text': textcol, 'bg': bgcol,
+                        'grid': gridcol, 'frame': fbgcol}
+
+        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
+        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='frame'))
+        gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='grid'))
+        textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='text'))
+
+        show_grid  = wx.CheckBox(panel,-1, ' Show Grid ', (-1, -1), (-1, -1))
+        show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
+        show_grid.SetValue(self.conf.show_grid)
+
+        show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes ', (-1, -1), (-1, -1))
+        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
+        show_box.SetValue(self.conf.axes_style == 'box')
+
+        csizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        csizer.Add(ctitle,    0, labstyle, 3)
+        csizer.Add(textcol,   0, labstyle, 3)
+        csizer.Add(gridcol,   0, labstyle, 3)
+        csizer.Add(bgcol,     0, labstyle, 3)
+        csizer.Add(fbgcol ,   0, labstyle, 3)
+        csizer.Add(ltheme,    1, labstyle, 3)
+        csizer.Add(coltheme,  1, labstyle, 3)
+        csizer.Add(show_grid, 0, labstyle, 3)
+        csizer.Add(show_box,  0, labstyle, 3)
+
+        sizer.Add(csizer,    (0, 0), (1, 9), labstyle, 2)
+
+        irow = 2
         for t in ('#','Label','Color', 'Line Style',
                   'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)
@@ -451,8 +415,8 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
             i = i+1
         self.trace_labels = []
-        ntrace_display = min(self.conf.ntrace+1, len(self.conf.traces))
-        for i in range(ntrace_display): # len(self.axes.get_lines())):
+        ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
+        for i in range(ntrace_display):
             irow += 1
             argu  = "trace %i" % i
             lin  = self.conf.traces[i]

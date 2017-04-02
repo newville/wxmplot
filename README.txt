@@ -1,11 +1,12 @@
 
 The wxmplot python package provides simple, rich plotting widgets for
 wxPython.  These are built on top of the matplotlib library, which provides
-2D plots and image display.  The wxmplot package does not expose matplotlib's 
-capabilities.  It provides widgets (wxPython panels) for basic 2D plotting 
-and image display to handle use cases.  The widgets are easy to program with, 
-and provide end-users with interactivity and customization of the graphics 
-without knowing matplotlib.
+2D plots and image display.  The wxmplot package does not explicitly expose
+all of matplotlib's capabilities.  Instead, it provides simple widgets
+(wxPython panels) for the most common use cases of basic 2D plotting and
+image display that are easy to include in a wxPython program and provide
+end-users with  interactivity and customization of the graphics without
+knowing all of the details of matplotlib.
 
 The principle objects provided by wxmplot are:
 
@@ -17,7 +18,7 @@ For the end-user, these provide the abilities to:
    1. display x, y coordinates (left-click)
    2. zoom in on a particular region of the plot (left-drag)
    3. customize titles, labels, legend, color, linestyle, marker,
-      and whether a grid is shown.  A separate window is used to
+      and whether a grid is shown.  A separate frame is used to
       set these attributes.
    4. save high-qualiy plot images (as PNGs), copy to system
       clipboard, or print.
@@ -55,5 +56,4 @@ changing its configuaration attributes and running the redraw() method.
 
 =====
 
-last update: 2016-Oct-24   Matt Newville <newville@cars.uchicago.edu>
-
+last update: 2017-Apr-2   Matt Newville <newville@cars.uchicago.edu>

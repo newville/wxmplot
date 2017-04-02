@@ -129,11 +129,11 @@ class PrintoutWx(wx.Printout):
                  title=None):
         if title is None:
             title = self._title_
-
-        wx.Printout.__init__(self, title=title)
+        wx.Printout.__init__(self, title)
         self.canvas = canvas
         self.width  = width
         self.margin = margin
+
 
     def HasPage(self, page):
         return page <= 1
@@ -176,7 +176,8 @@ class PrintoutWx(wx.Printout):
 
         # page may need additional scaling on preview
         page_scale = 1.0
-        if self.IsPreview():   page_scale = float(dcw)/pgw
+        if self.IsPreview():
+            page_scale = float(dcw)/pgw
 
         # get margin in pixels = (margin in in) * (pixels/in)
         top_margin  = int(self.margin * pph * page_scale)
@@ -245,21 +246,22 @@ class Printer:
             title = self.title
         if self.canvas is None:
             self.canvas = self.parent.canvas
+
         po1  = PrintoutWx(self.parent.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
         po2  = PrintoutWx(self.parent.canvas, title=title,
                           width=self.pwidth,   margin=self.pmargin)
-        self.preview = wx.PrintPreview(po1,po2,self.printerData)
+        self.preview = wx.PrintPreview(po1, po2, self.printerData)
 
         if ((is_wxPhoenix and self.preview.IsOk()) or
             (not is_wxPhoenix and self.preview.Ok())):
-            self.preview.SetZoom(65)
+            self.preview.SetZoom(85)
             frameInst= self.parent
             while not isinstance(frameInst, wx.Frame):
                 frameInst= frameInst.GetParent()
             frame = wx.PreviewFrame(self.preview, frameInst, "Preview")
             frame.Initialize()
-            frame.SetSize((850,650))
+            frame.SetSize((850, 650))
             frame.Centre(wx.BOTH)
             frame.Show(True)
 
@@ -271,6 +273,7 @@ class Printer:
         printer  = wx.Printer(pdd)
         if title is None:
             title = self.title
+
         printout = PrintoutWx(self.parent.canvas, title=title,
                               width=self.pwidth, margin=self.pmargin)
         print_ok = printer.Print(self.parent, printout, True)

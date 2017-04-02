@@ -793,7 +793,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.cmap_panels[col].imax_val.SetValue('%.4g' % imax)
             if enhance:
                 jmin, jmax = np.percentile(img, [clevel, 100.0-clevel])
-
+            if imax == imin:
+                imax = imin + 0.5
             conf.cmap_lo[col] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
             conf.cmap_hi[col] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
 
@@ -812,7 +813,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imax_val.SetValue('%.4g' % imax)
                 if enhance:
                     jmin, jmax = np.percentile(img[:,:,ix], [1, 99])
-
+                if imax == imin:
+                    imax = imin + 0.5
                 conf.cmap_lo[ix] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
                 conf.cmap_hi[ix] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
                 self.cmap_panels[ix].cmap_hi.SetValue(xhi)

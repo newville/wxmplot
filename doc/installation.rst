@@ -6,14 +6,15 @@ Prerequisites
 ~~~~~~~~~~~~~~~
 
 The wxmplot package requires wxpython, matplotlib, numpy, and six.
+Matplotlib version 1.5 or higher is required, with version 2.0 strongly
+recommended.
 
-For wxPython Classic, wxmplot works well with Python 2.7, but not Python 3.
-Since matplotlib 1.5 introduced support for wxPython Phoenix, wxmplot also
-works with matplotlib 1.5, wxPython Phoenix 3.0.3, and with both Python 2.7
-and Python 3.5.  As wxPython Phoenix is still in development (available at
+For wxPython Classic, wxmplot works with Python 2.7, but not Python 3.
+For wxPython Phoenix 3.0.2 or later, wxmplot works with Python 2.7, 3.5,
+and 3.6.  Since wxPython Phoenix is still in development (available at
 http://wxpython.org/Phoenix/snapshot-builds/), support for it should be
-viewed as provisional.  Testing with Phoenix and with Python 3.5 has been
-modest, but all wxmplot functionality appears to work.
+viewed as provisional.  Testing with Phoenix and Python 3.5 and 3.6
+has been modest, but all wxmplot functionality appears to work.
 
 Downloads
 ~~~~~~~~~~~~~

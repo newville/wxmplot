@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.23',
+        VERSION:     '0.9.24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -26,7 +27,6 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
     <link rel="next" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
     <link rel="prev" title="WXMPLOT: Plotting widgets for wxPython with matplotlib" href="index.html" /> 
   </head>
@@ -72,7 +72,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.txt"
+      <li><a href="_sources/installation.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -98,14 +98,15 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The wxmplot package requires wxpython, matplotlib, numpy, and six.</p>
-<p>For wxPython Classic, wxmplot works well with Python 2.7, but not Python 3.
-Since matplotlib 1.5 introduced support for wxPython Phoenix, wxmplot also
-works with matplotlib 1.5, wxPython Phoenix 3.0.3, and with both Python 2.7
-and Python 3.5.  As wxPython Phoenix is still in development (available at
+<p>The wxmplot package requires wxpython, matplotlib, numpy, and six.
+Matplotlib version 1.5 or higher is required, with version 2.0 strongly
+recommended.</p>
+<p>For wxPython Classic, wxmplot works with Python 2.7, but not Python 3.
+For wxPython Phoenix 3.0.2 or later, wxmplot works with Python 2.7, 3.5,
+and 3.6.  Since wxPython Phoenix is still in development (available at
 <a class="reference external" href="http://wxpython.org/Phoenix/snapshot-builds/">http://wxpython.org/Phoenix/snapshot-builds/</a>), support for it should be
-viewed as provisional.  Testing with Phoenix and with Python 3.5 has been
-modest, but all wxmplot functionality appears to work.</p>
+viewed as provisional.  Testing with Phoenix and Python 3.5 and 3.6
+has been modest, but all wxmplot functionality appears to work.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
@@ -182,7 +183,7 @@ DEALINGS IN THIS SOFTWARE.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>

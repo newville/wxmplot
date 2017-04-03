@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.23',
+        VERSION:     '0.9.24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -26,7 +27,6 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="WXMPlot: Plotting widgets for wxPython with matplotlib" href="index.html" />
     <link rel="next" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
     <link rel="prev" title="Downloading and Installation" href="installation.html" /> 
   </head>
@@ -78,7 +78,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/plotpanel.txt"
+      <li><a href="_sources/plotpanel.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -143,7 +143,7 @@ This takes many optional arguments:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>parent</strong> -- wx parent object.</li>
-<li><strong>size</strong> (<em>wx.Size  or tuple of 2 integers.</em>) -- figure size in wxPython pixel coordinates ((700, 450)).</li>
+<li><strong>size</strong> (<em>wx.Size</em><em>  or </em><em>tuple of 2 integers.</em>) -- figure size in wxPython pixel coordinates ((700, 450)).</li>
 <li><strong>dpi</strong> (<em>integer</em>) -- dots per inch for figure (150).</li>
 <li><strong>axisbg</strong> (<em>valid colour name</em>) -- background colour for Axis ('#FEFEFE').</li>
 <li><strong>fontsize</strong> (<em>integer</em>) -- font size for wxFont for labels and ticks (9).</li>
@@ -608,7 +608,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>limits</strong> (<em>a 4-element list: [xmin, xmax, ymin, ymax]</em>) -- x and y limits</li>
+<li><strong>limits</strong> (<em>a 4-element list:</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em><em></em>) -- x and y limits</li>
 <li><strong>axes</strong> -- instance of matplotlib axes to use (i.e, for right or left side y axes)</li>
 <li><strong>side</strong> -- set to 'right' to get right-hand axes.</li>
 </ul>
@@ -780,19 +780,18 @@ shown.</p>
 
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.7</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.3</span><span class="p">))</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.11</span><span class="p">)</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WXMPlot example&#39;</span><span class="p">,</span> 
+<span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WXMPlot example&#39;</span><span class="p">,</span>
          <span class="n">label</span><span class="o">=</span><span class="s1">&#39;decaying sine&#39;</span><span class="p">,</span>
-         <span class="n">ylabel</span><span class="o">=</span><span class="s1">r&#39;$\phi(x)$&#39;</span><span class="p">,</span> 
-         <span class="n">xlabel</span><span class="o">=</span><span class="s1">r&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
+         <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\phi(x)$&#39;</span><span class="p">,</span>
+         <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;noisy cosine&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
 </pre></div>
 </div>
 <p>This gives a window with a plot that looks like this:</p>
@@ -811,28 +810,23 @@ the plot can also be exported to an ASCII column file.  The Options
 menu allows the user to configure the plot, toggle the display of the
 legend and grid, and zoom out to the full plot range.</p>
 <p>The configuration window (Options-&gt;Configuration or Ctrl-K) is a
-tabbed window, with sections for configuring Line Traces, Colors and
-Margins, Text and Labels, Legend, and Scatterplot.</p>
+tabbed window, with sections for configuring Colors and Line Properties,
+Text, Labels, and Legend, and Scatterplot.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_LineProps.png"><img alt="_images/PlotConfig_LineProps.png" src="_images/PlotConfig_LineProps.png" style="width: 85%;" /></a>
-<p>The Line Traces tab allows the user to configure the label, color,
-line style, line width, symbol to use for a marker, marker size,
-z-order, and join style for each line or curve drawn.</p>
-<a class="reference internal image-reference" href="_images/PlotConfig_Colors.png"><img alt="_images/PlotConfig_Colors.png" src="_images/PlotConfig_Colors.png" style="width: 85%;" /></a>
-<p>The Colors and Margins tab allows the user to set the colors for
-background, frame, text, and also toggle the display of the grid and
-upper and right-hand axes spines. In addition, the margins for the
-plot window can be configured to be automatically set, or fine-tuned.</p>
+<p>The Colors and Line Properties tab allows the user to configure the basic
+colors for the plot, toggling the display of the grid lines and upper and
+right axes, and setting of the main properties for each trace.  The label,
+color, line style, line width, symbol to use for a marker, marker size,
+z-order, and join style for each trace drawn can be customized.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Text.png"><img alt="_images/PlotConfig_Text.png" src="_images/PlotConfig_Text.png" style="width: 85%;" /></a>
-<p>The Text and Labels tab allows the user to set the title and labels
-for the X and Y axes, and to adjust the fontsize for these text and the text
-shown in the plot legend.</p>
-<a class="reference internal image-reference" href="_images/PlotConfig_Legend.png"><img alt="_images/PlotConfig_Legend.png" src="_images/PlotConfig_Legend.png" style="width: 85%;" /></a>
-<p>The Legend tab allows the user to control the display and placement of
-the plot legend, and whether it can be used interactively. When &quot;Click
-Legend to Show/Hide Line&quot; is selected, the user can click on the
-Legend line indicator or text to toggle the corresponding line off and
-on.  The &quot;Draggable Legend&quot; option allows the user to drag the legend
-on the plot to fine-tune its placement.</p>
+<p>The Text and Labels tab allows the user to set the title and labels for the
+X and Y axes, and to adjust the fontsize for these text and the text shown
+in the plot legend.  The legend can also be customized: whether it is
+shown, it's location, and whether the legend entries can be clicked on to
+toggle the display of the corresponding line.  The experimental &quot;Draggable
+Legend&quot; option allows the user to drag the legend on the plot to fine-tune
+its placement. In addition, the margins for the
+plot window can be configured to be automatically set, or fine-tuned.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Scatter.png"><img alt="_images/PlotConfig_Scatter.png" src="_images/PlotConfig_Scatter.png" style="width: 85%;" /></a>
 <p>The Scatterplot tab allows the user to set the colors and marker sizes
 for scatter plots.</p>
@@ -888,7 +882,7 @@ created with:</p>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">7</span><span class="n">e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
 <span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
@@ -943,7 +937,7 @@ script also shows a dynamic, time-based plot.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>

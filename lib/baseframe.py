@@ -44,7 +44,7 @@ Also, these key bindings can be used
 Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
-                 axisbg=None, exit_callback=None, user_menus=None,
+                 facecolor=None, exit_callback=None, user_menus=None,
                  output_title='Plot', dpi=150, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
@@ -59,7 +59,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.dpi    = dpi
         self.user_menus = user_menus
         self.size = size
-        self.axisbg = axisbg
+        self.facecolor = facecolor
 
     def write_message(self,s,panel=0):
         """write a message to the Status Bar"""
@@ -124,7 +124,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.panel = PlotPanel(self, size=self.size,
-                               axisbg=self.axisbg,
+                               facecolor=self.facecolor,
                                output_title=self.output_title)
         self.panel.messenger = self.write_message
         sizer.Add(self.panel, 1, wx.EXPAND)

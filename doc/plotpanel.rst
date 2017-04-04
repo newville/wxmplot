@@ -44,8 +44,8 @@ many additional methods to interact with the plots.
    :type  size:    wx.Size  or tuple of 2 integers.
    :param dpi:    dots per inch for figure (150).
    :type  dpi:    integer
-   :param axisbg:    background colour for Axis ('#FEFEFE').
-   :type  axisbg:  valid colour name
+   :param facecolor:    background colour for Axis ('#FEFEFE').
+   :type  facecolor:  valid colour name
    :param fontsize:  font size for wxFont for labels and ticks (9).
    :type  fontsize:  integer
    :param output_title:  string to use for output plots ('plot').

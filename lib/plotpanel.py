@@ -537,7 +537,6 @@ class PlotPanel(BasePanel):
         self.fig   = Figure(self.figsize, dpi=self.dpi)
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
-
         kwargs = {'facecolor': self.conf.bgcolor}
         if matplotlib.__version__ < "2.0":
             kwargs = {'facecolor': self.conf.bgcolor}

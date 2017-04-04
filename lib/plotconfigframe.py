@@ -336,7 +336,7 @@ class PlotConfigFrame(wx.Frame):
                                     mpl_color(self.conf.grid_color),
                                     size=(25, 25))
         bgcol = csel.ColourSelect(panel,  -1, "",
-                                  mpl_color(ax.get_axis_bgcolor(), default=(255, 255, 252)),
+                                  mpl_color(ax.get_facecolor(), default=(255, 255, 252)),
                                   size=(25, 25))
 
 

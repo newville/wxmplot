@@ -358,7 +358,9 @@ class PlotPanel(BasePanel):
         self.user_limits[axes] = (xmin, xmax, ymin, ymax)
 
         self.axes_traces = {axes: [0]}
-        self.conf.set_trace_label('scatterplot')
+        if label is None:
+            label = 'scatterplot'
+        self.conf.set_trace_label(label)
         self.conf.set_trace_datarange((min(xdata), max(xdata),
                                        min(ydata), max(ydata)))
 

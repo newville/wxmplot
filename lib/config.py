@@ -479,7 +479,7 @@ class PlotConfig:
             self.mpl_legend = lgn(lins, labs, prop=self.legendfont,
                                   loc=self.legend_loc)
             self.mpl_legend.draw_frame(self.show_legend_frame)
-            self.mpl_legend.legendPatch.set_facecolor(axes[0].get_axis_bgcolor())
+            self.mpl_legend.legendPatch.set_facecolor(axes[0].get_facecolor())
             if self.draggable_legend:
                 self.mpl_legend.draggable(True, update='loc')
             self.legend_map = {}

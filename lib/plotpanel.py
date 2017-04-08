@@ -261,10 +261,15 @@ class PlotPanel(BasePanel):
 
         if gridcolor is not None:
             conf.gridcolor = gridcolor
+
+        needs_relabel = False
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
+            needs_relabel = True
+
         if legendfontsize is not None:
             conf.legendfont.set_size(legendfontsize)
+            needs_relabel = True
 
         if n < len(conf.lines):
             conf.lines[n] = _lines
@@ -276,10 +281,13 @@ class PlotPanel(BasePanel):
         self.set_viewlimits()
         if refresh:
             conf.refresh_trace(conf.ntrace)
-            conf.relabel()
+            needs_relabel = True
 
         if self.conf.show_legend:
             conf.draw_legend()
+
+        if needs_relabel:
+            conf.relabel()
 
         # axes style ('box' or 'open')
         conf.axes_style = 'box'

@@ -305,14 +305,19 @@ class PlotConfig:
     def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
         " re draw labels (title, x, y labels)"
         n = self.labelfont.get_size()
+        self.titlefont.set_size(n+1)
 
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
         rcParams['xtick.color'] =  rcParams['ytick.color'] =  self.textcolor
 
-        if xlabel is not None:  self.xlabel = xlabel
-        if ylabel is not None:  self.ylabel = ylabel
-        if y2label is not None: self.y2label = y2label
-        if title is not None:   self.title = title
+        if xlabel is not None:
+            self.xlabel = xlabel
+        if ylabel is not None:
+            self.ylabel = ylabel
+        if y2label is not None:
+            self.y2label = y2label
+        if title is not None:
+            self.title = title
 
         axes = self.canvas.figure.get_axes()
         kws = dict(fontproperties=self.titlefont, color=self.textcolor)
@@ -331,6 +336,9 @@ class PlotConfig:
         for ax in axes[0].xaxis, axes[0].yaxis:
             for t in (ax.get_ticklabels() + ax.get_ticklines()):
                 t.set_color(self.textcolor)
+                if hasattr(t, 'set_fontsize'):
+                    t.set_fontsize(n)
+
         self.set_added_text_size()
         if self.mpl_legend is not None:
             for t in self.mpl_legend.get_texts():

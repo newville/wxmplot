@@ -10,14 +10,16 @@ from .utils import Closure
 
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
+from .utils import MenuItem
 
 class MultiPlotFrame(BaseFrame):
     """
     MatPlotlib Array of 2D plot as a wx.Frame, using PlotPanel
     """
-    def __init__(self, parent=None, rows=1,cols=1,
-                 framesize=(600,350),
-                 panelsize=(4.0,3.20), **kws):
+    default_panelopts = dict(labelfontsize=7, legendfontsize=6)
+
+    def __init__(self, parent=None, rows=1, cols=1, framesize=None,
+                 panelsize=(400, 320), panelopts=None, **kws):
 
         BaseFrame.__init__(self, parent=parent,
                            title  = '2D Plot Array Frame',
@@ -25,7 +27,15 @@ class MultiPlotFrame(BaseFrame):
         self.panels = {}
         self.rows = rows
         self.cols = cols
+        if framesize is None:
+            framesize = (panelsize[0]*cols, panelsize[1]*rows)
+        self.framesize = framesize
         self.panelsize = panelsize
+
+        self.panelopts = self.default_panelopts
+        if panelopts is not None:
+            self.panelopts.update(panelopts)
+
         self.current_panel = (0,0)
         self.BuildFrame()
 
@@ -36,16 +46,23 @@ class MultiPlotFrame(BaseFrame):
         except KeyError:
             print( 'could not set self.panel')
 
-
-    def plot(self,x,y,panel=None,**kw):
+    def plot(self,x,y,panel=None,**kws):
         """plot after clearing current plot """
-        if panel is None: panel = self.current_panel
-        self.panels[panel].plot(x,y,**kw)
+        if panel is None:
+            panel = self.current_panel
+        opts = {}
+        opts.update(self.default_panelopts)
+        opts.update(kws)
+        self.panels[panel].plot(x ,y, **opts)
 
     def oplot(self,x,y,panel=None,**kw):
         """generic plotting method, overplotting any existing plot """
-        if panel is None: panel = self.current_panel
-        self.panels[panel].oplot(x,y,**kw)
+        if panel is None:
+            panel = self.current_panel
+        opts = {}
+        opts.update(self.default_panelopts)
+        opts.update(kws)
+        self.panels[panel].oplot(x, y, **opts)
 
     def update_line(self, t, x, y, panel=None, **kw):
         """overwrite data for trace t """
@@ -101,49 +118,111 @@ class MultiPlotFrame(BaseFrame):
     ## create GUI
     ####
     def BuildFrame(self):
-        sbar = self.CreateStatusBar(2,wx.CAPTION)
+        sbar = self.CreateStatusBar(2, wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
         sbar.SetFont(sfont)
 
-        self.SetStatusWidths([-3,-1])
-        self.SetStatusText('',0)
 
-        self.BuildMenu()
-        sizer = wx.GridBagSizer(self.rows,self.cols)
-
+        sizer = wx.GridBagSizer(3, 3)
 
         for i in range(self.rows):
             for j in range(self.cols):
                 self.panels[(i,j)] = PlotPanel(self, size=self.panelsize)
+                # **self.panelopts)
                 self.panels[(i,j)].messenger = self.write_message
                 panel = self.panels[(i,j)]
 
                 sizer.Add(panel,(i,j),(1,1),flag=wx.EXPAND|wx.ALIGN_CENTER)
-                panel.reportLeftDown = Closure(self.reportLeftDown,
+                panel.report_leftdown = Closure(self.report_leftdown,
                                                panelkey=(i,j))
 
-
         self.panel = self.panels[(0,0)]
-        for i in range(self.rows): sizer.AddGrowableRow(i)
-        for i in range(self.cols): sizer.AddGrowableCol(i)
+        for i in range(self.rows):
+            sizer.AddGrowableRow(i)
+        for i in range(self.cols):
+            sizer.AddGrowableCol(i)
 
+
+        self.BuildMenu()
+        self.SetStatusWidths([-3, -1])
+        self.SetStatusText('',0)
+        self.SetSize(self.framesize)
         self.SetAutoLayout(True)
         self.SetSizerAndFit(sizer)
 
-    def reportLeftDown(self, event=None, panelkey=None,**kw):
+    def BuildMenu(self):
+        mfile = self.Build_FileMenu()
+        mopts = wx.Menu()
+        MenuItem(self, mopts, "Configure Plot\tCtrl+K",
+                 "Configure Plot styles, colors, labels, etc",
+                 self.on_configure)
+        MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
+                 "Toggle Legend Display",
+                 self.on_toggle_legend)
+        MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
+                 "Toggle Grid Display",
+                 self.on_toggle_grid)
+
+        mopts.AppendSeparator()
+        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.on_unzoom)
+
+        mhelp = wx.Menu()
+        MenuItem(self, mhelp, "Quick Reference",
+                 "Quick Reference for WXMPlot", self.onHelp)
+        MenuItem(self, mhelp, "About", "About WXMPlot", self.onAbout)
+
+        mbar = wx.MenuBar()
+        mbar.Append(mfile, 'File')
+        mbar.Append(mopts, '&Options')
+        if self.user_menus is not None:
+            for title, menu in self.user_menus:
+                mbar.Append(menu, title)
+
+        mbar.Append(mhelp, '&Help')
+
+        self.SetMenuBar(mbar)
+        self.Bind(wx.EVT_CLOSE,self.onExit)
+
+    def on_configure(self, event=None, **kws):
+        self.panel.configure()
+
+    def on_toggle_legend(self, event=None, **kws):
+        self.panel.toggle_legend()
+
+    def on_toggle_grid(self, event=None, **kws):
+        self.panel.toggle_grid()
+
+    def on_unzoom(self, event=None, **kws):
+        self.panel.unzoom()
+
+    def report_leftdown(self, event=None, panelkey=None,**kw):
         try:
             self.panel.set_bg()
             self.panel.canvas.draw()
         except:
             pass
 
-        if panelkey is not None:
-            ix, iy = panelkey
-            self.set_panel(ix,iy)
-            self.panel.write_message("%f, %f" % (event.xdata,event.ydata), panel=1)
+        if panelkey is None or event is None:
+            return
 
-            self.BindMenuToPanel(panel=self.panel)
-            self.panel.set_bg('#FEFEFA')
-            self.panel.canvas.draw()
+        ix, iy = panelkey
+        self.set_panel(ix, iy)
+        panel = self.panel
+        ex, ey = event.x, event.y
+        tmsg = 'Current Panel: (%i, %i) ' % (ix, iy)
+        try:
+            x, y = panel.axes.transData.inverted().transform((ex, ey))
+        except:
+            x, y = event.xdata, event.ydata
+
+        try:
+            if x is not None and y is not None:
+                msg = ("%s X,Y= %s, %s" % (tmsg, panel._xfmt, panel._yfmt)) % (x, y)
+
+            self.write_message(msg, panel=0)
+        except:
+            pass

@@ -85,7 +85,7 @@ class PlotPanel(BasePanel):
         BasePanel.__init__(self, parent,
                            output_title=output_title, **kws)
 
-        self.conf = PlotConfig()
+        self.conf = PlotConfig(panel=self)
         self.data_range = {}
         self.win_config = None
         self.cursor_callback = None

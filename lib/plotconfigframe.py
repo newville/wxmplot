@@ -298,9 +298,8 @@ class PlotConfigFrame(wx.Frame):
 
 
         # Margins
-        ppanel = self.GetParent()
         _left, _top, _right, _bot = ["%.3f"% x for x in
-                                     ppanel.get_default_margins()]
+                                     self.conf.margins]
 
         mtitle = wx.StaticText(panel, -1, 'Margins: ')
         ltitle = wx.StaticText(panel, -1, ' Left:   ')

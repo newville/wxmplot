@@ -119,13 +119,17 @@ class StackedPlotFrame(BaseFrame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         botsize = self.panelsize[0], self.panelsize[1]/self.ratio
-        margins = {'top': dict(left=0.15, bottom=0.01, top=0.90, right=0.95),
-                   'bot': dict(left=0.15, bottom=0.40, top=0.99, right=0.95)}
+        margins = {'top': dict(left=0.15, bottom=0.005, top=0.90, right=0.95),
+                   'bot': dict(left=0.15, bottom=0.300, top=0.99, right=0.95)}
 
         self.panel     = PlotPanel(self, size=self.panelsize)
         self.panel_bot = PlotPanel(self, size=botsize)
         self.panel.xformatter = self.null_formatter
+        lsize = self.panel.conf.labelfont.get_size()
+        self.panel_bot.conf.labelfont.set_size(lsize-2)
         self.panel_bot.yformatter = self.bot_yformatter
+        # self.panel_bot.axes.tick_params(axis='y', labelsize=8)
+
 
         for pan, pname in ((self.panel, 'top'), (self.panel_bot, 'bot')):
             pan.messenger = self.write_message
@@ -141,8 +145,7 @@ class StackedPlotFrame(BaseFrame):
         null_events = {'leftdown': None, 'leftup': None, 'rightdown': None,
                        'rightup': None, 'motion': None, 'keyevent': None}
         self.panel_bot.cursor_modes = {'zoom': null_events}
-        self.panel_bot.axes.xaxis.set_major_formatter(NullFormatter())
-        self.panel_bot.axes.tick_params(axis='y', labelsize=8)
+
 
         sizer.Add(self.panel,self.ratio, wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
         sizer.Add(self.panel_bot, 1,     wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
@@ -262,43 +265,29 @@ class StackedPlotFrame(BaseFrame):
     def null_formatter(self, x, pos, type='x'):
         return ''
 
-
     def bot_yformatter(self, val, type=''):
         """custom formatter for FuncFormatter() and bottom panel"""
-        fmt, v = '%1.5g','%1.5g'
+        fmt = '%1.5g'
 
         ax = self.panel_bot.axes.yaxis
-        try:
-            dtick = 0.1 * ax.get_view_interval().span()
-        except:
-            dtick = 0.2
 
-        try:
-            ticks = ax.get_major_locator()()
-            dtick = abs(ticks[1] - ticks[0])
-        except:
-            pass
+        ticks = ax.get_major_locator()()
+        dtick = ticks[1] - ticks[0]
 
-        ival = 0
-        if val > ticks[0]:
-            ival = max(np.where(ticks <= val)[0])
-
-        if len(ticks) > 4 and ival % 2 == 1 or ival > len(ticks)-2:
-            return ''
         if   dtick > 29999:
-            fmt, v = ('%1.5g', '%1.6g')
+            fmt = '%1.5g'
         elif dtick > 1.99:
-            fmt, v = ('%1.0f', '%1.2f')
+            fmt = '%1.0f'
         elif dtick > 0.099:
-            fmt, v = ('%1.1f', '%1.3f')
+            fmt = '%1.1f'
         elif dtick > 0.0099:
-            fmt, v = ('%1.2f', '%1.4f')
+            fmt = '%1.2f'
         elif dtick > 0.00099:
-            fmt, v = ('%1.3f', '%1.5f')
+            fmt = '%1.3f'
         elif dtick > 0.000099:
-            fmt, v = ('%1.4f', '%1.6e')
+            fmt = '%1.4f'
         elif dtick > 0.0000099:
-            fmt, v = ('%1.5f', '%1.6e')
+            fmt = '%1.5f'
 
         s =  fmt % val
         s.strip()
@@ -307,10 +296,4 @@ class StackedPlotFrame(BaseFrame):
             s = s.replace('e0','e')
         while s.find('-0')>0:
             s = s.replace('-0','-')
-        if type == 'y':
-            self._yfmt = v
-        if type == 'y2':
-            self._y2fmt = v
-        if type == 'x':
-            self._xfmt = v
         return s

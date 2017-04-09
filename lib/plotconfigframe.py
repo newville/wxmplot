@@ -76,9 +76,12 @@ def clean_texmath(txt):
 class PlotConfigFrame(wx.Frame):
     """ GUI Configure Frame"""
     def __init__(self, parent=None, config=None, trace_color_callback=None):
-        if config is None: config = PlotConfig()
+        if config is None:
+            config = PlotConfig()
         self.conf   = config
-        self.trace_color_callback = trace_color_callback
+        if callable(trace_color_callback):
+            self.conf.trace_color_callback = trace_color_callback
+
         self.parent = parent
         self.canvas = self.conf.canvas
         self.axes = self.canvas.figure.get_axes()
@@ -135,7 +138,7 @@ class PlotConfigFrame(wx.Frame):
         ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
         ssize.SetRange(1, 100)
         ssize.SetValue(self.conf.scatter_size)
-        ssize.Bind(wx.EVT_SPINCTRL, partial(self.onScatter, argu='size'))
+        ssize.Bind(wx.EVT_SPINCTRL, partial(self.onScatter, item='size'))
 
         sizer.Add(slab,  (0, 0), (1,1), labstyle, 5)
         sizer.Add(ssize, (0, 1), (1,1), labstyle, 5)
@@ -157,10 +160,10 @@ class PlotConfigFrame(wx.Frame):
                                   mpl_color(conf.scatter_selectedge,
                                            default=(200, 0, 0)),
                                   size=(25, 25))
-        nfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_nf'))
-        necol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_ne'))
-        sfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_sf'))
-        secol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, argu='scatt_se'))
+        nfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_nf'))
+        necol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_ne'))
+        sfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_sf'))
+        secol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_se'))
 
         btnstyle= wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.ALL
 
@@ -210,26 +213,26 @@ class PlotConfigFrame(wx.Frame):
         t_size = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 25))
         t_size.SetRange(2, 20)
         t_size.SetValue(self.conf.labelfont.get_size())
-        t_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, argu='labelsize'))
+        t_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, item='labelsize'))
 
         l_size = wx.SpinCtrl(panel, -1, " ", (-1, -1), (ISPINSIZE, 25))
         l_size.SetRange(2, 20)
         l_size.SetValue(self.conf.legendfont.get_size())
-        l_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, argu='legendsize'))
+        l_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, item='legendsize'))
 
 
         self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
                                labeltext='Title: ',size=400,
-                               action = partial(self.onText, argu='title'))
+                               action = partial(self.onText, item='title'))
         self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
                                labeltext='Y Label: ',size=400,
-                               action = partial(self.onText, argu='ylabel'))
+                               action = partial(self.onText, item='ylabel'))
         self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
                                labeltext='Y2 Label: ',size=400,
-                               action = partial(self.onText, argu='y2label'))
+                               action = partial(self.onText, item='y2label'))
         self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
                                labeltext='X Label: ',size=400,
-                               action = partial(self.onText, argu='xlabel'))
+                               action = partial(self.onText, item='xlabel'))
 
         sizer.Add(self.titl.label, (0, 0), (1, 1), labstyle)
         sizer.Add(self.titl,       (0, 1), (1, 4), labstyle)
@@ -255,12 +258,12 @@ class PlotConfigFrame(wx.Frame):
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
         loc_ttl = wx.StaticText(panel, -1, '   Location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
-        leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='loc'))
+        leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
         leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
                              size=(80, -1))
-        leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend,argu='onaxis'))
+        leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
         drag_leg  = wx.CheckBox(panel,-1, 'Draggable Legend (experimental)', (-1, -1), (-1, -1))
@@ -272,11 +275,11 @@ class PlotConfigFrame(wx.Frame):
         hide_leg.SetValue(self.conf.hidewith_legend)
 
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
-        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='legend'))
+        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(self.conf.show_legend)
 
         show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
-        show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,argu='frame'))
+        show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,item='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -380,10 +383,10 @@ class PlotConfigFrame(wx.Frame):
         self.colwids = {'text': textcol, 'bg': bgcol,
                         'grid': gridcol, 'frame': fbgcol}
 
-        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, argu='bg'))
-        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, argu='frame'))
-        gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='grid'))
-        textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, argu='text'))
+        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, item='bg'))
+        fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, item='frame'))
+        gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='grid'))
+        textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='text'))
 
         show_grid  = wx.CheckBox(panel,-1, ' Show Grid ', (-1, -1), (-1, -1))
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
@@ -418,7 +421,7 @@ class PlotConfigFrame(wx.Frame):
         ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
         for i in range(ntrace_display):
             irow += 1
-            argu  = "trace %i" % i
+            label  = "trace %i" % i
             lin  = self.conf.traces[i]
             dlab = lin.label
             dcol = hexcolor(lin.color)
@@ -429,36 +432,36 @@ class PlotConfigFrame(wx.Frame):
             dzord = lin.zorder
             dsym = lin.marker
             lab = LabelEntry(panel, dlab, size=125,labeltext="%i" % (i+1),
-                               action = partial(self.onText,argu=argu))
+                               action = partial(self.onText, item='trace', trace=i))
             self.trace_labels.append(lab)
 
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
-            col.Bind(csel.EVT_COLOURSELECT,partial(self.onColor,argu=argu))
+            col.Bind(csel.EVT_COLOURSELECT,partial(self.onColor, trace=i))
 
             thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
-            thk.Bind(EVT_FLOATSPIN, partial(self.onThickness, argu=argu))
+            thk.Bind(EVT_FLOATSPIN, partial(self.onThickness, trace=i))
 
             sty = wx.Choice(panel, choices=self.conf.styles, size=(110,-1))
-            sty.Bind(wx.EVT_CHOICE,partial(self.onStyle,argu=argu))
+            sty.Bind(wx.EVT_CHOICE,partial(self.onStyle,trace=i))
             sty.SetStringSelection(dsty)
 
             msz = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dmsz,
                             min_val=0, max_val=30, increment=1, digits=0)
-            msz.Bind(EVT_FLOATSPIN, partial(self.onMarkerSize, argu=argu))
+            msz.Bind(EVT_FLOATSPIN, partial(self.onMarkerSize, trace=i))
 
             zor = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30),
                             value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0)
-            zor.Bind(EVT_FLOATSPIN, partial(self.onZorder, argu=argu))
+            zor.Bind(EVT_FLOATSPIN, partial(self.onZorder, trace=i))
 
             sym = wx.Choice(panel, -1, choices=self.conf.symbols, size=(120,-1))
-            sym.Bind(wx.EVT_CHOICE,partial(self.onSymbol,argu=argu))
+            sym.Bind(wx.EVT_CHOICE,partial(self.onSymbol,trace=i))
 
             sym.SetStringSelection(dsym)
 
             jsty = wx.Choice(panel, -1, choices=self.conf.drawstyles, size=(100,-1))
-            jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, argu=argu))
+            jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
             jsty.SetStringSelection(djsty)
 
             sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
@@ -475,36 +478,20 @@ class PlotConfigFrame(wx.Frame):
         panel.SetupScrolling()
         return panel
 
-    def onColor(self, event=None, color=None, argu='grid', draw=True):
+    def onColor(self, event=None, color=None, item='trace', trace=1, draw=True):
         if color is None and event is not None:
             color = hexcolor( event.GetValue() )
-        if argu[:6] == 'trace ':
-            trace = int(argu[6:])
-            self.conf.set_trace_color(color,trace=trace)
-            if hasattr(self.trace_color_callback, '__call__'):
-                self.trace_color_callback(trace, color)
-            self.redraw_legend()
+        if item == 'trace':
+            self.conf.set_trace_color(color, trace=trace)
+        elif item == 'grid':
+            self.conf.set_gridcolor(color)
+        elif item == 'bg':
+            self.conf.set_bgcolor(color)
+        elif item == 'frame':
+            self.conf.set_framecolor(color)
+        elif item == 'text':
+            self.conf.set_textcolor(color)
 
-        elif argu == 'grid':
-            self.conf.gridcolor = color
-            for ax in self.axes:
-                for i in ax.get_xgridlines()+ax.get_ygridlines():
-                    i.set_color(color)
-                    i.set_zorder(-30)
-        elif argu == 'bg':
-            self.conf.bgcolor = color
-            for ax in self.axes:
-                if matplotlib.__version__ < '2.0':
-                    ax.set_axis_bgcolor(color)
-                else:
-                    ax.set_facecolor(color)
-
-        elif argu in ('frame', 'fbg'):
-            self.canvas.figure.set_facecolor(color)
-        elif argu == 'text':
-            self.conf.textcolor = color
-            self.conf.relabel()
-            return
         if draw:
             self.canvas.draw()
 
@@ -518,61 +505,31 @@ class PlotConfigFrame(wx.Frame):
         self.colwids['bg'].SetColour(conf.bgcolor)
         self.colwids['frame'].SetColour(conf.framecolor)
 
-        self.onColor(color=conf.bgcolor,    argu='bg',    draw=False)
-        self.onColor(color=conf.gridcolor,  argu='grid',  draw=False)
-        self.onColor(color=conf.framecolor, argu='frame', draw=False)
-        self.onColor(color=conf.textcolor,  argu='text',  draw=False)
+        self.onColor(color=conf.bgcolor,    item='bg',    draw=False)
+        self.onColor(color=conf.gridcolor,  item='grid',  draw=False)
+        self.onColor(color=conf.framecolor, item='frame', draw=False)
+        self.onColor(color=conf.textcolor,  item='text',  draw=False)
 
-    def onStyle(self, event, argu='grid'):
-        try:
-            self.conf.set_trace_style(event.GetString(),trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onStyle(self, event, trace=0):
+        self.conf.set_trace_style(event.GetString(),trace=trace)
 
-    def onJoinStyle(self, event, argu='grid'):
-        try:
-            self.conf.set_trace_drawstyle(event.GetString(), trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onJoinStyle(self, event, trace=0):
+        self.conf.set_trace_drawstyle(event.GetString(), trace=trace)
 
-    def onSymbol(self,event,argu='grid'):
-        try:
-            self.conf.set_trace_marker(event.GetString(),trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onSymbol(self, event, trace=0):
+        self.conf.set_trace_marker(event.GetString(), trace=trace)
 
-    def onMarkerSize(self, event,argu=''):
-        val = event.GetEventObject().GetValue()
-        try:
-            self.conf.set_trace_markersize(val, trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onMarkerSize(self, event, trace=0):
+        self.conf.set_trace_markersize(event.GetEventObject().GetValue(),
+                                       trace=trace)
 
-    def onZorder(self, event,argu=''):
-        val = event.GetEventObject().GetValue()
-        try:
-            self.conf.set_trace_zorder(val, trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onZorder(self, event, trace=0):
+        self.conf.set_trace_zorder(event.GetEventObject().GetValue(),
+                                   trace=trace)
 
-    def onThickness(self, event, argu=''):
-        val = event.GetEventObject().GetValue()
-        try:
-            self.conf.set_trace_linewidth(val, trace=int(argu[6:]))
-            self.redraw_legend()
-            self.canvas.draw()
-        except:
-            return
+    def onThickness(self, event, trace=0):
+        self.conf.set_trace_linewidth(event.GetEventObject().GetValue(),
+                                      trace=trace)
 
     def onAutoMargin(self,event):
         self.conf.auto_margins = event.IsChecked()
@@ -586,33 +543,26 @@ class PlotConfigFrame(wx.Frame):
                 m.SetValue(v)
 
     def onMargins(self, event=None):
-        panel = self.GetParent()
-        self.conf.margins = [float(w.GetValue()) for w in self.margins]
-        left, top, right, bottom = self.conf.margins
-        panel.gridspec.update(left=left, top=1-top, right=1-right, bottom=bottom)
-        for ax in panel.fig.get_axes():
-            ax.update_params()
-            ax.set_position(ax.figbox)
-        self.canvas.draw()
+        left, top, right, bottom = [float(w.GetValue()) for w in self.margins]
+        self.conf.set_margins(left=left, top=top, right=right, bottom=bottom)
 
-    def onScatter(self, event, argu=None):
-
-        if self.conf.scatter_coll is None or argu is None:
+    def onScatter(self, event, item=None):
+        if self.conf.scatter_coll is None or item is None:
             return
         conf = self.conf
         coll = conf.scatter_coll
         recolor = True
-        if argu == 'size':
+        if item == 'size':
             conf.scatter_size = event.GetInt()
             coll._sizes = (conf.scatter_size,)
             recolor = False
-        elif argu == 'scatt_nf':
+        elif item == 'scatt_nf':
             self.conf.scatter_normalcolor = hexcolor(event.GetValue())
-        elif argu == 'scatt_ne':
+        elif item == 'scatt_ne':
             self.conf.scatter_normaledge = hexcolor(event.GetValue())
-        elif argu == 'scatt_sf':
+        elif item == 'scatt_sf':
             self.conf.scatter_selectcolor = hexcolor(event.GetValue())
-        elif argu == 'scatt_se':
+        elif item == 'scatt_se':
             self.conf.scatter_selectedge = hexcolor(event.GetValue())
 
         if recolor:
@@ -632,8 +582,8 @@ class PlotConfigFrame(wx.Frame):
                     ecols[i] = to_rgba(conf.scatter_normaledge)
         self.canvas.draw()
 
-    def onText(self, event, argu=''):
-        if argu=='labelsize':
+    def onText(self, event, item='trace', trace=0):
+        if item=='labelsize':
             size = event.GetInt()
             self.conf.labelfont.set_size(size)
             self.conf.titlefont.set_size(size+1)
@@ -642,23 +592,22 @@ class PlotConfigFrame(wx.Frame):
                     lab.set_fontsize(size)
             self.conf.relabel()
             return
-        if argu=='legendsize':
+        if item=='legendsize':
             size = event.GetInt()
             self.conf.legendfont.set_size(size)
             # self.conf.relabel()
             self.conf.draw_legend()
             return
-        if argu == 'title':
+        if item == 'title':
             wid = self.titl
-        elif argu == 'ylabel':
+        elif item == 'ylabel':
             wid = self.ylab
-        elif argu == 'y2label':
+        elif item == 'y2label':
             wid = self.y2lab
-        elif argu == 'xlabel':
+        elif item == 'xlabel':
             wid = self.xlab
-        elif argu[:6] == 'trace ':
-            wid = self.trace_labels[int(argu[6:])]
-
+        elif item == 'trace':
+            wid = self.trace_labels[i]
 
         if wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType():
             s = str(event.GetString()).strip()
@@ -673,17 +622,16 @@ class PlotConfigFrame(wx.Frame):
         if '\\' in s and '$' in s:
             s = clean_texmath(s)
             # print(" s = ", s)
-        if argu in ('xlabel', 'ylabel', 'y2label', 'title'):
+        if item in ('xlabel', 'ylabel', 'y2label', 'title'):
             try:
-                kws = {argu: s}
+                kws = {item: s}
                 self.conf.relabel(**kws)
                 wid.SetBackgroundColour((255, 255, 255))
             except: # as from latex error!
                 wid.SetBackgroundColour((250, 250, 200))
-        elif argu[:6] == 'trace ':
+        elif item == 'trace':
             try:
-                self.conf.set_trace_label(s, trace=int(argu[6:]))
-                self.redraw_legend()
+                self.conf.set_trace_label(s, trace=trace)
             except:
                 pass
 
@@ -695,16 +643,16 @@ class PlotConfigFrame(wx.Frame):
         if not event.IsChecked(): style='open'
         self.conf.set_axes_style(style=style)
 
-    def onShowLegend(self,event,argu=''):
+    def onShowLegend(self, event, item=''):
         auto_location = True
-        if (argu == 'legend'):
+        if (item == 'legend'):
             self.conf.show_legend  = event.IsChecked()
-        elif (argu=='frame'):
+        elif (item=='frame'):
             self.conf.show_legend_frame = event.IsChecked()
-        elif (argu=='loc'):
+        elif (item=='loc'):
             self.conf.legend_loc  = event.GetString()
             auto_location = False
-        elif (argu=='onaxis'):
+        elif (item=='onaxis'):
             self.conf.legend_onaxis  = event.GetString()
         self.conf.draw_legend(auto_location=auto_location)
 

@@ -74,7 +74,7 @@ class LineProperties:
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=6,
-                 markercolor=None, zorder=0, label=''):
+                 markercolor=None, zorder=1, label=''):
         self.color      = color
         self.style      = style
         self.drawstyle  = drawstyle
@@ -175,12 +175,16 @@ class LineProperties:
 
 class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """
-    def __init__(self, canvas=None): # trace_color_callback=None):
+    def __init__(self, canvas=None, panel=None, theme_color_callback=None,
+                 margin_callback=None, trace_color_callback=None):
         self.canvas = canvas
-
+        self.panel = panel
         self.styles      = list(StyleMap.keys())
         self.drawstyles  = list(DrawStyleMap.keys())
         self.symbols     = list(MarkerMap.keys())
+        self.trace_color_callback = trace_color_callback
+        self.theme_color_callback = theme_color_callback
+        self.margin_callback = margin_callback
 
         self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
@@ -229,7 +233,6 @@ class PlotConfig:
         self.show_legend_frame = False
         self.axes_style = 'box'
 
-        # self.trace_color_callback = trace_color_callback
         f0 =  FontProperties()
         self.labelfont = f0.copy()
         self.titlefont = f0.copy()
@@ -345,6 +348,55 @@ class PlotConfig:
                 t.set_color(self.textcolor)
         self.canvas.draw()
 
+    def set_margins(self, left=0.1, top=0.1, right=0.1, bottom=0.1):
+        "set margins"
+        self.margins = (left, top, right, bottom)
+        if self.panel is not None:
+            self.panel.gridspec.update(left=left, top=1-top,
+                                       right=1-right, bottom=bottom)
+        for ax in self.canvas.figure.get_axes():
+            ax.update_params()
+            ax.set_position(ax.figbox)
+        self.canvas.draw()
+        if callable(self.margin_callback):
+            self.margin_callback(left=left, top=top, right=right, bottom=bottom)
+
+    def set_gridcolor(self, color):
+        """set color for grid"""
+        self.gridcolor = color
+        for ax in self.canvas.figure.get_axes():
+            for i in ax.get_xgridlines()+ax.get_ygridlines():
+                i.set_color(color)
+                i.set_zorder(-1)
+        if callable(self.theme_color_callback):
+            self.theme_color_callback(color, 'grid')
+
+
+    def set_bgcolor(self, color):
+        """set color for background of plot"""
+        self.bgcolor = color
+        for ax in self.canvas.figure.get_axes():
+            if matplotlib.__version__ < '2.0':
+                ax.set_axis_bgcolor(color)
+            else:
+                ax.set_facecolor(color)
+        if callable(self.theme_color_callback):
+            self.theme_color_callback(color, 'bg')
+
+    def set_framecolor(self, color):
+        """set color for outer frame"""
+        self.framecolor = color
+        self.canvas.figure.set_facecolor(color)
+        if callable(self.theme_color_callback):
+            self.theme_color_callback(color, 'frame')
+
+    def set_textcolor(self, color):
+        """set color for labels and axis text"""
+        self.textcolor = color
+        self.relabel()
+        if callable(self.theme_color_callback):
+            self.theme_color_callback(color, 'text')
+
 
     def set_added_text_size(self):
         # for text added to plot, reset font size to match legend
@@ -360,6 +412,9 @@ class PlotConfig:
     def set_trace_color(self,color,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_color(color,line=self.__mpline(trace))
+        self.draw_legend()
+        if callable(self.trace_color_callback):
+            self.trace_color_callback(color, line=self.__mpline(trace))
 
     def set_trace_zorder(self, zorder, trace=None):
         trace = self.__gettrace(trace)
@@ -368,26 +423,32 @@ class PlotConfig:
     def set_trace_label(self, label, trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_label(label,line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_style(self,style,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_style(style,line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_drawstyle(self, style,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_marker(self,marker,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_marker(marker,line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_markersize(self,markersize,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_markersize(markersize,line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_linewidth(self,linewidth,trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
+        self.draw_legend()
 
     def set_trace_datarange(self, datarange, trace=None):
         trace = self.__gettrace(trace)
@@ -415,7 +476,7 @@ class PlotConfig:
         ax0 = axes[0]
         for i in ax0.get_xgridlines() + ax0.get_ygridlines():
             i.set_color(self.gridcolor)
-            i.set_zorder(-30)
+            i.set_zorder(-1)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)

@@ -119,8 +119,8 @@ class StackedPlotFrame(BaseFrame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         botsize = self.panelsize[0], self.panelsize[1]/self.ratio
-        margins = {'top': dict(left=0.15, bottom=0.005, top=0.90, right=0.95),
-                   'bot': dict(left=0.15, bottom=0.300, top=0.99, right=0.95)}
+        margins = {'top': dict(left=0.15, bottom=0.005, top=0.10, right=0.05),
+                   'bot': dict(left=0.15, bottom=0.300, top=0.01, right=0.05)}
 
         self.panel     = PlotPanel(self, size=self.panelsize)
         self.panel_bot = PlotPanel(self, size=botsize)
@@ -129,12 +129,13 @@ class StackedPlotFrame(BaseFrame):
         self.panel_bot.conf.labelfont.set_size(lsize-2)
         self.panel_bot.yformatter = self.bot_yformatter
         # self.panel_bot.axes.tick_params(axis='y', labelsize=8)
-
+        self.panel.conf.theme_color_callback = self.onThemeColor
+        self.panel.conf.margin_callback = self.onMargins
 
         for pan, pname in ((self.panel, 'top'), (self.panel_bot, 'bot')):
             pan.messenger = self.write_message
             pan.conf.auto_margins = False
-            pan.gridspec.update(**margins[pname])
+            pan.conf.set_margins(**margins[pname])
             pan.axes.update_params()
             pan.axes.set_position(pan.axes.figbox)
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
@@ -203,7 +204,25 @@ class StackedPlotFrame(BaseFrame):
         for p in (self.panel, self.panel_bot):
             p.conf.enable_grid(show)
 
+    def onThemeColor(self, color, item):
+        """pass theme colors to bottom panel"""
+        bconf = self.panel_bot.conf
+        if item == 'grid':
+            bconf.set_gridcolor(color)
+        elif item == 'bg':
+            bconf.set_bgcolor(color)
+        elif item == 'frame':
+            bconf.set_framecolor(color)
+        elif item == 'text':
+            bconf.set_textcolor(color)
+        bconf.canvas.draw()
 
+    def onMargins(self, left=0.1, top=0.1, right=0.1, bottom=0.1):
+        """ pass left/right margins on to bottom panel"""
+        bconf = self.panel_bot.conf
+        l, t, r, b = bconf.margins
+        bconf.set_margins(left=left, top=t, right=right, bottom=b)
+        bconf.canvas.draw()
 
     def set_viewlimits(self, autoscale=False, panel='top'):
         """update xy limits of a plot, as used with .update_line() """

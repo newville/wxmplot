@@ -371,7 +371,9 @@ class PlotPanel(BasePanel):
         self.user_limits[axes] = (xmin, xmax, ymin, ymax)
 
         self.axes_traces = {axes: [0]}
-        self.conf.set_trace_label('scatterplot')
+        if label is None:
+            label = 'scatterplot'
+        self.conf.set_trace_label(label)
         self.conf.set_trace_datarange((min(xdata), max(xdata),
                                        min(ydata), max(ydata)))
 
@@ -545,7 +547,7 @@ class PlotPanel(BasePanel):
         self.gridspec = GridSpec(1,1)
         kwargs = {'facecolor': self.conf.bgcolor}
         if matplotlib.__version__ < "2.0":
-            kwargs = {'axisbg': self.conf.bgcolor}
+            kwargs = {'facecolor': self.conf.bgcolor}
 
         self.axes  = self.fig.add_subplot(self.gridspec[0], **kwargs)
 

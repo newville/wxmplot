@@ -168,8 +168,6 @@ class PlotPanel(BasePanel):
         if xlog_scale is not None:
             self.conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
-
-
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
             x_dates = [datetime.fromtimestamp(i) for i in xdata]
@@ -220,6 +218,10 @@ class PlotPanel(BasePanel):
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
             _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+
+        if axes not in self.conf.data_save:
+            self.conf.data_save[axes] = []
+        self.conf.data_save[axes].append((xdata, ydata))
 
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
@@ -299,7 +301,7 @@ class PlotPanel(BasePanel):
             self.draw()
             self.canvas.Refresh()
 
-        self.conf.data_save.append((xdata, ydata))
+
         conf.ntrace = conf.ntrace + 1
         return _lines
 
@@ -463,7 +465,7 @@ class PlotPanel(BasePanel):
         self.conf.ylabel = ''
         self.conf.y2label = ''
         self.conf.title  = ''
-        self.conf.data_save = []
+        self.conf.data_save = {}
 
     def reset_config(self):
         """reset configuration to defaults."""
@@ -492,18 +494,19 @@ class PlotPanel(BasePanel):
 
     def set_logscale(self, event=None, xscale='linear', yscale='linear'):
         "set log or linear scale for x, y axis"
-        axes = self.axes
         self.conf.xscale = xscale
         self.conf.yscale = yscale
 
-        try:
-            axes.set_yscale(yscale, basey=10)
-        except:
-            axes.set_yscale('linear')
-        try:
-            axes.set_xscale(xscale, basex=10)
-        except:
-            axes.set_xscale('linear')
+        for axes in self.fig.get_axes():
+            # axes = self.axes
+            try:
+                axes.set_yscale(yscale, basey=10)
+            except:
+                axes.set_yscale('linear')
+            try:
+                axes.set_xscale(xscale, basex=10)
+            except:
+                axes.set_xscale('linear')
 
         self.conf.process_data()
         self.unzoom()

@@ -200,7 +200,7 @@ class PlotConfig:
         self.data_expressions = (None, "Y*X", "Y*X^2", "Y^2", "sqrt(Y)", "1/Y")
         self.data_deriv = False
         self.data_expr  = None
-        self.data_save  = []
+        self.data_save  = {}
 
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
@@ -602,37 +602,33 @@ class PlotConfig:
             self.legend_loc = loc
 
     def process_data(self):
-        axes = self.canvas.figure.get_axes()
         expr = self.data_expr
-        if expr is not None:  expr = expr.upper()
-        for trace, lines in enumerate(axes[0].get_lines()):
-            try:
-                dats = copy(self.data_save[trace])
-            except:
-                return
-            xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
-            if expr == 'Y*X':
-                yd = yd * xd
-            elif expr == 'Y*X^2':
-                yd = yd * xd * xd
-            elif expr == 'Y^2':
-                yd = yd * yd
-            elif expr == 'SQRT(Y)':
-                yd = np.sqrt(yd)
-            elif expr == '1/Y':
-                yd = 1./yd
-            if self.data_deriv:
-                yd = np.gradient(yd)/np.gradient(xd)
-            lines.set_ydata(yd)
-            lines.set_xdata(xd)
+        if expr is not None:
+            expr = expr.upper()
+        for ax in self.canvas.figure.get_axes():
+            for trace, lines in enumerate(ax.get_lines()):
+                print("ax, trace, lines ", ax, trace)
+                try:
+                    dats = copy(self.data_save[ax][trace])
+                except:
+                    return
+                xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
+                if expr == 'Y*X':
+                    yd = yd * xd
+                elif expr == 'Y*X^2':
+                    yd = yd * xd * xd
+                elif expr == 'Y^2':
+                    yd = yd * yd
+                elif expr == 'SQRT(Y)':
+                    yd = np.sqrt(yd)
+                elif expr == '1/Y':
+                    yd = 1./yd
+                if self.data_deriv:
+                    yd = np.gradient(yd)/np.gradient(xd)
+                lines.set_ydata(yd)
+                lines.set_xdata(xd)
 
-            self.traces[trace].data_range = [min(xd), max(xd), min(yd), max(yd)]
-
-        axes[0].set_xlim((min(xd), max(xd)), emit=True)
-        axes[0].set_ylim((min(yd), max(yd)), emit=True)
-
-        self.panel.set_viewlimits()
-        self.canvas.draw()
+        self.unzoom(full=True)
 
     def unzoom(self, full=False):
         """unzoom display 1 level or all the way"""
@@ -646,43 +642,37 @@ class PlotConfig:
 
     def set_viewlimits(self):
         axes = self.canvas.figure.get_axes()
-        trace0 = None
-        while trace0 is None:
-            for ax in axes:
-                if (ax in self.axes_traces and
-                   len(self.axes_traces[ax]) > 0):
-                    trace0 = self.axes_traces[ax][0]
-                    break
+
+
         for ax in axes:
-            datlim = self.get_trace_datarange(trace=trace0)
-            # print(" AXES (a) ", datlim, ax in self.axes_traces)
+            limits = None
+            # print(" SetView ", ax, ax in self.axes_traces)
             if ax in self.axes_traces:
-                for i in self.axes_traces[ax]:
-                    l =  self.get_trace_datarange(trace=i)
-                    datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
-                              min(datlim[2], l[2]), max(datlim[3], l[3])]
+                for trace, lines in enumerate(ax.get_lines()):
+                    x, y = lines.get_xdata(), lines.get_ydata()
+                    # dats = copy(self.data_save[ax][trace])
+                    # x, y = np.asarray(dats[0][:]), np.asarray(dats[1][:])
 
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            limits = [min(datlim[0], xmin),  max(datlim[1], xmax),
-                      min(datlim[2], ymin),  max(datlim[3], ymax)]
-            # print(" AXES (c) ", limits)
-            # print(" AXES (D) ", ax in self.user_limits)
-            # print(" AXES (D) ", self.user_limits[ax])
-            # print(" AXES (D) ", self.zoom_lims)
+                    if limits is None:
+                        limits = [min(x), max(x), min(y), max(y)]
+                    else:
+                        limits = [min(limits[0], min(x)), max(limits[1], max(x)),
+                                  min(limits[2], min(y)), max(limits[3], max(y))]
+            # print(" SetView B ", limits)
+            #             xmin, xmax = ax.get_xlim()
+            #             ymin, ymax = ax.get_ylim()
+            #             limits = [min(datlim[0], xmin),  max(datlim[1], xmax),
+            #                       min(datlim[2], ymin),  max(datlim[3], ymax)]
 
-            if (ax in self.user_limits and
-                (self.user_limits[ax] != 4*[None] or
-                len(self.zoom_lims) > 0)):
-
-                for i, val in enumerate(self.user_limits[ax]):
+            if ax in self.user_limits:
+                for i, val in  enumerate(self.user_limits[ax]):
                     if val is not None:
                         limits[i] = val
 
-            xmin, xmax, ymin, ymax = limits
+            # print(" SetView C ", limits, self.user_limits[ax])
             if len(self.zoom_lims) > 0:
-                limits_set = True
-                xmin, xmax, ymin, ymax = self.zoom_lims[-1][ax]
+                limits = self.zoom_lims[-1][ax]
 
-            ax.set_xlim((xmin, xmax), emit=True)
-            ax.set_ylim((ymin, ymax), emit=True)
+            # print(" SetView C ", limits, len(self.zoom_lims))
+            ax.set_xlim((limits[0], limits[1]), emit=True)
+            ax.set_ylim((limits[2], limits[3]), emit=True)

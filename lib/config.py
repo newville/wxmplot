@@ -23,7 +23,8 @@ Valid marker names are:
    'tripod 1','tripod 2'
 
 """
-
+from copy import copy
+import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
@@ -196,6 +197,11 @@ class PlotConfig:
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}
 
+        self.data_expressions = (None, "Y*X", "Y*X^2", "Y^2", "sqrt(Y)", "1/Y")
+        self.data_deriv = False
+        self.data_expr  = None
+        self.data_save  = []
+
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
@@ -206,6 +212,7 @@ class PlotConfig:
         self.zoom_init = (0, 1)
         self.zoom_lims = []
         self.title  = ' '
+        self.xscale = 'linear'
         self.yscale = 'linear'
         self.xlabel = ' '
         self.ylabel = ' '
@@ -593,3 +600,89 @@ class PlotConfig:
             loc = self.legend_abbrevs[loc]
         if loc in self.legend_locs:
             self.legend_loc = loc
+
+    def process_data(self):
+        axes = self.canvas.figure.get_axes()
+        expr = self.data_expr
+        if expr is not None:  expr = expr.upper()
+        for trace, lines in enumerate(axes[0].get_lines()):
+            try:
+                dats = copy(self.data_save[trace])
+            except:
+                return
+            xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
+            if expr == 'Y*X':
+                yd = yd * xd
+            elif expr == 'Y*X^2':
+                yd = yd * xd * xd
+            elif expr == 'Y^2':
+                yd = yd * yd
+            elif expr == 'SQRT(Y)':
+                yd = np.sqrt(yd)
+            elif expr == '1/Y':
+                yd = 1./yd
+            if self.data_deriv:
+                yd = np.gradient(yd)/np.gradient(xd)
+            lines.set_ydata(yd)
+            lines.set_xdata(xd)
+
+            self.traces[trace].data_range = [min(xd), max(xd), min(yd), max(yd)]
+
+        axes[0].set_xlim((min(xd), max(xd)), emit=True)
+        axes[0].set_ylim((min(yd), max(yd)), emit=True)
+
+        self.panel.set_viewlimits()
+        self.canvas.draw()
+
+    def unzoom(self, full=False):
+        """unzoom display 1 level or all the way"""
+        if full:
+            self.zoom_lims = self.zoom_lims[:1]
+            self.zoom_lims = []
+        elif len(self.zoom_lims) > 0:
+            self.zoom_lims.pop()
+        self.set_viewlimits()
+        self.canvas.draw()
+
+    def set_viewlimits(self):
+        axes = self.canvas.figure.get_axes()
+        trace0 = None
+        while trace0 is None:
+            for ax in axes:
+                if (ax in self.axes_traces and
+                   len(self.axes_traces[ax]) > 0):
+                    trace0 = self.axes_traces[ax][0]
+                    break
+        for ax in axes:
+            datlim = self.get_trace_datarange(trace=trace0)
+            # print(" AXES (a) ", datlim, ax in self.axes_traces)
+            if ax in self.axes_traces:
+                for i in self.axes_traces[ax]:
+                    l =  self.get_trace_datarange(trace=i)
+                    datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
+                              min(datlim[2], l[2]), max(datlim[3], l[3])]
+
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
+            limits = [min(datlim[0], xmin),  max(datlim[1], xmax),
+                      min(datlim[2], ymin),  max(datlim[3], ymax)]
+            # print(" AXES (c) ", limits)
+            # print(" AXES (D) ", ax in self.user_limits)
+            # print(" AXES (D) ", self.user_limits[ax])
+            # print(" AXES (D) ", self.zoom_lims)
+
+            if (ax in self.user_limits and
+                (self.user_limits[ax] != 4*[None] or
+                len(self.zoom_lims) > 0)):
+
+                for i, val in enumerate(self.user_limits[ax]):
+                    if val is not None:
+                        limits[i] = val
+
+            xmin, xmax, ymin, ymax = limits
+            if len(self.zoom_lims) > 0:
+                limits_set = True
+                xmin, xmax, ymin, ymax = self.zoom_lims[-1][ax]
+
+            ax.set_xlim((xmin, xmax), emit=True)
+            ax.set_ylim((ymin, ymax), emit=True)

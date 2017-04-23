@@ -8,6 +8,7 @@ import os
 import time
 import wx
 import matplotlib
+from functools import partial
 from .plotpanel import PlotPanel
 from .utils import MenuItem
 
@@ -198,6 +199,40 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
                  "Toggle Grid Display",
                  self.panel.toggle_grid)
+
+        mopts.AppendSeparator()
+
+        logmenu = wx.Menu()
+        MenuItem(self, logmenu, "X Linear / Y Linear", "X Linear / Y Linear",
+                 partial(self.panel.set_logscale, xscale='linear', yscale='linear'),
+                 kind=wx.ITEM_RADIO)
+        MenuItem(self, logmenu, "X Linear / Y Log", "X Lineay / Y Log",
+                 partial(self.panel.set_logscale, xscale='linear', yscale='log'),
+                 kind=wx.ITEM_RADIO)
+        MenuItem(self, logmenu, "X Log / Y Linear", "X Log / Y Linear",
+                 partial(self.panel.set_logscale, xscale='log', yscale='linear'),
+                 kind=wx.ITEM_RADIO)
+        MenuItem(self, logmenu, "X Log / Y Log", "X Log / Y Log",
+                 partial(self.panel.set_logscale, xscale='log', yscale='log'),
+                 kind=wx.ITEM_RADIO)
+
+        mopts.Append(wx.NewId(), "Linear/Log Scale ", logmenu)
+
+        ydatmenu = wx.Menu()
+
+        MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
+                 self.panel.toggle_deriv)
+
+        ydatmenu.AppendSeparator()
+        for expr in self.panel.conf.data_expressions:
+            label = expr
+            if label is None:
+                label = 'original Y(X)'
+            MenuItem(self, ydatmenu, label, label,
+                     partial(self.panel.process_data, expr=expr),
+                     kind=wx.ITEM_RADIO)
+        ydatmenu.AppendSeparator()
+        mopts.Append(wx.NewId(), "Transform Y(X) ", ydatmenu)
 
         mopts.AppendSeparator()
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

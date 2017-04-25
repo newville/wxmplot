@@ -203,18 +203,13 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mopts.AppendSeparator()
 
         logmenu = wx.Menu()
-        MenuItem(self, logmenu, "X Linear / Y Linear", "X Linear / Y Linear",
-                 partial(self.panel.set_logscale, xscale='linear', yscale='linear'),
-                 kind=wx.ITEM_RADIO)
-        MenuItem(self, logmenu, "X Linear / Y Log", "X Lineay / Y Log",
-                 partial(self.panel.set_logscale, xscale='linear', yscale='log'),
-                 kind=wx.ITEM_RADIO)
-        MenuItem(self, logmenu, "X Log / Y Linear", "X Log / Y Linear",
-                 partial(self.panel.set_logscale, xscale='log', yscale='linear'),
-                 kind=wx.ITEM_RADIO)
-        MenuItem(self, logmenu, "X Log / Y Log", "X Log / Y Log",
-                 partial(self.panel.set_logscale, xscale='log', yscale='log'),
-                 kind=wx.ITEM_RADIO)
+        for label in self.panel.conf.log_choices:
+            xword, yword = label.split(' / ')
+            xscale = xword.replace('x', '').strip()
+            yscale = yword.replace('y', '').strip()
+            MenuItem(self, logmenu, label, label,
+                     partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
+                     kind=wx.ITEM_RADIO)
 
         mopts.Append(wx.NewId(), "Linear/Log Scale ", logmenu)
 

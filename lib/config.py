@@ -197,7 +197,11 @@ class PlotConfig:
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}
 
-        self.data_expressions = (None, "Y*X", "Y*X^2", "Y^2", "sqrt(Y)", "1/Y")
+        self.data_expressions = (None, "y*x", "y*x^2", "y^2", "sqrt(y)", "1/y")
+
+        self.log_choices = ("x linear / y linear", "x linear / y log",
+                            "x log / y linear", "x log / y log")
+
         self.data_deriv = False
         self.data_expr  = None
         self.data_save  = {}
@@ -607,7 +611,6 @@ class PlotConfig:
             expr = expr.upper()
         for ax in self.canvas.figure.get_axes():
             for trace, lines in enumerate(ax.get_lines()):
-                print("ax, trace, lines ", ax, trace)
                 try:
                     dats = copy(self.data_save[ax][trace])
                 except:
@@ -641,12 +644,8 @@ class PlotConfig:
         self.canvas.draw()
 
     def set_viewlimits(self):
-        axes = self.canvas.figure.get_axes()
-
-
-        for ax in axes:
+        for ax in self.canvas.figure.get_axes():
             limits = None
-            # print(" SetView ", ax, ax in self.axes_traces)
             if ax in self.axes_traces:
                 for trace, lines in enumerate(ax.get_lines()):
                     x, y = lines.get_xdata(), lines.get_ydata()
@@ -658,21 +657,31 @@ class PlotConfig:
                     else:
                         limits = [min(limits[0], min(x)), max(limits[1], max(x)),
                                   min(limits[2], min(y)), max(limits[3], max(y))]
-            # print(" SetView B ", limits)
-            #             xmin, xmax = ax.get_xlim()
-            #             ymin, ymax = ax.get_ylim()
-            #             limits = [min(datlim[0], xmin),  max(datlim[1], xmax),
-            #                       min(datlim[2], ymin),  max(datlim[3], ymax)]
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):
                     if val is not None:
                         limits[i] = val
 
-            # print(" SetView C ", limits, self.user_limits[ax])
             if len(self.zoom_lims) > 0:
                 limits = self.zoom_lims[-1][ax]
 
-            # print(" SetView C ", limits, len(self.zoom_lims))
             ax.set_xlim((limits[0], limits[1]), emit=True)
             ax.set_ylim((limits[2], limits[3]), emit=True)
+
+    def set_logscale(self, xscale='linear', yscale='linear'):
+        "set log or linear scale for x, y axis"
+        self.xscale = xscale
+        self.yscale = yscale
+        for axes in self.canvas.figure.get_axes():
+            try:
+                axes.set_yscale(yscale, basey=10)
+            except:
+                axes.set_yscale('linear')
+            try:
+                axes.set_xscale(xscale, basex=10)
+            except:
+                axes.set_xscale('linear')
+
+        self.process_data()
+        self.unzoom(full=True)

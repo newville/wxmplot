@@ -197,18 +197,22 @@ class PlotPanel(BasePanel):
         if axes not in self.conf.user_limits:
             self.conf.user_limits[axes] = [None, None, None, None]
 
-        if xmin is not None: self.conf.user_limits[axes][0] = xmin
-        if xmax is not None: self.conf.user_limits[axes][1] = xmax
-        if ymin is not None: self.conf.user_limits[axes][2] = ymin
-        if ymax is not None: self.conf.user_limits[axes][3] = ymax
+        if xmin is not None:
+            self.conf.user_limits[axes][0] = xmin
+        if xmax is not None:
+            self.conf.user_limits[axes][1] = xmax
+        if ymin is not None:
+            self.conf.user_limits[axes][2] = ymin
+        if ymax is not None:
+            self.conf.user_limits[axes][3] = ymax
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        conf  = self.conf
-        n    = conf.ntrace
+        conf = self.conf
+        n = conf.ntrace
         if zorder is None:
             zorder = 5*(n+1)
         if axes not in self.conf.axes_traces:
@@ -494,22 +498,7 @@ class PlotPanel(BasePanel):
 
     def set_logscale(self, event=None, xscale='linear', yscale='linear'):
         "set log or linear scale for x, y axis"
-        self.conf.xscale = xscale
-        self.conf.yscale = yscale
-
-        for axes in self.fig.get_axes():
-            # axes = self.axes
-            try:
-                axes.set_yscale(yscale, basey=10)
-            except:
-                axes.set_yscale('linear')
-            try:
-                axes.set_xscale(xscale, basex=10)
-            except:
-                axes.set_xscale('linear')
-
-        self.conf.process_data()
-        self.unzoom()
+        self.conf.set_logscale(xscale=xscale, yscale=yscale)
 
     def toggle_legend(self, evt=None, show=None):
         "toggle legend display"

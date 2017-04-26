@@ -44,6 +44,16 @@ def autopack(panel, sizer):
     panel.SetSizer(sizer)
     sizer.Fit(panel)
 
+def ffmt(val):
+    """format None or floating point as string"""
+    if val is not None:
+        try:
+            return "%.5g" % val
+        except:
+            pass
+    return repr(val)
+
+
 def clean_texmath(txt):
     """
     clean tex math string, preserving control sequences
@@ -106,6 +116,8 @@ class PlotConfigFrame(wx.Frame):
         self.nb.SetActiveTabTextColour((100, 10, 10))
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Colors and Line Properties', True)
+        self.nb.AddPage(self.make_range_panel(parent=self.nb, font=font),
+                        'Ranges and Margins', True)
         self.nb.AddPage(self.make_text_panel(parent=self.nb, font=font),
                         'Text, Labels, Legends', True)
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
@@ -122,9 +134,131 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
         self.SetMinSize((750, 200))
-        self.SetSize((850, 400))
+        self.SetSize((925, 400))
         self.Show()
         self.Raise()
+
+    def make_range_panel(self, parent, font=None):
+        # bounds, margins, scales
+        panel = wx.Panel(parent)
+        if font is None:
+            font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+
+        conf = self.conf
+
+        sizer = wx.GridBagSizer(4, 4)
+
+        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+        mtitle = wx.StaticText(panel, -1, 'Linear/Log Scale: ')
+
+        logchoice = wx.Choice(panel, choices=self.conf.log_choices,  size=(140,-1))
+        logchoice.SetStringSelection("x %s / y %s" % (self.conf.xscale, self.conf.yscale))
+        logchoice.Bind(wx.EVT_CHOICE, self.onLogScale)
+
+        sizer.Add(mtitle,     (1, 0), (1,1), labstyle, 2)
+        sizer.Add(logchoice,  (1, 1), (1,3), labstyle, 2)
+
+
+        # Bounds
+        axes = self.canvas.figure.get_axes()
+        laxes = axes[0]
+        raxes = None
+        if len(axes) > 1:
+            raxes = axes[1]
+        user_lims = self.conf.user_limits[laxes]
+
+        auto_b  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
+        auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
+
+        xb0, xb1 = laxes.get_xlim()
+        yb0, yb1 = laxes.get_ylim()
+        if user_lims[0] is not None: xb0 = user_lims[0]
+        if user_lims[1] is not None: xb1 = user_lims[1]
+
+        if user_lims[2] is not None: yb0 = user_lims[2]
+        if user_lims[3] is not None: yb1 = user_lims[3]
+
+        y2b0, y2b1 = [None, None]
+        if raxes is not None:
+            y2b0, y2b1 = raxes.get_ylim()
+            user_lims = self.conf.user_limits[raxes]
+            if user_lims[2] is not None: y2b0 = user_lims[2]
+            if user_lims[3] is not None: y2b1 = user_lims[3]
+
+        opts = dict(size=100, labeltext='', action=self.onBounds)
+
+
+        self.xbounds  = [LabelEntry(panel,value=ffmt(xb0), **opts),
+                         LabelEntry(panel,value=ffmt(xb1), **opts)]
+        self.ybounds  = [LabelEntry(panel,value=ffmt(yb0), **opts),
+                         LabelEntry(panel,value=ffmt(yb1), **opts)]
+        self.y2bounds = [LabelEntry(panel,value=ffmt(y2b0), **opts),
+                         LabelEntry(panel,value=ffmt(y2b1), **opts)]
+
+        if user_lims == 4*[None]:
+            [w.Disable() for w in self.xbounds]
+            [w.Disable() for w in self.ybounds]
+
+        if raxes is None:
+            [w.Disable() for w in self.y2bounds]
+
+
+        sizer.Add(wx.StaticText(panel, -1, 'Bounds: '),    (3, 0), (1, 1), labstyle, 2)
+        sizer.Add(auto_b,                                  (3, 1), (1, 1), labstyle, 2)
+        sizer.Add(wx.StaticText(panel, -1, '   X axis:'),  (4, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.xbounds[0],                         (4, 1), (1, 1), labstyle, 2)
+        sizer.Add(wx.StaticText(panel, -1, ' : '),         (4, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.xbounds[1],                         (4, 3), (1, 1), labstyle, 2)
+
+        sizer.Add(wx.StaticText(panel, -1, '   Y axis:'),  (5, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.ybounds[0],                         (5, 1), (1, 1), labstyle, 2)
+        sizer.Add(wx.StaticText(panel, -1, ' : '),         (5, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.ybounds[1],                         (5, 3), (1, 1), labstyle, 2)
+
+        sizer.Add(wx.StaticText(panel, -1, '   Y2 axis:'), (6, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.y2bounds[0],                        (6, 1), (1, 1), labstyle, 2)
+        sizer.Add(wx.StaticText(panel, -1, ' : '),         (6, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.y2bounds[1],                        (6, 3), (1, 1), labstyle, 2)
+
+        # Margins
+        _left, _top, _right, _bot = ["%.3f"% x for x in self.conf.margins]
+
+        mtitle = wx.StaticText(panel, -1, 'Margins: ')
+        ltitle = wx.StaticText(panel, -1, ' Left:   ')
+        rtitle = wx.StaticText(panel, -1, ' Right:  ')
+        btitle = wx.StaticText(panel, -1, ' Bottom: ')
+        ttitle = wx.StaticText(panel, -1, ' Top:    ')
+
+        opts = dict(min_val=0.0, max_val=None, increment=0.01, digits=3,
+                    pos=(-1,-1), size=(FSPINSIZE, 30))
+        lmarg = FloatSpin(panel, -1, value=_left, **opts)
+        lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        rmarg = FloatSpin(panel, -1, value=_right, **opts)
+        rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        bmarg = FloatSpin(panel, -1, value=_bot, **opts)
+        bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+        tmarg = FloatSpin(panel, -1, value=_top, **opts)
+        tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
+
+        self.margins = [lmarg, tmarg, rmarg, bmarg]
+        if self.conf.auto_margins:
+            [m.Disable() for m in self.margins]
+
+        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
+        auto_m.SetValue(self.conf.auto_margins)
+
+        msizer = wx.BoxSizer(wx.HORIZONTAL)
+        msizer.AddMany((ltitle, lmarg, rtitle, rmarg,
+                        btitle, bmarg, ttitle, tmarg))
+
+        sizer.Add(mtitle,  (8, 0), (1,1), labstyle, 2)
+        sizer.Add(auto_m,  (8, 1), (1,1), labstyle, 2)
+        sizer.Add(msizer,  (9, 1), (1,6), labstyle, 2)
+
+        autopack(panel, sizer)
+        return panel
 
     def make_scatter_panel(self, parent, font=None):
         # list of traces
@@ -256,7 +390,7 @@ class PlotConfigFrame(wx.Frame):
         ax = self.axes[0]
 
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
-        loc_ttl = wx.StaticText(panel, -1, '   Location:', size=(-1, -1), style=labstyle)
+        loc_ttl = wx.StaticText(panel, -1, 'Location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
         leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
@@ -266,13 +400,9 @@ class PlotConfigFrame(wx.Frame):
         leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
-        drag_leg  = wx.CheckBox(panel,-1, 'Draggable Legend (experimental)', (-1, -1), (-1, -1))
-        drag_leg.Bind(wx.EVT_CHECKBOX, self.onDragLegend)
-        drag_leg.SetValue(self.conf.draggable_legend)
-
-        hide_leg  = wx.CheckBox(panel,-1, 'Click Legend to Show/Hide Line', (-1, -1), (-1, -1))
-        hide_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
-        hide_leg.SetValue(self.conf.hidewith_legend)
+        togg_leg  = wx.CheckBox(panel,-1, 'Click Legend to Show/Hide Line', (-1, -1), (-1, -1))
+        togg_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
+        togg_leg.SetValue(self.conf.hidewith_legend)
 
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
@@ -284,53 +414,14 @@ class PlotConfigFrame(wx.Frame):
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        lsizer.Add(show_leg, 1, labstyle, 2)
-        lsizer.Add(show_lfr, 0, labstyle, 2)
-        lsizer.Add(loc_ttl,  0, labstyle, 2)
-        lsizer.Add(leg_loc,  0, labstyle, 2)
-        lsizer.Add(leg_onax, 0, labstyle, 2)
+        lsizer.AddMany((leg_ttl, show_leg, show_lfr, togg_leg))
+        sizer.Add(lsizer,    (6, 0), (1, 8), labstyle, 2)
 
-        sizer.Add(leg_ttl,   (6, 0), (1, 1), labstyle, 2)
-        sizer.Add(lsizer,    (6, 1), (1, 5), labstyle, 2)
-
-        sizer.Add(hide_leg,  (7, 1), (1, 2), labstyle, 2)
-        sizer.Add(drag_leg,  (7, 4), (1, 3), labstyle, 2)
+        lsizer = wx.BoxSizer(wx.HORIZONTAL)
+        lsizer.AddMany((loc_ttl, leg_loc, leg_onax))
+        sizer.Add(lsizer,  (7, 1), (1, 2), labstyle, 2)
 
 
-        # Margins
-        _left, _top, _right, _bot = ["%.3f"% x for x in
-                                     self.conf.margins]
-
-        mtitle = wx.StaticText(panel, -1, 'Margins: ')
-        ltitle = wx.StaticText(panel, -1, ' Left:   ')
-        rtitle = wx.StaticText(panel, -1, ' Right:  ')
-        btitle = wx.StaticText(panel, -1, ' Bottom: ')
-        ttitle = wx.StaticText(panel, -1, ' Top:    ')
-
-        opts = dict(min_val=0.0, max_val=None, increment=0.01, digits=3,
-                    pos=(-1,-1), size=(FSPINSIZE, 30))
-        lmarg = FloatSpin(panel, -1, value=_left, **opts)
-        lmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        rmarg = FloatSpin(panel, -1, value=_right, **opts)
-        rmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        bmarg = FloatSpin(panel, -1, value=_bot, **opts)
-        bmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-        tmarg = FloatSpin(panel, -1, value=_top, **opts)
-        tmarg.Bind(EVT_FLOATSPIN, self.onMargins)
-
-        self.margins = [lmarg, tmarg, rmarg, bmarg]
-        if self.conf.auto_margins:
-            [m.Disable() for m in self.margins]
-
-        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
-        auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
-        auto_m.SetValue(self.conf.auto_margins)
-
-        msizer = wx.BoxSizer(wx.HORIZONTAL)
-        msizer.AddMany((mtitle, auto_m, ltitle, lmarg, rtitle, rmarg,
-                        btitle, bmarg, ttitle, tmarg))
-
-        sizer.Add(msizer,  (9, 0), (1, 8), labstyle, 2)
 
         autopack(panel, sizer)
         return panel
@@ -338,7 +429,7 @@ class PlotConfigFrame(wx.Frame):
     def make_linetrace_panel(self, parent, font=None):
         """colours and line properties"""
 
-        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+        panel = scrolled.ScrolledPanel(parent, size=(900, 250),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
 
         if font is None:
@@ -407,10 +498,10 @@ class PlotConfigFrame(wx.Frame):
         csizer.Add(show_grid, 0, labstyle, 3)
         csizer.Add(show_box,  0, labstyle, 3)
 
-        sizer.Add(csizer,    (0, 0), (1, 9), labstyle, 2)
+        sizer.Add(csizer,    (1, 0), (1, 9), labstyle, 2)
 
-        irow = 2
-        for t in ('#','Label','Color', 'Line Style',
+        irow = 3
+        for t in ('#','Label','Color', 'Style',
                   'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)
             x.SetFont(font)
@@ -437,19 +528,19 @@ class PlotConfigFrame(wx.Frame):
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
             col.Bind(csel.EVT_COLOURSELECT,partial(self.onColor, trace=i))
 
-            thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dthk,
+            thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 25), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
             thk.Bind(EVT_FLOATSPIN, partial(self.onThickness, trace=i))
 
-            sty = wx.Choice(panel, choices=self.conf.styles, size=(110,-1))
+            sty = wx.Choice(panel, choices=self.conf.styles, size=(100,-1))
             sty.Bind(wx.EVT_CHOICE,partial(self.onStyle,trace=i))
             sty.SetStringSelection(dsty)
 
-            msz = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30), value=dmsz,
+            msz = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 25), value=dmsz,
                             min_val=0, max_val=30, increment=1, digits=0)
             msz.Bind(EVT_FLOATSPIN, partial(self.onMarkerSize, trace=i))
 
-            zor = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 30),
+            zor = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 25),
                             value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0)
             zor.Bind(EVT_FLOATSPIN, partial(self.onZorder, trace=i))
@@ -509,6 +600,12 @@ class PlotConfigFrame(wx.Frame):
         self.onColor(color=conf.framecolor, item='frame', draw=False)
         self.onColor(color=conf.textcolor,  item='text',  draw=False)
 
+    def onLogScale(self, event):
+        xword, yword = event.GetString().split(' / ')
+        xscale = xword.replace('x', '').strip()
+        yscale = yword.replace('y', '').strip()
+        self.conf.set_logscale(xscale=xscale, yscale=yscale)
+
     def onStyle(self, event, trace=0):
         self.conf.set_trace_style(event.GetString(),trace=trace)
 
@@ -529,6 +626,52 @@ class PlotConfigFrame(wx.Frame):
     def onThickness(self, event, trace=0):
         self.conf.set_trace_linewidth(event.GetEventObject().GetValue(),
                                       trace=trace)
+
+    def onAutoBounds(self,event):
+        axes = self.canvas.figure.get_axes()
+        if event.IsChecked():
+            for ax in axes:
+                self.conf.user_limits[ax] = [None, None, None, None]
+            [m.Disable() for m in self.xbounds]
+            [m.Disable() for m in self.ybounds]
+            [m.Disable() for m in self.y2bounds]
+            self.conf.unzoom(full=True)
+        else:
+
+            xb = axes[0].get_xlim()
+            yb = axes[0].get_ylim()
+            for m, v in zip(self.xbounds, xb):
+                m.Enable()
+                m.SetValue(ffmt(v))
+            for m, v in zip(self.ybounds, yb):
+                m.Enable()
+                m.SetValue(ffmt(v))
+            if len(axes) > 1:
+                y2b = axes[1].get_ylim()
+                for m, v in zip(self.y2bounds, y2b):
+                    m.Enable()
+                    m.SetValue(ffmt(v))
+
+    def onBounds(self, event=None):
+        def FloatNone(v):
+            if v in ('', 'None', 'none'):
+                return None
+            try:
+                return float(v)
+            except:
+                return None
+
+        axes = self.canvas.figure.get_axes()
+        xmin, xmax = [FloatNone(w.GetValue()) for w in self.xbounds]
+        ymin, ymax = [FloatNone(w.GetValue()) for w in self.ybounds]
+        self.conf.user_limits[axes[0]] = [xmin, xmax, ymin, ymax]
+
+        if len(axes) > 1:
+            y2min, y2max = [FloatNone(w.GetValue()) for w in self.y2bounds]
+            self.conf.user_limits[axes[1]] = [xmin, xmax, y2min, y2max]
+        self.conf.set_viewlimits()
+        self.conf.canvas.draw()
+
 
     def onAutoMargin(self,event):
         self.conf.auto_margins = event.IsChecked()
@@ -606,7 +749,7 @@ class PlotConfigFrame(wx.Frame):
         elif item == 'xlabel':
             wid = self.xlab
         elif item == 'trace':
-            wid = self.trace_labels[i]
+            wid = self.trace_labels[trace]
 
         if wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType():
             s = str(event.GetString()).strip()

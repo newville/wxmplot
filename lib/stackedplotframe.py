@@ -224,7 +224,7 @@ class StackedPlotFrame(BaseFrame):
         bconf.set_margins(left=left, top=t, right=right, bottom=b)
         bconf.canvas.draw()
 
-    def set_viewlimits(self, autoscale=False, panel='top'):
+    def set_viewlimits(self, panel='top'):
         """update xy limits of a plot, as used with .update_line() """
         panel = self.get_panel(panel)
 

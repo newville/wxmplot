@@ -103,10 +103,10 @@ class PlotPanel(BasePanel):
         self.axesmargins = (30, 30, 30, 30)
 
         self.BuildPanel()
-        self.user_limits = {} # [None, None, None, None]
+        self.conf.user_limits = {} # [None, None, None, None]
         self.data_range = {}
         self.conf.zoom_lims = []
-        self.axes_traces = {}
+        self.conf.axes_traces = {}
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
@@ -123,7 +123,7 @@ class PlotPanel(BasePanel):
 
         self.data_range = {}
         self.conf.zoom_lims = []
-        self.axes_traces = {}
+        self.conf.axes_traces = {}
         self.clear()
         axes = self.axes
         if side == 'right':
@@ -132,7 +132,7 @@ class PlotPanel(BasePanel):
         self.conf.yscale = 'linear'
         self.cursor_mode = 'zoom'
         self.conf.plot_type = 'lineplot'
-        self.user_limits[axes] = [None, None, None, None]
+        self.conf.user_limits[axes] = [None, None, None, None]
 
         if xlabel is not None:
             self.set_xlabel(xlabel)
@@ -148,11 +148,11 @@ class PlotPanel(BasePanel):
 
     def oplot(self, xdata, ydata, side='left', label=None,
               xlabel=None, ylabel=None, y2label=None, title=None,
-              dy=None, ylog_scale=None, grid=None,
+              dy=None, ylog_scale=None, xlog_scale=None, grid=None,
               xmin=None, xmax=None, ymin=None, ymax=None,
               color=None, style=None, drawstyle=None,
               linewidth=2, marker=None, markersize=None,
-              autoscale=True, refresh=True, show_legend=None,
+              refresh=True, show_legend=None,
               legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None,
               labelfontsize=None, legendfontsize=None,
@@ -165,14 +165,8 @@ class PlotPanel(BasePanel):
         if ylog_scale is not None:
             self.conf.yscale = {False:'linear', True:'log'}[ylog_scale]
 
-            # ydata = ma.masked_where(ydata<=0, 1.0*ydata)
-            # ymin = min(ydata[where(ydata>0)])
-            # ydata[where(ydata<=0)] = None
-
-        try:
-            axes.set_yscale(self.conf.yscale, basey=10)
-        except:
-            axes.set_yscale('linear')
+        if xlog_scale is not None:
+            self.conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
@@ -200,30 +194,38 @@ class PlotPanel(BasePanel):
         # set data range for this trace
         datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
 
-        if axes not in self.user_limits:
-            self.user_limits[axes] = [None, None, None, None]
+        if axes not in self.conf.user_limits:
+            self.conf.user_limits[axes] = [None, None, None, None]
 
-        if xmin is not None: self.user_limits[axes][0] = xmin
-        if xmax is not None: self.user_limits[axes][1] = xmax
-        if ymin is not None: self.user_limits[axes][2] = ymin
-        if ymax is not None: self.user_limits[axes][3] = ymax
+        if xmin is not None:
+            self.conf.user_limits[axes][0] = xmin
+        if xmax is not None:
+            self.conf.user_limits[axes][1] = xmax
+        if ymin is not None:
+            self.conf.user_limits[axes][2] = ymin
+        if ymax is not None:
+            self.conf.user_limits[axes][3] = ymax
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        conf  = self.conf
-        n    = conf.ntrace
+        conf = self.conf
+        n = conf.ntrace
         if zorder is None:
             zorder = 5*(n+1)
-        if axes not in self.axes_traces:
-            self.axes_traces[axes] = []
-        self.axes_traces[axes].append(n)
+        if axes not in self.conf.axes_traces:
+            self.conf.axes_traces[axes] = []
+        self.conf.axes_traces[axes].append(n)
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
             _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+
+        if axes not in self.conf.data_save:
+            self.conf.data_save[axes] = []
+        self.conf.data_save[axes].append((xdata, ydata))
 
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
@@ -233,6 +235,8 @@ class PlotPanel(BasePanel):
             axes.grid(True)
         else:
             axes.grid(False)
+
+        self.set_logscale(xscale=self.conf.xscale, yscale=self.conf.yscale)
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
@@ -301,6 +305,7 @@ class PlotPanel(BasePanel):
             self.draw()
             self.canvas.Refresh()
 
+
         conf.ntrace = conf.ntrace + 1
         return _lines
 
@@ -368,9 +373,9 @@ class PlotPanel(BasePanel):
             self.conf.scatter_selectedge = selectedge
 
         axes = self.axes
-        self.user_limits[axes] = (xmin, xmax, ymin, ymax)
+        self.conf.user_limits[axes] = (xmin, xmax, ymin, ymax)
 
-        self.axes_traces = {axes: [0]}
+        self.conf.axes_traces = {axes: [0]}
         self.conf.set_trace_label('scatterplot')
         self.conf.set_trace_datarange((min(xdata), max(xdata),
                                        min(ydata), max(ydata)))
@@ -385,7 +390,7 @@ class PlotPanel(BasePanel):
             offsets=self.conf.scatter_data,
             transOffset= self.axes.transData)
         self.axes.add_collection(self.conf.scatter_coll)
-        self.set_viewlimits()
+
 
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -438,48 +443,16 @@ class PlotPanel(BasePanel):
             axes = self.axes
             if side == 'right':
                 axes = self.get_right_axes()
-        self.user_limits[axes] = limits
+        self.conf.user_limits[axes] = limits
         self.unzoom_all()
 
-    def set_viewlimits(self, autoscale=False):
-        """ update xy limits of a plot, as used with .update_line() """
 
-        trace0 = None
-        while trace0 is None:
-            for axes in self.fig.get_axes():
-                if (axes in self.axes_traces and
-                   len(self.axes_traces[axes]) > 0):
-                    trace0 = self.axes_traces[axes][0]
-                    break
+    def set_viewlimits(self):
+        """updates xy limits of a plot based on current data,
+        user defined limits, and any zoom level
 
-        for axes in self.fig.get_axes():
-            datlim = self.conf.get_trace_datarange(trace=trace0)
-            if axes in self.axes_traces:
-                for i in self.axes_traces[axes]:
-                    l =  self.conf.get_trace_datarange(trace=i)
-                    datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
-                              min(datlim[2], l[2]), max(datlim[3], l[3])]
-
-            xmin, xmax = axes.get_xlim()
-            ymin, ymax = axes.get_ylim()
-            limits = [min(datlim[0], xmin),
-                      max(datlim[1], xmax),
-                      min(datlim[2], ymin),
-                      max(datlim[3], ymax)]
-
-            if (axes in self.user_limits and
-                (self.user_limits[axes] != 4*[None] or
-                len(self.conf.zoom_lims) > 0)):
-
-                for i, val in enumerate(self.user_limits[axes]):
-                    if val is not None:
-                        limits[i] = val
-                xmin, xmax, ymin, ymax = limits
-                if len(self.conf.zoom_lims) > 0:
-                    limits_set = True
-                    xmin, xmax, ymin, ymax = self.conf.zoom_lims[-1][axes]
-                axes.set_xlim((xmin, xmax), emit=True)
-                axes.set_ylim((ymin, ymax), emit=True)
+        """
+        self.conf.set_viewlimits()
 
     def get_viewlimits(self, axes=None):
         if axes is None: axes = self.axes
@@ -496,17 +469,36 @@ class PlotPanel(BasePanel):
         self.conf.ylabel = ''
         self.conf.y2label = ''
         self.conf.title  = ''
+        self.conf.data_save = {}
 
     def reset_config(self):
         """reset configuration to defaults."""
         self.conf.set_defaults()
 
-    def unzoom(self, event=None, set_bounds=True):
+    def unzoom(self, event=None, **kws):
         """ zoom out 1 level, or to full data range """
-        if len(self.conf.zoom_lims) > 1:
-            self.conf.zoom_lims.pop()
-        self.set_viewlimits()
-        self.draw()
+        self.conf.unzoom(full=False)
+
+    def unzoom_all(self, event=None):
+        """ zoom out full data range """
+        self.conf.unzoom(full=True)
+
+
+    def process_data(self, event=None, expr=None):
+        if expr in self.conf.data_expressions:
+            self.conf.data_expr = expr
+            self.conf.process_data()
+            self.draw()
+
+    def toggle_deriv(self, evt=None, value=None):
+        "toggle derivative of data"
+        if value is None:
+            self.conf.data_deriv = not self.conf.data_deriv
+            self.conf.process_data()
+
+    def set_logscale(self, event=None, xscale='linear', yscale='linear'):
+        "set log or linear scale for x, y axis"
+        self.conf.set_logscale(xscale=xscale, yscale=yscale)
 
     def toggle_legend(self, evt=None, show=None):
         "toggle legend display"

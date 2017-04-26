@@ -8,6 +8,7 @@ import os
 import time
 import wx
 import matplotlib
+from functools import partial
 from .plotpanel import PlotPanel
 from .utils import MenuItem
 
@@ -198,6 +199,35 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
                  "Toggle Grid Display",
                  self.panel.toggle_grid)
+
+        mopts.AppendSeparator()
+
+        logmenu = wx.Menu()
+        for label in self.panel.conf.log_choices:
+            xword, yword = label.split(' / ')
+            xscale = xword.replace('x', '').strip()
+            yscale = yword.replace('y', '').strip()
+            MenuItem(self, logmenu, label, label,
+                     partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
+                     kind=wx.ITEM_RADIO)
+
+        mopts.Append(wx.NewId(), "Linear/Log Scale ", logmenu)
+
+        ydatmenu = wx.Menu()
+
+        MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
+                 self.panel.toggle_deriv)
+
+        ydatmenu.AppendSeparator()
+        for expr in self.panel.conf.data_expressions:
+            label = expr
+            if label is None:
+                label = 'original Y(X)'
+            MenuItem(self, ydatmenu, label, label,
+                     partial(self.panel.process_data, expr=expr),
+                     kind=wx.ITEM_RADIO)
+        ydatmenu.AppendSeparator()
+        mopts.Append(wx.NewId(), "Transform Y(X) ", ydatmenu)
 
         mopts.AppendSeparator()
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

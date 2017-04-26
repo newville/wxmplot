@@ -18,12 +18,13 @@ here is for trace properties:
 A matplotlib Line2D can have many more properties than this: these are not set here.
 
 Valid marker names are:
-   'no symbol', '+', 'o','x', '^','v','>','<','|','_',
+   'no symbol', 'o', '+', 'x', '^','v','>','<','|','_',
    'square','diamond','thin diamond', 'hexagon','pentagon',
    'tripod 1','tripod 2'
 
 """
-
+from copy import copy
+import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
@@ -51,7 +52,7 @@ for k,v in (('solid', ('-', None)),
     StyleMap[k]=v
 
 
-for k,v in (('no symbol','None'), ('+','+'), ('o','o'), ('x','x'),
+for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
             ('square','s'), ('diamond','D'), ('thin diamond','d'),
             ('^','^'), ('v','v'), ('>','>'), ('<','<'),
             ('|','|'),('_','_'), ('hexagon','h'), ('pentagon','p'),
@@ -196,6 +197,15 @@ class PlotConfig:
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}
 
+        self.data_expressions = (None, "y*x", "y*x^2", "y^2", "sqrt(y)", "1/y")
+
+        self.log_choices = ("x linear / y linear", "x linear / y log",
+                            "x log / y linear", "x log / y log")
+
+        self.data_deriv = False
+        self.data_expr  = None
+        self.data_save  = {}
+
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
@@ -206,6 +216,7 @@ class PlotConfig:
         self.zoom_init = (0, 1)
         self.zoom_lims = []
         self.title  = ' '
+        self.xscale = 'linear'
         self.yscale = 'linear'
         self.xlabel = ' '
         self.ylabel = ' '
@@ -254,7 +265,6 @@ class PlotConfig:
         for style, marker in (('solid', None), ('short dashed', None),
                                ('dash-dot', None), ('solid', 'o'),
                                ('solid', '+')):
-
             for color in ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
                           '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
                           '#bcbd22', '#17becf'):
@@ -271,7 +281,7 @@ class PlotConfig:
         self.framecolor = self.color_themes[theme]['frame']
 
     def _init_trace(self, n,  color, style,
-                    linewidth=2.5, zorder=None, marker=None, markersize=8):
+                    linewidth=2.5, zorder=None, marker=None, markersize=6):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProperties())
@@ -419,6 +429,7 @@ class PlotConfig:
     def set_trace_zorder(self, zorder, trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
+        self.canvas.draw()
 
     def set_trace_label(self, label, trace=None):
         trace = self.__gettrace(trace)
@@ -593,3 +604,84 @@ class PlotConfig:
             loc = self.legend_abbrevs[loc]
         if loc in self.legend_locs:
             self.legend_loc = loc
+
+    def process_data(self):
+        expr = self.data_expr
+        if expr is not None:
+            expr = expr.upper()
+        for ax in self.canvas.figure.get_axes():
+            for trace, lines in enumerate(ax.get_lines()):
+                try:
+                    dats = copy(self.data_save[ax][trace])
+                except:
+                    return
+                xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
+                if expr == 'Y*X':
+                    yd = yd * xd
+                elif expr == 'Y*X^2':
+                    yd = yd * xd * xd
+                elif expr == 'Y^2':
+                    yd = yd * yd
+                elif expr == 'SQRT(Y)':
+                    yd = np.sqrt(yd)
+                elif expr == '1/Y':
+                    yd = 1./yd
+                if self.data_deriv:
+                    yd = np.gradient(yd)/np.gradient(xd)
+                lines.set_ydata(yd)
+                lines.set_xdata(xd)
+
+        self.unzoom(full=True)
+
+    def unzoom(self, full=False):
+        """unzoom display 1 level or all the way"""
+        if full:
+            self.zoom_lims = self.zoom_lims[:1]
+            self.zoom_lims = []
+        elif len(self.zoom_lims) > 0:
+            self.zoom_lims.pop()
+        self.set_viewlimits()
+        self.canvas.draw()
+
+    def set_viewlimits(self):
+        for ax in self.canvas.figure.get_axes():
+            limits = None
+            if ax in self.axes_traces:
+                for trace, lines in enumerate(ax.get_lines()):
+                    x, y = lines.get_xdata(), lines.get_ydata()
+                    # dats = copy(self.data_save[ax][trace])
+                    # x, y = np.asarray(dats[0][:]), np.asarray(dats[1][:])
+
+                    if limits is None:
+                        limits = [min(x), max(x), min(y), max(y)]
+                    else:
+                        limits = [min(limits[0], min(x)), max(limits[1], max(x)),
+                                  min(limits[2], min(y)), max(limits[3], max(y))]
+
+            if ax in self.user_limits:
+                for i, val in  enumerate(self.user_limits[ax]):
+                    if val is not None:
+                        limits[i] = val
+
+            if len(self.zoom_lims) > 0:
+                limits = self.zoom_lims[-1][ax]
+
+            ax.set_xlim((limits[0], limits[1]), emit=True)
+            ax.set_ylim((limits[2], limits[3]), emit=True)
+
+    def set_logscale(self, xscale='linear', yscale='linear'):
+        "set log or linear scale for x, y axis"
+        self.xscale = xscale
+        self.yscale = yscale
+        for axes in self.canvas.figure.get_axes():
+            try:
+                axes.set_yscale(yscale, basey=10)
+            except:
+                axes.set_yscale('linear')
+            try:
+                axes.set_xscale(xscale, basex=10)
+            except:
+                axes.set_xscale('linear')
+
+        self.process_data()
+        self.unzoom(full=True)

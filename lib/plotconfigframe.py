@@ -498,9 +498,9 @@ class PlotConfigFrame(wx.Frame):
         csizer.Add(show_grid, 0, labstyle, 3)
         csizer.Add(show_box,  0, labstyle, 3)
 
-        sizer.Add(csizer,    (0, 0), (1, 9), labstyle, 2)
+        sizer.Add(csizer,    (1, 0), (1, 9), labstyle, 2)
 
-        irow = 2
+        irow = 3
         for t in ('#','Label','Color', 'Style',
                   'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)
@@ -749,7 +749,7 @@ class PlotConfigFrame(wx.Frame):
         elif item == 'xlabel':
             wid = self.xlab
         elif item == 'trace':
-            wid = self.trace_labels[i]
+            wid = self.trace_labels[trace]
 
         if wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType():
             s = str(event.GetString()).strip()

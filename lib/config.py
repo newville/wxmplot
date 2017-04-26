@@ -18,7 +18,7 @@ here is for trace properties:
 A matplotlib Line2D can have many more properties than this: these are not set here.
 
 Valid marker names are:
-   'no symbol', '+', 'o','x', '^','v','>','<','|','_',
+   'no symbol', 'o', '+', 'x', '^','v','>','<','|','_',
    'square','diamond','thin diamond', 'hexagon','pentagon',
    'tripod 1','tripod 2'
 
@@ -52,7 +52,7 @@ for k,v in (('solid', ('-', None)),
     StyleMap[k]=v
 
 
-for k,v in (('no symbol','None'), ('+','+'), ('o','o'), ('x','x'),
+for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
             ('square','s'), ('diamond','D'), ('thin diamond','d'),
             ('^','^'), ('v','v'), ('>','>'), ('<','<'),
             ('|','|'),('_','_'), ('hexagon','h'), ('pentagon','p'),
@@ -265,7 +265,6 @@ class PlotConfig:
         for style, marker in (('solid', None), ('short dashed', None),
                                ('dash-dot', None), ('solid', 'o'),
                                ('solid', '+')):
-
             for color in ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
                           '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
                           '#bcbd22', '#17becf'):
@@ -282,7 +281,7 @@ class PlotConfig:
         self.framecolor = self.color_themes[theme]['frame']
 
     def _init_trace(self, n,  color, style,
-                    linewidth=2.5, zorder=None, marker=None, markersize=8):
+                    linewidth=2.5, zorder=None, marker=None, markersize=6):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProperties())
@@ -430,6 +429,7 @@ class PlotConfig:
     def set_trace_zorder(self, zorder, trace=None):
         trace = self.__gettrace(trace)
         self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
+        self.canvas.draw()
 
     def set_trace_label(self, label, trace=None):
         trace = self.__gettrace(trace)

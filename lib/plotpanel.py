@@ -71,7 +71,7 @@ class PlotPanel(BasePanel):
 
     def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None,
                  facecolor=None, fontsize=9, trace_color_callback=None,
-                 output_title='plot', **kws):
+                 output_title='plot', with_data_process=True, **kws):
 
         self.trace_color_callback = trace_color_callback
         matplotlib.rc('axes', axisbelow=True)
@@ -85,7 +85,7 @@ class PlotPanel(BasePanel):
         BasePanel.__init__(self, parent,
                            output_title=output_title, **kws)
 
-        self.conf = PlotConfig(panel=self)
+        self.conf = PlotConfig(panel=self, with_data_process=with_data_process)
         self.data_range = {}
         self.win_config = None
         self.cursor_callback = None
@@ -218,30 +218,6 @@ class PlotPanel(BasePanel):
         if axes not in self.conf.axes_traces:
             self.conf.axes_traces[axes] = []
         self.conf.axes_traces[axes].append(n)
-        if dy is None:
-            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
-        else:
-            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
-
-        if axes not in self.conf.data_save:
-            self.conf.data_save[axes] = []
-        self.conf.data_save[axes].append((xdata, ydata))
-
-        if conf.show_grid and axes == self.axes:
-            # I'm sure there's a better way...
-            for i in axes.get_xgridlines() + axes.get_ygridlines():
-                i.set_color(conf.gridcolor)
-                i.set_zorder(-100)
-            axes.grid(True)
-        else:
-            axes.grid(False)
-
-        self.set_logscale(xscale=self.conf.xscale, yscale=self.conf.yscale)
-
-        if label is None:
-            label = 'trace %i' % (conf.ntrace+1)
-        conf.set_trace_label(label)
-        conf.set_trace_datarange(datarange)
 
         if bgcolor is not None:
             self.conf.bgcolor = bgcolor
@@ -266,6 +242,34 @@ class PlotPanel(BasePanel):
         if gridcolor is not None:
             conf.gridcolor = gridcolor
 
+        if dy is None:
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
+        else:
+            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+
+        if axes not in self.conf.data_save:
+            self.conf.data_save[axes] = []
+        self.conf.data_save[axes].append((xdata, ydata))
+
+        if conf.show_grid and axes == self.axes:
+            # I'm sure there's a better way...
+            for i in axes.get_xgridlines() + axes.get_ygridlines():
+                i.set_color(conf.gridcolor)
+                i.set_zorder(-100)
+            axes.grid(True)
+        else:
+            axes.grid(False)
+
+        if (self.conf.xscale == 'log' or self.conf.yscale == 'log'):
+            self.set_logscale(xscale=self.conf.xscale,
+                              yscale=self.conf.yscale)
+
+
+        if label is None:
+            label = 'trace %i' % (conf.ntrace+1)
+        conf.set_trace_label(label)
+        conf.set_trace_datarange(datarange)
+
         needs_relabel = False
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
@@ -275,11 +279,13 @@ class PlotPanel(BasePanel):
             conf.legendfont.set_size(legendfontsize)
             needs_relabel = True
 
+
         if n < len(conf.lines):
             conf.lines[n] = _lines
         else:
             conf._init_trace(n, 'black', solid)
             conf.lines[n] = _lines
+
 
         # now set plot limits:
         self.set_viewlimits()

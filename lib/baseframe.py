@@ -47,7 +47,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
                  exit_callback=None, user_menus=None, panelkws=None,
-                 axisbg=None, output_title='Plot', dpi=150, **kws):
+                 axisbg=None, output_title='Plot', dpi=150,
+                 with_data_process=True, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
@@ -60,6 +61,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.panel  = panel
         self.dpi    = dpi
         self.user_menus = user_menus
+        self.with_data_process = with_data_process
         self.size = size
         self.panelkws = panelkws or {}
         if axisbg is not None:
@@ -130,7 +132,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         panelkws = self.panelkws
         if self.size is not None:
             panelkws.update({'size': self.size})
-        panelkws.update({'output_title': self.output_title})
+        panelkws.update({'output_title': self.output_title,
+                         'with_data_process': self.with_data_process})
 
         self.panel = PlotPanel(self, **panelkws)
         self.panel.messenger = self.write_message
@@ -213,21 +216,22 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         mopts.Append(wx.NewId(), "Linear/Log Scale ", logmenu)
 
-        ydatmenu = wx.Menu()
+        if self.panel.conf.with_data_process:
+            ydatmenu = wx.Menu()
 
-        MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
-                 self.panel.toggle_deriv)
+            MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
+                     self.panel.toggle_deriv)
 
-        ydatmenu.AppendSeparator()
-        for expr in self.panel.conf.data_expressions:
-            label = expr
-            if label is None:
-                label = 'original Y(X)'
-            MenuItem(self, ydatmenu, label, label,
-                     partial(self.panel.process_data, expr=expr),
-                     kind=wx.ITEM_RADIO)
-        ydatmenu.AppendSeparator()
-        mopts.Append(wx.NewId(), "Transform Y(X) ", ydatmenu)
+            ydatmenu.AppendSeparator()
+            for expr in self.panel.conf.data_expressions:
+                label = expr
+                if label is None:
+                    label = 'original Y(X)'
+                MenuItem(self, ydatmenu, label, label,
+                         partial(self.panel.process_data, expr=expr),
+                         kind=wx.ITEM_RADIO)
+            ydatmenu.AppendSeparator()
+            mopts.Append(wx.NewId(), "Transform Y(X) ", ydatmenu)
 
         mopts.AppendSeparator()
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

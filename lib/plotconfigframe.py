@@ -500,6 +500,11 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(csizer,    (1, 0), (1, 9), labstyle, 2)
 
+        reset_btn = wx.Button(panel, label='Reset Line Colors', size=(170, -1))
+        reset_btn.Bind(wx.EVT_BUTTON, self.onResetLines)
+
+        sizer.Add(reset_btn, (2, 1), (1, 4))
+
         irow = 3
         for t in ('#','Label','Color', 'Style',
                   'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
@@ -526,7 +531,9 @@ class PlotConfigFrame(wx.Frame):
             self.trace_labels.append(lab)
 
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
-            col.Bind(csel.EVT_COLOURSELECT,partial(self.onColor, trace=i))
+            col.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, trace=i))
+
+            self.colwids[i] = col
 
             thk = FloatSpin(panel, -1,  pos=(-1,-1), size=(FSPINSIZE, 25), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1)
@@ -567,6 +574,18 @@ class PlotConfigFrame(wx.Frame):
         autopack(panel,sizer)
         panel.SetupScrolling()
         return panel
+
+    def onResetLines(self, event=None):
+        self.conf.reset_trace_properties()
+
+        ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
+        for i in range(ntrace_display):
+            lin = self.conf.traces[i]
+            curcol = hexcolor(self.colwids[i].GetColour())
+            newcol = hexcolor(lin.color)
+            self.colwids[i].SetColour(newcol)
+            if newcol != curcol:
+                self.onColor(event=None, color=newcol, trace=i)
 
     def onColor(self, event=None, color=None, item='trace', trace=1, draw=True):
         if color is None and event is not None:

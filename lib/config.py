@@ -28,6 +28,7 @@ import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
+from cycler import cycler
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
@@ -39,6 +40,12 @@ except ImportError:
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
+
+LineColors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
+              '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
+              '#bcbd22', '#17becf')
+
+rcParams['axes.prop_cycle'] = cycler('color', LineColors)
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
@@ -176,8 +183,9 @@ class LineProperties:
 
 class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """
-    def __init__(self, canvas=None, panel=None, theme_color_callback=None,
-                 margin_callback=None, trace_color_callback=None):
+    def __init__(self, canvas=None, panel=None, with_data_process=True,
+                 theme_color_callback=None, margin_callback=None,
+                 trace_color_callback=None):
         self.canvas = canvas
         self.panel = panel
         self.styles      = list(StyleMap.keys())
@@ -205,6 +213,7 @@ class PlotConfig:
         self.data_deriv = False
         self.data_expr  = None
         self.data_save  = {}
+        self.with_data_process = with_data_process
 
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
@@ -259,15 +268,14 @@ class PlotConfig:
         self.ntrace = 0
         self.lines  = [None]*30
         self.traces = []
+        self.reset_trace_properties()
 
+    def reset_trace_properties(self):
         i = -1
-
         for style, marker in (('solid', None), ('short dashed', None),
                                ('dash-dot', None), ('solid', 'o'),
                                ('solid', '+')):
-            for color in ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
-                          '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
-                          '#bcbd22', '#17becf'):
+            for color in LineColors:
                 i += 1
                 self._init_trace(i, color, style, marker=marker)
 
@@ -606,6 +614,8 @@ class PlotConfig:
             self.legend_loc = loc
 
     def process_data(self):
+        if not self.with_data_process:
+            return
         expr = self.data_expr
         if expr is not None:
             expr = expr.upper()
@@ -682,6 +692,5 @@ class PlotConfig:
                 axes.set_xscale(xscale, basex=10)
             except:
                 axes.set_xscale('linear')
-
         self.process_data()
         self.unzoom(full=True)

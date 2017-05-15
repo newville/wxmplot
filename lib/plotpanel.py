@@ -90,6 +90,7 @@ class PlotPanel(BasePanel):
         self.win_config = None
         self.cursor_callback = None
         self.lasso_callback = None
+        self.cursor_mode = 'zoom'
         self.parent    = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi     = dpi
@@ -130,8 +131,6 @@ class PlotPanel(BasePanel):
             axes = self.get_right_axes()
         self.conf.ntrace  = 0
         self.conf.yscale = 'linear'
-        self.cursor_mode = 'zoom'
-        self.conf.plot_type = 'lineplot'
         self.conf.user_limits[axes] = [None, None, None, None]
 
         if xlabel is not None:
@@ -158,6 +157,9 @@ class PlotPanel(BasePanel):
               labelfontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
+        self.cursor_mode = 'zoom'
+        self.conf.plot_type = 'lineplot'
+
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()

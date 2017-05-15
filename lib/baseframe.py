@@ -214,7 +214,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                      partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
                      kind=wx.ITEM_RADIO)
 
-        mopts.Append(wx.NewId(), "Linear/Log Scale ", logmenu)
+        mopts.AppendSubMenu(logmenu, "Linear/Log Scale ")
 
         if self.panel.conf.with_data_process:
             ydatmenu = wx.Menu()
@@ -231,7 +231,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                          partial(self.panel.process_data, expr=expr),
                          kind=wx.ITEM_RADIO)
             ydatmenu.AppendSeparator()
-            mopts.Append(wx.NewId(), "Transform Y(X) ", ydatmenu)
+
+            mopts.AppendSubMenu(ydatmenu, "Transform Y(X) ")
 
         mopts.AppendSeparator()
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

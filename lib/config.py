@@ -28,7 +28,13 @@ import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
-from cycler import cycler
+HAS_CYCLER = False
+try:
+    from cycler import cycler
+    HAS_CYCLER = True
+except ImportError:
+    pass
+
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
@@ -45,7 +51,8 @@ LineColors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
               '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
               '#bcbd22', '#17becf')
 
-rcParams['axes.prop_cycle'] = cycler('color', LineColors)
+if HAS_CYCLER and matplotlib.__version__ > '1.9':
+    rcParams['axes.prop_cycle'] = cycler('color', LineColors)
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k

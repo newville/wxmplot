@@ -365,10 +365,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
         sbar.SetFont(sfont)
-
         self.SetStatusWidths(sbar_widths)
-        for i in range(len(sbar_widths)):
-            self.SetStatusText('', i)
 
         self.optional_menus = []
 
@@ -379,7 +376,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
-
+        self.panel.nstatusbar = sbar.GetFieldsCount()
         self.BuildMenu()
 
         self.SetBackgroundColour('#F8F8F4')

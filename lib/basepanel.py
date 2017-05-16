@@ -56,6 +56,7 @@ class BasePanel(wx.Panel):
         self.cursor_modes = {}
         self.cursor_mode = 'report'
         self.parent = parent
+        self.motion_sbar = None
         self.printer = Printer(self, title=output_title)
         self.add_cursor_mode('report', motion = self.report_motion,
                              leftdown = self.report_leftdown)
@@ -585,7 +586,9 @@ class BasePanel(wx.Panel):
                 x, y = self.axes.transData.inverted().transform((event.x, event.y))
             except:
                 pass
-        self.write_message(fmt % (x, y), panel=1)
+        if self.motion_sbar is None:
+            self.motion_sbar = len(self.parent.statusbar_widths)-1
+        self.write_message(fmt % (x, y), panel=self.motion_sbar)
 
     def Print(self, event=None, **kw):
         self.printer.Print(event=event, **kw)

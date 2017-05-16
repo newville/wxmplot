@@ -497,8 +497,10 @@ class PlotPanel(BasePanel):
         if expr is None:
             expr = ''
         if self.conf.data_deriv:
+            if expr is None:
+                expr = 'y'
             expr = "deriv(%s)" % expr
-        self.write_message(expr, panel=1)
+        self.write_message("plotting %s" % expr, panel=0)
 
     def toggle_deriv(self, evt=None, value=None):
         "toggle derivative of data"
@@ -508,7 +510,7 @@ class PlotPanel(BasePanel):
             expr = self.conf.data_expr or ''
             if self.conf.data_deriv:
                 expr = "deriv(%s)" % expr
-            self.write_message(expr, panel=1)
+            self.write_message("plotting %s" % expr, panel=0)
 
             self.conf.process_data()
 
@@ -814,7 +816,9 @@ class PlotPanel(BasePanel):
                                               self._y2fmt) % (x, y, y2)
             except:
                 pass
-        self.write_message(msg,  panel=0)
+
+        nsbar = getattr(self, 'nstatusbar', 1)
+        self.write_message(msg,  panel=max(0, nsbar - 2))
         if (self.cursor_callback is not None and
             hasattr(self.cursor_callback , '__call__')):
             self.cursor_callback(x=event.xdata, y=event.ydata)

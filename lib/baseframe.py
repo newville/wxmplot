@@ -118,16 +118,13 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ## create GUI
     ####
     def BuildFrame(self):
-        self.statusbar_widths = sbars = [-2, -1, -1]
-        sb = self.CreateStatusBar(len(sbars), wx.CAPTION)
-        sfont = sb.GetFont()
+        sbar_widths = [-2, -1, -1]
+        sbar = self.CreateStatusBar(len(sbar_widths), wx.CAPTION)
+        sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
-        sb.SetFont(sfont)
-
-        self.SetStatusWidths(sbars)
-        for i in range(len(sbars)):
-            self.SetStatusText(' ', i)
+        sbar.SetFont(sfont)
+        self.SetStatusWidths(sbar_widths)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         panelkws = self.panelkws
@@ -138,13 +135,13 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         self.panel = PlotPanel(self, **panelkws)
         self.panel.messenger = self.write_message
+        self.panel.nstatusbar = sbar.GetFieldsCount()
         sizer.Add(self.panel, 1, wx.EXPAND)
         self.BuildMenu()
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.Fit()
-
 
     def Build_FileMenu(self, extras=None):
         mfile = wx.Menu()

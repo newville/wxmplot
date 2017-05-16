@@ -588,7 +588,7 @@ class BasePanel(wx.Panel):
                 pass
         if self.motion_sbar is None:
             try:
-                self.motion_sbar = len(self.parent.statusbar_widths)-1
+                self.motion_sbar = self.nstatusbar-1
             except AttributeError:
                 self.motion_sbar = 1
 

@@ -93,7 +93,6 @@ class PlotPanel(BasePanel):
         self.parent  = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi  = dpi
-        self.proc_message = ''
         if facecolor is not None:
             self.conf.bgcolor = facecolor
         if axisbg is not None:

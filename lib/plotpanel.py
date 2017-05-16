@@ -81,7 +81,6 @@ class PlotPanel(BasePanel):
         matplotlib.rc('legend', fontsize=fontsize)
         matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
 
-
         BasePanel.__init__(self, parent,
                            output_title=output_title, **kws)
 
@@ -91,10 +90,10 @@ class PlotPanel(BasePanel):
         self.cursor_callback = None
         self.lasso_callback = None
         self.cursor_mode = 'zoom'
-        self.parent    = parent
+        self.parent  = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
-        self.dpi     = dpi
-
+        self.dpi  = dpi
+        self.proc_message = ''
         if facecolor is not None:
             self.conf.bgcolor = facecolor
         if axisbg is not None:
@@ -491,17 +490,27 @@ class PlotPanel(BasePanel):
         """ zoom out full data range """
         self.conf.unzoom(full=True)
 
-
     def process_data(self, event=None, expr=None):
         if expr in self.conf.data_expressions:
             self.conf.data_expr = expr
             self.conf.process_data()
             self.draw()
+        if expr is None:
+            expr = ''
+        if self.conf.data_deriv:
+            expr = "deriv(%s)" % expr
+        self.write_message(expr, panel=1)
 
     def toggle_deriv(self, evt=None, value=None):
         "toggle derivative of data"
         if value is None:
             self.conf.data_deriv = not self.conf.data_deriv
+
+            expr = self.conf.data_expr or ''
+            if self.conf.data_deriv:
+                expr = "deriv(%s)" % expr
+            self.write_message(expr, panel=1)
+
             self.conf.process_data()
 
     def set_logscale(self, event=None, xscale='linear', yscale='linear'):
@@ -781,8 +790,7 @@ class PlotPanel(BasePanel):
             fout = open(fname, 'w')
             fout.write("%s\n" % "\n".join(buff))
             fout.close()
-            self.write_message("Exported data to '%s'" % fname,
-                               panel=0)
+            self.write_message("Exported data to '%s'" % fname, panel=0)
 
     ####
     ## GUI events

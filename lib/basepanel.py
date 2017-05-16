@@ -587,7 +587,11 @@ class BasePanel(wx.Panel):
             except:
                 pass
         if self.motion_sbar is None:
-            self.motion_sbar = len(self.parent.statusbar_widths)-1
+            try:
+                self.motion_sbar = len(self.parent.statusbar_widths)-1
+            except AttributeError:
+                self.motion_sbar = 1
+
         self.write_message(fmt % (x, y), panel=self.motion_sbar)
 
     def Print(self, event=None, **kw):

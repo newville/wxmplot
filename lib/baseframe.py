@@ -67,9 +67,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         if axisbg is not None:
             self.panelkws['axisbg'] = axisbg
 
-    def write_message(self,s,panel=0):
+    def write_message(self, txt, panel=0):
         """write a message to the Status Bar"""
-        self.SetStatusText(s, panel)
+        self.SetStatusText(txt, panel)
 
     def set_xylims(self, limits, axes=None):
         """overwrite data for trace t """
@@ -118,15 +118,16 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ## create GUI
     ####
     def BuildFrame(self):
-        # Python3 note: wxPython has no THICK_FRAME
-        sbar = self.CreateStatusBar(2, wx.CAPTION)
-        sfont = sbar.GetFont()
+        self.statusbar_widths = sbars = [-2, -1, -1]
+        sb = self.CreateStatusBar(len(sbars), wx.CAPTION)
+        sfont = sb.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
-        sbar.SetFont(sfont)
+        sb.SetFont(sfont)
 
-        self.SetStatusWidths([-3,-1])
-        self.SetStatusText('',0)
+        self.SetStatusWidths(sbars)
+        for i in range(len(sbars)):
+            self.SetStatusText(' ', i)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         panelkws = self.panelkws
@@ -220,7 +221,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             ydatmenu = wx.Menu()
 
             MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
-                     self.panel.toggle_deriv)
+                     self.panel.toggle_deriv, kind=wx.ITEM_CHECK)
 
             ydatmenu.AppendSeparator()
             for expr in self.panel.conf.data_expressions:

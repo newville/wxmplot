@@ -359,14 +359,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.config_mode = None
         if subtitles is not None:
             self.subtitles = subtitles
-        sbar = self.CreateStatusBar(2, wx.CAPTION)
+        sbar_widths = [-2, -1, -1]
+        sbar = self.CreateStatusBar(len(sbar_widths), wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
         sbar.SetFont(sfont)
 
-        self.SetStatusWidths([-2, -1])
-        self.SetStatusText('', 0)
+        self.SetStatusWidths(sbar_widths)
+        for i in range(len(sbar_widths)):
+            self.SetStatusText('', i)
 
         self.optional_menus = []
 

@@ -26,7 +26,7 @@ from .colors import hexcolor, hex2rgb
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
 ISPINSIZE = 110
-FSPINSIZE = 135
+FSPINSIZE = 150
 if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
     ISPINSIZE = 50
     FSPINSIZE = 70
@@ -133,8 +133,8 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
-        self.SetMinSize((750, 200))
-        self.SetSize((925, 400))
+        self.SetMinSize((775, 200))
+        self.SetSize((950, 400))
         self.Show()
         self.Raise()
 
@@ -151,7 +151,7 @@ class PlotConfigFrame(wx.Frame):
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
         mtitle = wx.StaticText(panel, -1, 'Linear/Log Scale: ')
 
-        logchoice = wx.Choice(panel, choices=self.conf.log_choices,  size=(140,-1))
+        logchoice = wx.Choice(panel, choices=self.conf.log_choices,  size=(200,-1))
         logchoice.SetStringSelection("x %s / y %s" % (self.conf.xscale, self.conf.yscale))
         logchoice.Bind(wx.EVT_CHOICE, self.onLogScale)
 
@@ -391,12 +391,12 @@ class PlotConfigFrame(wx.Frame):
 
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
         loc_ttl = wx.StaticText(panel, -1, 'Location:', size=(-1, -1), style=labstyle)
-        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(120, -1))
+        leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(150, -1))
         leg_loc.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='loc'))
         leg_loc.SetStringSelection(self.conf.legend_loc)
 
         leg_onax = wx.Choice(panel, -1, choices=self.conf.legend_onaxis_choices,
-                             size=(80, -1))
+                             size=(120, -1))
         leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
 
@@ -453,7 +453,7 @@ class PlotConfigFrame(wx.Frame):
 
         themes = list(self.conf.color_themes.keys())
 
-        coltheme = wx.Choice(panel, choices=themes,  size=(80,-1))
+        coltheme = wx.Choice(panel, choices=themes,  size=(100,-1))
         coltheme.SetStringSelection(self.conf.color_theme)
         coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
 
@@ -500,7 +500,7 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(csizer,    (1, 0), (1, 9), labstyle, 2)
 
-        reset_btn = wx.Button(panel, label='Reset Line Colors', size=(170, -1))
+        reset_btn = wx.Button(panel, label='Reset Line Colors', size=(200, -1))
         reset_btn.Bind(wx.EVT_BUTTON, self.onResetLines)
 
         sizer.Add(reset_btn, (2, 1), (1, 4))

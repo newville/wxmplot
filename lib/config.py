@@ -661,6 +661,7 @@ class PlotConfig:
         self.canvas.draw()
 
     def set_viewlimits(self):
+        all_limits = []
         for ax in self.canvas.figure.get_axes():
             limits = [None, None, None, None]
             if ax in self.axes_traces:
@@ -669,7 +670,7 @@ class PlotConfig:
                     # dats = copy(self.data_save[ax][trace])
                     # x, y = np.asarray(dats[0][:]), np.asarray(dats[1][:])
 
-                    if limits is None:
+                    if limits == [None, None, None, None]:
                         limits = [min(x), max(x), min(y), max(y)]
                     else:
                         limits = [min(limits[0], min(x)), max(limits[1], max(x)),
@@ -683,9 +684,10 @@ class PlotConfig:
 
             if len(self.zoom_lims) > 0:
                 limits = self.zoom_lims[-1][ax]
-
+            all_limits.append(limits)
             ax.set_xlim((limits[0], limits[1]), emit=True)
             ax.set_ylim((limits[2], limits[3]), emit=True)
+        return all_limits
 
     def set_logscale(self, xscale='linear', yscale='linear'):
         "set log or linear scale for x, y axis"

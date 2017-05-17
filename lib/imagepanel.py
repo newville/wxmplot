@@ -499,7 +499,7 @@ class ImagePanel(BasePanel):
 
             whitebg = conf.tricolor_bg.startswith('wh')
 
-            elif whitebg:
+            if whitebg:
                 inew = conf.tricolor_white_bg(inew)
 
             if self.conf.style == 'image':

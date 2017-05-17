@@ -662,7 +662,7 @@ class PlotConfig:
 
     def set_viewlimits(self):
         for ax in self.canvas.figure.get_axes():
-            limits = None
+            limits = [None, None, None, None]
             if ax in self.axes_traces:
                 for trace, lines in enumerate(ax.get_lines()):
                     x, y = lines.get_xdata(), lines.get_ydata()
@@ -674,6 +674,7 @@ class PlotConfig:
                     else:
                         limits = [min(limits[0], min(x)), max(limits[1], max(x)),
                                   min(limits[2], min(y)), max(limits[3], max(y))]
+
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):

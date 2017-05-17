@@ -64,8 +64,8 @@ these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.24'
-__date__     = '2017-Apr-2'
+__version__  = '0.9.25'
+__date__     = '2017-May-17'
 
 import sys
 import wx

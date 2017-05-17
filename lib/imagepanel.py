@@ -498,8 +498,6 @@ class ImagePanel(BasePanel):
             inew[:,:,2] = np.clip((b - blo)/(bhi - blo + 1.e-8), 0, 1)
 
             whitebg = conf.tricolor_bg.startswith('wh')
-            if conf.tricolor_mode == 'cmy':
-                inew = conf.rgb2cmy(inew, whitebg=whitebg)
 
             elif whitebg:
                 inew = conf.tricolor_white_bg(inew)

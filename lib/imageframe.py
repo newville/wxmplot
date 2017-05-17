@@ -34,7 +34,6 @@ CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to select like for profile')}
 
 RGB_COLORS = ('red', 'green', 'blue')
-CMY_COLORS = ('cyan', 'magenta', 'yellow')
 
 class ColorMapPanel(wx.Panel):
     """color map interface"""
@@ -389,9 +388,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.config_mode = 'int'
         if mode.lower().startswith('rgb'):
             self.config_mode = 'rgb'
-        elif mode.lower().startswith('cmy'):
-            self.config_mode = 'cmy'
-            self.panel.conf.tricolor_mode = 'cmy'
 
         self.Build_ConfigPanel()
 
@@ -419,7 +415,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         cmode = self.config_mode.lower()[:3]
 
         if len(img.shape) == 3:
-            if cmode not in ('rgb', 'cmy'):
+            if cmode != 'rgb':
                 for comp in self.config_panel.Children:
                     comp.Destroy()
                 self.config_mode = 'rgb'
@@ -452,7 +448,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
 
-    def set_subtitles(self, red=None, green=None, blue=None):
+    def set_subtitles(self, red=None, green=None, blue=None, **kws):
         if self.config_mode.startswith('int') and red is not None:
             self.cmap_panels[0].title.SetLabel(red)
 
@@ -590,8 +586,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         pf = PlotFrame(title=title, parent=self, size=(500, 250))
         colors = RGB_COLORS
-        if self.config_mode.lower()[:3] == 'cmy':
-            colors = CMY_COLORS
         if len(y.shape) == 2 and y.shape[1] == 3:
             pf.plot(x, y[:,0], color=colors[0])
             pf.oplot(x, y[:,1], color=colors[1])
@@ -631,20 +625,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
                 sizer.Add(self.cmap_panels[icol], 0, lsty, 2)
 
-                sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
-                                        style=wx.LI_HORIZONTAL), 0, lsty, 2)
-
-
-        elif self.config_mode == 'cmy':
-            for icol, col in enumerate(CMY_COLORS):
-                self.cmap_panels[icol] =  ColorMapPanel(self.config_panel,
-                                                        self.panel,
-                                                        title='%s: ' % col.title(),
-                                                        color=icol,
-                                                        default=col,
-                                                        colormap_list=None)
-
-                sizer.Add(self.cmap_panels[icol], 0, lsty, 2)
                 sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
                                         style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
@@ -732,9 +712,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if bgcol.startswith('wh'):
             cmaps = ('Reds', 'Greens', 'Blues')
 
-        if self.config_mode.lower()[:3] == 'cmy':
-            cmaps = ('Reds', 'Greens', 'Blues')
-
         self.cmap_panels[0].set_colormap(name=cmaps[0])
         self.cmap_panels[1].set_colormap(name=cmaps[1])
         self.cmap_panels[2].set_colormap(name=cmaps[2])
@@ -804,7 +781,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
             self.cmap_panels[col].redraw_cmap()
 
-        if len(img.shape) == 3: # rgb/cmy map
+        if len(img.shape) == 3: # rgb map
             for ix in range(3):
                 jmin = imin = img[:,:,ix].min()
                 jmax = imax = img[:,:,ix].max()

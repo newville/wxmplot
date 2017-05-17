@@ -323,9 +323,14 @@ class BasePanel(wx.Panel):
         """ formatter for date x-data. primitive, and probably needs
         improvement, following matplotlib's date methods.
         """
+
+        if x < 1: x = 1
+
         span = self.axes.xaxis.get_view_interval()
-        tmin = time.mktime(dates.num2date(min(span)).timetuple())
-        tmax = time.mktime(dates.num2date(max(span)).timetuple())
+        tmin = max(1.0, span[0])
+        tmax = max(2.0, span[1])
+        tmin = time.mktime(dates.num2date(tmin).timetuple())
+        tmax = time.mktime(dates.num2date(tmax).timetuple())
         nhours = (tmax - tmin)/3600.0
         fmt = "%m/%d"
         if nhours < 0.1:
@@ -334,7 +339,10 @@ class BasePanel(wx.Panel):
             fmt = "%m/%d\n%H:%M"
         elif nhours < 24*8:
             fmt = "%m/%d\n%H:%M"
-        return time.strftime(fmt, dates.num2date(x).timetuple())
+        try:
+            return time.strftime(fmt, dates.num2date(x).timetuple())
+        except:
+            return "?"
 
     def xformatter(self, x, pos):
         " x-axis formatter "

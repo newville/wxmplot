@@ -170,9 +170,9 @@ class PlotPanel(BasePanel):
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
-            x_dates = [datetime.fromtimestamp(i) for i in xdata]
-            xdata = dates.date2num(x_dates)
-            axes.xaxis.set_major_locator(dates.AutoDateLocator())
+            xdata = [datetime.fromtimestamp(i) for i in xdata]
+            xdata = dates.date2num(xdata)
+            # axes.xaxis.set_major_locator(dates.AutoDateLocator())
 
         if linewidth is None:
             linewidth = 2
@@ -603,18 +603,19 @@ class PlotPanel(BasePanel):
         l, t, r, b = self.axesmargins
         (l, b), (r, t) = trans(((l, b), (r, t)))
 
-        # print "AutoSet Margins 0b: (%.3f, %.3f, %.3f, %.3f)" %  (l, t, r, b)
         # Extent
         dl, dt, dr, db = 0, 0, 0, 0
         for i, ax in enumerate(self.fig.get_axes()):
             (x0, y0),(x1, y1) = ax.get_position().get_points()
-            (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
-            (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
-
-            dl = max(dl, (x0 - ox0))
-            dt = max(dt, (oy1 - y1))
-            dr = max(dr, (ox1 - x1))
-            db = max(db, (y0 - oy0))
+            try:
+                (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
+                (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
+                dl = max(dl, (x0 - ox0))
+                dt = max(dt, (oy1 - y1))
+                dr = max(dr, (ox1 - x1))
+                db = max(db, (y0 - oy0))
+            except:
+                pass
 
         # print(" > %.3f %.3f %.3f %.3f " % (dl, dt, dr, db))
         return (l + dl, t + dt, r + dr, b + db)
@@ -631,8 +632,9 @@ class PlotPanel(BasePanel):
         trans = self.fig.transFigure.inverted().transform
 
         # Static margins
-        self.conf.margins = l, t, r, b = self.get_default_margins()
-        self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
+        if not self.use_dates:
+            self.conf.margins = l, t, r, b = self.get_default_margins()
+            self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
 
         # Axes positions update
         for ax in self.fig.get_axes():

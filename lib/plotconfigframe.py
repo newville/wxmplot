@@ -419,7 +419,7 @@ class PlotConfigFrame(wx.Frame):
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lsizer.AddMany((loc_ttl, leg_loc, leg_onax))
-        sizer.Add(lsizer,  (7, 1), (1, 2), labstyle, 2)
+        sizer.Add(lsizer,  (7, 1), (1, 4), labstyle, 2)
 
 
 

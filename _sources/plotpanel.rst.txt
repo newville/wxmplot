@@ -434,31 +434,36 @@ Text, Labels, and Legend, and Scatterplot.
 .. image:: images/PlotConfig_LineProps.png
    :width: 85 %
 
-The Colors and Line Properties tab allows the user to configure the basic
+The **Colors and Line Properties** tab allows the user to configure the basic
 colors for the plot, toggling the display of the grid lines and upper and
 right axes, and setting of the main properties for each trace.  The label,
 color, line style, line width, symbol to use for a marker, marker size,
 z-order, and join style for each trace drawn can be customized.
 
 
+.. image:: images/PlotConfig_Ranges.png
+   :width: 85 %
+
+The **Ranges and Margins** tab allows the user to change
+between Linear and Log scale for both X and Y axes, explicitly set the X
+and/or data ranges displayed, and allow precise control of the margins
+around the plot.
+
 .. image:: images/PlotConfig_Text.png
    :width: 85 %
 
-The Text and Labels tab allows the user to set the title and labels for the
+The **Text and Labels** tab allows the user to set the title and labels for the
 X and Y axes, and to adjust the fontsize for these text and the text shown
 in the plot legend.  The legend can also be customized: whether it is
 shown, it's location, and whether the legend entries can be clicked on to
 toggle the display of the corresponding line.  The experimental "Draggable
 Legend" option allows the user to drag the legend on the plot to fine-tune
-its placement. In addition, the margins for the
-plot window can be configured to be automatically set, or fine-tuned.
-
-
+its placement.
 
 .. image:: images/PlotConfig_Scatter.png
    :width: 85 %
 
-The Scatterplot tab allows the user to set the colors and marker sizes
+The **Scatterplot** tab allows the user to set the colors and marker sizes
 for scatter plots.
 
 

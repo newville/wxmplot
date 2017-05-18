@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.24',
+        VERSION:     '0.9.25',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -786,8 +786,8 @@ shown.</p>
 
 <span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WXMPlot example&#39;</span><span class="p">,</span>
          <span class="n">label</span><span class="o">=</span><span class="s1">&#39;decaying sine&#39;</span><span class="p">,</span>
-         <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\phi(x)$&#39;</span><span class="p">,</span>
-         <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
+         <span class="n">ylabel</span><span class="o">=</span><span class="s1">r&#39;$\phi(x)$&#39;</span><span class="p">,</span>
+         <span class="n">xlabel</span><span class="o">=</span><span class="s1">r&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;noisy cosine&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
@@ -813,22 +813,26 @@ legend and grid, and zoom out to the full plot range.</p>
 tabbed window, with sections for configuring Colors and Line Properties,
 Text, Labels, and Legend, and Scatterplot.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_LineProps.png"><img alt="_images/PlotConfig_LineProps.png" src="_images/PlotConfig_LineProps.png" style="width: 85%;" /></a>
-<p>The Colors and Line Properties tab allows the user to configure the basic
+<p>The <strong>Colors and Line Properties</strong> tab allows the user to configure the basic
 colors for the plot, toggling the display of the grid lines and upper and
 right axes, and setting of the main properties for each trace.  The label,
 color, line style, line width, symbol to use for a marker, marker size,
 z-order, and join style for each trace drawn can be customized.</p>
+<a class="reference internal image-reference" href="_images/PlotConfig_Ranges.png"><img alt="_images/PlotConfig_Ranges.png" src="_images/PlotConfig_Ranges.png" style="width: 85%;" /></a>
+<p>The <strong>Ranges and Margins</strong> tab allows the user to change
+between Linear and Log scale for both X and Y axes, explicitly set the X
+and/or data ranges displayed, and allow precise control of the margins
+around the plot.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Text.png"><img alt="_images/PlotConfig_Text.png" src="_images/PlotConfig_Text.png" style="width: 85%;" /></a>
-<p>The Text and Labels tab allows the user to set the title and labels for the
+<p>The <strong>Text and Labels</strong> tab allows the user to set the title and labels for the
 X and Y axes, and to adjust the fontsize for these text and the text shown
 in the plot legend.  The legend can also be customized: whether it is
 shown, it's location, and whether the legend entries can be clicked on to
 toggle the display of the corresponding line.  The experimental &quot;Draggable
 Legend&quot; option allows the user to drag the legend on the plot to fine-tune
-its placement. In addition, the margins for the
-plot window can be configured to be automatically set, or fine-tuned.</p>
+its placement.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Scatter.png"><img alt="_images/PlotConfig_Scatter.png" src="_images/PlotConfig_Scatter.png" style="width: 85%;" /></a>
-<p>The Scatterplot tab allows the user to set the colors and marker sizes
+<p>The <strong>Scatterplot</strong> tab allows the user to set the colors and marker sizes
 for scatter plots.</p>
 </div>
 <div class="section" id="scatterplot-example">
@@ -882,7 +886,7 @@ created with:</p>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">7</span><span class="n">e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
 <span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>

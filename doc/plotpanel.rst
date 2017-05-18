@@ -452,7 +452,7 @@ around the plot.
 .. image:: images/PlotConfig_Text.png
    :width: 85 %
 
-The Text and Labels tab allows the user to set the title and labels for the
+The **Text and Labels** tab allows the user to set the title and labels for the
 X and Y axes, and to adjust the fontsize for these text and the text shown
 in the plot legend.  The legend can also be customized: whether it is
 shown, it's location, and whether the legend entries can be clicked on to
@@ -463,7 +463,7 @@ its placement.
 .. image:: images/PlotConfig_Scatter.png
    :width: 85 %
 
-The Scatterplot tab allows the user to set the colors and marker sizes
+The **Scatterplot** tab allows the user to set the colors and marker sizes
 for scatter plots.
 
 

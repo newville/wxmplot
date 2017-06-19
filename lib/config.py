@@ -273,15 +273,23 @@ class PlotConfig:
 
         # preload some traces
         self.ntrace = 0
-        self.lines  = [None]*30
+        self.lines  = [None]*200
         self.traces = []
         self.reset_trace_properties()
 
     def reset_trace_properties(self):
         i = -1
-        for style, marker in (('solid', None), ('short dashed', None),
-                               ('dash-dot', None), ('solid', 'o'),
-                               ('solid', '+')):
+        for style, marker in (('solid', None),      ('short dashed', None),
+                              ('dash-dot', None),   ('solid', 'o'),
+                              ('dotted', None),     ('solid', '+'),
+                              ('dashed', None),     ('solid', 'x'),
+                              ('long dashed', None), ('dashed', 'v'),
+                              ('dashed', 'square'), ('dashed', '^'),
+                              ('dashed', '<'),      ('dashed', '>'),
+                              ('solid', 'hexagon'), ('solid', 'pentagon'),
+                              ('solid', '|'),       ('solid', '_'),
+                              ('solid', 'diamond'), ('solid', 'tripod 1'),
+                              ):
             for color in LineColors:
                 i += 1
                 self._init_trace(i, color, style, marker=marker)
@@ -434,47 +442,55 @@ class PlotConfig:
         trace = self.__gettrace(trace)
         self.traces[trace].update(self.__mpline(trace))
 
-    def set_trace_color(self,color,trace=None):
+    def set_trace_color(self,color,trace=None, delay_draw=True):
         trace = self.__gettrace(trace)
         self.traces[trace].set_color(color,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
         if callable(self.trace_color_callback):
             self.trace_color_callback(color, line=self.__mpline(trace))
 
-    def set_trace_zorder(self, zorder, trace=None):
+    def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def set_trace_label(self, label, trace=None):
+    def set_trace_label(self, label, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_label(label,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_style(self,style,trace=None):
+    def set_trace_style(self,style,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_style(style,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_drawstyle(self, style,trace=None):
+    def set_trace_drawstyle(self, style,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_marker(self,marker,trace=None):
+    def set_trace_marker(self,marker,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_marker(marker,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_markersize(self,markersize,trace=None):
+    def set_trace_markersize(self,markersize,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_markersize(markersize,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_linewidth(self,linewidth,trace=None):
+    def set_trace_linewidth(self,linewidth, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
     def set_trace_datarange(self, datarange, trace=None):
         trace = self.__gettrace(trace)
@@ -494,7 +510,7 @@ class PlotConfig:
         return this[0]
 
 
-    def enable_grid(self, show=None):
+    def enable_grid(self, show=None, delay_draw=False):
         "enable/disable grid display"
         if show is not None:
             self.show_grid = show
@@ -506,9 +522,10 @@ class PlotConfig:
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def set_axes_style(self, style=None):
+    def set_axes_style(self, style=None, delay_draw=False):
         """set axes style: one of
            'box' / 'fullbox'  : show all four axes borders
            'open' / 'leftbot' : show left and bottom axes
@@ -538,9 +555,10 @@ class PlotConfig:
             axes0.spines['top'].set_visible(False)
             axes0.spines['left'].set_visible(False)
             axes0.spines['right'].set_visible(False)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def draw_legend(self, show=None, auto_location=True):
+    def draw_legend(self, show=None, auto_location=True, delay_draw=False):
         "redraw the legend"
         if show is not None:
             self.show_legend = show
@@ -606,7 +624,8 @@ class PlotConfig:
 
 
         self.set_added_text_size()
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
     def set_legend_location(self, loc, onaxis):
         "set legend location"
@@ -650,7 +669,7 @@ class PlotConfig:
 
         self.unzoom(full=True)
 
-    def unzoom(self, full=False):
+    def unzoom(self, full=False, delay_draw=False):
         """unzoom display 1 level or all the way"""
         if full:
             self.zoom_lims = self.zoom_lims[:1]
@@ -658,7 +677,8 @@ class PlotConfig:
         elif len(self.zoom_lims) > 0:
             self.zoom_lims.pop()
         self.set_viewlimits()
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
     def set_viewlimits(self):
         all_limits = []

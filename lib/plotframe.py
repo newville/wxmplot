@@ -36,6 +36,9 @@ class PlotFrame(BaseFrame):
         """generic plotting method, overplotting any existing plot """
         self.panel.oplot(x, y, **kw)
 
+    def plot_many(self, datalist, **kws):
+        self.panel.plot_many(datalist, **kws)
+
     def scatterplot(self, x, y, **kw):
         """plot after clearing current plot """
         self.panel.scatterplot(x, y, **kw)

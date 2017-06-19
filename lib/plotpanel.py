@@ -13,7 +13,6 @@ else:
 
 from numpy import nonzero, where, ma, nan
 import matplotlib
-
 from datetime import datetime
 from matplotlib import dates
 from matplotlib.figure import Figure
@@ -156,17 +155,18 @@ class PlotPanel(BasePanel):
               fullbox=None, axes_style=None, zorder=None, **kws):
         """ basic plot method, overplotting any existing plot """
         self.cursor_mode = 'zoom'
-        self.conf.plot_type = 'lineplot'
+        conf = self.conf
+        conf.plot_type = 'lineplot'
 
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
         # set y scale to log/linear
         if ylog_scale is not None:
-            self.conf.yscale = {False:'linear', True:'log'}[ylog_scale]
+            conf.yscale = {False:'linear', True:'log'}[ylog_scale]
 
         if xlog_scale is not None:
-            self.conf.xscale = {False:'linear', True:'log'}[xlog_scale]
+            conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         if self.use_dates:
@@ -186,70 +186,69 @@ class PlotPanel(BasePanel):
         if title  is not None:
             self.set_title(title)
         if show_legend is not None:
-            self.conf.set_legend_location(legend_loc, legend_on)
-            self.conf.show_legend = show_legend
+            conf.set_legend_location(legend_loc, legend_on)
+            conf.show_legend = show_legend
 
         if grid is not None:
-            self.conf.show_grid = grid
+            conf.show_grid = grid
+
         # set data range for this trace
         datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
 
-        if axes not in self.conf.user_limits:
-            self.conf.user_limits[axes] = [None, None, None, None]
+        if axes not in conf.user_limits:
+            conf.user_limits[axes] = [None, None, None, None]
 
         if xmin is not None:
-            self.conf.user_limits[axes][0] = xmin
+            conf.user_limits[axes][0] = xmin
         if xmax is not None:
-            self.conf.user_limits[axes][1] = xmax
+            conf.user_limits[axes][1] = xmax
         if ymin is not None:
-            self.conf.user_limits[axes][2] = ymin
+            conf.user_limits[axes][2] = ymin
         if ymax is not None:
-            self.conf.user_limits[axes][3] = ymax
+            conf.user_limits[axes][3] = ymax
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        conf = self.conf
         n = conf.ntrace
         if zorder is None:
             zorder = 5*(n+1)
-        if axes not in self.conf.axes_traces:
-            self.conf.axes_traces[axes] = []
-        self.conf.axes_traces[axes].append(n)
+        if axes not in conf.axes_traces:
+            conf.axes_traces[axes] = []
+        conf.axes_traces[axes].append(n)
 
         if bgcolor is not None:
-            self.conf.bgcolor = bgcolor
+            conf.bgcolor = bgcolor
             axes.set_axis_bgcolor(bgcolor)
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
 
-        conf.set_trace_zorder(zorder)
+        conf.set_trace_zorder(zorder, delay_draw=delay_draw)
         if color:
-            conf.set_trace_color(color)
+            conf.set_trace_color(color, delay_draw=delay_draw)
         if style:
-            conf.set_trace_style(style)
+            conf.set_trace_style(style, delay_draw=delay_draw)
         if marker:
-            conf.set_trace_marker(marker)
+            conf.set_trace_marker(marker, delay_draw=delay_draw)
         if linewidth is not None:
-            conf.set_trace_linewidth(linewidth)
+            conf.set_trace_linewidth(linewidth, delay_draw=delay_draw)
         if markersize is not None:
-            conf.set_trace_markersize(markersize)
+            conf.set_trace_markersize(markersize, delay_draw=delay_draw)
         if drawstyle is not None:
-            conf.set_trace_drawstyle(drawstyle)
+            conf.set_trace_drawstyle(drawstyle, delay_draw=delay_draw)
 
         if gridcolor is not None:
             conf.gridcolor = gridcolor
-
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
             _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
 
-        if axes not in self.conf.data_save:
-            self.conf.data_save[axes] = []
-        self.conf.data_save[axes].append((xdata, ydata))
+        if axes not in conf.data_save:
+            conf.data_save[axes] = []
+        conf.data_save[axes].append((xdata, ydata))
 
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
@@ -267,9 +266,8 @@ class PlotPanel(BasePanel):
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
-        conf.set_trace_label(label)
+        conf.set_trace_label(label, delay_draw=delay_draw)
         conf.set_trace_datarange(datarange)
-
         needs_relabel = False
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
@@ -283,9 +281,8 @@ class PlotPanel(BasePanel):
         if n < len(conf.lines):
             conf.lines[n] = _lines
         else:
-            conf._init_trace(n, 'black', solid)
-            conf.lines[n] = _lines
-
+            conf._init_trace(n, 'black', 'solid')
+            conf.lines.append(_lines)
 
         # now set plot limits:
         self.set_viewlimits()
@@ -293,10 +290,10 @@ class PlotPanel(BasePanel):
             conf.refresh_trace(conf.ntrace)
             needs_relabel = True
 
-        if self.conf.show_legend:
+        if conf.show_legend and not delay_draw:
             conf.draw_legend()
 
-        if needs_relabel:
+        if needs_relabel and not delay_draw:
             conf.relabel()
 
         # axes style ('box' or 'open')
@@ -305,15 +302,48 @@ class PlotPanel(BasePanel):
             conf.axes_style = 'open'
         if axes_style in ('open', 'box', 'bottom'):
             conf.axes_style = axes_style
-        conf.set_axes_style()
-
+        conf.set_axes_style(delay_draw=delay_draw)
         if not delay_draw:
             self.draw()
             self.canvas.Refresh()
-
-
         conf.ntrace = conf.ntrace + 1
         return _lines
+
+    def plot_many(self, datalist, side='left', title=None,
+                  xlabel=None, ylabel=None, **kws):
+        """
+        plot many traces at once, taking a list of (x, y) pairs
+        """
+        def unpack_tracedata(tdat, **kws):
+            if (isinstance(tdat, dict) and
+                'xdata' in tdat and 'ydata' in tdat):
+                xdata = tdat.pop('xdata')
+                ydata = tdat.pop('ydata')
+                out = kws
+                out.update(tdat)
+            elif isinstance(tdat, (list, tuple)):
+                out = kws
+                xdata = tdat[0]
+                ydata = tdat[1]
+            return (xdata, ydata, out)
+
+        opts = dict(side=side, title=title, xlabel=xlabel, ylabel=ylabel,
+                    delay_draw=True)
+        opts.update(kws)
+        x0, y0, opts = unpack_tracedata(datalist[0], **opts)
+
+        self.plot(x0, y0, **opts)
+
+        for dat in datalist[1:]:
+            x, y, opts = unpack_tracedata(dat, delay_draw=True)
+            self.oplot(x, y, **opts)
+
+        conf = self.conf
+        if conf.show_legend:
+            conf.draw_legend()
+        conf.relabel()
+        self.draw()
+        self.canvas.Refresh()
 
     def add_text(self, text, x, y, side='left', size=None,
                  rotation=None, ha='left', va='center',

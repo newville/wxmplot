@@ -225,19 +225,19 @@ class PlotPanel(BasePanel):
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
 
-        conf.set_trace_zorder(zorder, delay_draw=delay_draw)
+        conf.set_trace_zorder(zorder, delay_draw=True)
         if color:
-            conf.set_trace_color(color, delay_draw=delay_draw)
+            conf.set_trace_color(color, delay_draw=True)
         if style:
-            conf.set_trace_style(style, delay_draw=delay_draw)
+            conf.set_trace_style(style, delay_draw=True)
         if marker:
-            conf.set_trace_marker(marker, delay_draw=delay_draw)
+            conf.set_trace_marker(marker, delay_draw=True)
         if linewidth is not None:
-            conf.set_trace_linewidth(linewidth, delay_draw=delay_draw)
+            conf.set_trace_linewidth(linewidth, delay_draw=True)
         if markersize is not None:
-            conf.set_trace_markersize(markersize, delay_draw=delay_draw)
+            conf.set_trace_markersize(markersize, delay_draw=True)
         if drawstyle is not None:
-            conf.set_trace_drawstyle(drawstyle, delay_draw=delay_draw)
+            conf.set_trace_drawstyle(drawstyle, delay_draw=True)
 
         if gridcolor is not None:
             conf.gridcolor = gridcolor
@@ -266,7 +266,7 @@ class PlotPanel(BasePanel):
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
-        conf.set_trace_label(label, delay_draw=delay_draw)
+        conf.set_trace_label(label, delay_draw=True)
         conf.set_trace_datarange(datarange)
         needs_relabel = False
         if labelfontsize is not None:
@@ -481,7 +481,6 @@ class PlotPanel(BasePanel):
                 axes = self.get_right_axes()
         self.conf.user_limits[axes] = limits
         self.unzoom_all()
-
 
     def set_viewlimits(self):
         """updates xy limits of a plot based on current data,

@@ -158,11 +158,11 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | legend_on      | bool       | True    | whether legend is on Axis                      |  9  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | delay_draw     | bool       | False   | whether to delay draw until later.             |     |  no         |
+  | delay_draw     | bool       | False   | whether to delay draw until later.             | 10  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | refresh        | bool       | True    | whether to refresh display                     |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 10  |  no         |
+  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 11  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -211,8 +211,13 @@ same meaning, as indicated by the right-most column.
       'lr' 'll', 'uc', 'lc', or 'cc'') for ('upper right' , 'upper left', 'center right', 'center left',
       'lower right', 'lower left', 'upper center', 'lower center', or 'center').
 
-   10. The *use_dates* option is not very rich, and simply turns x-values that are Unix timestamps into x
-       labels showing the dates.
+   10. The *delay_draw* option will delay the actual drawing the plot to
+       the screen. This can be give a noticeable speed up when plotting
+       multiple line traces at once.  See also :meth:`plot_many` for a
+       convenience function to plot many traces at once.
+
+   11. The *use_dates* option is not very rich, and simply turns x-values
+       that are Unix timestamps into x labels showing the dates.
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
   configured interactively (see Plot Configuration).
@@ -231,6 +236,19 @@ same meaning, as indicated by the right-most column.
    the new (x, y) data without completely redrawing the entire plot.  Using
    this method is substantially faster than replotting, and should be used
    for dynamic plots such as a StripChart.
+
+.. method:: plot_many(xylist, side='left', title=None, xlabel=None, ylabel=None, **kws)
+
+   Plot many x, y datasets at a single time. *xylist* should be a list or
+   tuple of two-element list or tuple of (*x*, *y*) data arrays.  Many of
+   the properties listed in :ref:`Table of Plot Arguments <plotopt_table>`
+   can be specified.
+
+   If plotting many datasets, this method can give a significant speed-up
+   over calling :meth:`plot` followed by many calls of :meth:`oplot`, as
+   that will render the full image after each call, while the
+   :meth:`plot_many` will delay plotting until all the datasets are ready
+   to be plotted.
 
 .. method:: scatterplot(x, y, **kws)
 

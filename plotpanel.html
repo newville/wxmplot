@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
@@ -271,7 +271,7 @@ same meaning, as indicated by the right-most column.</p>
 <td>int</td>
 <td>2</td>
 <td>linewidth for trace</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-odd"><td>zorder</td>
@@ -299,7 +299,7 @@ same meaning, as indicated by the right-most column.</p>
 <td>left/right</td>
 <td>left</td>
 <td>side for y-axis and label</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 <tr class="row-odd"><td>marker</td>
@@ -313,28 +313,28 @@ same meaning, as indicated by the right-most column.</p>
 <td>int</td>
 <td>8</td>
 <td>size of marker shown for each point</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-odd"><td>legendfontsize</td>
 <td>int</td>
 <td>7</td>
 <td>text size for legend</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 <tr class="row-even"><td>labelfontsize</td>
 <td>int</td>
 <td>9</td>
 <td>text size for Axis labels</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 <tr class="row-odd"><td>dy</td>
 <td>array</td>
 <td>None</td>
 <td>uncertainties for y values; error bars</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>xmin</td>
@@ -369,14 +369,14 @@ same meaning, as indicated by the right-most column.</p>
 <td>bool</td>
 <td>False</td>
 <td>draw y axis with log(base 10) scale</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-odd"><td>autoscale</td>
 <td>bool</td>
 <td>True</td>
 <td>whether to automatically set plot limits</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>fullbox</td>
@@ -397,14 +397,14 @@ same meaning, as indicated by the right-most column.</p>
 <td>None/bool</td>
 <td>None</td>
 <td>to show grid lines</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 <tr class="row-odd"><td>show_legend</td>
 <td>None/bool</td>
 <td>None</td>
 <td>whether to display legend (None: leave as is)</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>legend_loc</td>
@@ -425,32 +425,32 @@ same meaning, as indicated by the right-most column.</p>
 <td>bool</td>
 <td>False</td>
 <td>whether to delay draw until later.</td>
-<td>&nbsp;</td>
+<td>10</td>
 <td>no</td>
 </tr>
 <tr class="row-odd"><td>refresh</td>
 <td>bool</td>
 <td>True</td>
 <td>whether to refresh display</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>no</td>
 </tr>
 <tr class="row-even"><td>use_dates</td>
 <td>bool</td>
 <td>False</td>
 <td>to show dates in xlabel (<a class="reference internal" href="other.html#plot" title="plot"><code class="xref py py-meth docutils literal"><span class="pre">plot()</span></code></a> only)</td>
-<td>10</td>
+<td>11</td>
 <td>no</td>
 </tr>
-<tr class="row-odd"><td>&nbsp;</td>
+<tr class="row-odd"><td>&#160;</td>
 <td colspan="4"><strong>arguments that apply only for</strong> <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><code class="xref py py-meth docutils literal"><span class="pre">scatterplot()</span></code></a></td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>size</td>
 <td>int</td>
 <td>10</td>
 <td>size of marker</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 <tr class="row-odd"><td>edgecolor</td>
@@ -471,7 +471,7 @@ same meaning, as indicated by the right-most column.</p>
 <td>function</td>
 <td>None</td>
 <td>user-supplied callback to run on selection</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>yes</td>
 </tr>
 </tbody>
@@ -504,8 +504,12 @@ which will suppress the top, right, and left Axes.</li>
 <li><em>legend_loc</em> sets the position of the leggend on the plot, and is one of ('ur', 'ul', 'cr', 'cl',
 'lr' 'll', 'uc', 'lc', or 'cc'') for ('upper right' , 'upper left', 'center right', 'center left',
 'lower right', 'lower left', 'upper center', 'lower center', or 'center').</li>
-<li>The <em>use_dates</em> option is not very rich, and simply turns x-values that are Unix timestamps into x
-labels showing the dates.</li>
+<li>The <em>delay_draw</em> option will delay the actual drawing the plot to
+the screen. This can be give a noticeable speed up when plotting
+multiple line traces at once.  See also <a class="reference internal" href="#plotpanel.plot_many" title="plotpanel.plot_many"><code class="xref py py-meth docutils literal"><span class="pre">plot_many()</span></code></a> for a
+convenience function to plot many traces at once.</li>
+<li>The <em>use_dates</em> option is not very rich, and simply turns x-values
+that are Unix timestamps into x labels showing the dates.</li>
 </ol>
 </div></blockquote>
 <p>All of these values, and a few more settings controlling whether and how to display a plot legend can be
@@ -534,6 +538,20 @@ wish to update traces from a previous <a class="reference internal" href="other.
 the new (x, y) data without completely redrawing the entire plot.  Using
 this method is substantially faster than replotting, and should be used
 for dynamic plots such as a StripChart.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plotpanel.plot_many">
+<code class="descclassname">plotpanel.</code><code class="descname">plot_many</code><span class="sig-paren">(</span><em>xylist</em>, <em>side='left'</em>, <em>title=None</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot many x, y datasets at a single time. <em>xylist</em> should be a list or
+tuple of two-element list or tuple of (<em>x</em>, <em>y</em>) data arrays.  Many of
+the properties listed in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>
+can be specified.</p>
+<p>If plotting many datasets, this method can give a significant speed-up
+over calling <a class="reference internal" href="other.html#plot" title="plot"><code class="xref py py-meth docutils literal"><span class="pre">plot()</span></code></a> followed by many calls of <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal"><span class="pre">oplot()</span></code></a>, as
+that will render the full image after each call, while the
+<a class="reference internal" href="#plotpanel.plot_many" title="plotpanel.plot_many"><code class="xref py py-meth docutils literal"><span class="pre">plot_many()</span></code></a> will delay plotting until all the datasets are ready
+to be plotted.</p>
 </dd></dl>
 
 <dl class="method">
@@ -608,7 +626,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>limits</strong> (<em>a 4-element list:</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em><em></em>) -- x and y limits</li>
+<li><strong>limits</strong> (<em>a 4-element list:</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em>) -- x and y limits</li>
 <li><strong>axes</strong> -- instance of matplotlib axes to use (i.e, for right or left side y axes)</li>
 <li><strong>side</strong> -- set to 'right' to get right-hand axes.</li>
 </ul>
@@ -786,8 +804,8 @@ shown.</p>
 
 <span class="n">app</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WXMPlot example&#39;</span><span class="p">,</span>
          <span class="n">label</span><span class="o">=</span><span class="s1">&#39;decaying sine&#39;</span><span class="p">,</span>
-         <span class="n">ylabel</span><span class="o">=</span><span class="s1">r&#39;$\phi(x)$&#39;</span><span class="p">,</span>
-         <span class="n">xlabel</span><span class="o">=</span><span class="s1">r&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
+         <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\phi(x)$&#39;</span><span class="p">,</span>
+         <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$x \&gt; \rm (\AA)$&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">oplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;noisy cosine&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">write_message</span><span class="p">(</span><span class="s1">&#39;Try Help-&gt;Quick Reference&#39;</span><span class="p">)</span>
@@ -886,7 +904,7 @@ created with:</p>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">7</span><span class="n">e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">92</span> <span class="o">+</span> <span class="mi">65</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
 <span class="n">pframe</span> <span class="o">=</span> <span class="n">wxmplot</span><span class="o">.</span><span class="n">PlotFrame</span><span class="p">()</span>
@@ -941,7 +959,7 @@ script also shows a dynamic, time-based plot.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

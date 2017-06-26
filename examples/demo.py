@@ -111,7 +111,7 @@ class TestFrame(wx.Frame):
 
 
         self.many_dlist = [(self.x, self.y1)]
-        for i in range(20):
+        for i in range(19):
             self.many_dlist.append((self.x, sin(2*(i+1)*x/23.0)))
 
 

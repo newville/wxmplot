@@ -685,16 +685,18 @@ class PlotConfig:
         for ax in self.canvas.figure.get_axes():
             limits = [None, None, None, None]
             if ax in self.axes_traces:
-                for trace, lines in enumerate(ax.get_lines()):
-                    x, y = lines.get_xdata(), lines.get_ydata()
-                    # dats = copy(self.data_save[ax][trace])
-                    # x, y = np.asarray(dats[0][:]), np.asarray(dats[1][:])
-
-                    if limits == [None, None, None, None]:
-                        limits = [min(x), max(x), min(y), max(y)]
-                    else:
-                        limits = [min(limits[0], min(x)), max(limits[1], max(x)),
-                                  min(limits[2], min(y)), max(limits[3], max(y))]
+                try:
+                    for trace, lines in enumerate(ax.get_lines()):
+                        x, y = lines.get_xdata(), lines.get_ydata()
+                        if limits == [None, None, None, None]:
+                            limits = [min(x), max(x), min(y), max(y)]
+                        else:
+                            limits = [min(limits[0], min(x)),
+                                      max(limits[1], max(x)),
+                                      min(limits[2], min(y)),
+                                      max(limits[3], max(y))]
+                except ValueError:
+                    pass
 
 
             if ax in self.user_limits:

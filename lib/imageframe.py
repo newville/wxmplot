@@ -413,8 +413,17 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if subtitles is not None:
             self.subtitles = subtitles
         cmode = self.config_mode.lower()[:3]
+        img = np.array(img)
 
         if len(img.shape) == 3:
+            ishape = img.shape
+            # make sure 3d image is shaped (NY, NX, 3)
+            if ishape[2] != 3:
+                if ishape[0] == 3:
+                    img = img.swapaxes(0, 1).swapaxes(1, 2)
+                elif ishape[1] == 3:
+                    img = img.swapaxes(1, 2)
+
             if cmode != 'rgb':
                 for comp in self.config_panel.Children:
                     comp.Destroy()

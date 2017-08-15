@@ -134,11 +134,10 @@ class ImagePanel(BasePanel):
             if hasattr(self.contour_callback , '__call__'):
                 self.contour_callback(levels=clevels)
         else: # image
-            print 'data',type(data)
-            print
-            print data
-            print
-            img = (data - data.min()) /(1.0*data.max() - data.min())
+            if data.max() == data.min():
+                img = data
+            else:
+                img = (data - data.min()) /(1.0*data.max() - data.min())
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
 

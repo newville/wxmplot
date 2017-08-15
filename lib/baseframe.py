@@ -65,7 +65,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.size = size
         self.panelkws = panelkws or {}
         if axisbg is not None:
-            self.panelkws['facecolor'] = axisbg
+            self.panelkws['axisbg'] = axisbg
 
     def write_message(self, txt, panel=0):
         """write a message to the Status Bar"""

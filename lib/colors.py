@@ -321,7 +321,7 @@ def rgb2hex(rgb):
             col = '#%02x%02x%02x' % (rgb.Red(), rgb.Green(), rgb.Blue())
         except:
             col = "#000000"
-    return col.upper()
+    return col.lower()
 
 
 def hexcolor(color):
@@ -330,7 +330,7 @@ def hexcolor(color):
     # Python 3: needs rewrite for str/unicode change
     if isinstance(color, six.string_types):
         if color[0] == '#' and len(color)==7:
-            return color
+            return color.lower()
 
     # now, get color to an rgb tuple
     rgb = (0,0,0)
@@ -352,7 +352,7 @@ def hexcolor(color):
 
     # convert rgb to hex color
     col = '#%02x%02x%02x' % (rgb)
-    return col.upper()
+    return col.lower()
 
 ###
 ###

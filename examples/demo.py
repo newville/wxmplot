@@ -33,7 +33,7 @@ class TestFrame(wx.Frame):
 
         self.Bind(wx.EVT_MENU, self.OnExit, menu_exit)
 
-        self.Bind(wx.EVT_CLOSE, self.OnExit) # CloseEvent)
+        self.Bind(wx.EVT_CLOSE, self.OnExit)
 
         self.plotframe  = None
 
@@ -54,6 +54,9 @@ class TestFrame(wx.Frame):
         b40 = wx.Button(panel, -1, 'Start Timed Plot',    size=(-1,-1))
         b50 = wx.Button(panel, -1, 'Stop Timed Plot',     size=(-1,-1))
         b60 = wx.Button(panel, -1, 'Plot 500,000 points',  size=(-1,-1))
+        bmany1 = wx.Button(panel, -1, 'Plot 20 traces (delay_draw=False)', size=(-1,-1))
+        bmany2 = wx.Button(panel, -1, 'Plot 20 traces (delay_draw=True)', size=(-1,-1))
+        bmany3 = wx.Button(panel, -1, 'Plot 20 traces (use plot_many())', size=(-1,-1))
 
         b10.Bind(wx.EVT_BUTTON,self.onPlot1)
         b20.Bind(wx.EVT_BUTTON,self.onPlot2)
@@ -64,6 +67,10 @@ class TestFrame(wx.Frame):
         b50.Bind(wx.EVT_BUTTON,self.onStopTimer)
         b60.Bind(wx.EVT_BUTTON,self.onPlotBig)
 
+        bmany1.Bind(wx.EVT_BUTTON,self.onPlotMany_Slow)
+        bmany2.Bind(wx.EVT_BUTTON,self.onPlotMany_Delay)
+        bmany3.Bind(wx.EVT_BUTTON,self.onPlotMany_Fast)
+
         panelsizer.Add(b10, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b20, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b22, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
@@ -72,6 +79,10 @@ class TestFrame(wx.Frame):
         panelsizer.Add(b40, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b50, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(b60, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
+
+        panelsizer.Add(bmany1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
+        panelsizer.Add(bmany2, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
+        panelsizer.Add(bmany3, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
 
         panel.SetSizer(panelsizer)
         panelsizer.Fit(panel)
@@ -97,6 +108,11 @@ class TestFrame(wx.Frame):
         self.bigy   = (sin(pi*self.bigx/140.0) +
                        cos(pi*self.bigx/277.0) +
                        cos(pi*self.bigx/820.0))
+
+
+        self.many_dlist = [(self.x, self.y1)]
+        for i in range(19):
+            self.many_dlist.append((self.x, sin(2*(i+1)*x/23.0)))
 
 
     def ShowPlotFrame(self, do_raise=True, clear=True):
@@ -170,6 +186,52 @@ class TestFrame(wx.Frame):
         self.plotframe.write_message(
             "Plot array with npts=%i, elapsed time=%8.3f s" % (len(self.bigx),dt))
 
+    def onPlotMany_Slow(self, event=None):
+        self.ShowPlotFrame()
+        dlist = self.many_dlist
+
+        t0 = time.time()
+        opts = dict(title='Plot 20 traces without delay_draw',
+            show_legend=True, xlabel='x')
+
+        self.plotframe.plot(dlist[0][0], dlist[0][1], **opts)
+        for tdat in dlist[1:]:
+            self.plotframe.oplot(tdat[0], tdat[1])
+
+        dt = time.time()-t0
+        self.plotframe.write_message(
+            "Plot 20 traces without delay_draw=True, elapsed time=%8.3f s" % (dt))
+
+    def onPlotMany_Delay(self, event=None):
+        self.ShowPlotFrame()
+        dlist = self.many_dlist
+
+        t0 = time.time()
+        opts = dict(title='Plot 20 traces with delay_draw',
+            show_legend=True, xlabel='x')
+
+        self.plotframe.plot(dlist[0][0], dlist[0][1], delay_draw=True, **opts)
+        for tdat in dlist[1:-1]:
+            self.plotframe.oplot(tdat[0], tdat[1], delay_draw=True)
+        self.plotframe.oplot(dlist[-1][0], dlist[-1][1])
+        dt = time.time()-t0
+        self.plotframe.write_message(
+            "Plot 20 traces with delay_draw=True, elapsed time=%8.3f s" % (dt))
+
+
+    def onPlotMany_Fast(self, event=None):
+        self.ShowPlotFrame()
+        dlist = self.many_dlist
+
+        t0 = time.time()
+        opts = dict(title='Plot 20 traces using plot_many()',
+            show_legend=True, xlabel='x')
+        self.plotframe.plot_many(dlist, **opts)
+
+        dt = time.time()-t0
+        self.plotframe.write_message(
+            "Plot 20 traces with plot_many(), elapsed time=%8.3f s" % (dt))
+
     def report_memory(i):
         pid = os.getpid()
         if os.name == 'posix':
@@ -207,9 +269,9 @@ class TestFrame(wx.Frame):
     def onTimer(self, event):
         # print 'timer ', self.count, time.time()
         self.count += 1
-        self.ShowPlotFrame(do_raise=False, clear=False)
         n = self.count
         if n < 2:
+            self.ShowPlotFrame(do_raise=False, clear=False)
             return
         if n >= self.npts:
             self.timer.Stop()
@@ -218,38 +280,10 @@ class TestFrame(wx.Frame):
             self.plotframe.plot(self.x[:n], self.y1[:n])# , grid=False)
 
         else:
-            self.plotframe.update_line(0, self.x[:n], self.y1[:n], update_limits=n<10, draw=True)
-
+            self.plotframe.update_line(0, self.x[:n], self.y1[:n], update_limits=True, draw=True)
             etime = time.time() - self.time0
             s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
             self.plotframe.write_message(s)
-
-        if self.datrange is None:
-            self.datrange = [min(self.x[:n]), max(self.x[:n]),
-                             min(self.y1[:n]),max(self.y1[:n])]
-
-        dr = [min(self.x[:n]), max(self.x[:n]), min(self.y1[:n]),max(self.y1[:n])]
-        lims = self.plotframe.panel.get_viewlimits()
-        if dr[0] < lims[0] or dr[1] > lims[1] or dr[2] < lims[2] or dr[3] > lims[3]:
-            self.datrange = dr
-            if n < len(self.x):
-                nmax = min(int(n*1.6), len(self.x)-1)
-                self.datrange[1] = self.x[nmax]
-            self.plotframe.panel.set_xylims(self.datrange)
-
-#        if (n > self.n_update-1) or
-#             (xr[0] < xv[0]) or (xr[1] > xv[1]) or
-#             (yr[0] < yv[0]) or (yr[1] > yv[1])):
-#             nx = self.n_update = min(self.npts,3+int(self.n_update*2.0))
-#             if nx > int(0.92*self.npts):
-#                 nx = self.n_update = self.npts
-#                 xylims = (min(self.x),max(self.x),
-#                           min(self.y1),max(self.y1))
-#             else:
-#                 xylims = (min(self.x[0:nx]),max(self.x[0:nx]),
-#                           min(self.y1[0:nx]),max(self.y1[0:nx]))
-#             self.up_count = self.up_count + 1
-#             self.plotframe.panel.set_xylims(xylims)
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This sample program shows some\n"

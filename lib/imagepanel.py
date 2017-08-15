@@ -179,13 +179,13 @@ class ImagePanel(BasePanel):
 
         self.canvas.draw()
 
-    def set_viewlimits(self, axes=None, autoscale=False):
+    def set_viewlimits(self, axes=None):
         """ update xy limits of a plot"""
         if axes is None:
             axes = self.axes
 
         xmin, xmax, ymin, ymax = self.data_range
-        if not autoscale and len(self.conf.zoom_lims) >1:
+        if len(self.conf.zoom_lims) >1:
             zlims = self.conf.zoom_lims[-1]
             if axes in zlims:
                 xmin, xmax, ymin, ymax = zlims[axes]
@@ -212,9 +212,7 @@ class ImagePanel(BasePanel):
         self.axes.set_xlim((xmin, xmax),emit=True)
         self.axes.set_ylim((ymin, ymax),emit=True)
         self.axes.update_datalim(((xmin, ymin), (xmax, ymax)))
-        if autoscale:
-            self.axes.set_xbound(self.axes.xaxis.get_major_locator().view_limits(xmin, xmax))
-            self.axes.set_ybound(self.axes.yaxis.get_major_locator().view_limits(ymin, ymax))
+
         self.conf.datalimits = [xmin, xmax, ymin, ymax]
         self.redraw()
 
@@ -504,10 +502,8 @@ class ImagePanel(BasePanel):
             inew[:,:,2] = np.clip((b - blo)/(bhi - blo + 1.e-8), 0, 1)
 
             whitebg = conf.tricolor_bg.startswith('wh')
-            if conf.tricolor_mode == 'cmy':
-                inew = conf.rgb2cmy(inew, whitebg=whitebg)
 
-            elif whitebg:
+            if whitebg:
                 inew = conf.tricolor_white_bg(inew)
 
             if self.conf.style == 'image':

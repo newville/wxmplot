@@ -53,6 +53,18 @@ class StackedPlotFrame(BaseFrame):
         if self.xlabel is not None:
             self.panel_bot.set_xlabel(self.xlabel)
 
+    def unzoom_all(self, event=None):
+        """ zoom out full data range """
+        for p in (self.panel, self.panel_bot):
+            p.conf.zoom_lims = []
+            p.conf.unzoom(full=True)
+        # self.panel.set_viewlimits()
+
+    def unzoom(self, event=None, panel='top'):
+        """zoom out 1 level, or to full data range """
+        panel = self.get_panel(panel)
+        panel.conf.unzoom(event=event)
+        self.panel.set_viewlimits()
 
     def update_line(self, t, x, y, panel='top', **kws):
         """overwrite data for trace t """
@@ -62,23 +74,13 @@ class StackedPlotFrame(BaseFrame):
     def set_xylims(self, lims, axes=None, panel='top', **kws):
         """set xy limits"""
         panel = self.get_panel(panel)
-        print("Stacked set_xylims ", panel, self.panel)
+        # print("Stacked set_xylims ", panel, self.panel)
         panel.set_xylims(lims, axes=axes, **kws)
 
     def clear(self, panel='top'):
         """clear plot """
         panel = self.get_panel(panel)
         panel.clear()
-
-    def unzoom_all(self, event=None, panel='top'):
-        """zoom out full data range """
-        panel = self.get_panel(panel)
-        panel.unzoom_all(event=event)
-
-    def unzoom(self, event=None, panel='top'):
-        """zoom out 1 level, or to full data range """
-        panel = self.get_panel(panel)
-        panel.unzoom(event=event)
 
     def set_title(self,s, panel='top'):
         "set plot title"
@@ -140,6 +142,7 @@ class StackedPlotFrame(BaseFrame):
             pan.axes.set_position(pan.axes.figbox)
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
             pan.unzoom_all = self.unzoom_all
+            pan.unzoom = self.unzoom
             pan.canvas.figure.set_facecolor('#F4F4EC')
 
         # suppress mouse events on the bottom panel
@@ -179,7 +182,7 @@ class StackedPlotFrame(BaseFrame):
 
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range",
-                 self.panel.unzoom)
+                 self.unzoom_all)
 
         mhelp = wx.Menu()
         MenuItem(self, mhelp, "Quick Reference",  "Quick Reference for WXMPlot", self.onHelp)
@@ -224,62 +227,18 @@ class StackedPlotFrame(BaseFrame):
         bconf.set_margins(left=left, top=t, right=right, bottom=b)
         bconf.canvas.draw()
 
-    def set_viewlimits(self, autoscale=False, panel='top'):
+    def set_viewlimits(self, panel='top'):
         """update xy limits of a plot, as used with .update_line() """
-        panel = self.get_panel(panel)
+        this_panel = self.get_panel(panel)
 
-        trace0 = None
-        while trace0 is None:
-            for axes in panel.fig.get_axes():
-                if (axes in panel.axes_traces and
-                   len(panel.axes_traces[axes]) > 0):
-                    trace0 = panel.axes_traces[axes][0]
-                    break
-
-        for axes in panel.fig.get_axes():
-            datlim = panel.conf.get_trace_datarange(trace=trace0)
-            if axes in panel.axes_traces:
-                for i in panel.axes_traces[axes]:
-                    l =  panel.conf.get_trace_datarange(trace=i)
-                    datlim = [min(datlim[0], l[0]), max(datlim[1], l[1]),
-                              min(datlim[2], l[2]), max(datlim[3], l[3])]
-
-            xmin, xmax = axes.get_xlim()
-            ymin, ymax = axes.get_ylim()
-            limits = [min(datlim[0], xmin),
-                      max(datlim[1], xmax),
-                      min(datlim[2], ymin),
-                      max(datlim[3], ymax)]
-
-            if (axes in panel.user_limits and
-                (panel.user_limits[axes] != 4*[None] or
-                len(panel.conf.zoom_lims) > 0)):
-
-                for i, val in enumerate(panel.user_limits[axes]):
-                    if val is not None:
-                        limits[i] = val
-                xmin, xmax, ymin, ymax = limits
-                if len(panel.conf.zoom_lims) > 0:
-                    limits_set = True
-                    xmin, xmax, ymin, ymax = panel.conf.zoom_lims[-1][axes]
-                axes.set_xlim((xmin, xmax), emit=True)
-                axes.set_ylim((ymin, ymax), emit=True)
-
-            # make top/bottom panel follow xlimits
-            other = self.panel
-            if panel == self.panel:
-                other = self.panel_bot
-
+        xmin, xmax, ymin, ymax = this_panel.conf.set_viewlimits()[0]
+        # print("Set ViewLimits ", xmin, xmax, ymin, ymax)
+        # make top/bottom panel follow xlimits
+        if this_panel == self.panel:
+            other = self.panel_bot
             for _ax in other.fig.get_axes():
                 _ax.set_xlim((xmin, xmax), emit=True)
             other.draw()
-
-    def unzoom_all(self, event=None):
-        """ zoom out full data range """
-        for p in (self.panel, self.panel_bot):
-            p.conf.zoom_lims = None
-
-            p.unzoom(event)
 
     def null_formatter(self, x, pos, type='x'):
         return ''

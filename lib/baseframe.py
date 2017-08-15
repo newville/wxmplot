@@ -8,6 +8,7 @@ import os
 import time
 import wx
 import matplotlib
+from functools import partial
 from .plotpanel import PlotPanel
 from .utils import MenuItem
 
@@ -46,7 +47,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def __init__(self, parent=None, panel=None, title='', size=None,
                  exit_callback=None, user_menus=None, panelkws=None,
-                 axisbg=None, output_title='Plot', dpi=150, **kws):
+                 axisbg=None, output_title='Plot', dpi=150,
+                 with_data_process=True, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
@@ -59,14 +61,15 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.panel  = panel
         self.dpi    = dpi
         self.user_menus = user_menus
+        self.with_data_process = with_data_process
         self.size = size
         self.panelkws = panelkws or {}
         if axisbg is not None:
             self.panelkws['facecolor'] = axisbg
 
-    def write_message(self,s,panel=0):
+    def write_message(self, txt, panel=0):
         """write a message to the Status Bar"""
-        self.SetStatusText(s, panel)
+        self.SetStatusText(txt, panel)
 
     def set_xylims(self, limits, axes=None):
         """overwrite data for trace t """
@@ -115,31 +118,30 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ## create GUI
     ####
     def BuildFrame(self):
-        # Python3 note: wxPython has no THICK_FRAME
-        sbar = self.CreateStatusBar(2, wx.CAPTION)
+        sbar_widths = [-2, -1, -1]
+        sbar = self.CreateStatusBar(len(sbar_widths), wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)
         sfont.SetPointSize(10)
         sbar.SetFont(sfont)
-
-        self.SetStatusWidths([-3,-1])
-        self.SetStatusText('',0)
+        self.SetStatusWidths(sbar_widths)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         panelkws = self.panelkws
         if self.size is not None:
             panelkws.update({'size': self.size})
-        panelkws.update({'output_title': self.output_title})
+        panelkws.update({'output_title': self.output_title,
+                         'with_data_process': self.with_data_process})
 
         self.panel = PlotPanel(self, **panelkws)
         self.panel.messenger = self.write_message
+        self.panel.nstatusbar = sbar.GetFieldsCount()
         sizer.Add(self.panel, 1, wx.EXPAND)
         self.BuildMenu()
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.Fit()
-
 
     def Build_FileMenu(self, extras=None):
         mfile = wx.Menu()
@@ -198,6 +200,37 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
                  "Toggle Grid Display",
                  self.panel.toggle_grid)
+
+        mopts.AppendSeparator()
+
+        logmenu = wx.Menu()
+        for label in self.panel.conf.log_choices:
+            xword, yword = label.split(' / ')
+            xscale = xword.replace('x', '').strip()
+            yscale = yword.replace('y', '').strip()
+            MenuItem(self, logmenu, label, label,
+                     partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
+                     kind=wx.ITEM_RADIO)
+
+        mopts.AppendSubMenu(logmenu, "Linear/Log Scale ")
+
+        if self.panel.conf.with_data_process:
+            ydatmenu = wx.Menu()
+
+            MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
+                     self.panel.toggle_deriv, kind=wx.ITEM_CHECK)
+
+            ydatmenu.AppendSeparator()
+            for expr in self.panel.conf.data_expressions:
+                label = expr
+                if label is None:
+                    label = 'original Y(X)'
+                MenuItem(self, ydatmenu, label, label,
+                         partial(self.panel.process_data, expr=expr),
+                         kind=wx.ITEM_RADIO)
+            ydatmenu.AppendSeparator()
+
+            mopts.AppendSubMenu(ydatmenu, "Transform Y(X) ")
 
         mopts.AppendSeparator()
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

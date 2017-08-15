@@ -18,15 +18,23 @@ here is for trace properties:
 A matplotlib Line2D can have many more properties than this: these are not set here.
 
 Valid marker names are:
-   'no symbol', '+', 'o','x', '^','v','>','<','|','_',
+   'no symbol', 'o', '+', 'x', '^','v','>','<','|','_',
    'square','diamond','thin diamond', 'hexagon','pentagon',
    'tripod 1','tripod 2'
 
 """
-
+from copy import copy
+import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
+HAS_CYCLER = False
+try:
+    from cycler import cycler
+    HAS_CYCLER = True
+except ImportError:
+    pass
+
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
@@ -38,6 +46,13 @@ except ImportError:
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
+
+LineColors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
+              '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
+              '#bcbd22', '#17becf')
+
+if HAS_CYCLER and matplotlib.__version__ > '1.9':
+    rcParams['axes.prop_cycle'] = cycler('color', LineColors)
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
@@ -51,7 +66,7 @@ for k,v in (('solid', ('-', None)),
     StyleMap[k]=v
 
 
-for k,v in (('no symbol','None'), ('+','+'), ('o','o'), ('x','x'),
+for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
             ('square','s'), ('diamond','D'), ('thin diamond','d'),
             ('^','^'), ('v','v'), ('>','>'), ('<','<'),
             ('|','|'),('_','_'), ('hexagon','h'), ('pentagon','p'),
@@ -175,8 +190,9 @@ class LineProperties:
 
 class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """
-    def __init__(self, canvas=None, panel=None, theme_color_callback=None,
-                 margin_callback=None, trace_color_callback=None):
+    def __init__(self, canvas=None, panel=None, with_data_process=True,
+                 theme_color_callback=None, margin_callback=None,
+                 trace_color_callback=None):
         self.canvas = canvas
         self.panel = panel
         self.styles      = list(StyleMap.keys())
@@ -196,6 +212,16 @@ class PlotConfig:
                                'uc': 'upper center',  'lc': 'lower center',
                                'cc': 'center'}
 
+        self.data_expressions = (None, "y*x", "y*x^2", "y^2", "sqrt(y)", "1/y")
+
+        self.log_choices = ("x linear / y linear", "x linear / y log",
+                            "x log / y linear", "x log / y log")
+
+        self.data_deriv = False
+        self.data_expr  = None
+        self.data_save  = {}
+        self.with_data_process = with_data_process
+
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
         self.set_defaults()
@@ -206,6 +232,7 @@ class PlotConfig:
         self.zoom_init = (0, 1)
         self.zoom_lims = []
         self.title  = ' '
+        self.xscale = 'linear'
         self.yscale = 'linear'
         self.xlabel = ' '
         self.ylabel = ' '
@@ -246,18 +273,24 @@ class PlotConfig:
 
         # preload some traces
         self.ntrace = 0
-        self.lines  = [None]*30
+        self.lines  = [None]*200
         self.traces = []
+        self.reset_trace_properties()
 
+    def reset_trace_properties(self):
         i = -1
-
-        for style, marker in (('solid', None), ('short dashed', None),
-                               ('dash-dot', None), ('solid', 'o'),
-                               ('solid', '+')):
-
-            for color in ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
-                          '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
-                          '#bcbd22', '#17becf'):
+        for style, marker in (('solid', None),      ('short dashed', None),
+                              ('dash-dot', None),   ('solid', 'o'),
+                              ('dotted', None),     ('solid', '+'),
+                              ('dashed', None),     ('solid', 'x'),
+                              ('long dashed', None), ('dashed', 'v'),
+                              ('dashed', 'square'), ('dashed', '^'),
+                              ('dashed', '<'),      ('dashed', '>'),
+                              ('solid', 'hexagon'), ('solid', 'pentagon'),
+                              ('solid', '|'),       ('solid', '_'),
+                              ('solid', 'diamond'), ('solid', 'tripod 1'),
+                              ):
+            for color in LineColors:
                 i += 1
                 self._init_trace(i, color, style, marker=marker)
 
@@ -271,7 +304,7 @@ class PlotConfig:
         self.framecolor = self.color_themes[theme]['frame']
 
     def _init_trace(self, n,  color, style,
-                    linewidth=2.5, zorder=None, marker=None, markersize=8):
+                    linewidth=2.5, zorder=None, marker=None, markersize=6):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProperties())
@@ -409,46 +442,55 @@ class PlotConfig:
         trace = self.__gettrace(trace)
         self.traces[trace].update(self.__mpline(trace))
 
-    def set_trace_color(self,color,trace=None):
+    def set_trace_color(self,color,trace=None, delay_draw=True):
         trace = self.__gettrace(trace)
         self.traces[trace].set_color(color,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
         if callable(self.trace_color_callback):
             self.trace_color_callback(color, line=self.__mpline(trace))
 
-    def set_trace_zorder(self, zorder, trace=None):
+    def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
+        if not delay_draw:
+            self.canvas.draw()
 
-    def set_trace_label(self, label, trace=None):
+    def set_trace_label(self, label, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_label(label,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_style(self,style,trace=None):
+    def set_trace_style(self,style,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_style(style,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_drawstyle(self, style,trace=None):
+    def set_trace_drawstyle(self, style,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_marker(self,marker,trace=None):
+    def set_trace_marker(self,marker,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_marker(marker,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_markersize(self,markersize,trace=None):
+    def set_trace_markersize(self,markersize,trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_markersize(markersize,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
-    def set_trace_linewidth(self,linewidth,trace=None):
+    def set_trace_linewidth(self,linewidth, trace=None, delay_draw=False):
         trace = self.__gettrace(trace)
         self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
-        self.draw_legend()
+        if not delay_draw:
+            self.draw_legend()
 
     def set_trace_datarange(self, datarange, trace=None):
         trace = self.__gettrace(trace)
@@ -468,7 +510,7 @@ class PlotConfig:
         return this[0]
 
 
-    def enable_grid(self, show=None):
+    def enable_grid(self, show=None, delay_draw=False):
         "enable/disable grid display"
         if show is not None:
             self.show_grid = show
@@ -480,9 +522,10 @@ class PlotConfig:
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
             ax.grid(False)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def set_axes_style(self, style=None):
+    def set_axes_style(self, style=None, delay_draw=False):
         """set axes style: one of
            'box' / 'fullbox'  : show all four axes borders
            'open' / 'leftbot' : show left and bottom axes
@@ -512,9 +555,10 @@ class PlotConfig:
             axes0.spines['top'].set_visible(False)
             axes0.spines['left'].set_visible(False)
             axes0.spines['right'].set_visible(False)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def draw_legend(self, show=None, auto_location=True):
+    def draw_legend(self, show=None, auto_location=True, delay_draw=False):
         "redraw the legend"
         if show is not None:
             self.show_legend = show
@@ -580,7 +624,8 @@ class PlotConfig:
 
 
         self.set_added_text_size()
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
     def set_legend_location(self, loc, onaxis):
         "set legend location"
@@ -593,3 +638,91 @@ class PlotConfig:
             loc = self.legend_abbrevs[loc]
         if loc in self.legend_locs:
             self.legend_loc = loc
+
+    def process_data(self):
+        if not self.with_data_process:
+            return
+        expr = self.data_expr
+        if expr is not None:
+            expr = expr.upper()
+        for ax in self.canvas.figure.get_axes():
+            for trace, lines in enumerate(ax.get_lines()):
+                try:
+                    dats = copy(self.data_save[ax][trace])
+                except:
+                    return
+                xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
+                if expr == 'Y*X':
+                    yd = yd * xd
+                elif expr == 'Y*X^2':
+                    yd = yd * xd * xd
+                elif expr == 'Y^2':
+                    yd = yd * yd
+                elif expr == 'SQRT(Y)':
+                    yd = np.sqrt(yd)
+                elif expr == '1/Y':
+                    yd = 1./yd
+                if self.data_deriv:
+                    yd = np.gradient(yd)/np.gradient(xd)
+                lines.set_ydata(yd)
+                lines.set_xdata(xd)
+
+        self.unzoom(full=True)
+
+    def unzoom(self, full=False, delay_draw=False):
+        """unzoom display 1 level or all the way"""
+        if full:
+            self.zoom_lims = self.zoom_lims[:1]
+            self.zoom_lims = []
+        elif len(self.zoom_lims) > 0:
+            self.zoom_lims.pop()
+        self.set_viewlimits()
+        if not delay_draw:
+            self.canvas.draw()
+
+    def set_viewlimits(self):
+        all_limits = []
+        for ax in self.canvas.figure.get_axes():
+            limits = [None, None, None, None]
+            if ax in self.axes_traces:
+                try:
+                    for trace, lines in enumerate(ax.get_lines()):
+                        x, y = lines.get_xdata(), lines.get_ydata()
+                        if limits == [None, None, None, None]:
+                            limits = [min(x), max(x), min(y), max(y)]
+                        else:
+                            limits = [min(limits[0], min(x)),
+                                      max(limits[1], max(x)),
+                                      min(limits[2], min(y)),
+                                      max(limits[3], max(y))]
+                except ValueError:
+                    pass
+
+
+            if ax in self.user_limits:
+                for i, val in  enumerate(self.user_limits[ax]):
+                    if val is not None:
+                        limits[i] = val
+
+            if len(self.zoom_lims) > 0:
+                limits = self.zoom_lims[-1][ax]
+            all_limits.append(limits)
+            ax.set_xlim((limits[0], limits[1]), emit=True)
+            ax.set_ylim((limits[2], limits[3]), emit=True)
+        return all_limits
+
+    def set_logscale(self, xscale='linear', yscale='linear'):
+        "set log or linear scale for x, y axis"
+        self.xscale = xscale
+        self.yscale = yscale
+        for axes in self.canvas.figure.get_axes():
+            try:
+                axes.set_yscale(yscale, basey=10)
+            except:
+                axes.set_yscale('linear')
+            try:
+                axes.set_xscale(xscale, basex=10)
+            except:
+                axes.set_xscale('linear')
+        self.process_data()
+        self.unzoom(full=True)

@@ -1,5 +1,5 @@
 """
-example showing display of C, M, Y maps
+example showing 2 maps
 """
 import wx
 from numpy import exp, random, arange, outer, array, linspace

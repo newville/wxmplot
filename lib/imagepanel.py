@@ -65,7 +65,7 @@ class ImagePanel(BasePanel):
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
-                store_data=True,  col=0, **kws):
+                store_data=True,  col=0, unzoom=True, **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -134,12 +134,15 @@ class ImagePanel(BasePanel):
             if hasattr(self.contour_callback , '__call__'):
                 self.contour_callback(levels=clevels)
         else: # image
-            img = (data -data.min()) /(1.0*data.max() - data.min())
+            if data.max() == data.min():
+                img = data
+            else:
+                img = (data - data.min()) /(1.0*data.max() - data.min())
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
 
         self.axes.set_axis_off()
-        self.unzoom_all()
+        if unzoom: self.unzoom_all()
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kws)
 

@@ -18,7 +18,7 @@ before_install:
 install:
     - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy matplotlib nose six 
     - source activate test_env
-    - conda config --add channels gsecars conda-forge
+    - conda config --add channels gsecars 
     - conda install wxpython
     - python setup.py install
 

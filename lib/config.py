@@ -80,6 +80,7 @@ ColorThemes['light'] = {'bg': '#FEFEFE', 'text': '#000000',
 ColorThemes['dark'] = {'bg': '#242424', 'text': '#FDFDC0',
                        'grid': '#404040', 'frame': '#181818'}
 
+ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 
 class LineProperties:
     """ abstraction for Line2D properties, closely related to a
@@ -231,6 +232,7 @@ class PlotConfig:
         self.zoom_y = 0
         self.zoom_init = (0, 1)
         self.zoom_lims = []
+        self.viewpad = 2.5
         self.title  = ' '
         self.xscale = 'linear'
         self.yscale = 'linear'
@@ -698,6 +700,20 @@ class PlotConfig:
                 except ValueError:
                     pass
 
+            # add padding to data range
+            if self.viewpad > 0:
+                xrange = limits[1] - limits[0]
+                if xrange < 1.e-10:
+                    xrange = max(1.e-10, (limits[1] + limits[0] )/2.0)
+
+                yrange = limits[3] - limits[2]
+                if yrange < 1.e-10:
+                    yrange = max(1.e-10, (limits[3] + limits[2] )/2.0)
+
+                limits[0] = limits[0] - xrange * self.viewpad /100.0
+                limits[1] = limits[1] + xrange * self.viewpad /100.0
+                limits[2] = limits[2] - yrange * self.viewpad /100.0
+                limits[3] = limits[3] + yrange * self.viewpad /100.0
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):
@@ -726,3 +742,10 @@ class PlotConfig:
                 axes.set_xscale('linear')
         self.process_data()
         self.unzoom(full=True)
+
+    def get_viewpads(self):
+        o = [round(i*100.0) for i in ViewPadPercents]
+        cur = round(100.0*self.viewpad)
+        if cur not in o:
+            o.append(cur)
+        return [i/100.0 for i in sorted(o)]

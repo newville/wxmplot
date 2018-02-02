@@ -142,6 +142,8 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ymax           | float      | None    | maximum displayed y value                      |  7  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | viewpad        | float      | 2.5     | percent past data range to pad ata limits      |  7  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | autoscale      | bool       | True    | whether to automatically set plot limits       |     |  no         |
@@ -200,7 +202,9 @@ same meaning, as indicated by the right-most column.
    6. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square', 'diamond', 'thin
       diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
 
-   7. By default, xmin, xmax, ymin, and ymax are set from the data.
+   7. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
+      percentage of the data range for the view to be extended.  That is, with xmin=0,
+      xmin=100, viewpad=5, the range for x will be [-5, 105].
 
    8. *fullbox* can be used to turn on or off the top and right Axes lines (or spines), giving a more open
       figure.  The 'axes_style' option gives a little more control -- you can set this to either 'box' for

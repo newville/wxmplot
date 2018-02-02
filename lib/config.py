@@ -714,6 +714,10 @@ class PlotConfig:
                 limits[1] = limits[1] + xrange * self.viewpad /100.0
                 limits[2] = limits[2] - yrange * self.viewpad /100.0
                 limits[3] = limits[3] + yrange * self.viewpad /100.0
+                if self.xscale == 'log':
+                    limits[0] = max(0, limits[0])
+                if self.yscale == 'log':
+                    limits[2] = max(0, limits[2])
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):

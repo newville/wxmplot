@@ -385,7 +385,7 @@ class PlotPanel(BasePanel):
                     selectcolor=None, selectedge=None,
                     xlabel=None, ylabel=None, y2label=None,
                     xmin=None, xmax=None, ymin=None, ymax=None,
-                    title=None, grid=None, callback=None, **kw):
+                    viewpad=None, title=None, grid=None, callback=None, **kw):
 
         if xlabel is not None:
             self.set_xlabel(xlabel)
@@ -410,6 +410,8 @@ class PlotPanel(BasePanel):
             self.conf.scatter_selectcolor = selectcolor
         if selectedge is not None:
             self.conf.scatter_selectedge = selectedge
+        if viewpad is not None:
+            conf.viewpad = viewpad
 
         axes = self.axes
         self.conf.user_limits[axes] = (xmin, xmax, ymin, ymax)

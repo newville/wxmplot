@@ -152,7 +152,7 @@ class PlotPanel(BasePanel):
               legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None,
               labelfontsize=None, legendfontsize=None,
-              fullbox=None, axes_style=None, zorder=None, **kws):
+              fullbox=None, axes_style=None, zorder=None, viewpad=None, **kws):
         """ basic plot method, overplotting any existing plot """
         self.cursor_mode = 'zoom'
         conf = self.conf
@@ -176,6 +176,9 @@ class PlotPanel(BasePanel):
 
         if linewidth is None:
             linewidth = 2
+
+        if viewpad is not None:
+            conf.viewpad = viewpad
 
         if xlabel is not None:
             self.set_xlabel(xlabel)

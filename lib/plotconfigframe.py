@@ -167,7 +167,7 @@ class PlotConfigFrame(wx.Frame):
             raxes = axes[1]
         user_lims = self.conf.user_limits[laxes]
 
-        auto_b  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_b  = wx.CheckBox(panel,-1, 'Default', (-1, -1), (-1, -1))
         auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
         auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
 
@@ -188,13 +188,21 @@ class PlotConfigFrame(wx.Frame):
 
         opts = dict(size=100, labeltext='', action=self.onBounds)
 
-
         self.xbounds  = [LabelEntry(panel,value=ffmt(xb0), **opts),
                          LabelEntry(panel,value=ffmt(xb1), **opts)]
         self.ybounds  = [LabelEntry(panel,value=ffmt(yb0), **opts),
                          LabelEntry(panel,value=ffmt(yb1), **opts)]
         self.y2bounds = [LabelEntry(panel,value=ffmt(y2b0), **opts),
                          LabelEntry(panel,value=ffmt(y2b1), **opts)]
+
+
+        vpad_list = [str(s) for s in self.conf.get_viewpads()]
+
+        self.vpad_cb = wx.ComboBox(panel, value=str(self.conf.viewpad),
+                              size=(100, -1),  choices=vpad_list,
+                              style=wx.CB_DROPDOWN|wx.TE_PROCESS_ENTER)
+        self.vpad_cb.Bind(wx.EVT_COMBOBOX,    self.onViewPadEvent)
+        self.vpad_cb.Bind(wx.EVT_TEXT_ENTER,  self.onViewPadEvent)
 
         if user_lims == 4*[None]:
             [w.Disable() for w in self.xbounds]
@@ -203,28 +211,38 @@ class PlotConfigFrame(wx.Frame):
         if raxes is None:
             [w.Disable() for w in self.y2bounds]
 
+        btext  = 'Bounds (Data Range): '
+        ptext  = 'Padding (% of Data Range): '
+        xtext  = '   X axis:'
+        ytext  = '   Y axis:'
+        y2text = '   Y2 axis:'
+        def showtext(t):
+            return wx.StaticText(panel, -1, t)
 
-        sizer.Add(wx.StaticText(panel, -1, 'Bounds: '),    (3, 0), (1, 1), labstyle, 2)
-        sizer.Add(auto_b,                                  (3, 1), (1, 1), labstyle, 2)
-        sizer.Add(wx.StaticText(panel, -1, '   X axis:'),  (4, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.xbounds[0],                         (4, 1), (1, 1), labstyle, 2)
-        sizer.Add(wx.StaticText(panel, -1, ' : '),         (4, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.xbounds[1],                         (4, 3), (1, 1), labstyle, 2)
+        sizer.Add(showtext(btext),  (3, 0), (1, 1), labstyle, 2)
+        sizer.Add(auto_b,           (3, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(ptext),  (3, 2), (1, 2), labstyle, 2)
+        sizer.Add(self.vpad_cb,     (3, 4), (1, 1), labstyle, 2)
 
-        sizer.Add(wx.StaticText(panel, -1, '   Y axis:'),  (5, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.ybounds[0],                         (5, 1), (1, 1), labstyle, 2)
-        sizer.Add(wx.StaticText(panel, -1, ' : '),         (5, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.ybounds[1],                         (5, 3), (1, 1), labstyle, 2)
+        sizer.Add(showtext(xtext),  (4, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.xbounds[0],  (4, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(' : '),  (4, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.xbounds[1],  (4, 3), (1, 1), labstyle, 2)
 
-        sizer.Add(wx.StaticText(panel, -1, '   Y2 axis:'), (6, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.y2bounds[0],                        (6, 1), (1, 1), labstyle, 2)
-        sizer.Add(wx.StaticText(panel, -1, ' : '),         (6, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.y2bounds[1],                        (6, 3), (1, 1), labstyle, 2)
+        sizer.Add(showtext(ytext),  (5, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.ybounds[0],  (5, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(' : '),  (5, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.ybounds[1],  (5, 3), (1, 1), labstyle, 2)
+
+        sizer.Add(showtext(y2text), (6, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.y2bounds[0], (6, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(' : '),  (6, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.y2bounds[1], (6, 3), (1, 1), labstyle, 2)
 
         # Margins
         _left, _top, _right, _bot = ["%.3f"% x for x in self.conf.margins]
 
-        mtitle = wx.StaticText(panel, -1, 'Margins: ')
+        mtitle = wx.StaticText(panel, -1, 'Margins for labels: ')
         ltitle = wx.StaticText(panel, -1, ' Left:   ')
         rtitle = wx.StaticText(panel, -1, ' Right:  ')
         btitle = wx.StaticText(panel, -1, ' Bottom: ')
@@ -245,7 +263,7 @@ class PlotConfigFrame(wx.Frame):
         if self.conf.auto_margins:
             [m.Disable() for m in self.margins]
 
-        auto_m  = wx.CheckBox(panel,-1, 'Auto-set', (-1, -1), (-1, -1))
+        auto_m  = wx.CheckBox(panel,-1, 'Default', (-1, -1), (-1, -1))
         auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
         auto_m.SetValue(self.conf.auto_margins)
 
@@ -654,9 +672,10 @@ class PlotConfigFrame(wx.Frame):
             [m.Disable() for m in self.xbounds]
             [m.Disable() for m in self.ybounds]
             [m.Disable() for m in self.y2bounds]
+            self.vpad_cb.Enable()
             self.conf.unzoom(full=True)
         else:
-
+            self.vpad_cb.Disable()
             xb = axes[0].get_xlim()
             yb = axes[0].get_ylim()
             for m, v in zip(self.xbounds, xb):
@@ -706,6 +725,21 @@ class PlotConfigFrame(wx.Frame):
     def onMargins(self, event=None):
         left, top, right, bottom = [float(w.GetValue()) for w in self.margins]
         self.conf.set_margins(left=left, top=top, right=right, bottom=bottom)
+
+    def onViewPadEvent(self, event=None):
+        self.conf.viewpad = float(event.GetString())
+
+        self.conf.set_viewlimits()
+        self.conf.canvas.draw()
+
+        axes = self.canvas.figure.get_axes()
+        xb = axes[0].get_xlim()
+        yb = axes[0].get_ylim()
+        for m, v in zip(self.xbounds, xb):
+            m.SetValue(ffmt(v))
+
+        for m, v in zip(self.ybounds, yb):
+            m.SetValue(ffmt(v))
 
     def onScatter(self, event, item=None):
         if self.conf.scatter_coll is None or item is None:

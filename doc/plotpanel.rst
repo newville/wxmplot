@@ -142,7 +142,7 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ymax           | float      | None    | maximum displayed y value                      |  7  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | viewpad        | float      | 2.5     | percent past data range to pad ata limits      |  7  |  yes        |
+  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  7  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -226,7 +226,7 @@ same meaning, as indicated by the right-most column.
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
   configured interactively (see Plot Configuration).
 
-.. method:: update_line(trace, x, y[, side='left'])
+.. method:: update_line(trace, x, y, side='left', update_limits=True, draw=False)
 
    update an existing trace.
 
@@ -234,6 +234,8 @@ same meaning, as indicated by the right-most column.
    :param x:     array of x values
    :param y:     array of y values
    :param side:  which y axis to use ('left' or 'right').
+   :param update_limits:  whether to force an update of the limits.
+   :param draw:    whether to force a redrawing of the canvas.
 
    This function is particularly useful for data that is changing and you
    wish to update traces from a previous :meth:`plot` or :meth:`oplot` with
@@ -264,7 +266,7 @@ same meaning, as indicated by the right-most column.
 
    Clear the plot.
 
-.. method:: add_text(text, x, y, side='left', rotation=None, ha='left', va='center', **kws)
+.. method:: add_text(text, x, y, side='left', rotation=None, ha='left', va='center', family=None, **kws)
 
    add text to the plot.
 
@@ -275,6 +277,7 @@ same meaning, as indicated by the right-most column.
    :param rotation:  text rotation: angle in degrees or 'vertical' or 'horizontal'
    :param ha:  horizontal alignment ('left', 'center', 'right')
    :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
+   :param family:  name of font family ('serif', 'sans-serif', etc)
 
 .. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', color='black', wdith=0.01, head_width=0.03, overhang=0)
 

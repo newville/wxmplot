@@ -50,13 +50,16 @@ def pack(window, sizer, expand=1.1):
     window.SetSize(nsize)
 
 
-
-def MenuItem(parent, menu, label='', longtext='', action=None, **kws):
+def MenuItem(parent, menu, label='', longtext='', action=None, default=True,
+             **kws):
     """Add Item to a Menu, with action
     m = Menu(parent, menu, label, longtext, action=None)
     """
     wid = wx.NewId()
     item = menu.Append(wid, label, longtext, **kws)
+    kind = item.GetKind()
+    if kind == wx.ITEM_CHECK:
+        item.Check(default)
     if callable(action):
         parent.Bind(wx.EVT_MENU, action, item)
     return item

@@ -405,9 +405,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Fit()
 
     def display(self, img, title=None, colormap=None, style='image',
-                subtitles=None, **kws):
-        """plot after clearing current plot
-        """
+                subtitles=None, auto_contrast=False, **kws):
+        """display image"""
         if title is not None:
             self.SetTitle(title)
         if subtitles is not None:
@@ -451,7 +450,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         contour_value = 0
         if style == 'contour':
             contour_value = 1
-        self.set_contrast_levels()
+        self.set_contrast_levels(auto_contrast)
         self.panel.redraw()
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -524,10 +523,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  'use logarithm to set intensity scale',
                  self.onLogScale, kind=wx.ITEM_CHECK)
 
-        MenuItem(self, mint, 'Toggle Contrast Enhancement\tCtrl+E',
-                 'Toggle contrast between auto-scale and full-scale',
-                 self.onEnhanceContrast, kind=wx.ITEM_CHECK)
-
+        MenuItem(self, mint, 'Enhance Contrast\tCtrl+E',
+                 'auto-scale contrast',
+                 self.onEnhanceContrast, kind=wx.ITEM_CHECK,
+                 default=self.panel.conf.auto_contrast)
 
         MenuItem(self, mint, 'Set Auto-Contrast Level',
                  'Set auto-contrast scale',
@@ -757,18 +756,23 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imax_val.Enable()
 
     def onEnhanceContrast(self, event=None):
-        """change image contrast, using scikit-image exposure routines"""
-        self.panel.conf.auto_contrast = event.IsChecked()
+        """set image contrast, using scikit-image exposure routines"""
+        if event is not None:
+            self.panel.conf.auto_contrast = event.IsChecked()
+
         self.set_contrast_levels()
         self.panel.redraw()
 
-    def set_contrast_levels(self):
+    def set_contrast_levels(self, enhance=None):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.auto_contrast
         """
         conf = self.panel.conf
         img  = self.panel.conf.data
-        enhance = conf.auto_contrast
+        if enhance is None:
+            enhance = conf.auto_contrast
+        conf.auto_contrast = enhance
+
         clevel = conf.auto_contrast_level
         if len(img.shape) == 2: # intensity map
             col = 0

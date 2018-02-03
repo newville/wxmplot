@@ -19,16 +19,17 @@ richly featured and provide end-users with interactivity (zooming, reading
 positions, rotating images) and customization (line types, labels, marker
 type, colors, and color tables) of the graphics without having to know
 matplotlib.  Wxmplot does not expose all of matplotlib's capabilities, but
-does provide 2D plotting and image display Panels and Frames can be used
-simply in wxPython applications to handle many use cases.
+does provide 2D plotting and image display Panels and Frames that are easy
+to add to wxPython applications to handle many common plotting and image
+display needs.
 
 The wxmplot package is aimed at programmers who want to include high
 quality scientific graphics in their applications that can be manipulated
 by the end-user.  If you're a python programmer who is comfortable writing
 complex pylab scripts or plotting interactively from IPython, this package
 may seem too limiting for your needs.  On the other hand, wxmplot provides
-better defaults and better customizations than matplotlib's Navigation
-toolbars.
+better defaults and better customizations than matplotlib's basic
+navigation toolbars.
 
 
 .. toctree::

@@ -11,7 +11,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.27',
+        VERSION:     '0.9.28',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -115,16 +115,16 @@ manipulate the displayed image, as will be discussed below.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parent</strong> -- wx parent object.</li>
-<li><strong>size</strong> -- figure size in inches.</li>
-<li><strong>dpi</strong> -- dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) -- function for accepting output messages.</li>
+<li><strong>parent</strong> – wx parent object.</li>
+<li><strong>size</strong> – figure size in inches.</li>
+<li><strong>dpi</strong> – dots per inch for figure.</li>
+<li><strong>messenger</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) – function for accepting output messages.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The <em>size</em>, and <em>dpi</em> arguments are sent to matplotlib's
+<p>The <em>size</em>, and <em>dpi</em> arguments are sent to matplotlib’s
 <code class="xref py py-class docutils literal"><span class="pre">Figure</span></code>.  The <em>messenger</em> should should be a function that
 accepts text messages from the panel for informational display.  The
 default value is to use <code class="xref py py-func docutils literal"><span class="pre">sys.stdout.write()</span></code>.</p>
@@ -209,14 +209,14 @@ configuration attributes and redrawing the image.</p>
 <em class="property">class </em><code class="descclassname">imageframe.</code><code class="descname">ImageFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
 <code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
-smoothing options as well as switching the display style between &quot;image&quot; and &quot;contour&quot;.</p>
+smoothing options as well as switching the display style between “image” and “contour”.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="image-configuration-with-imageconfig">
 <h2>Image configuration with <code class="xref py py-class docutils literal"><span class="pre">ImageConfig</span></code><a class="headerlink" href="#image-configuration-with-imageconfig" title="Permalink to this headline">¶</a></h2>
 <p>To change any of the attributes of the image on an <code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>, you
-can set the corresponding attribute of the panel's <code class="xref py py-attr docutils literal"><span class="pre">conf</span></code>.   That is,
+can set the corresponding attribute of the panel’s <code class="xref py py-attr docutils literal"><span class="pre">conf</span></code>.   That is,
 if you create an <code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code>, you can set the colormap with:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cmap</span>
 <span class="n">im_panel</span> <span class="o">=</span> <span class="n">ImagePanel</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
@@ -326,8 +326,8 @@ if you create an <code class="xref py py-class docutils literal"><span class="pr
 </tr>
 <tr class="row-odd"><td>style</td>
 <td>string</td>
-<td>'image'</td>
-<td>'image' or 'contour'</td>
+<td>‘image’</td>
+<td>‘image’ or ‘contour’</td>
 </tr>
 <tr class="row-even"><td>ncontour_levels</td>
 <td>int</td>
@@ -403,7 +403,7 @@ one of several interpolation algorithms.</p>
 </div>
 <div class="section" id="contour-example">
 <h3>Contour Example<a class="headerlink" href="#contour-example" title="Permalink to this headline">¶</a></h3>
-<p>From the Options menu, one can toggle to a 'contour style' plot, in which
+<p>From the Options menu, one can toggle to a ‘contour style’ plot, in which
 the levels are made discrete with many fewer levels than the continuous
 image display.  A contour plot can be created like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -514,7 +514,7 @@ more suitable for printed documents and presentations.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

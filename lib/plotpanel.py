@@ -443,13 +443,14 @@ class PlotPanel(BasePanel):
         xrange = max(xdata) - min(xdata)
         yrange = max(ydata) - min(ydata)
 
-        xmin = min(xdata) - xrange/50.0
-        xmax = max(xdata) + xrange/50.0
-        ymin = min(ydata) - yrange/50.0
-        ymax = max(ydata) + yrange/50.0
-        
+        xmin = min(xdata) - xrange/25.0
+        xmax = max(xdata) + xrange/25.0
+        ymin = min(ydata) - yrange/25.0
+        ymax = max(ydata) + yrange/25.0
+
         axes.set_xlim((xmin, xmax), emit=True)
         axes.set_ylim((ymin, ymax), emit=True)
+        self.set_viewlimits()
         self.draw()
 
     def lassoHandler(self, vertices):

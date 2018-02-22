@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #
 # Name:      wxmplot
-# Version:   0.9.28
+# Version:   0.9.29
 # user-configurable 2D plotting module, using wxPython
 #            and matplotlib.
 # Author:    Matthew Newville
-# Copyright: Matthew Newville, The University of Chicago, 2017
+# Copyright: Matthew Newville, The University of Chicago, 2018
 # Licence:   BSD license
-# Updated:   2018-Feb-03
+# Updated:   2018-Feb-22
 #-----------------------------------------------------------------------------
 
 """
@@ -64,8 +64,8 @@ these basic methods:
    save_figure():  bring up file dialog for saving image of figure
 """
 
-__version__  = '0.9.28'
-__date__     = '2018-Feb-03'
+__version__  = '0.9.29'
+__date__     = '2018-Feb-22'
 
 import sys
 import wx

@@ -25,12 +25,8 @@ from .colors import hexcolor, hex2rgb
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
-ISPINSIZE = 80
-FSPINSIZE = 80
-#if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
-#    ISPINSIZE = 50
-#    FSPINSIZE = 70
-
+ISPINSIZE = 75
+FSPINSIZE = 75
 
 def mpl_color(c, default = (242, 243, 244)):
     try:
@@ -167,7 +163,7 @@ class PlotConfigFrame(wx.Frame):
             raxes = axes[1]
         user_lims = self.conf.user_limits[laxes]
 
-        auto_b  = wx.CheckBox(panel,-1, 'Default', (-1, -1), (-1, -1))
+        auto_b  = wx.CheckBox(panel,-1, ' From Data ', (-1, -1), (-1, -1))
         auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
         auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
 
@@ -195,14 +191,11 @@ class PlotConfigFrame(wx.Frame):
         self.y2bounds = [LabelEntry(panel,value=ffmt(y2b0), **opts),
                          LabelEntry(panel,value=ffmt(y2b1), **opts)]
 
-
-        vpad_list = [str(s) for s in self.conf.get_viewpads()]
-
-        self.vpad_cb = wx.ComboBox(panel, value=str(self.conf.viewpad),
-                              size=(100, -1),  choices=vpad_list,
-                              style=wx.CB_DROPDOWN|wx.TE_PROCESS_ENTER)
-        self.vpad_cb.Bind(wx.EVT_COMBOBOX,    self.onViewPadEvent)
-        self.vpad_cb.Bind(wx.EVT_TEXT_ENTER,  self.onViewPadEvent)
+        self.vpad_val = FloatSpin(panel, -1, value=2.5,
+                                 min_val=0, max_val=100,
+                                 increment=0.5, digits=2,
+                                 pos=(-1,-1), size=(FSPINSIZE, 30))
+        self.vpad_val.Bind(EVT_FLOATSPIN, self.onViewPadEvent)
 
         if user_lims == 4*[None]:
             [w.Disable() for w in self.xbounds]
@@ -211,8 +204,8 @@ class PlotConfigFrame(wx.Frame):
         if raxes is None:
             [w.Disable() for w in self.y2bounds]
 
-        btext  = 'Bounds (Data Range): '
-        ptext  = 'Padding (% of Data Range): '
+        btext  = 'Plot Boundaries : '
+        ptext  = ' Padding (% of Data Range): '
         xtext  = '   X axis:'
         ytext  = '   Y axis:'
         y2text = '   Y2 axis:'
@@ -222,7 +215,7 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(showtext(btext),  (3, 0), (1, 1), labstyle, 2)
         sizer.Add(auto_b,           (3, 1), (1, 1), labstyle, 2)
         sizer.Add(showtext(ptext),  (3, 2), (1, 2), labstyle, 2)
-        sizer.Add(self.vpad_cb,     (3, 4), (1, 1), labstyle, 2)
+        sizer.Add(self.vpad_val,     (3, 4), (1, 1), labstyle, 2)
 
         sizer.Add(showtext(xtext),  (4, 0), (1, 1), labstyle, 2)
         sizer.Add(self.xbounds[0],  (4, 1), (1, 1), labstyle, 2)
@@ -263,7 +256,7 @@ class PlotConfigFrame(wx.Frame):
         if self.conf.auto_margins:
             [m.Disable() for m in self.margins]
 
-        auto_m  = wx.CheckBox(panel,-1, 'Default', (-1, -1), (-1, -1))
+        auto_m  = wx.CheckBox(panel,-1, ' Default ', (-1, -1), (-1, -1))
         auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin) # ShowGrid)
         auto_m.SetValue(self.conf.auto_margins)
 
@@ -476,7 +469,7 @@ class PlotConfigFrame(wx.Frame):
         coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
 
         textcol = csel.ColourSelect(panel, label=" Text ",
-                                    colour=mpl_color(self.conf.textcolor), 
+                                    colour=mpl_color(self.conf.textcolor),
                                     size=(50, 30), style=labstyle)
 
         gridcol = csel.ColourSelect(panel, label=" Grid ",
@@ -484,7 +477,7 @@ class PlotConfigFrame(wx.Frame):
                                     size=(50, 30), style=labstyle)
 
         bgcol = csel.ColourSelect(panel, label=" Background ",
-                                  colour=mpl_color(axis_bgcol), 
+                                  colour=mpl_color(axis_bgcol),
                                   size=(120, 30), style=labstyle)
 
         fbgcol = csel.ColourSelect(panel,  label=" Outer Frame ",
@@ -684,10 +677,10 @@ class PlotConfigFrame(wx.Frame):
             [m.Disable() for m in self.xbounds]
             [m.Disable() for m in self.ybounds]
             [m.Disable() for m in self.y2bounds]
-            self.vpad_cb.Enable()
+            self.vpad_val.Enable()
             self.conf.unzoom(full=True)
         else:
-            self.vpad_cb.Disable()
+            self.vpad_val.Disable()
             xb = axes[0].get_xlim()
             yb = axes[0].get_ylim()
             for m, v in zip(self.xbounds, xb):
@@ -739,8 +732,8 @@ class PlotConfigFrame(wx.Frame):
         self.conf.set_margins(left=left, top=top, right=right, bottom=bottom)
 
     def onViewPadEvent(self, event=None):
-        self.conf.viewpad = float(event.GetString())
 
+        self.conf.viewpad = float(self.vpad_val.GetValue())
         self.conf.set_viewlimits()
         self.conf.canvas.draw()
 

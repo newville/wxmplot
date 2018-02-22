@@ -25,11 +25,11 @@ from .colors import hexcolor, hex2rgb
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
-ISPINSIZE = 110
-FSPINSIZE = 150
-if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
-    ISPINSIZE = 50
-    FSPINSIZE = 70
+ISPINSIZE = 80
+FSPINSIZE = 80
+#if os.name == 'nt' or sys.platform.lower().startswith('darwin'):
+#    ISPINSIZE = 50
+#    FSPINSIZE = 70
 
 
 def mpl_color(c, default = (242, 243, 244)):
@@ -464,29 +464,33 @@ class PlotConfigFrame(wx.Frame):
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
-        opts = dict(size=(-1, 25), style=labstyle)
+        opts = dict(size=(40, 30), style=labstyle)
 
-        ctitle = wx.StaticText(panel, -1, 'Colors:  ')
-        ltheme = wx.StaticText(panel, -1, 'Use Color Theme: ')
+        ctitle = wx.StaticText(panel, -1, ' Colors:  ')
+        ltheme = wx.StaticText(panel, -1, ' Color Theme: ')
 
         themes = list(self.conf.color_themes.keys())
 
-        coltheme = wx.Choice(panel, choices=themes,  size=(100,-1))
+        coltheme = wx.Choice(panel, choices=themes)
         coltheme.SetStringSelection(self.conf.color_theme)
         coltheme.Bind(wx.EVT_CHOICE, self.onColorThemeStyle)
 
         textcol = csel.ColourSelect(panel, label=" Text ",
-                                    colour=mpl_color(self.conf.textcolor), **opts)
+                                    colour=mpl_color(self.conf.textcolor), 
+                                    size=(50, 30), style=labstyle)
 
         gridcol = csel.ColourSelect(panel, label=" Grid ",
-                                    colour=mpl_color(self.conf.gridcolor), **opts)
+                                    colour=mpl_color(self.conf.gridcolor),
+                                    size=(50, 30), style=labstyle)
 
         bgcol = csel.ColourSelect(panel, label=" Background ",
-                                  colour=mpl_color(axis_bgcol),  **opts)
+                                  colour=mpl_color(axis_bgcol), 
+                                  size=(120, 30), style=labstyle)
 
         fbgcol = csel.ColourSelect(panel,  label=" Outer Frame ",
                                    colour=mpl_color(self.canvas.figure.get_facecolor()),
-                                   **opts)
+                                   size=(120, 30), style=labstyle)
+
 
         self.colwids = {'text': textcol, 'bg': bgcol,
                         'grid': gridcol, 'frame': fbgcol}
@@ -504,6 +508,13 @@ class PlotConfigFrame(wx.Frame):
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(self.conf.axes_style == 'box')
 
+        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
+        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
+        show_leg.SetValue(self.conf.show_legend)
+
+        reset_btn = wx.Button(panel, label='Reset Line Colors', size=(175, -1))
+        reset_btn.Bind(wx.EVT_BUTTON, self.onResetLines)
+
         csizer = wx.BoxSizer(wx.HORIZONTAL)
 
         csizer.Add(ctitle,    0, labstyle, 3)
@@ -513,15 +524,16 @@ class PlotConfigFrame(wx.Frame):
         csizer.Add(fbgcol ,   0, labstyle, 3)
         csizer.Add(ltheme,    1, labstyle, 3)
         csizer.Add(coltheme,  1, labstyle, 3)
-        csizer.Add(show_grid, 0, labstyle, 3)
-        csizer.Add(show_box,  0, labstyle, 3)
+        csizer.Add(reset_btn, 0, labstyle, 3)
 
         sizer.Add(csizer,    (1, 0), (1, 9), labstyle, 2)
 
-        reset_btn = wx.Button(panel, label='Reset Line Colors', size=(200, -1))
-        reset_btn.Bind(wx.EVT_BUTTON, self.onResetLines)
 
-        sizer.Add(reset_btn, (2, 1), (1, 4))
+        # csizer.Add(show_grid, 0, labstyle, 3)
+        # csizer.Add(show_box,  0, labstyle, 3)
+        sizer.Add(show_grid, (2, 1), (1, 1))
+        sizer.Add(show_box,  (2, 2), (1, 3))
+        sizer.Add(show_leg,  (2, 5), (1, 2))
 
         irow = 3
         for t in ('#','Label','Color', 'Style',

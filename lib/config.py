@@ -163,6 +163,7 @@ class LineProperties:
         self.drawstyle = sty
         if line:
             line[0].set_drawstyle(DrawStyleMap[sty])
+            line[0]._invalidx = True
 
     def set_marker(self,marker,line=None):
         sym = 'no symbol'

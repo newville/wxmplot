@@ -131,13 +131,13 @@ class PlotPanel(BasePanel):
         self.conf.user_limits[axes] = [None, None, None, None]
 
         if xlabel is not None:
-            self.set_xlabel(xlabel)
+            self.set_xlabel(xlabel, delay_draw=True)
         if ylabel is not None:
-            self.set_ylabel(ylabel)
+            self.set_ylabel(ylabel, delay_draw=True)
         if y2label is not None:
-            self.set_y2label(y2label)
-        if title  is not None:
-            self.set_title(title)
+            self.set_y2label(y2label, delay_draw=True)
+        if title is not None:
+            self.set_title(title, delay_draw=True)
         if use_dates is not None:
             self.use_dates  = use_dates
         return self.oplot(xdata, ydata, side=side, **kws)
@@ -157,7 +157,6 @@ class PlotPanel(BasePanel):
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'
-
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
@@ -181,13 +180,13 @@ class PlotPanel(BasePanel):
             conf.viewpad = viewpad
 
         if xlabel is not None:
-            self.set_xlabel(xlabel)
+            self.set_xlabel(xlabel, delay_draw=delay_draw)
         if ylabel is not None:
-            self.set_ylabel(ylabel)
+            self.set_ylabel(ylabel, delay_draw=delay_draw)
         if y2label is not None:
-            self.set_y2label(y2label)
+            self.set_y2label(y2label, delay_draw=delay_draw)
         if title  is not None:
-            self.set_title(title)
+            self.set_title(title, delay_draw=delay_draw)
         if show_legend is not None:
             conf.set_legend_location(legend_loc, legend_on)
             conf.show_legend = show_legend
@@ -279,7 +278,6 @@ class PlotPanel(BasePanel):
         if legendfontsize is not None:
             conf.legendfont.set_size(legendfontsize)
             needs_relabel = True
-
 
         if n < len(conf.lines):
             conf.lines[n] = _lines

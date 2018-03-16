@@ -341,11 +341,12 @@ class PlotConfig:
             self.traces.append(LineProperties())
         return trace
 
-    def relabel(self, xlabel=None, ylabel=None, y2label=None, title=None):
+    def relabel(self, xlabel=None, ylabel=None,
+                y2label=None, title=None, delay_draw=False):
         " re draw labels (title, x, y labels)"
         n = self.labelfont.get_size()
         self.titlefont.set_size(n+1)
-
+        # print("  plot relabel ", delay_draw)
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
         rcParams['xtick.color'] =  rcParams['ytick.color'] =  self.textcolor
 
@@ -382,9 +383,11 @@ class PlotConfig:
         if self.mpl_legend is not None:
             for t in self.mpl_legend.get_texts():
                 t.set_color(self.textcolor)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
 
-    def set_margins(self, left=0.1, top=0.1, right=0.1, bottom=0.1):
+    def set_margins(self, left=0.1, top=0.1, right=0.1, bottom=0.1,
+                    delay_draw=False):
         "set margins"
         self.margins = (left, top, right, bottom)
         if self.panel is not None:
@@ -393,7 +396,8 @@ class PlotConfig:
         for ax in self.canvas.figure.get_axes():
             ax.update_params()
             ax.set_position(ax.figbox)
-        self.canvas.draw()
+        if not delay_draw:
+            self.canvas.draw()
         if callable(self.margin_callback):
             self.margin_callback(left=left, top=top, right=right, bottom=bottom)
 

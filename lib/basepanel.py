@@ -161,21 +161,21 @@ class BasePanel(wx.Panel):
         ymin, ymax = axes.get_ylim()
         return (xmin, xmax, ymin, ymax)
 
-    def set_title(self, s):
+    def set_title(self, s, delay_draw=False):
         "set plot title"
-        self.conf.relabel(title=s)
+        self.conf.relabel(title=s, delay_draw=delay_draw)
 
-    def set_xlabel(self, s):
+    def set_xlabel(self, s, delay_draw=False):
         "set plot xlabel"
-        self.conf.relabel(xlabel=s)
+        self.conf.relabel(xlabel=s, delay_draw=delay_draw)
 
-    def set_ylabel(self, s):
+    def set_ylabel(self, s, delay_draw=False):
         "set plot ylabel"
-        self.conf.relabel(ylabel=s)
+        self.conf.relabel(ylabel=s, delay_draw=delay_draw)
 
-    def set_y2label(self, s):
+    def set_y2label(self, s, delay_draw=False):
         "set plot ylabel"
-        self.conf.relabel(y2label=s)
+        self.conf.relabel(y2label=s, delay_draw=delay_draw)
 
     def write_message(self, s, panel=0):
         """ write message to message handler

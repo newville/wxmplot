@@ -519,9 +519,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         # intensity contrast
         mint =self.intensity_menu = wx.Menu()
-        MenuItem(self, mint,  'Log Scale Intensity\tCtrl+L',
-                 'use logarithm to set intensity scale',
-                 self.onLogScale, kind=wx.ITEM_CHECK)
+        #         MenuItem(self, mint,  'Log Scale Intensity\tCtrl+L',
+        #                  'use logarithm to set intensity scale',
+        #                  self.onLogScale, kind=wx.ITEM_CHECK)
 
         MenuItem(self, mint, 'Enhance Contrast\tCtrl+E',
                  'auto-scale contrast',

@@ -242,13 +242,12 @@ class PlotConfig:
         self.y2label = ' '
         self.added_texts = []
         self.plot_type = 'lineplot'
-        self.scatter_size = 6
         self.scatter_normalcolor = 'blue'
         self.scatter_normaledge  = 'blue'
         self.scatter_selectcolor = 'red'
         self.scatter_selectedge  = 'red'
-        self.scatter_data = None
-        self.scatter_coll = None
+        self.scatter_xdata = None
+        self.scatter_ydata = None
         self.scatter_mask = None
 
         self.margins = None

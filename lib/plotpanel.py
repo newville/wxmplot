@@ -448,10 +448,10 @@ class PlotPanel(BasePanel):
         conf = self.conf
         if self.conf.plot_type == 'scatter':
             xd, yd = conf.scatter_xdata, conf.scatter_ydata
-            sdat = zip(xd, yd)
+            sdat = list(zip(xd, yd))
             oldmask = conf.scatter_mask
             try:
-                self.axes.scatter(xd[where(oldmask)], yd[where(oldmask)], 
+                self.axes.scatter(xd[where(oldmask)], yd[where(oldmask)],
                                   c=conf.scatter_normalcolor,
                                   edgecolors=conf.scatter_normaledge)
             except IndexError:
@@ -461,7 +461,7 @@ class PlotPanel(BasePanel):
 
             mask = conf.scatter_mask = inside_poly(vertices, sdat)
             pts = nonzero(mask)[0]
-            self.axes.scatter(xd[where(mask)], yd[where(mask)], 
+            self.axes.scatter(xd[where(mask)], yd[where(mask)],
                               c=conf.scatter_selectcolor,
                               edgecolors=conf.scatter_selectedge)
 

@@ -107,6 +107,7 @@ class ImageMatrixFrame(BaseFrame):
                           self.img2_panel,
                           self.dual_panel]
 
+
         lsty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
 
         ir = 0
@@ -183,6 +184,8 @@ class ImageMatrixFrame(BaseFrame):
             opanel.set_colormap(name=colors[0])
             opanel.imgpanel.redraw()
 
+    def unzoom_all(self, event=None):
+        self.unzoom(event=event)
 
     def unzoom(self, event=None):
         self.xzoom = slice(0, self.map1.shape[1]+1)

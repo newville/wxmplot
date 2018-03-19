@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Speciality WXMPLOT displays &#8212; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.9.29',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -25,8 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -65,7 +56,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="imagepanel.html"
-                        title="previous chapter"><code class="docutils literal"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -75,12 +66,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -94,8 +87,8 @@
   <div class="section" id="speciality-wxmplot-displays">
 <h1>Speciality WXMPLOT displays<a class="headerlink" href="#speciality-wxmplot-displays" title="Permalink to this headline">¶</a></h1>
 <p>There are a few custom classes for speciality plots included in
-wxmplot.  Since these build on the <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> and
-<code class="xref py py-class docutils literal"><span class="pre">ImagePanel</span></code> clases, these are described briefly here and an
+wxmplot.  Since these build on the <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> clases, these are described briefly here and an
 example shown for each.</p>
 <div class="section" id="multiplotframe">
 <h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this headline">¶</a></h2>
@@ -104,11 +97,11 @@ example shown for each.</p>
 <em class="property">class </em><code class="descname">MultiPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>rows=1</em>, <em>cols=1</em>, <em>framesize=(600</em>, <em>350)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>A MultiPlotFrame supports a grid of <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> on a single plot frame.</p>
-<p>This supports the standard methods from <code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code>, with each
+<p>A MultiPlotFrame supports a grid of <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> on a single plot frame.</p>
+<p>This supports the standard methods from <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>, with each
 method taking and additional <cite>panel</cite> keyword argument that contains a
 two-element tuple for the address of that panel in the grid of
-<code class="xref py py-class docutils literal"><span class="pre">PlotPanel</span></code> .  The address starts at (0, 0) for the upper left
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> .  The address starts at (0, 0) for the upper left
 plot panel, and counts to left to right and top to bottom.</p>
 <dl class="method">
 <dt id="plot">
@@ -134,10 +127,10 @@ plot panel, and counts to left to right and top to bottom.</p>
 <dd><p>configure plot in specified panel</p>
 </dd></dl>
 
-<p>Many more methods are supported – essentially all of those for <code class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></code>.</p>
+<p>Many more methods are supported – essentially all of those for <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>.</p>
 <div class="section" id="multiplotframe-example">
 <h3>MultiPlotFrame Example<a class="headerlink" href="#multiplotframe-example" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1"># simple example of MPlot</span>
 
@@ -183,15 +176,15 @@ plot panel, and counts to left to right and top to bottom.</p>
 <em class="property">class </em><code class="descname">StackedPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>framesize=(850</em>, <em>450)</em>, <em>panelsize=(550</em>, <em>450)</em>, <em>ratio=3</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This supports two <code class="xref py py-class docutils literal"><span class="pre">PlotPanel`s</span> <span class="pre">stacked</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">one</span> <span class="pre">another,</span>
+<p>This supports two <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel`s</span> <span class="pre">stacked</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">one</span> <span class="pre">another,</span>
 <span class="pre">and</span> <span class="pre">sharing</span> <span class="pre">an</span> <span class="pre">X</span> <span class="pre">axis.</span>&#160; <span class="pre">Since</span> <span class="pre">the</span> <span class="pre">two</span> <span class="pre">plots</span> <span class="pre">are</span> <span class="pre">meant</span> <span class="pre">to</span> <span class="pre">share</span> <span class="pre">axes,</span>
 <span class="pre">there</span> <span class="pre">is</span> <span class="pre">very</span> <span class="pre">little</span> <span class="pre">space</span> <span class="pre">between</span> <span class="pre">the</span> <span class="pre">plots,</span> <span class="pre">so</span> <span class="pre">that</span> <span class="pre">they</span> <span class="pre">share</span> <span class="pre">axes</span>
 <span class="pre">labels.</span>&#160; <span class="pre">Furthermore,</span> <span class="pre">zooming</span> <span class="pre">in</span> <span class="pre">on</span> <span class="pre">either</span> <span class="pre">plot</span> <span class="pre">panel</span> <span class="pre">zooms</span> <span class="pre">into</span> <span class="pre">the</span>
 <span class="pre">corresponding</span> <span class="pre">X</span> <span class="pre">range</span> <span class="pre">for</span> <span class="pre">both</span> <span class="pre">panels.</span> <span class="pre">qThe</span> <span class="pre">`ratio</span></code> parameter sets the
 ratio of the height of the top panel to the height of the bottom
 panel.</p>
-<p><a class="reference internal" href="#StackedPlotFrame" title="StackedPlotFrame"><code class="xref py py-class docutils literal"><span class="pre">StackedPlotFrame</span></code></a> supports most of the methods of
-<code class="xref py py-class docutils literal"><span class="pre">PlotFrame</span></code>, with the specific panel addressed either as
+<p><a class="reference internal" href="#StackedPlotFrame" title="StackedPlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackedPlotFrame</span></code></a> supports most of the methods of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>, with the specific panel addressed either as
 <cite>panel=’top’</cite> or <cite>panel=’bot’</cite>.</p>
 <dl class="method">
 <dt>
@@ -219,7 +212,7 @@ panel.</p>
 
 <div class="section" id="stackedplotframe-example">
 <h3>StackedPlotFrame Example<a class="headerlink" href="#stackedplotframe-example" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1"># Stacked Plot shows two related plots stacked top and bottom that are</span>
 <span class="c1"># expected to share an X axis.</span>
@@ -265,7 +258,7 @@ panel.</p>
 <em class="property">class </em><code class="descname">ImageMatrixFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(900</em>, <em>600)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>An <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageMatrixFrame</span></code></a> supports the simultaneous display of 2
+<p>An <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a> supports the simultaneous display of 2
 related images, such as 2-dimensional data taken at different
 wavelengths or at different sampling times.  The display is presented
 as a 2 x 2 grid, with the individual images displayed along the
@@ -285,10 +278,10 @@ superposition image in the upper right panel.</p>
 <code class="descname">display</code><span class="sig-paren">(</span><em>map1</em>, <em>map2</em>, <em>title=None</em>, <em>name1='Map1'</em>, <em>name2='Map2'</em>, <em>xlabel='x'</em>, <em>ylabel='y'</em>, <em>x=None</em>, <em>y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal"><span class="pre">ImageMatrixFrame</span></code></a></p>
+<p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a></p>
 <div class="section" id="imagematrixframe-example">
 <h3>ImageMatrixFrame Example<a class="headerlink" href="#imagematrixframe-example" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example showing 2 maps</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">wx</span>
@@ -351,7 +344,7 @@ superposition image in the upper right panel.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

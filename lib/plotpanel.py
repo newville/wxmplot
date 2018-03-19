@@ -648,14 +648,13 @@ class PlotPanel(BasePanel):
             try:
                 (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
                 (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
-                dl = max(dl, (x0 - ox0))
-                dt = max(dt, (oy1 - y1))
-                dr = max(dr, (ox1 - x1))
-                db = max(db, (y0 - oy0))
+                dl = min(0.2, max(dl, (x0 - ox0)))
+                dt = min(0.2, max(dt, (oy1 - y1)))
+                dr = min(0.2, max(dr, (ox1 - x1)))
+                db = min(0.2, max(db, (y0 - oy0)))
             except:
                 pass
 
-        # print(" > %.3f %.3f %.3f %.3f " % (dl, dt, dr, db))
         return (l + dl, t + dt, r + dr, b + db)
 
     def autoset_margins(self):
@@ -673,7 +672,6 @@ class PlotPanel(BasePanel):
         if not self.use_dates:
             self.conf.margins = l, t, r, b = self.get_default_margins()
             self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
-
         # Axes positions update
         for ax in self.fig.get_axes():
             try:

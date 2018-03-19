@@ -281,7 +281,7 @@ class PlotConfigFrame(wx.Frame):
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
         slab = wx.StaticText(panel, -1, 'Symbol Size:', size=(-1,-1),style=labstyle)
         ssize = wx.SpinCtrl(panel, -1, "", (-1, -1), (ISPINSIZE, 30))
-        ssize.SetRange(1, 100)
+        ssize.SetRange(1, 1000)
         ssize.SetValue(self.conf.scatter_size)
         ssize.Bind(wx.EVT_SPINCTRL, partial(self.onScatter, item='size'))
 
@@ -747,13 +747,10 @@ class PlotConfigFrame(wx.Frame):
             m.SetValue(ffmt(v))
 
     def onScatter(self, event, item=None):
-        if item is None:
-            return
         conf = self.conf
-        recolor = True
+        axes = self.canvas.figure.get_axes()[0]
         if item == 'size':
             conf.scatter_size = event.GetInt()
-            recolor = False
         elif item == 'scatt_nf':
             self.conf.scatter_normalcolor = hexcolor(event.GetValue())
         elif item == 'scatt_ne':
@@ -763,25 +760,24 @@ class PlotConfigFrame(wx.Frame):
         elif item == 'scatt_se':
             self.conf.scatter_selectedge = hexcolor(event.GetValue())
 
-        if recolor:
-            axes = self.canvas.figure.get_axes()[0]
-            xd, yd = conf.scatter_xdata, conf.scatter_ydata
-            sdat = zip(xd, yd)
-            mask = conf.scatter_mask
-            if mask is  None:
-                axes.scatter(xd, yd,
-                             c=conf.scatter_normalcolor,
-                             edgecolors=conf.scatter_normaledge)
-            else:
-                axes.scatter(xd[np.where(~mask)], yd[np.where(~mask)], 
-                             c=conf.scatter_normalcolor,
-                             edgecolors=conf.scatter_normaledge)
-                axes.scatter(xd[np.where(mask)], yd[np.where(mask)], 
-                             c=conf.scatter_selectcolor,
-                             edgecolors=conf.scatter_selectedge)
-
-
-        self.canvas.draw()
+        axes.cla()
+        xd, yd = conf.scatter_xdata, conf.scatter_ydata
+        sdat = zip(xd, yd)
+        mask = conf.scatter_mask
+        if mask is  None:
+            axes.scatter(xd, yd, s=conf.scatter_size,
+                         c=conf.scatter_normalcolor,
+                         edgecolors=conf.scatter_normaledge)
+        else:
+            axes.scatter(xd[np.where(~mask)], yd[np.where(~mask)],
+                         s=conf.scatter_size,
+                         c=conf.scatter_normalcolor,
+                         edgecolors=conf.scatter_normaledge)
+            axes.scatter(xd[np.where(mask)], yd[np.where(mask)],
+                         s=conf.scatter_size,
+                         c=conf.scatter_selectcolor,
+                         edgecolors=conf.scatter_selectedge)
+        self.conf.relabel(delay_draw=False)
 
     def onText(self, event, item='trace', trace=0):
         if item=='labelsize':

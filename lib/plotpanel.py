@@ -11,7 +11,7 @@ if is_wxPhoenix:
 else:
     wxCursor = wx.StockCursor
 
-from numpy import nonzero, where, ma, nan
+from numpy import nonzero, where, ma, nan, array
 import matplotlib
 from datetime import datetime
 from matplotlib import dates
@@ -419,17 +419,10 @@ class PlotPanel(BasePanel):
         self.conf.set_trace_datarange((min(xdata), max(xdata),
                                        min(ydata), max(ydata)))
 
-        fcols = [to_rgba(self.conf.scatter_normalcolor) for x in xdata]
-        ecols = [self.conf.scatter_normaledge]*len(xdata)
-
-        self.conf.scatter_data = [(x, y) for x, y in zip(xdata, ydata)]
-        self.conf.scatter_size = size
-        self.conf.scatter_coll = CircleCollection(
-            sizes=(size, ), facecolors=fcols, edgecolors=ecols,
-            offsets=self.conf.scatter_data,
-            transOffset= self.axes.transData)
-        self.axes.add_collection(self.conf.scatter_coll)
-
+        self.conf.scatter_xdata = xdata
+        self.conf.scatter_ydata = ydata
+        self.axes.scatter(xdata, ydata, c=self.conf.scatter_normalcolor,
+                          edgecolors=self.conf.scatter_normaledge)
 
         if self.conf.show_grid:
             for i in axes.get_xgridlines()+axes.get_ygridlines():
@@ -453,23 +446,25 @@ class PlotPanel(BasePanel):
 
     def lassoHandler(self, vertices):
         conf = self.conf
-
         if self.conf.plot_type == 'scatter':
-            fcols = conf.scatter_coll.get_facecolors()
-            ecols = conf.scatter_coll.get_edgecolors()
-            sdat = conf.scatter_data
-            mask = inside_poly(vertices,sdat)
+            xd, yd = conf.scatter_xdata, conf.scatter_ydata
+            sdat = zip(xd, yd)
+            oldmask = conf.scatter_mask
+            try:
+                self.axes.scatter(xd[where(oldmask)], yd[where(oldmask)], 
+                                  c=conf.scatter_normalcolor,
+                                  edgecolors=conf.scatter_normaledge)
+            except IndexError:
+                self.axes.scatter(xd, yd,
+                                  c=conf.scatter_normalcolor,
+                                  edgecolors=conf.scatter_normaledge)
+
+            mask = conf.scatter_mask = inside_poly(vertices, sdat)
             pts = nonzero(mask)[0]
-            self.conf.scatter_mask = mask
-            for i in range(len(sdat)):
-                if i in pts:
-                    ecols[i] = to_rgba(conf.scatter_selectedge)
-                    fcols[i] = to_rgba(conf.scatter_selectcolor)
-                    fcols[i][3] = 0.3
-                    ecols[i][3] = 0.8
-                else:
-                    fcols[i] = to_rgba(conf.scatter_normalcolor)
-                    ecols[i] = to_rgba(conf.scatter_normaledge)
+            self.axes.scatter(xd[where(mask)], yd[where(mask)], 
+                              c=conf.scatter_selectcolor,
+                              edgecolors=conf.scatter_selectedge)
+
         else:
             xdata = self.axes.lines[0].get_xdata()
             ydata = self.axes.lines[0].get_ydata()
@@ -484,7 +479,7 @@ class PlotPanel(BasePanel):
         if (self.lasso_callback is not None and
             hasattr(self.lasso_callback , '__call__')):
             self.lasso_callback(data = sdat,
-                                selected = pts, mask=mask)
+                                selected=pts, mask=mask)
 
     def set_xylims(self, limits, axes=None, side='left'):
         "set user-defined limits and apply them"

@@ -747,14 +747,12 @@ class PlotConfigFrame(wx.Frame):
             m.SetValue(ffmt(v))
 
     def onScatter(self, event, item=None):
-        if self.conf.scatter_coll is None or item is None:
+        if item is None:
             return
         conf = self.conf
-        coll = conf.scatter_coll
         recolor = True
         if item == 'size':
             conf.scatter_size = event.GetInt()
-            coll._sizes = (conf.scatter_size,)
             recolor = False
         elif item == 'scatt_nf':
             self.conf.scatter_normalcolor = hexcolor(event.GetValue())
@@ -766,20 +764,23 @@ class PlotConfigFrame(wx.Frame):
             self.conf.scatter_selectedge = hexcolor(event.GetValue())
 
         if recolor:
-            fcols = coll.get_facecolors()
-            ecols = coll.get_edgecolors()
-            try:
-                pts = np.nonzero(self.conf.scatter_mask)[0]
-            except:
-                pts = []
-            for i in range(len(conf.scatter_data)):
-                if i in pts:
-                    ecols[i] = to_rgba(conf.scatter_selectedge)
-                    fcols[i] = to_rgba(conf.scatter_selectcolor)
-                    fcols[i][3] = 0.5
-                else:
-                    fcols[i] = to_rgba(conf.scatter_normalcolor)
-                    ecols[i] = to_rgba(conf.scatter_normaledge)
+            axes = self.canvas.figure.get_axes()[0]
+            xd, yd = conf.scatter_xdata, conf.scatter_ydata
+            sdat = zip(xd, yd)
+            mask = conf.scatter_mask
+            if mask is  None:
+                axes.scatter(xd, yd,
+                             c=conf.scatter_normalcolor,
+                             edgecolors=conf.scatter_normaledge)
+            else:
+                axes.scatter(xd[np.where(~mask)], yd[np.where(~mask)], 
+                             c=conf.scatter_normalcolor,
+                             edgecolors=conf.scatter_normaledge)
+                axes.scatter(xd[np.where(mask)], yd[np.where(mask)], 
+                             c=conf.scatter_selectcolor,
+                             edgecolors=conf.scatter_selectedge)
+
+
         self.canvas.draw()
 
     def onText(self, event, item='trace', trace=0):

@@ -11,6 +11,7 @@ if is_wxPhoenix:
 else:
     wxCursor = wx.StockCursor
 
+from math import log10
 from numpy import nonzero, where, ma, nan, array
 import matplotlib
 from datetime import datetime
@@ -30,32 +31,47 @@ from .utils import inside_poly
 to_rgba = colorConverter.to_rgba
 
 
-def gformat(val, length=14):
-    """format a number with '%g'-like format, except that
-    the return will be length ``length`` (default=12)
-    and have at least length-6 significant digits
+def gformat(val, length=11):
+    """Format a number with '%g'-like format, except that
+
+        a) the length of the output string will be the requested length.
+        b) positive numbers will have a leading blank.
+        b) the precision will be as high as possible.
+        c) trailing zeros will not be trimmed.
+
+    The precision will typically be length-7.
+
+    Arguments
+    ---------
+    val       value to be formatted
+    length    length of output string
+
+    Returns
+    -------
+    string of specified length.
+
+    Notes
+    ------
+     Positive values will have leading blank.
+
     """
+    try:
+        expon = int(log10(abs(val)))
+    except (OverflowError, ValueError):
+        expon = 0
     length = max(length, 7)
-    fmt = '{: .%ig}' % (length-6)
-    if isinstance(val, int):
-        out = ('{: .%ig}' % (length-2)).format(val)
-        if len(out) > length:
-            out = fmt.format(val)
-    else:
-        out = fmt.format(val)
-    if len(out) < length:
-        if 'e' in out:
-            ie = out.find('e')
-            if '.' not in out[:ie]:
-                out = out[:ie] + '.' + out[ie:]
-            out = out.replace('e', '0'*(length-len(out))+'e')
-        else:
-            fmt = '{: .%ig}' % (length-1)
-            out = fmt.format(val)[:length]
-            if len(out) < length:
-                pad = '0' if '.' in  out else ' '
-                out += pad*(length-len(out))
-    return out
+    form = 'e'
+    prec = length - 7
+    if abs(expon) > 99:
+        prec -= 1
+    elif ((expon > 0 and expon < (prec+4)) or
+          (expon <= 0 and -expon < (prec-1))):
+        form = 'f'
+        prec += 4
+        if expon > 0:
+            prec -= expon
+    fmt = '{0: %i.%i%s}' % (length, prec, form)
+    return fmt.format(val)
 
 class PlotPanel(BasePanel):
     """

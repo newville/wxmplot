@@ -383,8 +383,8 @@ class BasePanel(wx.Panel):
             dtick = abs(ticks[1] - ticks[0])
         except:
             pass
-        if   dtick > 29999:
-            fmt, v = ('%1.5g', '%1.6g')
+        if dtick > 89999:
+            fmt, v = ('%.1e',  '%1.6g')
         elif dtick > 1.99:
             fmt, v = ('%1.0f', '%1.2f')
         elif dtick > 0.099:

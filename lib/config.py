@@ -38,10 +38,7 @@ except ImportError:
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
-try:
-    from collections import OrderedDict
-except ImportError:
-    from .ordereddict import OrderedDict
+from collections import OrderedDict
 
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()

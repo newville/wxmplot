@@ -12,7 +12,7 @@ else:
     wxCursor = wx.StockCursor
 
 from math import log10
-from numpy import nonzero, where, ma, nan, array
+from numpy import nonzero, where
 import matplotlib
 from datetime import datetime
 from matplotlib import dates
@@ -26,52 +26,10 @@ from matplotlib.collections import CircleCollection
 from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
 from .config import PlotConfig
-from .utils import inside_poly
+from .utils import inside_poly, fix_filename, gformat
 
 to_rgba = colorConverter.to_rgba
 
-
-def gformat(val, length=11):
-    """Format a number with '%g'-like format, except that
-
-        a) the length of the output string will be the requested length.
-        b) positive numbers will have a leading blank.
-        b) the precision will be as high as possible.
-        c) trailing zeros will not be trimmed.
-
-    The precision will typically be length-7.
-
-    Arguments
-    ---------
-    val       value to be formatted
-    length    length of output string
-
-    Returns
-    -------
-    string of specified length.
-
-    Notes
-    ------
-     Positive values will have leading blank.
-
-    """
-    try:
-        expon = int(log10(abs(val)))
-    except (OverflowError, ValueError):
-        expon = 0
-    length = max(length, 7)
-    form = 'e'
-    prec = length - 7
-    if abs(expon) > 99:
-        prec -= 1
-    elif ((expon > 0 and expon < (prec+4)) or
-          (expon <= 0 and -expon < (prec-1))):
-        form = 'f'
-        prec += 4
-        if expon > 0:
-            prec -= expon
-    fmt = '{0: %i.%i%s}' % (length, prec, form)
-    return fmt.format(val)
 
 class PlotPanel(BasePanel):
     """
@@ -737,115 +695,6 @@ class PlotPanel(BasePanel):
                 legline.set_alpha(0.50)
                 legtext.set_alpha(0.50)
 
-
-    def onExport(self, event=None, **kws):
-        ofile  = ''
-        title = 'unknown plot'
-
-        if self.conf.title is not None:
-            title = ofile = self.conf.title.strip()
-        if len(ofile) > 64:
-            ofile = ofile[:63].strip()
-        if len(ofile) < 1:
-            ofile = 'plot'
-
-        for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
-            ofile = ofile.replace(c, '_')
-
-        while '__' in ofile:
-            ofile = ofile.replace('__', '_')
-
-        ofile = ofile + '.dat'
-
-        dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
-                            defaultDir = os.getcwd(),
-                            defaultFile=ofile,
-                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            self.writeASCIIFile(dlg.GetPath(), title=title)
-
-    def writeASCIIFile(self, fname, title='unknown plot'):
-        buff = ["# X,Y Data for %s" % title,
-                "#------------", "#     X     Y"]
-        lines= self.axes.get_lines()
-        x0 = lines[0].get_xaxis()
-        y0 = lines[0].get_yaxis()
-        lab0 = lines[0].get_label().strip()
-        if len(lab0) < 1: lab0 =  'Y'
-        buff.append("#   X    %s" % lab0)
-        outa = [x0, y0]
-        npts = len(x0)
-        if len(lines)  > 1:
-            for ix, line in enumerate(lines[1:]):
-                lab = ['#   ', '       ',
-                       line.get_label().strip()]
-                x = line.get_xdata()
-                y = line.get_ydata()
-                npts = max(npts, len(y))
-                if not all(x==x0):
-                    lab0[1]  = ' X%i ' % (ix+2)
-                    out.append(x)
-                out.append(line.get_ydata())
-
-        fout = open(fname, 'w')
-        fout.write("%s\n" % "\n".join(buff))
-        fout.close()
-
-        orig_dir = os.path.abspath(os.curdir)
-        thisdir = os.getcwd()
-        file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
-        dlg = wx.FileDialog(self,
-                            message='Export Plot Data to ASCII...',
-                            defaultDir=thisdir,
-                            defaultFile=ofile,
-                            wildcard=file_choices,
-                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            self.writeASCIIFile(dlg.GetPath(), title=title)
-        os.chdir(orig_dir)
-
-    def writeASCIIFile(self, fname, title='unknown plot'):
-        "save plot data to external file"
-
-        buff = ["# Plot Data for %s" % title, "#------"]
-
-        out = []
-        labs = []
-        itrace = 0
-        for ax in self.fig.get_axes():
-            for line in ax.lines:
-                itrace += 1
-                x = line.get_xdata()
-                y = line.get_ydata()
-                ylab = line.get_label()
-
-                if len(ylab) < 1: ylab = ' Y%i' % itrace
-                if len(ylab) < 4: ylab = ' %s%s' % (' '*4, lab)
-                for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
-                    ylab = ylab.replace(c, '_')
-
-                pad = max(1, 13-len(ylab))
-                lab = '     X%i   %s%s  ' % (itrace, ' '*pad, ylab)
-                out.extend([x, y])
-                labs.append(lab)
-        buff.append('# %s ' % (' '.join(labs)))
-
-        npts = [len(a) for a in out]
-        for i in range(max(npts)):
-            oline = []
-            for a in out:
-                d = nan
-                if i < len(a):  d = a[i]
-                oline.append(gformat(d))
-            buff.append(' '.join(oline))
-
-        if itrace > 0:
-            fout = open(fname, 'w')
-            fout.write("%s\n" % "\n".join(buff))
-            fout.close()
-            self.write_message("Exported data to '%s'" % fname, panel=0)
 
     ####
     ## GUI events

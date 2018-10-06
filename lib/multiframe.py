@@ -5,8 +5,7 @@
 
 import wx
 import matplotlib
-
-from .utils import Closure
+from functools import partial
 
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
@@ -36,7 +35,7 @@ class MultiPlotFrame(BaseFrame):
         if panelopts is not None:
             self.panelopts.update(panelopts)
 
-        self.current_panel = (0,0)
+        self.current_panel = (0, 0)
         self.BuildFrame()
 
     def set_panel(self,ix,iy):
@@ -124,7 +123,6 @@ class MultiPlotFrame(BaseFrame):
         sfont.SetPointSize(10)
         sbar.SetFont(sfont)
 
-
         sizer = wx.GridBagSizer(3, 3)
 
         for i in range(self.rows):
@@ -135,8 +133,8 @@ class MultiPlotFrame(BaseFrame):
                 panel = self.panels[(i,j)]
 
                 sizer.Add(panel,(i,j),(1,1),flag=wx.EXPAND|wx.ALIGN_CENTER)
-                panel.report_leftdown = Closure(self.report_leftdown,
-                                               panelkey=(i,j))
+                panel.report_leftdown = partial(self.report_leftdown,
+                                                panelkey=(i,j))
 
         self.panel = self.panels[(0,0)]
         for i in range(self.rows):

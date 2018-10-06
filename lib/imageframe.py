@@ -23,7 +23,7 @@ from .imageconf import ColorMap_List, Interp_List
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
-from .utils import LabelEntry, MenuItem, pack
+from .utils import LabelEntry, MenuItem, pack, gformat
 from .contourdialog import ContourDialog
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
@@ -333,13 +333,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 """
 
-
-    def __init__(self, parent=None, size=None,
+    def __init__(self, parent=None, size=(700, 525),
                  lasso_callback=None, mode='intensity',
                  show_xsections=False, cursor_labels=None,
                  output_title='Image', subtitles=None,
-                 user_menus=None, **kws):
-        if size is None: size = (700, 525)
+                 user_menus=None, title='Image Display Frame', **kws):
+
         self.lasso_callback = lasso_callback
         self.user_menus = user_menus
         self.cursor_menulabels =  {}
@@ -347,13 +346,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if cursor_labels is not None:
             self.cursor_menulabels.update(cursor_labels)
 
-        BaseFrame.__init__(self, parent=parent,
-                           title  = 'Image Display Frame',
-                           output_title=output_title,
-                           size=size, **kws)
+        BaseFrame.__init__(self, parent=parent, title=title,
+                           output_title=output_title, size=size, **kws)
 
         self.cmap_panels = {}
-
         self.subtitles = {}
         self.config_mode = None
         if subtitles is not None:
@@ -569,10 +565,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def onCursorMode(self, event=None, mode='zoom'):
         self.panel.cursor_mode = mode
-        #if wid == self.menuIDs.CUR_PROF:
-        #    self.panel.cursor_mode = 'profile'
-        #elif wid == self.menuIDs.CUR_LASSO:
-        #    self.panel.cursor_mode = 'lasso'
 
     def onProject(self, event=None, mode='y'):
         wid = event.GetId()
@@ -820,7 +812,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         """save color table image"""
         file_choices = 'PNG (*.png)|*.png'
         ofile = 'Colormap.png'
-
         dlg = wx.FileDialog(self, message='Save Colormap as...',
                             defaultDir=os.getcwd(),
                             defaultFile=ofile,
@@ -835,3 +826,38 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if self.panel is not None:
             self.panel.save_figure(event=event,
                                    transparent=transparent, dpi=dpi)
+
+
+
+    def ExportTextFile(self, fname, title='unknown map'):
+        buff = ["# Map Data for %s" % title,
+                "#-------------------------------------"]
+        data = self.panel.conf.data
+        narr = 1
+        if len(data.shape) == 3:
+            ny, nx, narr = data.shape
+            label = ['  Intensity%i  ' % (i+1) for i in range(narr)]
+            buff.append("#   Y       X      %s" % (' '.join(label)))
+        else:
+            ny, nx = data.shape
+            buff.append("#   Y       X      Intensity")
+
+        xdat = np.arange(nx)
+        ydat = np.arange(ny)
+        if self.panel.xdata is not None:
+            xdat = self.panel.xdata
+        if self.panel.ydata is not None:
+            ydat = self.panel.ydata
+
+        for iy in range(ny):
+            for ix in range(nx):
+                darr = [ydat[iy], xdat[ix]]
+                if narr == 1:
+                    darr.append(data[iy, ix])
+                else:
+                    darr.extend(data[iy, ix])
+                buff.append("  ".join([gformat(arr, 13) for arr in darr]))
+        buff.append("")
+        with open(fname, 'w') as fout:
+            fout.write("\n".join(buff))
+        fout.close()

@@ -17,7 +17,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig
 from .basepanel import BasePanel
-from .utils import inside_poly, gformat
+from .utils import inside_poly
 
 class ImagePanel(BasePanel):
     """
@@ -284,64 +284,6 @@ class ImagePanel(BasePanel):
     ####
     ## GUI events, overriding BasePanel components
     ####
-    def onExport(self, event=None):
-        ofile  = ''
-        title = 'unknown map'
-        if self.conf.title is not None:
-            title = ofile = self.conf.title.strip()
-        if len(ofile) > 64:
-            ofile = ofile[:63].strip()
-        if len(ofile) < 1:
-            ofile = 'Image'
-
-        for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
-            ofile = ofile.replace(c, '_')
-
-        while '__' in ofile:
-            ofile = ofile.replace('__', '_')
-
-        ofile = ofile + '.dat'
-        orig_dir = os.path.abspath(os.curdir)
-        file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
-        dlg = wx.FileDialog(self, message='Export Map Data to ASCII...',
-                            defaultDir = os.getcwd(),
-                            defaultFile=ofile,
-                            wildcard=file_choices,
-                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            self.writeASCIIFile(dlg.GetPath(), title=title)
-
-    def writeASCIIFile(self, fname, title='unknown map'):
-        buff = ["# Map Data for %s" % title,
-                "#-------------------------------------"]
-        print( " write ASCII ", self.conf.data.shape)
-        if len(self.conf.data.shape) == 3:
-            ny, nx, narr = self.conf.data.shape
-            label = ['Intensity%i' % (i+1) for i in range(narr)]
-            buff.append("#   Y   X   %s" % (' '.join(label)))
-        else:
-            ny, nx = self.conf.data.shape
-            buff.append("#   Y   X   Intensity")
-
-        xdat = np.arange(nx)
-        ydat = np.arange(ny)
-        if self.xdata is not None:
-            xdat = self.xdata
-        if self.ydata is not None:
-            ydat = self.ydata
-
-
-        for iy in range(ny):
-            for ix in range(nx):
-                d = [ydat[iy], xdat[ix]]
-                d.extend(self.conf.data[iy, ix])
-                buff.append(" ".join([gformat(a, 12) for a in d]))
-
-        fout = open(fname, 'w')
-        fout.write("%s\n" % "\n".join(buff))
-        fout.close()
-
     def calc_indices(self, shape):
         """calculates and stores the set of indices
         ix=[0, nx-1], iy=[0, ny-1] for data of shape (nx, ny)"""

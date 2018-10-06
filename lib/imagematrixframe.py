@@ -35,7 +35,7 @@ from .imagepanel import ImagePanel
 from .imageframe import ColorMapPanel, AutoContrastDialog
 from .imageconf import ColorMap_List, Interp_List
 from .colors import rgb2hex
-from .utils import LabelEntry, MenuItem, pack
+from .utils import LabelEntry, MenuItem, pack, fix_filename, gformat
 
 COLORMAPS = ('blue', 'red', 'green', 'magenta', 'cyan', 'yellow')
 ###, 'Reds', 'Greens', 'Blues')
@@ -214,7 +214,6 @@ class ImageMatrixFrame(BaseFrame):
         MenuItem(self, mcont, 'Set Auto-Contrast Level',
                  'Set auto-contrast scale',
                  self.onContrastConfig)
-
 
         # smoothing
         msmoo = wx.Menu()
@@ -413,6 +412,7 @@ class ImageMatrixFrame(BaseFrame):
 
         self.set_contrast_levels()
         self.dualimage_needs_update = True
+        self.panel = self.img1_panel
 
     def update_scatterplot(self, x, y):
         self.zoom_map1 = x
@@ -559,3 +559,30 @@ class ImageMatrixFrame(BaseFrame):
         else:
             self.dual_panel.display(img)
         self.sel_mask = None
+
+
+    def ExportTextFile(self, fname, title='unknown map'):
+        buff = ["# Correlation Map Data for %s" % title,
+                "#-------------------------------------"]
+
+        labels = ['  Y', '  X', self.name1, self.name2]
+        labels = [(' '*(11-len(l)) + l + ' ') for l in labels]
+
+        buff.append("#%s" % ('  '.join(labels)))
+
+        ny, nx = self.map1.shape
+        xdat = np.arange(nx)
+        ydat = np.arange(ny)
+        if self.xdata is not None:
+            xdat = self.xdata
+        if self.ydata is not None:
+            ydat = self.ydata
+
+        for iy in range(ny):
+            for ix in range(nx):
+                d = [ydat[iy], xdat[ix], self.map1[iy, ix], self.map2[iy, ix]]
+                buff.append("  ".join([gformat(a, 12) for a in d]))
+
+        fout = open(fname, 'w')
+        fout.write("%s\n" % "\n".join(buff))
+        fout.close()

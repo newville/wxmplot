@@ -828,20 +828,21 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                    transparent=transparent, dpi=dpi)
 
 
-
     def ExportTextFile(self, fname, title='unknown map'):
         buff = ["# Map Data for %s" % title,
                 "#-------------------------------------"]
         data = self.panel.conf.data
         narr = 1
+        labels = [' Y', ' X']
         if len(data.shape) == 3:
             ny, nx, narr = data.shape
-            label = ['  Intensity%i  ' % (i+1) for i in range(narr)]
-            buff.append("#   Y       X      %s" % (' '.join(label)))
+            labels.extend(['Map%d' % (i+1) for i in range(narr)])
         else:
             ny, nx = data.shape
-            buff.append("#   Y       X      Intensity")
+            labels.append('Map')
 
+        labels = [(' '*(11-len(l)) + l + ' ') for l in labels]
+        buff.append("#%s" % ('  '.join(labels)))
         xdat = np.arange(nx)
         ydat = np.arange(ny)
         if self.panel.xdata is not None:
@@ -856,7 +857,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     darr.append(data[iy, ix])
                 else:
                     darr.extend(data[iy, ix])
-                buff.append("  ".join([gformat(arr, 13) for arr in darr]))
+                buff.append("  ".join([gformat(arr, 12) for arr in darr]))
         buff.append("")
         with open(fname, 'w') as fout:
             fout.write("\n".join(buff))

@@ -263,12 +263,14 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             return
 
         try:
-            title = self.GetTitle()
+            title = self.panel.conf.title
         except AttributeError:
             title = None
 
         if title is None:
             title = self.output_title
+        if title is None:
+            title = self.GetTitle()
 
         title = title.strip()
 

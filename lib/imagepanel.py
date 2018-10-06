@@ -17,7 +17,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig
 from .basepanel import BasePanel
-from .utils import inside_poly
+from .utils import inside_poly, gformat
 
 class ImagePanel(BasePanel):
     """
@@ -314,17 +314,29 @@ class ImagePanel(BasePanel):
 
     def writeASCIIFile(self, fname, title='unknown map'):
         buff = ["# Map Data for %s" % title,
-                "#------", "#   Y   X   Intensity"]
-        ny, nx = self.conf.data.shape
+                "#-------------------------------------"]
+        print( " write ASCII ", self.conf.data.shape)
+        if len(self.conf.data.shape) == 3:
+            ny, nx, narr = self.conf.data.shape
+            label = ['Intensity%i' % (i+1) for i in range(narr)]
+            buff.append("#   Y   X   %s" % (' '.join(label)))
+        else:
+            ny, nx = self.conf.data.shape
+            buff.append("#   Y   X   Intensity")
+
         xdat = np.arange(nx)
         ydat = np.arange(ny)
-        if self.xdata is not None: xdat = self.xdata
-        if self.ydata is not None: ydat = self.ydata
+        if self.xdata is not None:
+            xdat = self.xdata
+        if self.ydata is not None:
+            ydat = self.ydata
+
 
         for iy in range(ny):
             for ix in range(nx):
-                buff.append(" %.10g  %.10g  %.10g" % (
-                    ydat[iy], xdat[ix], self.conf.data[iy, ix]))
+                d = [ydat[iy], xdat[ix]]
+                d.extend(self.conf.data[iy, ix])
+                buff.append(" ".join([gformat(a, 12) for a in d]))
 
         fout = open(fname, 'w')
         fout.write("%s\n" % "\n".join(buff))

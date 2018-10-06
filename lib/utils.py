@@ -5,8 +5,51 @@ import wx
 is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 
 import sys
+from math import log10
 import matplotlib
 from matplotlib.path import Path
+
+def gformat(val, length=11):
+    """Format a number with '%g'-like format, except that
+
+        a) the length of the output string will be the requested length.
+        b) positive numbers will have a leading blank.
+        b) the precision will be as high as possible.
+        c) trailing zeros will not be trimmed.
+
+    The precision will typically be length-7.
+
+    Arguments
+    ---------
+    val       value to be formatted
+    length    length of output string
+
+    Returns
+    -------
+    string of specified length.
+
+    Notes
+    ------
+     Positive values will have leading blank.
+
+    """
+    try:
+        expon = int(log10(abs(val)))
+    except (OverflowError, ValueError):
+        expon = 0
+    length = max(length, 7)
+    form = 'e'
+    prec = length - 7
+    if abs(expon) > 99:
+        prec -= 1
+    elif ((expon > 0 and expon < (prec+4)) or
+          (expon <= 0 and -expon < (prec-1))):
+        form = 'f'
+        prec += 4
+        if expon > 0:
+            prec -= expon
+    fmt = '{0: %i.%i%s}' % (length, prec, form)
+    return fmt.format(val)
 
 class Closure:
     """A very simple callback class to emulate a closure (reference to

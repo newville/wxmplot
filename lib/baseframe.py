@@ -10,11 +10,7 @@ import wx
 import matplotlib
 from functools import partial
 from .plotpanel import PlotPanel
-from .utils import MenuItem
-
-class Menu_IDs:
-    def __init__(self):
-        pass
+from .utils import MenuItem, fix_filename
 
 class BaseFrame(wx.Frame):
     """
@@ -151,15 +147,13 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mfile, "&Copy\tCtrl+C",
                  "Copy Plot Image to Clipboard",
                  self.Copy_to_Clipboard)
-
-        MenuItem(self, mfile, "Export Data",
-                "Export Data to ASCII Column file",
-                self.onExport)
+        MenuItem(self, mfile, "Export Data\tCtrl+D",
+                 "Export Data to Text File",
+                 self.onExport)
 
         if extras is not None:
             for text, helptext, callback in extras:
                 MenuItem(self, mfile, text, helptext, callback)
-
 
         mfile.AppendSeparator()
         MenuItem(self, mfile, 'Page Setup...', 'Printer Setup',
@@ -257,7 +251,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     def BindMenuToPanel(self, panel=None):
         pass
 
-
     def onAbout(self, event=None):
         dlg = wx.MessageDialog(self, self.about_msg, "About WXMPlot",
                                wx.OK | wx.ICON_INFORMATION)
@@ -265,14 +258,33 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         dlg.Destroy()
 
     def onExport(self, event=None):
-        if self.panel is not None:
-            self.panel.onExport(event=event)
-        else:
-            dlg = wx.MessageDialog(self, "Export Data not available",
-                                   "Export Data to ASCII",
-                                   wx.OK | wx.ICON_INFORMATION)
-            dlg.ShowModal()
-            dlg.Destroy()
+        if (self.panel is None or
+            not callable(getattr(self, 'ExportTextFile', None))):
+            return
+
+        try:
+            title = self.GetTitle()
+        except AttributeError:
+            title = None
+
+        if title is None:
+            title = self.output_title
+
+        title = title.strip()
+
+        fname = fix_filename(title, default='plot') + '.dat'
+
+        origdir = os.getcwd()
+        file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
+        dlg = wx.FileDialog(self, message='Export Data to Text File',
+                            defaultDir=os.getcwd(),
+                            defaultFile=fname,
+                            wildcard=file_choices,
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.ExportTextFile(dlg.GetPath(), title=title)
+        os.chdir(origdir)
 
     def onHelp(self, event=None):
         dlg = wx.MessageDialog(self, self.help_msg, "WXMPlot Quick Reference",
@@ -282,7 +294,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def onExit(self, event=None):
         try:
-            if hasattr(self.exit_callback, '__call__'):
+            if callable(self.exit_callback):
                 self.exit_callback()
         except:
             pass

@@ -19,7 +19,7 @@ from matplotlib.font_manager import fontManager, FontProperties
 from matplotlib.colors import colorConverter
 to_rgba = colorConverter.to_rgba
 
-from .utils import Closure, LabelEntry
+from .utils import LabelEntry
 from .config import PlotConfig
 from .colors import hexcolor, hex2rgb
 

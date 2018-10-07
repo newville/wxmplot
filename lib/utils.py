@@ -81,8 +81,7 @@ def MenuItem(parent, menu, label='', longtext='', action=None, default=True,
     """Add Item to a Menu, with action
     m = Menu(parent, menu, label, longtext, action=None)
     """
-    wid = wx.NewId()
-    item = menu.Append(wid, label, longtext, **kws)
+    item = menu.Append(-1, label, longtext, **kws)
     kind = item.GetKind()
     if kind == wx.ITEM_CHECK:
         item.Check(default)

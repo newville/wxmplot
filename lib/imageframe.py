@@ -19,7 +19,7 @@ from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
-from .imageconf import ColorMap_List, Interp_List
+from .imageconf import ColorMap_List, Interp_List, Contrast_List
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
@@ -34,6 +34,8 @@ CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to select like for profile')}
 
 RGB_COLORS = ('red', 'green', 'blue')
+
+
 
 class ColorMapPanel(wx.Panel):
     """color map interface"""
@@ -285,22 +287,34 @@ class ContrastPanel(wx.Panel):
         title = wx.StaticText(self, label='Auto-Contrast (%):', size=(120, -1))
         sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
 
-        self.contrast_choices = ['None', '1.0', '0.5', '0.2', '0.1',
-                                 '0.05', '0.02', '0.01', '0.005', '0.002',
-                                 '0.001']
-        self.choice = wx.Choice(self,  size=(100, -1),
-                            choices=self.contrast_choices)
+        self.choice = wx.Choice(self, size=(100, -1), choices=Contrast_List)
         self.choice.Bind(wx.EVT_CHOICE,  self.onChoice)
         self.choice.SetSelection(default)
         sizer.Add(self.choice, (0, 1), (1, 1), labstyle, 2)
         pack(self, sizer)
+
+    def set(self, choice=None):
+        if choice in Contrast_List:
+            self.SetStringSelection(choice)
+
+    def advance(self):
+        clevel = 1 + self.choice.GetSelection()
+        if clevel >= len(Contrast_List):
+            clevel = 0
+        self.choice.SetSelection(clevel)
+        clevel = Contrast_List[clevel]
+        if clevel == 'None':
+            clevel = 0
+        else:
+            clevel = float(clevel)
+        self.callback(contrast_level=clevel)
 
 
     def onChoice(self, event=None):
         if callable(self.callback):
             clevel = event.GetString()
             if clevel == 'None':
-                clevel = None
+                clevel = 0
             else:
                 clevel = float(clevel)
             self.callback(contrast_level=clevel)
@@ -496,6 +510,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onTriColorBG, kind=wx.ITEM_CHECK)
 
         self.optional_menus.append((m, True))
+
+        MenuItem(self, mview, 'Contrast Cycle+\tCtrl+E',
+                 'Cycle Through Contrast Choices',
+                 self.cycle_contrast)
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
@@ -735,6 +753,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imax_val.SetValue('%.4g' % imax)
                 self.cmap_panels[ix].imin_val.Enable()
                 self.cmap_panels[ix].imax_val.Enable()
+
+    def cycle_contrast(self, event=None):
+        self.contrast_panel.advance()
 
     def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range

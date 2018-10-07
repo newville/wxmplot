@@ -215,6 +215,10 @@ class ImageMatrixFrame(BaseFrame):
                  "Zoom out to full data range",
                  self.unzoom)
 
+        MenuItem(self, mview, 'Contrast Cycle+\tCtrl+E',
+                 'Cycle Through Contrast Choices',
+                 self.cycle_contrast)
+
         mbar = wx.MenuBar()
         mbar.Append(mfile, 'File')
         mbar.Append(mview, 'Image')
@@ -403,6 +407,9 @@ class ImageMatrixFrame(BaseFrame):
                                     ymin=ymin, ymax=ymax,
                                     xlabel=self.name1, ylabel=self.name2,
                                     callback=self.on_corplot_lasso)
+
+    def cycle_contrast(self, event=None):
+        self.contrast_panel.advance()
 
     def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range

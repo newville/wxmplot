@@ -40,8 +40,7 @@ class ImageConfig:
         self.flip_ud = False
         self.flip_lr = False
         self.rot  = False
-        self.auto_contrast = False
-        self.auto_contrast_level = 1.0
+        self.auto_contrast = 0
         self.datalimits = [None, None, None, None]
         self.cmap_lo = [0, 0, 0]
         self.cmap_range = 1000

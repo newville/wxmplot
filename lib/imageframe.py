@@ -736,7 +736,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imin_val.Enable()
                 self.cmap_panels[ix].imax_val.Enable()
 
-    def set_contrast_levels(self, contrast_level=None):
+    def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.auto_contrast
         """

@@ -32,7 +32,7 @@ except ImportError:
 from .baseframe  import BaseFrame
 from .plotpanel  import PlotPanel
 from .imagepanel import ImagePanel
-from .imageframe import ColorMapPanel, AutoContrastDialog
+from .imageframe import ColorMapPanel, InterpPanel, ContrastPanel
 from .imageconf import ColorMap_List, Interp_List
 from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack, fix_filename, gformat
@@ -126,6 +126,15 @@ class ImageMatrixFrame(BaseFrame):
             csizer.Add(wx.StaticLine(conf_panel, size=(200, 2),
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
+
+        self.interp_panel = InterpPanel(self.config_panel,
+                                        callback=self.onInterp)
+        self.contrast_panel = ContrastPanel(self.config_panel,
+                                            callback=self.set_contrast_levels)
+
+        csizer.Add(self.interp_panel, 0, lsty, 2)
+        csizer.Add(self.contrast_panel, 0, lsty, 2)
+
         cust = self.CustomConfig(conf_panel)
         if cust is not None:
             sizer.Add(cust, 0, lsty, 1)
@@ -206,27 +215,9 @@ class ImageMatrixFrame(BaseFrame):
                  "Zoom out to full data range",
                  self.unzoom)
 
-        mcont =  wx.Menu()
-        MenuItem(self, mcont, 'Toggle Contrast Enhancement\tCtrl+E',
-                 'Toggle contrast between auto-scale and full-scale',
-                 self.onEnhanceContrast, kind=wx.ITEM_CHECK)
-
-        MenuItem(self, mcont, 'Set Auto-Contrast Level',
-                 'Set auto-contrast scale',
-                 self.onContrastConfig)
-
-        # smoothing
-        msmoo = wx.Menu()
-        for itype in Interp_List:
-            wid = wx.NewId()
-            msmoo.AppendRadioItem(wid, itype, itype)
-            self.Bind(wx.EVT_MENU, partial(self.onInterp, name=itype), id=wid)
-
         mbar = wx.MenuBar()
         mbar.Append(mfile, 'File')
         mbar.Append(mview, 'Image')
-        mbar.Append(mcont, 'Contrast')
-        mbar.Append(msmoo, 'Smoothing')
 
         self.SetMenuBar(mbar)
         self.Bind(wx.EVT_CLOSE,self.onExit)
@@ -319,24 +310,6 @@ class ImageMatrixFrame(BaseFrame):
     def onExit(self, event=None):
         self.dualimage_timer.Stop()
         self.Destroy()
-
-    def onEnhanceContrast(self, event=None):
-        """change image contrast, using scikit-image exposure routines"""
-        for ipanel in self.imgpanels:
-            ipanel.conf.auto_contrast = event.IsChecked()
-            ipanel.redraw()
-        self.set_contrast_levels()
-
-
-    def onContrastConfig(self, event=None):
-        dlg = AutoContrastDialog(parent=self, conf=self.img1_panel.conf)
-        dlg.CenterOnScreen()
-        val = dlg.ShowModal()
-        if val == wx.ID_OK:
-            for ipanel in self.imgpanels:
-                ipanel.conf.auto_contrast_level = self.img1_panel.conf.auto_contrast_level
-        dlg.Destroy()
-        self.set_contrast_levels()
 
     def report_leftdown(self,event=None, name=''):
         if event is None:
@@ -431,7 +404,7 @@ class ImageMatrixFrame(BaseFrame):
                                     xlabel=self.name1, ylabel=self.name2,
                                     callback=self.on_corplot_lasso)
 
-    def set_contrast_levels(self):
+    def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.auto_contrast
         """
@@ -439,14 +412,16 @@ class ImageMatrixFrame(BaseFrame):
                                          (self.img1_panel, self.img2_panel)):
             conf = img_panel.conf
             img  = img_panel.conf.data
-            enhance = conf.auto_contrast
-            clevel = conf.auto_contrast_level
+            if contrast_level is None:
+                contrast_level = 0
+            conf.auto_contrast = contrast_level
+            clevels = [contrast_level, 100.0-contrast_level]
+
             jmin = imin = img.min()
             jmax = imax = img.max()
             cmap_panel.imin_val.SetValue('%.4g' % imin)
             cmap_panel.imax_val.SetValue('%.4g' % imax)
-            if enhance:
-                jmin, jmax = np.percentile(img, [clevel, 100.0-clevel])
+            jmin, jmax = np.percentile(img, clevels)
 
             conf.int_lo[0]  = imin
             conf.int_hi[0]  = imax

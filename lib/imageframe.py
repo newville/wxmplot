@@ -309,6 +309,18 @@ class ContrastPanel(wx.Panel):
             clevel = float(clevel)
         self.callback(contrast_level=clevel)
 
+    def retreat(self):
+        clevel = -1 + self.choice.GetSelection()
+        if clevel < 0:
+            clevel = len(Contrast_List) - 1
+        self.choice.SetSelection(clevel)
+        clevel = Contrast_List[clevel]
+        if clevel == 'None':
+            clevel = 0
+        else:
+            clevel = float(clevel)
+        self.callback(contrast_level=clevel)
+
 
     def onChoice(self, event=None):
         if callable(self.callback):
@@ -511,9 +523,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.optional_menus.append((m, True))
 
-        MenuItem(self, mview, 'Contrast Cycle+\tCtrl+E',
+        MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
                  'Cycle Through Contrast Choices',
                  self.cycle_contrast)
+        MenuItem(self, mview, 'Reduce Contrast Cycle\tCtrl+-',
+                 'Cycle Through Contrast Choices',
+                 partial(self.cycle_contrast, dir='back'))
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
@@ -754,8 +769,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imin_val.Enable()
                 self.cmap_panels[ix].imax_val.Enable()
 
-    def cycle_contrast(self, event=None):
-        self.contrast_panel.advance()
+    def cycle_contrast(self, event=None, dir='fore'):
+        if dir.startswith('f'):
+            self.contrast_panel.advance()
+        else:
+            self.contrast_panel.retreat()
 
     def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range

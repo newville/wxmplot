@@ -22,6 +22,9 @@ for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
         ColorMap_List.append(cm)
 
 
+Contrast_List = ['None', '1.0', '0.5', '0.2', '0.1', '0.05', '0.02',
+                 '0.01', '0.005', '0.002', '0.001']
+
 
 Interp_List = ('nearest', 'bilinear', 'bicubic', 'quadric', 'gaussian',
                'catrom', 'spline16', 'spline36', 'hanning', 'hamming',

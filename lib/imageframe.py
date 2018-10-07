@@ -126,8 +126,10 @@ class ColorMapPanel(wx.Panel):
         sizer.Add(self.imin_val,       (irow, 1), (1, 1), labstyle, 0)
         sizer.Add(self.imax_val.label, (irow, 2), (1, 1), labstyle, 0)
         sizer.Add(self.imax_val,       (irow, 3), (1, 1), labstyle, 0)
+
         irow += 1
         sizer.Add(self.islider_range,  (irow, 0), (1, 4), labstyle, 0)
+
         pack(self, sizer)
         self.set_colormap(default)
 
@@ -245,56 +247,63 @@ class ColorMapPanel(wx.Panel):
         self.imgpanel.redraw()
 
 
+class InterpPanel(wx.Panel):
+    """interpoloation / smoothing panel"""
+    def __init__(self, parent, default=0, callback=None, title='Smoothing',
+                 **kws):
+        wx.Panel.__init__(self, parent, -1,  **kws)
 
-class AutoContrastDialog(wx.Dialog):
-    """Configure Auto-Contrast Level"""
-    msg = '''Configure Auto-Contrast'''
-    def __init__(self, parent=None, conf=None,
-                 title='Auto-Contrast Configuration',
-                 size=wx.DefaultSize, pos=wx.DefaultPosition,
-                 style=wx.DEFAULT_DIALOG_STYLE):
-        self.conf = conf
-        if conf is None:
-            return
-        wid = -1
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
+        self.callback = callback
+        labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
+        sizer = wx.GridBagSizer(2, 2)
 
-        sizer = wx.GridBagSizer(4, 4)
-        clevel = float(conf.auto_contrast_level)
+        title = wx.StaticText(self, label='Smoothing:', size=(120, -1))
+        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
 
-        label = wx.StaticText(self, -1, "Contrast Percent Level:")
-        self.level = wx.TextCtrl(self, -1, "%.2f" % clevel, size=(100,-1))
+        interp_choice =  wx.Choice(self, size=(100, -1), choices=Interp_List)
+        interp_choice.Bind(wx.EVT_CHOICE,  self.onInterp)
+        interp_choice.SetSelection(default)
 
-        sizer.Add(label,        (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.level,   (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(interp_choice,  (0, 1), (1, 2), labstyle, 2)
+        pack(self, sizer)
 
-        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, (2, 0), (1, 2),
-                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
+    def onInterp(self, event=None):
+        if callable(self.callback):
+            self.callback(name=event.GetString())
 
-        btnsizer = wx.StdDialogButtonSizer()
 
-        btn1 = wx.Button(self, wx.ID_OK)
-        btn2 = wx.Button(self, wx.ID_CANCEL)
-        btn1.Bind(wx.EVT_BUTTON, self.onOK)
-        btn1.SetDefault()
-        btnsizer.AddButton(btn1)
-        btnsizer.AddButton(btn2)
-        btnsizer.Realize()
+class ContrastPanel(wx.Panel):
+    """auto-contrast panel"""
+    def __init__(self, parent, default=0, callback=None, title='Auto Contrast',
+                 **kws):
+        wx.Panel.__init__(self, parent, -1,  **kws)
 
-        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        self.callback = callback
+        labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
+        sizer = wx.GridBagSizer(2, 2)
 
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        title = wx.StaticText(self, label='Auto-Contrast (%):', size=(120, -1))
+        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
 
-    def onOK(self, evt=None):
-        try:
-            val = float(self.level.GetValue())
-        except:
-            val = 1.0
-        self.conf.auto_contrast_level = val
-        evt.Skip()
-        return wx.ID_OK
+        self.contrast_choices = ['None', '1.0', '0.5', '0.2', '0.1',
+                                 '0.05', '0.02', '0.01', '0.005', '0.002',
+                                 '0.001']
+        self.choice = wx.Choice(self,  size=(100, -1),
+                            choices=self.contrast_choices)
+        self.choice.Bind(wx.EVT_CHOICE,  self.onChoice)
+        self.choice.SetSelection(default)
+        sizer.Add(self.choice, (0, 1), (1, 1), labstyle, 2)
+        pack(self, sizer)
+
+
+    def onChoice(self, event=None):
+        if callable(self.callback):
+            clevel = event.GetString()
+            if clevel == 'None':
+                clevel = None
+            else:
+                clevel = float(clevel)
+            self.callback(contrast_level=clevel)
 
 class ImageFrame(BaseFrame):
     """
@@ -326,18 +335,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
      Ctrl-T:     Flip Top/Bottom
      Ctrl-F:     Flip Left/Right
 
-  Image Enhancement:
-     Ctrl-L:     Log-Scale Intensity
-     Ctrl-E:     Enhance Contrast
-
-
 """
 
     def __init__(self, parent=None, size=(700, 525),
                  lasso_callback=None, mode='intensity',
                  show_xsections=False, cursor_labels=None,
                  output_title='Image', subtitles=None,
-                 user_menus=None, title='Image Display Frame', **kws):
+                 user_menus=None,
+                 title='Image Display Frame', **kws):
 
         self.lasso_callback = lasso_callback
         self.user_menus = user_menus
@@ -446,8 +451,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         contour_value = 0
         if style == 'contour':
             contour_value = 1
-        self.set_contrast_levels(auto_contrast)
-        self.panel.redraw()
+
+        contrast_level = 0.0
+        if auto_contrast:
+            contrast_level = auto_contrast
+        self.set_contrast_levels(contrast_level=contrast_level)
         self.config_panel.Refresh()
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
@@ -513,28 +521,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onContourConfig)
         self.optional_menus.append((m, False))
 
-        # intensity contrast
-        mint =self.intensity_menu = wx.Menu()
-        #         MenuItem(self, mint,  'Log Scale Intensity\tCtrl+L',
-        #                  'use logarithm to set intensity scale',
-        #                  self.onLogScale, kind=wx.ITEM_CHECK)
-
-        MenuItem(self, mint, 'Enhance Contrast\tCtrl+E',
-                 'auto-scale contrast',
-                 self.onEnhanceContrast, kind=wx.ITEM_CHECK,
-                 default=self.panel.conf.auto_contrast)
-
-        MenuItem(self, mint, 'Set Auto-Contrast Level',
-                 'Set auto-contrast scale',
-                 self.onContrastConfig)
-
-        # smoothing
-        msmoo = wx.Menu()
-        for itype in Interp_List:
-            wid = wx.NewId()
-            msmoo.AppendRadioItem(wid, itype, itype)
-            self.Bind(wx.EVT_MENU, partial(self.onInterp, name=itype), id=wid)
-
         # help
         mhelp = wx.Menu()
         MenuItem(self, mhelp, 'Quick Reference',
@@ -542,12 +528,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mhelp, 'About', 'About WXMPlot', self.onAbout)
 
         # add all sub-menus, including user-added
-        submenus = [('File', mfile),
-                    ('Image', mview),
-                    ('Contrast', mint),
-                    ('Smoothing', msmoo)]
+        submenus = [('File', mfile), ('Image', mview)]
         if self.user_menus is not None:
             submenus.extend(self.user_menus)
+
         submenus.append(('&Help', mhelp))
 
         mbar = wx.MenuBar()
@@ -628,16 +612,30 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
                                         style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
+            self.interp_panel = InterpPanel(self.config_panel,
+                                            callback=self.onInterp)
+            self.contrast_panel = ContrastPanel(self.config_panel,
+                                            callback=self.set_contrast_levels)
+
+            sizer.Add(self.interp_panel, 0, lsty, 2)
+            sizer.Add(self.contrast_panel, 0, lsty, 2)
+
 
         else:
             self.cmap_panels[0] =  ColorMapPanel(self.config_panel,
                                                  self.panel,
                                                  default='gray',
                                                  colormap_list=ColorMap_List)
+            self.interp_panel = InterpPanel(self.config_panel,
+                                            callback=self.onInterp)
+            self.contrast_panel = ContrastPanel(self.config_panel,
+                                            callback=self.set_contrast_levels)
 
             sizer.Add(self.cmap_panels[0],  0, lsty, 1)
             sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
+            sizer.Add(self.interp_panel, 0, lsty, 2)
+            sizer.Add(self.contrast_panel, 0, lsty, 2)
 
         cust = self.CustomConfig(self.config_panel, None, 0)
         if cust is not None:
@@ -650,15 +648,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         to bottom of config panel
         """
         pass
-
-
-    def onContrastConfig(self, event=None):
-        dlg = AutoContrastDialog(parent=self, conf=self.panel.conf)
-        dlg.CenterOnScreen()
-        val = dlg.ShowModal()
-        if val == wx.ID_OK:
-            pass
-        dlg.Destroy()
 
 
     def onContourConfig(self, event=None):
@@ -747,39 +736,30 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].imin_val.Enable()
                 self.cmap_panels[ix].imax_val.Enable()
 
-    def onEnhanceContrast(self, event=None):
-        """set image contrast, using scikit-image exposure routines"""
-        if event is not None:
-            self.panel.conf.auto_contrast = event.IsChecked()
-
-        self.set_contrast_levels()
-        self.panel.redraw()
-
-    def set_contrast_levels(self, enhance=None):
+    def set_contrast_levels(self, contrast_level=None):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.auto_contrast
         """
         conf = self.panel.conf
         img  = self.panel.conf.data
-        if enhance is None:
-            enhance = conf.auto_contrast
-        conf.auto_contrast = enhance
+        if contrast_level is None:
+            contrast_level = 0
+        conf.auto_contrast = contrast_level
+        clevels = [contrast_level, 100.0-contrast_level]
 
-        clevel = conf.auto_contrast_level
         if len(img.shape) == 2: # intensity map
             col = 0
             jmin = imin = img.min()
             jmax = imax = img.max()
             self.cmap_panels[col].imin_val.SetValue('%.4g' % imin)
             self.cmap_panels[col].imax_val.SetValue('%.4g' % imax)
-            if enhance:
-                jmin, jmax = np.percentile(img, [clevel, 100.0-clevel])
+
+            jmin, jmax = np.percentile(img, clevels)
             if imax == imin:
                 imax = imin + 0.5
             conf.cmap_lo[col] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
             conf.cmap_hi[col] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
 
-            # print("Set contrast level =", conf.cmap_hi, conf.cmap_range)
 
             self.cmap_panels[col].cmap_hi.SetValue(xhi)
             self.cmap_panels[col].cmap_lo.SetValue(xlo)
@@ -792,8 +772,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 jmax = imax = img[:,:,ix].max()
                 self.cmap_panels[ix].imin_val.SetValue('%.4g' % imin)
                 self.cmap_panels[ix].imax_val.SetValue('%.4g' % imax)
-                if enhance:
-                    jmin, jmax = np.percentile(img[:,:,ix], [1, 99])
+
+                jmin, jmax = np.percentile(img[:,:,ix], clevels)
                 if imax == imin:
                     imax = imin + 0.5
                 conf.cmap_lo[ix] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
@@ -803,9 +783,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
                 self.cmap_panels[ix].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
                 self.cmap_panels[ix].redraw_cmap()
-
-    def onLogScale(self, event=None):
-        self.panel.conf.log_scale = not self.panel.conf.log_scale
         self.panel.redraw()
 
     def onCMapSave(self, event=None, col='int'):

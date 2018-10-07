@@ -13,7 +13,7 @@ import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
 
-from .utils import Printer
+from .utils import Printer, MenuItem
 
 class BasePanel(wx.Panel):
     """
@@ -88,22 +88,15 @@ class BasePanel(wx.Panel):
 
     def BuildPopup(self):
         # build pop-up menu for right-click display
-        self.popup_unzoom_all = wx.NewId()
-        self.popup_unzoom_one = wx.NewId()
-        self.popup_config     = wx.NewId()
-        self.popup_save   = wx.NewId()
-        self.popup_menu = wx.Menu()
-        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out')
-        self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
-        self.popup_menu.AppendSeparator()
-        if self.show_config_popup:
-            self.popup_menu.Append(self.popup_config,'Configure')
+        self.popup_menu = popup = wx.Menu()
+        MenuItem(self, popup, 'Zoom out', '',   self.unzoom)
+        MenuItem(self, popup, 'Zoom all the way out', '',   self.unzoom_all)
 
-        self.popup_menu.Append(self.popup_save,  'Save Image')
-        self.Bind(wx.EVT_MENU, self.unzoom,       id=self.popup_unzoom_one)
-        self.Bind(wx.EVT_MENU, self.unzoom_all,   id=self.popup_unzoom_all)
-        self.Bind(wx.EVT_MENU, self.save_figure,  id=self.popup_save)
-        self.Bind(wx.EVT_MENU, self.configure,    id=self.popup_config)
+        if self.show_config_popup:
+            MenuItem(self, popup, 'Configure', '',   self.configure)
+
+        MenuItem(self, popup, 'Save Image', '',   self.save_figure)
+
 
     def clear(self):
         """ clear plot """

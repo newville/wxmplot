@@ -17,7 +17,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig
 from .basepanel import BasePanel
-from .utils import inside_poly
+from .utils import inside_poly, MenuItem
 
 class ImagePanel(BasePanel):
     """
@@ -250,24 +250,15 @@ class ImagePanel(BasePanel):
 
     def BuildPopup(self):
         # build pop-up menu for right-click display
-        self.popup_unzoom_all = wx.NewId()
-        self.popup_unzoom_one = wx.NewId()
-        self.popup_rot90     = wx.NewId()
-        self.popup_curmode   = wx.NewId()
-        self.popup_save   = wx.NewId()
-        self.popup_menu = wx.Menu()
-        self.popup_menu.Append(self.popup_unzoom_one, 'Zoom out')
-        self.popup_menu.Append(self.popup_unzoom_all, 'Zoom all the way out')
-        self.popup_menu.AppendSeparator()
-        self.popup_menu.Append(self.popup_rot90,   'Rotate 90deg (CW)')
+        self.popup_menu = popup = wx.Menu()
+        MenuItem(self, popup, 'Zoom out', '',   self.unzoom)
+        MenuItem(self, popup, 'Zoom all the way out', '',   self.unzoom_all)
 
-        self.popup_menu.Append(self.popup_save,  'Save Image')
-        self.Bind(wx.EVT_MENU, self.unzoom,       id=self.popup_unzoom_one)
-        self.Bind(wx.EVT_MENU, self.unzoom_all,   id=self.popup_unzoom_all)
-        self.Bind(wx.EVT_MENU, self.save_figure,  id=self.popup_save)
-        # self.popup_menu.Append(self.popup_curmode, 'Toggle Cursor Mode')
-        # self.Bind(wx.EVT_MENU, self.toggle_curmode,  id=self.popup_curmode)
-        self.Bind(wx.EVT_MENU, self.rotate90,  id=self.popup_rot90)
+        self.popup_menu.AppendSeparator()
+
+        MenuItem(self, popup, 'Rotate 90deg  (CW)', '', self.rotate90)
+        MenuItem(self, popup, 'Save Image', '', self.save_figure)
+
 
     def rotate90(self, event=None):
         "rotate 90 degrees, CW"

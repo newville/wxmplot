@@ -153,6 +153,13 @@ class ImagePanel(BasePanel):
         self.indices_thread = Thread(target=self.calc_indices, args=(data.shape, ))
         self.indices_thread.start()
 
+    def update_image(self, data):
+        """update image on panel, as quickly as possible
+        """
+        img = (data - data.min()) /(1.0*data.max() - data.min())
+        self.axes.images[0].set_data(img)
+        self.canvas.draw()
+
 
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --

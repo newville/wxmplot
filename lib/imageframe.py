@@ -481,6 +481,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         contrast_level = 0.0
         if auto_contrast:
             contrast_level = auto_contrast
+        else:
+            clevel = self.contrast_panel.choice.GetStringSelection()
+            if clevel == 'None':
+                contrast_level = 0
+            else:
+                contrast_level = float(clevel)
         self.set_contrast_levels(contrast_level=contrast_level)
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -775,10 +781,17 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         else:
             self.contrast_panel.retreat()
 
-    def set_contrast_levels(self, contrast_level=0):
+    def set_contrast_levels(self, contrast_level=None):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.auto_contrast
         """
+        if contrast_level is None:
+            clevel = self.contrast_panel.choice.GetStringSelection()
+            if clevel == 'None':
+                contrast_level = 0
+            else:
+                contrast_level = float(clevel)
+
         conf = self.panel.conf
         img  = self.panel.conf.data
         if contrast_level is None:

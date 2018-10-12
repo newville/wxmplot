@@ -11,23 +11,24 @@ cm_names = register_custom_colormaps()
 
 ColorMap_List = []
 
-for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
-           'red', 'green', 'blue', 'magenta', 'yellow', 'cyan', 'Reds',
-           'Greens', 'Blues', 'cool', 'hot', 'copper', 'red_heat',
-           'green_heat', 'blue_heat', 'spring', 'summer', 'autumn',
-           'winter', 'ocean', 'terrain', 'jet', 'stdgamma', 'hsv',
-           'Accent', 'Spectral', 'PiYG', 'PRGn', 'Spectral', 'YlGn', 'YlGnBu',
-           'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn'):
+for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma', 'red',
+           'green', 'blue', 'magenta', 'yellow', 'cyan', 'Reds', 'Greens',
+           'Blues', 'cool', 'hot', 'copper', 'red_heat', 'green_heat',
+           'blue_heat', 'spring', 'summer', 'autumn', 'winter', 'ocean',
+           'terrain', 'jet', 'stdgamma', 'hsv', 'Accent', 'Spectral', 'PiYG',
+           'PRGn', 'Spectral', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu',
+           'RdYlGn'):
+
     if cm in cm_names or hasattr(colormap, cm):
         ColorMap_List.append(cm)
 
 
-Contrast_List = ['None', '0.01', '0.02', '0.05', '0.1', '0.2', '0.5', '1.0', '2.0', '5.0']
+Contrast_List = ['None', '0.01', '0.02', '0.05', '0.1', '0.2', '0.5', '1.0',
+                 '2.0', '5.0']
 
-Interp_List = ('nearest', 'bilinear', 'bicubic', 'quadric', 'gaussian',
-               'catrom', 'spline16', 'spline36', 'hanning', 'hamming',
-               'hermite', 'kaiser', 'bessel', 'mitchell', 'sinc',
-               'lanczos')
+Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
+               'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
+               'bilinear' 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
 
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):

@@ -74,7 +74,6 @@ class ImagePanel(BasePanel):
             self.conf.style = style
         self.axes.cla()
         conf = self.conf
-        conf.enhance  = False
         conf.log_scale = False
         conf.rot, conf.flip_ud, conf.flip_lr = False, False, False
         conf.highlight_areas = []
@@ -135,7 +134,7 @@ class ImagePanel(BasePanel):
                 self.axes.clabel(self.conf.contour, fontsize=10, inline=1)
             if hasattr(self.contour_callback , '__call__'):
                 self.contour_callback(levels=clevels)
-        else: # image
+        else:
             if data.max() == data.min():
                 img = data
             else:
@@ -154,9 +153,17 @@ class ImagePanel(BasePanel):
         self.indices_thread.start()
 
     def update_image(self, data):
-        """update image on panel, as quickly as possible
         """
-        img = (data - data.min()) /(1.0*data.max() - data.min())
+        update image on panel, as quickly as possible
+        """
+        if 1 in data.shape:
+            data = data.squeeze()
+        self.data_shape = data.shape
+        self.data_range = [0, data.shape[1], 0, data.shape[0]]
+        if data.max() == data.min():
+            img = data
+        else:
+            img = (data - data.min()) /(1.0*data.max() - data.min())
         self.axes.images[0].set_data(img)
         self.canvas.draw()
 

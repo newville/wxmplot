@@ -17,15 +17,13 @@ class TestFrame(wx.Frame):
 
         kwds["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
 
-        wx.Frame.__init__(self, parent, wx.NewId(), '',
+        wx.Frame.__init__(self, parent, -1, '',
                          wx.DefaultPosition, wx.Size(-1,-1), **kwds)
         self.SetTitle(" WXMPlot Plotting Demo")
 
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
         menu = wx.Menu()
-        ID_EXIT  = wx.NewId()
-
-        menu_exit = menu.Append(ID_EXIT, "E&xit", "Terminate the program")
+        menu_exit = menu.Append(-1, "E&xit", "Terminate the program")
 
         menuBar = wx.MenuBar()
         menuBar.Append(menu, "&File");
@@ -287,9 +285,9 @@ class TestFrame(wx.Frame):
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This sample program shows some\n"
-                              "examples of MPlot PlotFrame.\n"
+                              "examples of WXMPlot PlotFrame.\n"
                               "message dialog.",
-                              "About MPlot test", wx.OK | wx.ICON_INFORMATION)
+                              "About WXMPlot test", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 

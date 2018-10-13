@@ -159,7 +159,7 @@ Table of Image Configuration attributes:  All of these are members of the
   +-----------------+------------+---------+---------------------------------------------+
   | log_scale       | bool       | False   | display log(image)                          |
   +-----------------+------------+---------+---------------------------------------------+
-  | auto_intensity  | bool       | True    | auto-scale the intensity                    |
+  | contrast_level  | float      | 0       | contrast level (percentage)                 |
   +-----------------+------------+---------+---------------------------------------------+
   | cmap            | colormap   | gray    | colormap for intensity scale                |
   +-----------------+------------+---------+---------------------------------------------+
@@ -191,9 +191,11 @@ Some notes:
 1. *cmap* is an instance of a matplotlib colormap.
 2. *cmap_lo* and *cmap_hi* set the low and high values for the sliders that compress the
    colormap, and are on a scale from 0 to 100.
-3. In contrast, *int_lo* and *int_hi* set the map intensity values that are used when
-   *auto_intensity* is ``False``.  These can be used to put two different maps on the
+3. In contrast, *int_lo* and *int_hi* set the map intensity
+   values and so can be used to put two different maps on the
    same intensity intensity scale.
+4. *contrast_level* can be used to automatically set the *int_lo* and
+   *int_hi* values based on the distribution of intensities in the data.
 
 Examples and Screenshots
 ====================================================================

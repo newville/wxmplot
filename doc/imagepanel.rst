@@ -219,14 +219,14 @@ levels, and entries to explicitly set the minimum and maximum intensity.
 
 The Smoothing selection allows you choose from one of several interpolation
 algorithms to smooth pixelated images.  The Auto-Contrast selections allows
-you to select the contrast enhancement to automatically set the the upper and
+you to select the contrast enhancement to automatically set the upper and
 lower intensities levels based on the distribution of intensities in the
-image.  This value is taken as a percentage of the image intensity.  For
-example, if set to `1`, then the lower level will be set to be the intensity
-so that 1% of the pixels are at the lowest value and 1% are at the highest
-intensity.  This can greatly improve the display of many images from data that
-contains significant outliers.
-
+image. This value is taken as a percentage of range of intensities in the
+image. For example, if set to `1.0`, then the lower level will be set to be
+the intensity such that 1% of the pixels are at the lowest value and 1% are
+at the highest intensity.  For images with a small number of outliers
+(especially "hot pixels"), setting such a contrast level can greatly
+improve the display of the remainder of the data.
 
 Clicking on the image will show its coordinates and intensity value.
 Click-and-Drag will select a rectangular box to zoom in on a particular
@@ -265,7 +265,7 @@ In addition, one can bring up a screen to set the number of contour levels.
 If the data array has three dimensions, and has a shape of (NY, NX, 3), it
 is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
 In this case, the Image Frame will show sliders and min/max controls for
-each of the three colors.  For example:
+each of the three colors.
 
 .. literalinclude:: ../examples/rgb_image.py
 
@@ -283,5 +283,5 @@ like:
 .. image:: images/image_3color_white.png
    :width: 85%
 
-This gives a slightly different view of the same data, and the images may be
-more suitable for printed documents and presentations.
+This gives a slightly different view of the same data, with results that
+may be more suitable for printed documents and presentations.

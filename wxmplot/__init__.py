@@ -17,7 +17,7 @@
             Center for Advanced Radiation Sources,
             The University of Chicago
 
-   main widgets provided by wxmplot:
+   the main widgets provided by wxmplot are:
 
       PlotPanel: wx.Panel for basic 2-D line plots (roughly matplotlib `plot`)
 

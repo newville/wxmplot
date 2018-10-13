@@ -1,4 +1,5 @@
 import wx
+import numpy as np
 import matplotlib.cm as colormap
 from .colors import register_custom_colormaps
 
@@ -26,6 +27,8 @@ for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma', 'red',
 Contrast_List = ['None', '0.01', '0.02', '0.05', '0.1', '0.2', '0.5', '1.0',
                  '2.0', '5.0']
 
+Contrast_NDArray = np.array((-1.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1., 2, 5.))
+
 Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
                'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
                'bilinear' 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
@@ -42,7 +45,7 @@ class ImageConfig:
         self.flip_ud = False
         self.flip_lr = False
         self.rot  = False
-        self.auto_contrast = 0
+        self.contrast_level = 0
         self.datalimits = [None, None, None, None]
         self.cmap_lo = [0, 0, 0]
         self.cmap_range = 1000

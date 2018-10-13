@@ -66,7 +66,7 @@ class ImagePanel(BasePanel):
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
                 store_data=True, col=0, unzoom=True, auto_contrast=False,
-                **kws):
+                contrast_level=0, **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -81,8 +81,9 @@ class ImagePanel(BasePanel):
             data = data.squeeze()
         self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
-        conf.auto_contrast = auto_contrast
-
+        conf.contrast_level = contrast_level
+        if auto_contrast:
+            conf.contrast_level = 1
         if x is not None:
             self.xdata = np.array(x)
             if self.xdata.shape[0] != data.shape[1]:

@@ -19,7 +19,7 @@ from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
-from .imageconf import ColorMap_List, Interp_List, Contrast_List
+from .imageconf import ColorMap_List, Interp_List, Contrast_List, Contrast_NDArray
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
@@ -432,7 +432,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.Fit()
 
     def display(self, img, title=None, colormap=None, style='image',
-                subtitles=None, auto_contrast=False, **kws):
+                subtitles=None, auto_contrast=False, contrast_level=None, **kws):
         """display image"""
         if title is not None:
             self.SetTitle(title)
@@ -462,7 +462,28 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     comp.Destroy()
                 self.config_mode = 'int'
                 self.Build_ConfigPanel()
-        self.panel.display(img, style=style, **kws)
+
+        if contrast_level is None:
+            if auto_contrast:
+                cl_str = '1.0'
+            else:
+                cl_str = self.contrast_panel.choice.GetStringSelection()
+        else:
+            cl_int = max(np.where(Contrast_NDArray<=contrast_level)[0])
+            cl_str = Contrast_List[cl_int]
+
+        if cl_str == 'None':
+            contrast_level = 0
+        else:
+            contrast_level = float(cl_str)
+
+        self.contrast_panel.choice.SetStringSelection(cl_str)
+        self.panel.conf.contrast_level = contrast_level
+
+        self.panel.display(img, style=style, contrast_level=contrast_level,
+                           **kws)
+
+        self.set_contrast_levels(contrast_level=contrast_level)
 
         self.panel.conf.title = title
         if colormap is not None and self.config_mode == 'int':
@@ -478,16 +499,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if style == 'contour':
             contour_value = 1
 
-        contrast_level = 0.0
-        if auto_contrast:
-            contrast_level = auto_contrast
-        else:
-            clevel = self.contrast_panel.choice.GetStringSelection()
-            if clevel == 'None':
-                contrast_level = 0
-            else:
-                contrast_level = float(clevel)
-        self.set_contrast_levels(contrast_level=contrast_level)
         self.config_panel.Refresh()
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
@@ -783,7 +794,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def set_contrast_levels(self, contrast_level=None):
         """enhance contrast levels, or use full data range
-        according to value of self.panel.conf.auto_contrast
+        according to value of self.panel.conf.contrast_level
         """
         if contrast_level is None:
             clevel = self.contrast_panel.choice.GetStringSelection()
@@ -796,7 +807,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         img  = self.panel.conf.data
         if contrast_level is None:
             contrast_level = 0
-        conf.auto_contrast = contrast_level
+        conf.contrast_level = contrast_level
         clevels = [contrast_level, 100.0-contrast_level]
 
         if len(img.shape) == 2: # intensity map

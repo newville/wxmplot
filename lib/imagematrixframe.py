@@ -419,7 +419,7 @@ class ImageMatrixFrame(BaseFrame):
 
     def set_contrast_levels(self, contrast_level=0):
         """enhance contrast levels, or use full data range
-        according to value of self.panel.conf.auto_contrast
+        according to value of self.panel.conf.contrast_level
         """
         for cmap_panel, img_panel in zip((self.cmap_panels[0], self.cmap_panels[1]),
                                          (self.img1_panel, self.img2_panel)):
@@ -427,7 +427,7 @@ class ImageMatrixFrame(BaseFrame):
             img  = img_panel.conf.data
             if contrast_level is None:
                 contrast_level = 0
-            conf.auto_contrast = contrast_level
+            conf.contrast_level = contrast_level
             clevels = [contrast_level, 100.0-contrast_level]
 
             jmin = imin = img.min()

@@ -7,6 +7,6 @@ img = imread('ceo2.tiff')
 
 app = wx.App()
 frame = ImageFrame()
-frame.display(img, auto_contrast=True, colormap='plasma')
+frame.display(img, contrast_level=0.1, colormap='plasma')
 frame.Show()
 app.MainLoop()

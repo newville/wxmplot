@@ -31,6 +31,10 @@
 import sys
 import wx
 
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
+
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .plotpanel import PlotPanel
@@ -41,7 +45,3 @@ from .stackedplotframe import StackedPlotFrame
 from .residualplotframe import ResidualPlotFrame
 from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp
-
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions

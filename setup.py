@@ -14,18 +14,18 @@ data and customizing the plots and displays.  WXMPlot panels are more
 interactive than typical displayss from matplotlib's pyplot module.
 """
 
-install_reqs = ['six', 'matplotlib', 'numpy', 'wx']
+install_reqs = ['six', 'matplotlib', 'numpy']
 
 setup(name = 'wxmplot',
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
       author = 'Matthew Newville',
       author_email = 'newville@cars.uchicago.edu',
-      url          = 'http://newville.github.io/wxmplot/',
+      url = 'http://newville.github.io/wxmplot/',
       download_url = 'http://github.com/newville/wxmplot/',
-      requires     = install_reqs,
+      requires = install_reqs,
       install_requires = install_reqs,
-      license      = 'OSI Approved :: MIT License',
+      license = 'OSI Approved :: MIT License',
       description  = 'wxPython plotting tools using matplotlib',
       long_description = long_desc,
       platforms = ('Windows', 'Linux', 'Mac OS X'),
@@ -34,6 +34,5 @@ setup(name = 'wxmplot',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    'Topic :: Scientific/Engineering :: Visualization'],
-      package_dir = {'wxmplot': 'lib'},
       packages = ['wxmplot'],
-)
+ )

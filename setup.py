@@ -12,13 +12,16 @@ richly featured 2-D plotting and displaying 3-D data as intensity maps and
 contour plots.  Easy-to-use wx Panels and Frame provide high-quality plots
 and allow some user interaction and customization of the plots.  '''
 
+install_reqs = ['six', 'matplotlib', 'numpy', 'wx']
+
 setup(name = 'wxmplot',
       version = version,
       author = 'Matthew Newville',
       author_email = 'newville@cars.uchicago.edu',
       url          = 'http://newville.github.io/wxmplot/',
       download_url = 'http://github.com/newville/wxmplot/',
-      requires     = ('wx', 'numpy', 'matplotlib', 'six'),
+      requires     = install_reqs,
+      install_requires = install_reqs,
       license      = 'OSI Approved :: MIT License',
       description  = 'A library for plotting in wxPython using matplotlib',
       long_description = long_desc,

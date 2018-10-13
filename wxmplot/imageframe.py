@@ -495,9 +495,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             elif self.config_mode == 'int':
                 self.set_subtitles(red=subtitles)
 
-        contour_value = 0
+        self.panel.conf.style = 'image'
+        self.contrast_panel.Enable()
+        self.interp_panel.Enable()
         if style == 'contour':
-            contour_value = 1
+            self.panel.conf.style = 'contour'
+            self.contrast_panel.Disable()
+            self.interp_panel.Disable()
 
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -564,7 +568,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mview.AppendSeparator()
         m = MenuItem(self, mview, 'As Contour', 'Shown as contour map',
                      self.onContourToggle, kind=wx.ITEM_CHECK)
-        m.Check(False)
+        m.Check(self.panel.conf.style=='contour')
         self.optional_menus.append((m, False))
 
         m = MenuItem(self, mview, 'Configure Contours', 'Configure Contours',
@@ -728,8 +732,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         panel = self.panel
         conf  = panel.conf
         conf.style = 'image'
+        self.contrast_panel.Enable()
+        self.interp_panel.Enable()
         if event.IsChecked():
             conf.style = 'contour'
+            self.contrast_panel.Disable()
+            self.interp_panel.Disable()
+
         nlevels = int(conf.ncontour_levels)
         if self.config_mode == 'int':
             self.cmap_panels[0].set_colormap()

@@ -20,3 +20,4 @@ text=auto
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+wxmplot/_version.py export-subst

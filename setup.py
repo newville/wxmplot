@@ -2,20 +2,23 @@
 
 from setuptools import setup
 
-try:
-    from lib import __version__ as version
-except:
-    version = 'unknown'
+import versioneer
 
-long_desc = '''A library for wxPython based on matplotlib for high-level,
-richly featured 2-D plotting and displaying 3-D data as intensity maps and
-contour plots.  Easy-to-use wx Panels and Frame provide high-quality plots
-and allow some user interaction and customization of the plots.  '''
+long_desc = """
+WXMPlot provides advanced wxPython widgets for plotting and image
+display based on matplotlib. The plotting and image display wx Panels
+and Frames it provides are easy for the programmer to include and work
+with from wx programs.  More importantly, the widgets created by WXMPlot
+give the end user a flexible set of tools for interacting with their
+data and customizing the plots and displays.  WXMPlot panels are more
+interactive than typical displayss from matplotlib's pyplot module.
+"""
 
 install_reqs = ['six', 'matplotlib', 'numpy', 'wx']
 
 setup(name = 'wxmplot',
-      version = version,
+      version=versioneer.get_version(),
+      cmdclass=versioneer.get_cmdclass(),
       author = 'Matthew Newville',
       author_email = 'newville@cars.uchicago.edu',
       url          = 'http://newville.github.io/wxmplot/',
@@ -23,7 +26,7 @@ setup(name = 'wxmplot',
       requires     = install_reqs,
       install_requires = install_reqs,
       license      = 'OSI Approved :: MIT License',
-      description  = 'A library for plotting in wxPython using matplotlib',
+      description  = 'wxPython plotting tools using matplotlib',
       long_description = long_desc,
       platforms = ('Windows', 'Linux', 'Mac OS X'),
       classifiers=['Intended Audience :: Science/Research',

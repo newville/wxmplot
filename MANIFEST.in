@@ -4,3 +4,5 @@ recursive-include examples *
 recursive-exclude examples/*.tiff
 recursive-include doc *
 recursive-exclude doc/_build *
+include versioneer.py
+include wxmplot/_version.py

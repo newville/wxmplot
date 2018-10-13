@@ -5,13 +5,18 @@ from setuptools import setup
 import versioneer
 
 long_desc = """
-WXMPlot provides advanced wxPython widgets for plotting and image
-display based on matplotlib. The plotting and image display wx Panels
-and Frames it provides are easy for the programmer to include and work
-with from wx programs.  More importantly, the widgets created by WXMPlot
-give the end user a flexible set of tools for interacting with their
-data and customizing the plots and displays.  WXMPlot panels are more
-interactive than typical displayss from matplotlib's pyplot module.
+WXMPlot provides advanced wxPython widgets for plotting and image display
+of numerical data based on matplotlib. While matplotlib provides excellent
+general purpose plotting functionality and supports many GUI and non-GUI
+backends it does not have a very tight integration with any particular GUI
+toolkit. With a large number of plotting components and options, it is not
+easy for programmers to select plotting options for every stuation and not
+easy for end users to manipulate matplotlib plots.  Similarly, while
+wxPython has some plotting functionality, it has nothing as good or
+complete as matplotlib. The WXMPlot package attempts to bridge that gap.
+With the plotting and image display Panels and Frames from WXMPlot,
+programmers are able to provide plotting widgets that make it easy for end
+users to customize plots and interact with their data.
 """
 
 install_reqs = ['six', 'matplotlib', 'numpy']
@@ -26,9 +31,8 @@ setup(name = 'wxmplot',
       requires = install_reqs,
       install_requires = install_reqs,
       license = 'OSI Approved :: MIT License',
-      description  = 'wxPython plotting tools using matplotlib',
+      description  = 'wxPython plotting widgets using matplotlib',
       long_description = long_desc,
-      platforms = ('Windows', 'Linux', 'Mac OS X'),
       classifiers=['Intended Audience :: Science/Research',
                    'Operating System :: OS Independent',
                    'Programming Language :: Python',

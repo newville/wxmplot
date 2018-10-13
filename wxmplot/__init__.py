@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-   WXMPlot: wxPython plotting tools using matplotlib.
+   WXMPlot: wxPython plotting widgets using matplotlib.
 
    WXMPlot provides advanced wxPython widgets for plotting and image
    display based on matplotlib. The plotting and image display wx Panels

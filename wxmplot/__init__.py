@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-   WXMPlot: wxPython plotting widgets using matplotlib.
+   wxmplot: wxPython plotting widgets using matplotlib.
 
-   WXMPlot provides advanced wxPython widgets for plotting and image
+   wxmplot provides advanced wxPython widgets for plotting and image
    display based on matplotlib. The plotting and image display wx Panels
    and Frames it provides are easy for the programmer to include and work
-   with from wx programs.  More importantly, the widgets created by WXMPlot
+   with from wx programs.  More importantly, the widgets created by wxmplot
    give the end user a flexible set of tools for interacting with their
-   data and customizing the plots and displays.  WXMPlot panels are more
+   data and customizing the plots and displays.  wxmplot panels are more
    interactive than typical displayss from matplotlib's pyplot module.
 
    version: 0.9.31
@@ -17,15 +17,15 @@
             Center for Advanced Radiation Sources,
             The University of Chicago
 
-   main widgets provided by WXMPlot:
+   main widgets provided by wxmplot:
 
-     PlotPanel: wx.Panel for basic 2-D line plots (roughly matplotlib `plot`)
+      PlotPanel: wx.Panel for basic 2-D line plots (roughly matplotlib `plot`)
 
-     PlotFrame: wx.Frame containing a PlotPanel
+      PlotFrame: wx.Frame containing a PlotPanel
 
-     ImagePanel: wx.Panel for image display (roughly matplotlib `imshow`)
+      ImagePanel: wx.Panel for image display (roughly matplotlib `imshow`)
 
-     ImageFrame: wx.Frame containing ImagePanel
+      ImageFrame: wx.Frame containing ImagePanel
 """
 
 import sys

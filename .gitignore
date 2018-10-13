@@ -6,6 +6,6 @@ doc/_build
 doc/*.pdf
 build
 dist
-NonGit
+sandbox
 .project
 .pydevproject

@@ -6,12 +6,13 @@ Prerequisites
 ~~~~~~~~~~~~~~~
 
 The wxmplot package requires wxpython, matplotlib, numpy, and six.
-Matplotlib version 1.5 or higher is required, with version 2.0 or higher is
-strongly recommended.
+Matplotlib version 2.0 or higher is strongly recommended, though older
+versions may still work.
 
-With wxPython 4.0, (and wxPython Phoenix 3.0.2 or later), wxmplot works
-with Python 2.7, 3.5, and 3.6.  Testing with wxPython 4.0 and Python 3.5
-and 3.6 has been limited, but all functionality appears to work well.
+WxPython 4.0 or higher is also strongly recommended, as it allows wxmplot
+to work with Python 2.7 and 3.5, 3.6, and later. At this writing, little
+testing has been done with Python 3.7.  WxPython version 2.9 and 3 may also
+continue to work, but only support Python 2.7.
 
 
 Downloads
@@ -25,6 +26,11 @@ can be installed with::
 
    pip install wxmplot
 
+Users of anaconda python can also install wxmplot with::
+
+   conda install -c gsecars wxmplot
+
+
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,34 +41,15 @@ To get the latest development version, use::
 Installation from Source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-wxmplot is a pure python module, so installation on all platforms can use the source kit::
+wxmplot is a pure python module, so installation on all platforms can use
+the source kit and a standard installation using::
 
-   tar xvzf wxmplot-0.9.XX.tar.gz
-   cd wxmplot-0.9.XX/
    python setup.py install
 
-You can also install with ``pip install wxmplot``, or for Anaconda Python,
-using ``conda install -c newville wxmplot``
 
 License
 ~~~~~~~~~~~~~
 
 The wxmplot code is distribution under the following license:
 
-  Copyright (c) 2015 Matthew Newville, The University of Chicago
-
-  Permission to use and redistribute the source code or binary forms of this
-  software and its documentation, with or without modification is hereby
-  granted provided that the above notice of copyright, these terms of use,
-  and the disclaimer of warranty below appear in the source code and
-  documentation, and that none of the names of The University of Chicago or
-  the authors appear in advertising or endorsement of works derived from this
-  software without specific prior written permission from all parties.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THIS SOFTWARE.
+..  literalinclude:: ../LICENSE

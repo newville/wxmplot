@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>WXMPLOT: Plotting widgets for wxPython with matplotlib &#8212; WXMPlot: Plotting widgets for wxPython with matplotlib</title>
+    <title>wxmplot: wxPython plotting widgets using matplotlib &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Downloading and Installation" href="installation.html" /> 
@@ -30,12 +30,12 @@
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Downloads</h3>
-<p>Current version: <b>0.9.30</b></p>
+<p>Current version: <b>0.9.31</b></p>
 <p>Downloads:
 <ul>
   <li>&nbsp; &nbsp; <a href="http://pypi.python.org/pypi/wxmplot/">PyPI (Python.org)</a> <p>
@@ -67,30 +67,34 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxm
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="wxmplot-plotting-widgets-for-wxpython-with-matplotlib">
-<h1>WXMPLOT:  Plotting widgets for wxPython with matplotlib<a class="headerlink" href="#wxmplot-plotting-widgets-for-wxpython-with-matplotlib" title="Permalink to this headline">¶</a></h1>
-<p>The wxmplot python package provides easy-to-use, richly featured plotting
-widgets for <a class="reference external" href="http://www.wxpython.org/">wxPython</a> built on top of the wonderful <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>
-library.  While matplotlib provides excellent general purpose plotting
-functionality, and supports a variety of GUI and non-GUI backends, it does
-not have a very tight integration with any particular GUI toolkit.
-Similarly, while wxPython has some plotting functionality, it has nothing
-as good as matplotlib.  The wxmplot package attempts to bridge this gap,
-providing wx.Panels for basic 2D line plots and image display that are
+  <div class="section" id="wxmplot-wxpython-plotting-widgets-using-matplotlib">
+<h1>wxmplot: wxPython plotting widgets using matplotlib<a class="headerlink" href="#wxmplot-wxpython-plotting-widgets-using-matplotlib" title="Permalink to this headline">¶</a></h1>
+<p>wxmplot provides advanced <a class="reference external" href="http://www.wxpython.org/">wxPython</a> widgets for plotting and image display
+of numerical data based on <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>. While <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> provides
+excellent general purpose plotting functionality and supports many GUI and
+non-GUI backends it does not have a very tight integration with any
+particular GUI toolkit. With a large number of plotting components and
+options, it is not easy for programmers to select plotting options for every
+stuation and not easy for end users to manipulate <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> plots.
+Similarly, while <a class="reference external" href="http://www.wxpython.org/">wxPython</a> has some plotting functionality, it has nothing
+as good or complete as <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>. The wxmplot package attempts to bridge
+that gap.  With the plotting and image display Panels and Frames from
+wxmplot, programmers are able to provide plotting widgets that make it easy
+for end users to customize plots and interact with their data.</p>
+<p>WXMplot provides wx.Panels for basic 2D line plots and image display that are
 richly featured and provide end-users with interactivity (zooming, reading
 positions, rotating images) and customization (line types, labels, marker
 type, colors, and color tables) of the graphics without having to know
-matplotlib.  Wxmplot does not expose all of matplotlib’s capabilities, but
-does provide 2D plotting and image display Panels and Frames that are easy
-to add to wxPython applications to handle many common plotting and image
-display needs.</p>
-<p>The wxmplot package is aimed at programmers who want to include high
-quality scientific graphics in their applications that can be manipulated
-by the end-user.  If you’re a python programmer who is comfortable writing
-complex pylab scripts or plotting interactively from IPython, this package
-may seem too limiting for your needs.  On the other hand, wxmplot provides
-better defaults and better customizations than matplotlib’s basic
-navigation toolbars.</p>
+matplotlib.  wxmplot does not expose all of matplotlib’s capabilities, but
+does provide 2D plotting and image display Panels and Frames that are easy to
+add to wxPython applications to handle many common plotting and image display
+needs.</p>
+<p>The wxmplot package is aimed at programmers who want to include high quality
+scientific graphics in their applications that can be manipulated by the
+end-user.  If you’re a python programmer who is comfortable writing complex
+pyplot scripts or plotting interactively from IPython, this package may seem
+too limiting for your needs.  On the other hand, wxmplot provides more and
+and better customizations than matplotlib’s basic navigation toolbars.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
@@ -144,12 +148,12 @@ navigation toolbars.</p>
         <li class="right" >
           <a href="installation.html" title="Downloading and Installation"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">WXMPlot: Plotting widgets for wxPython with matplotlib</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>

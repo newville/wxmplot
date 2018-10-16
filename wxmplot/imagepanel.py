@@ -159,15 +159,12 @@ class ImagePanel(BasePanel):
         """
         if 1 in data.shape:
             data = data.squeeze()
-        self.data_shape = data.shape
-        self.data_range = [0, data.shape[1], 0, data.shape[0]]
-        if data.max() == data.min():
-            img = data
-        else:
-            img = (data - data.min()) /(1.0*data.max() - data.min())
-        self.axes.images[0].set_data(img)
+        if self.conf.contrast_level is not None:
+            clevels = [self.conf.contrast_level, 100.0-self.conf.contrast_level]
+            imin, imax = np.percentile(data, clevels)
+            data = np.clip((data - imin)/(imax - imin + 1.e-8), 0, 1)
+        self.axes.images[0].set_data(data)
         self.canvas.draw()
-
 
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --

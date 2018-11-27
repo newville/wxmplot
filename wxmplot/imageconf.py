@@ -31,7 +31,7 @@ Contrast_NDArray = np.array((-1.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1., 2, 5.))
 
 Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
                'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
-               'bilinear' 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
+               'bilinear', 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
 
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):

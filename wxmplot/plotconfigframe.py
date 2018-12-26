@@ -92,6 +92,7 @@ class PlotConfigFrame(wx.Frame):
         self.canvas = self.conf.canvas
         self.axes = self.canvas.figure.get_axes()
         self.conf.relabel()
+        self.show_legend_cbs = []
         self.DrawPanel()
 
     def DrawPanel(self):
@@ -418,6 +419,8 @@ class PlotConfigFrame(wx.Frame):
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(self.conf.show_legend)
+        if show_leg not in self.show_legend_cbs:
+            self.show_legend_cbs.append(show_leg)
 
         show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
         show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,item='frame'))
@@ -431,9 +434,6 @@ class PlotConfigFrame(wx.Frame):
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lsizer.AddMany((loc_ttl, leg_loc, leg_onax))
         sizer.Add(lsizer,  (7, 1), (1, 4), labstyle, 2)
-
-
-
         autopack(panel, sizer)
         return panel
 
@@ -504,6 +504,8 @@ class PlotConfigFrame(wx.Frame):
         show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(self.conf.show_legend)
+        if show_leg not in self.show_legend_cbs:
+            self.show_legend_cbs.append(show_leg)
 
         reset_btn = wx.Button(panel, label='Reset Line Colors', size=(175, -1))
         reset_btn.Bind(wx.EVT_BUTTON, self.onResetLines)
@@ -842,14 +844,18 @@ class PlotConfigFrame(wx.Frame):
 
     def onShowLegend(self, event, item=''):
         auto_location = True
-        if (item == 'legend'):
-            self.conf.show_legend  = event.IsChecked()
-        elif (item=='frame'):
+        if item == 'legend':
+            self.conf.show_legend  = checked = event.IsChecked()
+            for cb in self.show_legend_cbs:
+                if cb.GetValue() != checked:
+                    cb.SetValue(checked)
+
+        elif item=='frame':
             self.conf.show_legend_frame = event.IsChecked()
-        elif (item=='loc'):
+        elif item=='loc':
             self.conf.legend_loc  = event.GetString()
             auto_location = False
-        elif (item=='onaxis'):
+        elif item=='onaxis':
             self.conf.legend_onaxis  = event.GetString()
         self.conf.draw_legend(auto_location=auto_location)
 

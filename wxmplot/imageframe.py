@@ -541,7 +541,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
                      'Toggle background color for 3-color images',
                      self.onTriColorBG, kind=wx.ITEM_CHECK)
-
+        m.Check(False)
         self.optional_menus.append((m, True))
 
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',

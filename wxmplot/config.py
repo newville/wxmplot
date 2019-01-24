@@ -734,7 +734,8 @@ class PlotConfig:
             ax.set_ylim((limits[2], limits[3]), emit=True)
         return all_limits
 
-    def set_logscale(self, xscale='linear', yscale='linear'):
+    def set_logscale(self, xscale='linear', yscale='linear',
+                     delay_draw=False):
         "set log or linear scale for x, y axis"
         self.xscale = xscale
         self.yscale = yscale
@@ -747,8 +748,8 @@ class PlotConfig:
                 axes.set_xscale(xscale, basex=10)
             except:
                 axes.set_xscale('linear')
-        self.process_data()
-        self.unzoom(full=True)
+        if not delay_draw:
+            self.process_data()
 
     def get_viewpads(self):
         o = [round(i*100.0) for i in ViewPadPercents]

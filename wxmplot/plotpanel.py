@@ -214,7 +214,6 @@ class PlotPanel(BasePanel):
             conf.set_trace_markersize(markersize, delay_draw=True)
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle, delay_draw=True)
-
         if gridcolor is not None:
             conf.gridcolor = gridcolor
         if dy is None:
@@ -237,8 +236,8 @@ class PlotPanel(BasePanel):
 
         if (self.conf.xscale == 'log' or self.conf.yscale == 'log'):
             self.set_logscale(xscale=self.conf.xscale,
-                              yscale=self.conf.yscale)
-
+                              yscale=self.conf.yscale,
+                              delay_draw=delay_draw)
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
@@ -260,7 +259,8 @@ class PlotPanel(BasePanel):
             conf.lines.append(_lines)
 
         # now set plot limits:
-        self.set_viewlimits()
+        if not delay_draw:
+            self.set_viewlimits()
         if refresh:
             conf.refresh_trace(conf.ntrace)
             needs_relabel = True
@@ -526,9 +526,11 @@ class PlotPanel(BasePanel):
 
             self.conf.process_data()
 
-    def set_logscale(self, event=None, xscale='linear', yscale='linear'):
+    def set_logscale(self, event=None, xscale='linear', yscale='linear',
+                     delay_draw=False):
         "set log or linear scale for x, y axis"
-        self.conf.set_logscale(xscale=xscale, yscale=yscale)
+        self.conf.set_logscale(xscale=xscale, yscale=yscale,
+                               delay_draw=delay_draw)
 
     def toggle_legend(self, evt=None, show=None):
         "toggle legend display"

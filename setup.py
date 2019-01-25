@@ -19,8 +19,6 @@ programmers are able to provide plotting widgets that make it easy for end
 users to customize plots and interact with their data.
 """
 
-install_reqs = ['six', 'matplotlib', 'numpy']
-
 setup(name = 'wxmplot',
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
@@ -28,9 +26,8 @@ setup(name = 'wxmplot',
       author_email = 'newville@cars.uchicago.edu',
       url = 'http://newville.github.io/wxmplot/',
       download_url = 'http://github.com/newville/wxmplot/',
-      requires = install_reqs,
-      install_requires = install_reqs,
       license = 'OSI Approved :: MIT License',
+      platforms=['Windows', 'Linux', 'Mac OS X'],
       description  = 'wxPython plotting widgets using matplotlib',
       long_description = long_desc,
       classifiers=['Intended Audience :: Science/Research',

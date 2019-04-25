@@ -121,8 +121,8 @@ class StackedPlotFrame(BaseFrame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         botsize = self.panelsize[0], self.panelsize[1]/self.ratio
-        margins = {'top': dict(left=0.15, bottom=0.005, top=0.10, right=0.05),
-                   'bot': dict(left=0.15, bottom=0.300, top=0.01, right=0.05)}
+        margins = {'top': dict(left=0.15, bottom=0.01, top=0.10, right=0.05),
+                   'bot': dict(left=0.15, bottom=0.300, top=0.02, right=0.05)}
 
         self.panel     = PlotPanel(self, size=self.panelsize)
         self.panel_bot = PlotPanel(self, size=botsize)

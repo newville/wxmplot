@@ -703,6 +703,10 @@ class PlotConfig:
                 except ValueError:
                     pass
 
+            if ax in self.user_limits:
+                for i, val in  enumerate(self.user_limits[ax]):
+                    if val is not None:
+                        limits[i] = val
             # add padding to data range
             if self.viewpad > 0 and (None not in limits):
                 xrange = limits[1] - limits[0]

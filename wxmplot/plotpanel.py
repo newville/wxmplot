@@ -25,7 +25,7 @@ from matplotlib.collections import CircleCollection
 
 from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
-from .config import PlotConfig
+from .config import PlotConfig, ifnotNone, ifNone
 from .utils import inside_poly, fix_filename, gformat
 
 to_rgba = colorConverter.to_rgba
@@ -66,10 +66,8 @@ class PlotPanel(BasePanel):
         self.parent  = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi  = dpi
-        if facecolor is not None:
-            self.conf.bgcolor = facecolor
-        if axisbg is not None:
-            self.conf.bgcolor = axisbg
+        self.conf.bgcolor = ifnotNone(facecolor, self.conf.bgcolor)
+        self.conf.bgcolor = ifnotNone(axisbg, self.conf.bgcolor)
 
         # axesmargins : margins in px left/top/right/bottom
         self.axesmargins = (30, 30, 30, 30)
@@ -100,7 +98,7 @@ class PlotPanel(BasePanel):
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()
-        self.conf.ntrace  = 0
+        self.conf.reset_lines()
         self.conf.yscale = 'linear'
         self.conf.user_limits[axes] = [None, None, None, None]
 
@@ -112,21 +110,20 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
-        if use_dates is not None:
-            self.use_dates  = use_dates
+
+        self.use_datas = ifnotNone(use_dates, self.use_dates)
         return self.oplot(xdata, ydata, side=side, **kws)
 
-    def oplot(self, xdata, ydata, side='left', label=None,
-              xlabel=None, ylabel=None, y2label=None, title=None,
-              dy=None, ylog_scale=None, xlog_scale=None, grid=None,
-              xmin=None, xmax=None, ymin=None, ymax=None,
-              color=None, style=None, drawstyle=None,
-              linewidth=2, marker=None, markersize=None,
-              refresh=True, show_legend=None,
-              legend_loc='best', legend_on=True, delay_draw=False,
-              bgcolor=None, framecolor=None, gridcolor=None,
-              labelfontsize=None, legendfontsize=None,
-              fullbox=None, axes_style=None, zorder=None, viewpad=None, **kws):
+    def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,
+              ylabel=None, y2label=None, title=None, dy=None,
+              ylog_scale=None, xlog_scale=None, grid=None, xmin=None,
+              xmax=None, ymin=None, ymax=None, color=None, style=None,
+              drawstyle=None, linewidth=2, marker=None, markersize=None,
+              refresh=True, show_legend=None, legend_loc='best',
+              legend_on=True, delay_draw=False, bgcolor=None,
+              framecolor=None, gridcolor=None, labelfontsize=None,
+              legendfontsize=None, fullbox=None, axes_style=None,
+              zorder=None, viewpad=None, **kws):
         """ basic plot method, overplotting any existing plot """
         self.cursor_mode = 'zoom'
         conf = self.conf
@@ -147,11 +144,8 @@ class PlotPanel(BasePanel):
             xdata = dates.date2num(xdata)
             # axes.xaxis.set_major_locator(dates.AutoDateLocator())
 
-        if linewidth is None:
-            linewidth = 2
-
-        if viewpad is not None:
-            conf.viewpad = viewpad
+        linewidth = ifNone(linewidth, 2)
+        conf.viewpad = ifnotNone(viewpad, conf.viewpad)
 
         if xlabel is not None:
             self.set_xlabel(xlabel, delay_draw=delay_draw)
@@ -165,39 +159,33 @@ class PlotPanel(BasePanel):
             conf.set_legend_location(legend_loc, legend_on)
             conf.show_legend = show_legend
 
-        if grid is not None:
-            conf.show_grid = grid
+        conf.show_grid = ifnotNone(grid, conf.show_grid)
 
         # set data range for this trace
-        datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
+        # datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
 
         if axes not in conf.user_limits:
             conf.user_limits[axes] = [None, None, None, None]
 
-        if xmin is not None:
-            conf.user_limits[axes][0] = xmin
-        if xmax is not None:
-            conf.user_limits[axes][1] = xmax
-        if ymin is not None:
-            conf.user_limits[axes][2] = ymin
-        if ymax is not None:
-            conf.user_limits[axes][3] = ymax
+        conf.user_limits[axes][0] = ifnotNone(xmin, conf.user_limits[axes][0])
+        conf.user_limits[axes][1] = ifnotNone(xmax, conf.user_limits[axes][1])
+        conf.user_limits[axes][2] = ifnotNone(ymin, conf.user_limits[axes][2])
+        conf.user_limits[axes][3] = ifnotNone(ymax, conf.user_limits[axes][3])
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        n = conf.ntrace
-        if zorder is None:
-            zorder = 5*(n+1)
+        zorder = ifNone(zorder, 5*(conf.ntrace+1))
+
         if axes not in conf.axes_traces:
             conf.axes_traces[axes] = []
-        conf.axes_traces[axes].append(n)
+        conf.axes_traces[axes].append(conf.ntrace)
 
-        if bgcolor is not None:
-            conf.bgcolor = bgcolor
-            axes.set_axis_bgcolor(bgcolor)
+        conf.gridcolor = ifnotNone(gridcolor, conf.gridcolor)
+        conf.bgcolor = ifnotNone(bgcolor, conf.bgcolor)
+
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
 
@@ -214,8 +202,6 @@ class PlotPanel(BasePanel):
             conf.set_trace_markersize(markersize, delay_draw=True)
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle, delay_draw=True)
-        if gridcolor is not None:
-            conf.gridcolor = gridcolor
         if dy is None:
             _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         else:
@@ -242,7 +228,6 @@ class PlotPanel(BasePanel):
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
         conf.set_trace_label(label, delay_draw=True)
-        conf.set_trace_datarange(datarange)
         needs_relabel = False
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
@@ -252,10 +237,12 @@ class PlotPanel(BasePanel):
             conf.legendfont.set_size(legendfontsize)
             needs_relabel = True
 
-        if n < len(conf.lines):
-            conf.lines[n] = _lines
+
+        if conf.ntrace < len(conf.lines):
+            print(" Setting Conf line ", conf.ntrace, len(conf.lines), _lines)
+            conf.lines[conf.ntrace] = _lines
         else:
-            conf._init_trace(n, 'black', 'solid')
+            conf.init_trace(conf.ntrace, 'black', 'solid')
             conf.lines.append(_lines)
 
         # now set plot limits:
@@ -390,8 +377,8 @@ class PlotPanel(BasePanel):
 
         self.conf.axes_traces = {axes: [0]}
         self.conf.set_trace_label('scatterplot')
-        self.conf.set_trace_datarange((min(xdata), max(xdata),
-                                       min(ydata), max(ydata)))
+        # self.conf.set_trace_datarange((min(xdata), max(xdata),
+        #                                min(ydata), max(ydata)))
 
         self.conf.scatter_xdata = xdata
         self.conf.scatter_ydata = ydata
@@ -665,8 +652,8 @@ class PlotPanel(BasePanel):
 
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
-        datarange = [xdata.min(), xdata.max(), ydata.min(), ydata.max()]
-        self.conf.set_trace_datarange(datarange, trace=trace)
+        # datarange = [xdata.min(), xdata.max(), ydata.min(), ydata.max()]
+        # self.conf.set_trace_datarange(datarange, trace=trace)
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()

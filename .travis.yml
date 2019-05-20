@@ -6,7 +6,7 @@ sudo: false
 python:
    - 2.7
    - 3.6
-   - 3.7
+   - 3.7-dev
 
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh

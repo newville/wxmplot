@@ -34,7 +34,7 @@ from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
 from collections import OrderedDict
-from collections.abc import Iterable
+# from collections.abc import Iterable
 
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
@@ -407,7 +407,7 @@ class PlotConfig:
         mline = self.get_mpline(trace)
         if mline:
             for comp in mline:
-                if isinstance(comp, Iterable):
+                if hasattr(comp, '__iter__'):
                     for l in comp:
                         l.set_color(color)
                 else:

@@ -1,8 +1,9 @@
 import wx
+import yaml
 import numpy as np
 import matplotlib.cm as colormap
 from .colors import register_custom_colormaps
-
+from .config import bool_ifnotNone, ifnotNone
 
 cm_names = register_custom_colormaps()
 
@@ -111,4 +112,57 @@ class ImageConfig:
         out[:,:,0] = (tmp[:,:,1] + tmp[:,:,2])/2.0
         out[:,:,1] = (tmp[:,:,0] + tmp[:,:,2])/2.0
         out[:,:,2] = (tmp[:,:,0] + tmp[:,:,1])/2.0
+        return out
+
+    def set_config(self, interp=None, colormap=None, reverse_colormap=None,
+                   contrast_level=None, flip_ud=None, flip_lr=None,
+                   rot=None, tricolor_bg=None, ncontour_levels=None,
+                   title=None, style=None):
+        """set configuration options:
+
+           interp, colormap, reverse_colormap, contrast_levels, flip_ud,
+           flip_lr, rot, tricolor_bg, ncontour_levels, title, style
+        """
+        if interp is not None:
+            interp = interp.lower()
+            self.interp = interp if interp in Interp_List else self.interp
+
+        if colormap is not None:
+            colormap = colormap.lower()
+            if colormap.endswith('_r'):
+                reverse_colormap = True
+                colormap = colormap[:-2]
+            self.colormap = colormap if colormap in ColorMap_List else self.colormap
+
+        if contrast_level is not None:
+            self.contrast_level = float(contrast_level)
+
+        self.cmap_reverse = bool_ifnotNone(reverse_colormap, self.cmap_reverse)
+        self.flip_ud = bool_ifnotNone(flip_ud, self.flip_ud)
+        self.flip_lr = bool_ifnotNone(flip_lr, self.flip_lr)
+        self.rot     = bool_ifnotNone(rot, self.rot)
+
+        if tricolor_bg is not None:
+            tricolor_bg = tricolor_bg.lower()
+            if tricolor_bg in ('black', 'white'):
+                self.tricolor_bg = tricolor_bg
+
+        if ncontour_levels is not None:
+            self.ncontour_level = int(ncontour_levels)
+
+        if style is not None:
+            style = style.lower()
+            if style in ('image', 'contour'):
+                self.style = style
+
+        self.title = ifnotNone(title, self.title)
+
+
+    def get_config(self):
+        """get dictionary of configuration options"""
+        out = {'reverse_colormap': self.cmap_reverse}
+        for attr in ('interp', 'colormap', 'contrast_levels', 'flip_ud',
+                     'flip_lr', 'rot', 'tricolor_bg', 'ncontour_levels',
+                     'title', 'style'):
+            out[attr] = getattr(self, attr)
         return out

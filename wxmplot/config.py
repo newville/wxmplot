@@ -119,7 +119,7 @@ class LineProps:
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
             label=None):
-        self.color = color
+        self.color = ifnotNOne(color, self.color)
         self.style = style
         self.drawstyle  = drawstyle
         self.linewidth  = linewidth
@@ -388,21 +388,17 @@ class PlotConfig:
 
     def refresh_trace(self, trace=None):
         trace = self.get_trace(trace)
-        # print("refresh trace ", trace)
-        # self.traces[trace].update(self.get_mpline(trace))
+        prop = self.traces[trace]
 
-        self.set_trace_label(trace, trace.label)
-        self.set_trace_linewidth(trace, trace.linewidth)
-        self.set_trace_color(trace, trace.color)
-        self.set_trace_style(trace, trace.style)
-        self.set_trace_drawstyle(trace, trace.drawstyle)
-        self.set_trace_marker(trace, trace.marker)
-        self.set_trace_markersize(trace, trace.markersize)
-        self.set_trace_markercolor(trace, trace.markercolor)
-        self.set_trace_zorder(trace, trace.zorder)
-
-
-
+        self.set_trace_label(prop.label, trace=trace)
+        self.set_trace_linewidth(prop.linewidth, trace=trace)
+        self.set_trace_color(prop.color, trace=trace)
+        self.set_trace_style(prop.style, trace=trace)
+        self.set_trace_drawstyle(prop.drawstyle, trace=trace)
+        self.set_trace_marker(prop.marker, trace=trace)
+        self.set_trace_markersize(prop.markersize, trace=trace)
+        # self.set_trace_markercolor(prop.markercolor, trace=trace)
+        self.set_trace_zorder(prop.zorder, trace=trace)
 
     def set_trace_color(self, color, trace=None, delay_draw=True):
         trace = self.get_trace(trace)
@@ -410,7 +406,7 @@ class PlotConfig:
         self.traces[trace].color = color
         mline = self.get_mpline(trace)
         if mline:
-            for comp in line:
+            for comp in mline:
                 if isinstance(comp, Iterable):
                     for l in comp:
                         l.set_color(color)

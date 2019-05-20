@@ -29,11 +29,7 @@ class StripChartFrame(wx.Frame):
 
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
         menu = wx.Menu()
-        ID_EXIT  = wx.NewId()
-        ID_TIMER = wx.NewId()
-
-        menu_exit = menu.Append(ID_EXIT, "E&xit",
-                                "Terminate the program")
+        menu_exit = menu.Append(-1, "E&xit", "Terminate the program")
 
         menuBar = wx.MenuBar()
         menuBar.Append(menu, "&File");
@@ -85,7 +81,7 @@ class StripChartFrame(wx.Frame):
 
         self.Bind(wx.EVT_TIMER, self.onTimer)
         self.timer = wx.Timer(self)
-        self.count    = 0
+        self.count = 0
         self.Refresh()
         wx.CallAfter(self.onStartTimer)
 

@@ -237,9 +237,7 @@ class PlotPanel(BasePanel):
             conf.legendfont.set_size(legendfontsize)
             needs_relabel = True
 
-
         if conf.ntrace < len(conf.lines):
-            print(" Setting Conf line ", conf.ntrace, len(conf.lines), _lines)
             conf.lines[conf.ntrace] = _lines
         else:
             conf.init_trace(conf.ntrace, 'black', 'solid')
@@ -248,6 +246,7 @@ class PlotPanel(BasePanel):
         # now set plot limits:
         if not delay_draw:
             self.set_viewlimits()
+
         if refresh:
             conf.refresh_trace(conf.ntrace)
             needs_relabel = True
@@ -257,6 +256,7 @@ class PlotPanel(BasePanel):
 
         if needs_relabel and not delay_draw:
             conf.relabel()
+
 
         # axes style ('box' or 'open')
         conf.axes_style = 'box'
@@ -269,6 +269,7 @@ class PlotPanel(BasePanel):
             self.draw()
             self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
+        # print("# oplot done")
         return _lines
 
     def plot_many(self, datalist, side='left', title=None,

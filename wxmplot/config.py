@@ -28,17 +28,13 @@ import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
-HAS_CYCLER = False
-try:
-    from cycler import cycler
-    HAS_CYCLER = True
-except ImportError:
-    pass
+from cycler import cycler
 
 from . import colors
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
 from collections import OrderedDict
+from collections.abc import Iterable
 
 StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
@@ -48,8 +44,7 @@ LineColors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
               '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
               '#bcbd22', '#17becf')
 
-if HAS_CYCLER and matplotlib.__version__ > '1.9':
-    rcParams['axes.prop_cycle'] = cycler('color', LineColors)
+rcParams['axes.prop_cycle'] = cycler('color', LineColors)
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
@@ -79,17 +74,53 @@ ColorThemes['dark'] = {'bg': '#242424', 'text': '#FDFDC0',
 
 ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 
-class LineProperties:
+def bool_ifnotNone(val, default):
+    "return bool(val) if val is not None else default"
+    return bool(val) if val is not None else default
+
+def ifnotNone(val, default):
+    "return val if val is not None else default"
+    return val if val is not None else default
+
+def ifNone(test, val):
+    "return val if test is None else test"
+    return val if test is None else test
+
+class LineProps:
     """ abstraction for Line2D properties, closely related to a
     MatPlotlib Line2D.  used to set internal line properties, and
     to  make the matplotlib calls to set the Line2D properties
     """
+    REPRFMT = """LineProps(color='{color:s}', style='{style:s}', linewidth={linewidth:.1f},
+          label='{label:s}', zorder={zorder:d}, drawstyle='{drawstyle:s}',
+          marker='{marker:s}', markersize={markersize:.1f}, markercolor={markercolor:s})"""
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=6,
-                 markercolor=None, zorder=1, label=''):
+                 markercolor=None, zorder=1, label='', mpline=None):
         self.color      = color
         self.style      = style
+        self.drawstyle  = drawstyle
+        self.linewidth  = linewidth
+        self.marker     = marker
+        self.markersize = markersize
+        if markercolor is None:
+            markercolor = color
+        self.markercolor= markercolor
+        self.label      = label
+        self.zorder     = zorder
+        self.mpline     = mpline
+
+    def __repr__(self):
+        if self.zorder is None:
+            self.zorder = 33
+        return self.REPRFMT.format(**self.__dict__)
+
+    def set(self, color=None, style=None, drawstyle=None, linewidth=None,
+            marker=None, markersize=None, markercolor=None, zorder=None,
+            label=None):
+        self.color = color
+        self.style = style
         self.drawstyle  = drawstyle
         self.linewidth  = linewidth
         self.marker     = marker
@@ -97,95 +128,8 @@ class LineProperties:
         self.markercolor= markercolor
         self.label      = label
         self.zorder     = zorder
-        self.data_range = [None, None, None, None]
 
-    def update(self, line=None):
-        """ set a matplotlib Line2D to have the current properties"""
-        if line:
-            markercolor = self.markercolor
-            if markercolor is None: markercolor=self.color
-            # self.set_markeredgecolor(markercolor, line=line)
-            # self.set_markerfacecolor(markercolor, line=line)
 
-            self.set_label(self.label, line=line)
-            self.set_color(self.color, line=line)
-            self.set_style(self.style, line=line)
-            self.set_drawstyle(self.drawstyle, line=line)
-            self.set_marker(self.marker,line=line)
-            self.set_markersize(self.markersize, line=line)
-            self.set_linewidth(self.linewidth, line=line)
-
-    def set_color(self, color,line=None):
-        self.color = color
-        c = colors.hexcolor(color)
-        def _setc(aline, col):
-            aline.set_color(col)
-
-        if line:
-            for lx in line:
-                if isinstance(lx, (list, tuple)):
-                    for sublx in lx:
-                        _setc(sublx, c)
-                else:
-                    _setc(lx, c)
-
-    def set_label(self, label,line=None):
-        self.label = label
-        if line:
-            line[0].set_label(self.label)
-
-    def set_zorder(self, zorder, line=None):
-        self.zorder = zorder
-        if line:
-            line[0].set_zorder(zorder)
-
-    def set_style(self, style, line=None):
-        sty = 'solid'
-        if style in StyleMap:
-            sty = style
-        elif style in StyleMap.values():
-            for k,v in StyleMap.items():
-                if v == style:  sty = k
-        self.style = sty
-        if line:
-            _key, _opts = StyleMap[sty]
-            line[0].set_linestyle(_key)
-            if _key == '--' and _opts is not None:
-                line[0].set_dashes(_opts)
-
-    def set_drawstyle(self, style, line=None):
-        sty = 'default'
-        if style in DrawStyleMap:
-            sty = style
-        self.drawstyle = sty
-        if line:
-            line[0].set_drawstyle(DrawStyleMap[sty])
-            line[0]._invalidx = True
-
-    def set_marker(self,marker,line=None):
-        sym = 'no symbol'
-        if marker in MarkerMap:
-            sym = marker
-        elif marker in MarkerMap.values():
-            for k,v in MarkerMap.items():
-                if v == marker:  sym = k
-        self.marker = sym
-        if line:
-            line[0].set_marker(MarkerMap[sym])
-
-    def set_markersize(self,markersize,line=None):
-        self.markersize=markersize
-        if line:
-            line[0].set_markersize(self.markersize/2.0)
-
-    def set_linewidth(self, linewidth, line=None):
-        self.linewidth=linewidth
-        if line:
-            for l in line:
-                try:
-                    l.set_linewidth(self.linewidth/2.0)
-                except:
-                    pass
 
 class PlotConfig:
     """ MPlot Configuration for 2D Plots... holder class for most configuration data """
@@ -259,6 +203,7 @@ class PlotConfig:
         self.show_legend = False
         self.show_legend_frame = False
         self.axes_style = 'box'
+        self.axes_traces = {}
 
         f0 =  FontProperties()
         self.labelfont = f0.copy()
@@ -272,10 +217,14 @@ class PlotConfig:
         self.set_color_theme(self.color_theme)
 
         # preload some traces
-        self.ntrace = 0
-        self.lines  = [None]*200
         self.traces = []
         self.reset_trace_properties()
+        self.reset_lines()
+
+    def reset_lines(self):
+        self.lines = [None]*len(self.traces)
+        self.ntrace = 0
+        return self.lines
 
     def reset_trace_properties(self):
         i = -1
@@ -283,16 +232,10 @@ class PlotConfig:
                               ('dash-dot', None),   ('solid', 'o'),
                               ('dotted', None),     ('solid', '+'),
                               ('dashed', None),     ('solid', 'x'),
-                              ('long dashed', None), ('dashed', 'v'),
-                              ('dashed', 'square'), ('dashed', '^'),
-                              ('dashed', '<'),      ('dashed', '>'),
-                              ('solid', 'hexagon'), ('solid', 'pentagon'),
-                              ('solid', '|'),       ('solid', '_'),
-                              ('solid', 'diamond'), ('solid', 'tripod 1'),
-                              ):
+                              ('long dashed', None), ('dashed', 'square')):
             for color in LineColors:
                 i += 1
-                self._init_trace(i, color, style, marker=marker)
+                self.init_trace(i, color, style, marker=marker)
 
     def set_color_theme(self, theme='light'):
         if theme in self.color_themes:
@@ -303,39 +246,40 @@ class PlotConfig:
         self.gridcolor  = self.color_themes[theme]['grid']
         self.framecolor = self.color_themes[theme]['frame']
 
-    def _init_trace(self, n,  color, style,
-                    linewidth=2.5, zorder=None, marker=None, markersize=6):
+    def init_trace(self, n, color, style, label=None, linewidth=None,
+                   zorder=None, marker=None, markersize=None,
+                   drawstyle=None):
+
         """ used for building set of traces"""
         while n >= len(self.traces):
-            self.traces.append(LineProperties())
+            self.traces.append(LineProps())
         line = self.traces[n]
-        label = "trace %i" % (n+1)
-        line.label = label
-        line.drawstyle = 'default'
-        if zorder     is None:
-            zorder = 5 * (n+1)
-        line.zorder = zorder
-        if color      is not None: line.color = color
-        if style      is not None: line.style = style
-        if linewidth  is not None: line.linewidth = linewidth
-        if marker     is not None: line.marker = marker
-        if markersize is not None: line.markersize = markersize
-        self.traces[n] = line
 
-    def __mpline(self, trace):
+        line.label     =ifnotNone(label, "trace %i" % (n+1))
+        line.color     = ifnotNone(color, line.color)
+        line.style     = ifnotNone(style, line.style)
+        line.linewidth = ifnotNone(linewidth, line.linewidth)
+        line.drawstyle = ifnotNone(drawstyle, line.drawstyle)
+        line.zorder    = ifnotNone(zorder, 5*(n+1))
+        line.marker    = ifnotNone(marker, line.marker)
+        line.markersize = ifnotNone(markersize, line.markersize)
+
+
+    def get_mpline(self, trace):
         n = max(0, int(trace))
         while n >= len(self.traces):
-            self.traces.append(LineProperties())
+            self.traces.append(LineProps())
         try:
             return self.lines[n]
         except:
             return self.lines[n-1]
 
-    def __gettrace(self, trace):
+
+    def get_trace(self, trace):
         if trace is None:
             trace = self.ntrace
         while trace >= len(self.traces):
-            self.traces.append(LineProperties())
+            self.traces.append(LineProps())
         return trace
 
     def relabel(self, xlabel=None, ylabel=None,
@@ -442,75 +386,152 @@ class PlotConfig:
             if dynamic:
                 txt.set_fontsize(n)
 
-    def refresh_trace(self,trace=None):
-        trace = self.__gettrace(trace)
-        self.traces[trace].update(self.__mpline(trace))
+    def refresh_trace(self, trace=None):
+        trace = self.get_trace(trace)
+        # print("refresh trace ", trace)
+        # self.traces[trace].update(self.get_mpline(trace))
 
-    def set_trace_color(self,color,trace=None, delay_draw=True):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_color(color,line=self.__mpline(trace))
+        self.set_trace_label(trace, trace.label)
+        self.set_trace_linewidth(trace, trace.linewidth)
+        self.set_trace_color(trace, trace.color)
+        self.set_trace_style(trace, trace.style)
+        self.set_trace_drawstyle(trace, trace.drawstyle)
+        self.set_trace_marker(trace, trace.marker)
+        self.set_trace_markersize(trace, trace.markersize)
+        self.set_trace_markercolor(trace, trace.markercolor)
+        self.set_trace_zorder(trace, trace.zorder)
+
+
+
+
+    def set_trace_color(self, color, trace=None, delay_draw=True):
+        trace = self.get_trace(trace)
+        color = colors.hexcolor(color)
+        self.traces[trace].color = color
+        mline = self.get_mpline(trace)
+        if mline:
+            for comp in line:
+                if isinstance(comp, Iterable):
+                    for l in comp:
+                        l.set_color(color)
+                else:
+                    comp.set_color(color)
         if not delay_draw:
             self.draw_legend()
-        if callable(self.trace_color_callback):
-            self.trace_color_callback(color, line=self.__mpline(trace))
+        if callable(self.trace_color_callback) and mline:
+            self.trace_color_callback(color, line=mline)
 
     def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_zorder(zorder, line=self.__mpline(trace))
+        trace = self.get_trace(trace)
+        zorder = ifNone(zorder, 5*(trace+1))
+        self.traces[trace].zorder = zorder
+        mline = self.get_mpline(trace)
+        if mline:
+            mline[0].set_zorder(zorder)
+
         if not delay_draw:
             self.canvas.draw()
 
     def set_trace_label(self, label, trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_label(label,line=self.__mpline(trace))
+        trace = self.get_trace(trace)
+        self.traces[trace].label = label
+        mline = self.get_mpline(trace)
+        if mline:
+            mline[0].set_label = label
+
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_style(self,style,trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_style(style,line=self.__mpline(trace))
+    def set_trace_style(self, style, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        sty = 'solid'
+        if style in StyleMap:
+            sty = style
+        elif style in StyleMap.values():
+            for k,v in StyleMap.items():
+                if v == style:  sty = k
+        style = sty
+        self.traces[trace].style = style
+        mline = self.get_mpline(trace)
+        if mline:
+            _key, _opts = StyleMap[style]
+            mline[0].set_linestyle(_key)
+            if _key == '--' and _opts is not None:
+                mline[0].set_dashes(_opts)
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_drawstyle(self, style,trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_drawstyle(style, line=self.__mpline(trace))
+    def set_trace_drawstyle(self, drawstyle, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        sty = 'default'
+        if drawstyle in DrawStyleMap:
+            sty = drawstyle
+        drawstyle = sty
+        self.traces[trace].drawstyle = drawstyle
+
+        mline = self.get_mpline(trace)
+        if mline:
+            mline[0].set_drawstyle(DrawStyleMap[drawstyle])
+            mline[0]._invalidx = True
+
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_marker(self,marker,trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_marker(marker,line=self.__mpline(trace))
+    def set_trace_marker(self, marker, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        sym = 'no symbol'
+        if marker in MarkerMap:
+            sym = marker
+        elif marker in MarkerMap.values():
+            for k,v in MarkerMap.items():
+                if v == marker:  sym = k
+        marker = sym
+        self.traces[trace].marker = marker
+
+        mline = self.get_mpline(trace)
+        if mline:
+            mline[0].set_marker(MarkerMap[marker])
+
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_markersize(self,markersize,trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_markersize(markersize,line=self.__mpline(trace))
+    def set_trace_markersize(self, markersize, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        self.traces[trace].markersize = markersize
+
+        mline = self.get_mpline(trace)
+        if mline:
+            mline[0].set_markersize(markersize/2.0)
+
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_linewidth(self,linewidth, trace=None, delay_draw=False):
-        trace = self.__gettrace(trace)
-        self.traces[trace].set_linewidth(linewidth,line=self.__mpline(trace))
+    def set_trace_linewidth(self, linewidth, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        self.traces[trace].linewidth = linewidth
+
+        mline = self.get_mpline(trace)
+        if mline:
+            for line in mline:
+                try:
+                    line.set_linewidth(linewidth/2.0)
+                except:
+                    pass
+
         if not delay_draw:
             self.draw_legend()
 
     def set_trace_datarange(self, datarange, trace=None):
-        trace = self.__gettrace(trace)
-        self.traces[trace].data_range = datarange
+        pass
 
-    def get_trace_datarange(self, trace=None):
-        trace = self.__gettrace(trace)
-        return self.traces[trace].data_range
 
-    def get_mpl_line(self,trace=None):
-        this = self.__mpline(self.__gettrace(trace))
+    def get_mpl_line(self, trace=None):
+        this = self.get_mpline(self.get_trace(trace))
         if this is None:
             trace = 5
             while this is None and trace > 0:
                 trace = trace - 1
-                this = self.__mpline(self.__gettrace(trace))
+                this = self.get_mpline(self.get_trace(trace))
         return this[0]
 
 

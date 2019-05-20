@@ -390,15 +390,15 @@ class PlotConfig:
         trace = self.get_trace(trace)
         prop = self.traces[trace]
 
-        self.set_trace_label(prop.label, trace=trace)
-        self.set_trace_linewidth(prop.linewidth, trace=trace)
-        self.set_trace_color(prop.color, trace=trace)
-        self.set_trace_style(prop.style, trace=trace)
-        self.set_trace_drawstyle(prop.drawstyle, trace=trace)
-        self.set_trace_marker(prop.marker, trace=trace)
-        self.set_trace_markersize(prop.markersize, trace=trace)
+        self.set_trace_label(prop.label, trace=trace, delay_draw=True)
+        self.set_trace_linewidth(prop.linewidth, trace=trace, delay_draw=True)
+        self.set_trace_color(prop.color, trace=trace, delay_draw=True)
+        self.set_trace_style(prop.style, trace=trace, delay_draw=True)
+        self.set_trace_drawstyle(prop.drawstyle, trace=trace, delay_draw=True)
+        self.set_trace_marker(prop.marker, trace=trace, delay_draw=True)
+        self.set_trace_markersize(prop.markersize, trace=trace, delay_draw=True)
         # self.set_trace_markercolor(prop.markercolor, trace=trace)
-        self.set_trace_zorder(prop.zorder, trace=trace)
+        self.set_trace_zorder(prop.zorder, trace=trace, delay_draw=True)
 
     def set_trace_color(self, color, trace=None, delay_draw=True):
         trace = self.get_trace(trace)
@@ -433,8 +433,7 @@ class PlotConfig:
         self.traces[trace].label = label
         mline = self.get_mpline(trace)
         if mline:
-            mline[0].set_label = label
-
+            mline[0].set_label(label)
         if not delay_draw:
             self.draw_legend()
 
@@ -583,7 +582,6 @@ class PlotConfig:
         "redraw the legend"
         if show is not None:
             self.show_legend = show
-
         axes = self.canvas.figure.get_axes()
         # clear existing legend
         try:

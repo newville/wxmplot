@@ -1,5 +1,4 @@
 import wx
-import yaml
 import numpy as np
 import matplotlib.cm as colormap
 from .colors import register_custom_colormaps

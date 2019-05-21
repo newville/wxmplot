@@ -18,8 +18,8 @@ before_install:
     - conda info -a
 
 install:
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy wxpython matplotlib; fi
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7                    numpy scipy wxpython matplotlib; fi
+    - if [[ $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy wxpython matplotlib; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7                    numpy scipy wxpython matplotlib; fi
     - conda install six nose pytest pandas sphinx pillow
     - source activate test_env
     - python setup.py install

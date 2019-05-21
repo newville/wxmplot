@@ -6,6 +6,7 @@ sudo: false
 python:
    - 2.7
    - 3.6
+   - 3.7-dev
 
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
@@ -17,8 +18,10 @@ before_install:
     - conda info -a
 
 install:
-    - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy wxpython matplotlib six nose pytest cycler pillow sphinx pandas
+    - if [[$TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy scipy; fi
+    - if [[$TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy; fi
     - source activate test_env
+    - conda install wxpython matplotlib six nose pytest cycler pillow sphinx pandas
     - python setup.py install
     - conda list
 

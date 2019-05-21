@@ -6,10 +6,10 @@ sudo: false
 python:
    - 2.7
    - 3.6
-   - 3.7-dev
+   - 3.7
 
 before_install:
-    - wget http://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+    - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
     - hash -r
@@ -18,11 +18,11 @@ before_install:
     - conda info -a
 
 install:
-    - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy wxpython matplotlib
+    - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy wxpython matplotlib six nose pytest pandas sphinx pillow
     - source activate test_env
-    - conda config --add channels gsecars
-    - conda install nose pytest pandas sphinx pillow yaml pango pcre
     - python setup.py install
+    - conda list
 
 script:
+    - cd tests
     - pytest

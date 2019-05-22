@@ -1,7 +1,7 @@
-include README.txt LICENSE.txt ChangeLog MANIFEST.in
-recursive-include lib *.py
+include README.md LICENSE ChangeLog MANIFEST.in
+recursive-include wxmplot *.py
 recursive-include examples *
-recursive-exclude examples/*.tiff
+recursive-exclude examples *.tiff
 recursive-include doc *
 recursive-exclude doc/_build *
 include versioneer.py

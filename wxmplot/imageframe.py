@@ -545,11 +545,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.optional_menus.append((m, True))
 
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
-                 'Cycle Through Contrast Choices',
-                 self.cycle_contrast)
+                 'Cycle Through Contrast Choices', self.cycle_contrast)
         MenuItem(self, mview, 'Reduce Contrast Cycle\tCtrl+-',
                  'Cycle Through Contrast Choices',
                  partial(self.cycle_contrast, dir='back'))
+        MenuItem(self, mview, 'Show Histogram\tCtrl+G',
+                 'Show Intensity Histogram', self.show_histogram)
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
@@ -856,6 +857,35 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
                 self.cmap_panels[ix].redraw_cmap()
         self.panel.redraw()
+
+    def show_histogram(self, event=None):
+        conf = self.panel.conf
+        img  = conf.data
+
+        title = '%s: Histogram' % (self.GetTitle())
+        dat, color = None, None
+
+        if len(img.shape) == 2:
+            nbins = min(101, img.size)
+            dat = img.flatten()
+
+        elif len(img.shape) == 3:
+            nbins = int(min(101, img.size/3))
+            color = ('red', 'green', 'blue')
+            dat = [img[:,:,i].flatten() for i in range(3)]
+            dat = np.array(dat).transpose()
+
+        if dat is not None:
+            pf = PlotFrame(title=title, parent=self)
+            if color is None:
+                color = pf.panel.conf.traces[0].color
+            pf.panel.axes.hist(dat, bins=nbins, rwidth=0.75, color=color,
+                               stacked=(len(dat.shape)==2))
+            pf.panel.conf.relabel(xlabel='Intensity', ylabel='Population')
+            pf.Raise()
+            pf.Show()
+
+
 
     def onCMapSave(self, event=None, col='int'):
         """save color table image"""

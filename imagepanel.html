@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>ImagePanel: A wx.Panel for Image Display &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Speciality WXMPLOT displays" href="other.html" />
@@ -40,11 +39,11 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
-<li><a class="reference internal" href="#imagepanel-methods"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
-<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
-<li><a class="reference internal" href="#module-imageframe"><code class="docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
-<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
+<li><a class="reference internal" href="#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
+<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
+<li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
 <li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a><ul>
 <li><a class="reference internal" href="#basic-example">Basic example</a></li>
 <li><a class="reference internal" href="#contour-example">Contour Example</a></li>
@@ -57,7 +56,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="plotpanel.html"
-                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+                        title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="other.html"
                         title="next chapter">Speciality WXMPLOT displays</a></p>
@@ -69,13 +68,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -100,22 +97,18 @@ out.  In contrast, an <code class="xref py py-class docutils literal notranslate
 manipulate the displayed image, as will be discussed below.</p>
 <dl class="class">
 <dt id="imagepanel.ImagePanel">
-<em class="property">class </em><code class="descclassname">imagepanel.</code><code class="descname">ImagePanel</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(525</em>, <em>450)</em>, <em>dpi=100</em>, <em>messenger=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">ImagePanel</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(525</em>, <em class="sig-param">450)</em>, <em class="sig-param">dpi=100</em>, <em class="sig-param">messenger=None</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parent</strong> – wx parent object.</li>
-<li><strong>size</strong> – figure size in pixel.</li>
-<li><strong>dpi</strong> – dots per inch for figure.</li>
-<li><strong>messenger</strong> (callable or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – function for accepting output messages.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> – wx parent object.</p></li>
+<li><p><strong>size</strong> – figure size in pixel.</p></li>
+<li><p><strong>dpi</strong> – dots per inch for figure.</p></li>
+<li><p><strong>messenger</strong> (callable or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – function for accepting output messages.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The <em>size</em>, and <em>dpi</em> arguments are sent to matplotlib’s
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Figure</span></code>.  The <em>messenger</em> should should be a function that
 accepts text messages from the panel for informational display.  The
@@ -130,7 +123,7 @@ attributes.</p>
 <h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="imagepanel.display">
-<code class="descclassname">imagepanel.</code><code class="descname">display</code><span class="sig-paren">(</span><em>data</em>, <em>x=None</em>, <em>y=None</em>, <em>style='image'</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em>, <em class="sig-param">style='image'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
@@ -138,20 +131,20 @@ display purposes.</p>
 
 <dl class="method">
 <dt id="imagepanel.clear">
-<code class="descclassname">imagepanel.</code><code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="imagepanel.update_image">
-<code class="descclassname">imagepanel.</code><code class="descname">update_image</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">update_image</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>update the image with new data.  This can be signficantly faster than
 re-displaying the data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="imagepanel.redraw">
-<code class="descclassname">imagepanel.</code><code class="descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
@@ -162,25 +155,25 @@ re-displaying the data.</p>
 image panel.</p>
 <dl class="data">
 <dt id="imagepanel.data_callback">
-<code class="descclassname">imagepanel.</code><code class="descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.lasso_callback">
-<code class="descclassname">imagepanel.</code><code class="descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.cursor_callback">
-<code class="descclassname">imagepanel.</code><code class="descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.contour_callback">
-<code class="descclassname">imagepanel.</code><code class="descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the contour levels each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called with <code class="docutils literal notranslate"><span class="pre">style='contour'</span></code>.</p>
 </dd></dl>
 
@@ -192,20 +185,20 @@ image panel.</p>
 manipulate the image:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>display x, y, intensity coordinates (left-click)</li>
-<li>zoom in on a particular region of the plot (left-drag).</li>
-<li>change color maps.</li>
-<li>flip and rotate image.</li>
-<li>select optional smoothing interpolation.</li>
-<li>modify intensity scales.</li>
-<li>save high-quality plot images (as PNGs), copy to system clipboard, or print.</li>
+<li><p>display x, y, intensity coordinates (left-click)</p></li>
+<li><p>zoom in on a particular region of the plot (left-drag).</p></li>
+<li><p>change color maps.</p></li>
+<li><p>flip and rotate image.</p></li>
+<li><p>select optional smoothing interpolation.</p></li>
+<li><p>modify intensity scales.</p></li>
+<li><p>save high-quality plot images (as PNGs), copy to system clipboard, or print.</p></li>
 </ol>
 </div></blockquote>
 <p>These options are all available programmatically as well, by setting the
 configuration attributes and redrawing the image.</p>
 <dl class="class">
 <dt id="imageframe.ImageFrame">
-<em class="property">class </em><code class="descclassname">imageframe.</code><code class="descname">ImageFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(550</em>, <em>450)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">imageframe.</code><code class="sig-name descname">ImageFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between “image” and “contour”.</p>
@@ -243,119 +236,119 @@ if you create an <code class="xref py py-class docutils literal notranslate"><sp
 <p id="imageconf-table">Table of Image Configuration attributes:  All of these are members of the
 <em>panel.conf</em> object, as shown in the example above.</p>
 <blockquote>
-<div><table border="1" class="docutils">
+<div><table class="docutils align-default">
 <colgroup>
-<col width="20%" />
-<col width="14%" />
-<col width="11%" />
-<col width="54%" />
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 54%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">attribute</th>
-<th class="head">type</th>
-<th class="head">default</th>
-<th class="head">meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>attribute</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>default</p></th>
+<th class="head"><p>meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>rot</td>
-<td>bool</td>
-<td>False</td>
-<td>rotate image 90 degrees clockwise</td>
+<tbody>
+<tr class="row-even"><td><p>rot</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>rotate image 90 degrees clockwise</p></td>
 </tr>
-<tr class="row-odd"><td>flip_ud</td>
-<td>bool</td>
-<td>False</td>
-<td>flip image top/bottom</td>
+<tr class="row-odd"><td><p>flip_ud</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>flip image top/bottom</p></td>
 </tr>
-<tr class="row-even"><td>flip_lr</td>
-<td>bool</td>
-<td>False</td>
-<td>flip image left/right</td>
+<tr class="row-even"><td><p>flip_lr</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>flip image left/right</p></td>
 </tr>
-<tr class="row-odd"><td>log_scale</td>
-<td>bool</td>
-<td>False</td>
-<td>display log(image)</td>
+<tr class="row-odd"><td><p>log_scale</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>display log(image)</p></td>
 </tr>
-<tr class="row-even"><td>contrast_level</td>
-<td>float</td>
-<td>0</td>
-<td>contrast level (percentage)</td>
+<tr class="row-even"><td><p>contrast_level</p></td>
+<td><p>float</p></td>
+<td><p>0</p></td>
+<td><p>contrast level (percentage)</p></td>
 </tr>
-<tr class="row-odd"><td>cmap</td>
-<td>colormap</td>
-<td>gray</td>
-<td>colormap for intensity scale</td>
+<tr class="row-odd"><td><p>cmap</p></td>
+<td><p>colormap</p></td>
+<td><p>gray</p></td>
+<td><p>colormap for intensity scale</p></td>
 </tr>
-<tr class="row-even"><td>cmap_reverse</td>
-<td>bool</td>
-<td>False</td>
-<td>reverse colormap</td>
+<tr class="row-even"><td><p>cmap_reverse</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>reverse colormap</p></td>
 </tr>
-<tr class="row-odd"><td>interp</td>
-<td>string</td>
-<td>nearest</td>
-<td>interpolation, smoothing algorithm</td>
+<tr class="row-odd"><td><p>interp</p></td>
+<td><p>string</p></td>
+<td><p>nearest</p></td>
+<td><p>interpolation, smoothing algorithm</p></td>
 </tr>
-<tr class="row-even"><td>xylims</td>
-<td>list</td>
-<td>None</td>
-<td>xmin, xmax, ymin, ymax for display</td>
+<tr class="row-even"><td><p>xylims</p></td>
+<td><p>list</p></td>
+<td><p>None</p></td>
+<td><p>xmin, xmax, ymin, ymax for display</p></td>
 </tr>
-<tr class="row-odd"><td>cmap_lo</td>
-<td>int</td>
-<td>0</td>
-<td>low intensity percent for colormap mapping</td>
+<tr class="row-odd"><td><p>cmap_lo</p></td>
+<td><p>int</p></td>
+<td><p>0</p></td>
+<td><p>low intensity percent for colormap mapping</p></td>
 </tr>
-<tr class="row-even"><td>cmap_hi</td>
-<td>int</td>
-<td>100</td>
-<td>high intensity percent for colormap mapping</td>
+<tr class="row-even"><td><p>cmap_hi</p></td>
+<td><p>int</p></td>
+<td><p>100</p></td>
+<td><p>high intensity percent for colormap mapping</p></td>
 </tr>
-<tr class="row-odd"><td>int_lo</td>
-<td>float</td>
-<td>None</td>
-<td>low intensity when autoscaling is off</td>
+<tr class="row-odd"><td><p>int_lo</p></td>
+<td><p>float</p></td>
+<td><p>None</p></td>
+<td><p>low intensity when autoscaling is off</p></td>
 </tr>
-<tr class="row-even"><td>int_hi</td>
-<td>float</td>
-<td>None</td>
-<td>high intensity when autoscaling is off</td>
+<tr class="row-even"><td><p>int_hi</p></td>
+<td><p>float</p></td>
+<td><p>None</p></td>
+<td><p>high intensity when autoscaling is off</p></td>
 </tr>
-<tr class="row-odd"><td>style</td>
-<td>string</td>
-<td>‘image’</td>
-<td>‘image’ or ‘contour’</td>
+<tr class="row-odd"><td><p>style</p></td>
+<td><p>string</p></td>
+<td><p>‘image’</p></td>
+<td><p>‘image’ or ‘contour’</p></td>
 </tr>
-<tr class="row-even"><td>ncontour_levels</td>
-<td>int</td>
-<td>10</td>
-<td>number of contour levels</td>
+<tr class="row-even"><td><p>ncontour_levels</p></td>
+<td><p>int</p></td>
+<td><p>10</p></td>
+<td><p>number of contour levels</p></td>
 </tr>
-<tr class="row-odd"><td>contour_levels</td>
-<td>list</td>
-<td>None</td>
-<td>list of contour levels</td>
+<tr class="row-odd"><td><p>contour_levels</p></td>
+<td><p>list</p></td>
+<td><p>None</p></td>
+<td><p>list of contour levels</p></td>
 </tr>
-<tr class="row-even"><td>contour_labels</td>
-<td>list</td>
-<td>None</td>
-<td>list of contour labels</td>
+<tr class="row-even"><td><p>contour_labels</p></td>
+<td><p>list</p></td>
+<td><p>None</p></td>
+<td><p>list of contour labels</p></td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 <p>Some notes:</p>
 <ol class="arabic simple">
-<li><em>cmap</em> is an instance of a matplotlib colormap.</li>
-<li><em>cmap_lo</em> and <em>cmap_hi</em> set the low and high values for the sliders that compress the
-colormap, and are on a scale from 0 to 100.</li>
-<li>In contrast, <em>int_lo</em> and <em>int_hi</em> set the map intensity
+<li><p><em>cmap</em> is an instance of a matplotlib colormap.</p></li>
+<li><p><em>cmap_lo</em> and <em>cmap_hi</em> set the low and high values for the sliders that compress the
+colormap, and are on a scale from 0 to 100.</p></li>
+<li><p>In contrast, <em>int_lo</em> and <em>int_hi</em> set the map intensity
 values and so can be used to put two different maps on the
-same intensity intensity scale.</li>
-<li><em>contrast_level</em> can be used to automatically set the <em>int_lo</em> and
-<em>int_hi</em> values based on the distribution of intensities in the data.</li>
+same intensity intensity scale.</p></li>
+<li><p><em>contrast_level</em> can be used to automatically set the <em>int_lo</em> and
+<em>int_hi</em> values based on the distribution of intensities in the data.</p></li>
 </ol>
 </div>
 <div class="section" id="examples-and-screenshots">
@@ -522,7 +515,7 @@ may be more suitable for printed documents and presentations.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
     </div>
   </body>
 </html>

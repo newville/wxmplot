@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Speciality WXMPLOT displays &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" /> 
@@ -55,7 +54,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="imagepanel.html"
-                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
+                        title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -64,13 +63,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -93,7 +90,7 @@ example shown for each.</p>
 <h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="MultiPlotFrame">
-<em class="property">class </em><code class="descname">MultiPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>rows=1</em>, <em>cols=1</em>, <em>framesize=(600</em>, <em>350)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">MultiPlotFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">rows=1</em>, <em class="sig-param">cols=1</em>, <em class="sig-param">framesize=(600</em>, <em class="sig-param">350)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A MultiPlotFrame supports a grid of <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> on a single plot frame.</p>
@@ -104,25 +101,25 @@ two-element tuple for the address of that panel in the grid of
 plot panel, and counts to left to right and top to bottom.</p>
 <dl class="method">
 <dt id="plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel=(0</em>, <em>0)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot to specified panel.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel=(0</em>, <em>0)</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
 <dd><p>overplot to specified panel.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em>, <em>panel=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear plot in specified panel</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><em>self</em>, <em>panel=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">configure</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>configure plot in specified panel</p>
 </dd></dl>
 
@@ -172,7 +169,7 @@ plot panel, and counts to left to right and top to bottom.</p>
 <h2>StackedPlotFrame<a class="headerlink" href="#stackedplotframe" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="StackedPlotFrame">
-<em class="property">class </em><code class="descname">StackedPlotFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>framesize=(850</em>, <em>450)</em>, <em>panelsize=(550</em>, <em>450)</em>, <em>ratio=3</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">StackedPlotFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">framesize=(850</em>, <em class="sig-param">450)</em>, <em class="sig-param">panelsize=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">ratio=3</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This supports two <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel`s</span> <span class="pre">stacked</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">one</span> <span class="pre">another,</span>
@@ -187,25 +184,25 @@ panel.</p>
 <cite>panel=’top’</cite> or <cite>panel=’bot’</cite>.</p>
 <dl class="method">
 <dt>
-<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel='top'</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel='top'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
 <dd><p>plot to specified panel.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<code class="descname">plot</code><span class="sig-paren">(</span><em>self</em>, <em>x</em>, <em>y</em>, <em>panel='top'</em>, <em>**kws</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel='top'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
 <dd><p>overplot to specified panel.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em>, <em>panel='top'</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel='top'</em><span class="sig-paren">)</span></dt>
 <dd><p>clear plot in specified panel</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<code class="descname">configure</code><span class="sig-paren">(</span><em>self</em>, <em>panel='top'</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">configure</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel='top'</em><span class="sig-paren">)</span></dt>
 <dd><p>configure plot in specified panel</p>
 </dd></dl>
 
@@ -254,7 +251,7 @@ panel.</p>
 <h2>ImageMatrixFrame<a class="headerlink" href="#imagematrixframe" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="ImageMatrixFrame">
-<em class="property">class </em><code class="descname">ImageMatrixFrame</code><span class="sig-paren">(</span><em>parent</em>, <em>size=(900</em>, <em>600)</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ImageMatrixFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(900</em>, <em class="sig-param">600)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>An <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a> supports the simultaneous display of 2
@@ -274,7 +271,7 @@ lasso around any of the pixels.  These will then be highlighted on the
 superposition image in the upper right panel.</p>
 <dl class="method">
 <dt id="display">
-<code class="descname">display</code><span class="sig-paren">(</span><em>map1</em>, <em>map2</em>, <em>title=None</em>, <em>name1='Map1'</em>, <em>name2='Map2'</em>, <em>xlabel='x'</em>, <em>ylabel='y'</em>, <em>x=None</em>, <em>y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">map1</em>, <em class="sig-param">map2</em>, <em class="sig-param">title=None</em>, <em class="sig-param">name1='Map1'</em>, <em class="sig-param">name2='Map2'</em>, <em class="sig-param">xlabel='x'</em>, <em class="sig-param">ylabel='y'</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a></p>
@@ -343,7 +340,7 @@ superposition image in the upper right panel.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
     </div>
   </body>
 </html>

@@ -19,9 +19,15 @@ from matplotlib.font_manager import fontManager, FontProperties
 from matplotlib.colors import colorConverter
 to_rgba = colorConverter.to_rgba
 
-from .utils import LabelEntry
+from .utils import LabelEntry, MenuItem
 from .config import PlotConfig
 from .colors import hexcolor, hex2rgb
+
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
@@ -94,6 +100,48 @@ class PlotConfigFrame(wx.Frame):
         self.conf.relabel()
         self.show_legend_cbs = []
         self.DrawPanel()
+        mbar = wx.MenuBar()
+
+        fmenu = wx.Menu()
+        MenuItem(self, fmenu, "Save Configuration\tCtrl+S",
+                 "Save Configuration",
+                 self.save_config)
+        MenuItem(self, fmenu, "Load Configuration\tCtrl+R",
+                 "Load Configuration",
+                 self.load_config)
+        mbar.Append(fmenu, 'File')
+        self.SetMenuBar(mbar)
+
+    def save_config(self, evt=None, fname='wxmplot.yaml'):
+        if not HAS_YAML:
+            return
+        file_choices = 'YAML Config File (*.yaml)|*.yaml'
+        dlg = wx.FileDialog(self, message='Save plot configuration',
+                            defaultDir=os.getcwd(),
+                            defaultFile=fname,
+                            wildcard=file_choices,
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            conf = self.conf.get_current_config()
+            ppath = os.path.abspath(dlg.GetPath())
+            with open(ppath, 'w') as fh:
+                fh.write("%s\n" % yaml.dump(conf))
+
+
+    def load_config(self, evt=None):
+        if not HAS_YAML:
+            return
+        file_choices = 'YAML Config File (*.yaml)|*.yaml'
+        dlg = wx.FileDialog(self, message='Read plot configuration',
+                            defaultDir=os.getcwd(),
+                            wildcard=file_choices,
+                            style=wx.FD_OPEN)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            conf = yaml.safe_load(open(os.path.abspath(dlg.GetPath()), 'r').read())
+            self.conf.load_config(conf)
+
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL

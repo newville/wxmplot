@@ -40,11 +40,21 @@ StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
 
-LineColors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e',
-              '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
-              '#bcbd22', '#17becf')
 
-rcParams['axes.prop_cycle'] = cycler('color', LineColors)
+default_config = dict(viewpad=2.5, title='',  xscale='linear',
+                      yscale='linear', xlabel='', ylabel='', y2label='',
+                      plot_type='lineplot', scatter_size=30,
+                      scatter_normalcolor='blue',
+                      scatter_normaledge='blue', scatter_selectcolor='red',
+                      scatter_selectedge='red', auto_margins=True,
+                      legend_loc= 'best', legend_onaxis='on plot',
+                      show_grid=True, draggable_legend=False,
+                      hidewith_legend=True, show_legend=False,
+                      show_legend_frame=False, axes_style='box',
+                      color_theme='light', labelfont=9, legendfont=7,
+                      titlefont=10, linecolors=('#1f77b4', '#d62728',
+                      '#2ca02c', '#ff7f0e', '#9467bd', '#8c564b',
+                      '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'))
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
@@ -85,6 +95,7 @@ def ifnotNone(val, default):
 def ifNone(test, val):
     "return val if test is None else test"
     return val if test is None else test
+
 
 class LineProps:
     """ abstraction for Line2D properties, closely related to a
@@ -132,10 +143,10 @@ class LineProps:
 
 
 class PlotConfig:
-    """ MPlot Configuration for 2D Plots... holder class for most configuration data """
+    """Plot Configuration for 2D Plots... holder class for most configuration data """
     def __init__(self, canvas=None, panel=None, with_data_process=True,
                  theme_color_callback=None, margin_callback=None,
-                 trace_color_callback=None):
+                 trace_color_callback=None, custom_config=None):
         self.canvas = canvas
         self.panel = panel
         self.styles      = list(StyleMap.keys())
@@ -167,59 +178,66 @@ class PlotConfig:
 
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
+
+        self.configdict = default_config
+        if custom_config is not None:
+            self.configdict.update(custom_config)
+
         self.set_defaults()
 
     def set_defaults(self):
-        self.zoom_x = 0
-        self.zoom_y = 0
-        self.zoom_init = (0, 1)
+        fontsize = {}
+        for key, val in self.configdict.items():
+            if 'font' in key:
+                fontsize[key] = val
+            else:
+                setattr(self, key, val)
+
         self.zoom_lims = []
-        self.viewpad = 2.5
-        self.title  = ' '
-        self.xscale = 'linear'
-        self.yscale = 'linear'
-        self.xlabel = ' '
-        self.ylabel = ' '
-        self.y2label = ' '
         self.added_texts = []
-        self.plot_type = 'lineplot'
-        self.scatter_size = 30
-        self.scatter_normalcolor = 'blue'
-        self.scatter_normaledge  = 'blue'
-        self.scatter_selectcolor = 'red'
-        self.scatter_selectedge  = 'red'
         self.scatter_xdata = None
         self.scatter_ydata = None
         self.scatter_mask = None
-
         self.margins = None
-        self.auto_margins = True
-        self.legend_loc    = 'best'
-        self.legend_onaxis = 'on plot'
         self.mpl_legend  = None
-        self.show_grid   = True
-        self.draggable_legend = False
-        self.hidewith_legend = True
-        self.show_legend = False
-        self.show_legend_frame = False
-        self.axes_style = 'box'
         self.axes_traces = {}
-
-        f0 =  FontProperties()
-        self.labelfont = f0.copy()
-        self.titlefont = f0.copy()
-        self.legendfont = f0.copy()
-        self.legendfont.set_size(7)
-        self.labelfont.set_size(9)
-        self.titlefont.set_size(10)
-        self.color_themes = ColorThemes
-        self.color_theme = 'light'
-        self.set_color_theme(self.color_theme)
 
         # preload some traces
         self.traces = []
         self.reset_trace_properties()
         self.reset_lines()
+
+        f0 =  FontProperties()
+        self.labelfont = f0.copy()
+        self.titlefont = f0.copy()
+        self.legendfont = f0.copy()
+        self.legendfont.set_size(fontsize['legendfont'])
+        self.labelfont.set_size(fontsize['labelfont'])
+        self.titlefont.set_size(fontsize['titlefont'])
+        self.color_themes = ColorThemes
+        self.set_color_theme(self.color_theme)
+
+
+    def get_current_config(self):
+        """save dict of current configuration options to self.configdict
+        """
+        cnf = {}
+        for key in self.configdict:
+            if hasattr(self, key):
+                val = getattr(self, key)
+                if key in ('legendfont', 'labelfont', 'titlefont'):
+                    val = val.get_size()
+                elif key == 'linecolors':
+                    val = [trace.color for trace in self.traces[:10]]
+                cnf[key] = val
+        self.configdict = cnf
+        return cnf
+
+    def load_config(self, conf):
+        self.get_current_config()
+        self.configdict.update(conf)
+        self.set_defaults()
+
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
@@ -228,12 +246,13 @@ class PlotConfig:
 
     def reset_trace_properties(self):
         i = -1
-        for style, marker in (('solid', None),      ('short dashed', None),
-                              ('dash-dot', None),   ('solid', 'o'),
-                              ('dotted', None),     ('solid', '+'),
-                              ('dashed', None),     ('solid', 'x'),
+
+        for style, marker in (('solid', None), ('short dashed', None),
+                              ('dash-dot', None), ('solid', 'o'),
+                              ('dotted', None), ('solid', '+'),
+                              ('dashed', None), ('solid', 'x'),
                               ('long dashed', None), ('dashed', 'square')):
-            for color in LineColors:
+            for color in self.linecolors:
                 i += 1
                 self.init_trace(i, color, style, marker=marker)
 
@@ -249,13 +268,12 @@ class PlotConfig:
     def init_trace(self, n, color, style, label=None, linewidth=None,
                    zorder=None, marker=None, markersize=None,
                    drawstyle=None):
-
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProps())
         line = self.traces[n]
 
-        line.label     =ifnotNone(label, "trace %i" % (n+1))
+        line.label     = ifnotNone(label, "trace %i" % (n+1))
         line.color     = ifnotNone(color, line.color)
         line.style     = ifnotNone(style, line.style)
         line.linewidth = ifnotNone(linewidth, line.linewidth)
@@ -630,7 +648,7 @@ class PlotConfig:
 
             self.mpl_legend.legendPatch.set_facecolor(facecol)
             if self.draggable_legend:
-                self.mpl_legend.draggable(True, update='loc')
+                self.mpl_legend.set_draggable(True, update='loc')
             self.legend_map = {}
             for legline, legtext, mainline in zip(self.mpl_legend.get_lines(),
                                                   self.mpl_legend.get_texts(),

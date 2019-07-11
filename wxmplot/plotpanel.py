@@ -110,7 +110,6 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
-
         self.use_datas = ifnotNone(use_dates, self.use_dates)
         return self.oplot(xdata, ydata, side=side, **kws)
 
@@ -374,7 +373,7 @@ class PlotPanel(BasePanel):
             conf.viewpad = viewpad
 
         axes = self.axes
-        self.conf.user_limits[axes] = (xmin, xmax, ymin, ymax)
+        self.conf.user_limits[axes] = [xmin, xmax, ymin, ymax]
 
         self.conf.axes_traces = {axes: [0]}
         self.conf.set_trace_label('scatterplot')
@@ -450,7 +449,7 @@ class PlotPanel(BasePanel):
             axes = self.axes
             if side == 'right':
                 axes = self.get_right_axes()
-        self.conf.user_limits[axes] = limits
+        self.conf.user_limits[axes] = list(limits)
         self.unzoom_all()
 
     def set_viewlimits(self):

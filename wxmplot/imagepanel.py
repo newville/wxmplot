@@ -13,6 +13,7 @@ import numpy as np
 import matplotlib
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
+from matplotlib.gridspec import GridSpec
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig
@@ -65,8 +66,8 @@ class ImagePanel(BasePanel):
 
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
-                store_data=True, col=0, unzoom=True, auto_contrast=False,
-                contrast_level=0, **kws):
+                store_data=True, col=0, unzoom=True, show_axis=False,
+                auto_contrast=False, contrast_level=0, **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -75,6 +76,7 @@ class ImagePanel(BasePanel):
         self.axes.cla()
         conf = self.conf
         conf.log_scale = False
+        conf.show_axis = show_axis
         conf.rot, conf.flip_ud, conf.flip_lr = False, False, False
         conf.highlight_areas = []
         if 1 in data.shape:
@@ -142,10 +144,11 @@ class ImagePanel(BasePanel):
                 img = (data - data.min()) /(1.0*data.max() - data.min())
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
+        self.autoset_margins()
 
-        self.axes.set_axis_off()
         if unzoom:
             self.unzoom_all()
+
         if hasattr(self.data_callback, '__call__'):
             self.data_callback(data, x=x, y=y, **kws)
 
@@ -165,6 +168,31 @@ class ImagePanel(BasePanel):
             data = np.clip((data - imin)/(imax - imin + 1.e-8), 0, 1)
         self.axes.images[0].set_data(data)
         self.canvas.draw()
+
+    def autoset_margins(self):
+        """auto-set margins  left, bottom, right, top
+        according to the specified margins (in pixels)
+        and axes extent (taking into account labels,
+        title, axis)
+        """
+        if self.conf.show_axis:
+            self.axes.set_axis_on()
+            l, t, r, b = 0.08, 0.96, 0.96, 0.08
+            if self.xlab is not None:
+                self.axes.set_xlabel(self.xlab)
+                b, t = 0.11, 0.96
+            if self.ylab is not None:
+                self.axes.set_ylabel(self.ylab)
+                l, r = 0.11, 0.96
+        else:
+            self.axes.set_axis_off()
+            l, t, r, b = 0.01, 0.99, 0.99, 0.01
+        self.gridspec.update(left=l, top=t, right=r, bottom=b)
+
+        for ax in self.fig.get_axes():
+            ax.update_params()
+            ax.set_position(ax.figbox)
+
 
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --
@@ -243,11 +271,10 @@ class ImagePanel(BasePanel):
         """ builds basic GUI panel and popup menu"""
         figsize = (1.0*self.size[0]/self.dpi, 1.0*self.size[1]/self.dpi)
         self.fig   = Figure(figsize, dpi=self.dpi)
-        self.axes  = self.fig.add_axes([0.0, 0.0, 1.0, 1.0])
-
+        self.gridspec = GridSpec(1,1)
+        self.axes  = self.fig.add_subplot(self.gridspec[0],
+                                          facecolor='#FFFFFD')
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
-        self.fig.set_facecolor('#FFFFFD')
-
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
         self.conf.canvas= self.canvas

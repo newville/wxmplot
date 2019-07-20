@@ -538,6 +538,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  "Zoom out to full data range",
                  self.panel.unzoom)
 
+        m = MenuItem(self, mview, 'Toggle Axes Labels\tCtrl+A',
+                     'Toggle displacy of Axis labels',
+                     self.onAxesLabels, kind=wx.ITEM_CHECK)
         m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
                      'Toggle background color for 3-color images',
                      self.onTriColorBG, kind=wx.ITEM_CHECK)
@@ -710,10 +713,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = panel.conf
         dlg = ContourDialog(parent=self, conf=conf)
         dlg.CenterOnScreen()
-        val = dlg.ShowModal()
-        if val == wx.ID_OK:
-            pass
+        dlg.GetResponse()
         dlg.Destroy()
+
         if conf.style != 'contour':
             return
 
@@ -749,6 +751,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                       xlabel=panel.xlab, ylabel=panel.ylab,
                       style=conf.style)
         panel.redraw()
+
+    def onAxesLabels(self, event=None):
+        conf = self.panel.conf
+        conf.show_axis = not conf.show_axis
+        self.panel.autoset_margins()
+        self.panel.redraw()
 
     def onTriColorBG(self, event=None):
         bgcol = {True:'white', False:'black'}[event.IsChecked()]

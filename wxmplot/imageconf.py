@@ -41,6 +41,7 @@ class ImageConfig:
         self.cmap  = [colormap.gray, colormap.gray, colormap.gray]
         self.cmap_reverse = False
         self.interp = 'nearest'
+        self.show_axis = False
         self.log_scale = False
         self.flip_ud = False
         self.flip_lr = False

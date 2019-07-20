@@ -554,12 +554,8 @@ class PlotPanel(BasePanel):
         self.fig   = Figure(self.figsize, dpi=self.dpi)
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
-        kwargs = {'facecolor': self.conf.bgcolor}
-        if matplotlib.__version__ < "2.0":
-            kwargs = {'axisbg': self.conf.bgcolor}
-
-        self.axes  = self.fig.add_subplot(self.gridspec[0], **kwargs)
-
+        self.axes  = self.fig.add_subplot(self.gridspec[0],
+                                          facecolor=self.conf.bgcolor)
         self.canvas = FigureCanvas(self, -1, self.fig)
 
         self.printer.canvas = self.canvas

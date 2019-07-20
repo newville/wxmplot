@@ -7,10 +7,11 @@ class ContourDialog(wx.Dialog):
                  title='Contour Configuration',
                  size=wx.DefaultSize, pos=wx.DefaultPosition,
                  style=wx.DEFAULT_DIALOG_STYLE):
-        self.conf = conf
+
         if conf is None:
             return
-        wid = -1
+        self.conf = conf
+
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
 
         sizer = wx.GridBagSizer(7, 3)
@@ -30,13 +31,12 @@ class ContourDialog(wx.Dialog):
 
         btnsizer = wx.StdDialogButtonSizer()
 
-        btn = wx.Button(self, wx.ID_OK)
-        btn.Bind(wx.EVT_BUTTON, self.onOK)
-        btn.SetDefault()
-        btnsizer.AddButton(btn)
+        nobtn = wx.Button(self, wx.ID_CANCEL)
+        okbtn = wx.Button(self, wx.ID_OK)
+        okbtn.SetDefault()
 
-        btn = wx.Button(self, wx.ID_CANCEL)
-        btnsizer.AddButton(btn)
+        btnsizer.AddButton(okbtn)
+        btnsizer.AddButton(nobtn)
         btnsizer.Realize()
 
         sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
@@ -44,8 +44,10 @@ class ContourDialog(wx.Dialog):
         self.SetSizer(sizer)
         sizer.Fit(self)
 
-    def onOK(self, evt=None):
-        self.conf.ncontour_levels = int(self.ncontour.GetValue())
-        self.conf.contour_labels = self.showlabels.IsChecked()
-        evt.Skip()
-        return wx.ID_OK
+
+    def GetResponse(self, master=None, gname=None, ynorm=True):
+        self.Raise()
+        if self.ShowModal() == wx.ID_OK:
+            self.conf.ncontour_levels = int(self.ncontour.GetValue())
+            self.conf.contour_labels = self.showlabels.IsChecked()
+        return

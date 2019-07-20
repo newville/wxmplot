@@ -134,7 +134,13 @@ class ImagePanel(BasePanel):
             if contour_labels is None:
                 contour_labels = self.conf.contour_labels
             if contour_labels:
-                self.axes.clabel(self.conf.contour, fontsize=10, inline=1)
+                nlog = np.log10(clevels[1])
+                fmt = "%.3f"
+                if nlog < -2:
+                    fmt = "%%.%df" % (1-nlog)
+                elif nlog > 2:
+                    fmt = "%.1f"
+                self.axes.clabel(self.conf.contour, fontsize=10, inline=1, fmt=fmt)
             if hasattr(self.contour_callback , '__call__'):
                 self.contour_callback(levels=clevels)
         else:

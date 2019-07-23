@@ -33,6 +33,8 @@ Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
                'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
                'bilinear', 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
 
+Projection_List = ('None', 'X', 'Y') # , 'Both')
+
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):
         self.axes   = axes
@@ -67,6 +69,9 @@ class ImageConfig:
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
         self.zoompen   = wx.Pen('#101090',  3, wx.SOLID)
         self.zoom_lims = []
+        self.projections = None
+        self.projection_xy = -1, -1
+        self.projection_width = 1
 
     def relabel(self):
         " re draw labels (title, x,y labels)"

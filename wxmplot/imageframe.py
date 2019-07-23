@@ -10,6 +10,7 @@ if is_wxPhoenix:
 else:
     from wx._core import PyDeadObjectError
 
+from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
 from functools import partial
 import numpy as np
 from   matplotlib.cm import get_cmap
@@ -19,7 +20,8 @@ from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
-from .imageconf import ColorMap_List, Interp_List, Contrast_List, Contrast_NDArray
+from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
+                        Contrast_NDArray, Projection_List)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
@@ -251,11 +253,10 @@ class ColorMapPanel(wx.Panel):
 
 class InterpPanel(wx.Panel):
     """interpoloation / smoothing panel"""
-    def __init__(self, parent, default=0, callback=None, title='Smoothing',
-                 **kws):
+    def __init__(self, parent, imgpanel, default=0, **kws):
         wx.Panel.__init__(self, parent, -1,  **kws)
 
-        self.callback = callback
+        self.imgpanel = imgpanel
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         sizer = wx.GridBagSizer(2, 2)
 
@@ -270,14 +271,53 @@ class InterpPanel(wx.Panel):
         pack(self, sizer)
 
     def onInterp(self, event=None):
-        if callable(self.callback):
-            self.callback(name=event.GetString())
+        name=event.GetString()
+        if name not in Interp_List:
+            name = Interp_List[0]
+        self.imgpanel.conf.interp = name
+        self.imgpanel.redraw()
 
+class ProjectionPanel(wx.Panel):
+    """X/Y projections panel"""
+    def __init__(self, parent, imgpanel, **kws):
+        wx.Panel.__init__(self, parent, -1,  **kws)
+
+        self.imgpanel = imgpanel
+        labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.ALIGN_CENTRE_VERTICAL|wx.EXPAND
+        sizer = wx.GridBagSizer(2, 2)
+
+        title = wx.StaticText(self, label='Show Slice:', size=(120, -1))
+        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
+
+        p_choice =  wx.Choice(self, size=(100, -1), choices=Projection_List)
+        p_choice.Bind(wx.EVT_CHOICE,  self.onSetProjection)
+        p_choice.SetSelection(0)
+
+        sizer.Add(p_choice,  (0, 1), (1, 2), labstyle, 2)
+
+        label = wx.StaticText(self, label='Slice Width:', size=(120, -1))
+        sizer.Add(label, (1, 0), (1, 1), labstyle, 2)
+
+        self.width = FloatSpin(self, -1, value=1, min_val=0, max_val=5000,
+                               increment=1, digits=0, size=(60, -1))
+        self.width.Bind(EVT_FLOATSPIN, self.onSetProjectionWidth)
+        sizer.Add(self.width,  (1, 1), (1, 2), labstyle, 2)
+        pack(self, sizer)
+
+    def onSetProjection(self, event=None):
+        name = event.GetString()
+        if name not in Projection_List:
+            name = Projection_List[0]
+        self.imgpanel.conf.projections = name
+        self.imgpanel.update_projections()
+
+    def onSetProjectionWidth(self, event=None):
+        self.imgpanel.conf.projection_width = int(self.width.GetValue())
+        self.imgpanel.update_projections()
 
 class ContrastPanel(wx.Panel):
     """auto-contrast panel"""
-    def __init__(self, parent, default=0, callback=None, title='Auto Contrast',
-                 **kws):
+    def __init__(self, parent, default=0, callback=None, **kws):
         wx.Panel.__init__(self, parent, -1,  **kws)
 
         self.callback = callback
@@ -418,7 +458,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.Build_ConfigPanel()
 
-
         self.panel.messenger = self.write_message
 
         mainsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -498,6 +537,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.panel.conf.style = 'image'
         self.contrast_panel.Enable()
         self.interp_panel.Enable()
+        self.project_panel.Enable()
         if style == 'contour':
             self.panel.conf.style = 'contour'
             self.contrast_panel.Disable()
@@ -599,12 +639,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.SetMenuBar(mbar)
         self.Bind(wx.EVT_CLOSE,self.onExit)
 
-    def onInterp(self, evt=None, name=None):
-        if name not in Interp_List:
-            name = Interp_List[0]
-        self.panel.conf.interp = name
-        self.panel.redraw()
-
     def onCursorMode(self, event=None, mode='zoom'):
         self.panel.cursor_mode = mode
 
@@ -652,53 +686,43 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
     def Build_ConfigPanel(self):
         """config panel for left-hand-side of frame: RGB Maps"""
         panel = self.config_panel
-        sizer = wx.BoxSizer(wx.VERTICAL)
 
+        sizer = wx.BoxSizer(wx.VERTICAL)
         lsty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
+
+        self.contrast_panel = ContrastPanel(panel,
+                                            callback=self.set_contrast_levels)
+        self.interp_panel = InterpPanel(panel, self.panel)
+        self.project_panel = ProjectionPanel(panel, self.panel)
 
         if self.config_mode == 'rgb':
             for icol, col in enumerate(RGB_COLORS):
-                self.cmap_panels[icol] =  ColorMapPanel(self.config_panel,
-                                                       self.panel,
-                                                       title='%s: ' % col.title(),
-                                                       color=icol,
-                                                       default=col,
-                                                       colormap_list=None)
-
+                self.cmap_panels[icol] =  ColorMapPanel(panel, self.panel,
+                                                        title='%s: ' % col.title(),
+                                                        color=icol,
+                                                        default=col,
+                                                        colormap_list=None)
                 sizer.Add(self.cmap_panels[icol], 0, lsty, 2)
-
-                sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
+                sizer.Add(wx.StaticLine(panel, size=(100, 2),
                                         style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
-            self.interp_panel = InterpPanel(self.config_panel,
-                                            callback=self.onInterp)
-            self.contrast_panel = ContrastPanel(self.config_panel,
-                                            callback=self.set_contrast_levels)
-
-            sizer.Add(self.interp_panel, 0, lsty, 2)
-            sizer.Add(self.contrast_panel, 0, lsty, 2)
-
-
         else:
-            self.cmap_panels[0] =  ColorMapPanel(self.config_panel,
-                                                 self.panel,
+            self.cmap_panels[0] =  ColorMapPanel(panel, self.panel,
                                                  default='gray',
                                                  colormap_list=ColorMap_List)
-            self.interp_panel = InterpPanel(self.config_panel,
-                                            callback=self.onInterp)
-            self.contrast_panel = ContrastPanel(self.config_panel,
-                                            callback=self.set_contrast_levels)
 
             sizer.Add(self.cmap_panels[0],  0, lsty, 1)
-            sizer.Add(wx.StaticLine(self.config_panel, size=(100, 2),
+            sizer.Add(wx.StaticLine(panel, size=(100, 2),
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
-            sizer.Add(self.interp_panel, 0, lsty, 2)
-            sizer.Add(self.contrast_panel, 0, lsty, 2)
 
-        cust = self.CustomConfig(self.config_panel, None, 0)
+        sizer.Add(self.contrast_panel, 0, lsty, 2)
+        sizer.Add(self.interp_panel,   0, lsty, 2)
+        sizer.Add(self.project_panel,  0, lsty, 2)
+
+        cust = self.CustomConfig(panel, None, 0)
         if cust is not None:
             sizer.Add(cust, 0, lsty, 1)
-        pack(self.config_panel, sizer)
+        pack(panel, sizer)
 
 
     def CustomConfig(self, lpanel, lsizer, irow):
@@ -737,6 +761,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf.style = 'image'
         self.contrast_panel.Enable()
         self.interp_panel.Enable()
+        self.project_panel.Enable()
         if event.IsChecked():
             conf.style = 'contour'
             self.contrast_panel.Disable()
@@ -892,7 +917,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             pf.panel.conf.relabel(xlabel='Intensity', ylabel='Population')
             pf.Raise()
             pf.Show()
-
 
 
     def onCMapSave(self, event=None, col='int'):

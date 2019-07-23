@@ -19,6 +19,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from .imageconf import ImageConfig
 from .basepanel import BasePanel
 from .utils import inside_poly, MenuItem
+from .plotframe import PlotFrame
 
 class ImagePanel(BasePanel):
     """
@@ -52,7 +53,7 @@ class ImagePanel(BasePanel):
         self.lasso_callback = lasso_callback
         self.contour_callback = contour_callback
         self.redraw_callback = redraw_callback
-
+        self.projection_plotframe = None
         self.win_config = None
         self.data_shape = None
         self.size    = size
@@ -142,8 +143,11 @@ class ImagePanel(BasePanel):
                 img = data
             else:
                 img = (data - data.min()) /(1.0*data.max() - data.min())
+
+            extent = self.ydata[0], self.ydata[-1], self.xdata[0], self.xdata[-1]
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
+
         self.autoset_margins()
 
         if unzoom:
@@ -177,6 +181,21 @@ class ImagePanel(BasePanel):
         """
         if self.conf.show_axis:
             self.axes.set_axis_on()
+            xtlabs = []
+            for i in self.axes.get_xticks():
+                try:
+                    xtlabs.append(self.xdata[int(i)])
+                except IndexError:
+                    pass
+            self.axes.set_xticklabels(xtlabs)
+            ytlabs = []
+            for i in self.axes.get_yticks():
+                try:
+                    ytlabs.append(self.ydata[int(i)])
+                except IndexError:
+                    pass
+            self.axes.set_yticklabels(ytlabs)
+
             l, t, r, b = 0.08, 0.96, 0.96, 0.08
             if self.xlab is not None:
                 self.axes.set_xlabel(self.xlab)
@@ -527,3 +546,54 @@ class ImagePanel(BasePanel):
             self.write_message(msg, panel=0)
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)
+            self.conf.projection_xy = ix, iy
+            self.update_projections()
+
+    def get_projection_plotframe(self):
+        shown = False
+        if self.projection_plotframe is not None:
+            try:
+                self.projection_plotframe.Raise()
+                shown = True
+            except:
+                pass
+        if not shown:
+            self.projection_plotframe = PlotFrame(self)
+        return self.projection_plotframe
+
+    def update_projections(self):
+        if self.conf.projections in ('None', None, 0):
+            return
+        x, y = -1, -1
+        try:
+            x, y = [int(a) for a in self.conf.projection_xy]
+        except:
+            return
+        ymax, xmax = self.conf.data.shape
+        if x < 0 or y < 0 or x > xmax or y > ymax:
+            return
+
+        wid = int(self.conf.projection_width)
+        pf = self.get_projection_plotframe()
+
+        if self.conf.projections.lower() == 'x':
+            y1 = y - wid + 1
+            y2 = y + wid
+            if y1 < 0: y1 = 0
+            if y2 > ymax: y2 = ymax
+            ydat = self.conf.data[y1:y2,:].sum(axis=0)
+            pf.plot(self.xdata, ydat, xlabel='X', ylabel='Intensity',
+                    title='X Slice: Y=%d, width=%d' %(y, wid))
+            pf.Raise()
+            pf.Show()
+
+        elif self.conf.projections.lower() == 'y':
+            x1 = x - wid + 1
+            x2 = x + wid
+            if x1 < 0: x1 = 0
+            if x2 > xmax: x2 = xmax
+            xdat = self.conf.data[:,x1:x2].sum(axis=1)
+            pf.plot(self.ydata, xdat, xlabel='Y', ylabel='Intensity',
+                    title='Y Slice: X=%d, width=%d' %(x, wid))
+            pf.Raise()
+            pf.Show()

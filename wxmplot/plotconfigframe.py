@@ -7,7 +7,7 @@ from functools import partial
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
-from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN, FS_LEFT
+from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
 
 import wx.lib.scrolledpanel as scrolled
 import numpy as np

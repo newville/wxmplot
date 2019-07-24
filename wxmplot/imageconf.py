@@ -35,6 +35,8 @@ Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
 
 Projection_List = ('None', 'X', 'Y') # , 'Both')
 
+RGB_COLORS = ('red', 'green', 'blue')
+
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):
         self.axes   = axes

@@ -21,7 +21,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
 from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
-                        Contrast_NDArray, Projection_List)
+                        Contrast_NDArray, Projection_List, RGB_COLORS)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
@@ -34,10 +34,6 @@ CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to select points freehand'),
                      'prof':  ('Select Line Profile\tCtrl+K',
                                'Left-Drag to select like for profile')}
-
-RGB_COLORS = ('red', 'green', 'blue')
-
-
 
 class ColorMapPanel(wx.Panel):
     """color map interface"""

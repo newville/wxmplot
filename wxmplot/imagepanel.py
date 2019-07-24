@@ -17,7 +17,7 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
-from .imageconf import ImageConfig
+from .imageconf import ImageConfig, RGB_COLORS
 from .basepanel import BasePanel
 from .utils import inside_poly, MenuItem
 from .plotframe import PlotFrame
@@ -151,7 +151,6 @@ class ImagePanel(BasePanel):
             else:
                 img = (data - data.min()) /(1.0*data.max() - data.min())
 
-            extent = self.ydata[0], self.ydata[-1], self.xdata[0], self.xdata[-1]
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
 
@@ -200,9 +199,13 @@ class ImagePanel(BasePanel):
         if dtype == 'y':
             ax = self.axes.yaxis
             dat  = self.ydata
+            if dat is None:
+                dat = np.arange(self.conf.data.shape[0])
         else:
             ax = self.axes.xaxis
             dat = self.xdata
+            if dat is None:
+                dat = np.arange(self.conf.data.shape[1])
 
         try:
             dtick = 0.1 * dat
@@ -605,14 +608,14 @@ class ImagePanel(BasePanel):
             msg = "Pixel [%i, %i],%s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
-            if hasattr(self.cursor_callback , '__call__'):
-                self.cursor_callback(x=event.xdata, y=event.ydata)
             self.conf.projection_xy = ix, iy
             self.update_projections()
-
+            if hasattr(self.cursor_callback , '__call__'):
+                self.cursor_callback(x=event.xdata, y=event.ydata)
 
     def get_projection_plotframe(self):
         shown = False
+        new_plotter = False
         if self.projection_plotframe is not None:
             try:
                 self.projection_plotframe.Raise()
@@ -621,6 +624,7 @@ class ImagePanel(BasePanel):
                 pass
         if not shown:
             self.projection_plotframe = pf = PlotFrame(self)
+            new_plotter = True
             try:
                 xpos, ypos = self.parent.GetPosition()
                 xsiz, ysiz = self.parent.GetSize()
@@ -628,7 +632,7 @@ class ImagePanel(BasePanel):
             except:
                 pass
 
-        return self.projection_plotframe
+        return new_plotter, self.projection_plotframe
 
     def update_projections(self):
         if self.conf.projections in ('None', None, 0):
@@ -638,31 +642,66 @@ class ImagePanel(BasePanel):
             x, y = [int(a) for a in self.conf.projection_xy]
         except:
             return
-        ymax, xmax = self.conf.data.shape
+        if len(self.conf.data.shape) == 3:
+            ymax, xmax, nc = self.conf.data.shape
+        elif len(self.conf.data.shape) == 2:
+            ymax, xmax = self.conf.data.shape
+            nc = 0
+        else:
+            return
         if x < 0 or y < 0 or x > xmax or y > ymax:
             return
 
         wid = int(self.conf.projection_width)
-        pf = self.get_projection_plotframe()
+        new_plotter, pf = self.get_projection_plotframe()
+
+        popts = {'ylabel': 'Intensity', 'linewidth': 3}
 
         if self.conf.projections.lower() == 'x':
             y1 = int(y - wid/2. + 1)
             y2 = int(y + wid/2.) + 1
             if y1 < 0: y1 = 0
             if y2 > ymax: y2 = ymax
-            ydat = self.conf.data[y1:y2,:].sum(axis=0)
-            pf.plot(self.xdata, ydat, xlabel='X', ylabel='Intensity',
-                    title='X Slice: Y=%d:%d' %(y1, y2))
+            _x = self.xdata
+            if _x is None:
+                _x = np.arange(self.conf.data.shape[1])
+            _y = self.conf.data[y1:y2].sum(axis=0)
+            popts['xlabel'] = 'X'
+            popts['title'] = 'X Slice: Y=%d:%d' % (y1, y2)
+            if y2 == y1+1:
+                popts['title'] = 'X Slice: Y=%d' % y1
 
-        elif self.conf.projections.lower() == 'y':
+        else:
             x1 = int(x - wid/2.0 + 1)
             x2 = int(x + wid/2.0) + 1
             if x1 < 0: x1 = 0
             if x2 > xmax: x2 = xmax
-            xdat = self.conf.data[:,x1:x2].sum(axis=1)
+            _x = self.ydata
+            if _x is None:
+                _x = np.arange(self.conf.data.shape[0])
+            _y = self.conf.data[:,x1:x2].sum(axis=1)
+            popts['xlabel'] = 'Y'
+            popts['title'] = 'Y Slice: X=%d:%d' % (x1, x2)
+            if x2 == x1+1:
+                popts['title'] = 'Y Slice: X=%d' % x1
 
-            pf.plot(self.ydata, xdat, xlabel='Y', ylabel='Intensity',
-                    title='Y Slice: X=%d:%d' %(x1, x2))
+        if new_plotter:
+            if len(_y.shape) == 2 and _y.shape[1] == 3:
+                pf.plot(_x,  _y[:, 0], color=RGB_COLORS[0], delay_draw=True, **popts)
+                pf.oplot(_x, _y[:, 1], color=RGB_COLORS[1], delay_draw=True, **popts)
+                pf.oplot(_x, _y[:, 2], color=RGB_COLORS[2], **popts)
+            else:
+                pf.plot(_x, _y, **popts)
+        else:
+            pf.panel.set_title(popts['title'], delay_draw=True)
+            pf.panel.set_xlabel(popts['xlabel'], delay_draw=True)
+            if len(_y.shape) == 2 and _y.shape[1] == 3:
+                pf.update_line(0, _x,  _y[:, 0], update_limits=True, draw=False)
+                pf.update_line(1, _x,  _y[:, 1], update_limits=True, draw=False)
+                pf.update_line(2, _x,  _y[:, 2], update_limits=True, draw=True)
+            else:
+                pf.update_line(0, _x, _y, update_limits=True, draw=True)
+
 
         pf.Show()
         self.SetFocus()

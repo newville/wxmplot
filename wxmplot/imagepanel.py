@@ -14,6 +14,7 @@ import matplotlib
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
+from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig
@@ -179,6 +180,74 @@ class ImagePanel(BasePanel):
         self.axes.images[0].set_data(data)
         self.canvas.draw()
 
+    def xformatter(self, x, pos):
+        " x-axis formatter "
+        return self._format(x, dtype='x')
+
+    def yformatter(self, y, pos):
+        " y-axis formatter "
+        return self._format(y, dtype='y')
+
+
+    def _format(self, x, dtype='x'):
+        """ home built tick formatter to use with FuncFormatter():
+        x     value to be formatted
+        type  'x' or 'y' or 'y2' to set which list of ticks to get
+
+        also sets self._yfmt/self._xfmt for statusbar
+        """
+        fmt, v = '%1.5g','%1.5g'
+        if dtype == 'y':
+            ax = self.axes.yaxis
+            dat  = self.ydata
+        else:
+            ax = self.axes.xaxis
+            dat = self.xdata
+
+        try:
+            dtick = 0.1 * dat
+        except:
+            dtick = 0.2
+        try:
+            ticks = ax.get_major_locator()()
+            dtick = dat[int(ticks[1])] - dat[int(ticks[0])]
+        except:
+            pass
+
+        if dtick > 89999:
+            fmt, v = ('%.1e',  '%1.6g')
+        elif dtick > 1.99:
+            fmt, v = ('%1.0f', '%1.2f')
+        elif dtick > 0.099:
+            fmt, v = ('%1.1f', '%1.3f')
+        elif dtick > 0.0099:
+            fmt, v = ('%1.2f', '%1.4f')
+        elif dtick > 0.00099:
+            fmt, v = ('%1.3f', '%1.5f')
+        elif dtick > 0.000099:
+            fmt, v = ('%1.4f', '%1.6e')
+        elif dtick > 0.0000099:
+            fmt, v = ('%1.5f', '%1.6e')
+
+        try:
+            s =  fmt % dat[int(x)]
+            s.strip()
+            s = s.replace('+', '')
+        except:
+            s = ''
+        while s.find('e0')>0:
+            s = s.replace('e0','e')
+        while s.find('-0')>0:
+            s = s.replace('-0','-')
+        if type == 'y':
+            self._yfmt = v
+        if type == 'y2':
+            self._y2fmt = v
+        if type == 'x':
+            self._xfmt = v
+        return s
+
+
     def autoset_margins(self):
         """auto-set margins  left, bottom, right, top
         according to the specified margins (in pixels)
@@ -187,21 +256,8 @@ class ImagePanel(BasePanel):
         """
         if self.conf.show_axis:
             self.axes.set_axis_on()
-            xtlabs = []
-            for i in self.axes.get_xticks():
-                try:
-                    xtlabs.append(self.xdata[int(i)])
-                except IndexError:
-                    pass
-            self.axes.set_xticklabels(xtlabs)
-            ytlabs = []
-            for i in self.axes.get_yticks():
-                try:
-                    ytlabs.append(self.ydata[int(i)])
-                except IndexError:
-                    pass
-            self.axes.set_yticklabels(ytlabs)
-
+            self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+            self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
             l, t, r, b = 0.08, 0.96, 0.96, 0.08
             if self.xlab is not None:
                 self.axes.set_xlabel(self.xlab)
@@ -534,7 +590,6 @@ class ImagePanel(BasePanel):
         ix, iy = int(round(event.xdata)), int(round(event.ydata))
         if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
         if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix
-
         if (ix >= 0 and ix < self.conf.data.shape[1] and
             iy >= 0 and iy < self.conf.data.shape[0]):
             pos = ''
@@ -555,6 +610,7 @@ class ImagePanel(BasePanel):
             self.conf.projection_xy = ix, iy
             self.update_projections()
 
+
     def get_projection_plotframe(self):
         shown = False
         if self.projection_plotframe is not None:
@@ -564,7 +620,14 @@ class ImagePanel(BasePanel):
             except:
                 pass
         if not shown:
-            self.projection_plotframe = PlotFrame(self)
+            self.projection_plotframe = pf = PlotFrame(self)
+            try:
+                xpos, ypos = self.parent.GetPosition()
+                xsiz, ysiz = self.parent.GetSize()
+                pf.SetPosition((xpos+xsiz+10, ypos))
+            except:
+                pass
+
         return self.projection_plotframe
 
     def update_projections(self):
@@ -583,23 +646,27 @@ class ImagePanel(BasePanel):
         pf = self.get_projection_plotframe()
 
         if self.conf.projections.lower() == 'x':
-            y1 = y - wid + 1
-            y2 = y + wid
+            y1 = int(y - wid/2. + 1)
+            y2 = int(y + wid/2.) + 1
             if y1 < 0: y1 = 0
             if y2 > ymax: y2 = ymax
             ydat = self.conf.data[y1:y2,:].sum(axis=0)
             pf.plot(self.xdata, ydat, xlabel='X', ylabel='Intensity',
-                    title='X Slice: Y=%d, width=%d' %(y, wid))
-            pf.Raise()
-            pf.Show()
+                    title='X Slice: Y=%d:%d' %(y1, y2))
 
         elif self.conf.projections.lower() == 'y':
-            x1 = x - wid + 1
-            x2 = x + wid
+            x1 = int(x - wid/2.0 + 1)
+            x2 = int(x + wid/2.0) + 1
             if x1 < 0: x1 = 0
             if x2 > xmax: x2 = xmax
             xdat = self.conf.data[:,x1:x2].sum(axis=1)
+
             pf.plot(self.ydata, xdat, xlabel='Y', ylabel='Intensity',
-                    title='Y Slice: X=%d, width=%d' %(x, wid))
-            pf.Raise()
-            pf.Show()
+                    title='Y Slice: X=%d:%d' %(x1, x2))
+
+        pf.Show()
+        self.SetFocus()
+        try:
+            self.parent.Raise()
+        except:
+            pass

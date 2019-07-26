@@ -598,6 +598,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  partial(self.onFlip, mode='flip_ud'))
         MenuItem(self, mview,  'Flip Left/Right\tCtrl+F', '',
                  partial(self.onFlip, mode='flip_lr'))
+        MenuItem(self, mview,  'Reset Flips/Rotations', '',
+                 partial(self.onFlip, mode='restore'))
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Projet Horizontally\tCtrl+X', '',
@@ -670,13 +672,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
     def onFlip(self, event=None, mode=None):
         conf = self.panel.conf
         if mode == 'flip_lr':
-            conf.flip_lr = not conf.flip_lr
+            conf.flip_horiz()
         elif mode == 'flip_ud':
-            conf.flip_ud = not conf.flip_ud
-        elif mode == 'flip_orig':
-            conf.flip_lr, conf.flip_ud = False, False
+            conf.flip_vert()
         elif mode == 'rot_cw':
-            conf.rot = True
+            conf.rot90()
+        elif mode == 'restore':
+            conf.restore_flips_rotations()
         self.panel.unzoom_all()
 
     def Build_ConfigPanel(self):

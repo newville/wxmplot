@@ -14,7 +14,6 @@ import matplotlib
 import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
-from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 
 from .imageconf import ImageConfig, RGB_COLORS
@@ -56,13 +55,8 @@ class ImagePanel(BasePanel):
         self.redraw_callback = redraw_callback
         self.projection_plotframe = None
         self.win_config = None
-        self.data_shape = None
         self.size    = size
         self.dpi     = dpi
-        self.xlab    = 'X'
-        self.ylab    = 'Y'
-        self.xdata   = None
-        self.ydata   = None
         self.user_limits = {}
         self.BuildPanel()
 
@@ -79,30 +73,29 @@ class ImagePanel(BasePanel):
         conf = self.conf
         conf.log_scale = False
         conf.show_axis = show_axis
-        conf.rot, conf.flip_ud, conf.flip_lr = False, False, False
+
         conf.highlight_areas = []
         if 1 in data.shape:
             data = data.squeeze()
-        self.data_shape = data.shape
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
         conf.contrast_level = contrast_level
         if auto_contrast:
             conf.contrast_level = 1
         if x is not None:
-            self.xdata = np.array(x)
-            if self.xdata.shape[0] != data.shape[1]:
-                self.xdata = None
+            conf.xdat = np.array(x)
+            if conf.xdat.shape[0] != data.shape[1]:
+                conf.xdat = None
         if y is not None:
-            self.ydata = np.array(y)
-            if self.ydata.shape[0] != data.shape[0]:
-                self.ydata = None
+            conf.ydat = np.array(y)
+            if conf.ydat.shape[0] != data.shape[0]:
+                conf.ydat = None
 
         if xlabel is not None:
-            self.xlab = xlabel
+            conf.xlab = xlabel
         if ylabel is not None:
-            self.ylab = ylabel
+            conf.ylab = ylabel
         if store_data:
-            self.conf.data = data
+            conf.data = data
 
         cmap = self.conf.cmap[col]
         if self.conf.style == 'contour':
@@ -179,76 +172,6 @@ class ImagePanel(BasePanel):
         self.axes.images[0].set_data(data)
         self.canvas.draw()
 
-    def xformatter(self, x, pos):
-        " x-axis formatter "
-        return self._format(x, dtype='x')
-
-    def yformatter(self, y, pos):
-        " y-axis formatter "
-        return self._format(y, dtype='y')
-
-
-    def _format(self, x, dtype='x'):
-        """ home built tick formatter to use with FuncFormatter():
-        x     value to be formatted
-        type  'x' or 'y' or 'y2' to set which list of ticks to get
-
-        also sets self._yfmt/self._xfmt for statusbar
-        """
-        fmt, v = '%1.5g','%1.5g'
-        if dtype == 'y':
-            ax = self.axes.yaxis
-            dat  = self.ydata
-            if dat is None:
-                dat = np.arange(self.conf.data.shape[0])
-        else:
-            ax = self.axes.xaxis
-            dat = self.xdata
-            if dat is None:
-                dat = np.arange(self.conf.data.shape[1])
-
-        try:
-            dtick = 0.1 * dat
-        except:
-            dtick = 0.2
-        try:
-            ticks = ax.get_major_locator()()
-            dtick = dat[int(ticks[1])] - dat[int(ticks[0])]
-        except:
-            pass
-
-        if dtick > 89999:
-            fmt, v = ('%.1e',  '%1.6g')
-        elif dtick > 1.99:
-            fmt, v = ('%1.0f', '%1.2f')
-        elif dtick > 0.099:
-            fmt, v = ('%1.1f', '%1.3f')
-        elif dtick > 0.0099:
-            fmt, v = ('%1.2f', '%1.4f')
-        elif dtick > 0.00099:
-            fmt, v = ('%1.3f', '%1.5f')
-        elif dtick > 0.000099:
-            fmt, v = ('%1.4f', '%1.6e')
-        elif dtick > 0.0000099:
-            fmt, v = ('%1.5f', '%1.6e')
-
-        try:
-            s =  fmt % dat[int(x)]
-            s.strip()
-            s = s.replace('+', '')
-        except:
-            s = ''
-        while s.find('e0')>0:
-            s = s.replace('e0','e')
-        while s.find('-0')>0:
-            s = s.replace('-0','-')
-        if type == 'y':
-            self._yfmt = v
-        if type == 'y2':
-            self._y2fmt = v
-        if type == 'x':
-            self._xfmt = v
-        return s
 
 
     def autoset_margins(self):
@@ -259,14 +182,14 @@ class ImagePanel(BasePanel):
         """
         if self.conf.show_axis:
             self.axes.set_axis_on()
-            self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
-            self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
+            self.conf.set_formatters()
+
             l, t, r, b = 0.08, 0.96, 0.96, 0.08
-            if self.xlab is not None:
-                self.axes.set_xlabel(self.xlab)
+            if self.conf.xlab is not None:
+                self.axes.set_xlabel(self.conf.xlab)
                 b, t = 0.11, 0.96
-            if self.ylab is not None:
-                self.axes.set_ylabel(self.ylab)
+            if self.conf.ylab is not None:
+                self.axes.set_ylabel(self.conf.ylab)
                 l, r = 0.11, 0.96
         else:
             self.axes.set_axis_off()
@@ -385,7 +308,7 @@ class ImagePanel(BasePanel):
 
     def rotate90(self, event=None):
         "rotate 90 degrees, CW"
-        self.conf.rot = True
+        self.conf.rot90()
         self.unzoom_all()
 
     def toggle_curmode(self, event=None):
@@ -487,32 +410,18 @@ class ImagePanel(BasePanel):
         self.unzoom(event)
 
     def redraw(self, col=0):
-        """redraw image, applying the following:
-        rotation, flips, log scale
-        max/min values from sliders or explicit intensity ranges
-        color map
-        interpolation
+        """redraw image, applying
+        - log scaling,
+        - max/min values from sliders or explicit intensity ranges
+        - color map
+        - interpolation
         """
         conf = self.conf
-        # note: rotation re-calls display(), to reset the image
-        # other transformations will just do .set_data() on image
-        if conf.rot:
-            if self.xdata is not None:
-                self.xdata = self.xdata[::-1]
-            if self.ydata is not None:
-                self.ydata = self.ydata[:]
-
-            self.display(np.rot90(conf.data),
-                         x=self.ydata, xlabel=self.ylab,
-                         y=self.xdata, ylabel=self.xlab)
-        # flips, log scales
         img = conf.data
         if img is None: return
         if len(img.shape) == 2:
             col = 0
         if self.conf.style == 'image':
-            if conf.flip_ud:   img = np.flipud(img)
-            if conf.flip_lr:   img = np.fliplr(img)
             if conf.log_scale:
                 img = np.log10(1 + 9.0*img)
 
@@ -591,17 +500,17 @@ class ImagePanel(BasePanel):
             return
 
         ix, iy = int(round(event.xdata)), int(round(event.ydata))
-        if self.conf.flip_ud:  iy = self.conf.data.shape[0] - iy
-        if self.conf.flip_lr:  ix = self.conf.data.shape[1] - ix
-        if (ix >= 0 and ix < self.conf.data.shape[1] and
-            iy >= 0 and iy < self.conf.data.shape[0]):
+
+        conf = self.conf
+        if (ix >= 0 and ix < conf.data.shape[1] and
+            iy >= 0 and iy < conf.data.shape[0]):
             pos = ''
-            if self.xdata is not None:
-                pos = ' %s=%.4g,' % (self.xlab, self.xdata[ix])
-            if self.ydata is not None:
-                pos = '%s %s=%.4g,' % (pos, self.ylab, self.ydata[iy])
-            dval = self.conf.data[iy, ix]
-            if len(self.data_shape) == 3:
+            if conf.xdat is not None:
+                pos = ' %s=%.4g,' % (conf.xlab, conf.xdat[ix])
+            if conf.ydat is not None:
+                pos = '%s %s=%.4g,' % (pos, conf.ylab, conf.ydat[iy])
+            dval = conf.data[iy, ix]
+            if len(conf.data.shape) == 3:
                 dval = "%.4g, %.4g, %.4g" % tuple(dval)
             else:
                 dval = "%.4g" % dval
@@ -662,7 +571,7 @@ class ImagePanel(BasePanel):
             y2 = int(y + wid/2.) + 1
             if y1 < 0: y1 = 0
             if y2 > ymax: y2 = ymax
-            _x = self.xdata
+            _x = self.conf.xdat
             if _x is None:
                 _x = np.arange(self.conf.data.shape[1])
             _y = self.conf.data[y1:y2].sum(axis=0)
@@ -676,7 +585,7 @@ class ImagePanel(BasePanel):
             x2 = int(x + wid/2.0) + 1
             if x1 < 0: x1 = 0
             if x2 > xmax: x2 = xmax
-            _x = self.ydata
+            _x = self.conf.ydat
             if _x is None:
                 _x = np.arange(self.conf.data.shape[0])
             _y = self.conf.data[:,x1:x2].sum(axis=1)

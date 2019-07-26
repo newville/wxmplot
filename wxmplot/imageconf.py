@@ -1,6 +1,7 @@
 import wx
 import numpy as np
 import matplotlib.cm as colormap
+from matplotlib.ticker import FuncFormatter
 from .colors import register_custom_colormaps
 from .config import bool_ifnotNone, ifnotNone
 
@@ -47,9 +48,9 @@ class ImageConfig:
         self.interp = 'nearest'
         self.show_axis = False
         self.log_scale = False
-        self.flip_ud = False
-        self.flip_lr = False
-        self.rot  = False
+        self.flipud_applied = False
+        self.fliplr_applied = False
+        self.rot_level  = 0
         self.contrast_level = 0
         self.datalimits = [None, None, None, None]
         self.cmap_lo = [0, 0, 0]
@@ -60,6 +61,10 @@ class ImageConfig:
         self.int_lo = [0, 0, 0]
         self.int_hi = [1, 1, 1]
         self.data = None
+        self.xdat = None
+        self.ydat = None
+        self.xlab = 'X'
+        self.ylab = 'Y'
         self.indices = None
         self.title = 'image'
         self.style = 'image'
@@ -74,6 +79,135 @@ class ImageConfig:
         self.projections = None
         self.projection_xy = -1, -1
         self.projection_width = 1
+        self.set_formatters()
+
+
+    def flip_vert(self):
+        "flip image along vertical axis (up/down)"
+        self.data = np.flipud(self.data)
+        if self.ydat is not None:
+            self.ydat = self.ydat[::-1]
+        self.flipud_applied = not self.flipud_applied
+
+    def flip_horiz(self):
+        "flip image along horizontal axis (left/right)"
+        self.data = np.fliplr(self.data)
+        if self.xdat is not None:
+            self.xdat = self.xdat[::-1]
+        self.fliplr_applied = not self.fliplr_applied
+
+    def rot90(self):
+        "rotate image clockwise by 90 degrees"
+        if self.xdat is not None:
+            self.xdat = self.xdat[::-1]
+        if self.ydat is not None:
+            self.ydat = self.ydat[:]
+        self.xdat, self.ydat = self.ydat, self.xdat
+        self.xlab, self.ylab = self.ylab, self.xlab
+        self.data = np.rot90(self.data)
+        self.rot_level += 1
+        if self.rot_level == 4:
+            self.rot_level = 0
+        print("Rot !!  ", self.rot_level)
+        self.set_formatters()
+
+    def restore_flips_rotations(self):
+        "restore flips and rotations"
+        if self.fliplr_applied:
+            self.flip_horiz()
+        if self.flipud_applied:
+            self.flip_vert()
+        if self.rot_level != 0:
+            for i in range(4-self.rot_level):
+                self.rot90()
+
+    def set_formatters(self):
+        if self.axes is None:
+            return
+        # self.axes.xaxis.set_major_formatter(FuncFormatter(self.yformatter))
+        # self.axes.yaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        # else:
+        #   self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        #   self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
+
+    def xformatter(self, x, pos):
+        " x-axis formatter "
+        return self._format(x, pos, dtype='x')
+
+    def yformatter(self, y, pos):
+        " y-axis formatter "
+        return self._format(y, pos, dtype='y')
+
+    def _format(self, x, pos, dtype='x'):
+        """ home built tick formatter to use with FuncFormatter():
+        x     value to be formatted
+        type  'x' or 'y' or 'y2' to set which list of ticks to get
+
+        also sets self._yfmt/self._xfmt for statusbar
+        """
+        fmt, v = '%1.5g','%1.5g'
+        if dtype == 'y':
+            ax = self.axes.yaxis
+            dat  = self.ydat
+            if self.rot_level % 2 != 0:
+                pass
+                # ax = self.axes.xaxis
+                # dat = self.xdat
+            if dat is None:
+                dat = np.arange(self.data.shape[0])
+        else:
+            ax = self.axes.xaxis
+            dat = self.xdat
+            if self.rot_level % 2 != 0:
+                # ax = self.axes.yaxis
+                # dat = self.ydat
+                pass
+            if dat is None:
+                dat = np.arange(self.data.shape[1])
+
+        try:
+            dtick = 0.1 * dat
+        except:
+            dtick = 0.2
+        try:
+            ticks = ax.get_major_locator()()
+            dtick = abs(dat[int(ticks[1])] - dat[int(ticks[0])])
+        except:
+            pass
+        print("Format ", dtype, ax, pos, self.rot_level, len(dat), dat[0], dat[-1], self.xdat[0])
+
+        if dtick > 89999:
+            fmt, v = ('%.1e',  '%1.6g')
+        elif dtick > 1.99:
+            fmt, v = ('%1.0f', '%1.2f')
+        elif dtick > 0.099:
+            fmt, v = ('%1.1f', '%1.3f')
+        elif dtick > 0.0099:
+            fmt, v = ('%1.2f', '%1.4f')
+        elif dtick > 0.00099:
+            fmt, v = ('%1.3f', '%1.5f')
+        elif dtick > 0.000099:
+            fmt, v = ('%1.4f', '%1.6e')
+        elif dtick > 0.0000099:
+            fmt, v = ('%1.5f', '%1.6e')
+
+        try:
+            s =  fmt % dat[int(x)]
+            s.strip()
+            s = s.replace('+', '')
+        except:
+            s = ''
+        while s.find('e0')>0:
+            s = s.replace('e0','e')
+        while s.find('-0')>0:
+            s = s.replace('-0','-')
+        if type == 'y':
+            self._yfmt = v
+        if type == 'y2':
+            self._y2fmt = v
+        if type == 'x':
+            self._xfmt = v
+        return s
 
     def relabel(self):
         " re draw labels (title, x,y labels)"

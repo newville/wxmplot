@@ -670,16 +670,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         pf.Show()
 
     def onFlip(self, event=None, mode=None):
-        conf = self.panel.conf
+        panel = self.panel
         if mode == 'flip_lr':
-            conf.flip_horiz()
+            panel.flip_horiz()
         elif mode == 'flip_ud':
-            conf.flip_vert()
+            panel.flip_vert()
         elif mode == 'rot_cw':
-            conf.rot90()
+            panel.rotate90()
         elif mode == 'restore':
-            conf.restore_flips_rotations()
-        self.panel.unzoom_all()
+            panel.restore_flips_rotations()
+        panel.unzoom_all()
 
     def Build_ConfigPanel(self):
         """config panel for left-hand-side of frame: RGB Maps"""

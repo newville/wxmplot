@@ -577,10 +577,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         m = MenuItem(self, mview, 'Toggle Axes Labels\tCtrl+A',
                      'Toggle displacy of Axis labels',
                      self.onAxesLabels, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.show_axis)
         m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
                      'Toggle background color for 3-color images',
                      self.onTriColorBG, kind=wx.ITEM_CHECK)
-        m.Check(False)
+        m.Check(self.panel.conf.tricolor_bg == 'white')
         self.optional_menus.append((m, True))
 
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
@@ -592,6 +593,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  'Show Intensity Histogram', self.show_histogram)
 
         mview.AppendSeparator()
+        m = MenuItem(self, mview, 'Toggle Contour Plot\tCtrl+N',
+                     'Shown as contour map',
+                     self.onContourToggle, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.style=='contour')
+        self.optional_menus.append((m, False))
+
+        m = MenuItem(self, mview, 'Configure Contours', 'Configure Contours',
+                     self.onContourConfig)
+
+        mview.AppendSeparator()
         MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
                  partial(self.onFlip, mode='rot_cw'))
         MenuItem(self, mview,  'Flip Top/Bottom\tCtrl+T', '',
@@ -601,20 +612,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mview,  'Reset Flips/Rotations', '',
                  partial(self.onFlip, mode='restore'))
 
-        mview.AppendSeparator()
-        MenuItem(self, mview, 'Projet Horizontally\tCtrl+X', '',
-                 partial(self.onProject, mode='x'))
-        MenuItem(self, mview, 'Projet Vertically\tCtrl+Y', '',
-                 partial(self.onProject, mode='y'))
 
-        mview.AppendSeparator()
-        m = MenuItem(self, mview, 'As Contour', 'Shown as contour map',
-                     self.onContourToggle, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.style=='contour')
-        self.optional_menus.append((m, False))
-
-        m = MenuItem(self, mview, 'Configure Contours', 'Configure Contours',
-                     self.onContourConfig)
         self.optional_menus.append((m, False))
 
         # help
@@ -639,35 +637,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def onCursorMode(self, event=None, mode='zoom'):
         self.panel.cursor_mode = mode
-
-    def onProject(self, event=None, mode='y'):
-        wid = event.GetId()
-        if mode=='x':
-            x = self.panel.ydata
-            y = self.panel.conf.data.sum(axis=1)
-            axname = 'horizontal'
-            if x is None:
-                x = np.arange(y.shape[0])
-
-        else:
-            x = self.panel.xdata
-            y = self.panel.conf.data.sum(axis=0)
-            if x is None:
-                x = np.arange(y.shape[0])
-
-            axname = 'vertical'
-        title = '%s: sum along %s axis' % (self.GetTitle(), axname)
-
-        pf = PlotFrame(title=title, parent=self, size=(500, 250))
-        colors = RGB_COLORS
-        if len(y.shape) == 2 and y.shape[1] == 3:
-            pf.plot(x, y[:,0], color=colors[0])
-            pf.oplot(x, y[:,1], color=colors[1])
-            pf.oplot(x, y[:,2], color=colors[2])
-        else:
-            pf.plot(x, y)
-        pf.Raise()
-        pf.Show()
 
     def onFlip(self, event=None, mode=None):
         panel = self.panel
@@ -745,8 +714,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.cmap_panels[0].set_colormap()
 
         panel.axes.cla()
-        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
-                      xlabel=panel.xlab, ylabel=panel.ylab,
+        panel.display(conf.data, x=conf.xdat, y=conf.ydat,
+                      xlabel=conf.xlab, ylabel=conf.ylab,
                       contour_labels=conf.contour_labels,
                       nlevels=conf.ncontour_levels, style='contour')
         panel.redraw()
@@ -769,9 +738,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if self.config_mode == 'int':
             self.cmap_panels[0].set_colormap()
         panel.axes.cla()
-        panel.display(conf.data, x=panel.xdata, y = panel.ydata,
+        panel.display(conf.data, x=conf.xdat, y = conf.ydat,
                       nlevels=nlevels, contour_labels=conf.contour_labels,
-                      xlabel=panel.xlab, ylabel=panel.ylab,
+                      xlabel=conf.xlab, ylabel=conf.ylab,
                       style=conf.style)
         panel.redraw()
 
@@ -954,10 +923,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         buff.append("#%s" % ('  '.join(labels)))
         xdat = np.arange(nx)
         ydat = np.arange(ny)
-        if self.panel.xdata is not None:
-            xdat = self.panel.xdata
-        if self.panel.ydata is not None:
-            ydat = self.panel.ydata
+        if self.panel.conf.xdat is not None:
+            xdat = self.panel.conf.xdat
+        if self.panel.conf.ydat is not None:
+            ydat = self.panel.conf.ydat
 
         for iy in range(ny):
             for ix in range(nx):

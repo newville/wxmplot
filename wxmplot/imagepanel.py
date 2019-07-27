@@ -305,11 +305,37 @@ class ImagePanel(BasePanel):
         MenuItem(self, popup, 'Rotate 90deg  (CW)', '', self.rotate90)
         MenuItem(self, popup, 'Save Image', '', self.save_figure)
 
-
-    def rotate90(self, event=None):
+    def rotate90(self, event=None, display=True):
         "rotate 90 degrees, CW"
-        self.conf.rot90()
-        self.unzoom_all()
+        self.conf.rotate90()
+        if display:
+            conf = self.conf
+            self.display(conf.data, x=conf.xdat, y=conf.ydat,
+                         xlabel=conf.xlab, ylabel=conf.ylab,
+                         show_axis=conf.show_axis)
+
+    def flip_horiz(self):
+        self.conf.flip_horiz()
+
+    def flip_vert(self):
+        self.conf.flip_vert()
+
+    def restore_flips_rotations(self):
+        "restore flips and rotations"
+        conf = self.conf
+        if conf.fliplr_applied:
+            self.flip_horiz()
+        if conf.flipud_applied:
+            self.flip_vert()
+        if conf.rot_level != 0:
+            for i in range(4-conf.rot_level):
+                self.rotate90(display=False)
+            self.display(conf.data, x=conf.xdat, y=conf.ydat,
+                         xlabel=conf.xlab, ylabel=conf.ylab,
+                         show_axis=conf.show_axis)
+
+
+
 
     def toggle_curmode(self, event=None):
         "toggle cursor mode"

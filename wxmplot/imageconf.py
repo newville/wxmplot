@@ -96,8 +96,8 @@ class ImageConfig:
             self.xdat = self.xdat[::-1]
         self.fliplr_applied = not self.fliplr_applied
 
-    def rot90(self):
-        "rotate image clockwise by 90 degrees"
+    def rotate90(self, event=None):
+        "rotate 90 degrees, CW"
         if self.xdat is not None:
             self.xdat = self.xdat[::-1]
         if self.ydat is not None:
@@ -108,27 +108,11 @@ class ImageConfig:
         self.rot_level += 1
         if self.rot_level == 4:
             self.rot_level = 0
-        print("Rot !!  ", self.rot_level)
-        self.set_formatters()
-
-    def restore_flips_rotations(self):
-        "restore flips and rotations"
-        if self.fliplr_applied:
-            self.flip_horiz()
-        if self.flipud_applied:
-            self.flip_vert()
-        if self.rot_level != 0:
-            for i in range(4-self.rot_level):
-                self.rot90()
 
     def set_formatters(self):
-        if self.axes is None:
-            return
-        # self.axes.xaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        # self.axes.yaxis.set_major_formatter(FuncFormatter(self.xformatter))
-        # else:
-        #   self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
-        #   self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
+        if self.axes is not None:
+            self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+            self.axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
 
     def xformatter(self, x, pos):
         " x-axis formatter "
@@ -149,32 +133,27 @@ class ImageConfig:
         if dtype == 'y':
             ax = self.axes.yaxis
             dat  = self.ydat
-            if self.rot_level % 2 != 0:
-                pass
-                # ax = self.axes.xaxis
-                # dat = self.xdat
             if dat is None:
                 dat = np.arange(self.data.shape[0])
         else:
             ax = self.axes.xaxis
             dat = self.xdat
-            if self.rot_level % 2 != 0:
-                # ax = self.axes.yaxis
-                # dat = self.ydat
-                pass
             if dat is None:
                 dat = np.arange(self.data.shape[1])
 
+        ticks = [0,1]
         try:
-            dtick = 0.1 * dat
+            dtick = 0.1 * (dat.max() - dat.min())
         except:
             dtick = 0.2
         try:
             ticks = ax.get_major_locator()()
+        except:
+            ticks = [0, 1]
+        try:
             dtick = abs(dat[int(ticks[1])] - dat[int(ticks[0])])
         except:
             pass
-        print("Format ", dtype, ax, pos, self.rot_level, len(dat), dat[0], dat[-1], self.xdat[0])
 
         if dtick > 89999:
             fmt, v = ('%.1e',  '%1.6g')

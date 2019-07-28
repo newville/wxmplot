@@ -129,8 +129,8 @@ class ImagePanel(BasePanel):
             if contour_labels is None:
                 contour_labels = self.conf.contour_labels
             if contour_labels:
-                nlog = np.log10(clevels[1])
-                fmt = "%.3f"
+                nlog = np.log10(abs(clevels[1]-clevels[0]))
+                fmt = "%.4f"
                 if nlog < -2:
                     fmt = "%%.%df" % (1-nlog)
                 elif nlog > 2:
@@ -312,7 +312,8 @@ class ImagePanel(BasePanel):
             conf = self.conf
             self.display(conf.data, x=conf.xdat, y=conf.ydat,
                          xlabel=conf.xlab, ylabel=conf.ylab,
-                         show_axis=conf.show_axis)
+                         show_axis=conf.show_axis,
+                         levels=conf.ncontour_levels)
 
     def flip_horiz(self):
         self.conf.flip_horiz()
@@ -323,9 +324,9 @@ class ImagePanel(BasePanel):
     def restore_flips_rotations(self):
         "restore flips and rotations"
         conf = self.conf
-        if conf.fliplr_applied:
+        if conf.flip_lr:
             self.flip_horiz()
-        if conf.flipud_applied:
+        if conf.flip_ud:
             self.flip_vert()
         if conf.rot_level != 0:
             for i in range(4-conf.rot_level):
@@ -540,7 +541,7 @@ class ImagePanel(BasePanel):
                 dval = "%.4g, %.4g, %.4g" % tuple(dval)
             else:
                 dval = "%.4g" % dval
-            msg = "Pixel [%i, %i],%s Intensity=%s " % (ix, iy, pos, dval)
+            msg = "Pixel [%i, %i], %s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
             self.conf.projection_xy = ix, iy

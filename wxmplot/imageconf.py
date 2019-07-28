@@ -48,8 +48,8 @@ class ImageConfig:
         self.interp = 'nearest'
         self.show_axis = False
         self.log_scale = False
-        self.flipud_applied = False
-        self.fliplr_applied = False
+        self.flip_ud = False
+        self.flip_lr = False
         self.rot_level  = 0
         self.contrast_level = 0
         self.datalimits = [None, None, None, None]
@@ -87,14 +87,14 @@ class ImageConfig:
         self.data = np.flipud(self.data)
         if self.ydat is not None:
             self.ydat = self.ydat[::-1]
-        self.flipud_applied = not self.flipud_applied
+        self.flip_ud = not self.flip_ud
 
     def flip_horiz(self):
         "flip image along horizontal axis (left/right)"
         self.data = np.fliplr(self.data)
         if self.xdat is not None:
             self.xdat = self.xdat[::-1]
-        self.fliplr_applied = not self.fliplr_applied
+        self.flip_lr = not self.flip_lr
 
     def rotate90(self, event=None):
         "rotate 90 degrees, CW"

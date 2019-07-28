@@ -37,7 +37,9 @@ from .imageconf import ColorMap_List, Interp_List
 from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack, fix_filename, gformat
 
-COLORMAPS = ('blue', 'red', 'green', 'magenta', 'cyan', 'yellow')
+COLORMAPS = ('blue', 'red', 'green', 'yellow', 'cyan', 'magenta')
+CM_DEFS = ('blue', 'yellow')
+
 ###, 'Reds', 'Greens', 'Blues')
 
 def color_complements(color):
@@ -118,7 +120,7 @@ class ImageMatrixFrame(BaseFrame):
             self.cmap_panels[i] =  ColorMapPanel(conf_panel, imgpanel,
                                                  title='Map %i: ' % (i+1),
                                                  color=0,
-                                                 default=COLORMAPS[i],
+                                                 default=CM_DEFS[i],
                                                  colormap_list=COLORMAPS,
                                                  cmap_callback=partial(self.onColorMap, index=i))
 
@@ -127,7 +129,7 @@ class ImageMatrixFrame(BaseFrame):
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
 
-        self.interp_panel = InterpPanel(self.config_panel,
+        self.interp_panel = InterpPanel(self.config_panel, self.img1_panel, default=0,
                                         callback=self.onInterp)
         self.contrast_panel = ContrastPanel(self.config_panel,
                                             callback=self.set_contrast_levels)
@@ -186,12 +188,16 @@ class ImageMatrixFrame(BaseFrame):
         opanel.cmap_choice.Clear()
         for c in colors:
             opanel.cmap_choice.Append(c)
-        if c1 in colors:
-            opanel.cmap_choice.SetStringSelection(c1)
-        else:
-            opanel.cmap_choice.SetStringSelection(colors[0])
-            opanel.set_colormap(name=colors[0])
-            opanel.imgpanel.redraw()
+
+
+        ic1 = (COLORMAPS.index(name) + 3) % 6
+        if COLORMAPS[ic1] in colors:
+            c1 = COLORMAPS[ic1]
+        if c1  not in colors:
+            c1 = colors[0]
+        opanel.cmap_choice.SetStringSelection(c1)
+        opanel.set_colormap(name=c1)
+        opanel.imgpanel.redraw()
 
     def unzoom_all(self, event=None):
         self.unzoom(event=event)

@@ -60,6 +60,23 @@ class ImagePanel(BasePanel):
         self.user_limits = {}
         self.BuildPanel()
 
+    @property
+    def xdata(self):
+        return self.conf.xdata
+
+    @xdata.setter
+    def xdata(self, value):
+        self.conf.xdata = value
+
+    @property
+    def ydata(self):
+        return self.conf.ydata
+
+    @ydata.setter
+    def ydata(self, value):
+        self.conf.ydata = value
+
+
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
                 store_data=True, col=0, unzoom=True, show_axis=False,
@@ -82,13 +99,13 @@ class ImagePanel(BasePanel):
         if auto_contrast:
             conf.contrast_level = 1
         if x is not None:
-            conf.xdat = np.array(x)
-            if conf.xdat.shape[0] != data.shape[1]:
-                conf.xdat = None
+            conf.xdata = np.array(x)
+            if conf.xdata.shape[0] != data.shape[1]:
+                conf.xdata = None
         if y is not None:
-            conf.ydat = np.array(y)
-            if conf.ydat.shape[0] != data.shape[0]:
-                conf.ydat = None
+            conf.ydata = np.array(y)
+            if conf.ydata.shape[0] != data.shape[0]:
+                conf.ydata = None
 
         if xlabel is not None:
             conf.xlab = xlabel
@@ -310,7 +327,7 @@ class ImagePanel(BasePanel):
         self.conf.rotate90()
         if display:
             conf = self.conf
-            self.display(conf.data, x=conf.xdat, y=conf.ydat,
+            self.display(conf.data, x=conf.xdata, y=conf.ydata,
                          xlabel=conf.xlab, ylabel=conf.ylab,
                          show_axis=conf.show_axis,
                          levels=conf.ncontour_levels)
@@ -331,7 +348,7 @@ class ImagePanel(BasePanel):
         if conf.rot_level != 0:
             for i in range(4-conf.rot_level):
                 self.rotate90(display=False)
-            self.display(conf.data, x=conf.xdat, y=conf.ydat,
+            self.display(conf.data, x=conf.xdata, y=conf.ydata,
                          xlabel=conf.xlab, ylabel=conf.ylab,
                          show_axis=conf.show_axis)
 
@@ -532,10 +549,10 @@ class ImagePanel(BasePanel):
         if (ix >= 0 and ix < conf.data.shape[1] and
             iy >= 0 and iy < conf.data.shape[0]):
             pos = ''
-            if conf.xdat is not None:
-                pos = ' %s=%.4g,' % (conf.xlab, conf.xdat[ix])
-            if conf.ydat is not None:
-                pos = '%s %s=%.4g,' % (pos, conf.ylab, conf.ydat[iy])
+            if conf.xdata is not None:
+                pos = ' %s=%.4g,' % (conf.xlab, conf.xdata[ix])
+            if conf.ydata is not None:
+                pos = '%s %s=%.4g,' % (pos, conf.ylab, conf.ydata[iy])
             dval = conf.data[iy, ix]
             if len(conf.data.shape) == 3:
                 dval = "%.4g, %.4g, %.4g" % tuple(dval)
@@ -598,7 +615,7 @@ class ImagePanel(BasePanel):
             y2 = int(y + wid/2.) + 1
             if y1 < 0: y1 = 0
             if y2 > ymax: y2 = ymax
-            _x = self.conf.xdat
+            _x = self.conf.xdata
             if _x is None:
                 _x = np.arange(self.conf.data.shape[1])
             _y = self.conf.data[y1:y2].sum(axis=0)
@@ -612,7 +629,7 @@ class ImagePanel(BasePanel):
             x2 = int(x + wid/2.0) + 1
             if x1 < 0: x1 = 0
             if x2 > xmax: x2 = xmax
-            _x = self.conf.ydat
+            _x = self.conf.ydata
             if _x is None:
                 _x = np.arange(self.conf.data.shape[0])
             _y = self.conf.data[:,x1:x2].sum(axis=1)

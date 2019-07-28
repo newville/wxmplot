@@ -61,8 +61,8 @@ class ImageConfig:
         self.int_lo = [0, 0, 0]
         self.int_hi = [1, 1, 1]
         self.data = None
-        self.xdat = None
-        self.ydat = None
+        self.xdata = None
+        self.ydata = None
         self.xlab = 'X'
         self.ylab = 'Y'
         self.indices = None
@@ -92,17 +92,17 @@ class ImageConfig:
     def flip_horiz(self):
         "flip image along horizontal axis (left/right)"
         self.data = np.fliplr(self.data)
-        if self.xdat is not None:
-            self.xdat = self.xdat[::-1]
+        if self.xdata is not None:
+            self.xdata = self.xdata[::-1]
         self.flip_lr = not self.flip_lr
 
     def rotate90(self, event=None):
         "rotate 90 degrees, CW"
-        if self.xdat is not None:
-            self.xdat = self.xdat[::-1]
-        if self.ydat is not None:
-            self.ydat = self.ydat[:]
-        self.xdat, self.ydat = self.ydat, self.xdat
+        if self.xdata is not None:
+            self.xdata = self.xdata[::-1]
+        if self.ydata is not None:
+            self.ydata = self.ydata[:]
+        self.xdata, self.ydata = self.ydata, self.xdata
         self.xlab, self.ylab = self.ylab, self.xlab
         self.data = np.rot90(self.data)
         self.rot_level += 1
@@ -132,12 +132,12 @@ class ImageConfig:
         fmt, v = '%1.5g','%1.5g'
         if dtype == 'y':
             ax = self.axes.yaxis
-            dat  = self.ydat
+            dat  = self.ydata
             if dat is None:
                 dat = np.arange(self.data.shape[0])
         else:
             ax = self.axes.xaxis
-            dat = self.xdat
+            dat = self.xdata
             if dat is None:
                 dat = np.arange(self.data.shape[1])
 

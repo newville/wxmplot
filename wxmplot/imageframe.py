@@ -714,7 +714,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             self.cmap_panels[0].set_colormap()
 
         panel.axes.cla()
-        panel.display(conf.data, x=conf.xdat, y=conf.ydat,
+        panel.display(conf.data, x=conf.xdata, y=conf.ydata,
                       xlabel=conf.xlab, ylabel=conf.ylab,
                       contour_labels=conf.contour_labels,
                       nlevels=conf.ncontour_levels, style='contour')
@@ -738,10 +738,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if self.config_mode == 'int':
             self.cmap_panels[0].set_colormap()
         panel.axes.cla()
-        panel.display(conf.data, x=conf.xdat, y = conf.ydat,
-                      nlevels=nlevels, contour_labels=conf.contour_labels,
-                      xlabel=conf.xlab, ylabel=conf.ylab,
-                      style=conf.style)
+        panel.display(conf.data, x=conf.xdata, y=conf.ydata, nlevels=nlevels,
+                      contour_labels=conf.contour_labels, style=conf.style,
+                      xlabel=conf.xlab, ylabel=conf.ylab)
         panel.redraw()
 
     def onAxesLabels(self, event=None):
@@ -921,16 +920,16 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         labels = [(' '*(11-len(l)) + l + ' ') for l in labels]
         buff.append("#%s" % ('  '.join(labels)))
-        xdat = np.arange(nx)
-        ydat = np.arange(ny)
-        if self.panel.conf.xdat is not None:
-            xdat = self.panel.conf.xdat
-        if self.panel.conf.ydat is not None:
-            ydat = self.panel.conf.ydat
+        xdata = np.arange(nx)
+        ydata = np.arange(ny)
+        if self.panel.conf.xdata is not None:
+            xdata = self.panel.conf.xdata
+        if self.panel.conf.ydata is not None:
+            ydata = self.panel.conf.ydata
 
         for iy in range(ny):
             for ix in range(nx):
-                darr = [ydat[iy], xdat[ix]]
+                darr = [ydata[iy], xdata[ix]]
                 if narr == 1:
                     darr.append(data[iy, ix])
                 else:

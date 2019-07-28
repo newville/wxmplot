@@ -85,8 +85,8 @@ class ImageConfig:
     def flip_vert(self):
         "flip image along vertical axis (up/down)"
         self.data = np.flipud(self.data)
-        if self.ydat is not None:
-            self.ydat = self.ydat[::-1]
+        if self.ydata is not None:
+            self.ydata = self.ydata[::-1]
         self.flip_ud = not self.flip_ud
 
     def flip_horiz(self):

@@ -249,10 +249,11 @@ class ColorMapPanel(wx.Panel):
 
 class InterpPanel(wx.Panel):
     """interpoloation / smoothing panel"""
-    def __init__(self, parent, imgpanel, default=0, **kws):
+    def __init__(self, parent, imgpanel, default=0, callback=None, **kws):
         wx.Panel.__init__(self, parent, -1,  **kws)
 
         self.imgpanel = imgpanel
+        self.callback = callback
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         sizer = wx.GridBagSizer(2, 2)
 
@@ -272,6 +273,8 @@ class InterpPanel(wx.Panel):
             name = Interp_List[0]
         self.imgpanel.conf.interp = name
         self.imgpanel.redraw()
+        if callable(self.callback):
+            self.callback(name=name)
 
 class ProjectionPanel(wx.Panel):
     """X/Y projections panel"""

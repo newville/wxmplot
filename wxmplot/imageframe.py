@@ -577,27 +577,37 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  "Zoom out to full data range",
                  self.panel.unzoom)
 
-        m = MenuItem(self, mview, 'Toggle Axes Labels\tCtrl+A',
-                     'Toggle displacy of Axis labels',
-                     self.onAxesLabels, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.show_axis)
-        m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
-                     'Toggle background color for 3-color images',
-                     self.onTriColorBG, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.tricolor_bg == 'white')
-        self.optional_menus.append((m, True))
 
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
                  'Cycle Through Contrast Choices', self.cycle_contrast)
         MenuItem(self, mview, 'Reduce Contrast Cycle\tCtrl+-',
                  'Cycle Through Contrast Choices',
                  partial(self.cycle_contrast, dir='back'))
-        MenuItem(self, mview, 'Show Histogram\tCtrl+G',
+        MenuItem(self, mview, 'Display Histogram\tCtrl+G',
                  'Show Intensity Histogram', self.show_histogram)
 
         mview.AppendSeparator()
-        m = MenuItem(self, mview, 'Toggle Contour Plot\tCtrl+N',
-                     'Shown as contour map',
+
+        m = MenuItem(self, mview, 'Show Axes Labels\tCtrl+A',
+                     'Toggle displacy of Axis labels',
+                     self.onAxesLabels, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.show_axis)
+
+        m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
+                     'Toggle background color for 3-color images',
+                     self.onTriColorBG, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.tricolor_bg == 'white')
+        self.optional_menus.append((m, True))
+
+        m = MenuItem(self, mview, 'Show Slices on Motion',
+                     'Dynamically update Slice Plots on Mouse Motion',
+                     self.onSliceMotion, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.projection_onmotion)
+
+        mview.AppendSeparator()
+
+        m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
+                     'Shown as Contour Plot',
                      self.onContourToggle, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.style=='contour')
         self.optional_menus.append((m, False))
@@ -750,6 +760,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = self.panel.conf
         conf.show_axis = not conf.show_axis
         self.panel.autoset_margins()
+        self.panel.redraw()
+
+    def onSliceMotion(self, event=None):
+        conf = self.panel.conf
+        conf.projection_onmotion = not conf.projection_onmotion
         self.panel.redraw()
 
     def onTriColorBG(self, event=None):

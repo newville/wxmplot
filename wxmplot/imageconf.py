@@ -79,6 +79,7 @@ class ImageConfig:
         self.projections = None
         self.projection_xy = -1, -1
         self.projection_width = 1
+        self.projection_onmotion = False
         self.set_formatters()
 
 

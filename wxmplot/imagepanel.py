@@ -537,6 +537,30 @@ class ImagePanel(BasePanel):
             self.redraw_callback(wid=self.GetId())
 
 
+    def report_motion(self, event=None):
+        if event.inaxes is None:
+            return
+        fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
+        x, y  = event.xdata, event.ydata
+        if len(self.fig.get_axes()) > 1:
+            try:
+                x, y = self.axes.transData.inverted().transform((x, y))
+            except:
+                pass
+        if self.motion_sbar is None:
+            try:
+                self.motion_sbar = self.nstatusbar-1
+            except AttributeError:
+                self.motion_sbar = 1
+        self.write_message(fmt % (x, y), panel=self.motion_sbar)
+        conf = self.conf
+        if conf.projection_onmotion:
+            ix, iy = int(round(x)), int(round(y))
+            if (ix >= 0 and ix < conf.data.shape[1] and
+                iy >= 0 and iy < conf.data.shape[0]):
+                conf.projection_xy = ix, iy
+                self.update_projections()
+
     def report_leftdown(self,event=None):
         if event == None:
             return
@@ -561,7 +585,7 @@ class ImagePanel(BasePanel):
             msg = "Pixel [%i, %i], %s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
-            self.conf.projection_xy = ix, iy
+            conf.projection_xy = ix, iy
             self.update_projections()
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)

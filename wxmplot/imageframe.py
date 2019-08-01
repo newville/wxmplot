@@ -27,7 +27,7 @@ from .plotframe import PlotFrame
 from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack, gformat
 from .contourdialog import ContourDialog
-from .slicedialog import ImageSliceDialog
+
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
@@ -359,6 +359,56 @@ class ContrastPanel(wx.Panel):
                 clevel = float(clevel)
             self.callback(contrast_level=clevel)
 
+
+class ImageSliceDialog(wx.Dialog):
+    """Configure Image Slicing"""
+    msg = '''Configure Image Slicing'''
+    def __init__(self, parent=None, conf=None,
+                 title='Image Slice Configuration',
+                 size=wx.DefaultSize, pos=wx.DefaultPosition,
+                 style=wx.DEFAULT_DIALOG_STYLE):
+
+        if conf is None:
+            return
+        self.conf = conf
+
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
+
+        sizer = wx.GridBagSizer(7, 3)
+        swidth = '%i' % conf.projection_width
+        label = wx.StaticText(self, -1, "Slice Width:")
+        val = self.conf.projection_width
+        self.width = FloatSpin(self, -1, value=val, min_val=0, max_val=5000,
+                               increment=1, digits=0, size=(80, -1))
+
+        sizer.Add(label,           (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.width,      (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(line, (2, 0), (1, 2),
+                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
+
+        btnsizer = wx.StdDialogButtonSizer()
+
+        nobtn = wx.Button(self, wx.ID_CANCEL)
+        okbtn = wx.Button(self, wx.ID_OK)
+        okbtn.SetDefault()
+
+        btnsizer.AddButton(okbtn)
+        btnsizer.AddButton(nobtn)
+        btnsizer.Realize()
+
+        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def GetResponse(self, master=None, gname=None, ynorm=True):
+        self.Raise()
+        if self.ShowModal() == wx.ID_OK:
+            self.conf.projection_width = int(self.width.GetValue())
+        return
+
+
 class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
@@ -592,7 +642,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         mview.AppendSeparator()
 
-        m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
+         m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
                      'Shown as Contour Plot',
                      self.onContourToggle, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.style=='contour')
@@ -614,11 +664,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  partial(self.onFlip, mode='restore'))
 
         mslice = wx.Menu()
-        m1 = MenuItem(self, mslice, 'Do not show slices', 'Do not show X/Y slices',
+        m1 = MenuItem(self, mslice, 'No Slices', 'Do not show X/Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m2 = MenuItem(self, mslice, 'Show Horizontal Slices', 'show X slices',
+        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices', 'show X slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m3 = MenuItem(self, mslice, 'Show Vertical Slices', 'show Y slices',
+        m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices', 'show Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
         self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
 
@@ -647,8 +697,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         # add all sub-menus, including user-added
         submenus = [('File', mfile),
                     ('Image', mview),
-                    ('Slices', mslice),
                     ('Orientation', mrot),
+                    ('X/Y Slicing', mslice),
                     ('Smoothing', msmooth)]
         if self.user_menus is not None:
             submenus.extend(self.user_menus)

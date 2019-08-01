@@ -53,7 +53,7 @@ class ImagePanel(BasePanel):
         self.lasso_callback = lasso_callback
         self.contour_callback = contour_callback
         self.redraw_callback = redraw_callback
-        self.projection_plotframe = None
+        self.slice_plotframe = None
         self.win_config = None
         self.size    = size
         self.dpi     = dpi
@@ -561,12 +561,12 @@ class ImagePanel(BasePanel):
                 self.motion_sbar = 1
         self.write_message(fmt % (x, y), panel=self.motion_sbar)
         conf = self.conf
-        if conf.projection_onmotion:
+        if conf.slice_onmotion:
             ix, iy = int(round(x)), int(round(y))
             if (ix >= 0 and ix < conf.data.shape[1] and
                 iy >= 0 and iy < conf.data.shape[0]):
-                conf.projection_xy = ix, iy
-                self.update_projections()
+                conf.slice_xy = ix, iy
+                self.update_slices()
 
     def report_leftdown(self,event=None):
         if event == None:
@@ -592,22 +592,22 @@ class ImagePanel(BasePanel):
             msg = "Pixel [%i, %i], %s Intensity=%s " % (ix, iy, pos, dval)
 
             self.write_message(msg, panel=0)
-            conf.projection_xy = ix, iy
-            self.update_projections()
+            conf.slice_xy = ix, iy
+            self.update_slices()
             if hasattr(self.cursor_callback , '__call__'):
                 self.cursor_callback(x=event.xdata, y=event.ydata)
 
-    def get_projection_plotframe(self):
+    def get_slice_plotframe(self):
         shown = False
         new_plotter = False
-        if self.projection_plotframe is not None:
+        if self.slice_plotframe is not None:
             try:
-                self.projection_plotframe.Raise()
+                self.slice_plotframe.Raise()
                 shown = True
             except:
                 pass
         if not shown:
-            self.projection_plotframe = pf = PlotFrame(self)
+            self.slice_plotframe = pf = PlotFrame(self)
             new_plotter = True
             try:
                 xpos, ypos = self.parent.GetPosition()
@@ -616,14 +616,14 @@ class ImagePanel(BasePanel):
             except:
                 pass
 
-        return new_plotter, self.projection_plotframe
+        return new_plotter, self.slice_plotframe
 
-    def update_projections(self):
-        if self.conf.projections in ('None', None, 0):
+    def update_slices(self):
+        if self.conf.slices in ('None', None, 0):
             return
         x, y = -1, -1
         try:
-            x, y = [int(a) for a in self.conf.projection_xy]
+            x, y = [int(a) for a in self.conf.slice_xy]
         except:
             return
         if len(self.conf.data.shape) == 3:
@@ -636,12 +636,12 @@ class ImagePanel(BasePanel):
         if x < 0 or y < 0 or x > xmax or y > ymax:
             return
 
-        wid = int(self.conf.projection_width)
-        new_plotter, pf = self.get_projection_plotframe()
+        wid = int(self.conf.slice_width)
+        new_plotter, pf = self.get_slice_plotframe()
 
         popts = {'ylabel': 'Intensity', 'linewidth': 3}
 
-        if self.conf.projections.lower() == 'x':
+        if self.conf.slices.lower() == 'x':
             y1 = int(y - wid/2. + 1)
             y2 = int(y + wid/2.) + 1
             if y1 < 0: y1 = 0

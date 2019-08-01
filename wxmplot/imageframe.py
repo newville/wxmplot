@@ -21,7 +21,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
 from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
-                        Contrast_NDArray, Projection_List, RGB_COLORS)
+                        Contrast_NDArray, Slices_List, RGB_COLORS)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex
@@ -277,32 +277,6 @@ class InterpPanel(wx.Panel):
         if callable(self.callback):
             self.callback(name=name)
 
-class ProjectionPanel(wx.Panel):
-    """X/Y projections panel"""
-    def __init__(self, parent, imgpanel, **kws):
-        wx.Panel.__init__(self, parent, -1,  **kws)
-
-        self.imgpanel = imgpanel
-        labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.ALIGN_CENTRE_VERTICAL|wx.EXPAND
-        sizer = wx.GridBagSizer(2, 2)
-
-        title = wx.StaticText(self, label='Show Slice:', size=(120, -1))
-        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
-
-        p_choice =  wx.Choice(self, size=(100, -1), choices=Projection_List)
-        p_choice.Bind(wx.EVT_CHOICE,  self.onSetProjection)
-        p_choice.SetSelection(0)
-
-        sizer.Add(p_choice,  (0, 1), (1, 2), labstyle, 2)
-        pack(self, sizer)
-
-    def onSetProjection(self, event=None):
-        name = event.GetString()
-        if name not in Projection_List:
-            name = Projection_List[0]
-        self.imgpanel.conf.projections = name
-        self.imgpanel.update_projections()
-
 class ContrastPanel(wx.Panel):
     """auto-contrast panel"""
     def __init__(self, parent, default=0, callback=None, **kws):
@@ -375,9 +349,9 @@ class ImageSliceDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
 
         sizer = wx.GridBagSizer(7, 3)
-        swidth = '%i' % conf.projection_width
+        swidth = '%i' % conf.slice_width
         label = wx.StaticText(self, -1, "Slice Width:")
-        val = self.conf.projection_width
+        val = self.conf.slice_width
         self.width = FloatSpin(self, -1, value=val, min_val=0, max_val=5000,
                                increment=1, digits=0, size=(80, -1))
 
@@ -405,7 +379,7 @@ class ImageSliceDialog(wx.Dialog):
     def GetResponse(self, master=None, gname=None, ynorm=True):
         self.Raise()
         if self.ShowModal() == wx.ID_OK:
-            self.conf.projection_width = int(self.width.GetValue())
+            self.conf.slice_width = int(self.width.GetValue())
         return
 
 
@@ -574,8 +548,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.panel.conf.style = 'image'
         self.contrast_panel.Enable()
-        # self.interp_panel.Enable()
-        # self.project_panel.Enable()
+
         if style == 'contour':
             self.panel.conf.style = 'contour'
             self.contrast_panel.Disable()
@@ -642,7 +615,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         mview.AppendSeparator()
 
-         m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
+        m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
                      'Shown as Contour Plot',
                      self.onContourToggle, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.style=='contour')
@@ -652,6 +625,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onContourConfig)
         self.optional_menus.append((m, False))
 
+
+        mview.AppendSeparator()
+        m = MenuItem(self, mview, 'Show Scalebar\tCtrl+Z',
+                     'Shown Scalebar',
+                     self.onScalebarToggle, kind=wx.ITEM_CHECK)
+        m.Check(self.panel.conf.scalebar_show)
+        m = MenuItem(self, mview, 'Configure Scalebar', 'Configure Scalebar',
+                     self.onScalebarConfig)
 
         mrot = wx.Menu()
         MenuItem(self, mrot, 'Rotate clockwise\tCtrl+R', '',
@@ -758,8 +739,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         sizer.Add(self.contrast_panel, 0, lsty, 2)
-        # sizer.Add(self.interp_panel,   0, lsty, 2)
-        # sizer.Add(self.project_panel,  0, lsty, 2)
 
         cust = self.CustomConfig(panel, None, 0)
         if cust is not None:
@@ -772,7 +751,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         to bottom of config panel
         """
         pass
-
 
     def onContourConfig(self, event=None):
         panel = self.panel
@@ -805,13 +783,22 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         panel.redraw()
 
     def onSliceChoice(self, event=None):
-        name = self.slice_menus.get(event.GetId(), Projection_List[0])
-        self.panel.conf.projections = name
-        self.panel.update_projections()
+        name = self.slice_menus.get(event.GetId(), Slices_List[0])
+        self.panel.conf.slices = name
+        self.panel.update_slices()
 
     def onSliceDynamic(self, event=None):
         conf  = self.panel.conf
-        conf.projection_onmotion = not conf.projection_onmotion
+        conf.slice_onmotion = not conf.slice_onmotion
+
+    def onScalebarToggle(self, event=None):
+        conf  = self.panel.conf
+        conf.scalebar_show = not conf.scalebar_show
+
+    def onScalebarConfig(self, event=None):
+        conf  = self.panel.conf
+        print("config scalebar")
+
 
     def onSmoothChoice(self, event=None):
         name = self.smooth_menus.get(event.GetId(), Interp_List[0])
@@ -846,7 +833,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
     def onSliceMotion(self, event=None):
         conf = self.panel.conf
-        conf.projection_onmotion = not conf.projection_onmotion
+        conf.slice_onmotion = not conf.slice_onmotion
         self.panel.redraw()
 
     def onTriColorBG(self, event=None):

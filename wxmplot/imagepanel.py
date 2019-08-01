@@ -95,7 +95,8 @@ class ImagePanel(BasePanel):
         if 1 in data.shape:
             data = data.squeeze()
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
-        conf.contrast_level = contrast_level
+        if contrast_level not in (0, None):
+            conf.contrast_level = contrast_level
         if auto_contrast:
             conf.contrast_level = 1
         if x is not None:
@@ -123,6 +124,12 @@ class ImagePanel(BasePanel):
             if nlevels is None:
                 nlevels = self.conf.ncontour_levels = 9
             nlevels = max(2, nlevels)
+
+            if conf.contrast_level is not None:
+                contrast = [conf.contrast_level, 100.0-conf.contrast_level]
+                imin, imax = np.percentile(conf.data, contrast)
+                data = np.clip(conf.data, imin, imax)
+
             clevels  = np.linspace(data.min(), data.max(), nlevels+1)
             self.conf.contour_levels = clevels
             self.conf.image = self.axes.contourf(data, cmap=self.conf.cmap[col],
@@ -176,6 +183,7 @@ class ImagePanel(BasePanel):
         self.indices_thread = Thread(target=self.calc_indices, args=(data.shape, ))
         self.indices_thread.start()
 
+
     def update_image(self, data):
         """
         update image on panel, as quickly as possible
@@ -188,7 +196,6 @@ class ImagePanel(BasePanel):
             data = np.clip((data - imin)/(imax - imin + 1.e-8), 0, 1)
         self.axes.images[0].set_data(data)
         self.canvas.draw()
-
 
 
     def autoset_margins(self):

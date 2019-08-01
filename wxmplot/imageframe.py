@@ -27,6 +27,7 @@ from .plotframe import PlotFrame
 from .colors import rgb2hex
 from .utils import LabelEntry, MenuItem, pack, gformat
 from .contourdialog import ContourDialog
+from .slicedialog import ImageSliceDialog
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
                                'Left-Drag to zoom to rectangular box'),
@@ -293,14 +294,6 @@ class ProjectionPanel(wx.Panel):
         p_choice.SetSelection(0)
 
         sizer.Add(p_choice,  (0, 1), (1, 2), labstyle, 2)
-
-        label = wx.StaticText(self, label='Slice Width:', size=(120, -1))
-        sizer.Add(label, (1, 0), (1, 1), labstyle, 2)
-
-        self.width = FloatSpin(self, -1, value=1, min_val=0, max_val=5000,
-                               increment=1, digits=0, size=(60, -1))
-        self.width.Bind(EVT_FLOATSPIN, self.onSetProjectionWidth)
-        sizer.Add(self.width,  (1, 1), (1, 2), labstyle, 2)
         pack(self, sizer)
 
     def onSetProjection(self, event=None):
@@ -308,10 +301,6 @@ class ProjectionPanel(wx.Panel):
         if name not in Projection_List:
             name = Projection_List[0]
         self.imgpanel.conf.projections = name
-        self.imgpanel.update_projections()
-
-    def onSetProjectionWidth(self, event=None):
-        self.imgpanel.conf.projection_width = int(self.width.GetValue())
         self.imgpanel.update_projections()
 
 class ContrastPanel(wx.Panel):
@@ -535,12 +524,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.panel.conf.style = 'image'
         self.contrast_panel.Enable()
-        self.interp_panel.Enable()
-        self.project_panel.Enable()
+        # self.interp_panel.Enable()
+        # self.project_panel.Enable()
         if style == 'contour':
             self.panel.conf.style = 'contour'
             self.contrast_panel.Disable()
-            self.interp_panel.Disable()
+            # self.interp_panel.Disable()
 
         self.config_panel.Refresh()
         self.SendSizeEvent()
@@ -571,8 +560,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                      'Save Image of Colormap',
                                       self.onCMapSave),))
 
-        # options menu
+        # image menu
         mview = self.view_menu = wx.Menu()
+
+
         MenuItem(self, mview, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range",
                  self.panel.unzoom)
@@ -587,22 +578,17 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  'Show Intensity Histogram', self.show_histogram)
 
         mview.AppendSeparator()
-
         m = MenuItem(self, mview, 'Show Axes Labels\tCtrl+A',
                      'Toggle displacy of Axis labels',
                      self.onAxesLabels, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.show_axis)
 
-        m = MenuItem(self, mview, 'Toggle Background Color (Black/White)\tCtrl+W',
+        m = MenuItem(self, mview,
+                     'Toggle Background Color (Black/White)\tCtrl+W',
                      'Toggle background color for 3-color images',
                      self.onTriColorBG, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.tricolor_bg == 'white')
         self.optional_menus.append((m, True))
-
-        m = MenuItem(self, mview, 'Show Slices on Motion',
-                     'Dynamically update Slice Plots on Mouse Motion',
-                     self.onSliceMotion, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.projection_onmotion)
 
         mview.AppendSeparator()
 
@@ -614,19 +600,43 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         m = MenuItem(self, mview, 'Configure Contours', 'Configure Contours',
                      self.onContourConfig)
+        self.optional_menus.append((m, False))
 
-        mview.AppendSeparator()
-        MenuItem(self, mview, 'Rotate clockwise\tCtrl+R', '',
+
+        mrot = wx.Menu()
+        MenuItem(self, mrot, 'Rotate clockwise\tCtrl+R', '',
                  partial(self.onFlip, mode='rot_cw'))
-        MenuItem(self, mview,  'Flip Top/Bottom\tCtrl+T', '',
+        MenuItem(self, mrot,  'Flip Top/Bottom\tCtrl+T', '',
                  partial(self.onFlip, mode='flip_ud'))
-        MenuItem(self, mview,  'Flip Left/Right\tCtrl+F', '',
+        MenuItem(self, mrot,  'Flip Left/Right\tCtrl+F', '',
                  partial(self.onFlip, mode='flip_lr'))
-        MenuItem(self, mview,  'Reset Flips/Rotations', '',
+        MenuItem(self, mrot,  'Reset Flips/Rotations', '',
                  partial(self.onFlip, mode='restore'))
 
+        mslice = wx.Menu()
+        m1 = MenuItem(self, mslice, 'Do not show slices', 'Do not show X/Y slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        m2 = MenuItem(self, mslice, 'Show Horizontal Slices', 'show X slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        m3 = MenuItem(self, mslice, 'Show Vertical Slices', 'show Y slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
 
-        self.optional_menus.append((m, False))
+        m = MenuItem(self, mslice, 'Update Slices on Mouse Motion',
+                     'Update Slices on Mouse Motion',
+                     self.onSliceDynamic, default=False, kind=wx.ITEM_CHECK)
+
+        mview.AppendSeparator()
+        m = MenuItem(self, mslice, 'Configure Slices', 'Configure Slices',
+                     self.onSliceConfig)
+
+        msmooth = wx.Menu()
+        self.smooth_menus = {}
+        for sname in Interp_List:
+            m = MenuItem(self, msmooth, sname, sname,
+                         self.onSmoothChoice, kind=wx.ITEM_RADIO)
+            self.smooth_menus[m.GetId()] = sname
+
 
         # help
         mhelp = wx.Menu()
@@ -635,7 +645,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mhelp, 'About', 'About WXMPlot', self.onAbout)
 
         # add all sub-menus, including user-added
-        submenus = [('File', mfile), ('Image', mview)]
+        submenus = [('File', mfile),
+                    ('Image', mview),
+                    ('Slices', mslice),
+                    ('Orientation', mrot),
+                    ('Smoothing', msmooth)]
         if self.user_menus is not None:
             submenus.extend(self.user_menus)
 
@@ -672,8 +686,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.contrast_panel = ContrastPanel(panel,
                                             callback=self.set_contrast_levels)
-        self.interp_panel = InterpPanel(panel, self.panel)
-        self.project_panel = ProjectionPanel(panel, self.panel)
 
         if self.config_mode == 'rgb':
             for icol, col in enumerate(RGB_COLORS):
@@ -696,8 +708,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                     style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         sizer.Add(self.contrast_panel, 0, lsty, 2)
-        sizer.Add(self.interp_panel,   0, lsty, 2)
-        sizer.Add(self.project_panel,  0, lsty, 2)
+        # sizer.Add(self.interp_panel,   0, lsty, 2)
+        # sizer.Add(self.project_panel,  0, lsty, 2)
 
         cust = self.CustomConfig(panel, None, 0)
         if cust is not None:
@@ -733,6 +745,29 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                       nlevels=conf.ncontour_levels, style='contour')
         panel.redraw()
 
+    def onSliceConfig(self, event=None):
+        panel = self.panel
+        conf = panel.conf
+        dlg = ImageSliceDialog(parent=self, conf=conf)
+        dlg.CenterOnScreen()
+        dlg.GetResponse()
+        dlg.Destroy()
+        panel.redraw()
+
+    def onSliceChoice(self, event=None):
+        name = self.slice_menus.get(event.GetId(), Projection_List[0])
+        self.panel.conf.projections = name
+        self.panel.update_projections()
+
+    def onSliceDynamic(self, event=None):
+        conf  = self.panel.conf
+        conf.projection_onmotion = not conf.projection_onmotion
+
+    def onSmoothChoice(self, event=None):
+        name = self.smooth_menus.get(event.GetId(), Interp_List[0])
+        self.panel.conf.interp = name
+        self.panel.redraw()
+
     def onContourToggle(self, event=None):
         if len(self.panel.conf.data.shape) > 2:
             return
@@ -740,12 +775,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf  = panel.conf
         conf.style = 'image'
         self.contrast_panel.Enable()
-        self.interp_panel.Enable()
-        self.project_panel.Enable()
         if event.IsChecked():
             conf.style = 'contour'
             self.contrast_panel.Disable()
-            self.interp_panel.Disable()
 
         nlevels = int(conf.ncontour_levels)
         if self.config_mode == 'int':

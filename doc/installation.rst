@@ -5,14 +5,17 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The wxmplot package requires wxpython, matplotlib, numpy, and six.
-Matplotlib version 2.0 or higher is strongly recommended, though older
-versions may still work.
+The current version of wxmplot is |release|, released in July, 2019.
 
-WxPython 4.0 or higher is also strongly recommended, as it allows wxmplot
-to work with Python 2.7 and 3.5, 3.6, and later. At this writing, little
-testing has been done with Python 3.7.  WxPython version 2.9 and 3 may also
-continue to work, but only support Python 2.7.
+The wxmplot package requires wxpython, matplotlib, numpy, and six.
+
+
+This will be the final version to support Python 2.7 and WxPython below
+version 4.  WxPython 4.0 is strongly recommended, as is required for Python
+3.5 and higher.  WxPython version 2.9 and 3 may also continue to work, but
+only for Python 2.7, and this combination is no longer tested.  Matplotlib
+version 3.0 or higher is strongly recommended. Older versions may
+still work but are not tested.
 
 
 Downloads
@@ -21,8 +24,8 @@ Downloads
 .. _github:   http://github.com/newwville/wxmplot
 .. _PyPI:     http://pypi.python.org/pypi/wxmplot
 
-The latest version is available from `PyPI`_ or `github`_, and the package
-can be installed with::
+The latest version (|release|) is available from `PyPI`_ or `github`_, and
+the package can be installed with::
 
    pip install wxmplot
 

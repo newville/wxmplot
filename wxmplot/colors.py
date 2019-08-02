@@ -7,8 +7,9 @@ import numpy as np
 import six
 
 HAS_MPL = False
+
 try:
-    from matplotlib.colors import LinearSegmentedColormap
+    from matplotlib.colors import LinearSegmentedColormap, colorConverter
     from matplotlib.cm import register_cmap
     HAS_MPL = True
 except:
@@ -433,3 +434,11 @@ def register_custom_colormaps():
 
     return ('stdgamma', 'red', 'green', 'blue', 'red_heat', 'green_heat',
             'blue_heat', 'magenta', 'yellow', 'cyan')
+
+
+def mpl_color(c, default = (242, 243, 244)):
+    try:
+        r = map(lambda x: int(x*255), colorConverter.to_rgb(c))
+        return tuple(r)
+    except:
+        return default

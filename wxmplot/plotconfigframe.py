@@ -14,14 +14,11 @@ import numpy as np
 
 import matplotlib
 from matplotlib import rcParams
-from matplotlib.colors import colorConverter
 from matplotlib.font_manager import fontManager, FontProperties
-from matplotlib.colors import colorConverter
-to_rgba = colorConverter.to_rgba
 
 from .utils import LabelEntry, MenuItem
 from .config import PlotConfig
-from .colors import hexcolor, hex2rgb
+from .colors import hexcolor, hex2rgb, mpl_color
 
 try:
     import yaml
@@ -33,13 +30,6 @@ FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BU
 
 ISPINSIZE = 75
 FSPINSIZE = 75
-
-def mpl_color(c, default = (242, 243, 244)):
-    try:
-        r = map(lambda x: int(x*255), colorConverter.to_rgb(c))
-        return tuple(r)
-    except:
-        return default
 
 def autopack(panel, sizer):
     panel.SetAutoLayout(True)

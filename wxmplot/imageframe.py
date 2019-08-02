@@ -3,6 +3,8 @@
 wxmplot ImageFrame: a wx.Frame for image display, using matplotlib
 """
 import os
+from functools import partial
+
 import wx
 is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 if is_wxPhoenix:
@@ -11,8 +13,10 @@ else:
     from wx._core import PyDeadObjectError
 
 from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
-from functools import partial
+import wx.lib.colourselect  as csel
+
 import numpy as np
+
 from   matplotlib.cm import get_cmap
 import matplotlib.cm as mpl_colormap
 from matplotlib.figure import Figure
@@ -24,7 +28,7 @@ from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
                         Contrast_NDArray, Slices_List, RGB_COLORS)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
-from .colors import rgb2hex
+from .colors import rgb2hex, mpl_color
 from .utils import LabelEntry, MenuItem, pack, gformat
 from .contourdialog import ContourDialog
 
@@ -382,6 +386,62 @@ class ImageSliceDialog(wx.Dialog):
             self.conf.slice_width = int(self.width.GetValue())
         return
 
+class ScalebarDialog(wx.Dialog):
+    """Configure Image Scalebar"""
+    msg = '''Configure Image Scalebar'''
+    def __init__(self, parent=None, conf=None,
+                 title='Image Scalebar Configuration',
+                 size=wx.DefaultSize, pos=wx.DefaultPosition,
+                 style=wx.DEFAULT_DIALOG_STYLE):
+
+        if conf is None:
+            return
+        self.conf = conf
+
+        label = conf.scalebar_label
+        xpos, ypos = conf.scalebar_pos
+        xsiz, ysiz = conf.scalebar_size
+        sb_color = conf.scalebar_color
+
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
+
+        sizer = wx.GridBagSizer(7, 3)
+        swidth = '%i' % conf.slice_width
+        label = wx.StaticText(self, -1, "Slice Width:")
+        val = self.conf.slice_width
+        self.width = FloatSpin(self, -1, value=val, min_val=0, max_val=5000,
+                               increment=1, digits=0, size=(80, -1))
+
+        sizer.Add(label,           (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.width,      (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(line, (2, 0), (1, 2),
+                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
+
+        btnsizer = wx.StdDialogButtonSizer()
+
+        nobtn = wx.Button(self, wx.ID_CANCEL)
+        okbtn = wx.Button(self, wx.ID_OK)
+        okbtn.SetDefault()
+
+        btnsizer.AddButton(okbtn)
+        btnsizer.AddButton(nobtn)
+        btnsizer.Realize()
+
+        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def GetResponse(self, master=None, gname=None, ynorm=True):
+        self.Raise()
+        if self.ShowModal() == wx.ID_OK:
+            self.conf.scalebar_label = self.label.GetValue()
+            self.conf.scalebar_color = self.color.GetValue()
+            self.conf.scalebar_label = self.label.GetValue()
+        return
+
+
 
 class ImageFrame(BaseFrame):
     """
@@ -625,7 +685,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onContourConfig)
         self.optional_menus.append((m, False))
 
-
         mview.AppendSeparator()
         m = MenuItem(self, mview, 'Show Scalebar\tCtrl+Z',
                      'Shown Scalebar',
@@ -774,13 +833,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         panel.redraw()
 
     def onSliceConfig(self, event=None):
-        panel = self.panel
-        conf = panel.conf
-        dlg = ImageSliceDialog(parent=self, conf=conf)
+        dlg = ImageSliceDialog(parent=self, conf=self.panel.conf)
         dlg.CenterOnScreen()
         dlg.GetResponse()
         dlg.Destroy()
-        panel.redraw()
+        self.panel.redraw()
 
     def onSliceChoice(self, event=None):
         name = self.slice_menus.get(event.GetId(), Slices_List[0])
@@ -796,9 +853,11 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf.scalebar_show = not conf.scalebar_show
 
     def onScalebarConfig(self, event=None):
-        conf  = self.panel.conf
-        print("config scalebar")
-
+        dlg = ScalebarDialog(parent=self, conf=self.panel.conf)
+        dlg.CenterOnScreen()
+        dlg.GetResponse()
+        dlg.Destroy()
+        self.panel.redraw()
 
     def onSmoothChoice(self, event=None):
         name = self.smooth_menus.get(event.GetId(), Interp_List[0])

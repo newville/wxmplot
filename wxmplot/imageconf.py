@@ -81,9 +81,11 @@ class ImageConfig:
         self.slice_width = 1
         self.slice_onmotion = False
         self.scalebar_show = False
+        self.scalebar_showlabel = False
         self.scalebar_label = ''
-        self.scalebar_pos = -1, -1
-        self.scalebar_size = 100, 2
+        self.scalebar_units = 'mm'
+        self.scalebar_pos =  5, 5
+        self.scalebar_size = 1, 1
         self.scalebar_color = '#EEEE99'
         self.set_formatters()
 

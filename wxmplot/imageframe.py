@@ -13,7 +13,7 @@ else:
     from wx._core import PyDeadObjectError
 
 from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
-import wx.lib.colourselect  as csel
+import wx.lib.colourselect as csel
 
 import numpy as np
 
@@ -398,29 +398,67 @@ class ScalebarDialog(wx.Dialog):
             return
         self.conf = conf
 
-        label = conf.scalebar_label
-        xpos, ypos = conf.scalebar_pos
-        xsiz, ysiz = conf.scalebar_size
-        sb_color = conf.scalebar_color
 
+        dshape = conf.data.shape
+        nmax = max(dshape[0], dshape[1])
+        xdata = conf.xdata
+        ydata = conf.ydata
+        xstep, ystep = 1, 1
+        if xdata is not None:
+            xstep = abs(np.diff(xdata).mean())
+        if ydata is not None:
+            ystep = abs(np.diff(ydata).mean())
+
+        ypos, xpos = conf.scalebar_pos
+        ysiz, xsiz = conf.scalebar_size
+        units = conf.scalebar_units
+
+        self.wids = {}
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
 
         sizer = wx.GridBagSizer(7, 3)
-        swidth = '%i' % conf.slice_width
-        label = wx.StaticText(self, -1, "Slice Width:")
-        val = self.conf.slice_width
-        self.width = FloatSpin(self, -1, value=val, min_val=0, max_val=5000,
-                               increment=1, digits=0, size=(80, -1))
 
-        sizer.Add(label,           (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.width,      (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
 
-        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, (2, 0), (1, 2),
-                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
+        lab_opts = dict(size=(120, -1))
+        label_label = wx.StaticText(self, label='Scalebar Label:', **lab_opts)
+        color_label = wx.StaticText(self, label='Scalebar Color: ', **lab_opts)
+        xpos_label = wx.StaticText(self, label='X position (pixels): ',  **lab_opts)
+        ypos_label = wx.StaticText(self, label='Y Position (pixels): ',  **lab_opts)
+        width_label = wx.StaticText(self, label='Width (%s): ' % units, **lab_opts)
+        height_label = wx.StaticText(self, label='Height (pixels): ', **lab_opts)
+
+        self.show_scalebar = wx.CheckBox(self, label='Show Scalebar', size=(150, -1))
+        self.show_scalebar.SetValue(True)
+
+        self.show_label = wx.CheckBox(self, label='Show Scalebar Label', size=(150, -1))
+        self.show_label.SetValue(len(conf.scalebar_label) > 0)
+
+        pos_text1 = "Scalebar position (pixels from lower left)"
+        pos_label1 = wx.StaticText(self, label=pos_text1,  size=(275, -1))
+
+        pos_text2 = "Image Size = %d x %d pixels" % (dshape[1], dshape[0])
+        pos_label2 = wx.StaticText(self, label=pos_text2,  size=(275, -1))
+
+        pixelsize_text = "Pixel Size: X=%13.5g, Y=%13.5g %s" % (xstep, ystep, units)
+        pixelsize_label = wx.StaticText(self, label=pixelsize_text,
+                                        size=(275, -1))
+
+        self.label  = wx.TextCtrl(self, value=conf.scalebar_label,  size=(150, -1))
+        self.color = csel.ColourSelect(self,  -1, "",
+                                       mpl_color(conf.scalebar_color),
+                                       size=(75, 25))
+
+        opts = dict(min_val=0, increment=1, digits=0, size=(150, -1))
+
+        self.xpos = FloatSpin(self, -1, value=xpos, max_val=dshape[1], **opts)
+        self.ypos = FloatSpin(self, -1, value=ypos, max_val=dshape[0], **opts)
+        self.height = FloatSpin(self, -1, value=ysiz, max_val=dshape[0], **opts)
+
+        opts['increment'] = xstep
+        opts['digits'] = max(1, 2 - int(np.log10(abs(xstep))))
+        self.width = FloatSpin(self, -1, value=xsiz, max_val=dshape[1]*xstep, **opts)
 
         btnsizer = wx.StdDialogButtonSizer()
-
         nobtn = wx.Button(self, wx.ID_CANCEL)
         okbtn = wx.Button(self, wx.ID_OK)
         okbtn.SetDefault()
@@ -429,18 +467,68 @@ class ScalebarDialog(wx.Dialog):
         btnsizer.AddButton(nobtn)
         btnsizer.Realize()
 
-        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        irow = 0
+        sizer.Add(self.show_scalebar,  (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(self.show_label,  (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(label_label,  (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.label,   (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(color_label,  (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.color,   (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
+                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(pixelsize_label,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
+        irow += 1
+        sizer.Add(width_label,     (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.width,      (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        irow += 1
+        sizer.Add(height_label,    (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.height,     (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
+                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(pos_label1,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
+        irow += 1
+        sizer.Add(pos_label2,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
+        irow += 1
+        sizer.Add(xpos_label,   (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.xpos,    (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        irow += 1
+        sizer.Add(ypos_label,   (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+        sizer.Add(self.ypos,    (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
+                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
+
+        irow += 1
+        sizer.Add(btnsizer,     (irow, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
-    def GetResponse(self, master=None, gname=None, ynorm=True):
+    def GetResponse(self, event=None):
         self.Raise()
         if self.ShowModal() == wx.ID_OK:
-            self.conf.scalebar_label = self.label.GetValue()
-            self.conf.scalebar_color = self.color.GetValue()
-            self.conf.scalebar_label = self.label.GetValue()
-        return
-
+            conf = self.conf
+            conf.scalebar_show = self.show_scalebar.IsChecked()
+            conf.scalebar_showlabel = self.show_label.IsChecked()
+            conf.scalebar_label = self.label.GetValue()
+            conf.scalebar_pos = self.ypos.GetValue(), self.xpos.GetValue()
+            conf.scalebar_size = self.height.GetValue(), self.width.GetValue()
+            col = self.color.GetValue()
+            conf.scalebar_color = '#%02x%02x%02x' % (col[0], col[1], col[2])
 
 
 class ImageFrame(BaseFrame):
@@ -686,8 +774,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.optional_menus.append((m, False))
 
         mview.AppendSeparator()
-        m = MenuItem(self, mview, 'Show Scalebar\tCtrl+Z',
-                     'Shown Scalebar',
+        m = MenuItem(self, mview, 'Show Scalebar\tCtrl+B', 'Show Scalebar',
                      self.onScalebarToggle, kind=wx.ITEM_CHECK)
         m.Check(self.panel.conf.scalebar_show)
         m = MenuItem(self, mview, 'Configure Scalebar', 'Configure Scalebar',
@@ -851,6 +938,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
     def onScalebarToggle(self, event=None):
         conf  = self.panel.conf
         conf.scalebar_show = not conf.scalebar_show
+        self.panel.redraw()
 
     def onScalebarConfig(self, event=None):
         dlg = ScalebarDialog(parent=self, conf=self.panel.conf)

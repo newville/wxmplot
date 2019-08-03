@@ -15,6 +15,7 @@ import matplotlib.cm as colormap
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
+from matplotlib.patches import Rectangle
 
 from .imageconf import ImageConfig, RGB_COLORS
 from .basepanel import BasePanel
@@ -55,9 +56,10 @@ class ImagePanel(BasePanel):
         self.redraw_callback = redraw_callback
         self.slice_plotframe = None
         self.win_config = None
-        self.size    = size
-        self.dpi     = dpi
+        self.size = size
+        self.dpi  = dpi
         self.user_limits = {}
+        self.scalebar_rect = self.scalerbar_text = None
         self.BuildPanel()
 
     @property
@@ -539,6 +541,35 @@ class ImagePanel(BasePanel):
             if self.conf.style == 'image':
                 conf.image.set_data(inew)
                 conf.image.set_interpolation(conf.interp)
+
+
+        try:
+            self.scalebar_rect.remove()
+        except:
+            pass
+        try:
+            self.scalebar_text.remove()
+        except:
+            pass
+
+        if conf.scalebar_show:
+            xstep, ystep = 1, 1
+            if conf.xdata is not None:
+                xstep = abs(np.diff(conf.xdata).mean())
+            y, x = conf.scalebar_pos
+            y, x = int(y), int(x)
+            h, w = conf.scalebar_size
+            h, w = int(h), int(w/xstep)
+            col =  conf.scalebar_color
+
+            self.scalebar_rect = Rectangle((x, y), w, h,linewidth=1, edgecolor=col,
+                                 facecolor=col)
+            self.axes.add_patch(self.scalebar_rect)
+            if conf.scalebar_showlabel:
+                x = int(x + w/4)
+                y = y - 3*h
+                self.scalebar_text = self.axes.text(x, y, conf.scalebar_label,
+                                                    color=col)
         self.canvas.draw()
         if callable(self.redraw_callback):
             self.redraw_callback(wid=self.GetId())

@@ -231,9 +231,9 @@ class PlotConfigFrame(wx.Frame):
                          LabelEntry(panel,value=ffmt(y2b1), **opts)]
 
         self.vpad_val = FloatSpin(panel, -1, value=2.5,
-                                 min_val=0, max_val=100,
-                                 increment=0.5, digits=2,
-                                 pos=(-1,-1), size=(FSPINSIZE, 30))
+                                  min_val=0, max_val=100,
+                                  increment=0.5, digits=2,
+                                  pos=(-1,-1), size=(FSPINSIZE, 30))
         self.vpad_val.Bind(EVT_FLOATSPIN, self.onViewPadEvent)
 
         if user_lims == 4*[None]:

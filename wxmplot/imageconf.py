@@ -1,14 +1,21 @@
 import wx
 import wx.lib.agw.flatnotebook as flat_nb
-from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
-from wxutils import TextCtrl, SimpleText, HLine, pack
+import wx.lib.scrolledpanel as scrolled
+import wx.lib.colourselect as csel
+
+
+
+from math import log10
 
 import numpy as np
+
 import matplotlib.cm as colormap
 from matplotlib.ticker import FuncFormatter
-from .colors import register_custom_colormaps
+
+from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import bool_ifnotNone, ifnotNone
 from .plotconfigframe import FNB_STYLE, autopack
+from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, pack, FloatSpin, MenuItem
 
 try:
     import yaml
@@ -17,10 +24,6 @@ except ImportError:
     HAS_YAML = False
 
 cm_names = register_custom_colormaps()
-
-# for cm in cm_names:
-#     if cm not in cm_names:
-#         ColorMap_List.append(cm)
 
 ColorMap_List = []
 
@@ -148,7 +151,7 @@ class ImageConfig:
 
         also sets self._yfmt/self._xfmt for statusbar
         """
-        fmt, v = '%1.5g','%1.5g'
+        fmt = '%1.5g'
         if dtype == 'y':
             ax = self.axes.yaxis
             dat  = self.ydata
@@ -161,50 +164,35 @@ class ImageConfig:
                 dat = np.arange(self.data.shape[1])
 
         ticks = [0,1]
+        onep = 1.00001
         try:
-            dtick = 0.1 * (dat.max() - dat.min())
+            dtick = 0.1 * onep * (dat.max() - dat.min())
         except:
-            dtick = 0.2
+            dtick = 0.2 * onep
         try:
             ticks = ax.get_major_locator()()
         except:
             ticks = [0, 1]
         try:
-            dtick = abs(dat[int(ticks[1])] - dat[int(ticks[0])])
+            dtick = abs(dat[int(ticks[1])] - dat[int(ticks[0])]) * onep
         except:
             pass
 
         if dtick > 89999:
-            fmt, v = ('%.1e',  '%1.6g')
-        elif dtick > 1.99:
-            fmt, v = ('%1.1f', '%1.2f')
-        elif dtick > 0.099:
-            fmt, v = ('%1.2f', '%1.3f')
-        elif dtick > 0.0099:
-            fmt, v = ('%1.3f', '%1.4f')
-        elif dtick > 0.00099:
-            fmt, v = ('%1.4f', '%1.5f')
-        elif dtick > 0.000099:
-            fmt, v = ('%1.5f', '%1.6e')
-        elif dtick > 0.0000099:
-            fmt, v = ('%1.6f', '%1.6e')
+            fmt = '%.2e'
+        else:
+            fmt = '%%1.%df' % max(0, -round(log10(0.75*dtick)))
 
         try:
             s =  fmt % dat[int(x)]
-            s.strip()
-            s = s.replace('+', '')
         except:
             s = ''
+        s.strip()
+        s = s.replace('+', '')
         while s.find('e0')>0:
             s = s.replace('e0','e')
         while s.find('-0')>0:
             s = s.replace('-0','-')
-        if type == 'y':
-            self._yfmt = v
-        if type == 'y2':
-            self._y2fmt = v
-        if type == 'x':
-            self._xfmt = v
         return s
 
     def relabel(self):
@@ -307,6 +295,7 @@ class ImageConfig:
         return out
 
 labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
+
 class ImageConfigFrame(wx.Frame):
     """ GUI Configure Frame for Images"""
     def __init__(self, parent=None, config=None, trace_color_callback=None):
@@ -361,164 +350,205 @@ class ImageConfigFrame(wx.Frame):
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Image', style=style)
-        bgcol =  hex2rgb(self.conf.color_themes['light']['bg'])
-        panel = wx.Panel(self, -1)
-        panel.SetBackgroundColour(bgcol)
 
-        font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
-        panel.SetFont(font)
+        conf = self.conf
+        panel = self
+        # scrolled.ScrolledPanel(self, size=(600, 200),
+        #                               style=wx.GROW|wx.TAB_TRAVERSAL)
+        panel.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False))
+        panel.SetBackgroundColour(hex2rgb('#FEFEFE'))
 
-        self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
+        sizer = wx.GridBagSizer(2, 2)
+        irow = 0
+        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
 
-        self.nb.SetActiveTabColour((253, 253, 230))
-        self.nb.SetTabAreaColour((bgcol[0]-8, bgcol[1]-8, bgcol[2]-8))
-        self.nb.SetNonActiveTabTextColour((10, 10, 100))
-        self.nb.SetActiveTabTextColour((100, 10, 10))
-        self.nb.AddPage(self.make_general_panel(parent=self.nb, font=font),
-                        'General', True)
-        self.nb.AddPage(self.make_scalebar_panel(parent=self.nb, font=font),
-                        'Scalebar', True)
-        for i in range(self.nb.GetPageCount()):
-            self.nb.GetPage(i).SetBackgroundColour(bgcol)
 
-        self.nb.SetSelection(0)
+        # contours
+        ctitle = SimpleText(panel, 'Contours:', colour='#DD0000')
+        label = SimpleText(panel,  "# Levels:")
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.nb, 1, labstyle, 3)
+        self.ncontours = FloatSpin(panel, value=conf.ncontour_levels,
+                                     min_val=0, max_val=5000,
+                                     increment=1, digits=0, size=(60, -1),
+                                     action=self.onContourEvents)
+
+        self.showlabels = Check(panel, label='Show Labels?',
+                                default=conf.contour_labels,
+                                action=self.onContourEvents)
+
+        sizer.Add(ctitle,          (irow, 0), (1, 2), labstyle, 2)
+        irow += 1
+        sizer.Add(label,           (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.ncontours,  (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(self.showlabels, (irow, 2), (1, 1), labstyle, 2)
+        irow += 1
+        sizer.Add(HLine(panel, size=(400, -1)), (irow, 0), (1, 3), labstyle, 2)
+
+        # X/Y Slices
+        title =  SimpleText(panel, 'X/Y Slices:', colour='#DD0000')
+        label_dir = SimpleText(panel, "Direction:")
+        label_wid = SimpleText(panel, "Width (pixels):")
+        self.slice_width = FloatSpin(panel, value=conf.slice_width,
+                                     min_val=0, max_val=5000,
+                                     increment=1, digits=0, size=(60, -1),
+                                     action=self.onSliceEvents)
+        self.slice_dir =  Choice(panel, size=(90, -1),
+                                 choices=Slices_List,
+                                 action=self.onSliceEvents)
+        self.slice_dir.SetStringSelection(conf.slices)
+
+        self.slice_dynamic = Check(panel,label='Slices Follow Mouse Motion?',
+                                   default=conf.slice_onmotion,
+                                   action=self.onSliceEvents)
+        irow += 1
+        sizer.Add(title,            (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.slice_dynamic, (irow, 1), (1, 2), labstyle, 2)
+        irow += 1
+        sizer.Add(label_dir,        (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.slice_dir,   (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(label_wid,        (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.slice_width, (irow, 3), (1, 1), labstyle, 2)
+
+        irow += 1
+        sizer.Add(HLine(panel, size=(400, -1)), (irow, 0), (1, 3), labstyle, 2)
+
+        # Scalebar
+        ypos, xpos = conf.scalebar_pos
+        ysiz, xsiz = conf.scalebar_size
+        units = conf.scalebar_units
+        dshape = conf.data.shape
+        nmax = max(dshape[0], dshape[1])
+        xdata = conf.xdata
+        ydata = conf.ydata
+        xstep, ystep = 1, 1
+        if xdata is not None:
+            xstep = abs(np.diff(xdata).mean())
+        if ydata is not None:
+            ystep = abs(np.diff(ydata).mean())
+
+
+        title =  SimpleText(panel, 'Scalebar:', colour='#DD0000')
+        # label_dir = SimpleText(panel, "Direction:")
+        # label_wid = SimpleText(panel, "Width (pixels):")
+
+        lab_opts = dict(size=(120, -1))
+        color_label = SimpleText(panel, 'Color: ')
+        xpos_label = SimpleText(panel, 'X Position: ')
+        ypos_label = SimpleText(panel, 'Y Position: ')
+        size_label = SimpleText(panel, 'Scalebar Size: ')
+        pos_label = SimpleText(panel, "Scalebar Position (pixels from lower left):")
+        width_label = SimpleText(panel, 'Width (%s): ' % units)
+        height_label = SimpleText(panel, 'Height (pixels): ')
+
+        self.show_scalebar = Check(panel, label='Show Scalebar',
+                                   default=conf.scalebar_show,
+                                   action=self.onScalebarEvents)
+
+        self.show_label = Check(self, label='Show Label?',
+                                default=conf.scalebar_showlabel,
+                                action=self.onScalebarEvents)
+
+
+        stext = "Image Size: X=%d, Y=%d pixels; Pixel Size: X=%13.5g, Y=%13.5g %s"
+        stext = stext % (dshape[1], dshape[0], xstep, ystep, units)
+        scale_text = SimpleText(panel, label=stext)
+
+        self.label  = LabeledTextCtrl(panel, value=conf.scalebar_label,
+                                      size=(150, -1),
+                                      labeltext='Label:',
+                                      action=self.onScalebarEvents)
+
+        self.color = csel.ColourSelect(panel,  -1, "",
+                                       mpl_color(conf.scalebar_color),
+                                       size=(50, -1))
+        self.color.Bind(csel.EVT_COLOURSELECT, self.onScalebarEvents)
+
+
+
+        opts = dict(min_val=0, increment=1, digits=0, size=(100, -1),
+                    action=self.onScalebarEvents)
+
+        self.xpos = FloatSpin(panel,  value=xpos, max_val=dshape[1], **opts)
+        self.ypos = FloatSpin(panel,  value=ypos, max_val=dshape[0], **opts)
+        self.height = FloatSpin(panel, value=ysiz, max_val=dshape[0], **opts)
+
+        opts['increment'] = xstep
+        opts['digits'] = max(1, 2 - int(np.log10(abs(xstep))))
+        self.width = FloatSpin(panel, value=xsiz, max_val=dshape[1]*xstep, **opts)
+
+
+        irow += 1
+        sizer.Add(title,           (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(scale_text,      (irow, 1), (1, 4), labstyle, 2)
+
+
+        irow += 1
+        sizer.Add(size_label,     (irow, 0), (1, 3), labstyle, 2)
+
+        irow += 1
+        sizer.Add(width_label,     (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.width,      (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(height_label,    (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.height,     (irow, 3), (1, 1), labstyle, 2)
+
+        irow += 1
+        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
+                  (irow, 0), (1, 2), wx.GROW|labstyle, 2)
+
+        irow += 1
+        sizer.Add(pos_label,     (irow, 0), (1, 3), labstyle, 2)
+
+        irow += 1
+        sizer.Add(xpos_label,   (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.xpos,    (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(ypos_label,   (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.ypos,    (irow, 3), (1, 1), labstyle, 2)
+
+
+        irow += 1
+        sizer.Add(HLine(panel, size=(400, -1)), (irow, 0), (1, 3), labstyle, 2)
+
+
+        irow += 1
+        sizer.Add(self.label.label,      (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.label,       (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(color_label,     (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.color,      (irow, 3), (1, 1), labstyle, 2)
+
+        irow += 1
+        sizer.Add(self.show_scalebar,  (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(self.show_label,  (irow, 2), (1, 2), labstyle, 2)
+
+        irow += 1
+        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
+                  (irow, 0), (1, 2), wx.GROW|labstyle, 2)
+
         autopack(panel, sizer)
+
         self.SetMinSize((525, 200))
         self.SetSize((550, 400))
         self.Show()
         self.Raise()
 
-    def make_general_panel(self, parent=None, font=None):
-        conf = self.config
-        panel = scrolled.ScrolledPanel(parent, size=(600, 200),
-                                       style=wx.GROW|wx.TAB_TRAVERSAL,
-                                       name='p1')
-        if font is None:
-            font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
-
-        sizer = wx.GridBagSizer(2, 2)
-        irow = 0
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-
-
-        # contours
-        title = SimpleText(panel, 'Contours:', style=labstyle)
-        label = SimpleText(panel,  "# Levels:")
-        line  = HLine(panel, size=(200,-1))
-        nlevels = '%i' % conf.ncontour_levels
-        self.ncontours = TextCtrl(panel, -1, nlevels, size=(80,-1),
-                                  action=self.ContourEvents)
-
-        self.showlabels = Check(panel, label-'Show Labels?',
-                                default=conf.contour_labels,
-                                action=self.onContourEvents)
-
-        sizer.Add(title,           (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.showlabels, (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(label,           (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.ncontours,  (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(line,            (irow, 0), (1, 2), labstyle, 2)
-
-        # X/Y Slices
-        title =  SimpleText(panel, 'X/Y Slices:',  style=labstyle)
-        label_dir = SimpleText(panel, "Slice Direction:")
-        label_wid = SimpleText(panel, "Slice Width:")
-        self.slice_width = FloatSpin(panel, value=conf.slice_width,
-                                     min_val=0, max_val=5000,
-                                     increment=1, digits=0, size=(80, -1),
-                                     action=self.onSliceEvents)
-        self.slice_dir =  Choice(panel, size=(90, -1),
-                                 choices=Slices_List)
-        self.slice_dir.SetStringSelection(conf.slices)
-
-        self.slice_dynamic = Check(panel,label='Slices Follow Mouse?',
-                                   default=conf.slice_onmotion,
-                                   action=self.onSliceEvents)
-        irow += 1
-        sizer.Add(title,            (irow, 0), (1, 1), labstyle, 2)
-
-        irow += 1
-        sizer.Add(label_dir,        (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_dir,   (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(label_wid,        (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_width, (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(self.slice_dynamic, (irow, 1), (1, 1), labstyle, 2)
-
-        autopack(panel, sizer)
-        return panel
 
     def onContourEvents(self, event=None):
-        print("update contour")
+        self.conf.ncontour_levels = self.ncontours.GetValue()
+        self.conf.contour_labels  = self.showlabels.IsChecked()
+        self.parent.onContourToggle()
 
     def onSliceEvents(self, event=None):
-        print("update slice")
+        self.conf.slice_width = self.slice_width.GetValue()
+        self.conf.slices = self.slice_dir.GetStringSelection()
+        self.conf.slice_onmotion = self.slice_dynamic.IsChecked()
+        self.parent.onSliceChoice()
 
-    def make_scalebar_panel(self, parent=None, font=None):
+    def onScalebarEvents(self, event=None):
+        self.conf.scalebar_show = self.show_scalebar.IsChecked()
+        self.conf.scalebar_showlabel = self.show_label.IsChecked()
+        self.conf.scalebar_label = self.label.GetValue()
+        self.conf.scalebar_pos =  self.ypos.GetValue(), self.xpos.GetValue()
+        self.conf.scalebar_size = self.height.GetValue(), self.width.GetValue()
 
-        conf = self.config
-        panel = scrolled.ScrolledPanel(parent, size=(600, 200),
-                                       style=wx.GROW|wx.TAB_TRAVERSAL,
-                                       name='p1')
-        if font is None:
-            font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+        self.conf.scalebar_color = col = hexcolor(self.color.GetValue()[:3])
 
-        sizer = wx.GridBagSizer(2, 2)
-        irow = 0
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
-
-        # contours
-        title = wx.StaticText(panel, -1, 'Contours:', style=labstyle)
-        line  = wx.StaticLine(panel, -1, size=(200,-1), style=wx.LI_HORIZONTAL)
-        label = wx.StaticText(panel, -1, "# Levels:")
-        nlevels = '%i' % conf.ncontour_levels
-        self.ncontours = wx.TextCtrl(panel, -1, nlevels, size=(80,-1))
-        self.showlabels = wx.CheckBox(panel,-1, 'Show Labels?',
-                                       (-1, -1), (-1, -1))
-        self.showlabels.SetValue(panel.conf.contour_labels)
-
-        sizer.Add(title,           (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.showlabels, (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(label,           (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.ncontours,  (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(line,            (irow, 0), (1, 2), labstyle, 2)
-
-        # X/Y Slices
-        title = wx.StaticText(panel, -1, 'X/Y Slices:',  style=labstyle)
-        label_dir = wx.StaticText(panel, -1, "Slice Direction:")
-        label_wid = wx.StaticText(panel, -1, "Slice Width:")
-        self.slice_width = FloatSpin(panel, -1, value=conf.slice_width,
-                               min_val=0, max_val=5000,
-                               increment=1, digits=0, size=(80, -1))
-        self.slice_dir =  wx.Choice(panel, size=(90, -1),
-                                    choices=Slices_List)
-        self.slice_dir.SetStringSelection(conf.slices)
-
-        self.slice_dynamic = wx.CheckBox(panel,-1, 'Slices Follow Mouse?',
-                                         (-1, -1), (-1, -1))
-        self.slice_dynamic.SetValue(conf.slice_onmotion)
-
-
-        irow += 1
-        sizer.Add(title,            (irow, 0), (1, 1), labstyle, 2)
-
-        irow += 1
-        sizer.Add(label_dir,        (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_dir,   (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(label_wid,        (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_width, (irow, 1), (1, 1), labstyle, 2)
-        irow += 1
-        sizer.Add(self.slice_dynamic, (irow, 1), (1, 1), labstyle, 2)
-
-        autopack(panel, sizer)
-        return panel
+        self.parent.panel.redraw()

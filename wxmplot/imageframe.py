@@ -17,8 +17,7 @@ import wx.lib.colourselect as csel
 
 import numpy as np
 
-from   matplotlib.cm import get_cmap
-import matplotlib.cm as mpl_colormap
+import matplotlib.cm as cmap
 from matplotlib.figure import Figure
 from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -59,28 +58,28 @@ class ColorMapPanel(wx.Panel):
 
         self.cmap_choice = None
         reverse = False
-        cmap = default
+        cmapname = default
         if colormap_list is not None:
             cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
             cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
             self.cmap_choice = cmap_choice
 
-            if cmap is None:
-                cmap = colormap_list[0]
+            if cmapname is None:
+                cmapname = colormap_list[0]
 
-            if cmap.endswith('_r'):
+            if cmapname.endswith('_r'):
                 reverse = True
-                cmap = cmap[:-2]
-            cmap_choice.SetStringSelection(cmap)
+                cmapname = cmap[:-2]
+            cmap_choice.SetStringSelection(cmapname)
 
             cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
             cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
             cmap_reverse.SetValue(reverse)
             self.cmap_reverse = cmap_reverse
 
-        if cmap is None:
-            cmap = 'gray'
-        self.imgpanel.conf.cmap[color] = get_cmap(cmap)
+        if cmapname is None:
+            cmapname = 'gray'
+        self.imgpanel.conf.cmap[color] = cmap.get_cmap(cmapname)
 
         maxval = self.imgpanel.conf.cmap_range
         wd, ht = 1.00, 0.125
@@ -94,7 +93,7 @@ class ColorMapPanel(wx.Panel):
         ax.set_axis_off()
         self.cmap_canvas = FigureCanvas(self, -1, figure=fig)
 
-        self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmap,
+        self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmapname,
                                   interpolation='bilinear')
         self.cmap_lo = wx.Slider(self, -1, 0, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
@@ -136,8 +135,7 @@ class ColorMapPanel(wx.Panel):
         sizer.Add(self.islider_range,  (irow, 0), (1, 4), labstyle, 0)
 
         pack(self, sizer)
-        self.set_colormap(default)
-
+        self.set_colormap(cmapname)
 
 
     def onCMap(self, event=None):
@@ -154,44 +152,20 @@ class ColorMapPanel(wx.Panel):
 
     def set_colormap(self, name=None):
         conf = self.imgpanel.conf
-        col = self.icol
         try:
             if name is None:
                 name = self.cmap_choice.GetStringSelection()
         except:
             return
-        conf.cmap_reverse = False
-        try:
-            conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
-        except:
-            pass
-        if conf.cmap_reverse and not name.endswith('_r'):
-            name = name + '_r'
-        elif not conf.cmap_reverse and name.endswith('_r'):
-            name = name[:-2]
-        cmap_name = name
-        conf.cmap[col] = get_cmap(name)
 
-        if hasattr(conf, 'contour'):
-            xname = 'gray'
-            if cmap_name == 'gray_r':
-                xname = 'Reds_r'
-            elif cmap_name == 'gray':
-                xname = 'Reds'
-            elif cmap_name.endswith('_r'):
-                xname = 'gray_r'
-            conf.contour.set_cmap(getattr(mpl_colormap, xname))
-        if hasattr(conf, 'image'):
-            conf.image.set_cmap(conf.cmap[col])
+        try:
+            reverse = (1 == int(self.cmap_reverse.GetValue()))
+        except:
+            reverse = False
+
+        conf.set_colormap(name, reverse=reverse, icol=self.icol)
         self.redraw_cmap()
 
-        if hasattr(conf, 'highlight_areas'):
-            if hasattr(conf.cmap[col], '_lut'):
-                rgb  = [int(i*240)^255 for i in conf.cmap[col]._lut[0][:3]]
-                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-                for area in conf.highlight_areas:
-                    for w in area.collections + area.labelTexts:
-                        w.set_color(col)
 
     def onThreshold(self, event=None, argu='hi'):
         col = self.icol
@@ -489,7 +463,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.panel.conf.contrast_level = contrast_level
 
         self.panel.display(img, style=style, contrast_level=contrast_level,
-                           **kws)
+                           colormap=colormap, **kws)
 
         self.set_contrast_levels(contrast_level=contrast_level)
 
@@ -599,22 +573,23 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      kind=wx.ITEM_CHECK)
 
         mview.AppendSeparator()
+        MenuItem(self, mview, "Configure\tCtrl+K", "Configure Image Options",
+                 self.configure)
 
-        m1 = MenuItem(self, mview, 'Show No X/Y Slices', 'Do not show X/Y slices',
+        mslice = wx.Menu()
+        m1 = MenuItem(self, mslice, 'Show No X/Y Slices', 'Do not show X/Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m2 = MenuItem(self, mview, 'Show X (Horizontal) Slices\tCtrl+x', 'show X slices',
+        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices\tCtrl+x', 'show X slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m3 = MenuItem(self, mview, 'Show Y (Vertical) Slices\tCtrl+Y', 'show Y slices',
+        m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices\tCtrl+Y', 'show Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
         self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
-        m = MenuItem(self, mview, 'Slices Follow Mouse Motion?',
+        m = MenuItem(self, mslice, 'Slices Follow Mouse Motion?',
                      'Update Slices on Mouse Motion',
                      self.onSliceDynamic, checked=conf.slice_onmotion,
                      kind=wx.ITEM_CHECK)
 
-        mview.AppendSeparator()
-        MenuItem(self, mview, "Configure\tCtrl+K", "Configure Image Options",
-                 self.configure)
+
 
         mrot = wx.Menu()
         MenuItem(self, mrot, 'Rotate clockwise\tCtrl+R', '',
@@ -634,7 +609,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                          self.onSmoothChoice, kind=wx.ITEM_RADIO)
             self.smooth_menus[m.GetId()] = sname
 
-
         # help
         mhelp = wx.Menu()
         MenuItem(self, mhelp, 'Quick Reference',
@@ -644,6 +618,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         # add all sub-menus, including user-added
         submenus = [('File', mfile),
                     ('Image', mview),
+                    ('X/Y Slices', mslice),
                     ('Orientation', mrot),
                     ('Smoothing', msmooth)]
         if self.user_menus is not None:

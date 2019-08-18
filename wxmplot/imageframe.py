@@ -141,10 +141,11 @@ class ColorMapPanel(wx.Panel):
 
 
     def onCMap(self, event=None):
-        self.set_colormap(name=event.GetString())
-        self.imgpanel.redraw()
-        if callable(self.cmap_callback):
-            self.cmap_callback(name=event.GetString())
+        if event is not None:
+            self.set_colormap(name=event.GetString())
+            self.imgpanel.redraw()
+            if callable(self.cmap_callback):
+                self.cmap_callback(name=event.GetString())
 
 
     def onCMapReverse(self, event=None):
@@ -494,6 +495,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.panel.conf.title = title
         if colormap is not None and self.config_mode == 'int':
+            self.cmap_panels[0].cmap_choice.SetStringSelection(colormap)
             self.cmap_panels[0].set_colormap(name=colormap)
 
         if subtitles is not None:

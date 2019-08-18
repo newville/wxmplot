@@ -11,7 +11,7 @@ from threading import Thread
 
 import numpy as np
 import matplotlib
-import matplotlib.cm as colormap
+import matplotlib.cm as cmap
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
@@ -82,7 +82,7 @@ class ImagePanel(BasePanel):
     def display(self, data, x=None, y=None, xlabel=None, ylabel=None,
                 style=None, nlevels=None, levels=None, contour_labels=None,
                 store_data=True, col=0, unzoom=True, show_axis=False,
-                auto_contrast=False, contrast_level=0, **kws):
+                auto_contrast=False, contrast_level=0, colormap=None, **kws):
         """
         generic display, using imshow (default) or contour
         """
@@ -92,7 +92,6 @@ class ImagePanel(BasePanel):
         conf = self.conf
         conf.log_scale = False
         conf.show_axis = show_axis
-
         conf.highlight_areas = []
         if 1 in data.shape:
             data = data.squeeze()
@@ -117,7 +116,6 @@ class ImagePanel(BasePanel):
         if store_data:
             conf.data = data
 
-        cmap = self.conf.cmap[col]
         if self.conf.style == 'contour':
             if levels is None:
                 levels = self.conf.ncontour_levels
@@ -150,7 +148,7 @@ class ImagePanel(BasePanel):
                     xname = 'gray_r'
             except:
                 pass
-            self.conf.contour.set_cmap(getattr(colormap, xname))
+            self.conf.contour.set_cmap(getattr(cmap, xname))
 
             if contour_labels is None:
                 contour_labels = self.conf.contour_labels
@@ -169,7 +167,8 @@ class ImagePanel(BasePanel):
                 img = data
             else:
                 img = (data - data.min()) /(1.0*data.max() - data.min())
-
+            if colormap is not None:
+                self.conf.set_colormap(colormap, icol=col)
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
                                                interpolation=self.conf.interp)
 

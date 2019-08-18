@@ -9,7 +9,8 @@ from math import log10
 
 import numpy as np
 
-import matplotlib.cm as colormap
+import matplotlib.cm as cmap
+
 from matplotlib.ticker import FuncFormatter
 
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
@@ -35,7 +36,7 @@ for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma', 'red',
            'PRGn', 'Spectral', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu',
            'RdYlGn'):
 
-    if cm in cm_names or hasattr(colormap, cm):
+    if cm in cm_names or hasattr(cmap, cm):
         ColorMap_List.append(cm)
 
 
@@ -57,7 +58,7 @@ class ImageConfig:
         self.axes   = axes
         self.fig  = fig
         self.canvas  = canvas
-        self.cmap  = [colormap.gray, colormap.gray, colormap.gray]
+        self.cmap  = [cmap.gray, cmap.gray, cmap.gray]
         self.cmap_reverse = False
         self.interp = 'nearest'
         self.show_axis = False
@@ -103,6 +104,34 @@ class ImageConfig:
         self.scalebar_units = 'mm'
         self.scalebar_color = '#EEEE99'
         self.set_formatters()
+
+    def set_colormap(self, name, reverse=False, icol=0):
+        self.cmap_reverse = reverse
+        if reverse and not name.endswith('_r'):
+            name = name + '_r'
+        elif not reverse and name.endswith('_r'):
+            name = name[:-2]
+        self.cmap[icol] = _cmap_ = cmap.get_cmap(name)
+
+        if hasattr(self, 'contour'):
+            xname = 'gray'
+            if name == 'gray_r':
+                xname = 'Reds_r'
+            elif name == 'gray':
+                xname = 'Reds'
+            elif name.endswith('_r'):
+                xname = 'gray_r'
+            self.contour.set_cmap(getattr(cmap, xname))
+        if hasattr(self, 'image'):
+            self.image.set_cmap(self.cmap[icol])
+
+        if hasattr(self, 'highlight_areas'):
+            if hasattr(self.cmap[icol], '_lut'):
+                rgb  = [int(i*240)^255 for i in self.cmap[icol]._lut[0][:3]]
+                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+                for area in self.highlight_areas:
+                    for w in area.collections + area.labelTexts:
+                        w.set_color(col)
 
 
     def flip_vert(self):

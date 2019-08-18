@@ -72,7 +72,7 @@ class PlotDisplay(PlotFrame):
 
 class ImageDisplay(ImageFrame):
     def __init__(self, wxparent=None, window=1, size=None, **kws):
-       get_wxapp()
+        get_wxapp()
         ImageFrame.__init__(self, parent=None, size=size,
                                   exit_callback=self.onExit, **kws)
         self.Show()

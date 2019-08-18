@@ -2,12 +2,15 @@
 """
 Interactive wxmplot
 
-provides simple 'plot()', 'oplot()', and 'imshow()' functions to python interpreter
+ provides simple 'plot()', 'oplot()', and 'imshow()' functions to python interpreter
 
- plot:  display a simple X, Y line plot to an enhanced, configurable Plot Frame
- oplot: overplot a line plot on an existing Plot Frame
+ plot(x, y):  display a simple XY line plot to a wxmplot.PlotFrame
 
- imshow: display image of 2D array data on a configurable Image Display Frame.
+ oplot(x, y): overplot a line plot on an existing wxmplot.PlotFrame
+
+ imshow(array): display image of 2D array data on a wxmplot.ImageFrame
+
+ wxloop():   run wxPytho main loop, to pause for interactivitiy
 
 """
 
@@ -18,30 +21,33 @@ import wx
 
 from . import inputhook
 
-
 from .plotframe import PlotFrame
 from .imageframe import ImageFrame
 from .stackedplotframe import StackedPlotFrame
 
-from matplotlib.axes import Axes
-HIST_DOC = Axes.hist.__doc__
-
 IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
-MAX_WINDOWS = 20
+MAX_WINDOWS = 100
 MAX_CURSHIST = 100
 
-WXAPP = None
+wxapp = None
 
-def get_wxapp():
-    global WXAPP
-    if WXAPP is None:
-        _app = wx.GetApp()
-        if _app is not None:
-            WXAPP = _app
-    if WXAPP is None:
-        WXAPP = wx.App(redirect=False, clearSigInt=False)
 
+def get_wxapp(redirect=False, clearSigInt=False):
+    """get wx App"""
+    global wxapp
+    if wxapp is None:
+        wxapp = wx.GetApp()
+        if wxapp is None:
+            wxapp = wx.App(redirect=redirect, clearSigInt=clearSigInt)
+    return wxapp
+
+def wxloop():
+    """
+    run wxApp mainloop, allowing widget interaction
+    until all plotting and image image windows are closed.
+    """
+    get_wxapp().MainLoop()
 
 class PlotDisplay(PlotFrame):
     def __init__(self, wxparent=None, window=1, size=None, **kws):
@@ -208,7 +214,8 @@ def newplot(x, y, win=1, wxparent=None, wintitle=None, **kws):
 
     See Also: plot, oplot
     """
-    return plot(x, y, win=win, new=True, wxparent=wxparent, wintitle=wintitle, **kws)
+    kws['new'] = True
+    return plot(x, y, win=win, wxparent=wxparent, wintitle=wintitle, **kws)
 
 def plot_text(text, x, y, win=1, side='left', size=None,
               rotation=None, ha='left', va='center',

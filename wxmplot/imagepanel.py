@@ -553,9 +553,14 @@ class ImagePanel(BasePanel):
             pass
 
         if conf.scalebar_show:
-            xstep, ystep = 1, 1
-            if conf.xdata is not None:
-                xstep = abs(np.diff(conf.xdata).mean())
+            ystep, xstep = conf.scalebar_pixelsize
+            if xstep is None or ystep is None:
+                ystep, xstep = 1, 1
+                if conf.xdata is not None:
+                    xstep = abs(np.diff(conf.xdata).mean())
+                if conf.ydata is not None:
+                    ystep = abs(np.diff(conf.ydata).mean())
+                self.scalebar_pixelsize = ystep, xstep
             y, x = conf.scalebar_pos
             y, x = int(y), int(x)
             h, w = conf.scalebar_size

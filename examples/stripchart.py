@@ -96,7 +96,7 @@ class StripChartFrame(wx.Frame):
         self.tlist = [t0]
         self.tmin_last = -10000
         self.time0    = time.time()
-        self.timer.Start(50)
+        self.timer.Start(25)
 
     def onStopTimer(self,event=None):
         self.timer.Stop()
@@ -117,19 +117,19 @@ class StripChartFrame(wx.Frame):
             self.plotpanel.plot(tdat, ydat)
         else:
             self.plotpanel.update_line(0, tdat, ydat, draw=True)
-            self.write_message(" %i points in %8.4f s" % (n,etime))
+            self.write_message("update  %i points in %8.4f s" % (n,etime))
 
         lims = self.plotpanel.get_viewlimits()
         try:
             ymin, ymax = ydat[mask].min(), ydat[mask].max()
         except:
             ymin, ymax = ydat.min(), ydat.max()
-        tmin = max(int(min(tdat)) - 1.0, -self.tmin)
-        if (ymin < lims[2] or ymax >  lims[3] or
-            tmin != self.tmin_last or time.time()-self.last_update > 2):
-            self.tmin_last = tmin
-            self.last_update = time.time()
-            self.plotpanel.set_xylims((tmin, 0, ymin, ymax))
+        yrange = abs(ymax-ymin)
+        ymin -= yrange*0.05
+        ymax += yrange*0.05
+
+        if (ymin < lims[2] or ymax >  lims[3] ):
+            self.plotpanel.set_xylims((-self.tmin, 0, ymin, ymax))
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",

@@ -35,7 +35,7 @@ from .imagepanel import ImagePanel
 from .imageframe import ColorMapPanel, InterpPanel, ContrastPanel
 from .imageconf import ColorMap_List, Interp_List
 from .colors import rgb2hex
-from .utils import LabelEntry, MenuItem, pack, fix_filename, gformat
+from .utils import MenuItem, pack, fix_filename, gformat
 
 COLORMAPS = ('blue', 'red', 'green', 'yellow', 'cyan', 'magenta')
 CM_DEFS = ('blue', 'yellow')

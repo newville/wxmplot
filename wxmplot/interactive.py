@@ -348,7 +348,7 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
 
 
 def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
-         force_draw=True, *args, **kws):
+         force_draw=True, title=None, *args, **kws):
 
     plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
     if plotter is None:
@@ -356,9 +356,11 @@ def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
     plotter.Raise()
     if new:
         plotter.panel.axes.clear()
-
     out = plotter.panel.axes.hist(x, bins=bins, **kws)
+    if title is not None:
+        plotter.panel.set_title(title)
     plotter.panel.canvas.draw()
+
     return out
 
 def imshow(map, x=None, y=None, colormap=None, win=1, wxparent=None,

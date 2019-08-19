@@ -201,11 +201,16 @@ class PlotConfigFrame(wx.Frame):
         raxes = None
         if len(axes) > 1:
             raxes = axes[1]
-        user_lims = self.conf.user_limits[laxes]
-
+        try:
+            user_lims = self.conf.user_limits[laxes]
+        except:
+            user_lims = 4*[None]
         auto_b  = wx.CheckBox(panel,-1, ' From Data ', (-1, -1), (-1, -1))
         auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
-        auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
+        try:
+            auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
+        except:
+            pass
 
         xb0, xb1 = laxes.get_xlim()
         yb0, yb1 = laxes.get_ylim()

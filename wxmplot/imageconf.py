@@ -3,14 +3,11 @@ import wx.lib.agw.flatnotebook as flat_nb
 import wx.lib.scrolledpanel as scrolled
 import wx.lib.colourselect as csel
 
-
-
 from math import log10
 
 import numpy as np
 
 import matplotlib.cm as cmap
-
 from matplotlib.ticker import FuncFormatter
 
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
@@ -49,7 +46,7 @@ Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
                'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
                'bilinear', 'hanning', 'hamming', 'hermite', 'sinc', 'lanczos')
 
-Slices_List = ('None', 'X', 'Y') # , 'Both')
+Slices_List = ('None', 'X', 'Y')
 
 RGB_COLORS = ('red', 'green', 'blue')
 

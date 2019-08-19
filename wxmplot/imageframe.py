@@ -538,6 +538,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mview, "Zoom Out\tCtrl+Z", "Zoom out to full data range",
                  self.panel.unzoom)
 
+        MenuItem(self, mview, "Configure\tCtrl+K", "Configure Image Options",
+                 self.configure)
+
+        mview.AppendSeparator()
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
                  'Cycle Through Contrast Choices', self.cycle_contrast)
 
@@ -545,12 +549,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                  'Cycle Through Contrast Choices',
                  partial(self.cycle_contrast, dir='back'))
 
-        m = MenuItem(self, mview,
-                     'Toggle Background Color (Black/White)\tCtrl+W',
-                     'Toggle background color for 3-color images',
-                     self.onTriColorBG, kind=wx.ITEM_CHECK,
-                     checked=conf.tricolor_bg == 'white')
-        self.optional_menus.append((m, True))
 
         mview.AppendSeparator()
         MenuItem(self, mview, 'Show Histogram\tCtrl+G',
@@ -572,9 +570,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                      self.onScalebarToggle, checked=conf.scalebar_show,
                      kind=wx.ITEM_CHECK)
 
-        mview.AppendSeparator()
-        MenuItem(self, mview, "Configure\tCtrl+K", "Configure Image Options",
-                 self.configure)
+        m = MenuItem(self, mview,
+                     'Toggle Background Color (Black/White)\tCtrl+W',
+                     'Toggle background color for 3-color images',
+                     self.onTriColorBG, kind=wx.ITEM_CHECK,
+                     checked=conf.tricolor_bg == 'white')
+        self.optional_menus.append((m, True))
 
         mslice = wx.Menu()
         m1 = MenuItem(self, mslice, 'Show No X/Y Slices', 'Do not show X/Y slices',
@@ -583,7 +584,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
         m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices\tCtrl+Y', 'show Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
+        self.slice_menus = {m1.GetId(): 'None', m2.GetId(): 'X', m3.GetId(): 'Y'}
         m = MenuItem(self, mslice, 'Slices Follow Mouse Motion?',
                      'Update Slices on Mouse Motion',
                      self.onSliceDynamic, checked=conf.slice_onmotion,
@@ -690,12 +691,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         """
         pass
 
-
     def onSliceChoice(self, event=None):
         if event is not None:
             name = self.slice_menus.get(event.GetId(), Slices_List[0])
             self.panel.conf.slices = name
-
         self.panel.update_slices()
 
     def onSliceDynamic(self, event=None):

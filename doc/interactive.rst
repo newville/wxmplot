@@ -6,12 +6,13 @@
 .. module:: interactive
 
 The :mod:`interactive` modules provides simple, entry-level functions for
-plotting X/Y data and for image display.  These are similar in aim to the
-`matplotlib.pyplot` methods such as :func:`pyplot.plot` and
-:func:`pyplot.imshow`.  The functions are not drop-in replacements for
-those functions, as the syntax for the options are different, following
-:mod:`plotpanel.plot`. and :mod:`imagepanel.display`, and the interactivity
-provided is dramatically different (we might even say better).
+plotting X/Y data and for displaying 2D image data.  These are similar in
+aim to the :mod:`matplotlib.pyplot` methods such as :func:`pyplot.plot` and
+:func:`pyplot.imshow` but with noticeably better interactivity.  To be
+clear, the functions are not drop-in replacements for the
+:mod:`matplotlib.pyplot` methods, as the syntax for specifying options
+follows :mod:`plotpanel.plot`. and :mod:`imagepanel.display`, but they do
+provide roughly equivalent functionality.
 
 One important difference is that when using the functions here such as
 :func:`plot` and :func:`imshow` in an interactive Python session, the
@@ -34,7 +35,7 @@ independent display windows.
    essentially all those of :mod:`plotpanel.plot`.
 
 
-.. literalinclude:: ../examples/leftright.py
+.. literalinclude:: ../examples/simple.py
 
 and gives a plot that looks like this...
 

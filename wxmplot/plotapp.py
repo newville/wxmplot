@@ -2,8 +2,8 @@ import wx
 from .plotframe import PlotFrame
 
 class PlotApp(object):
-    """wx.App that provides a top-level Frame containing a 
-    matpplotlib plot that includes (by default) zooming, 
+    """wx.App that provides a top-level Frame containing a
+    matpplotlib plot that includes (by default) zooming,
     navigation and user-customization of line colors, width,
     labels, and so on.
       arguments
@@ -19,13 +19,13 @@ class PlotApp(object):
         self.frame = PlotFrame(title=title, size=size, dpi=dpi, **kws)
 
     def plot(self, x, y, **kw):
-        """plot x, y values (erasing old plot), 
+        """plot x, y values (erasing old plot),
         for method options see PlotPanel.plot.
         """
         return self.frame.plot(x,y,**kw)
 
     def oplot(self, x, y, **kw):
-        """overplot x, y values (on top of old plot), 
+        """overplot x, y values (on top of old plot),
         for method options see PlotPanel.oplot
         """
         return self.frame.oplot(x,y,**kw)
@@ -41,7 +41,7 @@ class PlotApp(object):
     def draw(self):
         "update figure"
         self.frame.draW()
-        
+
     def run(self):
         self.frame.Show()
         self.frame.Raise()

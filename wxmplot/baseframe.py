@@ -183,11 +183,14 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
-
         mopts = wx.Menu()
         MenuItem(self, mopts, "Configure Plot\tCtrl+K",
                  "Configure Plot styles, colors, labels, etc",
                  self.panel.configure)
+        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.panel.unzoom)
+
         MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
                  "Toggle Legend Display",
                  self.panel.toggle_legend)
@@ -226,10 +229,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
             mopts.AppendSubMenu(ydatmenu, "Transform Y(X) ")
 
-        mopts.AppendSeparator()
-        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range",
-                 self.panel.unzoom)
 
         mhelp = wx.Menu()
         MenuItem(self, mhelp, "Quick Reference",

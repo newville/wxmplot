@@ -1,26 +1,16 @@
 #!/usr/bin/python
 #
 
-import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
-
 import sys
 from math import log10
+
 import matplotlib
 from matplotlib.path import Path
 
-def fix_filename(fname, default='data'):
-    if fname is None or len(fname) < 1:
-        fname = default
-    if len(fname) > 64:
-        fname = fname[:63].strip()
+import wx
 
-    for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
-        fname = fname.replace(c, '_')
-
-    while '__' in fname:
-        fname = fname.replace('__', '_')
-    return fname
+from wxutils import (is_wxPhoenix, pack, fix_filename, MenuItem, SimpleText,
+                     Check, Choice, HLine, FloatSpin)
 
 
 def gformat(val, length=11):
@@ -65,46 +55,23 @@ def gformat(val, length=11):
     fmt = '{0: %i.%i%s}' % (length, prec, form)
     return fmt.format(val)
 
-def pack(window, sizer, expand=1.1):
-    "simple wxPython pack function"
-    tsize =  window.GetSize()
-    msize =  window.GetMinSize()
-    window.SetSizer(sizer)
-    sizer.Fit(window)
-    nsize = (10*int(expand*(max(msize[0], tsize[0])/10)),
-             10*int(expand*(max(msize[1], tsize[1])/10.)))
-    window.SetSize(nsize)
 
-
-def MenuItem(parent, menu, label='', longtext='', action=None, default=True,
-             **kws):
-    """Add Item to a Menu, with action
-    m = Menu(parent, menu, label, longtext, action=None)
-    """
-    item = menu.Append(-1, label, longtext, **kws)
-    kind = item.GetKind()
-    if kind == wx.ITEM_CHECK:
-        item.Check(default)
-    if callable(action):
-        parent.Bind(wx.EVT_MENU, action, item)
-    return item
-
-class LabelEntry(wx.TextCtrl):
+class LabeledTextCtrl(wx.TextCtrl):
     """
     simple extension of TextCtrl.  Typical usage:
-#  entry = LabelEntry(self, -1, value='22',
-#                     color='black',
-#                     labeltext='X',labelbgcolor='green',
-#                     style=wx.ALIGN_LEFT|wx.ST_NO_AUTORESIZE)
-#  row   = wx.BoxSizer(wx.HORIZONTAL)
-#  row.Add(entry.label, 1,wx.ALIGN_LEFT|wx.EXPAND)
-#  row.Add(entry,    1,wx.ALIGN_LEFT|wx.EXPAND)
 
+    entry = LabeledTextCtrl(self, -1, value='22',
+                            color='black',
+                            labeltext='X',labelbgcolor='green',
+                            style=wx.ALIGN_LEFT|wx.ST_NO_AUTORESIZE)
+    row  = wx.BoxSizer(wx.HORIZONTAL)
+    row.Add(entry.label, 1,wx.ALIGN_LEFT|wx.EXPAND)
+    row.Add(entry,    1,wx.ALIGN_LEFT|wx.EXPAND)
     """
-    def __init__(self,parent,value,size=-1,
+    def __init__(self,parent,value,size=(-1, -1),
                  font=None, action=None,
                  bgcolor=None, color=None, style=None,
-                 labeltext=None, labelsize=-1,
+                 labeltext=None, labelsize=(-1, -1),
                  labelcolor=None, labelbgcolor=None):
 
         if style is None:
@@ -115,8 +82,8 @@ class LabelEntry(wx.TextCtrl):
 
         if labeltext is not None:
             self.label = wx.StaticText(parent, -1, labeltext,
-                                       size = (labelsize,-1),
-                                       style = style)
+                                       size=labelsize, style=style)
+
             if labelcolor:
                 self.label.SetForegroundColour(labelcolor)
             if labelbgcolor:
@@ -129,8 +96,8 @@ class LabelEntry(wx.TextCtrl):
         except:
             value = ' '
 
-        wx.TextCtrl.__init__(self, parent, -1, value,
-                             size=(size,-1),style=style)
+        wx.TextCtrl.__init__(self, parent, -1, value, size=size,
+                             style=style)
 
         self.Bind(wx.EVT_TEXT_ENTER, self.__act)
         self.Bind(wx.EVT_KILL_FOCUS, self.__act)
@@ -146,6 +113,8 @@ class LabelEntry(wx.TextCtrl):
         val = self.GetValue()
         event.Skip()
         return val
+
+
 
 class PrintoutWx(wx.Printout):
     """Simple wrapper around wx Printout class -- all the real work

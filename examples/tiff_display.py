@@ -1,12 +1,10 @@
-import sys
-import wx
+from os import path
 from tifffile import imread
-from wxmplot import ImageFrame
 
-img = imread('ceo2.tiff')
+from wxmplot.interactive import imshow, wxloop
 
-app = wx.App()
-frame = ImageFrame()
-frame.display(img, contrast_level=0.1, colormap='plasma')
-frame.Show()
-app.MainLoop()
+thisdir, _ = path.split(__file__)
+imgdata =  imread(path.join(thisdir, 'ceo2.tiff'))
+
+imshow(imgdata, contrast_level=0.5, colormap='plasma')
+wxloop()

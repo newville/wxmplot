@@ -17,20 +17,19 @@ import wx.lib.colourselect as csel
 
 import numpy as np
 
-from   matplotlib.cm import get_cmap
-import matplotlib.cm as mpl_colormap
+import matplotlib.cm as cmap
 from matplotlib.figure import Figure
 from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from .imagepanel import ImagePanel
 from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
-                        Contrast_NDArray, Slices_List, RGB_COLORS)
+                        Contrast_NDArray, Slices_List, RGB_COLORS,
+                        ImageConfigFrame)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex, mpl_color
-from .utils import LabelEntry, MenuItem, pack, gformat
-from .contourdialog import ContourDialog
+from .utils import LabeledTextCtrl, MenuItem, pack, gformat
 
 
 CURSOR_MENULABELS = {'zoom':  ('Zoom to Rectangle\tCtrl+B',
@@ -59,28 +58,28 @@ class ColorMapPanel(wx.Panel):
 
         self.cmap_choice = None
         reverse = False
-        cmap = default
+        cmapname = default
         if colormap_list is not None:
             cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
             cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
             self.cmap_choice = cmap_choice
 
-            if cmap is None:
-                cmap = colormap_list[0]
+            if cmapname is None:
+                cmapname = colormap_list[0]
 
-            if cmap.endswith('_r'):
+            if cmapname.endswith('_r'):
                 reverse = True
-                cmap = cmap[:-2]
-            cmap_choice.SetStringSelection(cmap)
+                cmapname = cmap[:-2]
+            cmap_choice.SetStringSelection(cmapname)
 
             cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
             cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
             cmap_reverse.SetValue(reverse)
             self.cmap_reverse = cmap_reverse
 
-        if cmap is None:
-            cmap = 'gray'
-        self.imgpanel.conf.cmap[color] = get_cmap(cmap)
+        if cmapname is None:
+            cmapname = 'gray'
+        self.imgpanel.conf.cmap[color] = cmap.get_cmap(cmapname)
 
         maxval = self.imgpanel.conf.cmap_range
         wd, ht = 1.00, 0.125
@@ -94,7 +93,7 @@ class ColorMapPanel(wx.Panel):
         ax.set_axis_off()
         self.cmap_canvas = FigureCanvas(self, -1, figure=fig)
 
-        self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmap,
+        self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmapname,
                                   interpolation='bilinear')
         self.cmap_lo = wx.Slider(self, -1, 0, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
@@ -119,11 +118,11 @@ class ColorMapPanel(wx.Panel):
         irow += 1
         sizer.Add(self.cmap_lo,      (irow, 0), (1, 4), labstyle, 2)
 
-        self.imin_val = LabelEntry(self, 0, size=80,
-                                   labeltext='Range:',
-                                   action=partial(self.onThreshold, argu='lo'))
-        self.imax_val = LabelEntry(self, maxval, size=80, labeltext=':',
-                                   action=partial(self.onThreshold, argu='hi'))
+        self.imin_val = LabeledTextCtrl(self, 0, size=(80, -1),
+                                        labeltext='Range:',
+                                        action=partial(self.onThreshold, argu='lo'))
+        self.imax_val = LabeledTextCtrl(self, maxval, size=(80, -1), labeltext=':',
+                                        action=partial(self.onThreshold, argu='hi'))
         self.islider_range = wx.StaticText(self, label='Shown: ',
                                                 size=(90, -1))
         irow += 1
@@ -136,14 +135,15 @@ class ColorMapPanel(wx.Panel):
         sizer.Add(self.islider_range,  (irow, 0), (1, 4), labstyle, 0)
 
         pack(self, sizer)
-        self.set_colormap(default)
+        self.set_colormap(cmapname)
 
 
     def onCMap(self, event=None):
-        self.set_colormap(name=event.GetString())
-        self.imgpanel.redraw()
-        if callable(self.cmap_callback):
-            self.cmap_callback(name=event.GetString())
+        if event is not None:
+            self.set_colormap(name=event.GetString())
+            self.imgpanel.redraw()
+            if callable(self.cmap_callback):
+                self.cmap_callback(name=event.GetString())
 
 
     def onCMapReverse(self, event=None):
@@ -152,44 +152,20 @@ class ColorMapPanel(wx.Panel):
 
     def set_colormap(self, name=None):
         conf = self.imgpanel.conf
-        col = self.icol
         try:
             if name is None:
                 name = self.cmap_choice.GetStringSelection()
         except:
             return
-        conf.cmap_reverse = False
-        try:
-            conf.cmap_reverse = (1 == int(self.cmap_reverse.GetValue()))
-        except:
-            pass
-        if conf.cmap_reverse and not name.endswith('_r'):
-            name = name + '_r'
-        elif not conf.cmap_reverse and name.endswith('_r'):
-            name = name[:-2]
-        cmap_name = name
-        conf.cmap[col] = get_cmap(name)
 
-        if hasattr(conf, 'contour'):
-            xname = 'gray'
-            if cmap_name == 'gray_r':
-                xname = 'Reds_r'
-            elif cmap_name == 'gray':
-                xname = 'Reds'
-            elif cmap_name.endswith('_r'):
-                xname = 'gray_r'
-            conf.contour.set_cmap(getattr(mpl_colormap, xname))
-        if hasattr(conf, 'image'):
-            conf.image.set_cmap(conf.cmap[col])
+        try:
+            reverse = (1 == int(self.cmap_reverse.GetValue()))
+        except:
+            reverse = False
+
+        conf.set_colormap(name, reverse=reverse, icol=self.icol)
         self.redraw_cmap()
 
-        if hasattr(conf, 'highlight_areas'):
-            if hasattr(conf.cmap[col], '_lut'):
-                rgb  = [int(i*240)^255 for i in conf.cmap[col]._lut[0][:3]]
-                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-                for area in conf.highlight_areas:
-                    for w in area.collections + area.labelTexts:
-                        w.set_color(col)
 
     def onThreshold(self, event=None, argu='hi'):
         col = self.icol
@@ -338,197 +314,6 @@ class ContrastPanel(wx.Panel):
             self.callback(contrast_level=clevel)
 
 
-class ImageSliceDialog(wx.Dialog):
-    """Configure Image Slicing"""
-    msg = '''Configure Image Slicing'''
-    def __init__(self, parent=None, conf=None,
-                 title='Image Slice Configuration',
-                 size=wx.DefaultSize, pos=wx.DefaultPosition,
-                 style=wx.DEFAULT_DIALOG_STYLE):
-
-        if conf is None:
-            return
-        self.conf = conf
-
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
-
-        sizer = wx.GridBagSizer(7, 3)
-        swidth = '%i' % conf.slice_width
-        label = wx.StaticText(self, -1, "Slice Width:")
-        val = self.conf.slice_width
-        self.width = FloatSpin(self, -1, value=val, min_val=0, max_val=5000,
-                               increment=1, digits=0, size=(80, -1))
-
-        sizer.Add(label,           (0, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.width,      (0, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, (2, 0), (1, 2),
-                  wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 2)
-
-        btnsizer = wx.StdDialogButtonSizer()
-
-        nobtn = wx.Button(self, wx.ID_CANCEL)
-        okbtn = wx.Button(self, wx.ID_OK)
-        okbtn.SetDefault()
-
-        btnsizer.AddButton(okbtn)
-        btnsizer.AddButton(nobtn)
-        btnsizer.Realize()
-
-        sizer.Add(btnsizer, (3, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-    def GetResponse(self, master=None, gname=None, ynorm=True):
-        self.Raise()
-        if self.ShowModal() == wx.ID_OK:
-            self.conf.slice_width = int(self.width.GetValue())
-        return
-
-class ScalebarDialog(wx.Dialog):
-    """Configure Image Scalebar"""
-    msg = '''Configure Image Scalebar'''
-    def __init__(self, parent=None, conf=None,
-                 title='Image Scalebar Configuration',
-                 size=wx.DefaultSize, pos=wx.DefaultPosition,
-                 style=wx.DEFAULT_DIALOG_STYLE):
-
-        if conf is None:
-            return
-        self.conf = conf
-
-
-        dshape = conf.data.shape
-        nmax = max(dshape[0], dshape[1])
-        xdata = conf.xdata
-        ydata = conf.ydata
-        xstep, ystep = 1, 1
-        if xdata is not None:
-            xstep = abs(np.diff(xdata).mean())
-        if ydata is not None:
-            ystep = abs(np.diff(ydata).mean())
-
-        ypos, xpos = conf.scalebar_pos
-        ysiz, xsiz = conf.scalebar_size
-        units = conf.scalebar_units
-
-        self.wids = {}
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title=title)
-
-        sizer = wx.GridBagSizer(7, 3)
-
-
-        lab_opts = dict(size=(120, -1))
-        label_label = wx.StaticText(self, label='Scalebar Label:', **lab_opts)
-        color_label = wx.StaticText(self, label='Scalebar Color: ', **lab_opts)
-        xpos_label = wx.StaticText(self, label='X position (pixels): ',  **lab_opts)
-        ypos_label = wx.StaticText(self, label='Y Position (pixels): ',  **lab_opts)
-        width_label = wx.StaticText(self, label='Width (%s): ' % units, **lab_opts)
-        height_label = wx.StaticText(self, label='Height (pixels): ', **lab_opts)
-
-        self.show_scalebar = wx.CheckBox(self, label='Show Scalebar', size=(150, -1))
-        self.show_scalebar.SetValue(True)
-
-        self.show_label = wx.CheckBox(self, label='Show Scalebar Label', size=(150, -1))
-        self.show_label.SetValue(len(conf.scalebar_label) > 0)
-
-        pos_text1 = "Scalebar position (pixels from lower left)"
-        pos_label1 = wx.StaticText(self, label=pos_text1,  size=(275, -1))
-
-        pos_text2 = "Image Size = %d x %d pixels" % (dshape[1], dshape[0])
-        pos_label2 = wx.StaticText(self, label=pos_text2,  size=(275, -1))
-
-        pixelsize_text = "Pixel Size: X=%13.5g, Y=%13.5g %s" % (xstep, ystep, units)
-        pixelsize_label = wx.StaticText(self, label=pixelsize_text,
-                                        size=(275, -1))
-
-        self.label  = wx.TextCtrl(self, value=conf.scalebar_label,  size=(150, -1))
-        self.color = csel.ColourSelect(self,  -1, "",
-                                       mpl_color(conf.scalebar_color),
-                                       size=(75, 25))
-
-        opts = dict(min_val=0, increment=1, digits=0, size=(150, -1))
-
-        self.xpos = FloatSpin(self, -1, value=xpos, max_val=dshape[1], **opts)
-        self.ypos = FloatSpin(self, -1, value=ypos, max_val=dshape[0], **opts)
-        self.height = FloatSpin(self, -1, value=ysiz, max_val=dshape[0], **opts)
-
-        opts['increment'] = xstep
-        opts['digits'] = max(1, 2 - int(np.log10(abs(xstep))))
-        self.width = FloatSpin(self, -1, value=xsiz, max_val=dshape[1]*xstep, **opts)
-
-        btnsizer = wx.StdDialogButtonSizer()
-        nobtn = wx.Button(self, wx.ID_CANCEL)
-        okbtn = wx.Button(self, wx.ID_OK)
-        okbtn.SetDefault()
-
-        btnsizer.AddButton(okbtn)
-        btnsizer.AddButton(nobtn)
-        btnsizer.Realize()
-
-        irow = 0
-        sizer.Add(self.show_scalebar,  (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(self.show_label,  (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(label_label,  (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.label,   (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(color_label,  (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.color,   (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
-                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(pixelsize_label,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
-        irow += 1
-        sizer.Add(width_label,     (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.width,      (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        irow += 1
-        sizer.Add(height_label,    (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.height,     (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
-                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(pos_label1,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
-        irow += 1
-        sizer.Add(pos_label2,     (irow, 0), (1, 2), wx.ALIGN_LEFT|wx.ALL, 2)
-        irow += 1
-        sizer.Add(xpos_label,   (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.xpos,    (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        irow += 1
-        sizer.Add(ypos_label,   (irow, 0), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-        sizer.Add(self.ypos,    (irow, 1), (1, 1), wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(wx.StaticLine(self, -1, size=(275,-1), style=wx.LI_HORIZONTAL),
-                  (irow, 0), (1, 2), wx.GROW|wx.ALIGN_LEFT|wx.ALL, 2)
-
-        irow += 1
-        sizer.Add(btnsizer,     (irow, 0), (1, 2), wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-    def GetResponse(self, event=None):
-        self.Raise()
-        if self.ShowModal() == wx.ID_OK:
-            conf = self.conf
-            conf.scalebar_show = self.show_scalebar.IsChecked()
-            conf.scalebar_showlabel = self.show_label.IsChecked()
-            conf.scalebar_label = self.label.GetValue()
-            conf.scalebar_pos = self.ypos.GetValue(), self.xpos.GetValue()
-            conf.scalebar_size = self.height.GetValue(), self.width.GetValue()
-            col = self.color.GetValue()
-            conf.scalebar_color = '#%02x%02x%02x' % (col[0], col[1], col[2])
 
 
 class ImageFrame(BaseFrame):
@@ -563,12 +348,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 """
 
-    def __init__(self, parent=None, size=(700, 525),
-                 lasso_callback=None, mode='intensity',
-                 show_xsections=False, cursor_labels=None,
-                 output_title='Image', subtitles=None,
-                 user_menus=None,
-                 title='Image Display Frame', **kws):
+    def __init__(self, parent=None, size=(700, 525), lasso_callback=None,
+                 mode='intensity', show_xsections=False,
+                 cursor_labels=None, output_title='Image', subtitles=None,
+                 user_menus=None, title='Image Display Frame', **kws):
 
         self.lasso_callback = lasso_callback
         self.user_menus = user_menus
@@ -594,7 +377,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.SetStatusWidths(sbar_widths)
 
         self.optional_menus = []
-
+        self.win_config = None
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
 
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
@@ -680,12 +463,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.panel.conf.contrast_level = contrast_level
 
         self.panel.display(img, style=style, contrast_level=contrast_level,
-                           **kws)
+                           colormap=colormap, **kws)
 
         self.set_contrast_levels(contrast_level=contrast_level)
 
         self.panel.conf.title = title
         if colormap is not None and self.config_mode == 'int':
+            self.cmap_panels[0].cmap_choice.SetStringSelection(colormap)
             self.cmap_panels[0].set_colormap(name=colormap)
 
         if subtitles is not None:
@@ -705,6 +489,21 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.config_panel.Refresh()
         self.SendSizeEvent()
         wx.CallAfter(self.EnableMenus)
+
+    def configure(self, event=None):
+        """show configuration frame"""
+        if self.win_config is not None:
+            try:
+                self.win_config.Raise()
+            except:
+                self.win_config = None
+
+        if self.win_config is None:
+            self.win_config = ImageConfigFrame(parent=self,
+                                               config=self.panel.conf)
+
+            self.win_config.Raise()
+
 
     def set_subtitles(self, red=None, green=None, blue=None, **kws):
         if self.config_mode.startswith('int') and red is not None:
@@ -731,54 +530,66 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                      'Save Image of Colormap',
                                       self.onCMapSave),))
 
-        # image menu
+        # image menua
         mview = self.view_menu = wx.Menu()
+        conf = self.panel.conf
 
 
-        MenuItem(self, mview, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range",
+        MenuItem(self, mview, "Zoom Out\tCtrl+Z", "Zoom out to full data range",
                  self.panel.unzoom)
-
 
         MenuItem(self, mview, 'Enhance Contrast Cycle\tCtrl++',
                  'Cycle Through Contrast Choices', self.cycle_contrast)
+
         MenuItem(self, mview, 'Reduce Contrast Cycle\tCtrl+-',
                  'Cycle Through Contrast Choices',
                  partial(self.cycle_contrast, dir='back'))
-        MenuItem(self, mview, 'Display Histogram\tCtrl+G',
-                 'Show Intensity Histogram', self.show_histogram)
-
-        mview.AppendSeparator()
-        m = MenuItem(self, mview, 'Show Axes Labels\tCtrl+A',
-                     'Toggle displacy of Axis labels',
-                     self.onAxesLabels, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.show_axis)
 
         m = MenuItem(self, mview,
                      'Toggle Background Color (Black/White)\tCtrl+W',
                      'Toggle background color for 3-color images',
-                     self.onTriColorBG, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.tricolor_bg == 'white')
+                     self.onTriColorBG, kind=wx.ITEM_CHECK,
+                     checked=conf.tricolor_bg == 'white')
         self.optional_menus.append((m, True))
 
         mview.AppendSeparator()
+        MenuItem(self, mview, 'Show Histogram\tCtrl+G',
+                 'Show Intensity Histogram', self.show_histogram)
 
-        m = MenuItem(self, mview, 'Show as Contour Plot\tCtrl+N',
+
+        m = MenuItem(self, mview, 'Toggle Axes Labels\tCtrl+A',
+                     'Toggle displacy of Axis labels',
+                     self.onAxesLabels, kind=wx.ITEM_CHECK,
+                     checked=conf.show_axis)
+
+        m = MenuItem(self, mview, 'Toggle Contour Plot\tCtrl+N',
                      'Shown as Contour Plot',
-                     self.onContourToggle, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.style=='contour')
+                     self.onContourToggle, kind=wx.ITEM_CHECK,
+                     checked=conf.style=='contour')
         self.optional_menus.append((m, False))
 
-        m = MenuItem(self, mview, 'Configure Contours', 'Configure Contours',
-                     self.onContourConfig)
-        self.optional_menus.append((m, False))
+        m = MenuItem(self, mview, 'Toggle Scalebar\tCtrl+B', 'Show Scalebar',
+                     self.onScalebarToggle, checked=conf.scalebar_show,
+                     kind=wx.ITEM_CHECK)
 
         mview.AppendSeparator()
-        m = MenuItem(self, mview, 'Show Scalebar\tCtrl+B', 'Show Scalebar',
-                     self.onScalebarToggle, kind=wx.ITEM_CHECK)
-        m.Check(self.panel.conf.scalebar_show)
-        m = MenuItem(self, mview, 'Configure Scalebar', 'Configure Scalebar',
-                     self.onScalebarConfig)
+        MenuItem(self, mview, "Configure\tCtrl+K", "Configure Image Options",
+                 self.configure)
+
+        mslice = wx.Menu()
+        m1 = MenuItem(self, mslice, 'Show No X/Y Slices', 'Do not show X/Y slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices\tCtrl+x', 'show X slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices\tCtrl+Y', 'show Y slices',
+                      self.onSliceChoice, kind=wx.ITEM_RADIO)
+        self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
+        m = MenuItem(self, mslice, 'Slices Follow Mouse Motion?',
+                     'Update Slices on Mouse Motion',
+                     self.onSliceDynamic, checked=conf.slice_onmotion,
+                     kind=wx.ITEM_CHECK)
+
+
 
         mrot = wx.Menu()
         MenuItem(self, mrot, 'Rotate clockwise\tCtrl+R', '',
@@ -790,22 +601,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         MenuItem(self, mrot,  'Reset Flips/Rotations', '',
                  partial(self.onFlip, mode='restore'))
 
-        mslice = wx.Menu()
-        m1 = MenuItem(self, mslice, 'No Slices', 'Do not show X/Y slices',
-                      self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices', 'show X slices',
-                      self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices', 'show Y slices',
-                      self.onSliceChoice, kind=wx.ITEM_RADIO)
-        self.slice_menus = {m1.GetId(): None, m2.GetId(): 'X', m3.GetId(): 'Y'}
-
-        m = MenuItem(self, mslice, 'Update Slices on Mouse Motion',
-                     'Update Slices on Mouse Motion',
-                     self.onSliceDynamic, default=False, kind=wx.ITEM_CHECK)
-
-        mview.AppendSeparator()
-        m = MenuItem(self, mslice, 'Configure Slices', 'Configure Slices',
-                     self.onSliceConfig)
 
         msmooth = wx.Menu()
         self.smooth_menus = {}
@@ -813,7 +608,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             m = MenuItem(self, msmooth, sname, sname,
                          self.onSmoothChoice, kind=wx.ITEM_RADIO)
             self.smooth_menus[m.GetId()] = sname
-
 
         # help
         mhelp = wx.Menu()
@@ -824,8 +618,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         # add all sub-menus, including user-added
         submenus = [('File', mfile),
                     ('Image', mview),
+                    ('X/Y Slices', mslice),
                     ('Orientation', mrot),
-                    ('X/Y Slicing', mslice),
                     ('Smoothing', msmooth)]
         if self.user_menus is not None:
             submenus.extend(self.user_menus)
@@ -872,8 +666,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                                         default=col,
                                                         colormap_list=None)
                 sizer.Add(self.cmap_panels[icol], 0, lsty, 2)
-                sizer.Add(wx.StaticLine(panel, size=(100, 2),
-                                        style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         else:
             self.cmap_panels[0] =  ColorMapPanel(panel, self.panel,
@@ -881,10 +673,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                                                  colormap_list=ColorMap_List)
 
             sizer.Add(self.cmap_panels[0],  0, lsty, 1)
-            sizer.Add(wx.StaticLine(panel, size=(100, 2),
-                                    style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         sizer.Add(self.contrast_panel, 0, lsty, 2)
+        sizer.Add(wx.StaticLine(panel, size=(100, 2),
+                                style=wx.LI_HORIZONTAL), 0, lsty, 2)
 
         cust = self.CustomConfig(panel, None, 0)
         if cust is not None:
@@ -898,37 +690,12 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         """
         pass
 
-    def onContourConfig(self, event=None):
-        panel = self.panel
-        conf = panel.conf
-        dlg = ContourDialog(parent=self, conf=conf)
-        dlg.CenterOnScreen()
-        dlg.GetResponse()
-        dlg.Destroy()
-
-        if conf.style != 'contour':
-            return
-
-        if self.config_mode == 'int':
-            self.cmap_panels[0].set_colormap()
-
-        panel.axes.cla()
-        panel.display(conf.data, x=conf.xdata, y=conf.ydata,
-                      xlabel=conf.xlab, ylabel=conf.ylab,
-                      contour_labels=conf.contour_labels,
-                      nlevels=conf.ncontour_levels, style='contour')
-        panel.redraw()
-
-    def onSliceConfig(self, event=None):
-        dlg = ImageSliceDialog(parent=self, conf=self.panel.conf)
-        dlg.CenterOnScreen()
-        dlg.GetResponse()
-        dlg.Destroy()
-        self.panel.redraw()
 
     def onSliceChoice(self, event=None):
-        name = self.slice_menus.get(event.GetId(), Slices_List[0])
-        self.panel.conf.slices = name
+        if event is not None:
+            name = self.slice_menus.get(event.GetId(), Slices_List[0])
+            self.panel.conf.slices = name
+
         self.panel.update_slices()
 
     def onSliceDynamic(self, event=None):
@@ -940,12 +707,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf.scalebar_show = not conf.scalebar_show
         self.panel.redraw()
 
-    def onScalebarConfig(self, event=None):
-        dlg = ScalebarDialog(parent=self, conf=self.panel.conf)
-        dlg.CenterOnScreen()
-        dlg.GetResponse()
-        dlg.Destroy()
-        self.panel.redraw()
 
     def onSmoothChoice(self, event=None):
         name = self.smooth_menus.get(event.GetId(), Interp_List[0])
@@ -957,11 +718,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             return
         panel = self.panel
         conf  = panel.conf
-        conf.style = 'image'
-        self.contrast_panel.Enable()
-        if event.IsChecked():
-            conf.style = 'contour'
-            self.contrast_panel.Disable()
+
+        is_contour = event is None or event.IsChecked()
+        conf.style = {True: 'contour', False: 'image'}[is_contour]
+        self.contrast_panel.Enable(not is_contour)
 
         nlevels = int(conf.ncontour_levels)
         if self.config_mode == 'int':

@@ -16,7 +16,7 @@ import matplotlib
 from matplotlib import rcParams
 from matplotlib.font_manager import fontManager, FontProperties
 
-from .utils import LabelEntry, MenuItem
+from .utils import LabeledTextCtrl, MenuItem, SimpleText
 from .config import PlotConfig
 from .colors import hexcolor, hex2rgb, mpl_color
 
@@ -29,6 +29,7 @@ except ImportError:
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS
 
 ISPINSIZE = 75
+
 FSPINSIZE = 75
 
 def autopack(panel, sizer):
@@ -200,11 +201,16 @@ class PlotConfigFrame(wx.Frame):
         raxes = None
         if len(axes) > 1:
             raxes = axes[1]
-        user_lims = self.conf.user_limits[laxes]
-
+        try:
+            user_lims = self.conf.user_limits[laxes]
+        except:
+            user_lims = 4*[None]
         auto_b  = wx.CheckBox(panel,-1, ' From Data ', (-1, -1), (-1, -1))
         auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
-        auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
+        try:
+            auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
+        except:
+            pass
 
         xb0, xb1 = laxes.get_xlim()
         yb0, yb1 = laxes.get_ylim()
@@ -221,14 +227,14 @@ class PlotConfigFrame(wx.Frame):
             if user_lims[2] is not None: y2b0 = user_lims[2]
             if user_lims[3] is not None: y2b1 = user_lims[3]
 
-        opts = dict(size=100, labeltext='', action=self.onBounds)
+        opts = dict(size=(100, -1), labeltext='', action=self.onBounds)
 
-        self.xbounds  = [LabelEntry(panel,value=ffmt(xb0), **opts),
-                         LabelEntry(panel,value=ffmt(xb1), **opts)]
-        self.ybounds  = [LabelEntry(panel,value=ffmt(yb0), **opts),
-                         LabelEntry(panel,value=ffmt(yb1), **opts)]
-        self.y2bounds = [LabelEntry(panel,value=ffmt(y2b0), **opts),
-                         LabelEntry(panel,value=ffmt(y2b1), **opts)]
+        self.xbounds  = [LabeledTextCtrl(panel,value=ffmt(xb0), **opts),
+                         LabeledTextCtrl(panel,value=ffmt(xb1), **opts)]
+        self.ybounds  = [LabeledTextCtrl(panel,value=ffmt(yb0), **opts),
+                         LabeledTextCtrl(panel,value=ffmt(yb1), **opts)]
+        self.y2bounds = [LabeledTextCtrl(panel,value=ffmt(y2b0), **opts),
+                         LabeledTextCtrl(panel,value=ffmt(y2b1), **opts)]
 
         self.vpad_val = FloatSpin(panel, -1, value=2.5,
                                   min_val=0, max_val=100,
@@ -405,27 +411,27 @@ class PlotConfigFrame(wx.Frame):
         l_size.Bind(wx.EVT_SPINCTRL, partial(self.onText, item='legendsize'))
 
 
-        self.titl = LabelEntry(panel, self.conf.title.replace('\n', '\\n'),
-                               labeltext='Title: ',size=400,
-                               action = partial(self.onText, item='title'))
-        self.ylab = LabelEntry(panel, self.conf.ylabel.replace('\n', '\\n'),
-                               labeltext='Y Label: ',size=400,
-                               action = partial(self.onText, item='ylabel'))
-        self.y2lab= LabelEntry(panel, self.conf.y2label.replace('\n', '\\n'),
-                               labeltext='Y2 Label: ',size=400,
-                               action = partial(self.onText, item='y2label'))
-        self.xlab = LabelEntry(panel, self.conf.xlabel.replace('\n', '\\n'),
-                               labeltext='X Label: ',size=400,
-                               action = partial(self.onText, item='xlabel'))
+        self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='title'),
+                                    labeltext='Title: ', size=(400, -1))
+        self.ylab = LabeledTextCtrl(panel, self.conf.ylabel.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='ylabel'),
+                                    labeltext='Y Label: ', size=(400, -1))
+        self.y2lab= LabeledTextCtrl(panel, self.conf.y2label.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='y2label'),
+                                    labeltext='Y2 Label: ', size=(400, -1))
+        self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='xlabel'),
+                                    labeltext='X Label: ', size=(400, -1))
 
-        sizer.Add(self.titl.label, (0, 0), (1, 1), labstyle)
-        sizer.Add(self.titl,       (0, 1), (1, 4), labstyle)
-        sizer.Add(self.ylab.label, (1, 0), (1, 1), labstyle)
-        sizer.Add(self.ylab,       (1, 1), (1, 4), labstyle)
-        sizer.Add(self.y2lab.label,(2, 0), (1, 1), labstyle)
-        sizer.Add(self.y2lab,      (2, 1), (1, 4), labstyle)
-        sizer.Add(self.xlab.label, (3, 0), (1, 1), labstyle)
-        sizer.Add(self.xlab,       (3, 1), (1, 4), labstyle)
+        sizer.Add(self.titl.label,  (0, 0), (1, 1), labstyle)
+        sizer.Add(self.titl,        (0, 1), (1, 4), labstyle)
+        sizer.Add(self.ylab.label,  (1, 0), (1, 1), labstyle)
+        sizer.Add(self.ylab,        (1, 1), (1, 4), labstyle)
+        sizer.Add(self.y2lab.label, (2, 0), (1, 1), labstyle)
+        sizer.Add(self.y2lab,       (2, 1), (1, 4), labstyle)
+        sizer.Add(self.xlab.label,  (3, 0), (1, 1), labstyle)
+        sizer.Add(self.xlab,        (3, 1), (1, 4), labstyle)
 
         sizer.Add(t0,      (4, 0), (1, 1), labstyle)
         sizer.Add(t1,      (4, 1), (1, 1), labstyle)
@@ -589,8 +595,8 @@ class PlotConfigFrame(wx.Frame):
             djsty = lin.drawstyle
             dzord = lin.zorder
             dsym = lin.marker
-            lab = LabelEntry(panel, dlab, size=125,labeltext="%i" % (i+1),
-                               action = partial(self.onText, item='trace', trace=i))
+            lab = LabeledTextCtrl(panel, dlab, size=(125, -1), labeltext="%i" % (i+1),
+                                  action = partial(self.onText, item='trace', trace=i))
             self.trace_labels.append(lab)
 
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
@@ -819,7 +825,7 @@ class PlotConfigFrame(wx.Frame):
                          edgecolors=conf.scatter_selectedge)
         self.conf.relabel(delay_draw=False)
 
-    def onText(self, event, item='trace', trace=0):
+    def onText(self, event=None, item='trace', trace=0):
         if item=='labelsize':
             size = event.GetInt()
             self.conf.labelfont.set_size(size)
@@ -846,11 +852,7 @@ class PlotConfigFrame(wx.Frame):
         elif item == 'trace':
             wid = self.trace_labels[trace]
 
-        if wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType():
-            s = str(event.GetString()).strip()
-        elif wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType():
-            s = wid.GetValue()
-
+        s = wid.GetValue()
         try:
             s = str(s).strip()
         except TypeError:

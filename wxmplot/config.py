@@ -78,9 +78,9 @@ for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
 
 ColorThemes = OrderedDict()
 ColorThemes['light'] = {'bg': '#FEFEFE', 'text': '#000000',
-                        'grid': '#E5E5E5', 'frame': '#F8F8F8'}
-ColorThemes['dark'] = {'bg': '#242424', 'text': '#FDFDC0',
-                       'grid': '#404040', 'frame': '#181818'}
+                        'grid': '#E5E5E5', 'frame': '#FBFBFB'}
+ColorThemes['dark'] = {'bg': '#202020', 'text': '#FDFDC0',
+                       'grid': '#404040', 'frame': '#161616'}
 
 ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 

@@ -198,7 +198,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                  "Toggle Grid Display",
                  self.panel.toggle_grid)
 
-        mopts.AppendSeparator()
+        # mopts.AppendSeparator()
 
         logmenu = wx.Menu()
         for label in self.panel.conf.log_choices:
@@ -209,26 +209,20 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                      partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
                      kind=wx.ITEM_RADIO)
 
-        mopts.AppendSubMenu(logmenu, "Linear/Log Scale ")
 
+        transmenu = None
         if self.panel.conf.with_data_process:
-            ydatmenu = wx.Menu()
-
-            MenuItem(self, ydatmenu, "Toggle Derivative", "Toggle Derivative",
+            transmenu = wx.Menu()
+            MenuItem(self, transmenu, "Toggle Derivative", "Toggle Derivative",
                      self.panel.toggle_deriv, kind=wx.ITEM_CHECK)
 
-            ydatmenu.AppendSeparator()
             for expr in self.panel.conf.data_expressions:
                 label = expr
                 if label is None:
                     label = 'original Y(X)'
-                MenuItem(self, ydatmenu, label, label,
+                MenuItem(self, transmenu, label, label,
                          partial(self.panel.process_data, expr=expr),
                          kind=wx.ITEM_RADIO)
-            ydatmenu.AppendSeparator()
-
-            mopts.AppendSubMenu(ydatmenu, "Transform Y(X) ")
-
 
         mhelp = wx.Menu()
         MenuItem(self, mhelp, "Quick Reference",
@@ -238,6 +232,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mbar = wx.MenuBar()
         mbar.Append(mfile, 'File')
         mbar.Append(mopts, '&Options')
+        mbar.Append(logmenu, "Linear/Log Scale ")
+        if transmenu is not None:
+            mbar.Append(transmenu, "Transform Y(X)")
         if self.user_menus is not None:
             for title, menu in self.user_menus:
                 mbar.Append(menu, title)
@@ -273,7 +270,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         title = title.strip()
 
-        fname = fix_filename(title, default='plot') + '.dat'
+        fname = fix_filename(title + '.dat')
 
         origdir = os.getcwd()
         file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"

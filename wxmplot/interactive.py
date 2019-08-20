@@ -62,7 +62,6 @@ class PlotDisplay(PlotFrame):
         self.panel.cursor_mode = 'zoom'
         self.window = int(window)
         self.cursor_hist = []
-        self.panel.canvas.figure.set_facecolor('#FDFDFB')
         if window not in PLOT_DISPLAYS:
             PLOT_DISPLAYS[window] = self
 

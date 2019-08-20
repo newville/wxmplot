@@ -211,7 +211,7 @@ class BasePanel(wx.Panel):
 
     def set_bg(self, color= None):
         if color is None:
-            color = '#FDFDFB'
+            color = '#FBFBFB'
         self.fig.set_facecolor(color)
 
     def configure(self, evt=None, **kws):

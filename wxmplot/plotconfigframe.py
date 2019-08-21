@@ -8,13 +8,8 @@ import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
 from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
-
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
-
-import matplotlib
-from matplotlib import rcParams
-from matplotlib.font_manager import fontManager, FontProperties
 
 from .utils import LabeledTextCtrl, MenuItem, SimpleText
 from .config import PlotConfig
@@ -135,7 +130,7 @@ class PlotConfigFrame(wx.Frame):
 
 
     def DrawPanel(self):
-        style = wx.DEFAULT_FRAME_STYLE## |wx.TAB_TRAVERSAL
+        style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
         bgcol =  hex2rgb(self.conf.color_themes['light']['bg'])
         panel = wx.Panel(self, -1)
@@ -494,10 +489,7 @@ class PlotConfigFrame(wx.Frame):
         i = 0
 
         ax = self.axes[0]
-        if matplotlib.__version__ < '2.0':
-            axis_bgcol = ax.get_axis_bgcolor()
-        else:
-            axis_bgcol = ax.get_facecolor()
+        axis_bgcol = ax.get_facecolor()
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 

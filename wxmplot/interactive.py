@@ -32,8 +32,7 @@ MAX_CURSHIST = 100
 
 wxapp = None
 
-
-def get_wxapp(redirect=False, clearSigInt=False):
+def get_wxapp(redirect=False, clearSigInt=True):
     """get wx App"""
     global wxapp
     if wxapp is None:

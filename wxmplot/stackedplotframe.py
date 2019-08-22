@@ -130,7 +130,7 @@ class StackedPlotFrame(BaseFrame):
         lsize = self.panel.conf.labelfont.get_size()
         self.panel_bot.conf.labelfont.set_size(lsize-2)
         self.panel_bot.yformatter = self.bot_yformatter
-        # self.panel_bot.axes.tick_params(axis='y', labelsize=8)
+
         self.panel.conf.theme_color_callback = self.onThemeColor
         self.panel.conf.margin_callback = self.onMargins
 
@@ -213,7 +213,7 @@ class StackedPlotFrame(BaseFrame):
         if item == 'grid':
             bconf.set_gridcolor(color)
         elif item == 'bg':
-            bconf.set_bgcolor(color)
+            bconf.set_facecolor(color)
         elif item == 'frame':
             bconf.set_framecolor(color)
         elif item == 'text':

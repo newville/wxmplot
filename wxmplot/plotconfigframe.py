@@ -132,7 +132,7 @@ class PlotConfigFrame(wx.Frame):
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
-        bgcol =  hex2rgb(self.conf.color_themes['light']['bg'])
+        bgcol =  hex2rgb(self.conf.color_themes['light']['axes.facecolor'])
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
@@ -521,10 +521,10 @@ class PlotConfigFrame(wx.Frame):
                                    size=(120, 30), style=labstyle)
 
 
-        self.colwids = {'text': textcol, 'bg': bgcol,
+        self.colwids = {'text': textcol, 'face': bgcol,
                         'grid': gridcol, 'frame': fbgcol}
 
-        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, item='bg'))
+        bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, item='face'))
         fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, item='frame'))
         gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='grid'))
         textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='text'))
@@ -655,8 +655,8 @@ class PlotConfigFrame(wx.Frame):
             self.conf.set_trace_color(color, trace=trace)
         elif item == 'grid':
             self.conf.set_gridcolor(color)
-        elif item == 'bg':
-            self.conf.set_bgcolor(color)
+        elif item == 'face':
+            self.conf.set_facecolor(color)
         elif item == 'frame':
             self.conf.set_framecolor(color)
         elif item == 'text':
@@ -668,14 +668,14 @@ class PlotConfigFrame(wx.Frame):
     def onColorThemeStyle(self, event):
         theme = event.GetString()
         conf = self.conf
-        conf.set_color_theme(theme)
+        conf.set_theme(theme)
 
         self.colwids['text'].SetColour(conf.textcolor)
         self.colwids['grid'].SetColour(conf.gridcolor)
-        self.colwids['bg'].SetColour(conf.bgcolor)
+        self.colwids['face'].SetColour(conf.facecolor)
         self.colwids['frame'].SetColour(conf.framecolor)
 
-        self.onColor(color=conf.bgcolor,    item='bg',    draw=False)
+        self.onColor(color=conf.facecolor,  item='face',  draw=False)
         self.onColor(color=conf.gridcolor,  item='grid',  draw=False)
         self.onColor(color=conf.framecolor, item='frame', draw=False)
         self.onColor(color=conf.textcolor,  item='text',  draw=False)

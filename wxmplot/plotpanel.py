@@ -66,8 +66,8 @@ class PlotPanel(BasePanel):
         self.parent  = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi  = dpi
-        self.conf.bgcolor = ifnotNone(facecolor, self.conf.bgcolor)
-        self.conf.bgcolor = ifnotNone(axisbg, self.conf.bgcolor)
+        self.conf.facecolor = ifnotNone(axisbg, self.conf.facecolor)
+        self.conf.facecolor = ifnotNone(facecolor, self.conf.facecolor)
 
         # axesmargins : margins in px left/top/right/bottom
         self.axesmargins = (30, 30, 30, 30)
@@ -183,7 +183,7 @@ class PlotPanel(BasePanel):
         conf.axes_traces[axes].append(conf.ntrace)
 
         conf.gridcolor = ifnotNone(gridcolor, conf.gridcolor)
-        conf.bgcolor = ifnotNone(bgcolor, conf.bgcolor)
+        conf.facecolor = ifnotNone(bgcolor, conf.facecolor)
 
         if framecolor is not None:
             self.canvas.figure.set_facecolor(framecolor)
@@ -555,7 +555,7 @@ class PlotPanel(BasePanel):
         # 1 axes for now
         self.gridspec = GridSpec(1,1)
         self.axes  = self.fig.add_subplot(self.gridspec[0],
-                                          facecolor=self.conf.bgcolor)
+                                          facecolor=self.conf.facecolor)
         self.canvas = FigureCanvas(self, -1, self.fig)
 
         self.printer.canvas = self.canvas

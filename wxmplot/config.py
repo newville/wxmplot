@@ -23,11 +23,13 @@ Valid marker names are:
    'tripod 1','tripod 2'
 
 """
+import time
 from copy import copy
 import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
+from matplotlib import style
 from cycler import cycler
 
 from . import colors
@@ -77,10 +79,15 @@ for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
 
 
 ColorThemes = OrderedDict()
-ColorThemes['light'] = {'bg': '#FEFEFE', 'text': '#000000',
-                        'grid': '#E5E5E5', 'frame': '#FBFBFB'}
-ColorThemes['dark'] = {'bg': '#202020', 'text': '#FDFDC0',
-                       'grid': '#404040', 'frame': '#161616'}
+ColorThemes['light'] = {'axes.facecolor': '#FEFEFE',
+                        'text.color': '#000000',
+                        'grid.color': '#E5E5E5',
+                        'figure.facecolor': '#FBFBFB'}
+ColorThemes['dark'] = {'axes.facecolor': '#202020',
+                       'text.color': '#FDFDC0',
+                       'grid.color': '#404040',
+                       'figure.facecolor': '#161616'}
+
 
 ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 
@@ -204,7 +211,6 @@ class PlotConfig:
 
         # preload some traces
         self.traces = []
-        self.reset_trace_properties()
         self.reset_lines()
 
         f0 =  FontProperties()
@@ -215,7 +221,7 @@ class PlotConfig:
         self.labelfont.set_size(fontsize['labelfont'])
         self.titlefont.set_size(fontsize['titlefont'])
         self.color_themes = ColorThemes
-        self.set_color_theme(self.color_theme)
+        self.set_theme(self.color_theme)
 
 
     def get_current_config(self):
@@ -238,7 +244,6 @@ class PlotConfig:
         self.configdict.update(conf)
         self.set_defaults()
 
-
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
         self.ntrace = 0
@@ -246,7 +251,7 @@ class PlotConfig:
 
     def reset_trace_properties(self):
         i = -1
-
+        t0 = time.time()
         for style, marker in (('solid', None), ('short dashed', None),
                               ('dash-dot', None), ('solid', 'o'),
                               ('dotted', None), ('solid', '+'),
@@ -256,14 +261,15 @@ class PlotConfig:
                 i += 1
                 self.init_trace(i, color, style, marker=marker)
 
-    def set_color_theme(self, theme='light'):
+    def set_theme(self, theme='light'):
         if theme in self.color_themes:
             self.color_theme = theme
         theme = self.color_theme
-        self.bgcolor    = self.color_themes[theme]['bg']
-        self.textcolor  = self.color_themes[theme]['text']
-        self.gridcolor  = self.color_themes[theme]['grid']
-        self.framecolor = self.color_themes[theme]['frame']
+        self.facecolor  = self.color_themes[theme]['axes.facecolor']
+        self.textcolor  = self.color_themes[theme]['text.color']
+        self.gridcolor  = self.color_themes[theme]['grid.color']
+        self.framecolor = self.color_themes[theme]['figure.facecolor']
+        self.reset_trace_properties()
 
     def init_trace(self, n, color, style, label=None, linewidth=None,
                    zorder=None, marker=None, markersize=None,
@@ -287,6 +293,9 @@ class PlotConfig:
         n = max(0, int(trace))
         while n >= len(self.traces):
             self.traces.append(LineProps())
+        nlines = len(self.lines)
+        for i in range(nlines, len(self.traces)+1):
+            self.lines.append(None)
         try:
             return self.lines[n]
         except:
@@ -370,24 +379,20 @@ class PlotConfig:
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'grid')
 
-
-    def set_bgcolor(self, color):
+    def set_facecolor(self, color):
         """set color for background of plot"""
-        self.bgcolor = color
+        self.facecolor = color
         for ax in self.canvas.figure.get_axes():
-            if matplotlib.__version__ < '2.0':
-                ax.set_axis_bgcolor(color)
-            else:
-                ax.set_facecolor(color)
+            ax.set_facecolor(color)
         if callable(self.theme_color_callback):
-            self.theme_color_callback(color, 'bg')
+            self.theme_color_callback(color, 'axes.facecolor')
 
     def set_framecolor(self, color):
         """set color for outer frame"""
         self.framecolor = color
         self.canvas.figure.set_facecolor(color)
         if callable(self.theme_color_callback):
-            self.theme_color_callback(color, 'frame')
+            self.theme_color_callback(color, 'figure.facecolor')
 
     def set_textcolor(self, color):
         """set color for labels and axis text"""
@@ -641,10 +646,7 @@ class PlotConfig:
             self.mpl_legend = lgn(lins, labs, prop=self.legendfont,
                                   loc=self.legend_loc)
             self.mpl_legend.draw_frame(self.show_legend_frame)
-            if matplotlib.__version__ < '2.0':
-                facecol = axes[0].get_axis_bgcolor()
-            else:
-                facecol = axes[0].get_facecolor()
+            facecol = axes[0].get_facecolor()
 
             self.mpl_legend.legendPatch.set_facecolor(facecol)
             if self.draggable_legend:

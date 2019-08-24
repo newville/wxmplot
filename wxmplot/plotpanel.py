@@ -44,20 +44,15 @@ class PlotPanel(BasePanel):
 
     def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None,
                  facecolor=None, fontsize=9, trace_color_callback=None,
-                 output_title='plot', with_data_process=True, **kws):
+                 output_title='plot', with_data_process=True, theme=None,
+                 **kws):
 
         self.trace_color_callback = trace_color_callback
-        matplotlib.rc('axes', axisbelow=True)
-        matplotlib.rc('lines', linewidth=2)
-        matplotlib.rc('xtick', labelsize=fontsize, color='k')
-        matplotlib.rc('ytick', labelsize=fontsize, color='k')
-        matplotlib.rc('legend', fontsize=fontsize)
-        matplotlib.rc('grid',  linewidth=0.5, linestyle='-')
-
         BasePanel.__init__(self, parent,
                            output_title=output_title, **kws)
 
-        self.conf = PlotConfig(panel=self, with_data_process=with_data_process)
+        self.conf = PlotConfig(panel=self, theme=theme,
+                               with_data_process=with_data_process)
         self.data_range = {}
         self.win_config = None
         self.cursor_callback = None
@@ -122,12 +117,14 @@ class PlotPanel(BasePanel):
               legend_on=True, delay_draw=False, bgcolor=None,
               framecolor=None, gridcolor=None, labelfontsize=None,
               legendfontsize=None, fullbox=None, axes_style=None,
-              zorder=None, viewpad=None, **kws):
+              zorder=None, viewpad=None, theme=None, **kws):
         """ basic plot method, overplotting any existing plot """
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'
         axes = self.axes
+        if theme is not None:
+            conf.set_theme(theme)
         if side == 'right':
             axes = self.get_right_axes()
         # set y scale to log/linear

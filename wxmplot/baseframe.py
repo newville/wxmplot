@@ -44,7 +44,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     def __init__(self, parent=None, panel=None, title='', size=None,
                  exit_callback=None, user_menus=None, panelkws=None,
                  axisbg=None, output_title='Plot', dpi=150,
-                 with_data_process=True, **kws):
+                 with_data_process=True, theme=None, **kws):
         if size is None: size = (700,450)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
@@ -60,6 +60,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.with_data_process = with_data_process
         self.size = size
         self.panelkws = panelkws or {}
+        self.theme = theme
         if axisbg is not None:
             self.panelkws['axisbg'] = axisbg
 
@@ -127,7 +128,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         if self.size is not None:
             panelkws.update({'size': self.size})
         panelkws.update({'output_title': self.output_title,
-                         'with_data_process': self.with_data_process})
+                         'with_data_process': self.with_data_process,
+                         'theme': self.theme})
 
         self.panel = PlotPanel(self, **panelkws)
         self.panel.messenger = self.write_message

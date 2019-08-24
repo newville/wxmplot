@@ -29,10 +29,10 @@ import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
-from matplotlib import style
+import matplotlib.style
 from cycler import cycler
 
-from . import colors
+from .colors import hexcolor, mpl_color, mpl2hexcolor
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
 from collections import OrderedDict
@@ -42,21 +42,32 @@ StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
 
-
-default_config = dict(viewpad=2.5, title='',  xscale='linear',
-                      yscale='linear', xlabel='', ylabel='', y2label='',
-                      plot_type='lineplot', scatter_size=30,
+default_config = dict(viewpad=2.5,
+                      title='',
+                      xscale='linear',
+                      yscale='linear',
+                      xlabel='',
+                      ylabel='',
+                      y2label='',
+                      plot_type='lineplot',
+                      scatter_size=30,
                       scatter_normalcolor='blue',
-                      scatter_normaledge='blue', scatter_selectcolor='red',
-                      scatter_selectedge='red', auto_margins=True,
-                      legend_loc= 'best', legend_onaxis='on plot',
-                      show_grid=True, draggable_legend=False,
-                      hidewith_legend=True, show_legend=False,
-                      show_legend_frame=False, axes_style='box',
-                      color_theme='light', labelfont=9, legendfont=7,
-                      titlefont=10, linecolors=('#1f77b4', '#d62728',
-                      '#2ca02c', '#ff7f0e', '#9467bd', '#8c564b',
-                      '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'))
+                      scatter_normaledge='blue',
+                      scatter_selectcolor='red',
+                      scatter_selectedge='red',
+                      auto_margins=True,
+                      legend_loc= 'best',
+                      legend_onaxis='on plot',
+                      draggable_legend=False,
+                      hidewith_legend=True,
+                      show_legend=False,
+                      show_legend_frame=False,
+                      axes_style='box',
+                      labelfont=9,
+                      legendfont=7,
+                      titlefont=10,
+                      theme='wxmplot_light')
+
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
@@ -77,19 +88,66 @@ for k,v in (('no symbol','None'), ('o','o'), ('+','+'), ('x','x'),
             ('tripod 1','1'), ('tripod 2','2')):
     MarkerMap[k] = v
 
+ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 
-ColorThemes = OrderedDict()
-ColorThemes['light'] = {'axes.facecolor': '#FEFEFE',
-                        'text.color': '#000000',
-                        'grid.color': '#E5E5E5',
-                        'figure.facecolor': '#FBFBFB'}
-ColorThemes['dark'] = {'axes.facecolor': '#202020',
+linecolors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd',
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf')
+
+
+Themes = OrderedDict()
+def_theme = {'axes.grid': True,
+             'axes.axisbelow': True,
+             'axes.linewidth': 0.5,
+             'axes.edgecolor': '#000000',
+             'axes.facecolor': '#FEFEFE',
+             'grid.linestyle': '-',
+             'grid.linewidth': 0.5,
+             'lines.linewidth': 2.5,
+             'xtick.labelsize': 9,
+             'ytick.labelsize': 9,
+             'legend.fontsize': 8,
+             'axes.labelsize': 9,
+             'axes.titlesize': 10,
+             'xtick.major.size': 4,
+             'ytick.major.size': 4,
+             'xtick.major.width': 0.5,
+             'ytick.major.width': 0.5,
+             'xtick.color': '#000000',
+             'ytick.color': '#000000',
+             'text.color': '#000000',
+
+             'grid.color': '#E5E5E5',
+             'figure.facecolor': '#FBFBFB',
+             'axes.prop_cycle': cycler('color', linecolors),
+             }
+
+Themes['light'] = copy(def_theme)
+Themes['dark'] =  copy(def_theme)
+Themes['dark'].update({'axes.facecolor': '#202020',
+                       'axes.edgecolor': '#FDFDC0',
+                       'xtick.color': '#FDFDC0',
+                       'ytick.color': '#FDFDC0',
                        'text.color': '#FDFDC0',
                        'grid.color': '#404040',
-                       'figure.facecolor': '#161616'}
+                       'figure.facecolor': '#161616'})
 
+Themes['matplotlib'] = copy(rcParams)
 
-ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
+for tname in ('seaborn', 'bmh', 'dark_background',
+              'fivethirtyeight', 'ggplot', 'grayscale',
+              'tableau-colorblind10', 'seaborn-bright',
+              'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
+              'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
+              'seaborn-muted', 'seaborn-pastel', 'seaborn-paper',
+              'seaborn-poster', 'seaborn-talk', 'seaborn-ticks',
+              'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'):
+    if tname in matplotlib.style.library:
+        theme = copy(def_theme)
+        if tname.startswith('seaborn-'):
+            theme.update(matplotlib.style.library['seaborn'])
+        theme.update(matplotlib.style.library[tname])
+        Themes[tname.lower()] = theme
+
 
 def bool_ifnotNone(val, default):
     "return bool(val) if val is not None else default"
@@ -148,12 +206,14 @@ class LineProps:
         self.zorder     = zorder
 
 
-
 class PlotConfig:
     """Plot Configuration for 2D Plots... holder class for most configuration data """
+
     def __init__(self, canvas=None, panel=None, with_data_process=True,
-                 theme_color_callback=None, margin_callback=None,
-                 trace_color_callback=None, custom_config=None):
+                 theme=None, theme_color_callback=None,
+                 margin_callback=None, trace_color_callback=None,
+                 custom_config=None):
+
         self.canvas = canvas
         self.panel = panel
         self.styles      = list(StyleMap.keys())
@@ -162,6 +222,9 @@ class PlotConfig:
         self.trace_color_callback = trace_color_callback
         self.theme_color_callback = theme_color_callback
         self.margin_callback = margin_callback
+        self.current_theme = theme
+        if self.current_theme is None:
+            self.current_theme = 'light'
 
         self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
@@ -189,7 +252,7 @@ class PlotConfig:
         self.configdict = default_config
         if custom_config is not None:
             self.configdict.update(custom_config)
-
+        self.themes = Themes
         self.set_defaults()
 
     def set_defaults(self):
@@ -220,8 +283,27 @@ class PlotConfig:
         self.legendfont.set_size(fontsize['legendfont'])
         self.labelfont.set_size(fontsize['labelfont'])
         self.titlefont.set_size(fontsize['titlefont'])
-        self.color_themes = ColorThemes
-        self.set_theme(self.color_theme)
+        self.set_theme()
+
+    def set_theme(self, theme=None):
+        if theme in self.themes:
+            self.current_theme = theme
+        cur_theme = self.themes[self.current_theme]
+        rcParams.update(cur_theme)
+
+
+        self.facecolor  = mpl2hexcolor(cur_theme['axes.facecolor'])
+        self.textcolor  = mpl2hexcolor(cur_theme['text.color'])
+        self.gridcolor  = mpl2hexcolor(cur_theme['grid.color'])
+        self.framecolor = mpl2hexcolor(cur_theme['figure.facecolor'])
+        self.show_grid  = cur_theme['axes.grid']
+        self.legendfont.set_size(cur_theme['legend.fontsize'])
+        self.labelfont.set_size(cur_theme['axes.labelsize'])
+        self.titlefont.set_size(cur_theme['axes.titlesize'])
+
+        self.linecolors = [a['color'] for a in cur_theme['axes.prop_cycle']]
+        self.reset_trace_properties()
+        self.set_axes_style()
 
 
     def get_current_config(self):
@@ -260,16 +342,6 @@ class PlotConfig:
             for color in self.linecolors:
                 i += 1
                 self.init_trace(i, color, style, marker=marker)
-
-    def set_theme(self, theme='light'):
-        if theme in self.color_themes:
-            self.color_theme = theme
-        theme = self.color_theme
-        self.facecolor  = self.color_themes[theme]['axes.facecolor']
-        self.textcolor  = self.color_themes[theme]['text.color']
-        self.gridcolor  = self.color_themes[theme]['grid.color']
-        self.framecolor = self.color_themes[theme]['figure.facecolor']
-        self.reset_trace_properties()
 
     def init_trace(self, n, color, style, label=None, linewidth=None,
                    zorder=None, marker=None, markersize=None,
@@ -313,10 +385,8 @@ class PlotConfig:
                 y2label=None, title=None, delay_draw=False):
         " re draw labels (title, x, y labels)"
         n = self.labelfont.get_size()
-        self.titlefont.set_size(n+1)
-        # print("  plot relabel ", delay_draw)
+        # self.titlefont.set_size(n+1)
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
-        rcParams['xtick.color'] =  rcParams['ytick.color'] =  self.textcolor
 
         if xlabel is not None:
             self.xlabel = xlabel
@@ -342,7 +412,7 @@ class PlotConfig:
             axes[1].set_ylabel(self.y2label, **kws)
 
         for ax in axes[0].xaxis, axes[0].yaxis:
-            for t in (ax.get_ticklabels() + ax.get_ticklines()):
+            for t in ax.get_ticklabels():
                 t.set_color(self.textcolor)
                 if hasattr(t, 'set_fontsize'):
                     t.set_fontsize(n)
@@ -425,7 +495,7 @@ class PlotConfig:
 
     def set_trace_color(self, color, trace=None, delay_draw=True):
         trace = self.get_trace(trace)
-        color = colors.hexcolor(color)
+        color = hexcolor(color)
         self.traces[trace].color = color
         mline = self.get_mpline(trace)
         if mline:
@@ -576,7 +646,25 @@ class PlotConfig:
         """
         if style is not None:
             self.axes_style = style
-        axes0 = self.canvas.figure.get_axes()[0]
+
+        try:
+            ax = self.canvas.figure.get_axes()[0]
+        except AttributeError:
+            return
+
+        for tline in (ax.xaxis.get_majorticklines() + ax.yaxis.get_majorticklines()):
+                tline.set_color(rcParams['xtick.color'])
+                tline.set_markeredgewidth(rcParams['xtick.major.width'])
+                tline.set_markersize(rcParams['xtick.major.size'])
+                tline.set_linestyle('-')
+                tline.set_visible(True)
+
+        col = rcParams['axes.edgecolor']
+        for spine in ('top', 'bottom', 'left', 'right'):
+            ax.spines[spine].set_linewidth(rcParams['axes.linewidth'])
+            ax.spines[spine].set_facecolor(rcParams['axes.facecolor'])
+            ax.spines[spine].set_edgecolor(rcParams['axes.edgecolor'])
+
         _sty = self.axes_style.lower()
         if  _sty in ('fullbox', 'full'):
             _sty = 'box'
@@ -584,20 +672,22 @@ class PlotConfig:
             _sty = 'open'
 
         if _sty == 'box':
-            axes0.xaxis.set_ticks_position('both')
-            axes0.yaxis.set_ticks_position('both')
-            axes0.spines['top'].set_visible(True)
-            axes0.spines['right'].set_visible(True)
+            ax.xaxis.set_ticks_position('both')
+            ax.yaxis.set_ticks_position('both')
+            ax.spines['top'].set_visible(True)
+            ax.spines['right'].set_visible(True)
         elif _sty == 'open':
-            axes0.xaxis.set_ticks_position('bottom')
-            axes0.yaxis.set_ticks_position('left')
-            axes0.spines['top'].set_visible(False)
-            axes0.spines['right'].set_visible(False)
+            ax.xaxis.set_ticks_position('bottom')
+            ax.yaxis.set_ticks_position('left')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
         elif _sty == 'bottom':
-            axes0.xaxis.set_ticks_position('bottom')
-            axes0.spines['top'].set_visible(False)
-            axes0.spines['left'].set_visible(False)
-            axes0.spines['right'].set_visible(False)
+            ax.xaxis.set_ticks_position('bottom')
+            ax.spines['top'].set_visible(False)
+            ax.spines['left'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+
+
         if not delay_draw:
             self.canvas.draw()
 

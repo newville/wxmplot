@@ -442,3 +442,6 @@ def mpl_color(c, default = (242, 243, 244)):
         return tuple(r)
     except:
         return default
+
+def mpl2hexcolor(c):
+    return hexcolor(mpl_color(c))

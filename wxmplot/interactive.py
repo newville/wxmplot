@@ -29,6 +29,7 @@ IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
 MAX_WINDOWS = 100
 MAX_CURSHIST = 100
+DEFAULT_THEME = 'light'
 
 wxapp = None
 
@@ -48,12 +49,23 @@ def wxloop():
     """
     get_wxapp().MainLoop()
 
+def set_theme(theme):
+    global DEFAULT_THEME
+    DEFAULT_THEME = theme
+
+
 class PlotDisplay(PlotFrame):
-    def __init__(self, wxparent=None, window=1, size=None, **kws):
+    def __init__(self, wxparent=None, window=1, size=None, theme=None,
+                 wintitle=None, **kws):
         get_wxapp()
-        PlotFrame.__init__(self, parent=None, size=size,
-                           output_title='plot',
-                           exit_callback=self.onExit, **kws)
+        theme = DEFAULT_THEME if theme is None else theme
+
+        if wintitle is None:
+            wintitle   = 'Plot Window %i' % win
+
+        PlotFrame.__init__(self, parent=None, size=size, title=wintitle,
+                           output_title='plot', exit_callback=self.onExit,
+                           theme=theme, **kws)
 
         self.Show()
         self.Raise()
@@ -75,7 +87,7 @@ class PlotDisplay(PlotFrame):
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
 class ImageDisplay(ImageFrame):
-    def __init__(self, wxparent=None, window=1, size=None, **kws):
+    def __init__(self, wxparent=None, window=1, size=None, theme=None, **kws):
         get_wxapp()
         ImageFrame.__init__(self, parent=None, size=size,
                                   exit_callback=self.onExit, **kws)
@@ -97,16 +109,14 @@ class ImageDisplay(ImageFrame):
         if len(self.cursor_hist) > MAX_CURSHIST:
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
-def getPlotDisplay(win=1, wxparent=None, size=None, wintitle=None):
+def getPlotDisplay(win=1, wxparent=None, size=None, wintitle=None, theme=None):
     """make a plot window"""
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
         display = PLOT_DISPLAYS[win]
     else:
-        display = PlotDisplay(window=win, wxparent=wxparent, size=size)
-    if wintitle is None:
-        wintitle   = 'Plot Window %i' % win
-    display.SetTitle(wintitle)
+        display = PlotDisplay(window=win, wxparent=wxparent,
+                              size=size, theme=theme, wintitle=wintitle)
     return display
 
 def getImageDisplay(win=1, wxparent=None, size=None, wintitle=None):
@@ -122,7 +132,8 @@ def getImageDisplay(win=1, wxparent=None, size=None, wintitle=None):
     return display
 
 
-def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None, **kws):
+def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
+         theme=None, **kws):
     """plot(x, y[, win=1], options])
 
     Plot trace of x, y arrays in a Plot Frame, clearing any plot currently in the Plot Frame.
@@ -161,7 +172,7 @@ def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None, **kws):
     See Also: oplot, newplot
     """
     plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size,
-                             wintitle=wintitle)
+                             wintitle=wintitle, theme=theme)
     if plotter is None:
         return
     plotter.Raise()

@@ -293,20 +293,19 @@ class PlotConfig:
         cur_theme = self.themes[self.current_theme]
         rcParams.update(cur_theme)
 
-        self.set_facecolor(mpl2hexcolor(cur_theme['axes.facecolor']))
-        self.set_gridcolor(mpl2hexcolor(cur_theme['grid.color']))
-        self.set_textcolor(mpl2hexcolor(cur_theme['text.color']))
-        self.set_framecolor(mpl2hexcolor(cur_theme['figure.facecolor']))
-
         self.show_grid  = cur_theme['axes.grid']
         self.legendfont.set_size(cur_theme['legend.fontsize'])
         self.labelfont.set_size(cur_theme['axes.labelsize'])
         self.titlefont.set_size(cur_theme['axes.titlesize'])
 
+        self.set_facecolor(mpl2hexcolor(cur_theme['axes.facecolor']))
+        self.set_gridcolor(mpl2hexcolor(cur_theme['grid.color']))
+        self.set_framecolor(mpl2hexcolor(cur_theme['figure.facecolor']))
+        self.set_textcolor(mpl2hexcolor(cur_theme['text.color']))
+
         self.linecolors = [a['color'] for a in cur_theme['axes.prop_cycle']]
         self.reset_trace_properties()
         self.set_axes_style()
-
 
     def get_current_config(self):
         """save dict of current configuration options to self.configdict

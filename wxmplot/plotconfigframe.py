@@ -679,7 +679,7 @@ class PlotConfigFrame(wx.Frame):
                 newcol = hexcolor(lin.color)
                 self.colwids[i].SetColour(newcol)
                 if newcol != curcol:
-                    self.onColor(event=None, color=newcol, trace=i)
+                    self.conf.set_trace_color(newcol, trace=i)
             except KeyError:
                 pass
         conf.draw_legend()

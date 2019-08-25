@@ -61,7 +61,7 @@ class PlotDisplay(PlotFrame):
         theme = DEFAULT_THEME if theme is None else theme
 
         if wintitle is None:
-            wintitle   = 'Plot Window %i' % win
+            wintitle   = 'Plot Window %i' % window
 
         PlotFrame.__init__(self, parent=None, size=size, title=wintitle,
                            output_title='plot', exit_callback=self.onExit,

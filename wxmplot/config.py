@@ -103,6 +103,8 @@ def_theme = {'axes.grid': True,
              'grid.linestyle': '-',
              'grid.linewidth': 0.5,
              'lines.linewidth': 2.5,
+             'lines.markersize': 3,
+             'lines.markeredgewidth': 0.75,
              'xtick.labelsize': 9,
              'ytick.labelsize': 9,
              'legend.fontsize': 8,
@@ -115,7 +117,6 @@ def_theme = {'axes.grid': True,
              'xtick.color': '#000000',
              'ytick.color': '#000000',
              'text.color': '#000000',
-
              'grid.color': '#E5E5E5',
              'figure.facecolor': '#FBFBFB',
              'axes.prop_cycle': cycler('color', linecolors),
@@ -172,7 +173,7 @@ class LineProps:
           marker='{marker:s}', markersize={markersize:.1f}, markercolor={markercolor:s})"""
 
     def __init__(self, color='black', style='solid', drawstyle='default',
-                 linewidth=2, marker='no symbol',markersize=6,
+                 linewidth=2, marker='no symbol',markersize=4,
                  markercolor=None, zorder=1, label='', mpline=None):
         self.color      = color
         self.style      = style
@@ -288,14 +289,15 @@ class PlotConfig:
     def set_theme(self, theme=None):
         if theme in self.themes:
             self.current_theme = theme
+
         cur_theme = self.themes[self.current_theme]
         rcParams.update(cur_theme)
 
+        self.set_facecolor(mpl2hexcolor(cur_theme['axes.facecolor']))
+        self.set_gridcolor(mpl2hexcolor(cur_theme['grid.color']))
+        self.set_textcolor(mpl2hexcolor(cur_theme['text.color']))
+        self.set_framecolor(mpl2hexcolor(cur_theme['figure.facecolor']))
 
-        self.facecolor  = mpl2hexcolor(cur_theme['axes.facecolor'])
-        self.textcolor  = mpl2hexcolor(cur_theme['text.color'])
-        self.gridcolor  = mpl2hexcolor(cur_theme['grid.color'])
-        self.framecolor = mpl2hexcolor(cur_theme['figure.facecolor'])
         self.show_grid  = cur_theme['axes.grid']
         self.legendfont.set_size(cur_theme['legend.fontsize'])
         self.labelfont.set_size(cur_theme['axes.labelsize'])
@@ -396,7 +398,7 @@ class PlotConfig:
             self.y2label = y2label
         if title is not None:
             self.title = title
-
+        if self.canvas is None: return
         axes = self.canvas.figure.get_axes()
         kws = dict(fontproperties=self.titlefont, color=self.textcolor)
         axes[0].set_title(self.title, **kws)
@@ -442,6 +444,7 @@ class PlotConfig:
     def set_gridcolor(self, color):
         """set color for grid"""
         self.gridcolor = color
+        if self.canvas is None: return
         for ax in self.canvas.figure.get_axes():
             for i in ax.get_xgridlines()+ax.get_ygridlines():
                 i.set_color(color)
@@ -452,6 +455,7 @@ class PlotConfig:
     def set_facecolor(self, color):
         """set color for background of plot"""
         self.facecolor = color
+        if self.canvas is None: return
         for ax in self.canvas.figure.get_axes():
             ax.set_facecolor(color)
         if callable(self.theme_color_callback):
@@ -460,6 +464,7 @@ class PlotConfig:
     def set_framecolor(self, color):
         """set color for outer frame"""
         self.framecolor = color
+        if self.canvas is None: return
         self.canvas.figure.set_facecolor(color)
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'figure.facecolor')
@@ -490,7 +495,7 @@ class PlotConfig:
         self.set_trace_drawstyle(prop.drawstyle, trace=trace, delay_draw=True)
         self.set_trace_marker(prop.marker, trace=trace, delay_draw=True)
         self.set_trace_markersize(prop.markersize, trace=trace, delay_draw=True)
-        # self.set_trace_markercolor(prop.markercolor, trace=trace)
+
         self.set_trace_zorder(prop.zorder, trace=trace, delay_draw=True)
 
     def set_trace_color(self, color, trace=None, delay_draw=True):
@@ -589,7 +594,9 @@ class PlotConfig:
 
         mline = self.get_mpline(trace)
         if mline:
-            mline[0].set_markersize(markersize/2.0)
+            mline[0].set_markersize(markersize)
+            if mline[0].get_markeredgewidth() == 0:
+                mline[0].set_markeredgewidth(0.75)
 
         if not delay_draw:
             self.draw_legend()

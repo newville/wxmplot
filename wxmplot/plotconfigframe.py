@@ -578,7 +578,7 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
             i = i+1
         self.trace_labels = []
-        ntrace_display = max(4, min(self.conf.ntrace+1, len(self.conf.traces)))
+        ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
         for i in range(ntrace_display):
             irow += 1
             label  = "trace %i" % i
@@ -609,7 +609,7 @@ class PlotConfigFrame(wx.Frame):
             sty.SetStringSelection(dsty)
 
             msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=dmsz,
-                            min_val=0, max_val=30, increment=1, digits=0,
+                            min_val=0, max_val=30, increment=0.5, digits=1,
                             action=partial(self.onMarkerSize, trace=i))
 
             zor = FloatSpin(panel, size=(FSPINSIZE, -1), value=dzord,
@@ -662,30 +662,26 @@ class PlotConfigFrame(wx.Frame):
     def onTheme(self, event):
         theme = event.GetString()
         conf = self.conf
-        conf.set_theme(theme)
+        conf.set_theme(theme=theme)
         self.colwids['text'].SetColour(conf.textcolor)
         self.colwids['grid'].SetColour(conf.gridcolor)
         self.colwids['face'].SetColour(conf.facecolor)
         self.colwids['frame'].SetColour(conf.framecolor)
 
-        self.onColor(color=conf.facecolor,  item='face',  draw=False)
-        self.onColor(color=conf.gridcolor,  item='grid',  draw=False)
-        self.onColor(color=conf.framecolor, item='frame', draw=False)
-        self.onColor(color=conf.textcolor,  item='text',  draw=False)
-        self.conf.reset_trace_properties()
-
         self.title_fontsize.SetValue(self.conf.titlefont.get_size())
         self.legend_fontsize.SetValue(self.conf.legendfont.get_size())
 
-        ntrace_display = max(4, min(self.conf.ntrace+2, len(self.conf.traces)))
+        ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
         for i in range(ntrace_display):
-            lin = self.conf.traces[i]
-            curcol = hexcolor(self.colwids[i].GetColour())
-            newcol = hexcolor(lin.color)
-            self.colwids[i].SetColour(newcol)
-            if newcol != curcol:
-                self.onColor(event=None, color=newcol, trace=i)
-
+            try:
+                lin = self.conf.traces[i]
+                curcol = hexcolor(self.colwids[i].GetColour())
+                newcol = hexcolor(lin.color)
+                self.colwids[i].SetColour(newcol)
+                if newcol != curcol:
+                    self.onColor(event=None, color=newcol, trace=i)
+            except KeyError:
+                pass
         conf.draw_legend()
 
     def onLogScale(self, event):

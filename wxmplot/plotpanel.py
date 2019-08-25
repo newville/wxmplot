@@ -124,7 +124,7 @@ class PlotPanel(BasePanel):
         conf.plot_type = 'lineplot'
         axes = self.axes
         if theme is not None:
-            conf.set_theme(theme)
+            conf.set_theme(theme=theme)
         if side == 'right':
             axes = self.get_right_axes()
         # set y scale to log/linear

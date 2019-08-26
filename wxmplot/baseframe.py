@@ -45,7 +45,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                  exit_callback=None, user_menus=None, panelkws=None,
                  axisbg=None, output_title='Plot', dpi=150,
                  with_data_process=True, theme=None, **kws):
-        if size is None: size = (700,450)
+        if size is None:
+            size = (700, 500)
         kws['style'] = wx.DEFAULT_FRAME_STYLE
         kws['size']  = size
         wx.Frame.__init__(self, parent, -1, title, **kws)

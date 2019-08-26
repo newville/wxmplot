@@ -2,28 +2,28 @@
 """
 Interactive wxmplot
 
- provides simple 'plot()', 'oplot()', and 'imshow()' functions to python interpreter
+ provides simple 'plot()' and 'imshow()' functions to python interpreter
 
  plot(x, y):  display a simple XY line plot to a wxmplot.PlotFrame
 
- oplot(x, y): overplot a line plot on an existing wxmplot.PlotFrame
-
  imshow(array): display image of 2D array data on a wxmplot.ImageFrame
 
- wxloop():   run wxPytho main loop, to pause for interactivitiy
+ set_theme(themename): set plotting theme ('light', 'dark', 'seaborn', ...).
 
 """
 
 import time
 import os
 import sys
+import atexit
+
 import wx
 
 from . import inputhook
-
 from .plotframe import PlotFrame
 from .imageframe import ImageFrame
 from .stackedplotframe import StackedPlotFrame
+from .config import Themes
 
 IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
@@ -31,8 +31,14 @@ MAX_WINDOWS = 100
 MAX_CURSHIST = 100
 DEFAULT_THEME = 'light'
 
-wxapp = None
+__all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
+           'available_themes', 'get_plot_window', 'get_image_window',
+           'update_trace', 'plot_setlimits', 'plot_text', 'plot_arrow',
+           'plot_marker', 'plot_axhline', 'plot_axvline', 'hist',
+           'contour', 'DEFAULT_THEME']
 
+
+wxapp = None
 def get_wxapp(redirect=False, clearSigInt=True):
     """get wx App"""
     global wxapp
@@ -42,17 +48,32 @@ def get_wxapp(redirect=False, clearSigInt=True):
             wxapp = wx.App(redirect=redirect, clearSigInt=clearSigInt)
     return wxapp
 
-def wxloop():
-    """
-    run wxApp mainloop, allowing widget interaction
+@atexit.register
+def __wxmainloop__():
+    """run wxApp mainloop, allowing widget interaction
     until all plotting and image image windows are closed.
+    Note that this should not be necessary to run explicitly,
+    as it is registered to run when Python exits
     """
     get_wxapp().MainLoop()
 
-def set_theme(theme):
-    global DEFAULT_THEME
-    DEFAULT_THEME = theme
 
+def set_theme(theme):
+    """set plotting theme by name with a theme name such as
+    'light', 'dark', 'matplotlib', 'seaborn',
+    'ggplot', 'bmh', 'fivethirtyeight', ...
+
+    See `available_themes()` for the list of available themes.
+    """
+    global DEFAULT_THEME
+    if theme.lower() in Themes.keys():
+        DEFAULT_THEME = theme.lower()
+    else:
+        raise ValueError("theme '%s' unavailable. use `availabale_themes()`" % theme)
+
+def available_themes():
+    """list of available themes"""
+    return [name for name in Themes.keys()]
 
 class PlotDisplay(PlotFrame):
     def __init__(self, wxparent=None, window=1, size=None, theme=None,
@@ -87,10 +108,15 @@ class PlotDisplay(PlotFrame):
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
 class ImageDisplay(ImageFrame):
-    def __init__(self, wxparent=None, window=1, size=None, theme=None, **kws):
+    def __init__(self, wxparent=None, window=1, size=None, theme=None,
+                 wintitle=None, **kws):
         get_wxapp()
-        ImageFrame.__init__(self, parent=None, size=size,
-                                  exit_callback=self.onExit, **kws)
+        if wintitle is None:
+            wintitle   = 'Image Window %i' % window
+
+        ImageFrame.__init__(self, parent=None, size=size, title=wintitle,
+                            exit_callback=self.onExit, **kws)
+
         self.Show()
         self.Raise()
         self.cursor_hist = []
@@ -109,7 +135,7 @@ class ImageDisplay(ImageFrame):
         if len(self.cursor_hist) > MAX_CURSHIST:
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
-def getPlotDisplay(win=1, wxparent=None, size=None, wintitle=None, theme=None):
+def get_plot_window(win=1, wxparent=None, size=None, wintitle=None, theme=None):
     """make a plot window"""
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
@@ -119,16 +145,15 @@ def getPlotDisplay(win=1, wxparent=None, size=None, wintitle=None, theme=None):
                               size=size, theme=theme, wintitle=wintitle)
     return display
 
-def getImageDisplay(win=1, wxparent=None, size=None, wintitle=None):
+def get_image_window(win=1, wxparent=None, size=None, wintitle=None):
     """make an image window"""
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in IMG_DISPLAYS:
         display = IMG_DISPLAY[win]
     else:
-        display = ImageDisplay(window=win, wxparent=wxparent, size=size)
-    if wintitle is None:
-        wintitle  = 'Image Window %i' % win
-    display.SetTitle(wintitle)
+        display = ImageDisplay(window=win, wxparent=wxparent, size=size,
+                               wintitle=wintitle)
+
     return display
 
 
@@ -169,9 +194,9 @@ def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
         dy: array for error bars in y (must be same size as y!)
         yaxis='left'??
 
-    See Also: oplot, newplot
+    See Also: newplot
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size,
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size,
                              wintitle=wintitle, theme=theme)
     if plotter is None:
         return
@@ -184,7 +209,7 @@ def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
 
 def update_trace(x, y, trace=1, win=1, wxparent=None, **kws):
     """update a plot trace with new data, avoiding complete redraw"""
-    plotter = getPlotDisplay(wxparent=wxparent, win=win)
+    plotter = get_plot_window(wxparent=wxparent, win=win)
     if plotter is None:
         return
     plotter.Raise()
@@ -193,24 +218,10 @@ def update_trace(x, y, trace=1, win=1, wxparent=None, **kws):
 
 def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1, wxparent=None):
     """set plot view limits for plot in window `win`"""
-    plotter = getPlotDisplay(wxparent=wxparent, win=win)
+    plotter = get_plot_window(wxparent=wxparent, win=win)
     if plotter is None:
         return
     plotter.panel.set_xylims((xmin, xmax, ymin, ymax))
-
-def oplot(x, y, win=1,  wxparent=None, **kws):
-    """oplot(x, y[, win=1[, options]])
-
-    Plot 2-D trace of x, y arrays in a Plot Frame, over-plotting any
-    plot currently in the Plot Frame.
-
-    This is equivalent to
-    plot(x, y[, win=1[, new=False[, options]]])
-
-    See Also: plot, newplot
-    """
-    kws['new'] = False
-    return plot(x, y, win=win, wxparent=wxparent, **kws)
 
 def newplot(x, y, win=1, wxparent=None, wintitle=None, **kws):
     """newplot(x, y[, win=1[, options]])
@@ -221,15 +232,15 @@ def newplot(x, y, win=1, wxparent=None, wintitle=None, **kws):
     This is equivalent to
     plot(x, y[, win=1[, new=True[, options]]])
 
-    See Also: plot, oplot
+    See Also: plot
     """
     kws['new'] = True
     return plot(x, y, win=win, wxparent=wxparent, wintitle=wintitle, **kws)
 
-def plot_text(text, x, y, win=1, side='left', size=None,
-              rotation=None, ha='left', va='center',
-              wxparent=None,  **kws):
-    """plot_text(text, x, y, win=1, options)
+def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
+              side='left', wxparent=None, size=None, **kws):
+
+    """plot_text(x, y, text, win=1, options)
 
     add text at x, y coordinates of a plot
 
@@ -239,19 +250,18 @@ def plot_text(text, x, y, win=1, side='left', size=None,
         x:     x position of text
         y:     y position of text
         win:   index of Plot Frame (0, 1, etc).  May create a new Plot Frame.
-        side:  which axis to use ('left' or 'right') for coordinates.
         rotation:  text rotation. angle in degrees or 'vertical' or 'horizontal'
         ha:    horizontal alignment ('left', 'center', 'right')
         va:    vertical alignment ('top', 'center', 'bottom', 'baseline')
+        side: which axis to use ('left' or 'right') for coordinates.
 
-    See Also: plot, oplot, plot_arrow
+    See Also: plot, plot_arrow
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
-    plotter.add_text(text, x, y, side=side,
-                     rotation=rotation, ha=ha, va=va, **kws)
+    plotter.add_text(text, x, y, rotation=rotation, ha=ha, va=va, **kws)
 
 def plot_arrow(x1, y1, x2, y2, win=1, side='left',
                 shape='full', color='black',
@@ -277,9 +287,9 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
         overhang:    amount the arrow is swept back (in points. default=0)
         win:  window to draw too
 
-    See Also: plot, oplot, plot_text
+    See Also: plot, plot_text
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -302,9 +312,9 @@ def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
         size:   symbol size [4]
         color:  color  ['black']
 
-    See Also: plot, oplot, plot_text
+    See Also: plot, plot_text
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=None)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=None)
     if plotter is None:
         return
     plotter.Raise()
@@ -321,9 +331,9 @@ def plot_axhline(y, xmin=0, xmax=1, win=1, wxparent=None,
         y:      y position of line
         xmin:   starting x fraction (window units -- not user units!)
         xmax:   ending x fraction (window units -- not user units!)
-    See Also: plot, oplot, plot_arrow
+    See Also: plot, plot_arrow
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -343,9 +353,9 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
         x:      x position of line
         ymin:   starting y fraction (window units -- not user units!)
         ymax:   ending y fraction (window units -- not user units!)
-    See Also: plot, oplot, plot_arrow
+    See Also: plot, plot_arrow
     """
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -359,7 +369,7 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
 def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
          force_draw=True, title=None, *args, **kws):
 
-    plotter = getPlotDisplay(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -373,20 +383,20 @@ def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
     return out
 
 def imshow(map, x=None, y=None, colormap=None, win=1, wxparent=None,
-            size=None, **kws):
-
+           wintitle=None, size=None, **kws):
     """imshow(map[, options])
 
     Display an 2-D array of intensities as a false-color map
 
     map: 2-dimensional array for map
     """
-    img = getImageDisplay(wxparent=wxparent, win=win, size=size)
+    img = get_image_window(wxparent=wxparent, win=win, size=size,
+                          wintitle=wintitle)
     if img is not None:
         img.display(map, x=x, y=y, colormap=colormap, **kws)
     return img
 
-def _contour(map, x=None, y=None, **kws):
+def contour(map, x=None, y=None, **kws):
     """contour(map[, options])
 
     Display an 2-D array of intensities as a contour plot

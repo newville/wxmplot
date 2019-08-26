@@ -119,6 +119,7 @@ class PlotPanel(BasePanel):
               refresh=True, show_legend=None, legend_loc='best',
               legend_on=True, delay_draw=False, bgcolor=None,
               framecolor=None, gridcolor=None, labelfontsize=None,
+              titlefontsize=None,
               legendfontsize=None, fullbox=None, axes_style=None,
               zorder=None, viewpad=None, theme=None, **kws):
         """
@@ -233,6 +234,9 @@ class PlotPanel(BasePanel):
         needs_relabel = False
         if labelfontsize is not None:
             conf.labelfont.set_size(labelfontsize)
+            needs_relabel = True
+        if titlefontsize is not None:
+            conf.titlefont.set_size(titlefontsize)
             needs_relabel = True
 
         if legendfontsize is not None:

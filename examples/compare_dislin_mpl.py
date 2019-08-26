@@ -27,8 +27,7 @@ plt.show()
 """
 
 # wxmplot:
-from wxmplot.interactive import plot, wxloop
+from wxmplot.interactive import plot
 plot(x, y1, color='red', xlabel='x', ylabel='y',
      title='DISLIN Comparison\nsin(x) and cos(x)')
 plot(x, y2, color='green3', marker='+')
-wxloop()

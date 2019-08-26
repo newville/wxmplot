@@ -1,10 +1,6 @@
 #!/usr/bin/python
-
 import numpy as np
-from  wxmplot.interactive import plot, wxloop
+from wxmplot.interactive import plot
 
-x = np.arange(0.0,10.0,0.1)
-y = np.sin(2*x)/(x+2)
-
-plot(x, y, title='Test Plot', xlabel=r'${ R \mathrm{(\AA)}}$')
-wxloop()
+x = np.linspace(0.0, 20.0, 201)
+plot(x, np.sin(x)/(x+1), ylabel='response',  xlabel='T (sec)')

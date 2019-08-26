@@ -77,7 +77,10 @@ class PlotPanel(BasePanel):
              xlabel=None, ylabel=None, y2label=None,
              use_dates=False, **kws):
         """
-        plot (that is, create a new plot: clear, then oplot)
+        create a new plot of x/y data, clearing any existing plot on the panel
+
+
+
         """
         allaxes = self.fig.get_axes()
         if len(allaxes) > 1:
@@ -118,7 +121,10 @@ class PlotPanel(BasePanel):
               framecolor=None, gridcolor=None, labelfontsize=None,
               legendfontsize=None, fullbox=None, axes_style=None,
               zorder=None, viewpad=None, theme=None, **kws):
-        """ basic plot method, overplotting any existing plot """
+        """
+        basic plot method, adding to an existing display
+
+        """
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'
@@ -307,7 +313,8 @@ class PlotPanel(BasePanel):
     def add_text(self, text, x, y, side='left', size=None,
                  rotation=None, ha='left', va='center',
                  family=None, **kws):
-        """add text at supplied x, y position"""
+        """add text at supplied x, y position
+        """
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()

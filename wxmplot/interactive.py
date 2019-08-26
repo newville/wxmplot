@@ -40,7 +40,18 @@ __all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
 
 wxapp = None
 def get_wxapp(redirect=False, clearSigInt=True):
-    """get wx App"""
+    """get the wx App
+
+    Args:
+        redirect(bool): whether to redirect output that would otherwise
+            be written to the Console [False]
+        clearSigInt(bool): whether to clear interrupts of Ctrl-C [True]
+
+    Returns:
+        a wx.App instance
+
+
+    """
     global wxapp
     if wxapp is None:
         wxapp = wx.GetApp()
@@ -59,11 +70,23 @@ def __wxmainloop__():
 
 
 def set_theme(theme):
-    """set plotting theme by name with a theme name such as
-    'light', 'dark', 'matplotlib', 'seaborn',
-    'ggplot', 'bmh', 'fivethirtyeight', ...
+    """set plotting theme by name with a theme name
 
-    See `available_themes()` for the list of available themes.
+    Args:
+        theme(str): name of theme
+
+
+    Returns:
+        None
+
+
+
+    Notes:
+      1. Example themese are:'light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
+
+
+    See Also:
+       available_themes() for the list of available themes.
     """
     global DEFAULT_THEME
     if theme.lower() in Themes.keys():
@@ -72,11 +95,29 @@ def set_theme(theme):
         raise ValueError("theme '%s' unavailable. use `availabale_themes()`" % theme)
 
 def available_themes():
-    """list of available themes"""
+    """list of available theme
+
+    Returns:
+        list of theme names.
+
+    Notes:
+        As of this writing, the list is:
+
+      'light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
+      'fivethirtyeight', 'grayscale', 'dark_background',
+      'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind',
+      'seaborn-dark', 'seaborn-darkgrid', 'seaborn-dark-palette',
+      'seaborn-deep', 'seaborn-notebook', 'seaborn-muted',
+      'seaborn-pastel', 'seaborn-paper', 'seaborn-poster', 'seaborn-talk',
+      'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid',
+      'Solarize_Light2'
+
+
+    """
     return [name for name in Themes.keys()]
 
 class PlotDisplay(PlotFrame):
-    def __init__(self, wxparent=None, window=1, size=None, theme=None,
+    def __init__(self, window=1, size=None, theme=None,
                  wintitle=None, **kws):
         get_wxapp()
         theme = DEFAULT_THEME if theme is None else theme
@@ -108,7 +149,7 @@ class PlotDisplay(PlotFrame):
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
 class ImageDisplay(ImageFrame):
-    def __init__(self, wxparent=None, window=1, size=None, theme=None,
+    def __init__(self, window=1, size=None, theme=None,
                  wintitle=None, **kws):
         get_wxapp()
         if wintitle is None:
@@ -135,29 +176,35 @@ class ImageDisplay(ImageFrame):
         if len(self.cursor_hist) > MAX_CURSHIST:
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
-def get_plot_window(win=1, wxparent=None, size=None, wintitle=None, theme=None):
-    """make a plot window"""
+def get_plot_window(win=1, size=None, wintitle=None, theme=None):
+    """return a plot display (a wx.Frame)
+
+    Args:
+        win (int): index of Plot Window
+
+
+    """
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
         display = PLOT_DISPLAYS[win]
     else:
-        display = PlotDisplay(window=win, wxparent=wxparent,
-                              size=size, theme=theme, wintitle=wintitle)
+        display = PlotDisplay(window=win, size=size, theme=theme,
+                              wintitle=wintitle)
     return display
 
-def get_image_window(win=1, wxparent=None, size=None, wintitle=None):
+def get_image_window(win=1, size=None, wintitle=None):
     """make an image window"""
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in IMG_DISPLAYS:
         display = IMG_DISPLAY[win]
     else:
-        display = ImageDisplay(window=win, wxparent=wxparent, size=size,
+        display = ImageDisplay(window=win, size=size,
                                wintitle=wintitle)
 
     return display
 
 
-def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
+def plot(x,y, win=1, new=False, size=None, wintitle=None,
          theme=None, **kws):
     """plot(x, y[, win=1], options])
 
@@ -196,8 +243,9 @@ def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
 
     See Also: newplot
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size,
-                             wintitle=wintitle, theme=theme)
+    plotter = get_plot_window(win=win, size=size, wintitle=wintitle,
+                             theme=theme)
+
     if plotter is None:
         return
     plotter.Raise()
@@ -207,23 +255,23 @@ def plot(x,y, win=1, new=False, wxparent=None, size=None, wintitle=None,
         plotter.oplot(x, y, **kws)
     return plotter
 
-def update_trace(x, y, trace=1, win=1, wxparent=None, **kws):
+def update_trace(x, y, trace=1, win=1, **kws):
     """update a plot trace with new data, avoiding complete redraw"""
-    plotter = get_plot_window(wxparent=wxparent, win=win)
+    plotter = get_plot_window(win=win)
     if plotter is None:
         return
     plotter.Raise()
     trace -= 1 # wxmplot counts traces from 0
     plotter.panel.update_line(trace, x, y, draw=True, **kws)
 
-def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1, wxparent=None):
+def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1):
     """set plot view limits for plot in window `win`"""
-    plotter = get_plot_window(wxparent=wxparent, win=win)
+    plotter = get_plot_window(win=win)
     if plotter is None:
         return
     plotter.panel.set_xylims((xmin, xmax, ymin, ymax))
 
-def newplot(x, y, win=1, wxparent=None, wintitle=None, **kws):
+def newplot(x, y, win=1, wintitle=None, **kws):
     """newplot(x, y[, win=1[, options]])
 
     Plot 2-D trace of x, y arrays in a Plot Frame, clearing any
@@ -235,10 +283,10 @@ def newplot(x, y, win=1, wxparent=None, wintitle=None, **kws):
     See Also: plot
     """
     kws['new'] = True
-    return plot(x, y, win=win, wxparent=wxparent, wintitle=wintitle, **kws)
+    return plot(x, y, win=win, wintitle=wintitle, **kws)
 
 def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
-              side='left', wxparent=None, size=None, **kws):
+              side='left', size=None, **kws):
 
     """plot_text(x, y, text, win=1, options)
 
@@ -257,17 +305,16 @@ def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
 
     See Also: plot, plot_arrow
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
     plotter.add_text(text, x, y, rotation=rotation, ha=ha, va=va, **kws)
 
 def plot_arrow(x1, y1, x2, y2, win=1, side='left',
-                shape='full', color='black',
-                width=0.00, head_width=0.05, head_length=0.25,
-                wxparent=None, size=None, **kws):
-
+               shape='full', color='black',
+               width=0.00, head_width=0.05, head_length=0.25,
+               size=None, **kws):
     """plot_arrow(x1, y1, x2, y2, win=1, **kws)
 
     draw arrow from x1, y1 to x2, y2.
@@ -289,7 +336,7 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
 
     See Also: plot, plot_text
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -298,7 +345,7 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
                       head_width=head_width, **kws)
 
 def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
-                wxparent=None, win=1,  **kws):
+                win=1,  **kws):
 
     """plot_marker(x, y, marker='o', size=4, color='black')
 
@@ -314,14 +361,14 @@ def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
 
     See Also: plot, plot_text
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=None)
+    plotter = get_plot_window(win=win, size=None)
     if plotter is None:
         return
     plotter.Raise()
     plotter.oplot([x], [y], marker=marker, markersize=size, label=label,
-                 color=color, wxparent=wxparent,  **kws)
+                 color=color,  **kws)
 
-def plot_axhline(y, xmin=0, xmax=1, win=1, wxparent=None,
+def plot_axhline(y, xmin=0, xmax=1, win=1,
                   size=None, delay_draw=False,  **kws):
     """plot_axhline(y, xmin=None, ymin=None, **kws)
 
@@ -333,7 +380,7 @@ def plot_axhline(y, xmin=0, xmax=1, win=1, wxparent=None,
         xmax:   ending x fraction (window units -- not user units!)
     See Also: plot, plot_arrow
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -343,7 +390,7 @@ def plot_axhline(y, xmin=0, xmax=1, win=1, wxparent=None,
     if delay_draw:
         plotter.panel.canvas.draw()
 
-def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
+def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
                  delay_draw=False, **kws):
     """plot_axvline(y, xmin=None, ymin=None, **kws)
 
@@ -355,7 +402,7 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
         ymax:   ending y fraction (window units -- not user units!)
     See Also: plot, plot_arrow
     """
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -366,10 +413,10 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, wxparent=None, size=None,
         plotter.panel.canvas.draw()
 
 
-def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
+def hist(x, bins=10, win=1, new=False, size=None,
          force_draw=True, title=None, *args, **kws):
 
-    plotter = get_plot_window(wxparent=wxparent, win=win, size=size)
+    plotter = get_plot_window(win=win, size=size)
     if plotter is None:
         return
     plotter.Raise()
@@ -382,7 +429,7 @@ def hist(x, bins=10, win=1, new=False, wxparent=None, size=None,
 
     return out
 
-def imshow(map, x=None, y=None, colormap=None, win=1, wxparent=None,
+def imshow(map, x=None, y=None, colormap=None, win=1,
            wintitle=None, size=None, **kws):
     """imshow(map[, options])
 
@@ -390,7 +437,7 @@ def imshow(map, x=None, y=None, colormap=None, win=1, wxparent=None,
 
     map: 2-dimensional array for map
     """
-    img = get_image_window(wxparent=wxparent, win=win, size=size,
+    img = get_image_window(win=win, size=size,
                           wintitle=wintitle)
     if img is not None:
         img.display(map, x=x, y=y, colormap=colormap, **kws)

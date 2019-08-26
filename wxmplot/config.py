@@ -28,7 +28,7 @@ from copy import copy
 import numpy as np
 import matplotlib
 from matplotlib.font_manager import FontProperties
-from matplotlib import rcParams
+from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
 
@@ -66,7 +66,7 @@ default_config = dict(viewpad=2.5,
                       labelfont=9,
                       legendfont=7,
                       titlefont=10,
-                      theme='wxmplot_light')
+                      theme='light')
 
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
@@ -94,60 +94,79 @@ linecolors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd',
               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf')
 
 
+
+light_theme = {'axes.grid': True,
+               'axes.axisbelow': True,
+               'axes.linewidth': 0.5,
+               'axes.edgecolor': '#000000',
+               'axes.facecolor': '#FEFEFE',
+               'grid.linestyle': '-',
+               'grid.linewidth': 0.5,
+               'lines.linewidth': 2.5,
+               'lines.markersize': 3,
+               'lines.markeredgewidth': 0.75,
+               'xtick.labelsize': 9,
+               'ytick.labelsize': 9,
+               'legend.fontsize': 8,
+               'axes.labelsize': 9,
+               'axes.titlesize': 10,
+               'xtick.major.size': 4,
+               'ytick.major.size': 4,
+               'xtick.major.width': 0.5,
+               'ytick.major.width': 0.5,
+               'xtick.color': '#000000',
+               'ytick.color': '#000000',
+               'text.color': '#000000',
+               'grid.color': '#E5E5E5',
+               'figure.facecolor': '#FBFBFB',
+               'axes.prop_cycle': cycler('color', linecolors),
+               'savefig.bbox': None,
+               'savefig.directory': '~',
+               'savefig.dpi': 'figure',
+               'savefig.edgecolor': 'white',
+               'savefig.facecolor': 'white',
+               'savefig.format': 'png',
+               'savefig.jpeg_quality': 95,
+               'savefig.orientation': 'portrait',
+               'savefig.pad_inches': 0.1,
+
+               }
+
+
+dark_theme = {'axes.facecolor': '#202020',
+              'axes.edgecolor': '#FDFDC0',
+              'xtick.color': '#FDFDC0',
+              'ytick.color': '#FDFDC0',
+              'text.color': '#FDFDC0',
+              'grid.color': '#404040',
+              'figure.facecolor': '#161616',
+              'savefig.edgecolor': 'black',
+              'savefig.facecolor': 'black',
+              }
+
 Themes = OrderedDict()
-def_theme = {'axes.grid': True,
-             'axes.axisbelow': True,
-             'axes.linewidth': 0.5,
-             'axes.edgecolor': '#000000',
-             'axes.facecolor': '#FEFEFE',
-             'grid.linestyle': '-',
-             'grid.linewidth': 0.5,
-             'lines.linewidth': 2.5,
-             'lines.markersize': 3,
-             'lines.markeredgewidth': 0.75,
-             'xtick.labelsize': 9,
-             'ytick.labelsize': 9,
-             'legend.fontsize': 8,
-             'axes.labelsize': 9,
-             'axes.titlesize': 10,
-             'xtick.major.size': 4,
-             'ytick.major.size': 4,
-             'xtick.major.width': 0.5,
-             'ytick.major.width': 0.5,
-             'xtick.color': '#000000',
-             'ytick.color': '#000000',
-             'text.color': '#000000',
-             'grid.color': '#E5E5E5',
-             'figure.facecolor': '#FBFBFB',
-             'axes.prop_cycle': cycler('color', linecolors),
-             }
 
-Themes['light'] = copy(def_theme)
-Themes['dark'] =  copy(def_theme)
-Themes['dark'].update({'axes.facecolor': '#202020',
-                       'axes.edgecolor': '#FDFDC0',
-                       'xtick.color': '#FDFDC0',
-                       'ytick.color': '#FDFDC0',
-                       'text.color': '#FDFDC0',
-                       'grid.color': '#404040',
-                       'figure.facecolor': '#161616'})
-
-Themes['matplotlib'] = copy(rcParams)
-
-for tname in ('seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
-              'dark_background', 'tableau-colorblind10', 'seaborn-bright',
+for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
+              'fivethirtyeight', 'grayscale', 'dark_background',
+              'tableau-colorblind10', 'seaborn-bright',
               'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
               'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
               'seaborn-muted', 'seaborn-pastel', 'seaborn-paper',
               'seaborn-poster', 'seaborn-talk', 'seaborn-ticks',
               'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'):
-    if tname in matplotlib.style.library:
-        theme = copy(def_theme)
+    theme = rc_params()
+    if tname == 'matplotlib':
+        continue
+    elif tname == 'light':
+        theme.update(light_theme)
+    elif tname == 'dark':
+        theme.update(light_theme)
+        theme.update(dark_theme)
+    elif tname in matplotlib.style.library:
         if tname.startswith('seaborn-'):
             theme.update(matplotlib.style.library['seaborn'])
         theme.update(matplotlib.style.library[tname])
         Themes[tname.lower()] = theme
-
 
 def bool_ifnotNone(val, default):
     "return bool(val) if val is not None else default"

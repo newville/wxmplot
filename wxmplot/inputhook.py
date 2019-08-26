@@ -60,7 +60,6 @@ def stdin_ready():
 
 if sys.platform == 'win32':
     from msvcrt import kbhit as stdin_ready
-    clock = time.clock
     def ignore_CtrlC():
         pass
 elif sys.platform == 'darwin':

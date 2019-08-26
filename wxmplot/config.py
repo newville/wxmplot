@@ -134,9 +134,8 @@ Themes['dark'].update({'axes.facecolor': '#202020',
 
 Themes['matplotlib'] = copy(rcParams)
 
-for tname in ('seaborn', 'bmh', 'dark_background',
-              'fivethirtyeight', 'ggplot', 'grayscale',
-              'tableau-colorblind10', 'seaborn-bright',
+for tname in ('seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
+              'dark_background', 'tableau-colorblind10', 'seaborn-bright',
               'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
               'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
               'seaborn-muted', 'seaborn-pastel', 'seaborn-paper',

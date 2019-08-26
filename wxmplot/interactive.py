@@ -37,7 +37,6 @@ __all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
            'plot_marker', 'plot_axhline', 'plot_axvline', 'hist',
            'contour', 'DEFAULT_THEME']
 
-
 wxapp = None
 def get_wxapp(redirect=False, clearSigInt=True):
     """get the wx App
@@ -232,29 +231,48 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
     Args:
         x (array-like):  ordinate values
         y (array-like):  abscissa values (x and y must be same size!)
-        win (int): index of Plot Window [1]
-        new (bool): whether to start a new plot [False]
+        dy (array-like): array for error bars in y (must be same size as y!)
         label (str or None): label for this trace
-        size (tuple or None): width, height in pixels of Plot Window
-        wintitle (str or None): title for window frame
-        theme (str on None): plotting theme to use
-
-        linewidth (float):  width of line joining points [from style]
-        color (str or None): color for trace (see note 1) [from style]
+        linewidth (float):  width of line joining points [from theme]
+        color (str or None): color for trace (see note 1) [from theme]
         style (str or None): line style for joining points (see note 2)
         marker (str on None):  symbol to draw at each point (see note 3)
         markersize (float): size of marker
+        zorde (float or None): zorder (depth) of this trace
+        drawstyle (str or None): style for joining line segments (see note 4)
+        xmin (float or None): minimum x value for plot range
+        xmax (float or None): maximum x value for plot range
+        ymin (float or None): minimum y value for plot range
+        ymax (float or None): maximum y value for plot range
+        use_dates (bool): whether to interpret x data as dates [False]
+        new (bool): whether to start a new plot [False]
+        win (int): index of Plot Window [1]
+        side (str): side for y-axis ('left' or 'right') ['left']
+        size (tuple or None): width, height in pixels of Plot Window
 
+        wintitle (str or None): title for window frame
+        theme (str on None): plotting theme to use
         title (str or None):  plot title
         xlabel (str or None): label for x-axis
         ylabel (str or None): label for y-axis
         y2label (str or None): label for y2-axis (that is, right-side axis)
-        ylog_scale (bool): whether to show y-axis as log-scale [False]
-        show_grid (bool): whether to draw background grid [True]
-        drawstyle (str or None): style for joining line segments (see note 4)
 
-        dy: array for error bars in y (must be same size as y!)
-        yaxis='left'??
+
+        xlog_scale (bool): whether to show x-axis as log-scale [False]
+        ylog_scale (bool): whether to show y-axis as log-scale [False]
+        grid (bool): whether to draw background grid [True]
+        show_legend (bool or None): whether to show legend [False]
+        legend_loc (str): location for legend (see note 5) ['best']
+        legend_on  (bool): whether legend is within the main axes [True]
+        bgcolor (str on None): color of background plot area (from theme)
+        framecolo (str on None): color of outer frame area (from theme)
+        gridcolor (str or None:  color of grid (from theme)
+        labelfontsize (float): size (pixels) of font for Labels (from theme)
+        legendfontsize (float): size (pixels) of font for Legend (from theme)
+        titlefontsize (float): size (pixels) of font for Title (from theme)
+        axes_style (str): control what parts of axes are shown (see note 6)
+        viewpad (float or None): percent of data range to expand view ranges
+        delay_draw (boole): whether to delay drawing [False]
 
     Returns:
         plotter, a PlotFrame
@@ -269,6 +287,10 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
            'hexagon', 'pentagon', 'tripod 1', or 'tripod 2'
         4. drawstyle can be one of 'default', 'steps-pre','steps-mid',
            or 'steps-post'.
+        5. legend_loc can be one of 'best', 'upper right' , 'lower right',
+           'center right', 'upper left', 'lower left',  'center left',
+           'upper center', 'lower center', 'center'
+        6. axis_style can be one of 'open', 'box', 'bottom'.
 
     """
     plotter = get_plot_window(win=win, size=size, wintitle=wintitle,
@@ -283,8 +305,35 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         plotter.oplot(x, y, **kws)
     return plotter
 
+def newplot(x, y, win=1, wintitle=None, **kws):
+    """newplot(x, y[, win=1[, options]])
+
+    Plot trace of x, y arrays in a PlotFrame, clearing any
+    data currently shown in the PlotFrame.
+
+    Notes:
+        This is equivalent to
+        plot(x, y, ...., new=True)
+
+    """
+    kws['new'] = True
+    return plot(x, y, win=win, wintitle=wintitle, **kws)
+
+
 def update_trace(x, y, trace=1, win=1, **kws):
-    """update a plot trace with new data, avoiding complete redraw"""
+    """
+    update a plot trace with new data, avoiding complete redraw
+    This can significantly descrease drawing time:
+
+    Args:
+        x (array-like):  ordinate values
+        y (array-like):  abscissa values (x and y must be same size)
+        trace (int): which plot trace to update [1]
+        win (int): index of Plot Window [1]
+        side (str): side for y-axis ('left' or 'right') ['left']
+
+
+    """
     plotter = get_plot_window(win=win)
     if plotter is None:
         return
@@ -298,19 +347,6 @@ def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1):
     if plotter is None:
         return
     plotter.panel.set_xylims((xmin, xmax, ymin, ymax))
-
-def newplot(x, y, win=1, wintitle=None, **kws):
-    """newplot(x, y[, win=1[, options]])
-
-    Plot 2-D trace of x, y arrays in a Plot Frame, clearing any
-    plot currently in the Plot Frame.
-
-    This is equivalent to
-    plot(x, y[, win=1[, new=True[, options]]])
-
-    """
-    kws['new'] = True
-    return plot(x, y, win=win, wintitle=wintitle, **kws)
 
 def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
               side='left', size=None, **kws):

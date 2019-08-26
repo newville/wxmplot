@@ -43,9 +43,7 @@ Plotting with :func:`wxmplot.interactive.plot` and related functions
 ========================================================================
 
 
-.. function:: plot
-
-A wrapper around :method:`PlotPanel.plot`
+.. autofunction:: plot
 
 An example of using :func:`wxmplot.interactive.plot` is:
 
@@ -57,11 +55,9 @@ which gives a plot that looks like this:
 .. image:: images/basic_screenshot.png
    :width: 85 %
 
-
 .. autofunction:: newplot
 
 .. autofunction:: hist
-
 
 .. autofunction:: update_trace
 

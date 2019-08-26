@@ -79,14 +79,9 @@ def set_theme(theme):
     Returns:
         None
 
-
-
     Notes:
       1. Example themese are:'light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
-
-
-    See Also:
-       available_themes() for the list of available themes.
+      2. See available_themes() for the list of available themes.
     """
     global DEFAULT_THEME
     if theme.lower() in Themes.keys():
@@ -129,6 +124,8 @@ class PlotDisplay(PlotFrame):
                            output_title='plot', exit_callback=self.onExit,
                            theme=theme, **kws)
 
+        if size is not None:
+            self.SetSize(size)
         self.Show()
         self.Raise()
         self.panel.cursor_callback = self.onCursor
@@ -158,6 +155,8 @@ class ImageDisplay(ImageFrame):
         ImageFrame.__init__(self, parent=None, size=size, title=wintitle,
                             exit_callback=self.onExit, **kws)
 
+        if size is not None:
+            self.SetSize(size)
         self.Show()
         self.Raise()
         self.cursor_hist = []
@@ -177,13 +176,21 @@ class ImageDisplay(ImageFrame):
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
 def get_plot_window(win=1, size=None, wintitle=None, theme=None):
-    """return a plot display (a wx.Frame)
+    """return a plot display
 
     Args:
-        win (int): index of Plot Window
+        win (int): index of Plot Window (1 to %d)
+        size (tuple): width, height in pixels of Plot Window
+        wintitle(str): text for Window title [Plot Window N]
 
+    Returns:
+        diplay, a wxmplot PlotFrame.
 
-    """
+    Notes:
+        this will either return the existing PlotFrame for the
+        window index or create a new one.
+
+    """ % MAX_WINDOWS
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
         display = PLOT_DISPLAYS[win]
@@ -193,7 +200,21 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
     return display
 
 def get_image_window(win=1, size=None, wintitle=None):
-    """make an image window"""
+    """return an image display
+
+    Args:
+        win (int): index of Image Window (1 to %d)
+        size (tuple): width, height in pixels of Image Window
+        wintitle(str): text for Window title [Image Window N]
+
+    Returns:
+        diplay, a wxmplot ImageFrame.
+
+    Notes:
+        this will either return the existing ImageFrame for the
+        window index or create a new one.
+    """  % MAX_WINDOWS
+
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in IMG_DISPLAYS:
         display = IMG_DISPLAY[win]
@@ -203,45 +224,52 @@ def get_image_window(win=1, size=None, wintitle=None):
 
     return display
 
-
-def plot(x,y, win=1, new=False, size=None, wintitle=None,
-         theme=None, **kws):
+def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
     """plot(x, y[, win=1], options])
 
-    Plot trace of x, y arrays in a Plot Frame, clearing any plot currently in the Plot Frame.
+    Plot trace of x, y arrays in a PlotFrame
 
-    Parameters:
-    --------------
-        x :  array of ordinate values
-        y :  array of abscissa values (x and y must be same size!)
+    Args:
+        x (array-like):  ordinate values
+        y (array-like):  abscissa values (x and y must be same size!)
+        win (int): index of Plot Window [1]
+        new (bool): whether to start a new plot [False]
+        label (str or None): label for this trace
+        size (tuple or None): width, height in pixels of Plot Window
+        wintitle (str or None): title for window frame
+        theme (str on None): plotting theme to use
 
-        win: index of Plot Frame (0, 1, etc).  May create a new Plot Frame.
-        new: bool  (default False) for whether to start a new plot.
-        label: label for trace
+        linewidth (float):  width of line joining points [from style]
+        color (str or None): color for trace (see note 1) [from style]
+        style (str or None): line style for joining points (see note 2)
+        marker (str on None):  symbol to draw at each point (see note 3)
+        markersize (float): size of marker
 
-        size:  size of window
-        wintitle: title for window frame
-
-        **kws : keywords to pass to wxmplot.PlotPanel.plot()
-
-        title:  title for Plot
-        xlabel: x-axis label
-        ylabel: y-axis label
-        ylog_scale: whether to show y-axis as log-scale (True or False)
-        grid: whether to draw background grid (True or False)
-
-        color: color for trace (name such as 'red', or '#RRGGBB' hex string)
-        style: trace linestyle (one of 'solid', 'dashed', 'dotted', 'dot-dash')
-        linewidth:  integer width of line
-        marker:  symbol to draw at each point ('+', 'o', 'x', 'square', etc)
-        markersize: integer size of marker
-
-        drawstyle: style for joining line segments
+        title (str or None):  plot title
+        xlabel (str or None): label for x-axis
+        ylabel (str or None): label for y-axis
+        y2label (str or None): label for y2-axis (that is, right-side axis)
+        ylog_scale (bool): whether to show y-axis as log-scale [False]
+        show_grid (bool): whether to draw background grid [True]
+        drawstyle (str or None): style for joining line segments (see note 4)
 
         dy: array for error bars in y (must be same size as y!)
         yaxis='left'??
 
-    See Also: newplot
+    Returns:
+        plotter, a PlotFrame
+
+    Notes:
+        1. colors can be names such as 'red' or hex strings '#RRGGBB'.
+           by default, they are set by the theme
+        2. styles can be one of 'solid', 'short dashed', 'dash-dot',
+           'dashed', 'dotted', 'long-dashed'.
+        3. markers can be one of  'no symbol', 'o', '+', 'x', 'square',
+           'diamond', 'thin diamond', '^', 'v', '>', '<', '|', '_',
+           'hexagon', 'pentagon', 'tripod 1', or 'tripod 2'
+        4. drawstyle can be one of 'default', 'steps-pre','steps-mid',
+           or 'steps-post'.
+
     """
     plotter = get_plot_window(win=win, size=size, wintitle=wintitle,
                              theme=theme)
@@ -280,7 +308,6 @@ def newplot(x, y, win=1, wintitle=None, **kws):
     This is equivalent to
     plot(x, y[, win=1[, new=True[, options]]])
 
-    See Also: plot
     """
     kws['new'] = True
     return plot(x, y, win=win, wintitle=wintitle, **kws)
@@ -292,8 +319,7 @@ def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
 
     add text at x, y coordinates of a plot
 
-    Parameters:
-    --------------
+    Args:
         text:  text to draw
         x:     x position of text
         y:     y position of text
@@ -303,7 +329,6 @@ def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
         va:    vertical alignment ('top', 'center', 'bottom', 'baseline')
         side: which axis to use ('left' or 'right') for coordinates.
 
-    See Also: plot, plot_arrow
     """
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:
@@ -319,8 +344,7 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
 
     draw arrow from x1, y1 to x2, y2.
 
-    Parameters:
-    --------------
+    Args:
         x1: starting x coordinate
         y1: starting y coordinate
         x2: ending x coordinate
@@ -334,7 +358,6 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
         overhang:    amount the arrow is swept back (in points. default=0)
         win:  window to draw too
 
-    See Also: plot, plot_text
     """
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:
@@ -351,15 +374,13 @@ def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
 
     draw a marker at x, y
 
-    Parameters:
-    -----------
+    Args:
         x:      x coordinate
         y:      y coordinate
         marker: symbol to draw at each point ('+', 'o', 'x', 'square', etc) ['o']
         size:   symbol size [4]
         color:  color  ['black']
 
-    See Also: plot, plot_text
     """
     plotter = get_plot_window(win=win, size=None)
     if plotter is None:
@@ -373,12 +394,12 @@ def plot_axhline(y, xmin=0, xmax=1, win=1,
     """plot_axhline(y, xmin=None, ymin=None, **kws)
 
     plot a horizontal line spanning the plot axes
-    Parameters:
-    --------------
+
+    Args:
         y:      y position of line
         xmin:   starting x fraction (window units -- not user units!)
         xmax:   ending x fraction (window units -- not user units!)
-    See Also: plot, plot_arrow
+
     """
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:
@@ -395,12 +416,11 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
     """plot_axvline(y, xmin=None, ymin=None, **kws)
 
     plot a vertical line spanning the plot axes
-    Parameters:
-    --------------
+
+    Args:
         x:      x position of line
         ymin:   starting y fraction (window units -- not user units!)
         ymax:   ending y fraction (window units -- not user units!)
-    See Also: plot, plot_arrow
     """
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:

@@ -1,3 +1,4 @@
+.. _ch_interactive:
 
 ==========================================================
 :mod:`wxmplot.interactive`:  Interactive wxmplot displays

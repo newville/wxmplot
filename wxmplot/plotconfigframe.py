@@ -165,8 +165,8 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
-        self.SetMinSize((775, 200))
-        self.SetSize((950, 400))
+        self.SetMinSize((800, 250))
+        self.SetSize((925, 450))
         self.Show()
         self.Raise()
 
@@ -511,19 +511,19 @@ class PlotConfigFrame(wx.Frame):
 
         textcol = csel.ColourSelect(panel, label=" Text ",
                                     colour=mpl_color(self.conf.textcolor),
-                                    size=(120, 25), style=labstyle)
+                                    size=(120, 30), style=labstyle)
 
         gridcol = csel.ColourSelect(panel, label=" Grid ",
                                     colour=mpl_color(self.conf.gridcolor),
-                                    size=(120, 25), style=labstyle)
+                                    size=(120, 30), style=labstyle)
 
         bgcol = csel.ColourSelect(panel, label=" Background ",
                                   colour=mpl_color(axis_bgcol),
-                                  size=(120, 25), style=labstyle)
+                                  size=(120, 30), style=labstyle)
 
         fbgcol = csel.ColourSelect(panel,  label=" Outer Frame ",
                                    colour=mpl_color(self.canvas.figure.get_facecolor()),
-                                   size=(120, 25), style=labstyle)
+                                   size=(120, 30), style=labstyle)
 
 
         self.colwids = {'text': textcol, 'face': bgcol,
@@ -534,15 +534,15 @@ class PlotConfigFrame(wx.Frame):
         gridcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='grid'))
         textcol.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, item='text'))
 
-        show_grid  = wx.CheckBox(panel,-1, ' Show Grid ', (-1, -1), (-1, -1))
+        show_grid  = wx.CheckBox(panel,-1, ' Show Grid  ')
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(self.conf.show_grid)
 
-        show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes ', (-1, -1), (-1, -1))
+        show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(self.conf.axes_style == 'box')
 
-        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
+        show_leg = wx.CheckBox(panel,-1, 'Show Legend  ')
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(self.conf.show_legend)
         if show_leg not in self.show_legend_cbs:
@@ -557,8 +557,8 @@ class PlotConfigFrame(wx.Frame):
         tsizer.Add(ctitle,    0, labstyle, 3)
 
         tsizer.Add(show_grid, 0, labstyle, 3)
-        tsizer.Add(show_box,  0, labstyle, 3)
         tsizer.Add(show_leg,  0, labstyle, 3)
+        tsizer.Add(show_box,  0, labstyle, 3)
 
         csizer.Add(ctitle,    0, labstyle, 3)
         csizer.Add(textcol,   0, labstyle, 3)
@@ -567,10 +567,9 @@ class PlotConfigFrame(wx.Frame):
         csizer.Add(fbgcol ,   0, labstyle, 3)
 
         sizer.Add(tsizer,    (1, 0), (1, 9), labstyle, 3)
-        sizer.Add(csizer,    (2, 0), (1, 9), labstyle, 3)
+        sizer.Add(csizer,    (3, 0), (1, 9), labstyle, 3)
 
-
-        irow = 3
+        irow = 5
         for t in ('#','Label','Color', 'Style',
                   'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)

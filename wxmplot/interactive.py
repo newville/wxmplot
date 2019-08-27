@@ -178,9 +178,10 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
     """return a plot display
 
     Args:
-        win (int): index of Plot Window (1 to %d)
+        win (int): index of Plot Window (1 to 100)
         size (tuple): width, height in pixels of Plot Window
         wintitle(str): text for Window title [Plot Window N]
+        theme (str): theme for Plot Window ['light']
 
     Returns:
         diplay, a wxmplot PlotFrame.
@@ -189,7 +190,7 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
         this will either return the existing PlotFrame for the
         window index or create a new one.
 
-    """ % MAX_WINDOWS
+    """
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
         display = PLOT_DISPLAYS[win]
@@ -202,7 +203,7 @@ def get_image_window(win=1, size=None, wintitle=None):
     """return an image display
 
     Args:
-        win (int): index of Image Window (1 to %d)
+        win (int): index of Image Window (1 to 100)
         size (tuple): width, height in pixels of Image Window
         wintitle(str): text for Window title [Image Window N]
 
@@ -212,8 +213,7 @@ def get_image_window(win=1, size=None, wintitle=None):
     Notes:
         this will either return the existing ImageFrame for the
         window index or create a new one.
-    """  % MAX_WINDOWS
-
+    """
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in IMG_DISPLAYS:
         display = IMG_DISPLAY[win]
@@ -224,7 +224,7 @@ def get_image_window(win=1, size=None, wintitle=None):
     return display
 
 def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
-    """plot(x, y[, win=1], options])
+    """plot(x, y, win=1, new=False, ...)
 
     Plot trace of x, y arrays in a PlotFrame
 
@@ -232,31 +232,29 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         x (array-like):  ordinate values
         y (array-like):  abscissa values (x and y must be same size!)
         dy (array-like): array for error bars in y (must be same size as y!)
+        new (bool): whether to start a new plot [False]
+        win (int): index of Plot Window [1]
         label (str or None): label for this trace
         linewidth (float):  width of line joining points [from theme]
         color (str or None): color for trace (see note 1) [from theme]
         style (str or None): line style for joining points (see note 2)
         marker (str on None):  symbol to draw at each point (see note 3)
         markersize (float): size of marker
-        zorde (float or None): zorder (depth) of this trace
+        zorder (float or None): zorder (depth) of this trace
         drawstyle (str or None): style for joining line segments (see note 4)
         xmin (float or None): minimum x value for plot range
         xmax (float or None): maximum x value for plot range
         ymin (float or None): minimum y value for plot range
         ymax (float or None): maximum y value for plot range
         use_dates (bool): whether to interpret x data as dates [False]
-        new (bool): whether to start a new plot [False]
-        win (int): index of Plot Window [1]
         side (str): side for y-axis ('left' or 'right') ['left']
         size (tuple or None): width, height in pixels of Plot Window
-
         wintitle (str or None): title for window frame
         theme (str on None): plotting theme to use
         title (str or None):  plot title
         xlabel (str or None): label for x-axis
         ylabel (str or None): label for y-axis
         y2label (str or None): label for y2-axis (that is, right-side axis)
-
 
         xlog_scale (bool): whether to show x-axis as log-scale [False]
         ylog_scale (bool): whether to show y-axis as log-scale [False]
@@ -265,7 +263,7 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         legend_loc (str): location for legend (see note 5) ['best']
         legend_on  (bool): whether legend is within the main axes [True]
         bgcolor (str on None): color of background plot area (from theme)
-        framecolo (str on None): color of outer frame area (from theme)
+        framecolor (str on None): color of outer frame area (from theme)
         gridcolor (str or None:  color of grid (from theme)
         labelfontsize (float): size (pixels) of font for Labels (from theme)
         legendfontsize (float): size (pixels) of font for Legend (from theme)
@@ -306,7 +304,7 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
     return plotter
 
 def newplot(x, y, win=1, wintitle=None, **kws):
-    """newplot(x, y[, win=1[, options]])
+    """newplot(x, y, ...)
 
     Plot trace of x, y arrays in a PlotFrame, clearing any
     data currently shown in the PlotFrame.
@@ -332,7 +330,6 @@ def update_trace(x, y, trace=1, win=1, **kws):
         win (int): index of Plot Window [1]
         side (str): side for y-axis ('left' or 'right') ['left']
 
-
     """
     plotter = get_plot_window(win=win)
     if plotter is None:
@@ -342,7 +339,15 @@ def update_trace(x, y, trace=1, win=1, **kws):
     plotter.panel.update_line(trace, x, y, draw=True, **kws)
 
 def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1):
-    """set plot view limits for plot in window `win`"""
+    """set plot view limits for plot in window `win`
+
+    Args:
+        xmin (float): minimum x value
+        ymax (float): maximum x value
+        ymin (float): minimum y value
+        ymax (float): maximum y value
+        win (int): index of plot window
+    """
     plotter = get_plot_window(win=win)
     if plotter is None:
         return
@@ -356,14 +361,15 @@ def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
     add text at x, y coordinates of a plot
 
     Args:
-        text:  text to draw
-        x:     x position of text
-        y:     y position of text
-        win:   index of Plot Frame (0, 1, etc).  May create a new Plot Frame.
-        rotation:  text rotation. angle in degrees or 'vertical' or 'horizontal'
-        ha:    horizontal alignment ('left', 'center', 'right')
-        va:    vertical alignment ('top', 'center', 'bottom', 'baseline')
-        side: which axis to use ('left' or 'right') for coordinates.
+        text (str): text to draw
+        x (float): x position of text
+        y (float): y position of text
+        win (int): index of plot window
+        rotation (str or float):  text rotation. angle in degrees or 'vertical' or 'horizontal'
+        ha (str):    horizontal alignment ('left', 'center', 'right')
+        va (str)    vertical alignment ('top', 'center', 'bottom', 'baseline')
+        side (str): which axis to use ('left' or 'right') for coordinates.
+
 
     """
     plotter = get_plot_window(win=win, size=size)
@@ -381,18 +387,18 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
     draw arrow from x1, y1 to x2, y2.
 
     Args:
-        x1: starting x coordinate
-        y1: starting y coordinate
-        x2: ending x coordinate
-        y2: ending y coordinate
-        side: which axis to use ('left' or 'right') for coordinates.
-        shape:  arrow head shape ('full', 'left', 'right')
-        color:  arrow color ('black')
-        width:  width of arrow line (in points. default=0.0)
-        head_width:  width of arrow head (in points. default=0.05)
-        head_length:  length of arrow head (in points. default=0.25)
-        overhang:    amount the arrow is swept back (in points. default=0)
-        win:  window to draw too
+        x1 (float): starting x coordinate
+        y1 (float): starting y coordinate
+        x2 (float): ending x coordinate
+        y2 (float): ending y coordinate
+        side (str): which axis to use ('left' or 'right') for coordinates.
+        shape (str):  arrow head shape ('full', 'left', 'right')
+        color (str):  arrow color ('black')
+        width (float):  width of arrow line (in points. default=0.0)
+        head_width (float):  width of arrow head (in points. default=0.05)
+        head_length (float):  length of arrow head (in points. default=0.25)
+        overhang (float):   amount the arrow is swept back (in points. default=0)
+        win (int): index of plot window
 
     """
     plotter = get_plot_window(win=win, size=size)
@@ -411,11 +417,17 @@ def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
     draw a marker at x, y
 
     Args:
-        x:      x coordinate
-        y:      y coordinate
-        marker: symbol to draw at each point ('+', 'o', 'x', 'square', etc) ['o']
-        size:   symbol size [4]
-        color:  color  ['black']
+        x (float): x coordinate for marker
+        y float):  y coordinate
+        marker (str): symbol to draw at each point (see Note 1)
+        size (float): marker size [4]
+        color (str): marker color  ['black']
+        win (int): index of plot window
+
+    Notes:
+        1. marker can be one of ('+', 'o', 'x', 'square',
+           'diamond', 'thin diamond', '^', 'v', '>', '<', '|', '_',
+           'hexagon', 'pentagon', 'tripod 1', or 'tripod 2')
 
     """
     plotter = get_plot_window(win=win, size=None)
@@ -432,9 +444,10 @@ def plot_axhline(y, xmin=0, xmax=1, win=1,
     plot a horizontal line spanning the plot axes
 
     Args:
-        y:      y position of line
-        xmin:   starting x fraction (window units -- not user units!)
-        xmax:   ending x fraction (window units -- not user units!)
+        y (float):  y position of line
+        xmin (float): starting x fraction (window units -- not user units!)
+        xmax (float): ending x fraction (window units -- not user units!)
+        win (int): index of plot window
 
     """
     plotter = get_plot_window(win=win, size=size)
@@ -454,9 +467,11 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
     plot a vertical line spanning the plot axes
 
     Args:
-        x:      x position of line
-        ymin:   starting y fraction (window units -- not user units!)
-        ymax:   ending y fraction (window units -- not user units!)
+        x (float):   x position of line
+        ymin (float): starting y fraction (window units -- not user units!)
+        ymax (float): ending y fraction (window units -- not user units!)
+        win (int): index of plot window
+
     """
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:
@@ -471,6 +486,14 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
 
 def hist(x, bins=10, win=1, new=False, size=None,
          force_draw=True, title=None, *args, **kws):
+    """display a histogram
+
+    Args:
+        x (array-like): array of values
+        bins (int): number of bins to show
+        win (int): index of plot window
+
+    """
 
     plotter = get_plot_window(win=win, size=size)
     if plotter is None:
@@ -485,13 +508,36 @@ def hist(x, bins=10, win=1, new=False, size=None,
 
     return out
 
-def imshow(map, x=None, y=None, colormap=None, win=1,
+def imshow(map, y=None, x=None, colormap=None, win=1,
            wintitle=None, size=None, **kws):
-    """imshow(map[, options])
+    """imshow(map, ...)
 
     Display an 2-D array of intensities as a false-color map
 
-    map: 2-dimensional array for map
+    Args:
+        map(ndarray):  map array data (see Note 1)
+        y (array-like): values for pixels along vertical direction
+        x (array-like): values for pixels along horizontal direction
+        colormap (str): name of colormap to apply
+        win (int): index of Image Window (1 to %d)
+        size (tuple): width, height in pixels of Image Window
+        wintitle(str): text for Window title [Image Window N]
+        xlabel (str): label for horizontal axis ['X']
+        ylabel (str): label for horizontal axis ['Y']
+        style (str): display style ('image' or 'contour') ['image']
+        nlevels (int): number of levels for contour
+        contour_labels (bool): whether to show contour labels [True]
+        show_axis (bool): whether to shos Axis [False]
+        contrast_level (float): percent level for contrast [0]
+
+    Returns:
+        img, an ImageFrame
+
+    Notes:
+        1. the map data can either be a 2d array (shape NY, NX) for
+           single-color map or (NY, NX, 3) array for an RGB map
+
+
     """
     img = get_image_window(win=win, size=size,
                           wintitle=wintitle)
@@ -500,11 +546,13 @@ def imshow(map, x=None, y=None, colormap=None, win=1,
     return img
 
 def contour(map, x=None, y=None, **kws):
-    """contour(map[, options])
+    """contour(map, ...)
 
     Display an 2-D array of intensities as a contour plot
 
-    map: 2-dimensional array for map
+    Notes:
+        This is equivalent to
+        imshow(map, ..., style='contour')
     """
     kws.update(dict(style='contour'))
     imshow(map, x=x, y=y, **kws)

@@ -22,7 +22,7 @@ disappear when the script is complete but remains displayed and fully
 operational until all displayed windows have been closed or until the running
 script is explicitly clased as with Crtl-C.
 
-Although `wxmplot` provides :func:`plot`, :func:`imshow` and other functions
+While `wxmplot` provides :func:`plot`, :func:`imshow` and other functions
 that are roughly equivalent to the functions from `matplotlib.pyplot`, the
 functions are here not exact drop-in replacements for the `pyplot` functions.
 For one thing, there are many missing plot types and functions.  For another,

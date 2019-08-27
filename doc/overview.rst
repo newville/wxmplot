@@ -336,7 +336,7 @@ main window or menu selections. The Image Configuration Window has a few
 options and values that can be set by the user:
 
 .. image:: images/ImageConfig.png
-   :width: 75 %
+   :width: 50 %
 
 For contour plots, the user can select the number of levels to show and
 whether the contour line will show intensity values.

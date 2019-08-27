@@ -168,7 +168,6 @@ class PlotConfigFrame(wx.Frame):
         self.SetSize((925, 500))
         self.Show()
         self.Raise()
-        print("Size ", self.GetSize())
 
     def make_range_panel(self, parent, font=None):
         # bounds, margins, scales

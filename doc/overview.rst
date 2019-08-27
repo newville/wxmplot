@@ -1,8 +1,8 @@
 .. _ch_overview:
 
-==========================================================
-Overview:
-==========================================================
+===========
+ Overview:
+===========
 
 .. module:: wxmplot
 
@@ -10,6 +10,10 @@ Overview:
 image data.  It is not easy to convey the interactivity in a static
 document, but I will try.
 
+
+
+2D Line Plots with :func:`plot`
+===============================
 
 Let's start with a simple script using  :mod:`matplotlib.pyplot`::
 
@@ -35,18 +39,19 @@ somewhat on the backend being used):
 .. image:: images/mpl_basic.png
    :width: 75 %
 
-From this screen, moving the mouse around updates the display of x and y
-values displayed to those of the mouse.  Clicking on the magnifying glass
-icon and then clicking and dragging a box to zoom in.  allows the user to
-zoom in on portions of the plot.  Clicking on the icon with 4 arrows allows
-the user to pan to other parts of the data range.  Clicking on the icon
-with 3 bars (equalizer?) allows the user to adjust the plot margins. The
-diskette icon allows the user to save a PNG file of the plot display.  For
-some use-cases, this amount of interaction is sufficient.
+From this plot, moving the mouse around updates the x and y values
+displayed to match the location of the mouse.  Clicking on the magnifying
+glass icon and then clicking and dragging a box allows the user to zoom in
+on portions of the plot.  Clicking on the icon with 4 arrows allows the
+user to pan to other parts of the data range.  Clicking on the icon with 3
+bars allows the user to adjust the plot margins. The diskette icon allows
+the user to save a PNG file of the plot display.  For some use-cases, this
+amount of interaction is sufficient.
 
 By selecting a particular GUI toolkit, `wxmplot` aims to give more
-interaction, more flexibiity than the generic `maplotlib` display.  With
-`wxmplot`, that script would be rewritten as::
+interaction, more flexibiity than the generic `maplotlib` display, and
+without cluttering the display with little icons.  With `wxmplot`, that
+script would be rewritten as::
 
     #!/usr/bin/python
     import numpy as np
@@ -66,18 +71,25 @@ and yield a similar plot:
 
 As with the `pyplot` example, moving the mouse around updates the display
 of x and y values displayed to those of the mouse.  To zoom in on a region,
-the user can click and drag to draw a box to zoom in.  The Navigation
-Toolbar is gone, but there are more options for configuring the plot from
-the File and Options menus, as will be described in the next section.
+the user can click and drag to draw a box to zoom in.  The distracting
+Navigation Toolbar is gone and there are more options for configuring the
+plot from the File and Options menus, as will be described in the next
+section.
 
-Also, note that in the `wxmplot` example, there was no `show()` function
-issued.  As will be discussed more in :ref:`ch_interactive`, the `plot`
-functions display their results immediately, without the need for a
-blocking function such as `show()`.
+Note that in the `wxmplot` example, there was no `show()` function issued.
+As will be discussed more in :ref:`ch_interactive`, the `wxmplot` functions
+display results immediately when in an interactive session and allow
+interaction at the shell to continue, without the need for a blocking
+`show()` function.
+
+In addition to the :func:`interactive.plot` function, there are several
+more functions to augment 2D Line plots, including those to add text,
+arrows, lines, and markers to plots.  These and more functions are
+discussed in detail in :ref:`ch_interactive`.
 
 
 User Interaction and Configuring 2D line plots
-==================================================
+==============================================
 
 All `wxmplot` 2D plots support a few basic user interactions.  First, as
 mentioned above, the user can zoom in by drawing a box: Clicking the left
@@ -86,78 +98,79 @@ mouse button will zoom in to that rectangle.  This can be repeated multiple
 time to continue zooming in. Typing "Ctrl-Z" (or "Apple-Z" for Mac OS X)
 will zoom out to the previous zoom level, or until the show the full plot.
 
-A second important user interaction is that when the Plot Legend is
-displayed, clicking on the Legend entry for any trace will toggle whether
-that trace is displayed. For the example above with only two traces this
-may not be so important, but this ability to easily turn on and off traces
-can be very useful when many traces are displayed.
+A second important feature is that when the Plot Legend is displayed,
+clicking on the Legend entry for any trace will toggle whether that trace
+is displayed. For the example above with only two traces this may not be so
+important, but this ability to easily turn on and off traces can be very
+useful when many traces are displayed.
 
 Right-clicking within the Axes (that is the part of the Frame showing the
 Data) will show a pop-up window that allows the user to quickly Unzoom,
 Display the Plot Configuration Window, or Save the Image.
 
 Each Plot Window will have a File menu, an Option menu, and a Help menu
-that gives even more functionality, and a series of Ctrl-Letter bindings to
+that gives even more functionality, and a series of Ctrl-Key bindings to
 use as shortcuts to Menu selections.  From the File menu, the user can:
 
    * Save an image of the plot to a PNG file [Ctrl-S]
-   * Copy the image to system clipboard so that it can be pasted into other applications [Ctrl-C].
+   * Copy the image to system clipboard to paste into other applications [Ctrl-C].
    * Export the data in the plot to a plain text file [Ctrl-D]
    * Setup and preview printing.
    * Print the image [Ctrl-P]
 
 From the Options menu, the user can:
 
-   * Display the Plot Configuration Window to configure nearly any aspect ofthe Plot [Ctrl-K]
+   * Display the Plot Configuration Window [Ctrl-K]
    * Un-Zoom all to the full data range [Ctrl-Z]
    * Toggle whether the Legend is displayed [Ctrl-L]
    * Toggle whether the Grid is displayed [Ctrl-G]
-   * Select whether the X and Y Axes are Linear or Log Scale.
-   * Perform some simple data transformations, to show :math:`dy/dx`, :math:`yx`, :math:`yx^2`, :math:`y^2`, :math:`\sqrt{y}`, or :math:`1/y`.
+   * Select whether the X and Y Axes use Linear or Log Scale.
+   * Perform some simple data transformations to show :math:`dy/dx`, :math:`yx`, :math:`yx^2`, :math:`y^2`, :math:`\sqrt{y}`, or :math:`1/y`.
 
-The Help menu will display a quick cheat-sheet to remind you of some of
-these command options.
+The Help menu will display a quick cheat-sheet to remind you of these
+Ctrl-Key options.
 
-
-An important tool for configuring and customizing plots is the *Plot
-Configuration Window*.  This is a tabbed window with 4 panels to allow the
-user to configure essentially every aspect of the plot:
+An important tool for configuring and customizing 2D plots is the *Plot
+Configuration Window*.  This is a tabbed window frame with 4 panels to
+allow the user to configure essentially every aspect of the plot:
 
     * Colors and Line Properties
     * Ranges and Margins
     * Text, Labels, and Legend
     * Scatterplot displays
 
-with these configuration settings, anyone should be able to create
-beautiful presentation-quality image of their data.
+with these configuration settings, any user should be able to create
+beautiful presentation-quality image from their data.
 
 
 Color and Line Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 The **Colors and Line Properties** tab of the *Plot Configuration Window*
 allows the user to configure the basic colors for the plot.  This includes
-setting the plotting Theme.  Each of the themes available (there are more
-than 25 themes available, about half of them derived from the set of themes
-from Seaborn) will reset all the default colors for the plot components and
-for each line trace, and many of the resource settings of `matplotlib`.
-The themes and their color selections are carefully chosen and aim to make
-pleasing and informative color choices, some with special attention to
-color-blindness.
+setting the plotting theme.  Selecting any of the available themes (there
+are more than 25 themes available, about half of them derived from the set
+of themes from Seaborn) will reset all the default colors for the plot
+components and for each line trace, and many of the resource settings of
+`matplotlib`.  The themes and their color selections are carefully chosen
+to make pleasing and informative color choices, some with special attention
+to color-blindness.
 
-The user can change the colors for Text, Grid, Background, and Outer Frame,
-and select whether the Grid is shown, whether the Legend is Shown, and
-Whether the Top and Right Axes Spines are shown. The user can also set the
-following attributes for each trace: the label, color, line style, line
-width, symbol to use for a marker, marker size, z-order, and join style for
-each trace drawn can be customized.
+Aside from the theme choices, the user can change the colors for Text,
+Grid, Background, and Outer Frame, and also select whether the Grid is
+shown, whether the Legend is Shown, and Whether the Top and Right Axes
+Spines are shown. In addition, the user can set the any of the following
+attributes for each trace: the label, color, line style, line width, symbol
+to use for a marker, marker size, z-order, and join style for each trace
+drawn.  Starting from the decent default values from the pre-defined
+themes, this gives complete control of the plot display to the user.
 
 .. image:: images/PlotConfig_LineProps.png
    :width: 95 %
 
 
 Ranges and Margins Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 The **Ranges and Margins** tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can alsoe select a
@@ -179,7 +192,7 @@ top of the plot, they may need to adjust these margins.
 
 
 Text Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------
 
 The **Text and Labels** tab allows the user to set the title and labels for
 the X and Y axes, and to adjust the fontsize for these text and the text
@@ -194,7 +207,7 @@ on to toggle the display of the corresponding line.
 
 
 ScatterPlot Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 The **Scatterplot** tab allows the user to set the colors and marker sizes
 for scatter plots.
@@ -207,22 +220,134 @@ for scatter plots.
 
 
 Displaying images with :func:`imshow` and :func:`contour`
-==============================================================
+=========================================================
 
-#
-# .. autofunction:: imshow
-#
-# .. autofunction:: contour
-#
-# Functions for working with the interactive windows
-# ======================================================
-#
-# .. autofunction:: get_wxapp
-#
-# .. autofunction:: set_theme
-#
-# .. autofunction:: available_themes
-#
-# .. autofunction:: get_plot_window
-#
-# .. autofunction:: get_image_window
+
+As for 2D line plotting, `wxmplot` has a simple :func:`interactive.imshow`
+function that adds user-friendly controls to manipulate and adjust the
+display of image data.  While `matplotlib.pyplot.imshow()` has the same
+user action as the 2D line plot above, :func:`interactive.imshow` has
+interactions that are specific to displaying false color images from 2D
+arrays on intensity values.  A simple example of::
+
+    #!/usr/bin/python
+    import numpy as np
+    from wxmplot.interactive import imshow
+
+    y, x = np.mgrid[-5:5:101j, -4:6:101j]
+    dat = np.sin(x*x/3.0 + y*y)/(1 + (x+y)*(x+y))
+
+    imshow(dat, x=x[0,:], y=y[:,0], colormap='viridis',
+           wintitle='wxmplot imshow')
+
+
+will display the image:
+
+
+.. image:: images/wxmplot_imshow_basic.png
+   :width: 95 %
+
+
+To display that data as a contour plot, one can just replace
+:func:`interactive.imshow` with :func:`interactive.contour`.  With the same
+dataset but using::
+
+    contour(dat, x=x[0,:], y=y[:,0], colormap='gray', wintitle='wxmplot contour')
+
+will show:
+
+.. image:: images/wxmplot_contour_basic.png
+   :width: 95 %
+
+
+In fact, the user can switch between showing the image data as a contour
+from the Image menu or with Ctrl-N.
+
+
+User Interaction and Configuring Image and Contour displays
+===============================================================
+
+As with the 2D Line Plot, clicking anywhere on the image will show the x,
+y, and intensity values in the status bar.  If arrays for `x` and `y`
+values have been passed in, both the indices and `x` and `y` values for the
+pixel selected will be displayed.  Also as with the 2D Line Plot, clicking
+and dragging will zoom in on a portion of the image, a process that can be
+repeated indefinitely.
+
+From the Image or Contour panel, a few display customizations are
+immediately available. On the left hand side of the frame, there are a few
+controls to adjust the displayed image.  First, the color lookup table for
+intensity can be changed to any of about 30 pre-defined tables and can be
+reversed.  Sliders and entry boxes allow the user to change the threshold
+levels to adjust the contrast.  As a simple approach to adjusting the
+contrast level, a drop-down list can be used to select contrast percentage
+using the histogram of values in the image.  That is, selecting
+'Auto-contrast %' of '1' will put the lowest color value at the 1%
+percentile of intensities (that is the intensity such that 99% of the
+pixels have a higher intensity) and the highest value at the 99% percentile
+(that is the intensity such that 99% of the pixels have a lower
+intensity).  Note that adjusting the contrast is disabled for contour plots.
+
+There are several Menus and Ctrl-key shortcuts available to give more
+interaction.  From the File menu, the user can
+
+   * Save an image of the plot to a PNG file [Ctrl-S]
+   * Copy the image to system clipboard to paste into other applications [Ctrl-C].
+   * Export the data in the plot to a plain text file [Ctrl-D]
+   * Save an image of the current Color Map
+   * Setup and preview printing.
+   * Print the image [Ctrl-P]
+
+From the Image menu, the user can:
+
+   * Zoom Out all to the full data range [Ctrl-Z]
+   * Display an Image Configuration Window [Ctrl-K]
+   * Enhance the Auto-Contrast Level [Ctrl-+]
+   * Reduce the Auto-Contrast Level [Ctrl--]
+   * Display the histogram of intensities [Ctrl-G]
+   * Toggle whether the Axes Labels are displayed [Ctrl-A]
+   * Toggle whether the image is displayed as a Contour Map [Ctrl-N]
+   * Toggle whether a Scalebar is displayed [Ctrl-B]
+   * Toggle whether a 3-color map uses a black or white background [Ctrl-W]
+
+From the X/Y Slices menu, the user can control whether clicking on a pixel
+on the image displays a X- or Y- slice through the image data as a 2D Line
+Plot in a separate plotting window.  From this menu, the user can select:
+
+   * Show No X/Y Slices
+   * Show Slices in the X direction [Ctrl-X]
+   * Show Slices in the Y direction [Ctrl-Y]
+   * Toggle whether the displayed slice should update as the mouse is moved
+
+From the Orientation menu, the user can rotate and flip the image:
+
+   * Rotate clockwise by 90 degrees [Ctrl-R]
+   * Flip Top and Bottom [Ctrl-T]
+   * Flip Left and Right [Ctrl-F]
+   * Reset Flip and Rotations to original data
+
+From the Smoothing menu, the user can select one of more than a dozen
+methods to smooth the data across pixels.
+
+Finally, the Help menu will give a quick list of keyboard shortcuts.
+
+Image Configuration Window
+-----------------------------
+
+Most of options for working with images and contour maps can be from the
+main window or menu selections. The Image Configuration Window has a few
+options and values that can be set by the user:
+
+.. image:: images/ImageConfig.png
+   :width: 75 %
+
+
+For contour plots, the user can select the number of levels to show and
+whether the contour line will show intensity values.
+
+For the X/Y slices, the user can select which slice is shown and also
+whether the slice shown sums over more than one pixel across the dimension
+chosen.  This may be useful for smoothing out noisy images.
+
+More options are available to control whether a Scalebar is displayed on
+the image, and how that is set up.

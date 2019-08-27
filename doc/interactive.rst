@@ -1,7 +1,7 @@
 .. _ch_interactive:
 
 ==========================================================
-:mod:`wxmplot.interactive`:  Interactive wxmplot displays
+Interactive wxmplot displays
 ==========================================================
 
 .. module:: wxmplot.interactive

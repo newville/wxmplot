@@ -31,7 +31,6 @@ from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
-
 from .colors import hexcolor, mpl_color, mpl2hexcolor
 
 # use ordered dictionary to control order displayed in GUI dropdown lists
@@ -155,6 +154,7 @@ for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
               'seaborn-poster', 'seaborn-talk', 'seaborn-ticks',
               'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'):
     theme = rc_params()
+    theme['backend'] = 'WXAgg'
     if tname == 'matplotlib':
         pass
     elif tname == 'light':

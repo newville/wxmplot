@@ -40,5 +40,5 @@ setup(name = 'wxmplot',
                         'six>=1.10',
                         'matplotlib>=2.0',
                         'wxpython>=4.0.3'],
-      tests_require=['pytest'],
+      ## tests_require=['pytest'],
  )

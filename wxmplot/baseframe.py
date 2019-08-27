@@ -14,27 +14,33 @@ from .utils import MenuItem, fix_filename
 
 class BaseFrame(wx.Frame):
     """
-    MatPlotlib 2DRadio plot as a wx.Frame, using PlotPanel
+    wx.Frame with PlotPanel
     """
-    help_msg =  """Quick help:
+    help_msg =  """
+Left-Click:   to display X,Y coordinates
+Left-Drag:    to zoom in on plot region
+Right-Click:  display popup menu with choices:
+           Zoom out 1 level
+           Zoom all the way out
+           Configure
+           Save Image
 
- Left-Click:   to display X,Y coordinates
- Left-Drag:    to zoom in on plot region
- Right-Click:  display popup menu with choices:
-                Zoom out 1 level
-                Zoom all the way out
-                --------------------
-                Configure
-                Save Image
+With a Plot Legend displayed, click on each label to toggle the display of that trace.
 
-Also, these key bindings can be used
-(For Mac OSX, replace 'Ctrl' with 'Apple'):
+Key bindings (use 'Apple' for 'Ctrl' on MacOSX):
 
-  Ctrl-S:     save plot image to file
-  Ctrl-C:     copy plot image to clipboard
-  Ctrl-K:     Configure Plot
-  Ctrl-Q:     quit
+Ctrl-S:     Save plot image to PNG file
+Ctrl-C:     Copy plot image to system clipboard
+Ctrl-P:     Print plot image
 
+Ctrl-D:     Export data to plain text file
+
+Ctrl-L:     Toggle Display of Plot Legend
+Ctrl-G:     Toggle Display of Grid
+
+Ctrl-K:     Show Plot Configure Frame
+
+Ctrl-Q:     Quit
 """
 
     about_msg =  """WXMPlot  version %s

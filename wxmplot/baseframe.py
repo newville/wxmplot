@@ -212,6 +212,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                      partial(self.panel.set_logscale, xscale=xscale, yscale=yscale),
                      kind=wx.ITEM_RADIO)
 
+        mopts.AppendSubMenu(logmenu, "Linear/Log Scale ")
 
         transmenu = None
         if self.panel.conf.with_data_process:
@@ -227,6 +228,9 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                          partial(self.panel.process_data, expr=expr),
                          kind=wx.ITEM_RADIO)
 
+        if transmenu is not None:
+            mopts.AppendSubMenu(transmenu, "Transform Y(X)")
+
         mhelp = wx.Menu()
         MenuItem(self, mhelp, "Quick Reference",
                  "Quick Reference for WXMPlot", self.onHelp)
@@ -235,9 +239,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mbar = wx.MenuBar()
         mbar.Append(mfile, 'File')
         mbar.Append(mopts, '&Options')
-        mbar.Append(logmenu, "Linear/Log Scale ")
-        if transmenu is not None:
-            mbar.Append(transmenu, "Transform Y(X)")
         if self.user_menus is not None:
             for title, menu in self.user_menus:
                 mbar.Append(menu, title)

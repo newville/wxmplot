@@ -4,13 +4,144 @@
 import sys
 from math import log10
 
-import matplotlib
 from matplotlib.path import Path
 
 import wx
+from wx.lib.agw import floatspin as fspin
 
-from wxutils import (is_wxPhoenix, pack, fix_filename, MenuItem, SimpleText,
-                     Check, Choice, HLine, FloatSpin)
+is_wxPhoenix = 'phoenix' in wx.PlatformInfo
+
+if sys.version[0] == '2':
+    from string import maketrans
+    def fix_filename(fname):
+        """
+        fix string to be a 'good' filename. This may be a more
+        restrictive than the OS, but avoids nasty cases.
+        """
+        badchars = ' <>:"\'\\\t\r\n/|?*!%$'
+        out = fname.translate(maketrans(badchars, '_'*len(badchars)))
+        if out[0] in '-,;[]{}()~`@#':
+            out = '_%s' % out
+        return out
+elif sys.version[0] == '3':
+    def fix_filename(s):
+        """fix string to be a 'good' filename.
+        This may be a more restrictive than the OS, but
+        avoids nasty cases."""
+        badchars = ' <>:"\'\\\t\r\n/|?*!%$'
+        t = s.translate(s.maketrans(badchars, '_'*len(badchars)))
+        if t.count('.') > 1:
+            for i in range(t.count('.') - 1):
+                idot = t.find('.')
+                t = "%s_%s" % (t[:idot], t[idot+1:])
+        return t
+
+def pack(window, sizer, expand=1.1):
+    "simple wxPython pack function"
+    tsize =  window.GetSize()
+    msize =  window.GetMinSize()
+    window.SetSizer(sizer)
+    sizer.Fit(window)
+    nsize = (10*int(expand*(max(msize[0], tsize[0])/10)),
+             10*int(expand*(max(msize[1], tsize[1])/10.)))
+    window.SetSize(nsize)
+
+
+class SimpleText(wx.StaticText):
+    "simple static text wrapper"
+    def __init__(self, parent, label, minsize=None, font=None, colour=None,
+                 bgcolour=None, style=wx.ALIGN_CENTRE, **kws):
+
+        wx.StaticText.__init__(self, parent, -1, label=label, style=style,
+                               **kws)
+        if minsize is not None:
+            self.SetMinSize(minsize)
+        if font is not None:
+            self.SetFont(font)
+        if colour is not None:
+            self.SetForegroundColour(colour)
+        if bgcolour is not None:
+            self.SetBackgroundColour(bgcolour)
+
+def HLine(parent, size=(700, 3)):
+    """Simple horizontal line
+    h = HLine(parent, size=(700, 3)
+    """
+    return wx.StaticLine(parent, size=size, style=wx.LI_HORIZONTAL|wx.GROW)
+
+def MenuItem(parent, menu, label='', longtext='', action=None, kind='normal',
+             checked=False):
+    """Add Item to a Menu, with action
+    m = Menu(parent, menu, label, longtext, action=None, kind='normal')
+    """
+    kinds_map = {'normal': wx.ITEM_NORMAL,
+                 'radio': wx.ITEM_RADIO,
+                 'check': wx.ITEM_CHECK}
+    menu_kind = wx.ITEM_NORMAL
+    if kind in kinds_map.values():
+        menu_kind = kind
+    elif kind in kinds_map:
+        menu_kind = kinds_map[kind]
+
+    item = menu.Append(-1, label, longtext, kind=menu_kind)
+    if menu_kind == wx.ITEM_CHECK and checked:
+        item.Check(True)
+
+    if callable(action):
+        parent.Bind(wx.EVT_MENU, action, item)
+    return item
+
+class Check(wx.CheckBox):
+    """Simple Checkbox
+    c = Check(parent, default=True, label=None, **kws)
+    kws passed to wx.CheckBox
+    """
+    def __init__(self, parent, label='', default=True, action=None, **kws):
+        wx.CheckBox.__init__(self, parent, -1, label=label, **kws)
+        self.SetValue({True: 1, False:0}[default])
+        if action is not None:
+            self.Bind(wx.EVT_CHECKBOX, action)
+
+class Choice(wx.Choice):
+    """Simple Choice with default and bound action
+    c = Choice(panel, choices, default=0, action=None, **kws)
+    """
+    def __init__(self, parent, choices=None, default=0,
+                 action=None, **kws):
+        if choices is None:
+            choices = []
+        wx.Choice.__init__(self, parent, -1,  choices=choices, **kws)
+        self.Select(default)
+        self.Bind(wx.EVT_CHOICE, action)
+
+    def SetChoices(self, choices):
+        index = 0
+        try:
+            current = self.GetStringSelection()
+            if current in choices:
+                index = choices.index(current)
+        except:
+            pass
+        self.Clear()
+        self.AppendItems(choices)
+        self.SetStringSelection(choices[index])
+
+
+def FloatSpin(parent, value=0, action=None, tooltip=None,
+                 size=(100, -1), digits=1, increment=1, **kws):
+    """FloatSpin with action and tooltip"""
+    if value is None:
+        value = 0
+    fs = fspin.FloatSpin(parent, -1, size=size, value=value,
+                         digits=digits, increment=increment, **kws)
+    if action is not None:
+        fs.Bind(fspin.EVT_FLOATSPIN, action)
+    if tooltip is not None:
+        if is_wxPhoenix:
+            fs.SetToolTip(tooltip)
+        else:
+            fs.SetToolTipString(tooltip)
+    return fs
 
 
 def gformat(val, length=11):
@@ -282,9 +413,4 @@ class Printer:
         printout.Destroy()
 
 def inside_poly(vertices,data):
-    if(matplotlib.__version__ < '1.2'):
-        mask = points_inside_poly(data, vertices)
-    else:
-        mask = Path(vertices).contains_points(data)
-
-    return mask
+    return Path(vertices).contains_points(data)

@@ -39,7 +39,6 @@ setup(name = 'wxmplot',
       install_requires=['numpy>=1.12',
                         'six>=1.10',
                         'matplotlib>=2.0',
-                        'wxpython>=4.0.3',
-                        'wxutils>=0.2.1'],
+                        'wxpython>=4.0.3'],
       tests_require=['pytest'],
  )

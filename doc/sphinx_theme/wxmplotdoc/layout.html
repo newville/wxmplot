@@ -24,19 +24,25 @@
    <li><a href="{{ pathto('interactive') }}"> Interactive Displays</a>|</li>
    <li><a href="{{ pathto('plotpanel') }}"> 2D PlotPanel API</a>|</li>
    <li><a href="{{ pathto('imagepanel') }}"> Image API</a>|</li>
-   <li><a href="{{ pathto('other') }}"> Other Displays</a>|</li>
    <li><a href="{{ pathto('examples') }}"> Examples</a>|</li>
+   <li><a href="{{ pathto('other') }}"> Speciality Displays</a>|</li>
 {% endblock %}
 
 {% block relbar1 %}
 <div>
 <table border=0>
 	<tr><td width=5%></td>
-	<td width=60% align=left>
-	<a href="{{ pathto('index') }}" style="color: #157"><font size=+2>WXMPLOT: wxPython + matplotlib</font></a>
+	<td width=25%>
+	  <a href="{{ pathto('index') }}">
+	    <font size=+2 color=#157>WXMPLOT</font>
+	  </a>
 	</td>
-	<td width=35%></td>
-	</tr>
+	  <td width=60% align=left>
+	    <a href="{{ pathto('index') }}">
+	      <font size=+2 color=#157>wxPython + matplotlib</font>
+	    </a>
+	</td>
+</tr>
 </table>
 </div>
 {{ super() }}

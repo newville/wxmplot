@@ -1,14 +1,15 @@
 .. _ch_overview:
 
-===========
- Overview:
-===========
+==============================
+wxmplot Overview
+==============================
 
 .. module:: wxmplot
 
-`wxmplot` provides simple functions for making 2D plots and displaying
-image data.  It is not easy to convey the interactivity in a static
-document, but I will try.
+`wxmplot` provides simple functions for making 2D line plots and displaying
+image data.  These are similar to the simplest functions from
+`matplotlib.pyplot`, but offer richer interactivity and customization.  It is
+not easy to convey interactivity in a static document,
 
 
 
@@ -32,26 +33,25 @@ Let's start with a simple script using  :mod:`matplotlib.pyplot`::
     plt.legend()
     plt.show()
 
+which is pretty straight-forward and produces a plot as shown on the left
+(depending a bit on the backend and OS):
 
-which is pretty straight-forward and produces a plot like this (depending
-somewhat on the backend being used):
+.. _plotcompare:
 
-.. image:: images/mpl_basic.png
-   :width: 75 %
+    .. image:: images/plot_mpl.png
+       :width: 45%
+    .. image:: images/plot_wxmplot.png
+       :width: 52%
 
-From this plot, moving the mouse around updates the x and y values
-displayed to match the location of the mouse.  Clicking on the magnifying
-glass icon and then clicking and dragging a box allows the user to zoom in
-on portions of the plot.  Clicking on the icon with 4 arrows allows the
-user to pan to other parts of the data range.  Clicking on the icon with 3
-bars allows the user to adjust the plot margins. The diskette icon allows
-the user to save a PNG file of the plot display.  For some use-cases, this
-amount of interaction is sufficient.
+From the the matplotlib plot, moving the mouse around updates the x and y
+values displayed to match the location of the mouse.  Clicking on the
+magnifying glass icon and then clicking and dragging a box allows the user to
+zoom in on portions of the plot.  Clicking on the icon with 4 arrows allows
+the user to pan to other parts of the data range.  Clicking on the icon with 3
+bars allows the user to adjust the plot margins. The diskette icon allows the
+user to save a PNG file of the plot display.
 
-By selecting a particular GUI toolkit, `wxmplot` aims to give more
-interaction, more flexibiity than the generic `maplotlib` display, and
-without cluttering the display with little icons.  With `wxmplot`, that
-script would be rewritten as::
+With `wxmplot`, that script would be rewritten as::
 
     #!/usr/bin/python
     import numpy as np
@@ -64,17 +64,16 @@ script would be rewritten as::
             title='wxmplot example', show_legend=True)
     wi.plot(x, z, label='signal')
 
-and yield a similar plot:
+and yields the plot shown on the right above.  There are some stylistic
+differences, but the results are very similar.
 
-.. image:: images/wxmplot_basic.png
-   :width: 75 %
-
-As with the `pyplot` example, moving the mouse around updates the display
-of x and y values displayed to those of the mouse.  To zoom in on a region,
-the user can click and drag to draw a box to zoom in.  The distracting
-Navigation Toolbar is gone and there are more options for configuring the
-plot from the File and Options menus, as will be described in the next
-section.
+`Wxmplot` gives more interaction and flexibiity than the typical `maplotlib`
+display, and without cluttering the display with little icons.  As with the
+`pyplot` example, moving the mouse around updates the display of x and y
+values displayed to those of the mouse.  To zoom in on a region, the user can
+click and drag to draw a box to zoom in.  The Navigation Toolbar is gone but
+there are more options for configuring the plot from the File and Options
+menus, as will be described in the next section.
 
 Note that in the `wxmplot` example, there was no `show()` function issued.
 As will be discussed more in :ref:`ch_interactive`, the `wxmplot` functions
@@ -83,7 +82,7 @@ interaction at the shell to continue, without the need for a blocking
 `show()` function.
 
 In addition to the :func:`interactive.plot` function, there are several
-more functions to augment 2D Line plots, including those to add text,
+more functions to augment 2D line plots, including those to add text,
 arrows, lines, and markers to plots.  These and more functions are
 discussed in detail in :ref:`ch_interactive`.
 
@@ -91,7 +90,7 @@ discussed in detail in :ref:`ch_interactive`.
 User Interaction and Configuring 2D line plots
 ==============================================
 
-All `wxmplot` 2D plots support a few basic user interactions.  First, as
+All `wxmplot` 2D line plots support a few basic user interactions.  First, as
 mentioned above, the user can zoom in by drawing a box: Clicking the left
 mouse button and dragging will draw a rectangular box, and releasing the
 mouse button will zoom in to that rectangle.  This can be repeated multiple
@@ -130,7 +129,7 @@ From the Options menu, the user can:
 The Help menu will display a quick cheat-sheet to remind you of these
 Ctrl-Key options.
 
-An important tool for configuring and customizing 2D plots is the *Plot
+An important tool for configuring and customizing 2D line plots is the *Plot
 Configuration Window*.  This is a tabbed window frame with 4 panels to
 allow the user to configure essentially every aspect of the plot:
 
@@ -243,7 +242,7 @@ arrays on intensity values.  A simple example of::
 will display the image:
 
 
-.. image:: images/wxmplot_imshow_basic.png
+.. image:: images/imshow_wxmplot.png
    :width: 95 %
 
 
@@ -255,7 +254,7 @@ dataset but using::
 
 will show:
 
-.. image:: images/wxmplot_contour_basic.png
+.. image:: images/contour_wxmplot.png
    :width: 95 %
 
 
@@ -266,12 +265,11 @@ from the Image menu or with Ctrl-N.
 User Interaction and Configuring Image and Contour displays
 ===============================================================
 
-As with the 2D Line Plot, clicking anywhere on the image will show the x,
-y, and intensity values in the status bar.  If arrays for `x` and `y`
-values have been passed in, both the indices and `x` and `y` values for the
-pixel selected will be displayed.  Also as with the 2D Line Plot, clicking
-and dragging will zoom in on a portion of the image, a process that can be
-repeated indefinitely.
+As with the 2D line plots, clicking anywhere on the image will show the x, y,
+and intensity values in the status bar.  If arrays for `x` and `y` values have
+been passed in, both the indices and `x` and `y` values for the pixel selected
+will be displayed.  Similarly, clicking and dragging will zoom in on a portion
+of the image, a process that can be repeated indefinitely.
 
 From the Image or Contour panel, a few display customizations are
 immediately available. On the left hand side of the frame, there are a few
@@ -310,8 +308,8 @@ From the Image menu, the user can:
    * Toggle whether a 3-color map uses a black or white background [Ctrl-W]
 
 From the X/Y Slices menu, the user can control whether clicking on a pixel
-on the image displays a X- or Y- slice through the image data as a 2D Line
-Plot in a separate plotting window.  From this menu, the user can select:
+on the image displays a X- or Y- slice through the image data as a 2D line
+plot in a separate plotting window.  From this menu, the user can select:
 
    * Show No X/Y Slices
    * Show Slices in the X direction [Ctrl-X]
@@ -347,5 +345,8 @@ For the X/Y slices, the user can select which slice is shown and also
 whether the slice shown sums over more than one pixel across the dimension
 chosen.  This may be useful for smoothing out noisy images.
 
-More options are available to control whether a Scalebar is displayed on
-the image, and how that is set up.
+More options are available to control whether a Scalebar is displayed on the
+image, and how that is set up.  Here, the user can update the pixel size in
+the units of their choice, and set the size of the scalebar in their units.
+The position and color of the scaler can also be set, and text to go below the
+scalebar can be entered.

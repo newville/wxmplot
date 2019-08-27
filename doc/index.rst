@@ -43,5 +43,5 @@ with highly customizable displays to better explore their data.
    interactive
    plotpanel
    imagepanel
-   other
    examples
+   other

@@ -156,7 +156,7 @@ for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
               'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'):
     theme = rc_params()
     if tname == 'matplotlib':
-        continue
+        pass
     elif tname == 'light':
         theme.update(light_theme)
     elif tname == 'dark':
@@ -166,7 +166,7 @@ for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
         if tname.startswith('seaborn-'):
             theme.update(matplotlib.style.library['seaborn'])
         theme.update(matplotlib.style.library[tname])
-        Themes[tname.lower()] = theme
+    Themes[tname.lower()] = theme
 
 def bool_ifnotNone(val, default):
     "return bool(val) if val is not None else default"

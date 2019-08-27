@@ -1,6 +1,6 @@
 
 from numpy import exp, random, arange, outer
-from wxmplot.interactive import imshow
+import wxmplot.interactive as wi
 
 def gauss2d(x, y, x0, y0, sx, sy):
     return outer( exp( -(((y-y0)/float(sy))**2)/2),
@@ -15,4 +15,4 @@ dat  = 0.3 * random.random(size=nx*ny).reshape(ny, nx)
 dat =  dat + (16.0*gauss2d(x, y, 190,   96,  15,  26) +
               27.0*gauss2d(x, y, 140,  210,  51,  42))
 
-imshow(dat, x=ox, y=oy, style='contour', contour_labels=True)
+wi.imshow(dat, x=ox, y=oy, style='contour', contour_labels=True)

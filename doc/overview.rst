@@ -59,10 +59,10 @@ script would be rewritten as::
     y = 5*np.sin(4*x)/(x*x+6)
     z = 4.8*np.sin(4.3*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
 
-    from wxmplot.interactive import plot
-    plot(x, y, label='reference', marker='+', xlabel='x', ylabel='y',
-         title='wxmplot example', show_legend=True)
-    plot(x, z, label='signal')
+    import wxmplot.interactive as wi
+    wi.plot(x, y, label='reference', marker='+', xlabel='x', ylabel='y',
+            title='wxmplot example', show_legend=True)
+    wi.plot(x, z, label='signal')
 
 and yield a similar plot:
 
@@ -232,13 +232,12 @@ arrays on intensity values.  A simple example of::
 
     #!/usr/bin/python
     import numpy as np
-    from wxmplot.interactive import imshow
+    import wxmplot.interactive as wi
 
     y, x = np.mgrid[-5:5:101j, -4:6:101j]
     dat = np.sin(x*x/3.0 + y*y)/(1 + (x+y)*(x+y))
 
-    imshow(dat, x=x[0,:], y=y[:,0], colormap='viridis',
-           wintitle='wxmplot imshow')
+    wi.imshow(dat, x=x[0,:], y=y[:,0], colormap='viridis', wintitle='wxmplot imshow')
 
 
 will display the image:
@@ -252,7 +251,7 @@ To display that data as a contour plot, one can just replace
 :func:`interactive.imshow` with :func:`interactive.contour`.  With the same
 dataset but using::
 
-    contour(dat, x=x[0,:], y=y[:,0], colormap='gray', wintitle='wxmplot contour')
+    wi.contour(dat, x=x[0,:], y=y[:,0], colormap='gray', wintitle='wxmplot contour')
 
 will show:
 
@@ -340,7 +339,6 @@ options and values that can be set by the user:
 
 .. image:: images/ImageConfig.png
    :width: 75 %
-
 
 For contour plots, the user can select the number of levels to show and
 whether the contour line will show intensity values.

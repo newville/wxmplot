@@ -5,29 +5,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Index &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <title>Index &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="#" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head><body>
+<div>
+<table border=0>
+	<tr><td width=5%></td>
+	<td width=25%>
+	  <a href="index.html">
+	    <font size=+2 color=#157>WXMPLOT</font>
+	  </a>
+	</td>
+	  <td width=60% align=left>
+	    <a href="index.html">
+	      <font size=+2 color=#157>wxPython + matplotlib</font>
+	    </a>
+	</td>
+</tr>
+</table>
+</div>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
@@ -56,6 +87,7 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -75,6 +107,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="plotpanel.html#plotpanel.add_text">add_text() (in module plotpanel)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.available_themes">available_themes() (in module wxmplot.interactive)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -100,6 +134,8 @@
         <li><a href="plotpanel.html#plotpanel.configure">(in module plotpanel)</a>
 </li>
       </ul></li>
+      <li><a href="interactive.html#wxmplot.interactive.contour">contour() (in module wxmplot.interactive)</a>
+</li>
       <li><a href="imagepanel.html#imagepanel.contour_callback">contour_callback (in module imagepanel)</a>
 </li>
       <li><a href="imagepanel.html#imagepanel.cursor_callback">cursor_callback (in module imagepanel)</a>
@@ -126,7 +162,23 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="interactive.html#wxmplot.interactive.get_image_window">get_image_window() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.get_plot_window">get_plot_window() (in module wxmplot.interactive)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="interactive.html#wxmplot.interactive.get_wxapp">get_wxapp() (in module wxmplot.interactive)</a>
+</li>
       <li><a href="plotpanel.html#plotpanel.get_xylims">get_xylims() (in module plotpanel)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="interactive.html#wxmplot.interactive.hist">hist() (in module wxmplot.interactive)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -138,13 +190,15 @@
 </li>
       <li><a href="imagepanel.html#module-imageframe">imageframe (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="other.html#ImageMatrixFrame">ImageMatrixFrame (built-in class)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="imagepanel.html#imagepanel.ImagePanel">ImagePanel (class in imagepanel)</a>
 </li>
       <li><a href="imagepanel.html#module-imagepanel">imagepanel (module)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.imshow">imshow() (in module wxmplot.interactive)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -187,13 +241,27 @@
 </li>
         <li><a href="plotpanel.html#plotpanel.plot">(in module plotpanel)</a>
 </li>
-      </ul></li>
-      <li><a href="plotpanel.html#plotpanel.plot_many">plot_many() (in module plotpanel)</a>
+        <li><a href="interactive.html#wxmplot.interactive.plot">(in module wxmplot.interactive)</a>
 </li>
-      <li><a href="plotpanel.html#plotapp.PlotApp">PlotApp (class in plotapp)</a>
+      </ul></li>
+      <li><a href="interactive.html#wxmplot.interactive.plot_arrow">plot_arrow() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.plot_axhline">plot_axhline() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.plot_axvline">plot_axvline() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="plotpanel.html#plotpanel.plot_many">plot_many() (in module plotpanel)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="interactive.html#wxmplot.interactive.plot_marker">plot_marker() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.plot_setlimits">plot_setlimits() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="interactive.html#wxmplot.interactive.plot_text">plot_text() (in module wxmplot.interactive)</a>
+</li>
+      <li><a href="plotpanel.html#plotapp.PlotApp">PlotApp (class in plotapp)</a>
+</li>
       <li><a href="plotpanel.html#module-plotapp">plotapp (module)</a>
 </li>
       <li><a href="plotpanel.html#plotframe.PlotFrame">PlotFrame (class in plotframe)</a>
@@ -236,10 +304,12 @@
       </ul></li>
       <li><a href="plotpanel.html#plotpanel.set_bgcol">set_bgcol() (in module plotpanel)</a>
 </li>
-      <li><a href="plotpanel.html#plotpanel.set_title">set_title() (in module plotpanel)</a>
+      <li><a href="interactive.html#wxmplot.interactive.set_theme">set_theme() (in module wxmplot.interactive)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="plotpanel.html#plotpanel.set_title">set_title() (in module plotpanel)</a>
+</li>
       <li><a href="plotpanel.html#plotpanel.set_xlabel">set_xlabel() (in module plotpanel)</a>
 </li>
       <li><a href="plotpanel.html#plotpanel.set_xylims">set_xylims() (in module plotpanel)</a>
@@ -260,14 +330,18 @@
 </li>
       <li><a href="plotpanel.html#plotpanel.unzoom_all">unzoom_all() (in module plotpanel)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="imagepanel.html#imagepanel.update_image">update_image() (in module imagepanel)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="plotpanel.html#plotpanel.update_line">update_line() (in module plotpanel)</a>
 </li>
       <li><a href="plotpanel.html#plotframe.update_trace">update_trace() (in module plotframe)</a>
+
+      <ul>
+        <li><a href="interactive.html#wxmplot.interactive.update_trace">(in module wxmplot.interactive)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -275,6 +349,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="plotpanel.html#plotpanel.write_message">write_message() (in module plotpanel)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="overview.html#module-wxmplot">wxmplot (module)</a>
+</li>
+      <li><a href="interactive.html#module-wxmplot.interactive">wxmplot.interactive (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -292,15 +372,19 @@
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+        &#169; Copyright 2019, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

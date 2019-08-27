@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Search &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <title>Search &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,25 +13,56 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="#" />
   <script type="text/javascript" src="searchindex.js" defer></script>
-   
+  
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
 
   </head><body>
+<div>
+<table border=0>
+	<tr><td width=5%></td>
+	<td width=25%>
+	  <a href="index.html">
+	    <font size=+2 color=#157>WXMPLOT</font>
+	  </a>
+	</td>
+	  <td width=60% align=left>
+	    <a href="index.html">
+	      <font size=+2 color=#157>wxPython + matplotlib</font>
+	    </a>
+	</td>
+</tr>
+</table>
+</div>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
         </div>
@@ -57,7 +88,7 @@
     containing fewer words won't appear in the result list.
   </p>
   <form action="" method="get">
-    <input type="text" name="q" value="" />
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" />
     <input type="submit" value="search" />
     <span id="search-progress" style="padding-left: 10px"></span>
   </form>
@@ -77,15 +108,19 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+        &#169; Copyright 2019, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

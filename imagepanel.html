@@ -4,19 +4,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>ImagePanel: A wx.Panel for Image Display &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <title>ImagePanel: A wx.Panel for Image Display &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Speciality WXMPLOT displays" href="other.html" />
-    <link rel="prev" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" /> 
+    <link rel="next" title="wxmplot Examples" href="examples.html" />
+    <link rel="prev" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head><body>
+<div>
+<table border=0>
+	<tr><td width=5%></td>
+	<td width=25%>
+	  <a href="index.html">
+	    <font size=+2 color=#157>WXMPLOT</font>
+	  </a>
+	</td>
+	  <td width=60% align=left>
+	    <a href="index.html">
+	      <font size=+2 color=#157>wxPython + matplotlib</font>
+	    </a>
+	</td>
+</tr>
+</table>
+</div>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -24,17 +50,22 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="other.html" title="Speciality WXMPLOT displays"
+          <a href="examples.html" title="wxmplot Examples"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="#"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
@@ -44,12 +75,6 @@
 <li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
 <li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
 <li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
-<li><a class="reference internal" href="#examples-and-screenshots">Examples and Screenshots</a><ul>
-<li><a class="reference internal" href="#basic-example">Basic example</a></li>
-<li><a class="reference internal" href="#contour-example">Contour Example</a></li>
-<li><a class="reference internal" href="#color-example">3-Color Example</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -58,8 +83,8 @@
   <p class="topless"><a href="plotpanel.html"
                         title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="other.html"
-                        title="next chapter">Speciality WXMPLOT displays</a></p>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">wxmplot Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -97,7 +122,7 @@ out.  In contrast, an <code class="xref py py-class docutils literal notranslate
 manipulate the displayed image, as will be discussed below.</p>
 <dl class="class">
 <dt id="imagepanel.ImagePanel">
-<em class="property">class </em><code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">ImagePanel</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(525</em>, <em class="sig-param">450)</em>, <em class="sig-param">dpi=100</em>, <em class="sig-param">messenger=None</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ImagePanel</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(525</em>, <em class="sig-param">450)</em>, <em class="sig-param">dpi=100</em>, <em class="sig-param">messenger=None</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -123,7 +148,7 @@ attributes.</p>
 <h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="imagepanel.display">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em>, <em class="sig-param">style='image'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em>, <em class="sig-param">style='image'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
@@ -131,20 +156,20 @@ display purposes.</p>
 
 <dl class="method">
 <dt id="imagepanel.clear">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="imagepanel.update_image">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">update_image</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_image</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>update the image with new data.  This can be signficantly faster than
 re-displaying the data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="imagepanel.redraw">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
@@ -155,25 +180,25 @@ re-displaying the data.</p>
 image panel.</p>
 <dl class="data">
 <dt id="imagepanel.data_callback">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.lasso_callback">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.cursor_callback">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imagepanel.contour_callback">
-<code class="sig-prename descclassname">imagepanel.</code><code class="sig-name descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the contour levels each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called with <code class="docutils literal notranslate"><span class="pre">style='contour'</span></code>.</p>
 </dd></dl>
 
@@ -198,7 +223,7 @@ manipulate the image:</p>
 configuration attributes and redrawing the image.</p>
 <dl class="class">
 <dt id="imageframe.ImageFrame">
-<em class="property">class </em><code class="sig-prename descclassname">imageframe.</code><code class="sig-name descname">ImageFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ImageFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between “image” and “contour”.</p>
@@ -351,142 +376,6 @@ same intensity intensity scale.</p></li>
 <em>int_hi</em> values based on the distribution of intensities in the data.</p></li>
 </ol>
 </div>
-<div class="section" id="examples-and-screenshots">
-<h2>Examples and Screenshots<a class="headerlink" href="#examples-and-screenshots" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="basic-example">
-<h3>Basic example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h3>
-<p>A basic plot from a <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code></a> looks like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">ImageFrame</span>
-
-<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">101</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">:</span><span class="mi">101</span><span class="n">j</span><span class="p">]</span>
-<span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">3.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">))</span>
-
-<span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
-<span class="n">y0</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
-<span class="n">frame</span> <span class="o">=</span> <span class="n">ImageFrame</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;intensity&#39;</span><span class="p">)</span>
-<span class="n">frame</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y0</span><span class="p">)</span>
-<span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>giving the following image:</p>
-<a class="reference internal image-reference" href="_images/imagedisplay.png"><img alt="_images/imagedisplay.png" src="_images/imagedisplay.png" style="width: 85%;" /></a>
-<p>This screenshot shows a long list of choices for color table, a checkbox to
-reverse the color table, sliders to adjust the upper and lower intensity
-levels, and entries to explicitly set the minimum and maximum intensity.</p>
-<p>The Smoothing selection allows you choose from one of several interpolation
-algorithms to smooth pixelated images.  The Auto-Contrast selections allows
-you to select the contrast enhancement to automatically set the upper and
-lower intensities levels based on the distribution of intensities in the
-image. This value is taken as a percentage of range of intensities in the
-image. For example, if set to <cite>1.0</cite>, then the lower level will be set to be
-the intensity such that 1% of the pixels are at the lowest value and 1% are
-at the highest intensity.  For images with a small number of outliers
-(especially “hot pixels”), setting such a contrast level can greatly
-improve the display of the remainder of the data.</p>
-<p>Clicking on the image will show its coordinates and intensity value.
-Click-and-Drag will select a rectangular box to zoom in on a particular
-feature of the image.</p>
-<p>The File menu includes options to save an PNG file of the image (Ctrl-S),
-copy the image to the system clipboard (Ctrl-C), print (Ctrl-P) or
-print-preview the image, save the image to an ASCII file (table of
-numbers), or quit the application.</p>
-<p>The Options menu includes Zoom Out (Ctrl-Z), rotating the image clockwise
-(Ctrl-R), flipping the image top/bottom (Ctrl-T) or right/left (Ctrl-F)
-(note that flipping does not work for contour-style plots) or saving an
-image of the colormap.</p>
-</div>
-<div class="section" id="contour-example">
-<h3>Contour Example<a class="headerlink" href="#contour-example" title="Permalink to this headline">¶</a></h3>
-<p>From the Options menu, one can toggle to a ‘contour style’ plot, in which
-the levels are made discrete with many fewer levels than the continuous
-image display.  A contour plot can be created like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">ImageFrame</span>
-
-<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">101</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">:</span><span class="mi">101</span><span class="n">j</span><span class="p">]</span>
-<span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">3.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">))</span>
-
-<span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
-<span class="n">y0</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
-<span class="n">frame</span> <span class="o">=</span> <span class="n">ImageFrame</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;intensity&#39;</span><span class="p">)</span>
-<span class="n">frame</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y0</span><span class="p">)</span>
-<span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>giving a plot that would look like this:</p>
-<a class="reference internal image-reference" href="_images/contour.png"><img alt="_images/contour.png" src="_images/contour.png" style="width: 85%;" /></a>
-<p>In addition, one can bring up a screen to set the number of contour levels.</p>
-</div>
-<div class="section" id="color-example">
-<h3>3-Color Example<a class="headerlink" href="#color-example" title="Permalink to this headline">¶</a></h3>
-<p>If the data array has three dimensions, and has a shape of (NY, NX, 3), it
-is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
-In this case, the Image Frame will show sliders and min/max controls for
-each of the three colors.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">example showing display of R, G, B maps</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">ImageFrame</span>
-
-<span class="k">def</span> <span class="nf">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">outer</span><span class="p">(</span> <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">y</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
-                  <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sx</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
-    <span class="n">frame</span> <span class="o">=</span> <span class="n">ImageFrame</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rgb&#39;</span><span class="p">)</span>
-    <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="mi">350</span><span class="p">,</span> <span class="mi">400</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">)</span>
-    <span class="n">ox</span> <span class="o">=</span>  <span class="n">x</span> <span class="o">/</span> <span class="mf">100.0</span>
-    <span class="n">oy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">y</span> <span class="o">/</span> <span class="mf">200.0</span>
-    <span class="n">red</span>  <span class="o">=</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">red</span> <span class="o">=</span>  <span class="n">red</span> <span class="o">+</span> <span class="p">(</span><span class="mf">6.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span>   <span class="mi">76</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">6</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="mf">3.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span>  <span class="mi">70</span><span class="p">,</span>  <span class="mi">33</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="mf">2.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span>  <span class="mi">12</span><span class="p">,</span>  <span class="mi">6</span><span class="p">))</span>
-    <span class="n">green</span>  <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">green</span> <span class="o">=</span> <span class="n">green</span>  <span class="o">+</span> <span class="p">(</span><span class="mf">5.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">173</span><span class="p">,</span>  <span class="mi">98</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">9</span><span class="p">)</span> <span class="o">+</span>
-                      <span class="mf">3.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">63</span><span class="p">))</span>
-
-    <span class="n">blue</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">blue</span> <span class="o">=</span> <span class="n">blue</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.9</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">265</span><span class="p">,</span>  <span class="mi">78</span><span class="p">,</span>  <span class="mi">23</span><span class="p">)</span> <span class="o">+</span>
-                   <span class="mf">3.5</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span>  <span class="mi">95</span><span class="p">,</span>  <span class="mi">22</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="o">+</span>
-                   <span class="mf">7.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span>  <span class="mi">310</span><span class="p">,</span>  <span class="mi">40</span><span class="p">,</span>  <span class="mi">133</span><span class="p">))</span>
-
-    <span class="n">dat</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">])</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">frame</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">ox</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">oy</span><span class="p">,</span>
-                  <span class="n">subtitles</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;red&#39;</span><span class="p">:</span><span class="s1">&#39;Red Image&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="s1">&#39;Green Blob&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="s1">&#39;other&#39;</span><span class="p">})</span>
-    <span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>giving a plot that would look like this:</p>
-<a class="reference internal image-reference" href="_images/image_3color.png"><img alt="_images/image_3color.png" src="_images/image_3color.png" style="width: 85%;" /></a>
-<p>Note that there is also an Image-&gt;Toggle Background Color
-(Black/White) menu selection that can switch the zero intensity color
-between black and white.  The same image with a white background looks
-like:</p>
-<a class="reference internal image-reference" href="_images/image_3color_white.png"><img alt="_images/image_3color_white.png" src="_images/image_3color_white.png" style="width: 85%;" /></a>
-<p>This gives a slightly different view of the same data, with results that
-may be more suitable for printed documents and presentations.</p>
-</div>
-</div>
 </div>
 
 
@@ -502,20 +391,24 @@ may be more suitable for printed documents and presentations.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="other.html" title="Speciality WXMPLOT displays"
+          <a href="examples.html" title="wxmplot Examples"
              >next</a> |</li>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="installation.html">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="#"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+        &#169; Copyright 2019, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

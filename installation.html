@@ -4,19 +4,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Downloading and Installation &#8212; wxmplot: wxPython plotting widgets using matplotlib</title>
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <title>Downloading and Installation &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
-    <link rel="prev" title="wxmplot: wxPython plotting widgets using matplotlib" href="index.html" /> 
+    <link rel="next" title="wxmplot Overview" href="overview.html" />
+    <link rel="prev" title="wxmplot: plotting widgets using wxPython and matplotlib" href="index.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head><body>
+<div>
+<table border=0>
+	<tr><td width=5%></td>
+	<td width=25%>
+	  <a href="index.html">
+	    <font size=+2 color=#157>WXMPLOT</font>
+	  </a>
+	</td>
+	  <td width=60% align=left>
+	    <a href="index.html">
+	      <font size=+2 color=#157>wxPython + matplotlib</font>
+	    </a>
+	</td>
+</tr>
+</table>
+</div>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -24,17 +50,22 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
+          <a href="overview.html" title="wxmplot Overview"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="wxmplot: wxPython plotting widgets using matplotlib"
+          <a href="index.html" title="wxmplot: plotting widgets using wxPython and matplotlib"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="#">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
@@ -51,10 +82,10 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">wxmplot: wxPython plotting widgets using matplotlib</a></p>
+                        title="previous chapter">wxmplot: plotting widgets using wxPython and matplotlib</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plotpanel.html"
-                        title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+  <p class="topless"><a href="overview.html"
+                        title="next chapter">wxmplot Overview</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -84,18 +115,20 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The wxmplot package requires wxpython, matplotlib, numpy, and six.
-Matplotlib version 2.0 or higher is strongly recommended, though older
-versions may still work.</p>
-<p>WxPython 4.0 or higher is also strongly recommended, as it allows wxmplot
-to work with Python 2.7 and 3.5, 3.6, and later. At this writing, little
-testing has been done with Python 3.7.  WxPython version 2.9 and 3 may also
-continue to work, but only support Python 2.7.</p>
+<p>The current version of wxmplot is 0.9.38, released in August, 2019.</p>
+<p>The wxmplot package requires wxpython, matplotlib, numpy, wxutils, and
+six.  All of these are readily available from <cite>pip</cite> or on <cite>conda</cite> channels.</p>
+<p>This is the final version to support Python 2.7 and WxPython below
+version 4.  WxPython 4.0 is strongly recommended, as is required for Python
+3.5 and higher.  WxPython version 2.9 and 3 may also continue to work, but
+only for Python 2.7, and this combination is no longer tested.  Matplotlib
+version 3.0 or higher is strongly recommended. Older versions may still
+work but are not tested.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest version is available from <a class="reference external" href="http://pypi.python.org/pypi/wxmplot">PyPI</a> or <a class="reference external" href="http://github.com/newwville/wxmplot">github</a>, and the package
-can be installed with:</p>
+<p>The latest version (0.9.38) is available from <a class="reference external" href="http://pypi.python.org/pypi/wxmplot">PyPI</a> or <a class="reference external" href="http://github.com/newwville/wxmplot">github</a>, and
+the package can be installed with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">wxmplot</span>
 </pre></div>
 </div>
@@ -161,20 +194,24 @@ the source kit and a standard installation using:</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
+          <a href="overview.html" title="wxmplot Overview"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="wxmplot: wxPython plotting widgets using matplotlib"
+          <a href="index.html" title="wxmplot: plotting widgets using wxPython and matplotlib"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">wxmplot: wxPython plotting widgets using matplotlib</a> &#187;</li> 
+   <li>[<a href="#">Installation</a>|</li>
+   <li><a href="overview.html"> Overview</a>|</li>
+   <li><a href="interactive.html"> Interactive Displays</a>|</li>
+   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
+   <li><a href="imagepanel.html"> Image API</a>|</li>
+   <li><a href="examples.html"> Examples</a>|</li>
+   <li><a href="other.html"> Speciality Displays</a>|</li>
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+        &#169; Copyright 2019, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

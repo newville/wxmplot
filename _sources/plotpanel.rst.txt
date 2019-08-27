@@ -5,14 +5,15 @@
 
 .. module:: plotpanel
 
-The :class:`PlotPanel` class supports standard 2 dimensional plots,
-including line plots and scatter plots.  It has both an easy-to-use
-programming interface, and a rich graphical user interface for
-manipulating the plot after it has been drawn.  The :class:`PlotPanel`
-class is derived from a :class:`wx.Panel` and so that it can be
-included anywhere in a wx Window object that a normal :class:`wx.Panel`
-can be put.  In addition to drawing a plot, a :class:`PlotPanel`
-provides the following capabilities to the end-user:
+
+
+The :class:`PlotPanel` class supports standard 2D line plots, including
+scatter plots.  It has both an easy-to-use programming interface, and a rich
+graphical user interface for manipulating the plot after it has been drawn.
+The :class:`PlotPanel` class is derived from a :class:`wx.Panel` and so that
+it can be included anywhere in a wx Window object that a normal
+:class:`wx.Panel` can be put.  In addition to drawing a plot, a
+:class:`PlotPanel` provides the following capabilities to the end-user:
 
    1. display x, y coordinates as the mouse move.
    2. display x, y coordinates of last left-click.
@@ -416,113 +417,3 @@ and menubar with menu items for saving, printing and configuring plots.
    :meth:`write_message`, which are sent to the underlying :class:`PlotPanel`.
    This allows very simple scripts which give plot interactivity and
    customization.
-
-
-Examples and Screenshots
-====================================================================
-
-Here, a few examples and screenshots of the output of those examples are
-shown.
-
-Basic Example
-~~~~~~~~~~~~~~
-
-A basic plot can be made using a :class:`PlotApp` and a simple script like this:
-
-.. literalinclude:: ../examples/basic_screenshot.py
-
-This gives a window with a plot that looks like this:
-
-.. image:: images/basic_screenshot.png
-   :width: 85 %
-
-
-User Interaction
-~~~~~~~~~~~~~~~~~~~~~
-
-The plot image shown above supports zooming with a box: Pressing down
-the left mouse button and dragging will draw a rectangular box, and
-releasing the mouse button will zoom in to that rectangle.  This can
-be repeated multiple time. Typing "Ctrl-Z" (or "Apple-Z" for Mac
-OS X) will zoom out to the previous zoom level, or show the full plot.
-
-From the File menu, the user can save an image of the plot, copy that
-image to system clipboard, or setup and preview printing.  The data in
-the plot can also be exported to an ASCII column file.  The Options
-menu allows the user to configure the plot, toggle the display of the
-legend and grid, and zoom out to the full plot range.
-
-The configuration window (Options->Configuration or Ctrl-K) is a
-tabbed window, with sections for configuring Colors and Line Properties,
-Text, Labels, and Legend, and Scatterplot.
-
-.. image:: images/PlotConfig_LineProps.png
-   :width: 85 %
-
-The **Colors and Line Properties** tab allows the user to configure the basic
-colors for the plot, toggling the display of the grid lines and upper and
-right axes, and setting of the main properties for each trace.  The label,
-color, line style, line width, symbol to use for a marker, marker size,
-z-order, and join style for each trace drawn can be customized.
-
-
-.. image:: images/PlotConfig_Ranges.png
-   :width: 85 %
-
-The **Ranges and Margins** tab allows the user to change
-between Linear and Log scale for both X and Y axes, explicitly set the X
-and/or data ranges displayed, and allow precise control of the margins
-around the plot.
-
-.. image:: images/PlotConfig_Text.png
-   :width: 85 %
-
-The **Text and Labels** tab allows the user to set the title and labels for the
-X and Y axes, and to adjust the fontsize for these text and the text shown
-in the plot legend.  The legend can also be customized: whether it is
-shown, it's location, and whether the legend entries can be clicked on to
-toggle the display of the corresponding line.  The experimental "Draggable
-Legend" option allows the user to drag the legend on the plot to fine-tune
-its placement.
-
-.. image:: images/PlotConfig_Scatter.png
-   :width: 85 %
-
-The **Scatterplot** tab allows the user to set the colors and marker sizes
-for scatter plots.
-
-
-Scatterplot Example
-~~~~~~~~~~~~~~~~~~~~~
-
-An example scatterplot can be produced with a script like this:
-
-.. literalinclude:: ../examples/scatterplot.py
-
-and gives a plot (after having selected by "lasso"ing) that looks like this:
-
-.. image:: images/scatterplot.png
-   :width: 85 %
-
-Using Left and Right Axes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-An example using both right and left axes with different scales can be
-created with:
-
-.. literalinclude:: ../examples/leftright.py
-
-and gives a plot that looks like this:
-
-.. image:: images/two_axes.png
-   :width: 85 %
-
-More Examples
-~~~~~~~~~~~~~~~
-
-These and several other examples are given in the *examples* directory in
-the source distribution kit.  The *demo.py* script there will show several
-2D Plot panel examples, including a plot which uses a timer to simulate a
-dynamic plot, updating the plot as fast as it can - typically 10 to 30
-times per second, depending on your machine.  The *stripchart.py* example
-script also shows a dynamic, time-based plot.

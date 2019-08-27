@@ -1,12 +1,12 @@
 
 ==========================================================
-Speciality WXMPLOT displays
+Speciality wxmplot displays
 ==========================================================
 
 There are a few custom classes for speciality plots included in
 wxmplot.  Since these build on the :class:`PlotPanel` and
 :class:`ImagePanel` clases, these are described briefly here and an
-example shown for each. 
+example shown for each.
 
 
 MultiPlotFrame
@@ -30,13 +30,13 @@ plot panel, and counts to left to right and top to bottom.
 .. method:: plot(self,x,y, panel=(0, 0), **kws)
 
    overplot to specified panel.
- 
+
 .. method:: clear(self, panel=(0, 0))
-   
+
    clear plot in specified panel
 
 .. method:: configure(self, panel=(0, 0))
-   
+
    configure plot in specified panel
 
 Many more methods are supported -- essentially all of those for :class:`PlotFrame`.
@@ -78,13 +78,13 @@ panel.
 .. method:: plot(self,x,y, panel='top', **kws)
 
    overplot to specified panel.
- 
+
 .. method:: clear(self, panel='top')
-   
+
    clear plot in specified panel
 
 .. method:: configure(self, panel='top')
-   
+
    configure plot in specified panel
 
 
@@ -136,5 +136,3 @@ This gives a window with a plot that looks like this:
 
 .. image:: images/imagematrix.png
    :width: 85 %
-
-

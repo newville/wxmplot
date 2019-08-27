@@ -6,9 +6,9 @@
 .. module:: wxmplot.interactive
 
 The :mod:`interactive` modules provides simple entry-level functions
-:mod:`interactive.plot` for plotting X/Y data and :mod:`interactive.imshow`
-for displaying 2D image data.  These functions are similar to the
-:mod:`matplotlib.pyplot` methods :func:`pyplot.plot` and
+:mod:`interactive.plot` for 2D plotting of X, Y data and
+:mod:`interactive.imshow` for displaying image data.  These functions are
+similar to the :mod:`matplotlib.pyplot` methods :func:`pyplot.plot` and
 :func:`pyplot.imshow` but with a few important differences.
 
 
@@ -39,11 +39,15 @@ As a result, the :mod:`interactive` module gives very useful displays of
 data and you may find yourself replacing :mod:`pyplot` for interactive
 work.
 
-Plotting with :func:`wxmplot.interactive.plot` and related functions
-========================================================================
+2D Plotting with :func:`wxmplot.interactive.plot` and related functions
+==========================================================================
 
 
 .. autofunction:: plot
+
+
+More details of Plot Optons are given in
+:ref:`Table of Plot Arguments <plotopt_table>`.
 
 An example of using :func:`wxmplot.interactive.plot` is:
 
@@ -74,16 +78,16 @@ which gives a plot that looks like this:
 .. autofunction:: plot_axvline
 
 
-Displaying images
-====================
+Displaying images with :func:`imshow` and :func:`contour`
+==============================================================
 
 
 .. autofunction:: imshow
 
 .. autofunction:: contour
 
-Other routines
-====================
+Functions for working with the interactive windows
+======================================================
 
 .. autofunction:: get_wxapp
 

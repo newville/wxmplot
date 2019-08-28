@@ -28,11 +28,12 @@ capabilities, it does provide basic plotting and image display with
 wxPython widgets that are easy to add to wxPython applications to handle
 many common plotting and image display needs for scientific data.
 
-`wxmplot` enables script writers to make basic 2D line plots or images from
-their data and the interact and configure these displays of their data. In
-addition, programmers who want to include high quality scientific graphics
-in their applications can easily use `wxmplot` to provide their end-users
-with highly customizable displays to better explore their data.
+`wxmplot` enables script writers to make basic 2D line plots or image
+displays from their data and interact with and configure these displays as
+part of exploratory data analysis. In addition, programmers who want to
+include these high quality graphical displays of data in their applications
+and enable application users to explore their data can easily use the
+`wxmplot` plotting widgets.
 
 
 .. toctree::

@@ -67,7 +67,7 @@ With `wxmplot`, that script would be rewritten as::
 and yields the plot shown on the right above.  There are some stylistic
 differences, but the results are very similar.
 
-`Wxmplot` gives more interaction and flexibiity than the typical `maplotlib`
+`Wxmplot` gives more interaction and flexibility than the typical `maplotlib`
 display, and without cluttering the display with little icons.  As with the
 `pyplot` example, moving the mouse around updates the display of x and y
 values displayed to those of the mouse.  To zoom in on a region, the user can
@@ -172,7 +172,7 @@ Ranges and Margins Properties
 -----------------------------
 
 The **Ranges and Margins** tab allows the user to change the display data
-ranges and the outer margins of the plot.  Here, the user can alsoe select a
+ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.
 
 The user can also set the Plot Boundaries -- exact X and Y ranges to show
@@ -194,7 +194,7 @@ Text Properties
 ---------------
 
 The **Text and Labels** tab allows the user to set the title and labels for
-the X and Y axes, and to adjust the fontsize for these text and the text
+the X and Y axes, and to adjust the font size for these text and the text
 shown in the plot legend.  Here, the Legend can also be customized: whether
 it is shown, it's location, and whether the legend entries can be clicked
 on to toggle the display of the corresponding line.
@@ -348,5 +348,5 @@ chosen.  This may be useful for smoothing out noisy images.
 More options are available to control whether a Scalebar is displayed on the
 image, and how that is set up.  Here, the user can update the pixel size in
 the units of their choice, and set the size of the scalebar in their units.
-The position and color of the scaler can also be set, and text to go below the
+The position and color of the scalebar can also be set, and text to go below the
 scalebar can be entered.

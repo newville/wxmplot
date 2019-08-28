@@ -38,10 +38,10 @@ Plotting in an interactive session
 As an example using :mod:`wxmplot.interactive` in a Jupyter-qtconsole
 session might look like this::
 
-    Jupyter QtConsole 4.5.1
-    Python 3.7.0 (default, Jun 28 2018, 07:39:16)
+    Jupyter QtConsole 4.5.4
+    Python 3.7.4 (default, Aug 13 2019, 20:35:49)
     Type 'copyright', 'credits' or 'license' for more information
-    IPython 7.6.1 -- An enhanced Interactive Python. Type '?' for help.
+    IPython 7.7.0 -- An enhanced Interactive Python. Type '?' for help.
 
     In [1]: import numpy as np
 
@@ -87,39 +87,52 @@ something new, we might do something like::
 
     In [7]:
 
-or, if we wanted to bring up a second 2D Line Plot window, we might do::
+We can also place a text string, arrow, horizontal, or vertical line on the
+plot, as with::
+
+    In [7]: wi.plot_text('hello!', 9.1, 0.87)
+
+    In [8]:
 
 
-    In [7]: wi.plot(x, np.sin(x)*np.exp(-x/8) , win=2, theme='ggplot')
-    Out[7]: <wxmplot.interactive.PlotDisplay at 0x110b2fb88>
+and so forth.
+
+If we wanted to bring up a second 2D Line Plot window, we can use the
+**win=2** option::
 
 
-and so on.
+    In [8]: wi.plot(x, np.sin(x)*np.exp(-x/8) , win=2, theme='ggplot')
+    Out[8]: <wxmplot.interactive.PlotDisplay at 0x110b2fb88>
+
+    In [9]:
+
+and then control which of the displays any additional plot functions use by
+passing the `win` option to the plotting functions.
 
 
 The immediacy of the rendering and the ability to customize the plots makes
-that the functions here ideally suited for for exploratory displays of
-data.
+these plotting functions ideally suited for exploratory displays of data.
 
 
 Using the :mod:`interactive` functions from a script
 ===========================================================
 
-When using the :mod:`interactive` functions from a script, the display will
-appear and does not disappear when the script is complete but remains
-displayed and fully operational until all displayed windows have been
-closed or until the running script is explicitly clased as with Crtl-C.
-That means that you can add `wi.plot()`  and `wi.imshow()` to your short-
-or long-running scripts and the plots will be displayed and persist until
-you no longer want to use them.
+When using the :mod:`interactive` functions from running a script in a
+non-interactive way, the display will still appear and does not disappear when
+the script is complete.  Instead, the plots will remain displayed and fully
+operational until all windows have been closed or until the running script is
+explicitly closed with Crtl-C.  That means that you can add `wi.plot()` and
+`wi.imshow()` to your short- or long-running scripts and the plots will be
+displayed until you no longer want to use them.
 
 
 2D Plotting with :func:`plot` and related functions
 ==========================================================================
 
+
 .. autofunction:: plot
 
-More details of Plot Optons are given in
+More details of Plot Options are given in
 :ref:`Table of Plot Arguments <plotopt_table>`.
 
 .. autofunction:: hist

@@ -6,21 +6,19 @@ Interactive wxmplot displays
 
 .. module:: wxmplot.interactive
 
-The :ref:`ch_overview` describes the features available in `wxmplot`, and
-shows how `wxmplot` plotting functions give a richer level of interactivity
-and customization to the end user.  Here, the functions in the
-:mod:`interactive` are described in more detail.  An important feature of the
-:func:`plot`, :func:`imshow` and other functions of the :mod:`interactive`
-module is that they display their results immediately, without having to
-execute a `show()` method to render the display. In addition, for interactive
-work from the Python (or one of the Jupyter consoles or notebook) prompt, the
-displayed windows do not block the Python session.  This means you can easily
-plot other functions or data, either on the same window or in a new top-level
-plotting window (a :class:`PlotFrame`).  Furthermore, when running from a
-script that calls an :mod:`interactive` function, the display does not
-disappear when the script is complete but remains displayed and fully
-operational until all displayed windows have been closed or until the running
-script is explicitly clased as with Crtl-C.
+The :ref:`ch_overview` describes the main features of `wxmplot` and shows
+how `wxmplot` plotting functions give a richer level of customization and
+interactivity to the end user.  Here, the emphasis is on the immediacy of
+the interactivity of the data displays especially when used from
+interactive sessions.  An important feature of the :func:`plot`,
+:func:`imshow` and other functions of the :mod:`interactive` module is that
+they display their results immediately, without having to execute a
+`show()` method to render the display. For interactive work from the Python
+(or one of the Jupyter consoles or notebook) prompt, the displayed windows
+do not block the Python session.  This means that not only can you zoom in,
+change themes, etc from the Plot window, you can can also easily plot other
+functions or data, either on the same window or in a new top-level plotting
+window.
 
 While `wxmplot` provides :func:`plot`, :func:`imshow` and other functions
 that are roughly equivalent to the functions from `matplotlib.pyplot`, the
@@ -30,16 +28,96 @@ the syntax for specifying options is different.  For example, `wxmplot`
 prefers a long list of keyword arguments to :func:`plot` over a series of
 separate function calls.
 
-The immediacy of the rendering and the ability to customize the plots either
-before or after they are made means that the functions here are very useful
-for exploratory displays of data, and you may find yourself replacing
-:mod:`pyplot` for interactive work.
+The functions in the :mod:`interactive` are described in detail below.
 
-2D Plotting with :func:`wxmplot.interactive.plot` and related functions
+
+Plotting in an interactive session
+===========================================================
+
+
+As an example using :mod:`wxmplot.interactive` in a Jupyter-qtconsole
+session might look like this::
+
+    Jupyter QtConsole 4.5.1
+    Python 3.7.0 (default, Jun 28 2018, 07:39:16)
+    Type 'copyright', 'credits' or 'license' for more information
+    IPython 7.6.1 -- An enhanced Interactive Python. Type '?' for help.
+
+    In [1]: import numpy as np
+
+    In [2]: import wxmplot.interactive as wi
+
+    In [3]: x = np.linspace(0, 20, 101)
+
+    In [4]: wi.plot(x, np.sin(x), xlabel='t (sec)')
+    Out[4]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
+
+    In [5]:
+
+At this point a plot like this will be displayed:
+
+.. image:: images/interactive1.png
+   :width: 50 %
+
+As with using `%matplotlib notebook` in a Jupyter notebook, the `wxmplot`
+display can be zoomed in and out, but as shown in :ref:`ch_overview`, it
+can also be configured and updated in many more ways.
+
+For example, from the Plot Configuration window we could change the theme
+to 'Seaborn' and set the label for this trace to be 'sine'.  Then from the
+Jupyter console we can continue::
+
+    In [5]: wi.plot(x, np.cos(1.5*x), label='cosine', show_legend=True)
+    Out[5]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
+
+    In [6]:
+
+which will now show:
+
+.. image:: images/interactive2.png
+   :width: 50 %
+
+which is again a fully interactive and configurable display. For example,
+with the legend displayed, clicking on any of the labels in the legend will
+toggle the display of that curve.  If we want to clear the data and plot
+something new, we might do something like::
+
+    In [6]: wi.plot(x, x*np.log(x+1), label='xlogx', new=True)
+    Out[6]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
+
+    In [7]:
+
+or, if we wanted to bring up a second 2D Line Plot window, we might do::
+
+
+    In [7]: wi.plot(x, np.sin(x)*np.exp(-x/8) , win=2, theme='ggplot')
+    Out[7]: <wxmplot.interactive.PlotDisplay at 0x110b2fb88>
+
+
+and so on.
+
+
+The immediacy of the rendering and the ability to customize the plots makes
+that the functions here ideally suited for for exploratory displays of
+data.
+
+
+Using the :mod:`interactive` functions from a script
+===========================================================
+
+When using the :mod:`interactive` functions from a script, the display will
+appear and does not disappear when the script is complete but remains
+displayed and fully operational until all displayed windows have been
+closed or until the running script is explicitly clased as with Crtl-C.
+That means that you can add `wi.plot()`  and `wi.imshow()` to your short-
+or long-running scripts and the plots will be displayed and persist until
+you no longer want to use them.
+
+
+2D Plotting with :func:`plot` and related functions
 ==========================================================================
 
 .. autofunction:: plot
-
 
 More details of Plot Optons are given in
 :ref:`Table of Plot Arguments <plotopt_table>`.

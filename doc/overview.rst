@@ -8,8 +8,10 @@ wxmplot Overview
 
 `wxmplot` provides simple functions for making 2D line plots and displaying
 image data.  These are similar to the simplest functions from
-`matplotlib.pyplot`, but offer richer interactivity and customization.  It is
-not easy to convey interactivity in a static document,
+`matplotlib.pyplot`, but offer richer interactivity and customization.  It
+is not easy to convey interactivity in a static document, but here and in
+:ref:`ch_interactive`, we will try to show how easy it is to use `wxmplot`
+for exploratory data analysis.
 
 
 
@@ -33,8 +35,8 @@ Let's start with a simple script using  :mod:`matplotlib.pyplot`::
     plt.legend()
     plt.show()
 
-which is pretty straight-forward and produces a plot as shown on the left
-(depending a bit on the backend and OS):
+This is a pretty straight-forward matplotlib script and produces a plot as
+shown on the left (depending a bit on the backend and OS):
 
 .. _plotcompare:
 
@@ -43,13 +45,13 @@ which is pretty straight-forward and produces a plot as shown on the left
     .. image:: images/plot_wxmplot.png
        :width: 52%
 
-From the the matplotlib plot, moving the mouse around updates the x and y
+From the matplotlib plot, moving the mouse around updates the x and y
 values displayed to match the location of the mouse.  Clicking on the
-magnifying glass icon and then clicking and dragging a box allows the user to
-zoom in on portions of the plot.  Clicking on the icon with 4 arrows allows
-the user to pan to other parts of the data range.  Clicking on the icon with 3
-bars allows the user to adjust the plot margins. The diskette icon allows the
-user to save a PNG file of the plot display.
+magnifying glass icon and then clicking and dragging a box allows the user
+to zoom in on portions of the plot.  Clicking on the icon with 4 arrows
+allows the user to pan to other parts of the data range.  Clicking on the
+icon with 3 bars allows the user to adjust the plot margins. The diskette
+icon allows the user to save a PNG file of the plot display.
 
 With `wxmplot`, that script would be rewritten as::
 
@@ -65,15 +67,16 @@ With `wxmplot`, that script would be rewritten as::
     wi.plot(x, z, label='signal')
 
 and yields the plot shown on the right above.  There are some stylistic
-differences, but the results are very similar.
+differences, but the point so far is that the results are very similar.
 
-`Wxmplot` gives more interaction and flexibility than the typical `maplotlib`
+`Wxmplot` gives more interaction and flexibility than the `maplotlib`
 display, and without cluttering the display with little icons.  As with the
 `pyplot` example, moving the mouse around updates the display of x and y
-values displayed to those of the mouse.  To zoom in on a region, the user can
-click and drag to draw a box to zoom in.  The Navigation Toolbar is gone but
-there are more options for configuring the plot from the File and Options
-menus, as will be described in the next section.
+values displayed to those of the mouse.  To zoom in on a region, the user
+simply clicks and drag to draw a box to zoom in.  The Navigation Toolbar is
+gone but there are options for saving the image and many more options for
+configuring the plot from the File and Options menus.  These will be
+described in more detail in the next section.
 
 Note that in the `wxmplot` example, there was no `show()` function issued.
 As will be discussed more in :ref:`ch_interactive`, the `wxmplot` functions

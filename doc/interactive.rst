@@ -8,17 +8,17 @@ Interactive wxmplot displays
 
 The :ref:`ch_overview` describes the main features of `wxmplot` and shows
 how `wxmplot` plotting functions give a richer level of customization and
-interactivity to the end user.  Here, the emphasis is on the immediacy of
-the interactivity of the data displays especially when used from
-interactive sessions.  An important feature of the :func:`plot`,
-:func:`imshow` and other functions of the :mod:`interactive` module is that
-they display their results immediately, without having to execute a
-`show()` method to render the display. For interactive work from the Python
-(or one of the Jupyter consoles or notebook) prompt, the displayed windows
-do not block the Python session.  This means that not only can you zoom in,
-change themes, etc from the Plot window, you can can also easily plot other
-functions or data, either on the same window or in a new top-level plotting
-window.
+interactivity to the end user than is available from the standard
+`matplotlib.pyplot`.  Here, the emphasis is on the immediacy of the
+interactivity of the data displays especially when used from interactive
+sessions.  An important feature of the :func:`plot`, :func:`imshow` and
+other functions of the :mod:`interactive` module is that they display their
+results immediately, without having to execute a `show()` method to render
+the display. For interactive work from the Python (or one of the Jupyter
+consoles or notebook) prompt, the displayed windows do not block the Python
+session.  This means that not only can you zoom in, change themes, etc from
+the Plot window, you can can also easily plot other functions or data,
+either on the same window or in a new top-level plotting window.
 
 While `wxmplot` provides :func:`plot`, :func:`imshow` and other functions
 that are roughly equivalent to the functions from `matplotlib.pyplot`, the

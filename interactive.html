@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -138,10 +138,10 @@ separate function calls.</p>
 <h2>Plotting in an interactive session<a class="headerlink" href="#plotting-in-an-interactive-session" title="Permalink to this headline">¶</a></h2>
 <p>As an example using <a class="reference internal" href="#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> in a Jupyter-qtconsole
 session might look like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jupyter</span> <span class="n">QtConsole</span> <span class="mf">4.5</span><span class="o">.</span><span class="mi">1</span>
-<span class="n">Python</span> <span class="mf">3.7</span><span class="o">.</span><span class="mi">0</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Jun</span> <span class="mi">28</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">07</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mi">16</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jupyter</span> <span class="n">QtConsole</span> <span class="mf">4.5</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">Python</span> <span class="mf">3.7</span><span class="o">.</span><span class="mi">4</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Aug</span> <span class="mi">13</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">49</span><span class="p">)</span>
 <span class="n">Type</span> <span class="s1">&#39;copyright&#39;</span><span class="p">,</span> <span class="s1">&#39;credits&#39;</span> <span class="ow">or</span> <span class="s1">&#39;license&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span>
-<span class="n">IPython</span> <span class="mf">7.6</span><span class="o">.</span><span class="mi">1</span> <span class="o">--</span> <span class="n">An</span> <span class="n">enhanced</span> <span class="n">Interactive</span> <span class="n">Python</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;?&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span>
+<span class="n">IPython</span> <span class="mf">7.7</span><span class="o">.</span><span class="mi">0</span> <span class="o">--</span> <span class="n">An</span> <span class="n">enhanced</span> <span class="n">Interactive</span> <span class="n">Python</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;?&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -181,25 +181,36 @@ something new, we might do something like:</p>
 <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span>
 </pre></div>
 </div>
-<p>or, if we wanted to bring up a second 2D Line Plot window, we might do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x110b2fb88</span><span class="o">&gt;</span>
+<p>We can also place a text string, arrow, horizontal, or vertical line on the
+plot, as with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot_text</span><span class="p">(</span><span class="s1">&#39;hello!&#39;</span><span class="p">,</span> <span class="mf">9.1</span><span class="p">,</span> <span class="mf">0.87</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span>
 </pre></div>
 </div>
-<p>and so on.</p>
+<p>and so forth.</p>
+<p>If we wanted to bring up a second 2D Line Plot window, we can use the
+<strong>win=2</strong> option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x110b2fb88</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span>
+</pre></div>
+</div>
+<p>and then control which of the displays any additional plot functions use by
+passing the <cite>win</cite> option to the plotting functions.</p>
 <p>The immediacy of the rendering and the ability to customize the plots makes
-that the functions here ideally suited for for exploratory displays of
-data.</p>
+these plotting functions ideally suited for exploratory displays of data.</p>
 </div>
 <div class="section" id="using-the-interactive-functions-from-a-script">
 <h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Permalink to this headline">¶</a></h2>
-<p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script, the display will
-appear and does not disappear when the script is complete but remains
-displayed and fully operational until all displayed windows have been
-closed or until the running script is explicitly clased as with Crtl-C.
-That means that you can add <cite>wi.plot()</cite>  and <cite>wi.imshow()</cite> to your short-
-or long-running scripts and the plots will be displayed and persist until
-you no longer want to use them.</p>
+<p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from running a script in a
+non-interactive way, the display will still appear and does not disappear when
+the script is complete.  Instead, the plots will remain displayed and fully
+operational until all windows have been closed or until the running script is
+explicitly closed with Crtl-C.  That means that you can add <cite>wi.plot()</cite> and
+<cite>wi.imshow()</cite> to your short- or long-running scripts and the plots will be
+displayed until you no longer want to use them.</p>
 </div>
 <div class="section" id="d-plotting-with-plot-and-related-functions">
 <h2>2D Plotting with <a class="reference internal" href="other.html#plot" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#d-plotting-with-plot-and-related-functions" title="Permalink to this headline">¶</a></h2>
@@ -275,7 +286,7 @@ or ‘steps-post’.</p></li>
 </ol>
 </dd></dl>
 
-<p>More details of Plot Optons are given in
+<p>More details of Plot Options are given in
 <a class="reference internal" href="plotpanel.html#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>.</p>
 <dl class="function">
 <dt id="wxmplot.interactive.hist">
@@ -612,7 +623,7 @@ window index or create a new one.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

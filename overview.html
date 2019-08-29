@@ -123,8 +123,10 @@
 <span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Permalink to this headline">¶</a></h1>
 <p><cite>wxmplot</cite> provides simple functions for making 2D line plots and displaying
 image data.  These are similar to the simplest functions from
-<cite>matplotlib.pyplot</cite>, but offer richer interactivity and customization.  It is
-not easy to convey interactivity in a static document,</p>
+<cite>matplotlib.pyplot</cite>, but offer richer interactivity and customization.  It
+is not easy to convey interactivity in a static document, but here and in
+<a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, we will try to show how easy it is to use <cite>wxmplot</cite>
+for exploratory data analysis.</p>
 <div class="section" id="d-line-plots-with-plot">
 <h2>2D Line Plots with <a class="reference internal" href="other.html#plot" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#d-line-plots-with-plot" title="Permalink to this headline">¶</a></h2>
 <p>Let’s start with a simple script using  <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
@@ -144,19 +146,19 @@ not easy to convey interactivity in a static document,</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>which is pretty straight-forward and produces a plot as shown on the left
-(depending a bit on the backend and OS):</p>
+<p>This is a pretty straight-forward matplotlib script and produces a plot as
+shown on the left (depending a bit on the backend and OS):</p>
 <blockquote id="plotcompare">
 <div><a class="reference internal image-reference" href="_images/plot_mpl.png"><img alt="_images/plot_mpl.png" src="_images/plot_mpl.png" style="width: 45%;" /></a>
 <a class="reference internal image-reference" href="_images/plot_wxmplot.png"><img alt="_images/plot_wxmplot.png" src="_images/plot_wxmplot.png" style="width: 52%;" /></a>
 </div></blockquote>
-<p>From the the matplotlib plot, moving the mouse around updates the x and y
+<p>From the matplotlib plot, moving the mouse around updates the x and y
 values displayed to match the location of the mouse.  Clicking on the
-magnifying glass icon and then clicking and dragging a box allows the user to
-zoom in on portions of the plot.  Clicking on the icon with 4 arrows allows
-the user to pan to other parts of the data range.  Clicking on the icon with 3
-bars allows the user to adjust the plot margins. The diskette icon allows the
-user to save a PNG file of the plot display.</p>
+magnifying glass icon and then clicking and dragging a box allows the user
+to zoom in on portions of the plot.  Clicking on the icon with 4 arrows
+allows the user to pan to other parts of the data range.  Clicking on the
+icon with 3 bars allows the user to adjust the plot margins. The diskette
+icon allows the user to save a PNG file of the plot display.</p>
 <p>With <cite>wxmplot</cite>, that script would be rewritten as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -171,14 +173,15 @@ user to save a PNG file of the plot display.</p>
 </pre></div>
 </div>
 <p>and yields the plot shown on the right above.  There are some stylistic
-differences, but the results are very similar.</p>
-<p><cite>Wxmplot</cite> gives more interaction and flexibility than the typical <cite>maplotlib</cite>
+differences, but the point so far is that the results are very similar.</p>
+<p><cite>Wxmplot</cite> gives more interaction and flexibility than the <cite>maplotlib</cite>
 display, and without cluttering the display with little icons.  As with the
 <cite>pyplot</cite> example, moving the mouse around updates the display of x and y
-values displayed to those of the mouse.  To zoom in on a region, the user can
-click and drag to draw a box to zoom in.  The Navigation Toolbar is gone but
-there are more options for configuring the plot from the File and Options
-menus, as will be described in the next section.</p>
+values displayed to those of the mouse.  To zoom in on a region, the user
+simply clicks and drag to draw a box to zoom in.  The Navigation Toolbar is
+gone but there are options for saving the image and many more options for
+configuring the plot from the File and Options menus.  These will be
+described in more detail in the next section.</p>
 <p>Note that in the <cite>wxmplot</cite> example, there was no <cite>show()</cite> function issued.
 As will be discussed more in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, the <cite>wxmplot</cite> functions
 display results immediately when in an interactive session and allow
@@ -230,9 +233,10 @@ use as shortcuts to Menu selections.  From the File menu, the user can:</p>
 </div></blockquote>
 <p>The Help menu will display a quick cheat-sheet to remind you of these
 Ctrl-Key options.</p>
-<p>An important tool for configuring and customizing 2D line plots is the <em>Plot
-Configuration Window</em>.  This is a tabbed window frame with 4 panels to
-allow the user to configure essentially every aspect of the plot:</p>
+<p>The <em>Plot Configuration Window</em>  is an
+important tool for configuring and customizing 2D line plots.  This is a
+tabbed window frame with 4 panels to allow the user to configure
+essentially every aspect of the plot:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Colors and Line Properties</p></li>
@@ -241,27 +245,26 @@ allow the user to configure essentially every aspect of the plot:</p>
 <li><p>Scatterplot displays</p></li>
 </ul>
 </div></blockquote>
-<p>with these configuration settings, any user should be able to create
-beautiful presentation-quality image from their data.</p>
+<p>with these configuration settings available, any user should be able to
+create beautiful presentation-quality image from their data.</p>
 <div class="section" id="color-and-line-properties">
 <h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>Colors and Line Properties</strong> tab of the <em>Plot Configuration Window</em>
 allows the user to configure the basic colors for the plot.  This includes
 setting the plotting theme.  Selecting any of the available themes (there
-are more than 25 themes available, about half of them derived from the set
-of themes from Seaborn) will reset all the default colors for the plot
-components and for each line trace, and many of the resource settings of
-<cite>matplotlib</cite>.  The themes and their color selections are carefully chosen
-to make pleasing and informative color choices, some with special attention
-to color-blindness.</p>
+are more than 25 themes available, about half of them derived from Seaborn)
+will reset all the default colors for the plot components and for each line
+trace, and many of the resource settings of <cite>matplotlib</cite>.  The themes and
+their color selections are carefully chosen to make pleasing and
+informative color choices, some with special attention to color-blindness.</p>
 <p>Aside from the theme choices, the user can change the colors for Text,
 Grid, Background, and Outer Frame, and also select whether the Grid is
-shown, whether the Legend is Shown, and Whether the Top and Right Axes
+shown, whether the Legend is Shown, and whether the Top and Right Axes
 Spines are shown. In addition, the user can set the any of the following
 attributes for each trace: the label, color, line style, line width, symbol
 to use for a marker, marker size, z-order, and join style for each trace
 drawn.  Starting from the decent default values from the pre-defined
-themes, this gives complete control of the plot display to the user.</p>
+themes, this gives the user complete control of the plot display.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_LineProps.png"><img alt="_images/PlotConfig_LineProps.png" src="_images/PlotConfig_LineProps.png" style="width: 95%;" /></a>
 </div>
 <div class="section" id="ranges-and-margins-properties">
@@ -269,12 +272,12 @@ themes, this gives complete control of the plot display to the user.</p>
 <p>The <strong>Ranges and Margins</strong> tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.</p>
-<p>The user can also set the Plot Boundaries – exact X and Y ranges to show
-for the plot, or use the values of the data range.  By default, the data
-range is padded by a few percent so that all the data is fully displayed.
+<p>The user can set the Plot Boundaries – exact X and Y ranges for the plot,
+or use the values of the data range.  By default, the range shown is the
+data range padded by a few percent so that all the data is fully displayed.
 The user can change the “padding percentage”, or explicitly set each of the
 view limits.</p>
-<p>Finally, the user can finely adjust the margins around the plot. By default
+<p>Finally, the user can fine-tune the margins around the plot. By default
 these are chosen to give a small but noticeable empty space around the edge
 of the plot. If the user wants the Plot Legend to be off to the side or on
 top of the plot, they may need to adjust these margins.</p>
@@ -283,10 +286,10 @@ top of the plot, they may need to adjust these margins.</p>
 <div class="section" id="text-properties">
 <h3>Text Properties<a class="headerlink" href="#text-properties" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>Text and Labels</strong> tab allows the user to set the title and labels for
-the X and Y axes, and to adjust the font size for these text and the text
-shown in the plot legend.  Here, the Legend can also be customized: whether
-it is shown, it’s location, and whether the legend entries can be clicked
-on to toggle the display of the corresponding line.</p>
+the X and Y axes, and to adjust the font size for these text components.
+Here, the details of the Legend can also be customized: whether it is
+shown, its location, and whether the legend entries can be clicked on to
+toggle the display of the corresponding line.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Text.png"><img alt="_images/PlotConfig_Text.png" src="_images/PlotConfig_Text.png" style="width: 95%;" /></a>
 </div>
 <div class="section" id="scatterplot-properties">
@@ -299,11 +302,12 @@ for scatter plots.</p>
 <div class="section" id="displaying-images-with-imshow-and-contour">
 <h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this headline">¶</a></h2>
 <p>As for 2D line plotting, <cite>wxmplot</cite> has a simple <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a>
-function that adds user-friendly controls to manipulate and adjust the
-display of image data.  While <cite>matplotlib.pyplot.imshow()</cite> has the same
-user action as the 2D line plot above, <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a> has
-interactions that are specific to displaying false color images from 2D
-arrays on intensity values.  A simple example of:</p>
+function that displays 2D image data and adds user-friendly controls to
+manipulate and adjust the display of image data.  While
+<cite>matplotlib.pyplot.imshow()</cite> has the basic user action of zooming and
+saving image files, <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a> has interactions that are
+specific to displaying false color images from 2D arrays on intensity
+values.  An example using <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a> is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
@@ -314,15 +318,15 @@ arrays on intensity values.  A simple example of:</p>
 <span class="n">wi</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">wintitle</span><span class="o">=</span><span class="s1">&#39;wxmplot imshow&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>will display the image:</p>
+<p>whic will display the image and a control frame:</p>
 <a class="reference internal image-reference" href="_images/imshow_wxmplot.png"><img alt="_images/imshow_wxmplot.png" src="_images/imshow_wxmplot.png" style="width: 95%;" /></a>
-<p>To display that data as a contour plot, one can just replace
+<p>To display that image data as a contour plot, one can just replace
 <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a> with <a class="reference internal" href="interactive.html#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.contour()</span></code></a>.  With the same
 dataset but using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wi</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">wintitle</span><span class="o">=</span><span class="s1">&#39;wxmplot contour&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>will show:</p>
+<p>which will show:</p>
 <a class="reference internal image-reference" href="_images/contour_wxmplot.png"><img alt="_images/contour_wxmplot.png" src="_images/contour_wxmplot.png" style="width: 95%;" /></a>
 <p>In fact, the user can switch between showing the image data as a contour
 from the Image menu or with Ctrl-N.</p>
@@ -339,23 +343,24 @@ immediately available. On the left hand side of the frame, there are a few
 controls to adjust the displayed image.  First, the color lookup table for
 intensity can be changed to any of about 30 pre-defined tables and can be
 reversed.  Sliders and entry boxes allow the user to change the threshold
-levels to adjust the contrast.  As a simple approach to adjusting the
-contrast level, a drop-down list can be used to select contrast percentage
-using the histogram of values in the image.  That is, selecting
-‘Auto-contrast %’ of ‘1’ will put the lowest color value at the 1%
-percentile of intensities (that is the intensity such that 99% of the
-pixels have a higher intensity) and the highest value at the 99% percentile
-(that is the intensity such that 99% of the pixels have a lower
-intensity).  Note that adjusting the contrast is disabled for contour plots.</p>
-<p>There are several Menus and Ctrl-key shortcuts available to give more
-interaction.  From the File menu, the user can</p>
+levels to adjust the contrast.  A simple and reproducibl approach to
+adjusting the contrast level is also provided: a drop-down list can be used
+to select contrast percentage using the histogram of values in the image.
+That is, selecting ‘Auto-contrast %’ of ‘1’ will put the lowest color value
+at the 1% percentile of intensities (that is the intensity such that 99% of
+the pixels have a higher intensity) and the highest value at the 99%
+percentile (that is the intensity such that 99% of the pixels have a lower
+intensity).  Note that adjusting the contrast is disabled for contour
+plots.</p>
+<p>There are several Menus and Ctrl-key shortcuts available from the Image
+Display Window to give more interaction.  From the File menu, the user can</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Save an image of the plot to a PNG file [Ctrl-S]</p></li>
 <li><p>Copy the image to system clipboard to paste into other applications [Ctrl-C].</p></li>
 <li><p>Export the data in the plot to a plain text file [Ctrl-D]</p></li>
 <li><p>Save an image of the current Color Map</p></li>
-<li><p>Setup and preview printing.</p></li>
+<li><p>Setup and preview printing</p></li>
 <li><p>Print the image [Ctrl-P]</p></li>
 </ul>
 </div></blockquote>
@@ -398,9 +403,9 @@ methods to smooth the data across pixels.</p>
 <p>Finally, the Help menu will give a quick list of keyboard shortcuts.</p>
 <div class="section" id="image-configuration-window">
 <h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Permalink to this headline">¶</a></h3>
-<p>Most of options for working with images and contour maps can be from the
-main window or menu selections. The Image Configuration Window has a few
-options and values that can be set by the user:</p>
+<p>Most of options for working with images and contour maps can be found from
+the main window or menu selections. The Image Configuration Window has a
+few additional options and values that can be set by the user:</p>
 <a class="reference internal image-reference" href="_images/ImageConfig.png"><img alt="_images/ImageConfig.png" src="_images/ImageConfig.png" style="width: 50%;" /></a>
 <p>For contour plots, the user can select the number of levels to show and
 whether the contour line will show intensity values.</p>

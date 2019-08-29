@@ -111,24 +111,24 @@ passing the `win` option to the plotting functions.
 
 
 The immediacy of the rendering and the ability to customize the plots makes
-these plotting functions ideally suited for exploratory displays of data.
+these plotting functions well-suited for exploratory displays of data.
 
 
 Using the :mod:`interactive` functions from a script
 ===========================================================
 
-When using the :mod:`interactive` functions from running a script in a
-non-interactive way, the display will still appear and does not disappear when
-the script is complete.  Instead, the plots will remain displayed and fully
-operational until all windows have been closed or until the running script is
-explicitly closed with Crtl-C.  That means that you can add `wi.plot()` and
-`wi.imshow()` to your short- or long-running scripts and the plots will be
-displayed until you no longer want to use them.
+When using the :mod:`interactive` functions by running a script in a
+non-interactive way, the display will still appear. It does not block
+further execution of the script and the display does not disappear when the
+script is complete.  Instead, the plots and images will remain displayed
+and fully operational until all windows have been closed or until the
+running script is explicitly closed with Crtl-C.  That means that you can
+add `wi.plot()` and `wi.imshow()` to your short- or long-running scripts
+and the plots will be displayed until you no longer want to use them.
 
 
 2D Plotting with :func:`plot` and related functions
 ==========================================================================
-
 
 .. autofunction:: plot
 
@@ -162,12 +162,38 @@ Displaying images with :func:`imshow` and :func:`contour`
 Functions for working with the interactive windows
 ======================================================
 
-.. autofunction:: get_wxapp
-
 .. autofunction:: set_theme
 
 .. autofunction:: available_themes
 
+.. autofunction:: get_wxapp
+
 .. autofunction:: get_plot_window
 
+The returned :class:`wx.PlotFrame` will have the heirarchy of attributes
+described in the table below.  This allows access to the underlying
+matplotlib Axes and Canvas objects.
+
+.. _plotframe_objects_table:
+
+**Table of PlotFrame attributes**
+
+  +-----------------+-----------------------------------------------------+
+  | name            |  object type                                        |
+  +=================+=====================================================+
+  | .panel          | wxmplot.PlotPanel, a wx.Panel                       |
+  +-----------------+-----------------------------------------------------+
+  | .panel.conf     | wxmplot.PlotConfig                                  |
+  +-----------------+-----------------------------------------------------+
+  | .panel.axes     | matplotlib.axes.AxesSubPlot                         |
+  +-----------------+-----------------------------------------------------+
+  | .panel.fig      | matplotlib.figure.Figure                            |
+  +-----------------+-----------------------------------------------------+
+  | .panel.canvas   | matplotlib.backends.backend_wxagg.FigureCanvasWxAgg |
+  +-----------------+-----------------------------------------------------+
+
 .. autofunction:: get_image_window
+
+As with :class:`wx.PlotFrame`, the returned :class:`wx.ImageFrame` will
+have the same principle attributes to access the matplotlib Axes and Canvas
+objects.

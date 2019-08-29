@@ -132,17 +132,18 @@ From the Options menu, the user can:
 The Help menu will display a quick cheat-sheet to remind you of these
 Ctrl-Key options.
 
-An important tool for configuring and customizing 2D line plots is the *Plot
-Configuration Window*.  This is a tabbed window frame with 4 panels to
-allow the user to configure essentially every aspect of the plot:
+The *Plot Configuration Window*  is an
+important tool for configuring and customizing 2D line plots.  This is a
+tabbed window frame with 4 panels to allow the user to configure
+essentially every aspect of the plot:
 
     * Colors and Line Properties
     * Ranges and Margins
     * Text, Labels, and Legend
     * Scatterplot displays
 
-with these configuration settings, any user should be able to create
-beautiful presentation-quality image from their data.
+with these configuration settings available, any user should be able to
+create beautiful presentation-quality image from their data.
 
 
 Color and Line Properties
@@ -151,21 +152,20 @@ Color and Line Properties
 The **Colors and Line Properties** tab of the *Plot Configuration Window*
 allows the user to configure the basic colors for the plot.  This includes
 setting the plotting theme.  Selecting any of the available themes (there
-are more than 25 themes available, about half of them derived from the set
-of themes from Seaborn) will reset all the default colors for the plot
-components and for each line trace, and many of the resource settings of
-`matplotlib`.  The themes and their color selections are carefully chosen
-to make pleasing and informative color choices, some with special attention
-to color-blindness.
+are more than 25 themes available, about half of them derived from Seaborn)
+will reset all the default colors for the plot components and for each line
+trace, and many of the resource settings of `matplotlib`.  The themes and
+their color selections are carefully chosen to make pleasing and
+informative color choices, some with special attention to color-blindness.
 
 Aside from the theme choices, the user can change the colors for Text,
 Grid, Background, and Outer Frame, and also select whether the Grid is
-shown, whether the Legend is Shown, and Whether the Top and Right Axes
+shown, whether the Legend is Shown, and whether the Top and Right Axes
 Spines are shown. In addition, the user can set the any of the following
 attributes for each trace: the label, color, line style, line width, symbol
 to use for a marker, marker size, z-order, and join style for each trace
 drawn.  Starting from the decent default values from the pre-defined
-themes, this gives complete control of the plot display to the user.
+themes, this gives the user complete control of the plot display.
 
 .. image:: images/PlotConfig_LineProps.png
    :width: 95 %
@@ -178,13 +178,13 @@ The **Ranges and Margins** tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.
 
-The user can also set the Plot Boundaries -- exact X and Y ranges to show
-for the plot, or use the values of the data range.  By default, the data
-range is padded by a few percent so that all the data is fully displayed.
+The user can set the Plot Boundaries -- exact X and Y ranges for the plot,
+or use the values of the data range.  By default, the range shown is the
+data range padded by a few percent so that all the data is fully displayed.
 The user can change the "padding percentage", or explicitly set each of the
 view limits.
 
-Finally, the user can finely adjust the margins around the plot. By default
+Finally, the user can fine-tune the margins around the plot. By default
 these are chosen to give a small but noticeable empty space around the edge
 of the plot. If the user wants the Plot Legend to be off to the side or on
 top of the plot, they may need to adjust these margins.
@@ -197,10 +197,10 @@ Text Properties
 ---------------
 
 The **Text and Labels** tab allows the user to set the title and labels for
-the X and Y axes, and to adjust the font size for these text and the text
-shown in the plot legend.  Here, the Legend can also be customized: whether
-it is shown, it's location, and whether the legend entries can be clicked
-on to toggle the display of the corresponding line.
+the X and Y axes, and to adjust the font size for these text components.
+Here, the details of the Legend can also be customized: whether it is
+shown, its location, and whether the legend entries can be clicked on to
+toggle the display of the corresponding line.
 
 
 .. image:: images/PlotConfig_Text.png
@@ -226,11 +226,12 @@ Displaying images with :func:`imshow` and :func:`contour`
 
 
 As for 2D line plotting, `wxmplot` has a simple :func:`interactive.imshow`
-function that adds user-friendly controls to manipulate and adjust the
-display of image data.  While `matplotlib.pyplot.imshow()` has the same
-user action as the 2D line plot above, :func:`interactive.imshow` has
-interactions that are specific to displaying false color images from 2D
-arrays on intensity values.  A simple example of::
+function that displays 2D image data and adds user-friendly controls to
+manipulate and adjust the display of image data.  While
+`matplotlib.pyplot.imshow()` has the basic user action of zooming and
+saving image files, :func:`interactive.imshow` has interactions that are
+specific to displaying false color images from 2D arrays on intensity
+values.  An example using :func:`interactive.imshow` is::
 
     #!/usr/bin/python
     import numpy as np
@@ -242,20 +243,20 @@ arrays on intensity values.  A simple example of::
     wi.imshow(dat, x=x[0,:], y=y[:,0], colormap='viridis', wintitle='wxmplot imshow')
 
 
-will display the image:
+whic will display the image and a control frame:
 
 
 .. image:: images/imshow_wxmplot.png
    :width: 95 %
 
 
-To display that data as a contour plot, one can just replace
+To display that image data as a contour plot, one can just replace
 :func:`interactive.imshow` with :func:`interactive.contour`.  With the same
 dataset but using::
 
     wi.contour(dat, x=x[0,:], y=y[:,0], colormap='gray', wintitle='wxmplot contour')
 
-will show:
+which will show:
 
 .. image:: images/contour_wxmplot.png
    :width: 95 %
@@ -279,23 +280,24 @@ immediately available. On the left hand side of the frame, there are a few
 controls to adjust the displayed image.  First, the color lookup table for
 intensity can be changed to any of about 30 pre-defined tables and can be
 reversed.  Sliders and entry boxes allow the user to change the threshold
-levels to adjust the contrast.  As a simple approach to adjusting the
-contrast level, a drop-down list can be used to select contrast percentage
-using the histogram of values in the image.  That is, selecting
-'Auto-contrast %' of '1' will put the lowest color value at the 1%
-percentile of intensities (that is the intensity such that 99% of the
-pixels have a higher intensity) and the highest value at the 99% percentile
-(that is the intensity such that 99% of the pixels have a lower
-intensity).  Note that adjusting the contrast is disabled for contour plots.
+levels to adjust the contrast.  A simple and reproducibl approach to
+adjusting the contrast level is also provided: a drop-down list can be used
+to select contrast percentage using the histogram of values in the image.
+That is, selecting 'Auto-contrast %' of '1' will put the lowest color value
+at the 1% percentile of intensities (that is the intensity such that 99% of
+the pixels have a higher intensity) and the highest value at the 99%
+percentile (that is the intensity such that 99% of the pixels have a lower
+intensity).  Note that adjusting the contrast is disabled for contour
+plots.
 
-There are several Menus and Ctrl-key shortcuts available to give more
-interaction.  From the File menu, the user can
+There are several Menus and Ctrl-key shortcuts available from the Image
+Display Window to give more interaction.  From the File menu, the user can
 
    * Save an image of the plot to a PNG file [Ctrl-S]
    * Copy the image to system clipboard to paste into other applications [Ctrl-C].
    * Export the data in the plot to a plain text file [Ctrl-D]
    * Save an image of the current Color Map
-   * Setup and preview printing.
+   * Setup and preview printing
    * Print the image [Ctrl-P]
 
 From the Image menu, the user can:
@@ -334,9 +336,9 @@ Finally, the Help menu will give a quick list of keyboard shortcuts.
 Image Configuration Window
 -----------------------------
 
-Most of options for working with images and contour maps can be from the
-main window or menu selections. The Image Configuration Window has a few
-options and values that can be set by the user:
+Most of options for working with images and contour maps can be found from
+the main window or menu selections. The Image Configuration Window has a
+few additional options and values that can be set by the user:
 
 .. image:: images/ImageConfig.png
    :width: 50 %

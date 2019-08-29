@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -96,31 +96,32 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxm
             
   <div class="section" id="wxmplot-plotting-widgets-using-wxpython-and-matplotlib">
 <h1>wxmplot: plotting widgets using wxPython and matplotlib<a class="headerlink" href="#wxmplot-plotting-widgets-using-wxpython-and-matplotlib" title="Permalink to this headline">¶</a></h1>
-<p><cite>wxmplot</cite> provides easy-to-use and high-level <a class="reference external" href="http://www.wxpython.org/">wxPython</a> widgets and
-python functions for plotting and displaying of numerical data.</p>
-<p>While <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> provides excellent general-purpose plotting and
-supports many backends, it does not have tight integration with any
-particular GUI toolkit.  In addition, while the <cite>matplotlib.pyplot</cite> module
-provides interactive plots and image displays, the features of its
-Navigation Toolbars are minimal.  On the other hand, <a class="reference external" href="http://www.wxpython.org/">wxPython</a> has some
-basic plotting functionality but nothing as good as <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>.</p>
-<p><cite>wxmplot</cite> bridges the gap between <cite>matplotlib</cite> and <cite>wxPython</cite> by providing
-both wxPython widgets and top-level functions for basic 2D line plots,
-image display, and some custom plots.  The displays made with <cite>wxmplot</cite>
-give end-users highly interactive displays of their data that allow zooming
-and unzooming, reporting mouse positions, and rotating images.  The
-displays are also highly configurable, allow the user to change many
-aspects of the plot such as colors, line types, labels, marker type, color
-tables, smoothing.  Although <cite>wxmplot</cite> does not expose all of matplotlib’s
-capabilities, it does provide basic plotting and image display with
-wxPython widgets that are easy to add to wxPython applications to handle
-many common plotting and image display needs for scientific data.</p>
-<p><cite>wxmplot</cite> enables script writers to make basic 2D line plots or image
-displays from their data and interact with and configure these displays as
-part of exploratory data analysis. In addition, programmers who want to
-include these high quality graphical displays of data in their applications
-and enable application users to explore their data can easily use the
-<cite>wxmplot</cite> plotting widgets.</p>
+<p><cite>wxmplot</cite> provides <a class="reference external" href="http://www.wxpython.org/">wxPython</a> widgets and python functions for displaying
+numerical data.</p>
+<p>While <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> provides excellent general-purpose plotting
+functionality supports many backends, it does not have tight integration
+with any particular GUI toolkit.  While The <cite>matplotlib.pyplot</cite> module provides
+easy-to-use functions for plotting and displaying data, the features of its
+Navigation Toolbars for interactivity and customizations are minimal.  On
+the other hand, while <a class="reference external" href="http://www.wxpython.org/">wxPython</a> has some basic plotting functionality, it
+has nothing as good as <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>.</p>
+<p><cite>wxmplot</cite> bridges the gap between <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> and <a class="reference external" href="http://www.wxpython.org/">wxPython</a> by
+providing wxPython widgets and user-friendly functions for basic 2D line
+plots, image display, and some custom plots.  The displays made with
+<cite>wxmplot</cite> give end-users highly interactive displays of their data that
+allow zooming and unzooming, reporting mouse positions, rotating images,
+and changing color themes.  The displays are highly configurable, helping
+the user to change many aspects of the plot such as colors, line types,
+labels, marker type, color tables, smoothing.  To be clear, <cite>wxmplot</cite> does
+not expose all of matplotlib’s capabilities, but it does provide plotting
+and image display tools that handle many of the most common plotting and
+image display needs for scientific data.</p>
+<p>In particular, the <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> funtions enables script
+writers to make 2D line plots and image displays from their data, and to
+interact with and configure these displays as part of exploratory data
+analysis. In addition, programmers can use the <cite>wxmplot</cite> widgets to include
+these high quality graphical displays of data in their wxPython
+applications to enable users to explore their data.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
@@ -206,7 +207,7 @@ and enable application users to explore their data can easily use the
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

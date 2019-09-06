@@ -69,7 +69,7 @@ With `wxmplot`, that script would be rewritten as::
 and yields the plot shown on the right above.  There are some stylistic
 differences, but the point so far is that the results are very similar.
 
-`Wxmplot` gives more interaction and flexibility than the `maplotlib`
+`Wxmplot` gives more interaction and flexibility than the `matplotlib`
 display, and without cluttering the display with little icons.  As with the
 `pyplot` example, moving the mouse around updates the display of x and y
 values displayed to those of the mouse.  To zoom in on a region, the user
@@ -243,7 +243,7 @@ values.  An example using :func:`interactive.imshow` is::
     wi.imshow(dat, x=x[0,:], y=y[:,0], colormap='viridis', wintitle='wxmplot imshow')
 
 
-whic will display the image and a control frame:
+which will display the image and a control frame:
 
 
 .. image:: images/imshow_wxmplot.png
@@ -280,7 +280,7 @@ immediately available. On the left hand side of the frame, there are a few
 controls to adjust the displayed image.  First, the color lookup table for
 intensity can be changed to any of about 30 pre-defined tables and can be
 reversed.  Sliders and entry boxes allow the user to change the threshold
-levels to adjust the contrast.  A simple and reproducibl approach to
+levels to adjust the contrast.  A simple and reproducible approach to
 adjusting the contrast level is also provided: a drop-down list can be used
 to select contrast percentage using the histogram of values in the image.
 That is, selecting 'Auto-contrast %' of '1' will put the lowest color value

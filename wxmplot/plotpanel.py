@@ -108,7 +108,7 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
-        self.use_datas = ifnotNone(use_dates, self.use_dates)
+        self.use_dates = ifnotNone(use_dates, self.use_dates)
         return self.oplot(xdata, ydata, side=side, **kws)
 
     def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,

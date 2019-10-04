@@ -59,6 +59,9 @@ class ImageConfig:
         self.cmap_reverse = False
         self.interp = 'nearest'
         self.show_axis = False
+        self.show_grid = False
+        self.grid_color = '#807030'
+        self.grid_alpha = 0.25
         self.log_scale = False
         self.flip_ud = False
         self.flip_lr = False
@@ -384,7 +387,7 @@ class ImageConfigFrame(wx.Frame):
         self.SetBackgroundColour(hex2rgb('#FEFEFE'))
 
         sizer = wx.GridBagSizer(2, 2)
-        irow = 1
+        irow = 0
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
 
 
@@ -408,7 +411,36 @@ class ImageConfigFrame(wx.Frame):
         sizer.Add(self.showlabels, (irow, 2), (1, 1), labstyle, 2)
         irow += 1
         sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+
+        # Grid
+        title = SimpleText(self, 'Image Grid:', colour='#DD0000')
+        label_gcolor = SimpleText(self, "Color:")
+        label_galpha = SimpleText(self, "Alpha:")
+        self.show_grid = Check(self, label='Show Grid with Labeled Axes?',
+                               default=conf.show_grid,
+                               action=self.onGridEvents)
+
+        self.grid_alpha = FloatSpin(self, value=conf.grid_alpha,
+                                     min_val=0, max_val=1,
+                                     increment=0.05, digits=3, size=(130, -1),
+                                     action=self.onGridEvents)
+        self.grid_color = csel.ColourSelect(self,  -1, "",
+                                            mpl_color(conf.grid_color),
+                                            size=(50, -1))
+        self.grid_color.Bind(csel.EVT_COLOURSELECT, self.onGridEvents)
+
         irow += 1
+        sizer.Add(title,          (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.show_grid, (irow, 1), (1, 1), labstyle, 2)
+        irow += 1
+        sizer.Add(label_gcolor,     (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.grid_color,  (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(label_galpha,     (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.grid_alpha,  (irow, 3), (1, 1), labstyle, 2)
+
+        irow += 1
+        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+
 
         # X/Y Slices
         title =  SimpleText(self, 'X/Y Slices:', colour='#DD0000')
@@ -437,7 +469,6 @@ class ImageConfigFrame(wx.Frame):
 
         irow += 1
         sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
-        irow += 1
 
         # Scalebar
         ypos, xpos = conf.scalebar_pos
@@ -582,6 +613,12 @@ class ImageConfigFrame(wx.Frame):
         self.Show()
         self.Raise()
 
+    def onGridEvents(self, event=None):
+        self.conf.show_grid = self.show_grid.IsChecked()
+        self.conf.grid_color = hexcolor(self.grid_color.GetValue()[:3])
+        self.conf.grid_alpha = self.grid_alpha.GetValue()
+        self.parent.panel.autoset_margins()
+        self.parent.panel.redraw()
 
     def onContourEvents(self, event=None):
         self.conf.ncontour_levels = self.ncontours.GetValue()

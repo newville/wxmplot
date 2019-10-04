@@ -207,6 +207,12 @@ class ImagePanel(BasePanel):
         """
         if self.conf.show_axis:
             self.axes.set_axis_on()
+            if self.conf.show_grid:
+                self.axes.grid(True,
+                               alpha=self.conf.grid_alpha,
+                               color=self.conf.grid_color)
+            else:
+                self.axes.grid(False)
             self.conf.set_formatters()
 
             l, t, r, b = 0.08, 0.96, 0.96, 0.08
@@ -224,7 +230,6 @@ class ImagePanel(BasePanel):
         for ax in self.fig.get_axes():
             ax.update_params()
             ax.set_position(ax.figbox)
-
 
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --

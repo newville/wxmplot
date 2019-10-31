@@ -216,7 +216,7 @@ def get_image_window(win=1, size=None, wintitle=None):
     """
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in IMG_DISPLAYS:
-        display = IMG_DISPLAY[win]
+        display = IMG_DISPLAYS[win]
     else:
         display = ImageDisplay(window=win, size=size,
                                wintitle=wintitle)

@@ -378,7 +378,7 @@ class PlotPanel(BasePanel):
         if selectedge is not None:
             self.conf.scatter_selectedge = selectedge
         if viewpad is not None:
-            conf.viewpad = viewpad
+            self.conf.viewpad = viewpad
 
         axes = self.axes
         self.conf.user_limits[axes] = [xmin, xmax, ymin, ymax]

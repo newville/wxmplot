@@ -7,6 +7,7 @@
     <title>wxmplot Examples &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -187,7 +188,7 @@ Perhaps surprisingly, this can be faster than updating the 2D line plots.</p>
 <h2>Plotting data from a datafile<a class="headerlink" href="#plotting-data-from-a-datafile" title="Permalink to this headline">¶</a></h2>
 <p>Reading data with <cite>numpy.loadtext</cite> and plotting:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
 
@@ -233,8 +234,8 @@ created with:</p>
 <div class="section" id="displaying-and-image-of-a-tiff-file">
 <h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Permalink to this headline">¶</a></h2>
 <p>Reading a TIFF file and showing the image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
-<span class="kn">from</span> <span class="nn">tifffile</span> <span class="k">import</span> <span class="n">imread</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">tifffile</span> <span class="kn">import</span> <span class="n">imread</span>
 
 <span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
 
@@ -257,8 +258,8 @@ each of the three colors.</p>
 <span class="sd">example showing display of R, G, B maps</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="k">import</span> <span class="n">ImageFrame</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="kn">import</span> <span class="n">ImageFrame</span>
 
 <span class="k">def</span> <span class="nf">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">outer</span><span class="p">(</span> <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">y</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
@@ -334,8 +335,8 @@ may be more suitable for printed documents and presentations.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+        &#169; Copyright 2020, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

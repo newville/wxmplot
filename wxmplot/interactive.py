@@ -134,6 +134,7 @@ class PlotDisplay(PlotFrame):
         if window not in PLOT_DISPLAYS:
             PLOT_DISPLAYS[window] = self
 
+
     def onExit(self, o, **kw):
         if self.window in PLOT_DISPLAYS:
             PLOT_DISPLAYS.pop(self.window)
@@ -293,11 +294,10 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
     """
     plotter = get_plot_window(win=win, size=size, wintitle=wintitle,
                              theme=theme)
-
     if plotter is None:
         return
     plotter.Raise()
-    if new:
+    if new or plotter.panel.conf.ntrace == 0:
         plotter.plot(x, y, **kws)
     else:
         plotter.oplot(x, y, **kws)

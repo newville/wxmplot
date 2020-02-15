@@ -72,14 +72,14 @@ class PlotPanel(BasePanel):
         self.data_range = {}
         self.conf.zoom_lims = []
         self.conf.axes_traces = {}
+        self.use_dates = False
+        self.dates_style = None
 
     def plot(self, xdata, ydata, side='left', title=None,
              xlabel=None, ylabel=None, y2label=None,
-             use_dates=False, **kws):
+             use_dates=False, dates_style=None, **kws):
         """
         create a new plot of x/y data, clearing any existing plot on the panel
-
-
 
         """
         allaxes = self.fig.get_axes()
@@ -108,8 +108,10 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
+        self.dates_style = ifnotNone(dates_style, self.dates_style)
         self.use_dates = ifnotNone(use_dates, self.use_dates)
         return self.oplot(xdata, ydata, side=side, **kws)
+
 
     def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,
               ylabel=None, y2label=None, title=None, dy=None,
@@ -119,9 +121,9 @@ class PlotPanel(BasePanel):
               refresh=True, show_legend=None, legend_loc='best',
               legend_on=True, delay_draw=False, bgcolor=None,
               framecolor=None, gridcolor=None, labelfontsize=None,
-              titlefontsize=None,
-              legendfontsize=None, fullbox=None, axes_style=None,
-              zorder=None, viewpad=None, theme=None, **kws):
+              titlefontsize=None, legendfontsize=None, fullbox=None,
+              axes_style=None, zorder=None, viewpad=None, theme=None,
+              use_dates=None, dates_style=None, **kws):
         """
         basic plot method, adding to an existing display
 
@@ -142,10 +144,24 @@ class PlotPanel(BasePanel):
             conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+        self.dates_style = ifnotNone(dates_style, self.dates_style)
+        self.use_dates = ifnotNone(use_dates, self.use_dates)
         if self.use_dates:
-            xdata = [datetime.fromtimestamp(i) for i in xdata]
-            xdata = dates.date2num(xdata)
-            # axes.xaxis.set_major_locator(dates.AutoDateLocator())
+            # date handling options to get xdate to mpl dates
+            #   1. xdate are in datetime: convert to mpl dates
+            #   2. xdata are strings: parse with datestr2num
+            #   3. xdata are floats:
+            #        a) dates_styles=='dates': use directly
+            #        b) else: convert as unix timestamp to mpl dates
+            x0 = xdata[0]
+            dstyle = self.dates_style
+            if dstyle is None: dstyle = ''
+            if isinstance(x0, datetime):
+                xdata = dates.date2num(xdata)
+            elif isinstance(x0, str) or dstyle.lower().startswith('str'):
+                xdata = dates.datestr2num(xdata)
+            elif not dstyle.lower().startswith('dates'):
+                xdata = dates.epoch2num(xdata)
 
         linewidth = ifNone(linewidth, 2)
         conf.viewpad = ifnotNone(viewpad, conf.viewpad)
@@ -275,7 +291,6 @@ class PlotPanel(BasePanel):
             self.draw()
             self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
-        # print("# oplot done")
         return _lines
 
     def plot_many(self, datalist, side='left', title=None,

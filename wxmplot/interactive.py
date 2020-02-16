@@ -265,7 +265,7 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         legend_on  (bool): whether legend is within the main axes [True]
         bgcolor (str on None): color of background plot area (from theme)
         framecolor (str on None): color of outer frame area (from theme)
-        gridcolor (str or None:  color of grid (from theme)
+        gridcolor (str or None):  color of grid (from theme)
         labelfontsize (float): size (pixels) of font for Labels (from theme)
         legendfontsize (float): size (pixels) of font for Legend (from theme)
         titlefontsize (float): size (pixels) of font for Title (from theme)

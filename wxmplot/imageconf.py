@@ -8,7 +8,7 @@ from math import log10
 import numpy as np
 
 import matplotlib.cm as cmap
-from matplotlib.ticker import FuncFormatter
+from matplotlib.ticker import FuncFormatter, ScalarFormatter
 
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import bool_ifnotNone, ifnotNone
@@ -103,7 +103,10 @@ class ImageConfig:
         self.scalebar_pixelsize = None, None
         self.scalebar_units = 'mm'
         self.scalebar_color = '#EEEE99'
+        self._xfmt = None
+        self._yfmt = None
         self.set_formatters()
+
 
     def set_colormap(self, name, reverse=False, icol=0):
         self.cmap_reverse = reverse
@@ -161,6 +164,10 @@ class ImageConfig:
         if self.rot_level == 4:
             self.rot_level = 0
 
+    def reset_formats(self):
+        "reset formats for x/y axis"
+        self._xfmt = self._yfmt = None
+
     def set_formatters(self):
         if self.axes is not None:
             self.axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
@@ -174,6 +181,35 @@ class ImageConfig:
         " y-axis formatter "
         return self._format(y, pos, dtype='y')
 
+    def set_format_str(self, axis, dat):
+        try:
+            ticks = axis.get_major_locator()()
+        except:
+            ticks = [0, 1]
+
+        dticks = []
+        for t in ticks:
+            try:
+                dticks.append(dat[int(t)])
+            except:
+                pass
+        if len(dticks) < 2:
+            dticks.append(dat.min())
+            dticks.append(dat.max())
+
+        dstep = max(2.e-15, abs(np.diff(dticks).mean()))
+        if dstep > 5e4 or (dstep < 5.e-4 and dticks.mean() < 5.e-2):
+            fmt = '%.2e'
+        else:
+            ndigs = max(0, 3 - round(log10(dstep)))
+            while ndigs >= 0:
+                if np.abs(dticks- np.round(dticks, decimals=ndigs)).max() < 2e-3*dstep:
+                    ndigs -= 1
+                else:
+                    break
+            fmt = '%%1.%df' % min(9, ndigs+1)
+        return fmt
+
     def _format(self, x, pos, dtype='x'):
         """ home built tick formatter to use with FuncFormatter():
         x     value to be formatted
@@ -181,37 +217,23 @@ class ImageConfig:
 
         also sets self._yfmt/self._xfmt for statusbar
         """
-        fmt = '%1.5g'
         if dtype == 'y':
             ax = self.axes.yaxis
             dat  = self.ydata
             if dat is None:
                 dat = np.arange(self.data.shape[0])
+            if self._yfmt is None:
+                self._yfmt = self.set_format_str(ax, dat)
+            fmt = self._yfmt
+
         else:
             ax = self.axes.xaxis
             dat = self.xdata
             if dat is None:
                 dat = np.arange(self.data.shape[1])
-
-        ticks = [0,1]
-        onep = 1.00001
-        try:
-            dtick = 0.1 * onep * (dat.max() - dat.min())
-        except:
-            dtick = 0.2 * onep
-        try:
-            ticks = ax.get_major_locator()()
-        except:
-            ticks = [0, 1]
-        try:
-            dtick = abs(dat[int(ticks[1])] - dat[int(ticks[0])]) * onep
-        except:
-            pass
-
-        if dtick > 89999:
-            fmt = '%.2e'
-        else:
-            fmt = '%%1.%df' % max(0, -round(log10(0.75*dtick)))
+            if self._xfmt is None:
+                self._xfmt = self.set_format_str(ax, dat)
+            fmt = self._xfmt
 
         try:
             s =  fmt % dat[int(x)]

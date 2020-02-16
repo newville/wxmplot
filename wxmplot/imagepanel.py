@@ -293,6 +293,7 @@ class ImagePanel(BasePanel):
         self.axes.update_datalim(((xmin, ymin), (xmax, ymax)))
 
         self.conf.datalimits = [xmin, xmax, ymin, ymax]
+        self.conf.reset_formats()
         self.redraw()
 
     def clear(self):
@@ -587,7 +588,7 @@ class ImagePanel(BasePanel):
     def report_motion(self, event=None):
         if event.inaxes is None:
             return
-        fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
+        fmt = "X,Y= %g, %g"
         x, y  = event.xdata, event.ydata
         if len(self.fig.get_axes()) > 1:
             try:

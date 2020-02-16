@@ -167,6 +167,8 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 11  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | dates_style    | str        | ''      | aid conversion of floats to time data          | 11  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
   |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | size           | int        | 10      | size of marker                                 |     |  yes        |
@@ -221,8 +223,8 @@ same meaning, as indicated by the right-most column.
        multiple line traces at once.  See also :meth:`plot_many` for a
        convenience function to plot many traces at once.
 
-   11. The *use_dates* option is not very rich, and simply turns x-values
-       that are Unix timestamps into x labels showing the dates.
+   11. For more on using data with dates or times, see :ref:`sect_datetime`.
+
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
   configured interactively (see Plot Configuration).
@@ -354,6 +356,35 @@ same meaning, as indicated by the right-most column.
 .. method:: reset_config()
 
    reset the configuration to default settings.
+
+
+.. _sect_datetime:
+
+Using date-time data with :func:`plot`
+===========================================
+
+If the `x` values to be plotted holds date or time data, these can be handled in
+a few different formats.  In order for the X-axis labels to be properly
+displayed as a string showing the date, the values must be eventually converted
+to a `matplotlib.dates` object, which uses a floating point number to represent
+the number of days since year 0, BCE.  The `wxmplot` user is not expected to do
+this conversion.
+
+The best way to specify datetime information is to use `datetime` objects
+from the `datetime` library.  These will be automatically recognized and
+properly converted.
+
+If the `x` data is a list or array of integers or floats and `use_dates=True` is
+used, the values will be interpreted as Unix timestamps (seconds since 1970),
+unless `dates_styles='dates'`, in which case they will be interpreted as
+`matplotlib.dates`.
+
+Finally, it is possible to pass in a list or array of strings as `x`, and set
+`use_dates=True`.  In this case, the `matplotlib.dates.datestr2num` function
+will be used convert the string.  Of course, whether this actually works well
+will depend on the ability of this function to parse and interpret the date
+strings used.
+
 
 
 :class:`PlotFrame`: a wx.Frame showing a :class:`PlotPanel`

@@ -73,6 +73,7 @@
   <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a><ul>
 <li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a></li>
+<li><a class="reference internal" href="#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
 <li><a class="reference internal" href="#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
 </ul>
@@ -454,32 +455,39 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>11</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-even"><td><p>dates_style</p></td>
+<td><p>str</p></td>
+<td><p>‘’</p></td>
+<td><p>aid conversion of floats to time data</p></td>
+<td><p>11</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td></td>
 <td colspan="4"><p><strong>arguments that apply only for</strong> <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot()</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>size</p></td>
+<tr class="row-even"><td><p>size</p></td>
 <td><p>int</p></td>
 <td><p>10</p></td>
 <td><p>size of marker</p></td>
 <td></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p>edgecolor</p></td>
+<tr class="row-odd"><td><p>edgecolor</p></td>
 <td><p>string</p></td>
 <td><p>black</p></td>
 <td><p>edge color of marker</p></td>
 <td><p>2</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p>selectcolor</p></td>
+<tr class="row-even"><td><p>selectcolor</p></td>
 <td><p>string</p></td>
 <td><p>red</p></td>
 <td><p>color for selected points</p></td>
 <td><p>2</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p>callback</p></td>
+<tr class="row-odd"><td><p>callback</p></td>
 <td><p>function</p></td>
 <td><p>None</p></td>
 <td><p>user-supplied callback to run on selection</p></td>
@@ -522,8 +530,7 @@ which will suppress the top, right, and left Axes.</p></li>
 the screen. This can be give a noticeable speed up when plotting
 multiple line traces at once.  See also <a class="reference internal" href="#plotpanel.plot_many" title="plotpanel.plot_many"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot_many()</span></code></a> for a
 convenience function to plot many traces at once.</p></li>
-<li><p>The <em>use_dates</em> option is not very rich, and simply turns x-values
-that are Unix timestamps into x labels showing the dates.</p></li>
+<li><p>For more on using data with dates or times, see <a class="reference internal" href="#sect-datetime"><span class="std std-ref">Using date-time data with plot()</span></a>.</p></li>
 </ol>
 </div></blockquote>
 <p>All of these values, and a few more settings controlling whether and how to display a plot legend can be
@@ -710,6 +717,27 @@ a <code class="xref py py-class docutils literal notranslate"><span class="pre">
 <dd><p>reset the configuration to default settings.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="using-date-time-data-with-plot">
+<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="other.html#plot" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Permalink to this headline">¶</a></h2>
+<p>If the <cite>x</cite> values to be plotted holds date or time data, these can be handled in
+a few different formats.  In order for the X-axis labels to be properly
+displayed as a string showing the date, the values must be eventually converted
+to a <cite>matplotlib.dates</cite> object, which uses a floating point number to represent
+the number of days since year 0, BCE.  The <cite>wxmplot</cite> user is not expected to do
+this conversion.</p>
+<p>The best way to specify datetime information is to use <cite>datetime</cite> objects
+from the <cite>datetime</cite> library.  These will be automatically recognized and
+properly converted.</p>
+<p>If the <cite>x</cite> data is a list or array of integers or floats and <cite>use_dates=True</cite> is
+used, the values will be interpreted as Unix timestamps (seconds since 1970),
+unless <cite>dates_styles=’dates’</cite>, in which case they will be interpreted as
+<cite>matplotlib.dates</cite>.</p>
+<p>Finally, it is possible to pass in a list or array of strings as <cite>x</cite>, and set
+<cite>use_dates=True</cite>.  In this case, the <cite>matplotlib.dates.datestr2num</cite> function
+will be used convert the string.  Of course, whether this actually works well
+will depend on the ability of this function to parse and interpret the date
+strings used.</p>
 </div>
 <div class="section" id="module-plotframe">
 <span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Permalink to this headline">¶</a></h2>

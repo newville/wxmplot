@@ -146,6 +146,9 @@ class PlotPanel(BasePanel):
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
         self.dates_style = ifnotNone(dates_style, self.dates_style)
         self.use_dates = ifnotNone(use_dates, self.use_dates)
+        if isinstance(xdata[0], datetime):
+            self.use_dates = True
+
         if self.use_dates:
             # date handling options to get xdate to mpl dates
             #   1. xdate are in datetime: convert to mpl dates
@@ -162,7 +165,6 @@ class PlotPanel(BasePanel):
                 xdata = dates.datestr2num(xdata)
             elif not dstyle.lower().startswith('dates'):
                 xdata = dates.epoch2num(xdata)
-
         linewidth = ifNone(linewidth, 2)
         conf.viewpad = ifnotNone(viewpad, conf.viewpad)
 
@@ -322,6 +324,7 @@ class PlotPanel(BasePanel):
             x, y, opts = unpack_tracedata(dat, delay_draw=True)
             self.oplot(x, y, **opts)
 
+        self.reset_formats()
         conf = self.conf
         if conf.show_legend:
             conf.draw_legend()
@@ -480,6 +483,7 @@ class PlotPanel(BasePanel):
         user defined limits, and any zoom level
 
         """
+        self.reset_formats()
         self.conf.set_viewlimits()
 
     def get_viewlimits(self, axes=None):
@@ -505,10 +509,12 @@ class PlotPanel(BasePanel):
 
     def unzoom(self, event=None, **kws):
         """ zoom out 1 level, or to full data range """
+        self.reset_formats()
         self.conf.unzoom(full=False)
 
     def unzoom_all(self, event=None):
         """ zoom out full data range """
+        self.reset_formats()
         self.conf.unzoom(full=True)
 
     def process_data(self, event=None, expr=None):
@@ -718,13 +724,12 @@ class PlotPanel(BasePanel):
             x, y = event.xdata, event.ydata
 
         if x is not None and y is not None:
-            msg = ("X,Y= %s, %s" % (self._xfmt, self._yfmt)) % (x, y)
+            msg = "X,Y= %g, %g" % (x, y)
         if len(self.fig.get_axes()) > 1:
             ax2 = self.fig.get_axes()[1]
             try:
                 x2, y2 = ax2.transData.inverted().transform((ex, ey))
-                msg = "X,Y,Y2= %s, %s, %s" % (self._xfmt, self._yfmt,
-                                              self._y2fmt) % (x, y, y2)
+                msg = "X,Y,Y2= %g, %g, %g" % (x, y, y2)
             except:
                 pass
 

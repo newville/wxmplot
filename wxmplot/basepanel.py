@@ -9,6 +9,8 @@ import os
 import wx
 is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 
+import numpy as np
+from math import log10
 import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
@@ -39,9 +41,7 @@ class BasePanel(wx.Panel):
             self.messenger = self.__def_messenger
 
         self.popup_menu =  None
-        self._yfmt = '%.4f'
-        self._y2fmt = '%.4f'
-        self._xfmt = '%.4f'
+        self._yfmt  = self._y2fmt = self._xfmt  = None
         self.use_dates = False
         self.show_config_popup = show_config_popup
         self.launch_dir  = os.getcwd()
@@ -256,7 +256,7 @@ class BasePanel(wx.Panel):
     def report_leftdown(self, event=None):
         if event is None:
             return
-        self.write_message("%f, %f" % (event.xdata, event.ydata), panel=1)
+        self.write_message("%g, %g" % (event.xdata, event.ydata), panel=1)
 
     def onLeftDown(self, event=None):
         """ left button down: report x,y coords, start zooming mode"""
@@ -334,6 +334,9 @@ class BasePanel(wx.Panel):
         except:
             return "?"
 
+    def reset_formats(self):
+        self._xfmt = self._yfmt = self._y2fmt = None
+
     def xformatter(self, x, pos):
         " x-axis formatter "
         if self.use_dates:
@@ -349,6 +352,30 @@ class BasePanel(wx.Panel):
         " y-axis formatter "
         return self.__format(y, type='y2')
 
+    def set_format_str(self, axis):
+        try:
+            ticks = axis.get_major_locator()()
+        except:
+            ticks = [0, 1]
+
+        if len(ticks) < 2:
+            ticks.append(0)
+            ticks.append(1)
+
+        step = max(2.e-15, abs(np.diff(ticks).mean()))
+        if step > 5e4 or (step < 5.e-4 and ticks.mean() < 5.e-2):
+            fmt = '%.2e'
+        else:
+            ndigs = max(0, 3 - round(log10(step)))
+            while ndigs >= 0:
+                if np.abs(ticks- np.round(ticks, decimals=ndigs)).max() < 2e-3*step:
+                    ndigs -= 1
+                else:
+                    break
+            fmt = '%%1.%df' % min(9, ndigs+1)
+        return fmt
+
+
     def __format(self, x, type='x'):
         """ home built tick formatter to use with FuncFormatter():
         x     value to be formatted
@@ -359,48 +386,29 @@ class BasePanel(wx.Panel):
         fmt, v = '%1.5g','%1.5g'
         if type == 'y':
             ax = self.axes.yaxis
+            if self._yfmt is None:
+                self._yfmt = self.set_format_str(ax)
+            fmt = self._yfmt
         elif type == 'y2' and len(self.fig.get_axes()) > 1:
             ax =  self.fig.get_axes()[1].yaxis
+            if self._y2fmt is None:
+                self._y2fmt = self.set_format_str(ax)
+            fmt = self._y2fmt
         else:
             ax = self.axes.xaxis
-
-        try:
-            dtick = 0.1 * ax.get_view_interval().span()
-        except:
-            dtick = 0.2
-        try:
-            ticks = ax.get_major_locator()()
-            dtick = abs(ticks[1] - ticks[0])
-        except:
-            pass
-        if dtick > 89999:
-            fmt, v = ('%.1e',  '%1.6g')
-        elif dtick > 1.99:
-            fmt, v = ('%1.0f', '%1.2f')
-        elif dtick > 0.099:
-            fmt, v = ('%1.1f', '%1.3f')
-        elif dtick > 0.0099:
-            fmt, v = ('%1.2f', '%1.4f')
-        elif dtick > 0.00099:
-            fmt, v = ('%1.3f', '%1.5f')
-        elif dtick > 0.000099:
-            fmt, v = ('%1.4f', '%1.6e')
-        elif dtick > 0.0000099:
-            fmt, v = ('%1.5f', '%1.6e')
+            if self._xfmt is None:
+                self._xfmt = self.set_format_str(ax)
+            fmt = self._xfmt
 
         s =  fmt % x
         s.strip()
         s = s.replace('+', '')
         while s.find('e0')>0:
             s = s.replace('e0','e')
+        if s.endswith('e'):
+            s = s[:-1]
         while s.find('-0')>0:
-            s = s.replace('-0','-')
-        if type == 'y':
-            self._yfmt = v
-        if type == 'y2':
-            self._y2fmt = v
-        if type == 'x':
-            self._xfmt = v
+             s = s.replace('-0','-')
         return s
 
     def __onKeyEvent(self, event=None):
@@ -577,7 +585,7 @@ class BasePanel(wx.Panel):
         if event.inaxes is None:
             return
 
-        fmt = "X,Y= %s, %s" % (self._xfmt, self._yfmt)
+        fmt = "X,Y= %g, %g"
         x, y  = event.xdata, event.ydata
         if len(self.fig.get_axes()) > 1:
             try:

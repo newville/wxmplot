@@ -859,12 +859,18 @@ class PlotConfig:
             # add padding to data range
             if self.viewpad > 0 and (None not in limits):
                 xrange = limits[1] - limits[0]
-                if xrange < 1.e-10:
-                    xrange = max(1.e-10, (limits[1] + limits[0] )/2.0)
+                try:
+                    if xrange < 1.e-10:
+                        xrange = max(1.e-10, (limits[1] + limits[0] )/2.0)
+                except:
+                    pass
 
                 yrange = limits[3] - limits[2]
-                if yrange < 1.e-10:
-                    yrange = max(1.e-10, (limits[3] + limits[2] )/2.0)
+                try:
+                    if yrange < 1.e-10:
+                        yrange = max(1.e-10, (limits[3] + limits[2] )/2.0)
+                except:
+                    pass
 
                 limits[0] = limits[0] - xrange * self.viewpad /100.0
                 limits[1] = limits[1] + xrange * self.viewpad /100.0
@@ -883,8 +889,14 @@ class PlotConfig:
             if len(self.zoom_lims) > 0:
                 limits = self.zoom_lims[-1][ax]
             all_limits.append(limits)
-            ax.set_xlim((limits[0], limits[1]), emit=True)
-            ax.set_ylim((limits[2], limits[3]), emit=True)
+            try:
+                ax.set_xlim((limits[0], limits[1]), emit=True)
+            except:
+                pass
+            try:
+                ax.set_ylim((limits[2], limits[3]), emit=True)
+            except:
+                pass
         return all_limits
 
     def set_logscale(self, xscale='linear', yscale='linear',

@@ -11,6 +11,7 @@ import matplotlib
 from functools import partial
 from .plotpanel import PlotPanel
 from .utils import MenuItem, fix_filename
+from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as NavigationToolbar
 
 class BaseFrame(wx.Frame):
     """
@@ -139,6 +140,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                          'theme': self.theme})
 
         self.panel = PlotPanel(self, **panelkws)
+        self.toolbar = NavigationToolbar(self.panel.canvas)
+        self.toolbar.Hide()
         self.panel.messenger = self.write_message
         self.panel.nstatusbar = sbar.GetFieldsCount()
         sizer.Add(self.panel, 1, wx.EXPAND)
@@ -190,6 +193,24 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     def Print(self, event=None):
         self.panel.Print(event=event)
 
+    def Zoom(self, event=None ):
+    if(self.toolbar._active == 'PAN'):
+        self.toolbar.pan()
+    self.panel.cursor_mode = 'zoom'
+    self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+
+    def Zoom_on_X(self, event=None ):
+        if(self.toolbar._active == 'PAN'):
+            self.toolbar.pan()
+        self.panel.cursor_mode = 'zoom on x'
+        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+
+    def Zoom_on_Y(self, event=None ):
+        if(self.toolbar._active == 'PAN'):
+            self.toolbar.pan()
+        self.panel.cursor_mode = 'zoom on y'
+        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
         mopts = wx.Menu()
@@ -207,7 +228,17 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                  "Toggle Grid Display",
                  self.panel.toggle_grid)
 
-        # mopts.AppendSeparator()
+        mopts.AppendSeparator()
+
+        MenuItem(self, mopts, "Zoom\tCtrl+R",
+         "Going back to Zoom if Pan previously activated",
+         self.Zoom)
+        MenuItem(self, mopts, "Zoom on X\tCtrl+X",
+                 "Zoom on X only",
+                 self.Zoom_on_X)
+        MenuItem(self, mopts, "Zoom on Y\tCtrl+Y",
+                 "Zoom on Y only",
+                 self.Zoom_on_Y)
 
         logmenu = wx.Menu()
         for label in self.panel.conf.log_choices:

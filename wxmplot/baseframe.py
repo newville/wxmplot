@@ -211,6 +211,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.panel.cursor_mode = 'zoom on y'
         self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
 
+    def Pan(self, event=None ):
+        self.panel.cursor_mode = 'report'
+        self.toolbar.pan()
+
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
         mopts = wx.Menu()
@@ -239,6 +243,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mopts, "Zoom on Y\tCtrl+Y",
                  "Zoom on Y only",
                  self.Zoom_on_Y)
+        MenuItem(self, mopts, "Pan\tCtrl+W",
+         "Pan",self.Pan)
 
         logmenu = wx.Menu()
         for label in self.panel.conf.log_choices:

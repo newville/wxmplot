@@ -455,6 +455,9 @@ class BasePanel(wx.Panel):
                     self.toolbar.pan()
                 self.cursor_mode = 'zoom on y'
                 self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+            elif ckey == 'W':
+                self.cursor_mode = 'report'
+                self.toolbar.pan()
 
     def __onMouseButtonEvent(self, event=None):
         """ general mouse press/release events. Here, event is
@@ -750,7 +753,7 @@ class BasePanel(wx.Panel):
 
             if callable(self.zoom_callback):
                 self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
-                
+
     def lasso_motion(self, event=None):
         """motion event handler for lasso mode"""
         self.report_motion(event=event)

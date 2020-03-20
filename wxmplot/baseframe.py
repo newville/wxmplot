@@ -194,10 +194,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.panel.Print(event=event)
 
     def Zoom(self, event=None ):
-    if(self.toolbar._active == 'PAN'):
-        self.toolbar.pan()
-    self.panel.cursor_mode = 'zoom'
-    self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+        if(self.toolbar._active == 'PAN'):
+            self.toolbar.pan()
+        self.panel.cursor_mode = 'zoom'
+        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
 
     def Zoom_on_X(self, event=None ):
         if(self.toolbar._active == 'PAN'):

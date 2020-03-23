@@ -577,22 +577,18 @@ class BasePanel(wx.Panel):
     def zoom_on_x_motion(self, event=None):
         """motion event handler for zoom on x mode"""
         try:
-            x, y  = event.x, event.y
+            x = event.x
         except:
             return
         self.report_motion(event=event)
         if self.zoom_ini is None:
             return
-        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        ini_x = self.zoom_ini[0]
+        ini_xd = self.zoom_ini[2]
         if event.xdata is not None:
             self.x_lastmove = event.xdata
-        if event.ydata is not None:
-            self.y_lastmove = event.ydata
         x0     = min(x, ini_x)
-        ymax   = max(y, ini_y)
         width  = abs(x-ini_x)
-        height = abs(y-ini_y)
-        y0     = self.canvas.figure.bbox.height - ymax
 
         zdc = wx.ClientDC(self.canvas)
         zdc.SetLogicalFunction(wx.XOR)
@@ -624,16 +620,16 @@ class BasePanel(wx.Panel):
         if self.zoom_ini is None:
             return
 
-        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        ini_x = self.zoom_ini[0]
+        ini_xd = self.zoom_ini[2]
         try:
             dx = abs(ini_x - event.x)
-            dy = abs(ini_y - event.y)
         except:
-            dx, dy = 0, 0
+            dx = 0
         t0 = time.time()
         self.rbbox = None
         self.zoom_ini = None
-        if (dx > 3) and (dy > 3) and (t0-self.mouse_uptime)>0.1:
+        if (dx > 3) and (t0-self.mouse_uptime)>0.1:
             self.mouse_uptime = t0
             zlims, tlims = {}, {}
             for ax in self.fig.get_axes():
@@ -647,13 +643,13 @@ class BasePanel(wx.Panel):
             for ax in self.fig.get_axes():
                 ax_inv = ax.transData.inverted
                 try:
-                    x1, y1 = ax_inv().transform((event.x, event.y))
+                    x1 = ax_inv().transform(event.x)
                 except:
-                    x1, y1 = self.x_lastmove, self.y_lastmove
+                    x1 = self.x_lastmove
                 try:
-                    x0, y0 = ax_inv().transform((ini_x, ini_y))
+                    x0 = ax_inv().transform(ini_x)
                 except:
-                    x0, y0 = ini_xd, ini_yd
+                    x0 = ini_xd
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
                              ymin, ymax]
@@ -667,20 +663,17 @@ class BasePanel(wx.Panel):
     def zoom_on_y_motion(self, event=None):
         """motion event handler for zoom on y mode"""
         try:
-            x, y  = event.x, event.y
+            y = event.y
         except:
             return
         self.report_motion(event=event)
         if self.zoom_ini is None:
             return
-        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
-        if event.xdata is not None:
-            self.x_lastmove = event.xdata
+        ini_y = self.zoom_ini[1]
+        ini_yd = self.zoom_ini[3]
         if event.ydata is not None:
             self.y_lastmove = event.ydata
-        x0     = min(x, ini_x)
         ymax   = max(y, ini_y)
-        width  = abs(x-ini_x)
         height = abs(y-ini_y)
         y0     = self.canvas.figure.bbox.height - ymax
 
@@ -714,16 +707,16 @@ class BasePanel(wx.Panel):
         if self.zoom_ini is None:
             return
 
-        ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
+        ini_y = self.zoom_ini[1]
+        ini_yd = self.zoom_ini[3]
         try:
-            dx = abs(ini_x - event.x)
             dy = abs(ini_y - event.y)
         except:
-            dx, dy = 0, 0
+            dy = 0
         t0 = time.time()
         self.rbbox = None
         self.zoom_ini = None
-        if (dx > 3) and (dy > 3) and (t0-self.mouse_uptime)>0.1:
+        if (dy > 3) and (t0-self.mouse_uptime)>0.1:
             self.mouse_uptime = t0
             zlims, tlims = {}, {}
             for ax in self.fig.get_axes():
@@ -737,13 +730,13 @@ class BasePanel(wx.Panel):
             for ax in self.fig.get_axes():
                 ax_inv = ax.transData.inverted
                 try:
-                    x1, y1 = ax_inv().transform((event.x, event.y))
+                    y1 = ax_inv().transform(event.y)
                 except:
-                    x1, y1 = self.x_lastmove, self.y_lastmove
+                    y1 = self.y_lastmove
                 try:
-                    x0, y0 = ax_inv().transform((ini_x, ini_y))
+                    y0 = ax_inv().transform(ini_y)
                 except:
-                    x0, y0 = ini_xd, ini_yd
+                    y0 = ini_yd
 
                 tlims[ax] = [xmin, xmax,
                              min(y0, y1), max(y0, y1)]

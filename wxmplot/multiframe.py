@@ -54,7 +54,7 @@ class MultiPlotFrame(BaseFrame):
         opts.update(kws)
         self.panels[panel].plot(x ,y, **opts)
 
-    def oplot(self,x,y,panel=None,**kw):
+    def oplot(self,x,y,panel=None,**kws):
         """generic plotting method, overplotting any existing plot """
         if panel is None:
             panel = self.current_panel

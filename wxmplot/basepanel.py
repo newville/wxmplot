@@ -66,6 +66,12 @@ class BasePanel(wx.Panel):
         self.add_cursor_mode('lasso', motion = self.lasso_motion,
                              leftdown = self.lasso_leftdown,
                              leftup   = self.lasso_leftup)
+        self.add_cursor_mode('zoom on x', motion = self.zoom_on_x_motion,
+                             leftdown = self.zoom_on_x_leftdown,
+                             leftup   = self.zoom_on_x_leftup)
+        self.add_cursor_mode('zoom on y', motion = self.zoom_on_y_motion,
+                             leftdown = self.zoom_on_y_leftdown,
+                             leftup   = self.zoom_on_y_leftup)
 
     def addCanvasEvents(self):
         # use matplotlib events
@@ -434,6 +440,24 @@ class BasePanel(wx.Panel):
                 self.unzoom(event)
             elif ckey == 'P':
                 self.canvas.printer.Print(event)
+            elif ckey == 'R':
+                if(self.toolbar._active == 'PAN'):
+                    self.toolbar.pan()
+                self.cursor_mode = 'zoom'
+                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+            elif ckey == 'X':
+                if(self.toolbar._active == 'PAN'):
+                    self.toolbar.pan()
+                self.cursor_mode = 'zoom on x'
+                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+            elif ckey == 'Y':
+                if(self.toolbar._active == 'PAN'):
+                    self.toolbar.pan()
+                self.cursor_mode = 'zoom on y'
+                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+            elif ckey == 'W':
+                self.cursor_mode = 'report'
+                self.toolbar.pan()
 
     def __onMouseButtonEvent(self, event=None):
         """ general mouse press/release events. Here, event is
@@ -542,6 +566,179 @@ class BasePanel(wx.Panel):
                     x0, y0 = ini_xd, ini_yd
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
+                             min(y0, y1), max(y0, y1)]
+            self.conf.zoom_lims.append(tlims)
+            # now apply limits:
+            self.set_viewlimits()
+
+            if callable(self.zoom_callback):
+                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
+
+    def zoom_on_x_motion(self, event=None):
+        """motion event handler for zoom on x mode"""
+        try:
+            x = event.x
+        except:
+            return
+        self.report_motion(event=event)
+        if self.zoom_ini is None:
+            return
+        ini_x = self.zoom_ini[0]
+        ini_xd = self.zoom_ini[2]
+        if event.xdata is not None:
+            self.x_lastmove = event.xdata
+        x0     = min(x, ini_x)
+        width  = abs(x-ini_x)
+
+        zdc = wx.ClientDC(self.canvas)
+        zdc.SetLogicalFunction(wx.XOR)
+        zdc.SetBrush(wx.TRANSPARENT_BRUSH)
+        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
+        zdc.ResetBoundingBox()
+        if not is_wxPhoenix:
+            zdc.BeginDrawing()
+
+        # erase previous box
+        if self.rbbox is not None:
+            zdc.DrawRectangle(*self.rbbox)
+        limits = self.canvas.figure.axes[0].bbox.corners()
+        height = limits[3][1] - limits[0][1]
+        y0 = self.GetSize()[1] - int(round(limits[1][1]))
+        self.rbbox = (x0, y0, width, height)
+        zdc.DrawRectangle(*self.rbbox)
+        if not is_wxPhoenix:
+            zdc.EndDrawing()
+
+    def zoom_on_x_leftdown(self, event=None):
+        """leftdown event handler for zoom on x mode"""
+        self.x_lastmove, self.y_lastmove = None, None
+        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
+        self.report_leftdown(event=event)
+
+    def zoom_on_x_leftup(self, event=None):
+        """leftup event handler for zoom on x mode"""
+        if self.zoom_ini is None:
+            return
+
+        ini_x = self.zoom_ini[0]
+        ini_xd = self.zoom_ini[2]
+        try:
+            dx = abs(ini_x - event.x)
+        except:
+            dx = 0
+        t0 = time.time()
+        self.rbbox = None
+        self.zoom_ini = None
+        if (dx > 3) and (t0-self.mouse_uptime)>0.1:
+            self.mouse_uptime = t0
+            zlims, tlims = {}, {}
+            for ax in self.fig.get_axes():
+                xmin, xmax = ax.get_xlim()
+                ymin, ymax = ax.get_ylim()
+                zlims[ax] = [xmin, xmax, ymin, ymax]
+            if len(self.conf.zoom_lims) == 0:
+                self.conf.zoom_lims.append(zlims)
+            # for multiple axes, we first collect all the new limits, and
+            # only then apply them
+            for ax in self.fig.get_axes():
+                ax_inv = ax.transData.inverted
+                try:
+                    x1 = ax_inv().transform(event.x)
+                except:
+                    x1 = self.x_lastmove
+                try:
+                    x0 = ax_inv().transform(ini_x)
+                except:
+                    x0 = ini_xd
+
+                tlims[ax] = [min(x0, x1), max(x0, x1),
+                             ymin, ymax]
+            self.conf.zoom_lims.append(tlims)
+            # now apply limits:
+            self.set_viewlimits()
+
+            if callable(self.zoom_callback):
+                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
+
+    def zoom_on_y_motion(self, event=None):
+        """motion event handler for zoom on y mode"""
+        try:
+            y = event.y
+        except:
+            return
+        self.report_motion(event=event)
+        if self.zoom_ini is None:
+            return
+        ini_y = self.zoom_ini[1]
+        ini_yd = self.zoom_ini[3]
+        if event.ydata is not None:
+            self.y_lastmove = event.ydata
+        ymax   = max(y, ini_y)
+        height = abs(y-ini_y)
+        y0     = self.canvas.figure.bbox.height - ymax
+
+        zdc = wx.ClientDC(self.canvas)
+        zdc.SetLogicalFunction(wx.XOR)
+        zdc.SetBrush(wx.TRANSPARENT_BRUSH)
+        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
+        zdc.ResetBoundingBox()
+        if not is_wxPhoenix:
+            zdc.BeginDrawing()
+
+        # erase previous box
+        if self.rbbox is not None:
+            zdc.DrawRectangle(*self.rbbox)
+        limits = self.canvas.figure.axes[0].bbox.corners()
+        width = limits[2][0] - limits[0][0]
+        x0 = limits[0][0]
+        self.rbbox = (x0, y0, width, height)
+        zdc.DrawRectangle(*self.rbbox)
+        if not is_wxPhoenix:
+            zdc.EndDrawing()
+
+    def zoom_on_y_leftdown(self, event=None):
+        """leftdown event handler for zoom on y mode"""
+        self.x_lastmove, self.y_lastmove = None, None
+        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
+        self.report_leftdown(event=event)
+
+    def zoom_on_y_leftup(self, event=None):
+        """leftup event handler for zoom on y mode"""
+        if self.zoom_ini is None:
+            return
+
+        ini_y = self.zoom_ini[1]
+        ini_yd = self.zoom_ini[3]
+        try:
+            dy = abs(ini_y - event.y)
+        except:
+            dy = 0
+        t0 = time.time()
+        self.rbbox = None
+        self.zoom_ini = None
+        if (dy > 3) and (t0-self.mouse_uptime)>0.1:
+            self.mouse_uptime = t0
+            zlims, tlims = {}, {}
+            for ax in self.fig.get_axes():
+                xmin, xmax = ax.get_xlim()
+                ymin, ymax = ax.get_ylim()
+                zlims[ax] = [xmin, xmax, ymin, ymax]
+            if len(self.conf.zoom_lims) == 0:
+                self.conf.zoom_lims.append(zlims)
+            # for multiple axes, we first collect all the new limits, and
+            # only then apply them
+            for ax in self.fig.get_axes():
+                ax_inv = ax.transData.inverted
+                try:
+                    y1 = ax_inv().transform(event.y)
+                except:
+                    y1 = self.y_lastmove
+                try:
+                    y0 = ax_inv().transform(ini_y)
+                except:
+                    y0 = ini_yd
+
+                tlims[ax] = [xmin, xmax,
                              min(y0, y1), max(y0, y1)]
             self.conf.zoom_lims.append(tlims)
             # now apply limits:

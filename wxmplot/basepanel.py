@@ -464,7 +464,7 @@ class BasePanel(wx.Panel):
             x0, x1 = axes.get_xlim()
             y0, y1 = axes.get_ylim()
 
-        step = 0.15 if shift else 0.03
+        step = 0.10 if shift else 0.02
         if direction in ('left', 'right'):
             step *= abs(x1 - x0) * {'right': 1, 'left': -1}[direction]
             x0, x1 = x0+step, x1+step

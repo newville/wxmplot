@@ -98,7 +98,7 @@ class PlotPanel(BasePanel):
             axes = self.get_right_axes()
         self.conf.reset_lines()
         self.conf.yscale = 'linear'
-        self.conf.user_limits[axes] = [None, None, None, None]
+        self.conf.user_limits[axes] = 4*[None]
 
         if xlabel is not None:
             self.set_xlabel(xlabel, delay_draw=True)
@@ -516,6 +516,7 @@ class PlotPanel(BasePanel):
         """ zoom out full data range """
         self.reset_formats()
         self.conf.unzoom(full=True)
+        self.conf.user_limits[self.axis] = 4*[None]
 
     def process_data(self, event=None, expr=None):
         if expr in self.conf.data_expressions:

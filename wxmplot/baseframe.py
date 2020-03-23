@@ -11,7 +11,6 @@ import matplotlib
 from functools import partial
 from .plotpanel import PlotPanel
 from .utils import MenuItem, fix_filename
-from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as NavigationToolbar
 
 class BaseFrame(wx.Frame):
     """
@@ -140,8 +139,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                          'theme': self.theme})
 
         self.panel = PlotPanel(self, **panelkws)
-        self.toolbar = NavigationToolbar(self.panel.canvas)
-        self.toolbar.Hide()
+        # self.toolbar = NavigationToolbar(self.panel.canvas)
         self.panel.messenger = self.write_message
         self.panel.nstatusbar = sbar.GetFieldsCount()
         sizer.Add(self.panel, 1, wx.EXPAND)
@@ -193,27 +191,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     def Print(self, event=None):
         self.panel.Print(event=event)
 
-    def Zoom(self, event=None ):
-        if(self.toolbar._active == 'PAN'):
-            self.toolbar.pan()
-        self.panel.cursor_mode = 'zoom'
-        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
-
-    def Zoom_on_X(self, event=None ):
-        if(self.toolbar._active == 'PAN'):
-            self.toolbar.pan()
-        self.panel.cursor_mode = 'zoom on x'
-        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
-
-    def Zoom_on_Y(self, event=None ):
-        if(self.toolbar._active == 'PAN'):
-            self.toolbar.pan()
-        self.panel.cursor_mode = 'zoom on y'
-        self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
-
-    def Pan(self, event=None ):
-        self.panel.cursor_mode = 'report'
-        self.toolbar.pan()
+    def onZoomStyle(self, event=None, style='both'):
+        self.panel.zoom_style = style
 
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
@@ -221,9 +200,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         MenuItem(self, mopts, "Configure Plot\tCtrl+K",
                  "Configure Plot styles, colors, labels, etc",
                  self.panel.configure)
-        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range",
-                 self.panel.unzoom)
 
         MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
                  "Toggle Legend Display",
@@ -234,17 +210,25 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         mopts.AppendSeparator()
 
-        MenuItem(self, mopts, "Zoom\tCtrl+R",
-         "Going back to Zoom if Pan previously activated",
-         self.Zoom)
-        MenuItem(self, mopts, "Zoom on X\tCtrl+X",
-                 "Zoom on X only",
-                 self.Zoom_on_X)
-        MenuItem(self, mopts, "Zoom on Y\tCtrl+Y",
-                 "Zoom on Y only",
-                 self.Zoom_on_Y)
-        MenuItem(self, mopts, "Pan\tCtrl+W",
-         "Pan",self.Pan)
+        MenuItem(self, mopts, "Zoom X and Y\tCtrl+W",
+                 "Zoom on both X and Y",
+                 partial(self.onZoomStyle, style='both'),
+                 kind=wx.ITEM_RADIO, checked=True)
+        MenuItem(self, mopts, "Zoom X Only\tCtrl+X",
+                 "Zoom X only",
+                 partial(self.onZoomStyle, style='x'),
+                 kind=wx.ITEM_RADIO)
+
+        MenuItem(self, mopts, "Zoom Y Only\tCtrl+Y",
+                 "Zoom Y only",
+                 partial(self.onZoomStyle, style='y'),
+                 kind=wx.ITEM_RADIO)
+
+        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
+                 "Zoom out to full data range",
+                 self.panel.unzoom)
+
+        mopts.AppendSeparator()
 
         logmenu = wx.Menu()
         for label in self.panel.conf.log_choices:

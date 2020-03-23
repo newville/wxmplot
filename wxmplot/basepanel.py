@@ -48,13 +48,13 @@ class BasePanel(wx.Panel):
 
         self.mouse_uptime = time.time()
         self.user_limits = {}
-        # self.zoom_lims = []    # x, y coords zoom levels
         self.zoom_ini  = None  # x, y coords for zoom-box
         self.zoom_callback = zoom_callback
         self.rbbox = None
         self.zdc = None
         self.cursor_modes = {}
         self.cursor_mode = 'report'
+        self.zoom_style = 'both'
         self.parent = parent
         self.motion_sbar = None
         self.printer = Printer(self, title=output_title)
@@ -66,12 +66,7 @@ class BasePanel(wx.Panel):
         self.add_cursor_mode('lasso', motion = self.lasso_motion,
                              leftdown = self.lasso_leftdown,
                              leftup   = self.lasso_leftup)
-        self.add_cursor_mode('zoom on x', motion = self.zoom_on_x_motion,
-                             leftdown = self.zoom_on_x_leftdown,
-                             leftup   = self.zoom_on_x_leftup)
-        self.add_cursor_mode('zoom on y', motion = self.zoom_on_y_motion,
-                             leftdown = self.zoom_on_y_leftdown,
-                             leftup   = self.zoom_on_y_leftup)
+
 
     def addCanvasEvents(self):
         # use matplotlib events
@@ -116,6 +111,7 @@ class BasePanel(wx.Panel):
         """ zoom out full data range """
         if len(self.conf.zoom_lims) > 0:
             self.conf.zoom_lims = [self.conf.zoom_lims[0]]
+        self.user_lims[self.axes] = 4*[None]
         self.unzoom(event)
 
     def unzoom(self, event=None, set_bounds=True):
@@ -124,7 +120,6 @@ class BasePanel(wx.Panel):
         if len(self.conf.zoom_lims) > 1:
             lims = self.conf.zoom_lims.pop()
         ax = self.axes
-        # print 'base unzoom ', lims, set_bounds
         if lims is None: # auto scale
             self.conf.zoom_lims = [None]
             xmin, xmax, ymin, ymax = self.data_range
@@ -423,13 +418,16 @@ class BasePanel(wx.Panel):
         if event is None:
             return
         key = event.guiEvent.GetKeyCode()
-        if (key < wx.WXK_SPACE or  key > 255):
-            return
-        ckey = chr(key)
+        shift = event.guiEvent.ShiftDown()
         mod  = event.guiEvent.ControlDown()
         if self.is_macosx:
             mod = event.guiEvent.MetaDown()
         if mod:
+            if (key < wx.WXK_SPACE or  key > 255):
+                print('... ')
+                return
+            ckey = chr(key)
+            print(key, ckey)
             if ckey == 'C':
                 self.canvas.Copy_to_Clipboard(event)
             elif ckey == 'S':
@@ -440,24 +438,43 @@ class BasePanel(wx.Panel):
                 self.unzoom(event)
             elif ckey == 'P':
                 self.canvas.printer.Print(event)
-            elif ckey == 'R':
-                if(self.toolbar._active == 'PAN'):
-                    self.toolbar.pan()
-                self.cursor_mode = 'zoom'
-                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
             elif ckey == 'X':
-                if(self.toolbar._active == 'PAN'):
-                    self.toolbar.pan()
-                self.cursor_mode = 'zoom on x'
-                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+                self.zoom_style = 'x'
             elif ckey == 'Y':
-                if(self.toolbar._active == 'PAN'):
-                    self.toolbar.pan()
-                self.cursor_mode = 'zoom on y'
-                self.toolbar.set_cursor(matplotlib.backend_tools.cursors.SELECT_REGION)
+                self.zoom_style = 'y'
             elif ckey == 'W':
-                self.cursor_mode = 'report'
-                self.toolbar.pan()
+                self.zoom_style = 'both'
+        elif key in (wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT):
+            self._onPan(direction='left', shift=shift)
+        elif key in (wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT):
+            self._onPan(direction='right', shift=shift)
+        elif key in (wx.WXK_UP, wx.WXK_NUMPAD_UP):
+            self._onPan(direction='up', shift=shift)
+        elif key in (wx.WXK_DOWN, wx.WXK_NUMPAD_DOWN):
+            self._onPan(direction='down', shift=shift)
+
+    def _onPan(self, direction=None, shift=False):
+        if direction not in ('left', 'right', 'up', 'down'):
+            return
+
+        axes = self.fig.get_axes()[0]
+        if len(self.conf.zoom_lims) > 0:
+            x0, x1, y0, y1 = self.conf.zoom_lims[-1][axes]
+        else:
+            x0, x1 = axes.get_xlim()
+            y0, y1 = axes.get_ylim()
+
+        step = 0.15 if shift else 0.03
+        if direction in ('left', 'right'):
+            step *= abs(x1 - x0) * {'right': 1, 'left': -1}[direction]
+            x0, x1 = x0+step, x1+step
+        elif direction in ('up', 'down'):
+            step *= abs(y1 - y0) * {'up': 1, 'down': -1}[direction]
+            y0, y1 = y0+step, y1+step
+
+        self.conf.zoom_lims.append({axes: [x0, x1, y0, y1]})
+        self.conf.set_viewlimits()
+        self.canvas.draw()
 
     def __onMouseButtonEvent(self, event=None):
         """ general mouse press/release events. Here, event is
@@ -471,9 +488,7 @@ class BasePanel(wx.Panel):
 
         handlers = {(1, 'button_press_event'):   self.onLeftDown,
                     (1, 'button_release_event'): self.onLeftUp,
-                    (3, 'button_press_event'):   self.onRightDown,
-                    }
-        # (3,'button_release_event'): self.onRightUp}
+                    (3, 'button_press_event'):   self.onRightDown}
 
         handle_event = handlers.get((button, event.name), None)
         if hasattr(handle_event, '__call__'):
@@ -510,7 +525,7 @@ class BasePanel(wx.Panel):
         zdc = wx.ClientDC(self.canvas)
         zdc.SetLogicalFunction(wx.XOR)
         zdc.SetBrush(wx.TRANSPARENT_BRUSH)
-        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
+        zdc.SetPen(wx.Pen('WHITE', 2, wx.SOLID))
         zdc.ResetBoundingBox()
         if not is_wxPhoenix:
             zdc.BeginDrawing()
@@ -519,6 +534,18 @@ class BasePanel(wx.Panel):
         if self.rbbox is not None:
             zdc.DrawRectangle(*self.rbbox)
         self.rbbox = (x0, y0, width, height)
+
+        limits = self.canvas.figure.axes[0].bbox.corners()
+        if self.zoom_style.startswith('x'):
+            height = int(round(limits[3][1] - limits[0][1]))
+            y0 = 1 + self.canvas.GetSize()[1] - int(round(limits[1][1]))
+
+        elif self.zoom_style.startswith('y'):
+            width = 1 + int(round(limits[2][0] - limits[0][0]))
+            x0 = 1 + int(round(limits[0][0]))
+
+        self.rbbox = (x0, y0, width, height)
+
         zdc.DrawRectangle(*self.rbbox)
         if not is_wxPhoenix:
             zdc.EndDrawing()
@@ -567,6 +594,11 @@ class BasePanel(wx.Panel):
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
                              min(y0, y1), max(y0, y1)]
+                if self.zoom_style.startswith('x'):
+                    tlims[ax][2:] = [ymin, ymax]
+                elif self.zoom_style.startswith('y'):
+                    tlims[ax][:2] = [xmin, xmax]
+
             self.conf.zoom_lims.append(tlims)
             # now apply limits:
             self.set_viewlimits()
@@ -574,178 +606,6 @@ class BasePanel(wx.Panel):
             if callable(self.zoom_callback):
                 self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
 
-    def zoom_on_x_motion(self, event=None):
-        """motion event handler for zoom on x mode"""
-        try:
-            x = event.x
-        except:
-            return
-        self.report_motion(event=event)
-        if self.zoom_ini is None:
-            return
-        ini_x = self.zoom_ini[0]
-        ini_xd = self.zoom_ini[2]
-        if event.xdata is not None:
-            self.x_lastmove = event.xdata
-        x0     = min(x, ini_x)
-        width  = abs(x-ini_x)
-
-        zdc = wx.ClientDC(self.canvas)
-        zdc.SetLogicalFunction(wx.XOR)
-        zdc.SetBrush(wx.TRANSPARENT_BRUSH)
-        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
-        zdc.ResetBoundingBox()
-        if not is_wxPhoenix:
-            zdc.BeginDrawing()
-
-        # erase previous box
-        if self.rbbox is not None:
-            zdc.DrawRectangle(*self.rbbox)
-        limits = self.canvas.figure.axes[0].bbox.corners()
-        height = limits[3][1] - limits[0][1]
-        y0 = self.GetSize()[1] - int(round(limits[1][1]))
-        self.rbbox = (x0, y0, width, height)
-        zdc.DrawRectangle(*self.rbbox)
-        if not is_wxPhoenix:
-            zdc.EndDrawing()
-
-    def zoom_on_x_leftdown(self, event=None):
-        """leftdown event handler for zoom on x mode"""
-        self.x_lastmove, self.y_lastmove = None, None
-        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
-        self.report_leftdown(event=event)
-
-    def zoom_on_x_leftup(self, event=None):
-        """leftup event handler for zoom on x mode"""
-        if self.zoom_ini is None:
-            return
-
-        ini_x = self.zoom_ini[0]
-        ini_xd = self.zoom_ini[2]
-        try:
-            dx = abs(ini_x - event.x)
-        except:
-            dx = 0
-        t0 = time.time()
-        self.rbbox = None
-        self.zoom_ini = None
-        if (dx > 3) and (t0-self.mouse_uptime)>0.1:
-            self.mouse_uptime = t0
-            zlims, tlims = {}, {}
-            for ax in self.fig.get_axes():
-                xmin, xmax = ax.get_xlim()
-                ymin, ymax = ax.get_ylim()
-                zlims[ax] = [xmin, xmax, ymin, ymax]
-            if len(self.conf.zoom_lims) == 0:
-                self.conf.zoom_lims.append(zlims)
-            # for multiple axes, we first collect all the new limits, and
-            # only then apply them
-            for ax in self.fig.get_axes():
-                ax_inv = ax.transData.inverted
-                try:
-                    x1 = ax_inv().transform(event.x)
-                except:
-                    x1 = self.x_lastmove
-                try:
-                    x0 = ax_inv().transform(ini_x)
-                except:
-                    x0 = ini_xd
-
-                tlims[ax] = [min(x0, x1), max(x0, x1),
-                             ymin, ymax]
-            self.conf.zoom_lims.append(tlims)
-            # now apply limits:
-            self.set_viewlimits()
-
-            if callable(self.zoom_callback):
-                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
-
-    def zoom_on_y_motion(self, event=None):
-        """motion event handler for zoom on y mode"""
-        try:
-            y = event.y
-        except:
-            return
-        self.report_motion(event=event)
-        if self.zoom_ini is None:
-            return
-        ini_y = self.zoom_ini[1]
-        ini_yd = self.zoom_ini[3]
-        if event.ydata is not None:
-            self.y_lastmove = event.ydata
-        ymax   = max(y, ini_y)
-        height = abs(y-ini_y)
-        y0     = self.canvas.figure.bbox.height - ymax
-
-        zdc = wx.ClientDC(self.canvas)
-        zdc.SetLogicalFunction(wx.XOR)
-        zdc.SetBrush(wx.TRANSPARENT_BRUSH)
-        zdc.SetPen(wx.Pen('White', 2, wx.SOLID))
-        zdc.ResetBoundingBox()
-        if not is_wxPhoenix:
-            zdc.BeginDrawing()
-
-        # erase previous box
-        if self.rbbox is not None:
-            zdc.DrawRectangle(*self.rbbox)
-        limits = self.canvas.figure.axes[0].bbox.corners()
-        width = limits[2][0] - limits[0][0]
-        x0 = limits[0][0]
-        self.rbbox = (x0, y0, width, height)
-        zdc.DrawRectangle(*self.rbbox)
-        if not is_wxPhoenix:
-            zdc.EndDrawing()
-
-    def zoom_on_y_leftdown(self, event=None):
-        """leftdown event handler for zoom on y mode"""
-        self.x_lastmove, self.y_lastmove = None, None
-        self.zoom_ini = (event.x, event.y, event.xdata, event.ydata)
-        self.report_leftdown(event=event)
-
-    def zoom_on_y_leftup(self, event=None):
-        """leftup event handler for zoom on y mode"""
-        if self.zoom_ini is None:
-            return
-
-        ini_y = self.zoom_ini[1]
-        ini_yd = self.zoom_ini[3]
-        try:
-            dy = abs(ini_y - event.y)
-        except:
-            dy = 0
-        t0 = time.time()
-        self.rbbox = None
-        self.zoom_ini = None
-        if (dy > 3) and (t0-self.mouse_uptime)>0.1:
-            self.mouse_uptime = t0
-            zlims, tlims = {}, {}
-            for ax in self.fig.get_axes():
-                xmin, xmax = ax.get_xlim()
-                ymin, ymax = ax.get_ylim()
-                zlims[ax] = [xmin, xmax, ymin, ymax]
-            if len(self.conf.zoom_lims) == 0:
-                self.conf.zoom_lims.append(zlims)
-            # for multiple axes, we first collect all the new limits, and
-            # only then apply them
-            for ax in self.fig.get_axes():
-                ax_inv = ax.transData.inverted
-                try:
-                    y1 = ax_inv().transform(event.y)
-                except:
-                    y1 = self.y_lastmove
-                try:
-                    y0 = ax_inv().transform(ini_y)
-                except:
-                    y0 = ini_yd
-
-                tlims[ax] = [xmin, xmax,
-                             min(y0, y1), max(y0, y1)]
-            self.conf.zoom_lims.append(tlims)
-            # now apply limits:
-            self.set_viewlimits()
-
-            if callable(self.zoom_callback):
-                self.zoom_callback(wid=self.GetId(), limits=tlims[ax])
 
     def lasso_motion(self, event=None):
         """motion event handler for lasso mode"""

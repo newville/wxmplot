@@ -84,10 +84,15 @@ class MultiPlotFrame(BaseFrame):
         if panel is None: panel = self.current_panel
         self.panels[panel].unzoom_all(event=event)
 
-    def unzoom(self,event=None,panel=None):
+    def unzoom(self, event=None, panel=None):
         """zoom out 1 level, or to full data range """
-        if panel is None: panel = self.current_panel
+        if panel is None:
+            panel = self.current_panel
         self.panels[panel].unzoom(event=event)
+
+    def onZoomStyle(self, event=None, style='both'):
+        for panel in self.panels.values():
+            panel.zoom_style = style
 
     def set_title(self,s,panel=None):
         "set plot title"
@@ -163,10 +168,29 @@ class MultiPlotFrame(BaseFrame):
                  "Toggle Grid Display",
                  self.on_toggle_grid)
 
+
         mopts.AppendSeparator()
+
+        MenuItem(self, mopts, "Zoom X and Y\tCtrl+W",
+                 "Zoom on both X and Y",
+                 partial(self.onZoomStyle, style='both'),
+                 kind=wx.ITEM_RADIO, checked=True)
+        MenuItem(self, mopts, "Zoom X Only\tCtrl+X",
+                 "Zoom X only",
+                 partial(self.onZoomStyle, style='x'),
+                 kind=wx.ITEM_RADIO)
+
+        MenuItem(self, mopts, "Zoom Y Only\tCtrl+Y",
+                 "Zoom Y only",
+                 partial(self.onZoomStyle, style='y'),
+                 kind=wx.ITEM_RADIO)
+
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
                  "Zoom out to full data range",
-                 self.on_unzoom)
+                 self.unzoom)
+
+        mopts.AppendSeparator()
+
 
         mhelp = wx.Menu()
         MenuItem(self, mhelp, "Quick Reference",

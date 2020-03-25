@@ -427,7 +427,6 @@ class BasePanel(wx.Panel):
                 print('... ')
                 return
             ckey = chr(key)
-            print(key, ckey)
             if ckey == 'C':
                 self.canvas.Copy_to_Clipboard(event)
             elif ckey == 'S':

@@ -191,8 +191,8 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     def Print(self, event=None):
         self.panel.Print(event=event)
 
-    def onZoomStyle(self, event=None, style='both'):
-        self.panel.zoom_style = style
+    def onZoomStyle(self, event=None, style='both x and y'):
+        self.panel.conf.zoom_style = style
 
     def BuildMenu(self):
         mfile = self.Build_FileMenu()
@@ -212,21 +212,24 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         MenuItem(self, mopts, "Zoom X and Y\tCtrl+W",
                  "Zoom on both X and Y",
-                 partial(self.onZoomStyle, style='both'),
+                 partial(self.onZoomStyle, style='both x and y'),
                  kind=wx.ITEM_RADIO, checked=True)
         MenuItem(self, mopts, "Zoom X Only\tCtrl+X",
                  "Zoom X only",
-                 partial(self.onZoomStyle, style='x'),
+                 partial(self.onZoomStyle, style='x only'),
                  kind=wx.ITEM_RADIO)
 
         MenuItem(self, mopts, "Zoom Y Only\tCtrl+Y",
                  "Zoom Y only",
-                 partial(self.onZoomStyle, style='y'),
+                 partial(self.onZoomStyle, style='y only'),
                  kind=wx.ITEM_RADIO)
 
-        MenuItem(self, mopts, "Zoom Out\tCtrl+Z",
-                 "Zoom out to full data range",
+        MenuItem(self, mopts, "Undo Zoom/Pan\tCtrl+Z",
+                 "Zoom out / Pan out to previous view",
                  self.panel.unzoom)
+        MenuItem(self, mopts, "Zoom all the way out",
+                 "Zoom out to full data range",
+                 self.panel.unzoom_all)
 
         mopts.AppendSeparator()
 

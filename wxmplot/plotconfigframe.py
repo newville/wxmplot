@@ -190,6 +190,15 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(logchoice,  (1, 1), (1,3), labstyle, 2)
 
 
+        # Zoom
+        ztitle = wx.StaticText(panel, -1, 'Zoom Style: ')
+        zoomchoice = wx.Choice(panel, choices=self.conf.zoom_choices, size=(200,-1))
+        if self.conf.zoom_style in self.conf.zoom_choices:
+            zoomchoice.SetStringSelection(self.conf.zoom_style)
+        zoomchoice.Bind(wx.EVT_CHOICE, self.onZoomStyle)
+        sizer.Add(ztitle,      (2, 0), (1,1), labstyle, 2)
+        sizer.Add(zoomchoice,  (2, 1), (1,3), labstyle, 2)
+
         # Bounds
         axes = self.canvas.figure.get_axes()
         laxes = axes[0]
@@ -687,6 +696,9 @@ class PlotConfigFrame(wx.Frame):
         xscale = xword.replace('x', '').strip()
         yscale = yword.replace('y', '').strip()
         self.conf.set_logscale(xscale=xscale, yscale=yscale)
+
+    def onZoomStyle(self, event=None):
+        self.conf.zoom_style = event.GetString()
 
     def onStyle(self, event, trace=0):
         self.conf.set_trace_style(event.GetString(),trace=trace)

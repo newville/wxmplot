@@ -54,7 +54,6 @@ class BasePanel(wx.Panel):
         self.zdc = None
         self.cursor_modes = {}
         self.cursor_mode = 'report'
-        self.zoom_style = 'both'
         self.parent = parent
         self.motion_sbar = None
         self.printer = Printer(self, title=output_title)
@@ -90,7 +89,7 @@ class BasePanel(wx.Panel):
     def BuildPopup(self):
         # build pop-up menu for right-click display
         self.popup_menu = popup = wx.Menu()
-        MenuItem(self, popup, 'Zoom out', '',   self.unzoom)
+        MenuItem(self, popup, 'Undo last zoom', '',   self.unzoom)
         MenuItem(self, popup, 'Zoom all the way out', '',   self.unzoom_all)
 
         if self.show_config_popup:
@@ -438,11 +437,11 @@ class BasePanel(wx.Panel):
             elif ckey == 'P':
                 self.canvas.printer.Print(event)
             elif ckey == 'X':
-                self.zoom_style = 'x'
+                self.conf.zoom_style = 'x only'
             elif ckey == 'Y':
-                self.zoom_style = 'y'
+                self.conf.zoom_style = 'y only'
             elif ckey == 'W':
-                self.zoom_style = 'both'
+                self.conf.zoom_style = 'both x and y'
         elif key in (wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT):
             self._onPan(direction='left', shift=shift)
         elif key in (wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT):
@@ -535,11 +534,11 @@ class BasePanel(wx.Panel):
         self.rbbox = (x0, y0, width, height)
 
         limits = self.canvas.figure.axes[0].bbox.corners()
-        if self.zoom_style.startswith('x'):
+        if self.conf.zoom_style.startswith('x'):
             height = int(round(limits[3][1] - limits[0][1]))
             y0 = 1 + self.canvas.GetSize()[1] - int(round(limits[1][1]))
 
-        elif self.zoom_style.startswith('y'):
+        elif self.conf.zoom_style.startswith('y'):
             width = 1 + int(round(limits[2][0] - limits[0][0]))
             x0 = 1 + int(round(limits[0][0]))
 
@@ -593,9 +592,9 @@ class BasePanel(wx.Panel):
 
                 tlims[ax] = [min(x0, x1), max(x0, x1),
                              min(y0, y1), max(y0, y1)]
-                if self.zoom_style.startswith('x'):
+                if self.conf.zoom_style.startswith('x'):
                     tlims[ax][2:] = [ymin, ymax]
-                elif self.zoom_style.startswith('y'):
+                elif self.conf.zoom_style.startswith('y'):
                     tlims[ax][:2] = [xmin, xmax]
 
             self.conf.zoom_lims.append(tlims)

@@ -90,6 +90,8 @@ class ImageConfig:
         self.cursor_mode = 'zoom'
         self.zoombrush = wx.Brush('#040410',  wx.SOLID)
         self.zoompen   = wx.Pen('#101090',  3, wx.SOLID)
+        self.zoom_choices = ('both x and y', 'x only', 'y only')
+        self.zoom_style = 'both'
         self.zoom_lims = []
         self.slices = Slices_List[0]
         self.slice_xy = -1, -1

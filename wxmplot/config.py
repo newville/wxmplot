@@ -259,7 +259,8 @@ class PlotConfig:
 
         self.log_choices = ("x linear / y linear", "x linear / y log",
                             "x log / y linear", "x log / y log")
-
+        self.zoom_choices = ('both x and y', 'x only', 'y only')
+        self.zoom_style = self.zoom_choices[0]
         self.data_deriv = False
         self.data_expr  = None
         self.data_save  = {}

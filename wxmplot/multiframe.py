@@ -90,9 +90,9 @@ class MultiPlotFrame(BaseFrame):
             panel = self.current_panel
         self.panels[panel].unzoom(event=event)
 
-    def onZoomStyle(self, event=None, style='both'):
+    def onZoomStyle(self, event=None, style='both x and y'):
         for panel in self.panels.values():
-            panel.zoom_style = style
+            panel.conf.zoom_style = style
 
     def set_title(self,s,panel=None):
         "set plot title"
@@ -173,16 +173,16 @@ class MultiPlotFrame(BaseFrame):
 
         MenuItem(self, mopts, "Zoom X and Y\tCtrl+W",
                  "Zoom on both X and Y",
-                 partial(self.onZoomStyle, style='both'),
+                 partial(self.onZoomStyle, style='both x and y'),
                  kind=wx.ITEM_RADIO, checked=True)
         MenuItem(self, mopts, "Zoom X Only\tCtrl+X",
                  "Zoom X only",
-                 partial(self.onZoomStyle, style='x'),
+                 partial(self.onZoomStyle, style='x only'),
                  kind=wx.ITEM_RADIO)
 
         MenuItem(self, mopts, "Zoom Y Only\tCtrl+Y",
                  "Zoom Y only",
-                 partial(self.onZoomStyle, style='y'),
+                 partial(self.onZoomStyle, style='y only'),
                  kind=wx.ITEM_RADIO)
 
         MenuItem(self, mopts, "Zoom Out\tCtrl+Z",

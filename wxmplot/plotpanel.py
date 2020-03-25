@@ -14,6 +14,8 @@ else:
 from math import log10
 from numpy import nonzero, where
 import matplotlib
+from functools import partial
+
 from datetime import datetime
 from matplotlib import dates
 from matplotlib.figure import Figure
@@ -26,7 +28,7 @@ from matplotlib.collections import CircleCollection
 from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
 from .config import PlotConfig, ifnotNone, ifNone
-from .utils import inside_poly, fix_filename, gformat
+from .utils import inside_poly, fix_filename, gformat, MenuItem
 
 to_rgba = colorConverter.to_rgba
 
@@ -516,7 +518,6 @@ class PlotPanel(BasePanel):
         """ zoom out full data range """
         self.reset_formats()
         self.conf.unzoom(full=True)
-        self.conf.user_limits[self.axis] = 4*[None]
 
     def process_data(self, event=None, expr=None):
         if expr in self.conf.data_expressions:
@@ -612,6 +613,31 @@ class PlotPanel(BasePanel):
             canvas_draw(*args, **kws)
         self.canvas.draw = draw
         self.addCanvasEvents()
+
+    def BuildPopup(self):
+        # build pop-up menu for right-click display
+        self.popup_menu = popup = wx.Menu()
+        MenuItem(self, popup, 'Configure', '',   self.configure)
+
+        MenuItem(self, popup, 'Save Image', '',   self.save_figure)
+        popup.AppendSeparator()
+
+        MenuItem(self, popup, 'Undo Zoom/Pan', '',   self.unzoom)
+        MenuItem(self, popup, 'Zoom all the way out', '', self.unzoom_all)
+
+        popup.AppendSeparator()
+        MenuItem(self, popup, 'Zoom X and Y', '',
+                 partial(self.onZoomStyle, style='both x and y'),
+                 kind=wx.ITEM_RADIO, checked=True)
+        MenuItem(self, popup, 'Zoom X Only', '',
+                 partial(self.onZoomStyle, style='x only'),
+                 kind=wx.ITEM_RADIO)
+        MenuItem(self, popup, 'Zoom Y Only', '',
+                 partial(self.onZoomStyle, style='y only'),
+                 kind=wx.ITEM_RADIO)
+
+    def onZoomStyle(self, event=None, style='both x and y'):
+        self.conf.zoom_style = style
 
     def _updateCanvasDraw(self):
         """ Overload of the draw function that update

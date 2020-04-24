@@ -562,8 +562,6 @@ class PlotConfigFrame(wx.Frame):
 
         tsizer.Add(ltheme,    0, labstyle, 3)
         tsizer.Add(themechoice,  1, labstyle, 3)
-        tsizer.Add(ctitle,    0, labstyle, 3)
-
         tsizer.Add(show_grid, 0, labstyle, 3)
         tsizer.Add(show_leg,  0, labstyle, 3)
         tsizer.Add(show_box,  0, labstyle, 3)

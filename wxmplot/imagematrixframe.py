@@ -110,7 +110,7 @@ class ImageMatrixFrame(BaseFrame):
                           self.dual_panel]
 
 
-        lsty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
+        lsty = wx.LEFT|wx.TOP|wx.EXPAND
 
         ir = 0
         self.wids = {}
@@ -151,7 +151,7 @@ class ImageMatrixFrame(BaseFrame):
             panel.messenger = self.write_message
 
         sizer = wx.GridSizer(2, 2, 2, 2)
-        lsty |= wx.GROW|wx.ALL|wx.EXPAND|wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL
+        lsty |= wx.GROW|wx.ALL|wx.EXPAND
         sizer.Add(self.img1_panel, 1, lsty, 2)
         sizer.Add(self.dual_panel, 1, lsty, 2)
         sizer.Add(self.plot_panel, 1, lsty, 2)

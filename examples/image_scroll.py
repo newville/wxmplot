@@ -16,7 +16,7 @@ class TestFrame(wx.Frame):
     def __init__(self, parent=None, *args,**kwds):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL
 
-        wx.Frame.__init__(self, parent, wx.NewId(), '',
+        wx.Frame.__init__(self, parent, -1, '',
                          wx.DefaultPosition, wx.Size(-1,-1), **kwds)
         self.SetTitle(" WXMPlot Image Scroll")
 
@@ -32,7 +32,7 @@ class TestFrame(wx.Frame):
         panelsizer = wx.BoxSizer(wx.VERTICAL)
 
         panelsizer.Add( wx.StaticText(panel, -1, 'Show Images'),
-                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT|wx.EXPAND, 10)
+                        0, wx.LEFT|wx.EXPAND, 10)
 
         btn = wx.Button(panel, -1, 'start scrolling', size=(-1,-1))
         btn.Bind(wx.EVT_BUTTON,self.onScrollImages)
@@ -49,7 +49,7 @@ class TestFrame(wx.Frame):
         panel.SetSizer(panelsizer)
         panelsizer.Fit(panel)
 
-        framesizer.Add(panel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.EXPAND,2)
+        framesizer.Add(panel, 0, wx.EXPAND, 2)
         self.SetSizer(framesizer)
         framesizer.Fit(self)
         self.create_data()

@@ -576,9 +576,8 @@ class ImagePanel(BasePanel):
                                  facecolor=col)
             self.axes.add_patch(self.scalebar_rect)
             if conf.scalebar_showlabel:
-                x = int(x + w/4)
-                y = y - 3*h
-                self.scalebar_text = self.axes.text(x, y, conf.scalebar_label,
+                yoff, xoff = conf.scalebar_textoffset
+                self.scalebar_text = self.axes.text(x+xoff, y+yoff, conf.scalebar_label,
                                                     color=col)
         self.canvas.draw()
         if callable(self.redraw_callback):

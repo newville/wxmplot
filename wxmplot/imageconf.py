@@ -100,6 +100,7 @@ class ImageConfig:
         self.scalebar_show = False
         self.scalebar_showlabel = False
         self.scalebar_label = ''
+        self.scalebar_textoffset =  10, 25
         self.scalebar_pos =  5, 5
         self.scalebar_size = 1, 1
         self.scalebar_pixelsize = None, None
@@ -496,6 +497,7 @@ class ImageConfigFrame(wx.Frame):
 
         # Scalebar
         ypos, xpos = conf.scalebar_pos
+        tyoff, txoff = conf.scalebar_textoffset
         ysiz, xsiz = conf.scalebar_size
         units = conf.scalebar_units
         dshape = conf.data.shape
@@ -516,7 +518,11 @@ class ImageConfigFrame(wx.Frame):
         xpos_label = SimpleText(self, 'X Position: ')
         ypos_label = SimpleText(self, 'Y Position: ')
         size_label = SimpleText(self, 'Scalebar Size: ')
-        pos_label = SimpleText(self, "Scalebar Position (pixels from lower left):")
+        pos_label = SimpleText(self, 'Scalebar Position (pixels from lower left):')
+        toff_label = SimpleText(self, 'Scalebar Label Position (pixels from scalebar):')
+        xoff_label = SimpleText(self, 'X Offset: ')
+        yoff_label = SimpleText(self, 'Y Offset: ')
+
         width_label = SimpleText(self, 'Width (%s): ' % units)
         height_label = SimpleText(self, 'Height (pixels): ')
         pixsize_label = SimpleText(self, 'Pixel Size: ')
@@ -554,12 +560,21 @@ class ImageConfigFrame(wx.Frame):
 
 
 
-        opts = dict(min_val=0, increment=1, digits=0, size=(100, -1),
+        opts = dict(increment=1, digits=0, size=(100, -1),
                     action=self.onScalebarEvents)
 
-        self.xpos = FloatSpin(self,  value=xpos, max_val=dshape[1], **opts)
-        self.ypos = FloatSpin(self,  value=ypos, max_val=dshape[0], **opts)
-        self.height = FloatSpin(self, value=ysiz, max_val=dshape[0], **opts)
+        self.xpos = FloatSpin(self,  value=xpos, max_val=dshape[1],
+                              min_val=0, **opts)
+        self.ypos = FloatSpin(self,  value=ypos, max_val=dshape[0],
+                              min_val=0, **opts)
+        self.height = FloatSpin(self, value=ysiz, max_val=dshape[0],
+                                min_val=0, **opts)
+
+        self.txoff = FloatSpin(self,  value=txoff, max_val=dshape[1],
+                               min_val=-dshape[1], **opts)
+        self.tyoff = FloatSpin(self,  value=tyoff, max_val=dshape[0],
+                               min_val=-dshape[0], **opts)
+
 
         opts['increment'] = xstep
         opts['digits'] = max(1, 2 - int(np.log10(abs(xstep))))
@@ -615,12 +630,20 @@ class ImageConfigFrame(wx.Frame):
         irow += 1
         sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
 
-
         irow += 1
         sizer.Add(self.label.label,      (irow, 0), (1, 1), labstyle, 2)
         sizer.Add(self.label,       (irow, 1), (1, 1), labstyle, 2)
         sizer.Add(color_label,     (irow, 2), (1, 1), labstyle, 2)
         sizer.Add(self.color,      (irow, 3), (1, 1), labstyle, 2)
+
+        irow += 1
+        sizer.Add(toff_label,   (irow, 0), (1, 3), labstyle, 2)
+
+        irow += 1
+        sizer.Add(xoff_label,   (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.txoff,   (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(yoff_label,   (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.tyoff,   (irow, 3), (1, 1), labstyle, 2)
 
         irow += 1
         sizer.Add(self.show_scalebar,  (irow, 1), (1, 1), labstyle, 2)
@@ -660,6 +683,7 @@ class ImageConfigFrame(wx.Frame):
         self.conf.scalebar_showlabel = self.show_label.IsChecked()
         self.conf.scalebar_label = self.label.GetValue()
         self.conf.scalebar_pos =  self.ypos.GetValue(), self.xpos.GetValue()
+        self.conf.scalebar_textoffset =  self.tyoff.GetValue(), self.txoff.GetValue()
         self.conf.scalebar_size = self.height.GetValue(), self.width.GetValue()
 
         self.conf.scalebar_color = col = hexcolor(self.color.GetValue()[:3])

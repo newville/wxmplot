@@ -293,8 +293,11 @@ class PrintoutWx(wx.Printout):
         # set figure resolution,bg color for printer
         self.canvas.figure.dpi = ppw
         self.canvas.figure.set_facecolor('#FFFFFF')
-        self.canvas.bitmap.SetWidth(int(self.canvas.bitmap.GetWidth() * vscale))
-        self.canvas.bitmap.SetHeight(int(self.canvas.bitmap.GetHeight()* vscale))
+        try:
+            self.canvas.bitmap.SetWidth(int(self.canvas.bitmap.GetWidth() * vscale))
+            self.canvas.bitmap.SetHeight(int(self.canvas.bitmap.GetHeight()* vscale))
+        except:
+            pass
 
         # occasional crash here?
         try:

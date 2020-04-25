@@ -151,8 +151,8 @@ class StackedPlotFrame(BaseFrame):
         self.panel_bot.cursor_modes = {'zoom': null_events}
 
 
-        sizer.Add(self.panel,self.ratio, wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
-        sizer.Add(self.panel_bot, 1,     wx.GROW|wx.EXPAND|wx.ALIGN_CENTER, 2)
+        sizer.Add(self.panel,self.ratio, wx.GROW|wx.EXPAND, 2)
+        sizer.Add(self.panel_bot, 1,     wx.GROW|wx.EXPAND, 2)
 
         pack(self, sizer)
 

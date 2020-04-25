@@ -63,7 +63,7 @@ class StripChartFrame(wx.Frame):
 
         btnsizer.Add(b_on,   0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
         btnsizer.Add(b_off,  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
-        btnsizer.Add(tlabel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
+        btnsizer.Add(tlabel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.LEFT, 0)
         btnsizer.Add(self.time_range, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
 
         btnpanel.SetSizer(btnsizer)
@@ -72,10 +72,8 @@ class StripChartFrame(wx.Frame):
         self.plotpanel = PlotPanel(self, messenger=self.write_message)
         self.plotpanel.BuildPanel()
         self.plotpanel.set_xlabel('Time from Present (s)')
-        mainsizer.Add(btnpanel,       0,
-                      wx.GROW|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
-        mainsizer.Add(self.plotpanel, 1,
-                      wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 0)
+        mainsizer.Add(btnpanel, 0,  wx.GROW|wx.ALIGN_LEFT|wx.LEFT, 0)
+        mainsizer.Add(self.plotpanel, 1, wx.GROW|wx.ALL|wx.ALIGN_LEFT|wx.LEFT, 0)
         self.SetSizer(mainsizer)
         mainsizer.Fit(self)
 

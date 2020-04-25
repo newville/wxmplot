@@ -544,7 +544,7 @@ class ImageMatrixFrame(BaseFrame):
             dp.conf.data = img
         im1_zoom = self.img1_panel.conf.zoom_lims[-1]
         if im1_zoom is not None:
-            dp.conf.zoom_lims.append({dp.axes:im1_zoom.values()[0]})
+            dp.conf.zoom_lims.append({dp.axes:list(im1_zoom.values())[0]})
             dp.set_viewlimits()
             if self.sel_mask is not None:
                 dp.conf.image = dp.axes.imshow(img, cmap=dp.conf.cmap[0],

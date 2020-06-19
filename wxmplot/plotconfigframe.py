@@ -495,44 +495,30 @@ class PlotConfigFrame(wx.Frame):
 
         panel = scrolled.ScrolledPanel(parent, size=(900, 250),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
-
         if font is None:
             font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
 
         sizer = wx.GridBagSizer(2, 2)
         i = 0
-
+        cnf = self.conf
         ax = self.axes[0]
-        axis_bgcol = ax.get_facecolor()
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-
         opts = dict(size=(40, 30), style=labstyle)
 
-        ctitle = wx.StaticText(panel, -1, ' Colors:  ')
-        ltheme = wx.StaticText(panel, -1, ' Theme: ')
-
-        theme_names = list(self.conf.themes.keys())
-
+        theme_names = list(cnf.themes.keys())
         themechoice = Choice(panel, choices=theme_names, action=self.onTheme)
-        themechoice.SetStringSelection(self.conf.current_theme)
+        themechoice.SetStringSelection(cnf.current_theme)
 
-        textcol = csel.ColourSelect(panel, label=" Text ",
-                                    colour=mpl_color(self.conf.textcolor),
-                                    size=(120, 30), style=labstyle)
 
-        gridcol = csel.ColourSelect(panel, label=" Grid ",
-                                    colour=mpl_color(self.conf.gridcolor),
-                                    size=(120, 30), style=labstyle)
-
-        bgcol = csel.ColourSelect(panel, label=" Background ",
-                                  colour=mpl_color(axis_bgcol),
-                                  size=(120, 30), style=labstyle)
-
-        fbgcol = csel.ColourSelect(panel,  label=" Outer Frame ",
-                                   colour=mpl_color(self.canvas.figure.get_facecolor()),
-                                   size=(120, 30), style=labstyle)
-
+        textcol = csel.ColourSelect(panel, label=" Text ", size=(80, -1),
+                                    colour=mpl_color(cnf.textcolor))
+        gridcol = csel.ColourSelect(panel, label=" Grid ", size=(80, -1),
+                                    colour=mpl_color(cnf.gridcolor))
+        bgcol = csel.ColourSelect(panel, label=" Background ", size=(120, -1),
+                                  colour=mpl_color(ax.get_facecolor()))
+        fbgcol = csel.ColourSelect(panel,  label=" Frame ", size=(80, -1),
+                                   colour=mpl_color(self.canvas.figure.get_facecolor()))
 
         self.colwids = {'text': textcol, 'face': bgcol,
                         'grid': gridcol, 'frame': fbgcol}
@@ -544,36 +530,53 @@ class PlotConfigFrame(wx.Frame):
 
         show_grid  = wx.CheckBox(panel,-1, ' Show Grid  ')
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
-        show_grid.SetValue(self.conf.show_grid)
+        show_grid.SetValue(cnf.show_grid)
 
         show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
-        show_box.SetValue(self.conf.axes_style == 'box')
+        show_box.SetValue(cnf.axes_style == 'box')
 
         show_leg = wx.CheckBox(panel,-1, 'Show Legend  ')
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
-        show_leg.SetValue(self.conf.show_legend)
+        show_leg.SetValue(cnf.show_legend)
         if show_leg not in self.show_legend_cbs:
             self.show_legend_cbs.append(show_leg)
 
+        tsizer = wx.BoxSizer(wx.HORIZONTAL)
+        tsizer.Add(wx.StaticText(panel, -1, ' Theme: '), 0, labstyle, 3)
+        tsizer.Add(themechoice,  1, labstyle, 3)
+        tsizer.Add(wx.StaticText(panel, -1, ' Colors: '), 0, labstyle, 3)
+        tsizer.Add(textcol,   0, labstyle, 3)
+        tsizer.Add(gridcol,   0, labstyle, 3)
+        tsizer.Add(bgcol,     0, labstyle, 3)
+        tsizer.Add(fbgcol ,   0, labstyle, 3)
+        sizer.Add(tsizer,    (1, 0), (1, 9), labstyle, 3)
 
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
-        csizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        tsizer.Add(ltheme,    0, labstyle, 3)
-        tsizer.Add(themechoice,  1, labstyle, 3)
+        tsizer.Add(wx.StaticText(panel, -1, ' Options: '), 0, labstyle, 3)
         tsizer.Add(show_grid, 0, labstyle, 3)
         tsizer.Add(show_leg,  0, labstyle, 3)
         tsizer.Add(show_box,  0, labstyle, 3)
 
-        csizer.Add(ctitle,    0, labstyle, 3)
-        csizer.Add(textcol,   0, labstyle, 3)
-        csizer.Add(gridcol,   0, labstyle, 3)
-        csizer.Add(bgcol,     0, labstyle, 3)
-        csizer.Add(fbgcol ,   0, labstyle, 3)
+        sizer.Add(tsizer,    (2, 0), (1, 9), labstyle, 3)
 
-        sizer.Add(tsizer,    (1, 0), (1, 9), labstyle, 3)
-        sizer.Add(csizer,    (3, 0), (1, 9), labstyle, 3)
+        tsizer = wx.BoxSizer(wx.HORIZONTAL)
+        tsizer.Add(wx.StaticText(panel, -1, ' All Traces:  Thickness: '), 0, labstyle, 3)
+        ##
+        thk = FloatSpin(panel, size=(FSPINSIZE, -1), value=cnf.traces[0].linewidth,
+                        min_val=0, max_val=10, increment=0.5, digits=1,
+                        action=partial(self.onThickness, trace=-1))
+        tsizer.Add(thk, 0, labstyle, 3)
+        msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=cnf.traces[0].markersize,
+                        min_val=0, max_val=30, increment=0.5, digits=1,
+                        action=partial(self.onMarkerSize, trace=-1))
+        tsizer.Add(wx.StaticText(panel, -1, ' Symbol Size: '), 0, labstyle, 3)
+        tsizer.Add(msz, 0, labstyle, 3)
+
+
+        sizer.Add(tsizer,    (3, 0), (1, 9), labstyle, 3)
+
+        sizer.Add(wx.StaticText(panel, -1, 'Thing 1'), (4, 0), (1, 9), labstyle, 3)
 
         irow = 5
         for t in ('#','Label','Color', 'Style',
@@ -583,11 +586,13 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
             i = i+1
         self.trace_labels = []
-        ntrace_display = min(self.conf.ntrace+2, len(self.conf.traces))
+        self.choice_linewidths = []
+        self.choice_markersizes = []
+        ntrace_display = min(cnf.ntrace+2, len(cnf.traces))
         for i in range(ntrace_display):
             irow += 1
             label  = "trace %i" % i
-            lin  = self.conf.traces[i]
+            lin  = cnf.traces[i]
             dlab = lin.label
             dcol = hexcolor(lin.color)
             dthk = lin.linewidth
@@ -608,25 +613,25 @@ class PlotConfigFrame(wx.Frame):
             thk = FloatSpin(panel, size=(FSPINSIZE, -1), value=dthk,
                             min_val=0, max_val=10, increment=0.5, digits=1,
                             action=partial(self.onThickness, trace=i))
-
-            sty = Choice(panel, choices=self.conf.styles, size=(100,-1),
+            self.choice_linewidths.append(thk)
+            sty = Choice(panel, choices=cnf.styles, size=(100,-1),
                          action=partial(self.onStyle,trace=i))
             sty.SetStringSelection(dsty)
 
             msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=dmsz,
                             min_val=0, max_val=30, increment=0.5, digits=1,
                             action=partial(self.onMarkerSize, trace=i))
-
+            self.choice_markersizes.append(msz)
             zor = FloatSpin(panel, size=(FSPINSIZE, -1), value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0,
                             action=partial(self.onZorder, trace=i))
 
-            sym = Choice(panel, choices=self.conf.symbols, size=(120,-1),
+            sym = Choice(panel, choices=cnf.symbols, size=(120,-1),
                          action=partial(self.onSymbol,trace=i))
 
             sym.SetStringSelection(dsym)
 
-            jsty = wx.Choice(panel, -1, choices=self.conf.drawstyles, size=(100,-1))
+            jsty = wx.Choice(panel, -1, choices=cnf.drawstyles, size=(100,-1))
             jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
             jsty.SetStringSelection(djsty)
 
@@ -708,16 +713,28 @@ class PlotConfigFrame(wx.Frame):
         self.conf.set_trace_marker(event.GetString(), trace=trace)
 
     def onMarkerSize(self, event, trace=0):
-        self.conf.set_trace_markersize(event.GetEventObject().GetValue(),
-                                       trace=trace)
+        val = event.GetEventObject().GetValue()
+        if trace == -1:
+            for t, c in enumerate(self.choice_markersizes):
+                c.SetValue(val)
+                self.conf.set_trace_markersize(val, trace=t)
+        else:
+            self.conf.set_trace_markersize(val, trace=trace)
+
 
     def onZorder(self, event, trace=0):
         self.conf.set_trace_zorder(event.GetEventObject().GetValue(),
                                    trace=trace)
 
     def onThickness(self, event, trace=0):
-        self.conf.set_trace_linewidth(event.GetEventObject().GetValue(),
-                                      trace=trace)
+        val = event.GetEventObject().GetValue()
+        if trace == -1:
+            for t, c in enumerate(self.choice_linewidths):
+                c.SetValue(val)
+                self.conf.set_trace_linewidth(val, trace=t)
+        else:
+            self.conf.set_trace_linewidth(val, trace=trace)
+
 
     def onAutoBounds(self,event):
         axes = self.canvas.figure.get_axes()

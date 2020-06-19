@@ -423,7 +423,6 @@ class BasePanel(wx.Panel):
             mod = event.guiEvent.MetaDown()
         if mod:
             if (key < wx.WXK_SPACE or  key > 255):
-                print('... ')
                 return
             ckey = chr(key)
             if ckey == 'C':

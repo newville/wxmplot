@@ -3,6 +3,7 @@
 # WXMPlot GUI to Configure (2D) Plots
 #
 import os, sys
+import time
 from functools import partial
 import wx
 import wx.lib.colourselect  as csel
@@ -563,10 +564,12 @@ class PlotConfigFrame(wx.Frame):
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
         tsizer.Add(wx.StaticText(panel, -1, ' All Traces:  Thickness: '), 0, labstyle, 3)
         ##
-        thk = FloatSpin(panel, size=(FSPINSIZE, -1), value=cnf.traces[0].linewidth,
-                        min_val=0, max_val=10, increment=0.5, digits=1,
-                        action=partial(self.onThickness, trace=-1))
-        tsizer.Add(thk, 0, labstyle, 3)
+        allthk = FloatSpin(panel, size=(FSPINSIZE, -1), value=cnf.traces[0].linewidth,
+                           min_val=0, max_val=20, increment=0.5, digits=1,
+                           action=partial(self.onThickness, trace=-1))
+
+        self.last_thickness_event = 0.0
+        tsizer.Add(allthk, 0, labstyle, 3)
         msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=cnf.traces[0].markersize,
                         min_val=0, max_val=30, increment=0.5, digits=1,
                         action=partial(self.onMarkerSize, trace=-1))
@@ -611,7 +614,7 @@ class PlotConfigFrame(wx.Frame):
             self.colwids[i] = col
 
             thk = FloatSpin(panel, size=(FSPINSIZE, -1), value=dthk,
-                            min_val=0, max_val=10, increment=0.5, digits=1,
+                            min_val=0, max_val=20, increment=0.5, digits=1,
                             action=partial(self.onThickness, trace=i))
             self.choice_linewidths.append(thk)
             sty = Choice(panel, choices=cnf.styles, size=(100,-1),

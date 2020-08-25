@@ -58,9 +58,6 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         wx.Frame.__init__(self, parent, -1, title, **kws)
 
         self.SetMinSize((250, 250))
-        print('@baseframe ', self)
-        print('@baseframe ', self.GetSize())
-        
         self.output_title = output_title
         self.exit_callback = exit_callback
         self.parent = parent

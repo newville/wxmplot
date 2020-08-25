@@ -588,6 +588,8 @@ class PlotPanel(BasePanel):
         self.axes  = self.fig.add_subplot(self.gridspec[0],
                                           facecolor=self.conf.facecolor)
         self.canvas = FigureCanvas(self, -1, self.fig)
+        self.canvas.SetClientSize((self.figsize[0]*self.dpi, self.figsize[1]*self.dpi))
+        self.canvas.SetMinSize((300, 300))
 
         self.printer.canvas = self.canvas
         self.set_bg(self.conf.framecolor)
@@ -602,10 +604,10 @@ class PlotPanel(BasePanel):
         # This way of adding to sizer allows resizing
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.canvas, 2, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND, 0)
-        self.SetAutoLayout(True)
+        # self.SetAutoLayout(True)
         self.autoset_margins()
         self.SetSizer(sizer)
-        self.Fit()
+        self.SetSize(self.GetBestVirtualSize())
 
         canvas_draw = self.canvas.draw
         def draw(*args, **kws):

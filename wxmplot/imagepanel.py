@@ -322,7 +322,7 @@ class ImagePanel(BasePanel):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self.canvas, 1, wx.ALL|wx.GROW)
         self.SetSizer(sizer)
-        self.Fit()
+        self.SetSize(self.GetBestVirtualSize())
         self.addCanvasEvents()
 
     def BuildPopup(self):

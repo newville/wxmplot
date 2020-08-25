@@ -408,10 +408,9 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mainsizer.Add(self.config_panel, 0,
                       wx.LEFT|wx.ALIGN_LEFT|wx.TOP|wx.ALIGN_TOP|wx.EXPAND)
 
-        mainsizer.Add(self.panel,    1, wx.ALL|wx.GROW)
-
+        mainsizer.Add(self.panel,  1, wx.ALL|wx.GROW)
         self.SetSizer(mainsizer)
-        self.Fit()
+        self.SetSize(self.GetBestVirtualSize())        
 
     def display(self, img, title=None, colormap=None, style='image',
                 subtitles=None, auto_contrast=False, contrast_level=None, **kws):

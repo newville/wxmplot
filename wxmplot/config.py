@@ -125,12 +125,10 @@ light_theme = {'axes.grid': True,
                'savefig.edgecolor': 'white',
                'savefig.facecolor': 'white',
                'savefig.format': 'png',
-               'savefig.jpeg_quality': 95,
+               # 'savefig.jpeg_quality': 95,
                'savefig.orientation': 'portrait',
                'savefig.pad_inches': 0.1,
-
                }
-
 
 dark_theme = {'axes.facecolor': '#202020',
               'axes.edgecolor': '#FDFDC0',

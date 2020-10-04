@@ -14,4 +14,4 @@ for ix, theme in enumerate(('light', 'dark', 'matplotlib', 'seaborn',
                    label='reference', show_legend=True, theme=theme, size=(600,450))
     wi.plot(x, z, label='signal', marker='+', win=ix+1)
     siz = this.GetSize()
-    this.SetPosition((25 + ix*siz[0]/4, 25 + ix*siz[1]/12))
+    this.SetPosition((25 + int(ix*siz[0]/4), 25 + int(ix*siz[1]/12)))

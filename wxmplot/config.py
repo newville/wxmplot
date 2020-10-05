@@ -768,7 +768,7 @@ class PlotConfig:
             for legline, legtext, mainline in zip(self.mpl_legend.get_lines(),
                                                   self.mpl_legend.get_texts(),
                                                   lins):
-                legline.set_pickradius(5)
+                legline.set_pickradius(20)
                 legtext.set_picker(5)
                 self.legend_map[legline] = (mainline, legline, legtext)
                 self.legend_map[legtext] = (mainline, legline, legtext)

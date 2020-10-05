@@ -81,6 +81,8 @@ class StripChartFrame(wx.Frame):
         self.timer = wx.Timer(self)
         self.count = 0
         self.Refresh()
+        self.SetSize(self.GetBestVirtualSize())
+
         wx.CallAfter(self.onStartTimer)
 
     def write_message(self, msg, panel=0):

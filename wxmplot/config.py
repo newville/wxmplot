@@ -842,15 +842,21 @@ class PlotConfig:
                 try:
                     for trace, lines in enumerate(ax.get_lines()):
                         x, y = lines.get_xdata(), lines.get_ydata()
-                        if y_minpos is None:
-                            y_minpos= min(y[np.where(y>0)])
-                        else:
-                            y_minpos= min(y_minpos, min(y[np.where(y>0)]))
-                        if x_minpos is None:
-                            x_minpos= min(x[np.where(x>0)])
-                        else:
-                            x_minpos= min(x_minpos, min(x[np.where(x>0)]))
-                            
+                        try:
+                            if not isinstance(y, np.ndarray):
+                                y = np.array(y)
+                            if not isinstance(x, np.ndarray):
+                                x = np.array(x)
+                            if y_minpos is None:
+                                y_minpos= min(y[np.where(y>0)])
+                            else:
+                                y_minpos= min(y_minpos, min(y[np.where(y>0)]))
+                            if x_minpos is None:
+                                x_minpos= min(x[np.where(x>0)])
+                            else:
+                                x_minpos= min(x_minpos, min(x[np.where(x>0)]))
+                        except:
+                            pass
                         if limits == [None, None, None, None]:
                             limits = [min(x), max(x), min(y), max(y)]
                         else:

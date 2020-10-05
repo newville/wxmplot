@@ -834,13 +834,23 @@ class PlotConfig:
 
     def set_viewlimits(self):
         all_limits = []
-
+        x_minpos = None
+        y_minpos = None
         for ax in self.canvas.figure.get_axes():
             limits = [None, None, None, None]
             if ax in self.axes_traces:
                 try:
                     for trace, lines in enumerate(ax.get_lines()):
                         x, y = lines.get_xdata(), lines.get_ydata()
+                        if y_minpos is None:
+                            y_minpos= min(y[np.where(y>0)])
+                        else:
+                            y_minpos= min(y_minpos, min(y[np.where(y>0)]))
+                        if x_minpos is None:
+                            x_minpos= min(x[np.where(x>0)])
+                        else:
+                            x_minpos= min(x_minpos, min(x[np.where(x>0)]))
+                            
                         if limits == [None, None, None, None]:
                             limits = [min(x), max(x), min(y), max(y)]
                         else:
@@ -850,7 +860,8 @@ class PlotConfig:
                                       max(limits[3], max(y))]
                 except ValueError:
                     pass
-
+            if x_minpos is None: x_minpos = 1.e-8
+            if y_minpos is None: y_minpos = 1.e-8
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):
                     if val is not None:
@@ -876,9 +887,11 @@ class PlotConfig:
                 limits[2] = limits[2] - yrange * self.viewpad /100.0
                 limits[3] = limits[3] + yrange * self.viewpad /100.0
                 if self.xscale == 'log':
-                    limits[0] = max(0, limits[0])
+                    limits[0] = max(x_minpos/2, limits[0])
+                   
                 if self.yscale == 'log':
-                    limits[2] = max(0, limits[2])
+                    limits[2] = max(y_minpos/2, limits[2])
+                   
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):
@@ -905,11 +918,11 @@ class PlotConfig:
         self.yscale = yscale
         for axes in self.canvas.figure.get_axes():
             try:
-                axes.set_yscale(yscale, basey=10)
+                axes.set_yscale(yscale)
             except:
                 axes.set_yscale('linear')
             try:
-                axes.set_xscale(xscale, basex=10)
+                axes.set_xscale(xscale)
             except:
                 axes.set_xscale('linear')
         if not delay_draw:

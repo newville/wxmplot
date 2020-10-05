@@ -18,7 +18,7 @@ class StackedPlotFrame(BaseFrame):
     Top/Bottom MatPlotlib panels in a single frame
     """
     def __init__(self, parent=None, title ='Stacked Plot Frame',
-                 framesize=(850,450), panelsize=(550,450),
+                 framesize=(550,650), panelsize=(550,350),
                  ratio=3.0, **kws):
 
         BaseFrame.__init__(self, parent=parent, title=title,
@@ -151,13 +151,10 @@ class StackedPlotFrame(BaseFrame):
         self.panel_bot.cursor_modes = {'zoom': null_events}
 
 
-        sizer.Add(self.panel,self.ratio, wx.GROW|wx.EXPAND, 2)
-        sizer.Add(self.panel_bot, 1,     wx.GROW|wx.EXPAND, 2)
-
+        sizer.Add(self.panel,     round(0.75*self.ratio), wx.GROW|wx.EXPAND, 2)
+        sizer.Add(self.panel_bot, 1, wx.GROW, 2)
         pack(self, sizer)
-
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSize(self.GetBestVirtualSize())
         self.BuildMenu()
 
     def BuildMenu(self):

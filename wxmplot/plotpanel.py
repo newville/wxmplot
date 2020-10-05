@@ -51,7 +51,7 @@ class PlotPanel(BasePanel):
 
         self.trace_color_callback = trace_color_callback
         BasePanel.__init__(self, parent,
-                           output_title=output_title, **kws)
+                           output_title=output_title, size=size, **kws)
 
         self.conf = PlotConfig(panel=self, theme=theme,
                                with_data_process=with_data_process)
@@ -589,7 +589,7 @@ class PlotPanel(BasePanel):
                                           facecolor=self.conf.facecolor)
         self.canvas = FigureCanvas(self, -1, self.fig)
         self.canvas.SetClientSize((self.figsize[0]*self.dpi, self.figsize[1]*self.dpi))
-        self.canvas.SetMinSize((300, 300))
+        self.canvas.SetMinSize((100, 100))
 
         self.printer.canvas = self.canvas
         self.set_bg(self.conf.framecolor)

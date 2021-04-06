@@ -429,8 +429,8 @@ def register_custom_colormaps():
         cm2 = cm1[::-1]
         nam1 = name
         nam2 = '%s_r' % name
-        register_cmap(name=nam1, cmap=makemap(nam1, cm1, 256), lut=256)
-        register_cmap(name=nam2, cmap=makemap(nam2, cm2, 256), lut=256)
+        register_cmap(name=nam1, cmap=makemap(nam1, cm1, 256))
+        register_cmap(name=nam2, cmap=makemap(nam2, cm2, 256))
 
     return ('stdgamma', 'red', 'green', 'blue', 'red_heat', 'green_heat',
             'blue_heat', 'magenta', 'yellow', 'cyan')

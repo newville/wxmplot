@@ -348,7 +348,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 """
 
-    def __init__(self, parent=None, size=(700, 525), lasso_callback=None,
+    def __init__(self, parent=None, size=(750, 625), lasso_callback=None,
                  mode='intensity', show_xsections=False,
                  cursor_labels=None, output_title='Image', subtitles=None,
                  user_menus=None, title='Image Display Frame', **kws):
@@ -381,7 +381,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
 
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
-                                size=(700, 525), dpi=100,
+                                size=(650, 725), dpi=100,
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
@@ -410,7 +410,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         mainsizer.Add(self.panel,  1, wx.ALL|wx.GROW)
         self.SetSizer(mainsizer)
-        self.SetSize(self.GetBestVirtualSize())        
+        self.SetSize(self.GetBestVirtualSize())
 
     def display(self, img, title=None, colormap=None, style='image',
                 subtitles=None, auto_contrast=False, contrast_level=None, **kws):

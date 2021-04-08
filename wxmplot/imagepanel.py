@@ -228,8 +228,10 @@ class ImagePanel(BasePanel):
         self.gridspec.update(left=l, top=t, right=r, bottom=b)
 
         for ax in self.fig.get_axes():
-            ax.update_params()
-            ax.set_position(ax.figbox)
+            # ax.update_params()
+            # ax.set_position(ax.figbox)
+            figpos = ax.get_subplotspec().get_position(self.canvas.figure)
+            ax.set_position(figpos)
 
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --

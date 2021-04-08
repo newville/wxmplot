@@ -138,8 +138,13 @@ class StackedPlotFrame(BaseFrame):
             pan.messenger = self.write_message
             pan.conf.auto_margins = False
             pan.conf.set_margins(**margins[pname])
-            pan.axes.update_params()
-            pan.axes.set_position(pan.axes.figbox)
+            # pan.axes.update_params()
+            # pan.axes.set_position(pan.axes.figbox)
+            # ax.update_params()
+            # ax.set_position(ax.figbox)
+            figpos = pan.axes.get_subplotspec().get_position(pan.canvas.figure)
+            pan.axes.set_position(figpos)
+
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
             pan.unzoom_all = self.unzoom_all
             pan.unzoom = self.unzoom

@@ -450,8 +450,10 @@ class PlotConfig:
             self.panel.gridspec.update(left=left, top=1-top,
                                        right=1-right, bottom=bottom)
         for ax in self.canvas.figure.get_axes():
-            ax.update_params()
-            ax.set_position(ax.figbox)
+            # ax.update_params()
+            figpos = ax.get_subplotspec().get_position(self.canvas.figure)
+            ax.set_position(figpos)
+
         if not delay_draw:
             self.canvas.draw()
         if callable(self.margin_callback):
@@ -894,10 +896,10 @@ class PlotConfig:
                 limits[3] = limits[3] + yrange * self.viewpad /100.0
                 if self.xscale == 'log':
                     limits[0] = max(x_minpos/2, limits[0])
-                   
+
                 if self.yscale == 'log':
                     limits[2] = max(y_minpos/2, limits[2])
-                   
+
 
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):

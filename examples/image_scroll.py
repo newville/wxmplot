@@ -40,7 +40,7 @@ class TestFrame(wx.Frame):
         btn2 = wx.Button(panel, -1, 'stop scrolling', size=(-1,-1))
         btn2.Bind(wx.EVT_BUTTON,self.onStop)
 
-        self.msg = wx.StaticText(panel, -1, 'Image Rate  ', size=(200, -1))
+        self.msg = wx.StaticText(panel, label='000 images in 00.0000 seconds ',  size=(500, -1))
 
         panelsizer.Add(btn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
         panelsizer.Add(btn2, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.LEFT, 5)
@@ -61,15 +61,14 @@ class TestFrame(wx.Frame):
 
     def create_data(self):
         nx = ny = 1001
-        print("Creating images..")
-        for xoff in np.linspace(-1, 1, 11):
+        print("Creating 240 images..")
+        for xoff in np.linspace(-2.5, 2.5, 20):
             y, x = np.mgrid[-10+xoff:10+xoff:nx*1j, -10:10:nx*1j]
-            for xscale in (4.5, 5.0, 5.5, 6.0):
-                for yscale in (0.8, 0.9, 1.0, 1.1, 1.2):
+            for xscale in (4.5, 5.0, 6.0):
+                for yscale in (0.8, 1.0, 1.1, 1.2):
                     dat = np.sin(x*x/xscale + y*y/yscale)/(1 + (x+y)*(x+y))
                     dat += np.random.normal(scale=0.12, size=(nx, ny))
                     self.arrays.append(dat)
-            print(' . ')
         shuffle(self.arrays)
         print("Built %d arrays, shape=%s" % (len(self.arrays), repr(dat.shape)))
 
@@ -86,29 +85,21 @@ class TestFrame(wx.Frame):
         self.imageframe.Raise()
 
     def onTimer(self, event):
-        message = " %d/%d images in %.4f sec " % (self.count, len(self.arrays),
-                                                  time.time()-self.t0)
-        wx.CallAfter(self.msg.SetLabel, message)
-
-        if self.count >= len(self.arrays):
-            self.count = 0
-            print("displayed %d arrays %.4f secs " % (len(self.arrays), time.time()-self.t0))
-            self.t0 = time.time()
-
-        panel = self.imageframe.panel
-        panel.update_image(self.arrays[self.count])
         self.count += 1
-
+        message = " %d images in %.3f sec" % (self.count,
+                                              time.time()-self.t0)
+        self.msg.SetLabel(message)
+        wx.CallAfter(self.imageframe.panel.update_image,
+                     self.arrays[self.count % len(self.arrays)])
 
     def onScrollImages(self,event=None):
         self.ShowImageFrame()
-        self.count   = 0
+        self.count = 0
         self.t0 = time.time()
-        self.timer.Start(25)
+        self.timer.Start(10)
 
     def onStop(self,event=None):
         self.timer.Stop()
-
 
 if __name__ == '__main__':
     app = wx.App()

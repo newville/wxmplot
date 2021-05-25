@@ -6,12 +6,6 @@ import os
 from functools import partial
 
 import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
-if is_wxPhoenix:
-    PyDeadObjectError = RuntimeError
-else:
-    from wx._core import PyDeadObjectError
-
 from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
 import wx.lib.colourselect as csel
 

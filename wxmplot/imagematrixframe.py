@@ -14,13 +14,13 @@
 ##
 
 import os
+from functools import partial
+
 import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 
 import numpy as np
 import matplotlib
 
-from functools import partial
 
 HAS_IMAGE = False
 try:
@@ -49,10 +49,7 @@ def color_complements(color):
 
 def image2wxbitmap(img):
     "PIL image 2 wx bitmap"
-    if is_wxPhoenix:
-        wximg = wx.Image(*img.size)
-    else:
-        wximg = wx.EmptyImage(*img.size)
+    wximg = wx.Image(*img.size)
     wximg.SetData(img.tobytes())
     return wximg.ConvertToBitmap()
 

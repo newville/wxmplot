@@ -9,32 +9,18 @@ from matplotlib.path import Path
 import wx
 from wx.lib.agw import floatspin as fspin
 
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
 
-if sys.version[0] == '2':
-    from string import maketrans
-    def fix_filename(fname):
-        """
-        fix string to be a 'good' filename. This may be a more
-        restrictive than the OS, but avoids nasty cases.
-        """
-        badchars = ' <>:"\'\\\t\r\n/|?*!%$'
-        out = fname.translate(maketrans(badchars, '_'*len(badchars)))
-        if out[0] in '-,;[]{}()~`@#':
-            out = '_%s' % out
-        return out
-elif sys.version[0] == '3':
-    def fix_filename(s):
-        """fix string to be a 'good' filename.
-        This may be a more restrictive than the OS, but
-        avoids nasty cases."""
-        badchars = ' <>:"\'\\\t\r\n/|?*!%$'
-        t = s.translate(s.maketrans(badchars, '_'*len(badchars)))
-        if t.count('.') > 1:
-            for i in range(t.count('.') - 1):
-                idot = t.find('.')
-                t = "%s_%s" % (t[:idot], t[idot+1:])
-        return t
+def fix_filename(s):
+    """fix string to be a 'good' filename.
+    This may be a more restrictive than the OS, but
+    avoids nasty cases."""
+    badchars = ' <>:"\'\\\t\r\n/|?*!%$'
+    t = s.translate(s.maketrans(badchars, '_'*len(badchars)))
+    if t.count('.') > 1:
+        for i in range(t.count('.') - 1):
+            idot = t.find('.')
+            t = "%s_%s" % (t[:idot], t[idot+1:])
+    return t
 
 def pack(window, sizer, expand=1.1):
     "simple wxPython pack function"
@@ -137,10 +123,7 @@ def FloatSpin(parent, value=0, action=None, tooltip=None,
     if action is not None:
         fs.Bind(fspin.EVT_FLOATSPIN, action)
     if tooltip is not None:
-        if is_wxPhoenix:
-            fs.SetToolTip(tooltip)
-        else:
-            fs.SetToolTipString(tooltip)
+        fs.SetToolTip(tooltip)
     return fs
 
 
@@ -274,10 +257,7 @@ class PrintoutWx(wx.Printout):
 
         ppw,pph = self.GetPPIPrinter()      # printer's pixels per in
         pgw,pgh = self.GetPageSizePixels()  # page size in pixels
-        if is_wxPhoenix:
-            grw, grh = self.canvas.GetSize()
-        else:
-            grw, grh = self.canvas.GetSizeTuple()
+        grw, grh = self.canvas.GetSize()
         dc      = self.GetDC()
         dcw,dch = dc.GetSize()
 
@@ -384,8 +364,7 @@ class Printer:
                           width=self.pwidth,   margin=self.pmargin)
         self.preview = wx.PrintPreview(po1, po2, self.printerData)
 
-        if ((is_wxPhoenix and self.preview.IsOk()) or
-            (not is_wxPhoenix and self.preview.Ok())):
+        if self.preview.IsOk():
             self.preview.SetZoom(85)
             frameInst= self.parent
             while not isinstance(frameInst, wx.Frame):

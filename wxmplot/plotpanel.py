@@ -4,19 +4,14 @@ wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
 """
 import os
 import sys
-import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
-if is_wxPhoenix:
-    wxCursor = wx.Cursor
-else:
-    wxCursor = wx.StockCursor
+from functools import partial
+from datetime import datetime
 
-from math import log10
+import wx
+
+
 from numpy import nonzero, where
 import matplotlib
-from functools import partial
-
-from datetime import datetime
 from matplotlib import dates
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -31,7 +26,6 @@ from .config import PlotConfig, ifnotNone, ifNone
 from .utils import inside_poly, fix_filename, gformat, MenuItem
 
 to_rgba = colorConverter.to_rgba
-
 
 class PlotPanel(BasePanel):
     """
@@ -532,7 +526,7 @@ class PlotPanel(BasePanel):
             expr = "deriv(%s)" % expr
         self.write_message("plotting %s" % expr, panel=0)
 
-    def toggle_deriv(self, evt=None, value=None):
+    def toggle_deriv(self, event=None, value=None):
         "toggle derivative of data"
         if value is None:
             self.conf.data_deriv = not self.conf.data_deriv
@@ -557,7 +551,7 @@ class PlotPanel(BasePanel):
             self.conf.show_legend = show
         self.conf.draw_legend()
 
-    def toggle_grid(self, evt=None, show=None):
+    def toggle_grid(self, event=None, show=None):
         "toggle grid display"
         if show is None:
             show = not self.conf.show_grid
@@ -594,7 +588,7 @@ class PlotPanel(BasePanel):
         self.printer.canvas = self.canvas
         self.set_bg(self.conf.framecolor)
         self.conf.canvas = self.canvas
-        self.canvas.SetCursor(wxCursor(wx.CURSOR_CROSS))
+        self.canvas.SetCursor(wx.Cursor(wx.CURSOR_CROSS))
         self.canvas.mpl_connect("pick_event", self.__onPickEvent)
 
         # overwrite ScalarFormatter from ticker.py here:
@@ -660,7 +654,7 @@ class PlotPanel(BasePanel):
 
         # Extent
         dl, dt, dr, db = 0, 0, 0, 0
-        for i, ax in enumerate(self.fig.get_axes()):
+        for ax in self.fig.get_axes():
             (x0, y0),(x1, y1) = ax.get_position().get_points()
             try:
                 (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
@@ -683,7 +677,7 @@ class PlotPanel(BasePanel):
         if not self.conf.auto_margins:
             return
         # coordinates in px -> [0,1] in figure coordinates
-        trans = self.fig.transFigure.inverted().transform
+        # trans = self.fig.transFigure.inverted().transform
 
         # Static margins
         if not self.use_dates:
@@ -691,11 +685,6 @@ class PlotPanel(BasePanel):
             self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
         # Axes positions update
         for ax in self.fig.get_axes():
-            # try:
-            #     print("") # ax.update_params()
-            # except ValueError:
-            #     pass
-            # print("UPDATE ")
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)
             ax.set_position(figpos)
 
@@ -708,8 +697,6 @@ class PlotPanel(BasePanel):
 
         x = self.conf.get_mpl_line(trace)
         x.set_data(xdata, ydata)
-        # datarange = [xdata.min(), xdata.max(), ydata.min(), ydata.max()]
-        # self.conf.set_trace_datarange(datarange, trace=trace)
         axes = self.axes
         if side == 'right':
             axes = self.get_right_axes()

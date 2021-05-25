@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>wxmplot Examples &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/wxmplotdoc.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Speciality wxmplot displays" href="other.html" />
@@ -63,7 +65,8 @@
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="#"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">wxmplot Examples</a></li> 
       </ul>
     </div>
 
@@ -105,7 +108,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -114,12 +117,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="wxmplot-examples">
+  <section id="wxmplot-examples">
 <span id="ch-examples"></span><h1>wxmplot Examples<a class="headerlink" href="#wxmplot-examples" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a> showed a few illustrative  examples using <cite>wxmplot</cite>.
 Here we show a few more examples.  These and more are given in the <em>examples</em>
 directory in the source distribution kit.</p>
-<div class="section" id="examples-not-shown-here">
+<section id="examples-not-shown-here">
 <h2>Examples not shown here<a class="headerlink" href="#examples-not-shown-here" title="Permalink to this headline">¶</a></h2>
 <p>Several examples are not shown here either because they show many plots or are
 otherwise more complex.  They are worth trying out.</p>
@@ -130,8 +133,8 @@ typically 10 to 30 times per second, depending on your machine.</p>
 <p><em>theme_compare.py</em> renders the same plot with a selection of different themes.</p>
 <p><em>image_scroll.py</em> shows an updating set of images on a single display.
 Perhaps surprisingly, this can be faster than updating the 2D line plots.</p>
-</div>
-<div class="section" id="scatterplot-example">
+</section>
+<section id="scatterplot-example">
 <h2>Scatterplot Example<a class="headerlink" href="#scatterplot-example" title="Permalink to this headline">¶</a></h2>
 <p>An example scatterplot can be produced with a script like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -163,8 +166,8 @@ Perhaps surprisingly, this can be faster than updating the 2D line plots.</p>
 </div>
 <p>and gives a plot (after having selected by “lasso”ing) that looks like this:</p>
 <a class="reference internal image-reference" href="_images/scatterplot.png"><img alt="_images/scatterplot.png" src="_images/scatterplot.png" style="width: 85%;" /></a>
-</div>
-<div class="section" id="plotting-with-errorbars">
+</section>
+<section id="plotting-with-errorbars">
 <h2>Plotting with errorbars<a class="headerlink" href="#plotting-with-errorbars" title="Permalink to this headline">¶</a></h2>
 <p>An example plotting with error bars:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -183,8 +186,8 @@ Perhaps surprisingly, this can be faster than updating the 2D line plots.</p>
 </div>
 <p>gives:</p>
 <a class="reference internal image-reference" href="_images/errorbar.png"><img alt="_images/errorbar.png" src="_images/errorbar.png" style="width: 85%;" /></a>
-</div>
-<div class="section" id="plotting-data-from-a-datafile">
+</section>
+<section id="plotting-data-from-a-datafile">
 <h2>Plotting data from a datafile<a class="headerlink" href="#plotting-data-from-a-datafile" title="Permalink to this headline">¶</a></h2>
 <p>Reading data with <cite>numpy.loadtext</cite> and plotting:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -205,8 +208,8 @@ Perhaps surprisingly, this can be faster than updating the 2D line plots.</p>
 </div>
 <p>gives:</p>
 <a class="reference internal image-reference" href="_images/datafile_plot.png"><img alt="_images/datafile_plot.png" src="_images/datafile_plot.png" style="width: 85%;" /></a>
-</div>
-<div class="section" id="using-left-and-right-axes">
+</section>
+<section id="using-left-and-right-axes">
 <h2>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Permalink to this headline">¶</a></h2>
 <p>An example using both right and left axes with different scales can be
 created with:</p>
@@ -230,8 +233,8 @@ created with:</p>
 </div>
 <p>and gives a plot that looks like this:</p>
 <a class="reference internal image-reference" href="_images/two_axes.png"><img alt="_images/two_axes.png" src="_images/two_axes.png" style="width: 85%;" /></a>
-</div>
-<div class="section" id="displaying-and-image-of-a-tiff-file">
+</section>
+<section id="displaying-and-image-of-a-tiff-file">
 <h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Permalink to this headline">¶</a></h2>
 <p>Reading a TIFF file and showing the image:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
@@ -247,8 +250,8 @@ created with:</p>
 </div>
 <p>gives:</p>
 <a class="reference internal image-reference" href="_images/tifffile_image.png"><img alt="_images/tifffile_image.png" src="_images/tifffile_image.png" style="width: 85%;" /></a>
-</div>
-<div class="section" id="color-image">
+</section>
+<section id="color-image">
 <h2>3-Color Image<a class="headerlink" href="#color-image" title="Permalink to this headline">¶</a></h2>
 <p>If the data array has three dimensions, and has a shape of (NY, NX, 3), it
 is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
@@ -303,10 +306,11 @@ like:</p>
 <a class="reference internal image-reference" href="_images/image_3color_white.png"><img alt="_images/image_3color_white.png" src="_images/image_3color_white.png" style="width: 85%;" /></a>
 <p>This gives a slightly different view of the same data, with results that
 may be more suitable for printed documents and presentations.</p>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -331,12 +335,13 @@ may be more suitable for printed documents and presentations.</p>
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="#"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">wxmplot Examples</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+        &#169; Copyright 2021, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
 </html>

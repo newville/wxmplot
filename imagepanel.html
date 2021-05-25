@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>ImagePanel: A wx.Panel for Image Display &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/wxmplotdoc.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="wxmplot Examples" href="examples.html" />
@@ -63,7 +65,8 @@
    <li><a href="#"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
     </div>
 
@@ -102,7 +105,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -111,7 +114,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-imagepanel">
+  <section id="module-imagepanel">
 <span id="imagepanel-a-wx-panel-for-image-display"></span><h1><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display<a class="headerlink" href="#module-imagepanel" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
@@ -121,9 +124,9 @@ easily included in a wx GUI.</p>
 built in to the <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> itself is the ability to zoom in and
 out.  In contrast, an <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code> provides many more ways to
 manipulate the displayed image, as will be discussed below.</p>
-<dl class="class">
-<dt id="imagepanel.ImagePanel">
-<em class="property">class </em><code class="sig-name descname">ImagePanel</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(525</em>, <em class="sig-param">450)</em>, <em class="sig-param">dpi=100</em>, <em class="sig-param">messenger=None</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="imagepanel.ImagePanel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ImagePanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(525,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">messenger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -145,66 +148,66 @@ orientation, and so on) are controlled through configuration
 attributes.</p>
 </dd></dl>
 
-<div class="section" id="imagepanel-methods">
+<section id="imagepanel-methods">
 <h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> methods<a class="headerlink" href="#imagepanel-methods" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="imagepanel.display">
-<code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em>, <em class="sig-param">style='image'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="imagepanel.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="imagepanel.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="imagepanel.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="imagepanel.update_image">
-<code class="sig-name descname">update_image</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="imagepanel.update_image">
+<span class="sig-name descname"><span class="pre">update_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>update the image with new data.  This can be signficantly faster than
 re-displaying the data.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="imagepanel.redraw">
-<code class="sig-name descname">redraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="imagepanel.redraw">
+<span class="sig-name descname"><span class="pre">redraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Permalink to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="imagepanel-callback-attributes">
+</section>
+<section id="imagepanel-callback-attributes">
 <h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> callback attributes<a class="headerlink" href="#imagepanel-callback-attributes" title="Permalink to this headline">¶</a></h2>
 <p>An <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> instance has several <strong>callback</strong> attributes that can be used to get information from the
 image panel.</p>
-<dl class="data">
-<dt id="imagepanel.data_callback">
-<code class="sig-name descname">data_callback</code><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="imagepanel.data_callback">
+<span class="sig-name descname"><span class="pre">data_callback</span></span><a class="headerlink" href="#imagepanel.data_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called.</p>
 </dd></dl>
 
-<dl class="data">
-<dt id="imagepanel.lasso_callback">
-<code class="sig-name descname">lasso_callback</code><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="imagepanel.lasso_callback">
+<span class="sig-name descname"><span class="pre">lasso_callback</span></span><a class="headerlink" href="#imagepanel.lasso_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
-<dl class="data">
-<dt id="imagepanel.cursor_callback">
-<code class="sig-name descname">cursor_callback</code><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="imagepanel.cursor_callback">
+<span class="sig-name descname"><span class="pre">cursor_callback</span></span><a class="headerlink" href="#imagepanel.cursor_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
-<dl class="data">
-<dt id="imagepanel.contour_callback">
-<code class="sig-name descname">contour_callback</code><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="imagepanel.contour_callback">
+<span class="sig-name descname"><span class="pre">contour_callback</span></span><a class="headerlink" href="#imagepanel.contour_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that is called with the contour levels each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called with <code class="docutils literal notranslate"><span class="pre">style='contour'</span></code>.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="module-imageframe">
+</section>
+<section id="module-imageframe">
 <span id="imageframe-a-wx-frame-for-image-display"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display<a class="headerlink" href="#module-imageframe" title="Permalink to this headline">¶</a></h2>
 <p>In addition to providing a top-level window frame holding an
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>, an <a class="reference internal" href="#imageframe.ImageFrame" title="imageframe.ImageFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code></a> provides the end-user with many ways to
@@ -222,16 +225,16 @@ manipulate the image:</p>
 </div></blockquote>
 <p>These options are all available programmatically as well, by setting the
 configuration attributes and redrawing the image.</p>
-<dl class="class">
-<dt id="imageframe.ImageFrame">
-<em class="property">class </em><code class="sig-name descname">ImageFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="imageframe.ImageFrame">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ImageFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(550,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between “image” and “contour”.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="image-configuration-with-imageconfig">
+</section>
+<section id="image-configuration-with-imageconfig">
 <h2>Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code><a class="headerlink" href="#image-configuration-with-imageconfig" title="Permalink to this headline">¶</a></h2>
 <p>To change any of the attributes of the image on an <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>, you
 can set the corresponding attribute of the panel’s <code class="xref py py-attr docutils literal notranslate"><span class="pre">conf</span></code>.   That is,
@@ -376,10 +379,11 @@ same intensity intensity scale.</p></li>
 <li><p><em>contrast_level</em> can be used to automatically set the <em>int_lo</em> and
 <em>int_hi</em> values based on the distribution of intensities in the data.</p></li>
 </ol>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -404,12 +408,13 @@ same intensity intensity scale.</p></li>
    <li><a href="#"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+        &#169; Copyright 2021, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
 </html>

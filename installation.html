@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Downloading and Installation &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/wxmplotdoc.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="wxmplot Overview" href="overview.html" />
@@ -63,7 +65,8 @@
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">Downloading and Installation</a></li> 
       </ul>
     </div>
 
@@ -103,7 +106,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -112,48 +115,39 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="downloading-and-installation">
+  <section id="downloading-and-installation">
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="prerequisites">
+<section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The current version of wxmplot is 0.9.40, released in August, 2019.</p>
-<p>The wxmplot package requires wxPython, matplotlib, numpy, and six.  All of
+<p>The current version of wxmplot is 3.5.0, released in May, 2021.</p>
+<p>The wxmplot package requires Python3.6 or higher, wxPython 4.0.3 or higher,
+matplotlib 3.0 or higher, and numpy 1.12 or higher.  All of
 these are readily available from <cite>pip</cite> or on <cite>conda</cite> channels.</p>
-<p>This is the final version to support Python 2.7 and WxPython below
-version 4.  WxPython 4.0 is strongly recommended, and is required for
-Python 3.5 and higher.  WxPython version 2.9 and 3 may also continue to
-work with Python 2.7, and this combination is no longer tested.  Matplotlib
-version 3.0 or higher is also strongly recommended. Older versions may
-still work but are not tested.</p>
-</div>
-<div class="section" id="downloads">
+</section>
+<section id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest version (0.9.40) is available from <a class="reference external" href="http://pypi.python.org/pypi/wxmplot">PyPI</a> or <a class="reference external" href="http://github.com/newwville/wxmplot">github</a>, and
+<p>The latest version (3.5.0) is available from <a class="reference external" href="https://pypi.python.org/pypi/wxmplot">PyPI</a> or <a class="reference external" href="https://github.com/newwville/wxmplot">github</a>, and
 the package can be installed with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">wxmplot</span>
 </pre></div>
 </div>
-<p>Users of anaconda python can also install wxmplot with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">gsecars</span> <span class="n">wxmplot</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="development-version">
+</section>
+<section id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
 <p>To get the latest development version, use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">newville</span><span class="o">/</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">newville</span><span class="o">/</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="installation-from-source">
+</section>
+<section id="installation-from-source">
 <h2>Installation from Source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h2>
 <p>wxmplot is a pure python module, so installation on all platforms can use
 the source kit and a standard installation using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="license">
+</section>
+<section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>The wxmplot code is distribution under the following license:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">MIT</span> <span class="n">License</span>
@@ -179,10 +173,11 @@ the source kit and a standard installation using:</p>
 <span class="n">SOFTWARE</span><span class="o">.</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -207,12 +202,13 @@ the source kit and a standard installation using:</p>
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="other.html"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">Downloading and Installation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+        &#169; Copyright 2021, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
 </html>

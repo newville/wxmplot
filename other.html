@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Speciality wxmplot displays &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" href="_static/wxmplotdoc.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/wxmplotdoc.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="wxmplot Examples" href="examples.html" />
@@ -59,7 +61,8 @@
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="#"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">Speciality wxmplot displays</a></li> 
       </ul>
     </div>
 
@@ -103,7 +106,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -112,17 +115,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="speciality-wxmplot-displays">
+  <section id="speciality-wxmplot-displays">
 <h1>Speciality wxmplot displays<a class="headerlink" href="#speciality-wxmplot-displays" title="Permalink to this headline">¶</a></h1>
 <p>There are a few custom classes for speciality plots included in
 wxmplot.  Since these build on the <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> and
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> clases, these are described briefly here and an
 example shown for each.</p>
-<div class="section" id="multiplotframe">
+<section id="multiplotframe">
 <h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="MultiPlotFrame">
-<em class="property">class </em><code class="sig-name descname">MultiPlotFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">rows=1</em>, <em class="sig-param">cols=1</em>, <em class="sig-param">framesize=(600</em>, <em class="sig-param">350)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="MultiPlotFrame">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MultiPlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(600,</span> <span class="pre">350)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A MultiPlotFrame supports a grid of <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> on a single plot frame.</p>
@@ -131,32 +134,32 @@ method taking and additional <cite>panel</cite> keyword argument that contains a
 two-element tuple for the address of that panel in the grid of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> .  The address starts at (0, 0) for the upper left
 plot panel, and counts to left to right and top to bottom.</p>
-<dl class="method">
-<dt id="plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot to specified panel.</p>
 </dd></dl>
 
-<dl class="method">
-<dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>overplot to specified panel.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear plot in specified panel</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="configure">
-<code class="sig-name descname">configure</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel=(0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="configure">
+<span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>configure plot in specified panel</p>
 </dd></dl>
 
 <p>Many more methods are supported – essentially all of those for <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>.</p>
-<div class="section" id="multiplotframe-example">
+<section id="multiplotframe-example">
 <h3>MultiPlotFrame Example<a class="headerlink" href="#multiplotframe-example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
@@ -195,13 +198,13 @@ plot panel, and counts to left to right and top to bottom.</p>
 </div>
 <p>This gives a window with a plot that looks like this:</p>
 <a class="reference internal image-reference" href="_images/multiplot.png"><img alt="_images/multiplot.png" src="_images/multiplot.png" style="width: 85%;" /></a>
-</div>
-</div>
-<div class="section" id="stackedplotframe">
+</section>
+</section>
+<section id="stackedplotframe">
 <h2>StackedPlotFrame<a class="headerlink" href="#stackedplotframe" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="StackedPlotFrame">
-<em class="property">class </em><code class="sig-name descname">StackedPlotFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">framesize=(850</em>, <em class="sig-param">450)</em>, <em class="sig-param">panelsize=(550</em>, <em class="sig-param">450)</em>, <em class="sig-param">ratio=3</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="StackedPlotFrame">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">StackedPlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(850,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panelsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(550,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This supports two <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel`s</span> <span class="pre">stacked</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">one</span> <span class="pre">another,</span>
@@ -214,31 +217,31 @@ panel.</p>
 <p><a class="reference internal" href="#StackedPlotFrame" title="StackedPlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackedPlotFrame</span></code></a> supports most of the methods of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>, with the specific panel addressed either as
 <cite>panel=’top’</cite> or <cite>panel=’bot’</cite>.</p>
-<dl class="method">
-<dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel='top'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot to specified panel.</p>
 </dd></dl>
 
-<dl class="method">
-<dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">panel='top'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd><p>overplot to specified panel.</p>
 </dd></dl>
 
-<dl class="method">
-<dt>
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel='top'</em><span class="sig-paren">)</span></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear plot in specified panel</p>
 </dd></dl>
 
-<dl class="method">
-<dt>
-<code class="sig-name descname">configure</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">panel='top'</em><span class="sig-paren">)</span></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
 <dd><p>configure plot in specified panel</p>
 </dd></dl>
 
-<div class="section" id="stackedplotframe-example">
+<section id="stackedplotframe-example">
 <h3>StackedPlotFrame Example<a class="headerlink" href="#stackedplotframe-example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
@@ -277,13 +280,13 @@ panel.</p>
 </div>
 <p>This gives a window with a plot that looks like this:</p>
 <a class="reference internal image-reference" href="_images/stackedplot.png"><img alt="_images/stackedplot.png" src="_images/stackedplot.png" style="width: 70%;" /></a>
-</div>
-</div>
-<div class="section" id="imagematrixframe">
+</section>
+</section>
+<section id="imagematrixframe">
 <h2>ImageMatrixFrame<a class="headerlink" href="#imagematrixframe" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="ImageMatrixFrame">
-<em class="property">class </em><code class="sig-name descname">ImageMatrixFrame</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">size=(900</em>, <em class="sig-param">600)</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="ImageMatrixFrame">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ImageMatrixFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(900,</span> <span class="pre">600)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>An <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a> supports the simultaneous display of 2
@@ -301,13 +304,13 @@ the correlation between the two images.</p>
 follow that zoom level.  Using the scatter plot, the user can draw a
 lasso around any of the pixels.  These will then be highlighted on the
 superposition image in the upper right panel.</p>
-<dl class="method">
-<dt id="display">
-<code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param">map1</em>, <em class="sig-param">map2</em>, <em class="sig-param">title=None</em>, <em class="sig-param">name1='Map1'</em>, <em class="sig-param">name2='Map2'</em>, <em class="sig-param">xlabel='x'</em>, <em class="sig-param">ylabel='y'</em>, <em class="sig-param">x=None</em>, <em class="sig-param">y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Map1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Map2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a></p>
-<div class="section" id="imagematrixframe-example">
+<section id="imagematrixframe-example">
 <h3>ImageMatrixFrame Example<a class="headerlink" href="#imagematrixframe-example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example showing 2 maps</span>
@@ -331,11 +334,11 @@ superposition image in the upper right panel.</p>
     <span class="n">oy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">y</span> <span class="o">/</span> <span class="mf">20.0</span>
 
     <span class="n">map1</span>  <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">map1</span> <span class="o">+=</span> <span class="mf">0.02</span> <span class="o">+</span> <span class="p">(</span><span class="mf">16.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">.</span><span class="mi">50</span><span class="p">,</span>  <span class="o">.</span><span class="mi">25</span><span class="p">,</span>   <span class="o">.</span><span class="mi">09</span><span class="p">,</span>  <span class="o">.</span><span class="mi">08</span><span class="p">)</span> <span class="o">+</span>
-                    <span class="mf">18.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="o">.</span><span class="mi">12</span><span class="p">,</span> <span class="o">-.</span><span class="mi">06</span><span class="p">,</span>  <span class="o">.</span><span class="mi">23</span><span class="p">,</span>  <span class="o">.</span><span class="mi">21</span><span class="p">))</span>
+    <span class="n">map1</span> <span class="o">+=</span> <span class="mf">0.02</span> <span class="o">+</span> <span class="p">(</span><span class="mf">16.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span>  <span class="mf">.25</span><span class="p">,</span>   <span class="mf">.09</span><span class="p">,</span>  <span class="mf">.08</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="mf">18.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="mf">.12</span><span class="p">,</span> <span class="o">-</span><span class="mf">.06</span><span class="p">,</span>  <span class="mf">.23</span><span class="p">,</span>  <span class="mf">.21</span><span class="p">))</span>
     <span class="n">map2</span>  <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">map2</span> <span class="o">+=</span> <span class="mf">0.11</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="o">.</span><span class="mi">44</span><span class="p">,</span>  <span class="o">.</span><span class="mi">3</span><span class="p">,</span>   <span class="o">.</span><span class="mi">1</span><span class="p">,</span>  <span class="o">.</span><span class="mi">15</span><span class="p">)</span> <span class="o">+</span>
-                    <span class="mf">1.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="o">.</span><span class="mi">7</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">.</span><span class="mi">09</span><span class="p">,</span> <span class="o">.</span><span class="mi">11</span><span class="p">))</span>
+    <span class="n">map2</span> <span class="o">+=</span> <span class="mf">0.11</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="mf">.44</span><span class="p">,</span>  <span class="mf">.3</span><span class="p">,</span>   <span class="mf">.1</span><span class="p">,</span>  <span class="mf">.15</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="mf">1.2</span><span class="o">*</span><span class="n">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>   <span class="mf">.7</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">.09</span><span class="p">,</span> <span class="mf">.11</span><span class="p">))</span>
 
     <span class="n">frame</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">map1</span><span class="p">,</span> <span class="n">map2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">name1</span><span class="o">=</span><span class="s1">&#39;Iron&#39;</span><span class="p">,</span> <span class="n">name2</span><span class="o">=</span><span class="s1">&#39;Carbon&#39;</span><span class="p">,</span>
                   <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
@@ -345,11 +348,12 @@ superposition image in the upper right panel.</p>
 </div>
 <p>This gives a window with a plot that looks like this:</p>
 <a class="reference internal image-reference" href="_images/imagematrix.png"><img alt="_images/imagematrix.png" src="_images/imagematrix.png" style="width: 85%;" /></a>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -371,12 +375,13 @@ superposition image in the upper right panel.</p>
    <li><a href="imagepanel.html"> Image API</a>|</li>
    <li><a href="examples.html"> Examples</a>|</li>
    <li><a href="#"> Speciality Displays</a>|</li>
- 
+
+        <li class="nav-item nav-item-this"><a href="">Speciality wxmplot displays</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+        &#169; Copyright 2021, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
 </html>

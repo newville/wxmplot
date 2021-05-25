@@ -1,15 +1,9 @@
 import sys
-import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
-if is_wxPhoenix:
-    PyDeadObjectError = RuntimeError
-else:
-    from wx._core import PyDeadObjectError
-
 import time, os, sys
 
 from numpy import arange, sin, cos, exp, pi, linspace, ones, random
 
+import wx
 from wxmplot.plotframe import PlotFrame
 
 class TestFrame(wx.Frame):
@@ -120,7 +114,7 @@ class TestFrame(wx.Frame):
             self.has_plot = False
         try:
             self.plotframe.Show()
-        except PyDeadObjectError:
+        except RuntimeError:
             self.plotframe = PlotFrame(self)
             self.plotframe.Show()
 

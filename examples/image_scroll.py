@@ -1,15 +1,9 @@
 import time, os, sys
-import numpy as np
-
 from random import shuffle
 
-import wx
-is_wxPhoenix = 'phoenix' in wx.PlatformInfo
-if is_wxPhoenix:
-    PyDeadObjectError = RuntimeError
-else:
-    from wx._core import PyDeadObjectError
+import numpy as np
 
+import wx
 from wxmplot import ImageFrame
 
 class TestFrame(wx.Frame):
@@ -77,7 +71,7 @@ class TestFrame(wx.Frame):
             self.imageframe = ImageFrame(self)
         try:
             self.imageframe.Show()
-        except PyDeadObjectError:
+        except RuntimeError:
             self.imageframe = Imageframe(self)
             self.imageframe.Show()
 

@@ -76,7 +76,7 @@ Some of the optional arguments (all keyword/values) include
 
    save_figure():     bring up file dialog for saving image of figure
 
-Image Diisplay with ImagePanel and ImageFrame
+Image Display with ImagePanel and ImageFrame
 ------------------------------------------
 
 This displays a numpy array as an greyscale or false color image.  The end

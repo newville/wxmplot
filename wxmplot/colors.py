@@ -4,7 +4,6 @@ color support for MPlot.
 
 """
 import numpy as np
-import six
 
 HAS_MPL = False
 
@@ -329,7 +328,7 @@ def hexcolor(color):
     " returns hex color given a tuple, wx.Color, or X11 named color"
     # first, if this is a hex color already, return!
     # Python 3: needs rewrite for str/unicode change
-    if isinstance(color, six.string_types):
+    if isinstance(color, str):
         if color[0] == '#' and len(color)==7:
             return color.lower()
 
@@ -339,7 +338,7 @@ def hexcolor(color):
         rgb = color
     elif isinstance(color, list):
         rgb = tuple(color)
-    elif isinstance(color, six.string_types):
+    elif isinstance(color, str):
         c = color.lower()
         if c.find(' ')>-1:    c = c.replace(' ','')
         if c.find('gray')>-1: c = c.replace('gray','grey')

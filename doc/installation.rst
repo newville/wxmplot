@@ -2,6 +2,10 @@
 Downloading and Installation
 ====================================
 
+.. _github:   https://github.com/newville/wxmplot
+.. _PyPI:     https://pypi.python.org/pypi/wxmplot
+
+
 Prerequisites
 ~~~~~~~~~~~~~~~
 
@@ -12,11 +16,8 @@ matplotlib 3.0 or higher, and numpy 1.12 or higher.  All of
 these are readily available from `pip` or on `conda` channels.
 
 
-Downloads
+Installation
 ~~~~~~~~~~~~~
-
-.. _github:   https://github.com/newwville/wxmplot
-.. _PyPI:     https://pypi.python.org/pypi/wxmplot
 
 The latest version (|release|) is available from `PyPI`_ or `github`_, and
 the package can be installed with::

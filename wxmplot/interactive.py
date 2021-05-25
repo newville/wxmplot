@@ -79,7 +79,8 @@ def set_theme(theme):
         None
 
     Notes:
-      1. Example themese are:'light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
+      1. Example themese are:'light', 'dark', 'white-background', 'matplotlib',
+      'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
       2. See available_themes() for the list of available themes.
     """
     global DEFAULT_THEME
@@ -97,8 +98,8 @@ def available_themes():
     Notes:
         As of this writing, the list is:
 
-      'light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
-      'fivethirtyeight', 'grayscale', 'dark_background',
+      'light', 'dark', 'white-background', 'matplotlib', 'seaborn',
+      'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
       'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind',
       'seaborn-dark', 'seaborn-darkgrid', 'seaborn-dark-palette',
       'seaborn-deep', 'seaborn-notebook', 'seaborn-muted',

@@ -125,7 +125,6 @@ light_theme = {'axes.grid': True,
                'savefig.edgecolor': 'white',
                'savefig.facecolor': 'white',
                'savefig.format': 'png',
-               # 'savefig.jpeg_quality': 95,
                'savefig.orientation': 'portrait',
                'savefig.pad_inches': 0.1,
                }
@@ -141,9 +140,14 @@ dark_theme = {'axes.facecolor': '#202020',
               'savefig.facecolor': 'black',
               }
 
+whitebg_theme = {'axes.facecolor': '#FFFFFF',
+               'figure.facecolor': '#FFFFFF'}
+
+
 Themes = OrderedDict()
 
-for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
+for tname in ('light',  'white-background', 'dark',
+              'matplotlib', 'seaborn', 'ggplot', 'bmh',
               'fivethirtyeight', 'grayscale', 'dark_background',
               'tableau-colorblind10', 'seaborn-bright',
               'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
@@ -160,6 +164,9 @@ for tname in ('light', 'dark', 'matplotlib', 'seaborn', 'ggplot', 'bmh',
     elif tname == 'dark':
         theme.update(light_theme)
         theme.update(dark_theme)
+    elif tname == 'white-background':
+        theme.update(light_theme)
+        theme.update(whitebg_theme)        
     elif tname in matplotlib.style.library:
         if tname.startswith('seaborn-'):
             theme.update(matplotlib.style.library['seaborn'])

@@ -117,7 +117,12 @@ class ImageConfig:
             name = name + '_r'
         elif not reverse and name.endswith('_r'):
             name = name[:-2]
-        self.cmap[icol] = _cmap_ = cmap.get_cmap(name)
+        self.cmap[icol] = curr_cmap = cmap.get_cmap(name)
+        if not hasattr(curr_cmap, '_lut'):
+            try:
+                curr_cmap._init()
+            except:
+                pass
 
         if hasattr(self, 'contour'):
             xname = 'gray'
@@ -129,16 +134,16 @@ class ImageConfig:
                 xname = 'gray_r'
             self.contour.set_cmap(getattr(cmap, xname))
         if hasattr(self, 'image'):
-            self.image.set_cmap(self.cmap[icol])
+            self.image.set_cmap(curr_cmap)
 
-        if hasattr(self, 'highlight_areas'):
-            if hasattr(self.cmap[icol], '_lut'):
-                rgb  = [int(i*240)^255 for i in self.cmap[icol]._lut[0][:3]]
-                col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-                for area in self.highlight_areas:
-                    for w in area.collections + area.labelTexts:
-                        w.set_color(col)
-
+        if hasattr(self, 'highlight_areas') and hasattr(curr_cmap, '_lut'):
+            rgb  = [int(i*240)^255 for i in curr_cmap._lut[0][:3]]
+            col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+            for area in self.highlight_areas:
+                for w in area.labelTexts:
+                    w.set_color(col)
+                for w in area.collections:
+                    w.set_edgecolor(col)
 
     def flip_vert(self):
         "flip image along vertical axis (up/down)"

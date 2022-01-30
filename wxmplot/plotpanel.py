@@ -676,13 +676,9 @@ class PlotPanel(BasePanel):
         """
         if not self.conf.auto_margins:
             return
-        # coordinates in px -> [0,1] in figure coordinates
-        # trans = self.fig.transFigure.inverted().transform
 
-        # Static margins
-        if not self.use_dates:
-            self.conf.margins = l, t, r, b = self.get_default_margins()
-            self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
+        self.conf.margins = l, t, r, b = self.get_default_margins()
+        self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
         # Axes positions update
         for ax in self.fig.get_axes():
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)

@@ -317,6 +317,7 @@ class ImagePanel(BasePanel):
         self.axes  = self.fig.add_subplot(self.gridspec[0],
                                           facecolor='#FFFFFD')
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
+        self.canvas.gui_repaint = self.gui_repaint
         self.conf.axes  = self.axes
         self.conf.fig   = self.fig
         self.conf.canvas= self.canvas

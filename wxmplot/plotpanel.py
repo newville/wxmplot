@@ -573,7 +573,7 @@ class PlotPanel(BasePanel):
 
     ####
     ## create GUI
-    ####
+    ####x
     def BuildPanel(self):
         """ builds basic GUI panel and popup menu"""
         self.fig   = Figure(self.figsize, dpi=self.dpi)
@@ -584,6 +584,7 @@ class PlotPanel(BasePanel):
         self.canvas = FigureCanvas(self, -1, self.fig)
         self.canvas.SetClientSize((self.figsize[0]*self.dpi, self.figsize[1]*self.dpi))
         self.canvas.SetMinSize((100, 100))
+        self.canvas.gui_repaint = self.gui_repaint
 
         self.printer.canvas = self.canvas
         self.set_bg(self.conf.framecolor)

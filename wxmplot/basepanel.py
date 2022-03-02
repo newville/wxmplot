@@ -51,7 +51,7 @@ class BasePanel(wx.Panel):
         self.zoom_ini  = None  # x, y coords for zoom-box
         self.zoom_callback = zoom_callback
         self.rbbox = None
-        self.zdc = None
+        # self.zdc = None
         self.cursor_modes = {}
         self.cursor_mode = 'report'
         self.parent = parent
@@ -499,6 +499,29 @@ class BasePanel(wx.Panel):
             return
         self.cursor_mode_action('motion', event=event)
 
+
+    def gui_repaint(self, drawDC=None):
+        """
+        Update the displayed image on the GUI canvas, using the supplied
+        wx.PaintDC device context.
+
+        The 'WXAgg' backend sets origin accordingly.
+        """
+        if not drawDC:
+            drawDC = wx.ClientDC(self.canvas)
+
+        bmp = self.canvas.bitmap
+        if (wx.Platform == '__WXMSW__'
+            and isinstance(self.canvas.figure._cachedRenderer, RendererWx)):
+            bmp = bmp.ConvertToImage().ConvertToBitmap()
+
+        drawDC.DrawBitmap(bmp, 0, 0)
+        if self.rbbox is not None:
+            drawDC.SetLogicalFunction(wx.XOR)
+            drawDC.SetBrush(wx.Brush('Black', wx.BRUSHSTYLE_TRANSPARENT))
+            drawDC.SetPen(wx.Pen('WHITE', 2, wx.SOLID))
+            drawDC.DrawRectangle(*self.rbbox)
+
     def zoom_motion(self, event=None):
         """motion event handler for zoom mode"""
         try:
@@ -518,18 +541,6 @@ class BasePanel(wx.Panel):
         width  = abs(x-ini_x)
         height = abs(y-ini_y)
         y0     = self.canvas.figure.bbox.height - ymax
-
-        zdc = wx.ClientDC(self.canvas)
-        zdc.SetLogicalFunction(wx.XOR)
-        zdc.SetBrush(wx.TRANSPARENT_BRUSH)
-        zdc.SetPen(wx.Pen('WHITE', 2, wx.SOLID))
-        zdc.ResetBoundingBox()
-
-        # erase previous box
-        if self.rbbox is not None:
-            zdc.DrawRectangle(*self.rbbox)
-        self.rbbox = (x0, y0, width, height)
-
         limits = self.canvas.figure.axes[0].bbox.corners()
         if self.conf.zoom_style.startswith('x'):
             height = int(round(limits[3][1] - limits[0][1]))
@@ -540,8 +551,8 @@ class BasePanel(wx.Panel):
             x0 = 1 + int(round(limits[0][0]))
 
         self.rbbox = (x0, y0, width, height)
+        self.canvas.Refresh()
 
-        zdc.DrawRectangle(*self.rbbox)
 
     def zoom_leftdown(self, event=None):
         """leftdown event handler for zoom mode"""
@@ -553,6 +564,7 @@ class BasePanel(wx.Panel):
         """leftup event handler for zoom mode"""
         if self.zoom_ini is None:
             return
+        self.canvas._rubberband_rect = None
 
         ini_x, ini_y, ini_xd, ini_yd = self.zoom_ini
         try:

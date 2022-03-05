@@ -1,4 +1,3 @@
-
 ==========================================================
 :class:`PlotPanel`:  A wx.Panel for Basic 2D Line Plots
 ==========================================================
@@ -107,25 +106,27 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | label          | string     | None    | trace label (defaults to 'trace N')            |  1  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | color          | string     | blue    | color to use for trace                         |  2  |  yes        |
+  | theme          | str        | ''      | theme for colors and text size                 |  2  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | bgcolor        | string     | #FEFEFE | color for background of Axis (plot area)       |  2  |  yes        |
+  | color          | string     | blue    | color to use for trace                         |  3  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | framecolor     | string     | white   | color for frame outside Axis                   |  2  |  yes        |
+  | bgcolor        | string     | #FEFEFE | color for background of Axis (plot area)       |  3  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | gridcolor      | string     | #E5E5E5 | color for grid lines                           |  2  |  yes        |
+  | framecolor     | string     | white   | color for frame outside Axis                   |  3  |  yes        |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | gridcolor      | string     | #E5E5E5 | color for grid lines                           |  3  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | linewidth      | int        | 2       | linewidth for trace                            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  3  |  no         |
+  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  4  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  4  |  no         |
+  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  5  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | drawstyle      | string     | line    | style connecting points of trace               |  5  |  no         |
+  | drawstyle      | string     | line    | style connecting points of trace               |  6  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | side           | left/right | left    | side for y-axis and label                      |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  6  |  no         |
+  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  7  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | markersize     | int        | 8       | size of marker shown for each point            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -135,47 +136,47 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | dy             | array      | None    | uncertainties for y values; error bars         |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmin           | float      | None    | minimum displayed x value                      |  7  |  yes        |
+  | xmin           | float      | None    | minimum displayed x value                      |  8  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmax           | float      | None    | maximum displayed x value                      |  7  |  yes        |
+  | xmax           | float      | None    | maximum displayed x value                      |  8  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymin           | float      | None    | minimum displayed y value                      |  7  |  yes        |
+  | ymin           | float      | None    | minimum displayed y value                      |  8  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymax           | float      | None    | maximum displayed y value                      |  7  |  yes        |
+  | ymax           | float      | None    | maximum displayed y value                      |  8  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  7  |  yes        |
+  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  8  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | autoscale      | bool       | True    | whether to automatically set plot limits       |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  8  |  no         |
+  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  9  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  8  |  no         |
+  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  9  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | grid           | None/bool  | None    | to show grid lines                             |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | show_legend    | None/bool  | None    | whether to display legend (None: leave as is)  |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_loc     | string     | 'ur'    | location of legend                             |  9  |  no         |
+  | legend_loc     | string     | 'ur'    | location of legend                             | 10  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_on      | bool       | True    | whether legend is on Axis                      |  9  |  no         |
+  | legend_on      | bool       | True    | whether legend is on Axis                      | 10  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | delay_draw     | bool       | False   | whether to delay draw until later.             | 10  |  no         |
+  | delay_draw     | bool       | False   | whether to delay draw until later.             | 11  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | refresh        | bool       | True    | whether to refresh display                     |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 11  |  no         |
+  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 12  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | dates_style    | str        | ''      | aid conversion of floats to time data          | 11  |  no         |
+  | dates_style    | str        | ''      | aid conversion of floats to time data          | 12  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | size           | int        | 10      | size of marker                                 |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | edgecolor      | string     | black   | edge color of marker                           |  2  |  yes        |
+  | edgecolor      | string     | black   | edge color of marker                           |  3  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | selectcolor    | string     | red     | color for selected points                      |  2  |  yes        |
+  | selectcolor    | string     | red     | color for selected points                      |  3  |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | callback       | function   | None    | user-supplied callback to run on selection     |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -187,43 +188,55 @@ same meaning, as indicated by the right-most column.
    1. The title, label, and grid arguments to :meth:`plot` default to ``None``,
       which means to use the previously used value.
 
-   2. All *color* arguments can be a common color name ("blue", "red", "black", etc), a standard X11 color
+   2. The *theme* will set the color palette and make stylistic choices.
+      Choices include 'light' (the default), 'white-background', 'dark',
+      'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
+      'dark_background', 'tableau-colorblind10', 'seaborn-bright',
+      'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
+      'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
+      'seaborn-muted', 'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
+      'seaborn-talk', 'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid', and
+
+
+   3. All *color* arguments can be a common color name ("blue", "red", "black", etc), a standard X11 color
       names ("cadetblue3", "darkgreen", etc), or an RGB hex color string of the form "#RRGGBB".
 
-   3. *zorder* is the depth (that is, height above the plane of the screen) to draw the object at.  By
-      default, each :meth:`oplot` plots at a zorder of 10*(n+1), where n is the counter for the trace.
-      That is, each subsequent trace is drawn *over* the previous, by defualt.
+   4. *zorder* is the depth (that is, height above the plane of the screen) to
+      draw the object at, controlling which element will be on top of others.
+      By default, each :meth:`oplot` plots at a zorder of 10*(n+1), where n is
+      the counter for the trace.  That is, each subsequent trace is drawn *over*
+      the previous, by defualt.
 
-   4. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or 'dash-dot')
+   5. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or 'dash-dot')
 
-   5. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').  ``None`` connects
+   6. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').  ``None`` connects
       points with a straight line between points.  The others give horizontal lines with a vertical step
       at the starting point ('step-pre'), mid-point ('step-mid') the ending point ('steps-post').  Note
       that if displaying discrete values as a function of time, left-to-right, and want to show a
       transition to a new value as a sudden step, you want 'steps-post'.
 
-   6. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square', 'diamond', 'thin
+   7. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square', 'diamond', 'thin
       diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
 
-   7. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
+   8. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
       percentage of the data range for the view to be extended.  That is, with xmin=0,
       xmin=100, viewpad=5, the range for x will be [-5, 105].
 
-   8. *fullbox* can be used to turn on or off the top and right Axes lines (or spines), giving a more open
+   9. *fullbox* can be used to turn on or off the top and right Axes lines (or spines), giving a more open
       figure.  The 'axes_style' option gives a little more control -- you can set this to either 'box' for
       a complete box, 'open' for left and right Axes lines only (same as *fullbox=False*), or 'bottom'
       which will suppress the top, right, and left Axes.
 
-   9. *legend_loc* sets the position of the leggend on the plot, and is one of ('ur', 'ul', 'cr', 'cl',
+   10. *legend_loc* sets the position of the leggend on the plot, and is one of ('ur', 'ul', 'cr', 'cl',
       'lr' 'll', 'uc', 'lc', or 'cc'') for ('upper right' , 'upper left', 'center right', 'center left',
       'lower right', 'lower left', 'upper center', 'lower center', or 'center').
 
-   10. The *delay_draw* option will delay the actual drawing the plot to
+   11. The *delay_draw* option will delay the actual drawing the plot to
        the screen. This can be give a noticeable speed up when plotting
        multiple line traces at once.  See also :meth:`plot_many` for a
        convenience function to plot many traces at once.
 
-   11. For more on using data with dates or times, see :ref:`sect_datetime`.
+   12. For more on using data with dates or times, see :ref:`sect_datetime`.
 
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be

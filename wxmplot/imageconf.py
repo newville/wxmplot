@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.cm as cmap
 from matplotlib.ticker import FuncFormatter, ScalarFormatter
 
+from wxutils import get_cwd
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import bool_ifnotNone, ifnotNone
 from .plotconfigframe import FNB_STYLE, autopack
@@ -382,7 +383,7 @@ class ImageConfigFrame(wx.Frame):
             return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Save image configuration',
-                            defaultDir=os.getcwd(),
+                            defaultDir=get_cwd(),
                             defaultFile=fname,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
@@ -399,7 +400,7 @@ class ImageConfigFrame(wx.Frame):
             return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Read image configuration',
-                            defaultDir=os.getcwd(),
+                            defaultDir=get_cwd(),
                             wildcard=file_choices,
                             style=wx.FD_OPEN)
 

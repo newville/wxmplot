@@ -9,7 +9,7 @@ import os
 from math import log10
 
 import wx
-
+from wxutils import get_cwd
 import numpy as np
 import matplotlib
 from matplotlib.widgets import Lasso
@@ -44,7 +44,7 @@ class BasePanel(wx.Panel):
         self._yfmt  = self._y2fmt = self._xfmt  = None
         self.use_dates = False
         self.show_config_popup = show_config_popup
-        self.launch_dir  = os.getcwd()
+        self.launch_dir  = get_cwd()
 
         self.mouse_uptime = time.time()
         self.user_limits = {}
@@ -191,9 +191,9 @@ class BasePanel(wx.Panel):
             ofile = ofile.replace(c, '_')
 
         ofile = ofile + '.png'
-        orig_dir = os.path.abspath(os.curdir)
+        orig_dir = os.path.abspath(get_cwd())
         dlg = wx.FileDialog(self, message='Save Plot Figure as...',
-                            defaultDir = os.getcwd(),
+                            defaultDir=orig_dir,
                             defaultFile=ofile,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)

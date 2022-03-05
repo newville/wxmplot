@@ -11,7 +11,7 @@ import wx.lib.agw.flatnotebook as flat_nb
 
 import wx.lib.scrolledpanel as scrolled
 import numpy as np
-
+from wxutils import get_cwd
 from .utils import (LabeledTextCtrl, MenuItem, SimpleText, Choice,
                     FloatSpin)
 from .config import PlotConfig
@@ -104,7 +104,7 @@ class PlotConfigFrame(wx.Frame):
             return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Save plot configuration',
-                            defaultDir=os.getcwd(),
+                            defaultDir=get_cwd(),
                             defaultFile=fname,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
@@ -121,7 +121,7 @@ class PlotConfigFrame(wx.Frame):
             return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Read plot configuration',
-                            defaultDir=os.getcwd(),
+                            defaultDir=get_cwd(),
                             wildcard=file_choices,
                             style=wx.FD_OPEN)
 

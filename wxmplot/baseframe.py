@@ -9,6 +9,9 @@ import time
 import wx
 import matplotlib
 from functools import partial
+
+from wxutils import get_cwd
+
 from .plotpanel import PlotPanel
 from .utils import MenuItem, fix_filename
 
@@ -148,7 +151,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         self.SetSize(self.GetBestVirtualSize())
-        
+
 
     def Build_FileMenu(self, extras=None):
         mfile = wx.Menu()
@@ -309,10 +312,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
 
         fname = fix_filename(title + '.dat')
 
-        origdir = os.getcwd()
+        origdir = get_cwd()
         file_choices = "DAT (*.dat)|*.dat|ALL FILES (*.*)|*.*"
         dlg = wx.FileDialog(self, message='Export Data to Text File',
-                            defaultDir=os.getcwd(),
+                            defaultDir=origdir,
                             defaultFile=fname,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)

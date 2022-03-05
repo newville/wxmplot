@@ -16,6 +16,8 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
+from wxutils import get_cwd
+
 from .imagepanel import ImagePanel
 from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
                         Contrast_NDArray, Slices_List, RGB_COLORS,
@@ -876,7 +878,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         file_choices = 'PNG (*.png)|*.png'
         ofile = 'Colormap.png'
         dlg = wx.FileDialog(self, message='Save Colormap as...',
-                            defaultDir=os.getcwd(),
+                            defaultDir=get_cwd(),
                             defaultFile=ofile,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)

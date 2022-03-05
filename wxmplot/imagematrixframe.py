@@ -17,7 +17,7 @@ import os
 from functools import partial
 
 import wx
-
+from wxutils import get_cwd
 import numpy as np
 import matplotlib
 
@@ -240,7 +240,7 @@ class ImageMatrixFrame(BaseFrame):
         file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|PDF (*.pdf)|*.pdf"
         ofile = "%s.png" % self.title
         dlg = wx.FileDialog(self, message='Save Figure as...',
-                            defaultDir = os.getcwd(),
+                            defaultDir=get_cwd(),
                             defaultFile=ofile,
                             wildcard=file_choices,
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)

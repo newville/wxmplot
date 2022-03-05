@@ -1,4 +1,3 @@
-
 ==========================================================
 Speciality wxmplot displays
 ==========================================================
@@ -23,19 +22,19 @@ two-element tuple for the address of that panel in the grid of
 plot panel, and counts to left to right and top to bottom.
 
 
-.. method:: plot(self,x,y, panel=(0, 0), **kws)
+.. method:: MultiPlotFrame.plot(self,x,y, panel=(0, 0), **kws)
 
    plot to specified panel.
 
-.. method:: plot(self,x,y, panel=(0, 0), **kws)
+.. method::  MultiPlotFrame.oplot(self,x,y, panel=(0, 0), **kws)
 
    overplot to specified panel.
 
-.. method:: clear(self, panel=(0, 0))
+.. method::  MultiPlotFrame.clear(self, panel=(0, 0))
 
    clear plot in specified panel
 
-.. method:: configure(self, panel=(0, 0))
+.. method::  MultiPlotFrame.configure(self, panel=(0, 0))
 
    configure plot in specified panel
 
@@ -71,19 +70,19 @@ panel.
 :class:`PlotFrame`, with the specific panel addressed either as
 `panel='top'` or `panel='bot'`.
 
-.. method:: plot(self,x,y, panel='top', **kws)
+.. method:: StackedPlotFrame.plot(self,x,y, panel='top', **kws)
 
    plot to specified panel.
 
-.. method:: plot(self,x,y, panel='top', **kws)
+.. method:: StackedPlotFrame.oplot(self,x,y, panel='top', **kws)
 
    overplot to specified panel.
 
-.. method:: clear(self, panel='top')
+.. method:: StackedPlotFrame.clear(self, panel='top')
 
    clear plot in specified panel
 
-.. method:: configure(self, panel='top')
+.. method:: StackedPlotFrame.configure(self, panel='top')
 
    configure plot in specified panel
 

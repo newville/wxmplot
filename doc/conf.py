@@ -27,9 +27,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.napoleon',
               'sphinx.ext.todo',
-              'IPython.sphinxext.ipython_console_highlighting',
-              'jupyter_sphinx.execute',
-              # 'sphinx_gallery.gen_gallery',
+              'jupyter_sphinx',
               ]
 
 autoclass_content = 'both'

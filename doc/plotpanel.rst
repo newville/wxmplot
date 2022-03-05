@@ -185,58 +185,62 @@ same meaning, as indicated by the right-most column.
   displays) and for each trace (color, linewidth, ...) are preserved for a
   :class:`PlotPanel`. A few specific notes:
 
-   1. The title, label, and grid arguments to :meth:`plot` default to ``None``,
-      which means to use the previously used value.
+   1. The title, label, and grid arguments to :meth:`plot` default to ``None``, which
+      means to use the previously used value.
 
-   2. The *theme* will set the color palette and make stylistic choices.
-      Choices include 'light' (the default), 'white-background', 'dark',
-      'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
-      'dark_background', 'tableau-colorblind10', 'seaborn-bright',
-      'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
-      'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
+   2. The *theme* will set the color palette and make stylistic choices.  Choices
+      include 'light' (the default), 'white-background', 'dark', 'matplotlib',
+      'seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
+      'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
+      'seaborn-darkgrid', 'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
       'seaborn-muted', 'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
       'seaborn-talk', 'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid', and
 
+   3. All *color* arguments can be a common color name ("blue", "red", "black", etc), a
+      standard X11 color names ("cadetblue3", "darkgreen", etc), or an RGB hex color
+      string of the form "#RRGGBB".
 
-   3. All *color* arguments can be a common color name ("blue", "red", "black", etc), a standard X11 color
-      names ("cadetblue3", "darkgreen", etc), or an RGB hex color string of the form "#RRGGBB".
+   4. *zorder* is the depth (that is, height above the plane of the screen) to draw the
+      object at, controlling which element will be on top of others.  By default, each
+      :meth:`oplot` plots at a zorder of 10*(n+1), where n is the counter for the trace.
+      That is, each subsequent trace is drawn *over* the previous, by defualt.
 
-   4. *zorder* is the depth (that is, height above the plane of the screen) to
-      draw the object at, controlling which element will be on top of others.
-      By default, each :meth:`oplot` plots at a zorder of 10*(n+1), where n is
-      the counter for the trace.  That is, each subsequent trace is drawn *over*
-      the previous, by defualt.
+   5. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or
+      'dash-dot')
 
-   5. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or 'dash-dot')
-
-   6. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').  ``None`` connects
-      points with a straight line between points.  The others give horizontal lines with a vertical step
-      at the starting point ('step-pre'), mid-point ('step-mid') the ending point ('steps-post').  Note
-      that if displaying discrete values as a function of time, left-to-right, and want to show a
+   6. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').
+      ``None`` connects points with a straight line between points.  The others give
+      horizontal lines with a vertical step at the starting point ('step-pre'),
+      mid-point ('step-mid') the ending point ('steps-post').  Note that if displaying
+      discrete values as a function of time, left-to-right, and want to show a
       transition to a new value as a sudden step, you want 'steps-post'.
 
-   7. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square', 'diamond', 'thin
-      diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
+   7. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
+      'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
 
    8. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
       percentage of the data range for the view to be extended.  That is, with xmin=0,
       xmin=100, viewpad=5, the range for x will be [-5, 105].
 
-   9. *fullbox* can be used to turn on or off the top and right Axes lines (or spines), giving a more open
-      figure.  The 'axes_style' option gives a little more control -- you can set this to either 'box' for
-      a complete box, 'open' for left and right Axes lines only (same as *fullbox=False*), or 'bottom'
-      which will suppress the top, right, and left Axes.
+   9. *fullbox* can be used to turn on or off the top and right Axes lines (or spines),
+      giving a more open figure.  The 'axes_style' option gives a little more control --
+      you can set this to either 'box' for a complete box, 'open' for left and right
+      Axes lines only (same as *fullbox=False*), or 'bottom' which will suppress the
+      top, right, and left Axes.
 
-   10. *legend_loc* sets the position of the leggend on the plot, and is one of ('ur', 'ul', 'cr', 'cl',
-      'lr' 'll', 'uc', 'lc', or 'cc'') for ('upper right' , 'upper left', 'center right', 'center left',
-      'lower right', 'lower left', 'upper center', 'lower center', or 'center').
+   10. *legend_loc* sets the position of the leggend on the plot, and is one of 'ur',
+       'ul', 'cr', 'cl', 'lr' 'll', 'uc', 'lc', or 'cc' for 'upper right' , 'upper
+       left', 'center right', 'center left', 'lower right', 'lower left', 'upper center',
+       'lower center', or 'center'.
 
-   11. The *delay_draw* option will delay the actual drawing the plot to
-       the screen. This can be give a noticeable speed up when plotting
-       multiple line traces at once.  See also :meth:`plot_many` for a
-       convenience function to plot many traces at once.
+   11. The *delay_draw* option will delay the actual drawing the plot to the
+       screen. This can be give a noticeable speed up when plotting multiple line traces
+       at once.  See also :meth:`plot_many` for a convenience function to plot many
+       traces at once.
 
    12. For more on using data with dates or times, see :ref:`sect_datetime`.
+
+
 
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be

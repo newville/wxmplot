@@ -27,13 +27,10 @@
 
       ImageFrame: wx.Frame containing ImagePanel
 """
+from .version import version as __version__
 
 import sys
 import wx
-
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
 
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame

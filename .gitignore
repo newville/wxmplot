@@ -9,3 +9,4 @@ dist
 sandbox
 .project
 .pydevproject
+wxmplot/version.py

@@ -72,8 +72,9 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Interactive wxmplot displays</a><ul>
 <li><a class="reference internal" href="#plotting-in-an-interactive-session">Plotting in an interactive session</a></li>
 <li><a class="reference internal" href="#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
@@ -84,12 +85,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="previous chapter">wxmplot Overview</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="plotpanel.html"
-                        title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="overview.html"
+                          title="previous chapter">wxmplot Overview</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="plotpanel.html"
+                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,7 +107,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -122,7 +128,7 @@ how <cite>wxmplot</cite> plotting functions give a richer level of customization
 interactivity to the end user than is available from the standard
 <cite>matplotlib.pyplot</cite>.  Here, the emphasis is on the immediacy of the
 interactivity of the data displays especially when used from interactive
-sessions.  An important feature of the <a class="reference internal" href="other.html#id2" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and
+sessions.  An important feature of the <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and
 other functions of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> module is that they display their
 results immediately, without having to execute a <cite>show()</cite> method to render
 the display. For interactive work from the Python (or one of the Jupyter
@@ -130,12 +136,12 @@ consoles or notebook) prompt, the displayed windows do not block the Python
 session.  This means that not only can you zoom in, change themes, etc from
 the Plot window, you can can also easily plot other functions or data,
 either on the same window or in a new top-level plotting window.</p>
-<p>While <cite>wxmplot</cite> provides <a class="reference internal" href="other.html#id2" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and other functions
+<p>While <cite>wxmplot</cite> provides <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and other functions
 that are roughly equivalent to the functions from <cite>matplotlib.pyplot</cite>, the
 functions are here not exact drop-in replacements for the <cite>pyplot</cite> functions.
 For one thing, there are many missing plot types and functions.  For another,
 the syntax for specifying options is different.  For example, <cite>wxmplot</cite>
-prefers a long list of keyword arguments to <a class="reference internal" href="other.html#id2" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> over a series of
+prefers a long list of keyword arguments to <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> over a series of
 separate function calls.</p>
 <p>The functions in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> are described in detail below.</p>
 <section id="plotting-in-an-interactive-session">
@@ -218,10 +224,10 @@ add <cite>wi.plot()</cite> and <cite>wi.imshow()</cite> to your short- or long-r
 and the plots will be displayed until you no longer want to use them.</p>
 </section>
 <section id="d-plotting-with-plot-and-related-functions">
-<h2>2D Plotting with <a class="reference internal" href="other.html#id2" title="plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#d-plotting-with-plot-and-related-functions" title="Permalink to this headline">¶</a></h2>
+<h2>2D Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#d-plotting-with-plot-and-related-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em>, <em class="sig-param"><span class="pre">win=1</span></em>, <em class="sig-param"><span class="pre">new=False</span></em>, <em class="sig-param"><span class="pre">...</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot trace of x, y arrays in a PlotFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -345,7 +351,7 @@ This can significantly descrease drawing time:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_text">
-<span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">y</span></em>, <em class="sig-param"><span class="pre">text</span></em>, <em class="sig-param"><span class="pre">win=1</span></em>, <em class="sig-param"><span class="pre">options</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>add text at x, y coordinates of a plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -448,7 +454,7 @@ This can significantly descrease drawing time:</p>
 <h2>Displaying images with <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and <a class="reference internal" href="#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.imshow">
-<span class="sig-name descname"><span class="pre">imshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">map</span></em>, <em class="sig-param"><span class="pre">...</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.imshow" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">imshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display an 2-D array of intensities as a false-color map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -482,7 +488,7 @@ single-color map or (NY, NX, 3) array for an RGB map</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.contour">
-<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">map</span></em>, <em class="sig-param"><span class="pre">...</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.contour" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.contour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display an 2-D array of intensities as a contour plot</p>
 <p class="rubric">Notes</p>
 <p>This is equivalent to
@@ -665,8 +671,8 @@ objects.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+        &#169; Copyright 2022, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

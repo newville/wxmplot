@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
+from matplotlib.backends.backend_wx import RendererWx
 
 from .utils import Printer, MenuItem
 

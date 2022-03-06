@@ -1,5 +1,6 @@
 include README.md LICENSE ChangeLog MANIFEST.in
-recursive-exclude *.pyc core.* *~ *.pdf .gitignore .gitattribute
+exclude .gitignore .gitattributes
+recursive-exclude *.pyc core.* *~ *.pdf
 recursive-include wxmplot *.py
 recursive-include examples *.py
 recursive-include examples *.dat

@@ -9,7 +9,6 @@ from datetime import datetime
 
 import wx
 
-
 from numpy import nonzero, where
 import matplotlib
 from matplotlib import dates
@@ -226,6 +225,7 @@ class PlotPanel(BasePanel):
         _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         if dy is not None and not fill:
             _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+        _fill = None
         if fill:
             fkws = dict(step=None, zorder=zorder, color=color)
             if drawstyle != 'default':

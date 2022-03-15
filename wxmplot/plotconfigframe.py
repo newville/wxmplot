@@ -25,8 +25,8 @@ except ImportError:
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
-ISPINSIZE = 75
-FSPINSIZE = 75
+ISPINSIZE = 70
+FSPINSIZE = 70
 
 def autopack(panel, sizer):
     panel.SetAutoLayout(True)
@@ -165,8 +165,8 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
-        self.SetMinSize((850, 250))
-        self.SetSize((950, 450))
+        self.SetMinSize((875, 250))
+        self.SetSize((975, 450))
         self.Show()
         self.Raise()
 

@@ -329,29 +329,29 @@ def hexcolor(color):
     # first, if this is a hex color already, return!
     # Python 3: needs rewrite for str/unicode change
     if isinstance(color, str):
-        if color[0] == '#' and len(color)==7:
+        if color[0] == '#' and len(color) in (7, 9):
             return color.lower()
 
-    # now, get color to an rgb tuple
-    rgb = (0,0,0)
+    # now, get color to an rgba tuple
+    cvals = (0, 0, 0)
     if isinstance(color, tuple):
-        rgb = color
+        cvals = color
     elif isinstance(color, list):
-        rgb = tuple(color)
+        cvals = tuple(color)
     elif isinstance(color, str):
         c = color.lower()
         if c.find(' ')>-1:    c = c.replace(' ','')
         if c.find('gray')>-1: c = c.replace('gray','grey')
         if c in x11_colors:
-            rgb = x11_colors[c]
+            cvals = x11_colors[c]
     else:
         try:
-            rgb = color.Red(), color.Green(), color.Blue()
+            cvals = color.Red(), color.Green(), color.Blue()
         except:
             pass
 
-    # convert rgb to hex color
-    col = '#%02x%02x%02x' % (rgb)
+    # convert cvals to hex color
+    col = '#'  +  ''.join(['%02x' % c for c in cvals])
     return col.lower()
 
 ###

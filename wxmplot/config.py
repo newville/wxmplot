@@ -166,7 +166,7 @@ for tname in ('light',  'white-background', 'dark',
         theme.update(dark_theme)
     elif tname == 'white-background':
         theme.update(light_theme)
-        theme.update(whitebg_theme)        
+        theme.update(whitebg_theme)
     elif tname in matplotlib.style.library:
         if tname.startswith('seaborn-'):
             theme.update(matplotlib.style.library['seaborn'])
@@ -197,10 +197,12 @@ class LineProps:
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=4,
-                 markercolor=None, zorder=1, label='', mpline=None):
+                 markercolor=None, fillstyle=False, alpha=1.0, zorder=1, label='', mpline=None):
         self.color      = color
+        self.alpha      = alpha
         self.style      = style
         self.drawstyle  = drawstyle
+        self.fillstyle = fillstyle
         self.linewidth  = linewidth
         self.marker     = marker
         self.markersize = markersize
@@ -211,6 +213,7 @@ class LineProps:
         self.zorder     = zorder
         self.mpline     = mpline
 
+
     def __repr__(self):
         if self.zorder is None:
             self.zorder = 33
@@ -218,16 +221,18 @@ class LineProps:
 
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
-            label=None):
+            label=None, fillstyle=False, alpha=None):
         self.color = ifnotNOne(color, self.color)
         self.style = style
         self.drawstyle  = drawstyle
+        self.fillstyle  = fillstyle
         self.linewidth  = linewidth
         self.marker     = marker
         self.markersize = markersize
         self.markercolor= markercolor
         self.label      = label
         self.zorder     = zorder
+        self.alpha      = alpha
 
 
 class PlotConfig:
@@ -353,6 +358,7 @@ class PlotConfig:
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
+        self.fills = [None]*len(self.traces)
         self.ntrace = 0
         return self.lines
 
@@ -370,17 +376,20 @@ class PlotConfig:
 
     def init_trace(self, n, color, style, label=None, linewidth=None,
                    zorder=None, marker=None, markersize=None,
-                   drawstyle=None):
+                   drawstyle=None, fillstyle=None, alpha=1):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProps())
+            self.fills.append(None)
         line = self.traces[n]
 
         line.label     = ifnotNone(label, "trace %i" % (n+1))
         line.color     = ifnotNone(color, line.color)
+        line.alpha     = ifnotNone(alpha, line.alpha)
         line.style     = ifnotNone(style, line.style)
         line.linewidth = ifnotNone(linewidth, line.linewidth)
         line.drawstyle = ifnotNone(drawstyle, line.drawstyle)
+        line.fillstyle = ifnotNone(fillstyle, line.fillstyle)
         line.zorder    = ifnotNone(zorder, 5*(n+1))
         line.marker    = ifnotNone(marker, line.marker)
         line.markersize = ifnotNone(markersize, line.markersize)
@@ -516,11 +525,12 @@ class PlotConfig:
         self.set_trace_label(prop.label, trace=trace, delay_draw=True)
         self.set_trace_linewidth(prop.linewidth, trace=trace, delay_draw=True)
         self.set_trace_color(prop.color, trace=trace, delay_draw=True)
+        self.set_trace_alpha(prop.alpha, trace=trace, delay_draw=True)
         self.set_trace_style(prop.style, trace=trace, delay_draw=True)
         self.set_trace_drawstyle(prop.drawstyle, trace=trace, delay_draw=True)
+        self.set_trace_fillstyle(prop.fillstyle, trace=trace, delay_draw=True)
         self.set_trace_marker(prop.marker, trace=trace, delay_draw=True)
         self.set_trace_markersize(prop.markersize, trace=trace, delay_draw=True)
-
         self.set_trace_zorder(prop.zorder, trace=trace, delay_draw=True)
 
     def set_trace_color(self, color, trace=None, delay_draw=True):
@@ -539,6 +549,24 @@ class PlotConfig:
             self.draw_legend()
         if callable(self.trace_color_callback) and mline:
             self.trace_color_callback(color, line=mline)
+
+    def set_trace_alpha(self, alpha, trace=None, delay_draw=True):
+        trace = self.get_trace(trace)
+        alpha = min(1, max(0, float(alpha)))
+        self.traces[trace].alpha = alpha
+        mline = self.get_mpline(trace)
+        if mline:
+            for comp in mline:
+                if hasattr(comp, '__iter__'):
+                    for l in comp:
+                        l.set_alpha(alpha)
+                else:
+                    comp.set_alpha(alpha)
+        if self.fills[trace] is not None:
+            self.fills[trace].set_alpha(alpha)
+        if not delay_draw:
+            self.draw_legend()
+
 
     def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
@@ -592,6 +620,45 @@ class PlotConfig:
             mline[0].set_drawstyle(DrawStyleMap[drawstyle])
             mline[0]._invalidx = True
 
+        if not delay_draw:
+            self.draw_legend()
+
+    def set_trace_fillstyle(self, fillstyle, trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+
+        cur_fill = self.fills[trace]
+        axes = self.canvas.figure.get_axes()[0]
+
+        def del_collection(thisfill):
+            for i, coll in enumerate(axes.collections):
+                if id(thisfill) == id(coll):
+                    del axes.collections[i]
+
+        if not fillstyle:
+            self.traces[trace].fillstyle = False
+            if cur_fill is not None:
+                del_collection(cur_fill)
+                del cur_fill
+                self.fills[trace] = None
+        elif fillstyle:
+            if cur_fill is not None:
+                del_collection(cur_fill)
+                del cur_fill
+
+            self.traces[trace].fillstyle = True
+            atrace = self.traces[trace]
+            this = self.get_mpline(trace)
+            if this is not None:
+                args = dict(step=None, zorder=atrace.zorder,
+                            color=atrace.color,
+                            alpha=atrace.alpha)
+                if atrace.drawstyle != 'default':
+                    args['step'] = drawstyle
+
+                _fill = axes.fill_between(this[0].get_xdata(),
+                                          this[0].get_ydata(),
+                                          y2=0, **args)
+                self.fills[trace] = _fill
         if not delay_draw:
             self.draw_legend()
 
@@ -745,11 +812,13 @@ class PlotConfig:
 
         labs = []
         lins = []
+        traces = []
         for ax in axes:
-            for xline in ax.get_lines():
+            for trace, xline in enumerate(ax.get_lines()):
                 xlab = xline.get_label()
                 if (xlab != '_nolegend_' and len(xlab)>0):
                     lins.append(xline)
+                    traces.append(trace)
 
         for l in lins:
             xl = l.get_label()
@@ -774,13 +843,13 @@ class PlotConfig:
             if self.draggable_legend:
                 self.mpl_legend.set_draggable(True, update='loc')
             self.legend_map = {}
-            for legline, legtext, mainline in zip(self.mpl_legend.get_lines(),
-                                                  self.mpl_legend.get_texts(),
-                                                  lins):
+            for legline, legtext, mainline, trace in zip(self.mpl_legend.get_lines(),
+                                                         self.mpl_legend.get_texts(),
+                                                         lins, traces):
                 legline.set_pickradius(20)
                 legtext.set_picker(5)
-                self.legend_map[legline] = (mainline, legline, legtext)
-                self.legend_map[legtext] = (mainline, legline, legtext)
+                self.legend_map[legline] = (mainline, trace, legline, legtext)
+                self.legend_map[legtext] = (mainline, trace, legline, legtext)
                 legtext.set_color(self.textcolor)
 
 

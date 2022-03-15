@@ -165,8 +165,8 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
-        self.SetMinSize((800, 250))
-        self.SetSize((925, 500))
+        self.SetMinSize((850, 250))
+        self.SetSize((950, 450))
         self.Show()
         self.Raise()
 
@@ -383,7 +383,7 @@ class PlotConfigFrame(wx.Frame):
 
 
     def make_text_panel(self, parent, font=None):
-        panel = scrolled.ScrolledPanel(parent, size=(800, 200),
+        panel = scrolled.ScrolledPanel(parent, size=(875, 225),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
         if font is None:
             font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
@@ -582,8 +582,9 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(wx.StaticText(panel, -1, 'Thing 1'), (4, 0), (1, 9), labstyle, 3)
 
         irow = 5
-        for t in ('#','Label','Color', 'Style',
-                  'Thickness','Symbol',' Size', 'Z Order', 'Join Style'):
+
+        for t in ('#','Label','Color', 'Alpha', 'Style', 'Thickness', 'Symbol',
+                  'Size', 'Z Order', 'Join Style', 'Fill to Zero'):
             x = wx.StaticText(panel, -1, t)
             x.SetFont(font)
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
@@ -599,9 +600,11 @@ class PlotConfigFrame(wx.Frame):
             dlab = lin.label
             dcol = hexcolor(lin.color)
             dthk = lin.linewidth
+            dalp = lin.alpha
             dmsz = lin.markersize
             dsty = lin.style
             djsty = lin.drawstyle
+            dfill = lin.fillstyle
             dzord = lin.zorder
             dsym = lin.marker
             lab = LabeledTextCtrl(panel, dlab, size=(125, -1), labeltext="%i" % (i+1),
@@ -617,6 +620,7 @@ class PlotConfigFrame(wx.Frame):
                             min_val=0, max_val=20, increment=0.5, digits=1,
                             action=partial(self.onThickness, trace=i))
             self.choice_linewidths.append(thk)
+
             sty = Choice(panel, choices=cnf.styles, size=(100,-1),
                          action=partial(self.onStyle,trace=i))
             sty.SetStringSelection(dsty)
@@ -638,15 +642,26 @@ class PlotConfigFrame(wx.Frame):
             jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
             jsty.SetStringSelection(djsty)
 
-            sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(col, (irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(sty, (irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(thk, (irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(sym, (irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(msz, (irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(zor, (irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
-            sizer.Add(jsty, (irow,8),(1,1),wx.ALIGN_LEFT|wx.ALL, 5)
+            ffil = wx.CheckBox(panel, -1, ' ')
+            ffil.Bind(wx.EVT_CHECKBOX, partial(self.onFillStyle, trace=i))
+            ffil.SetValue(dfill)
+
+            alp = FloatSpin(panel, size=(FSPINSIZE, -1), value=dalp,
+                            min_val=0, max_val=1, increment=0.05, digits=2,
+                            action=partial(self.onAlpha, trace=i))
+
+
+            sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(col, (irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(alp, (irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(sty, (irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(thk, (irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(sym, (irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(msz, (irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(zor, (irow,8),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(jsty, (irow,9),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(ffil, (irow,10),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
 
         autopack(panel,sizer)
         panel.SetupScrolling()
@@ -656,10 +671,20 @@ class PlotConfigFrame(wx.Frame):
         pass
 
     def onColor(self, event=None, color=None, item='trace', trace=1, draw=True):
+        event_col = event.GetValue()
         if color is None and event is not None:
-            color = hexcolor( event.GetValue() )
+            color = hexcolor(event_col)
+        try:
+            alpha = event_col.Alpha()
+        except:
+            alpha = 1.0
+        print("Set Color ", color, alpha)
+
         if item == 'trace':
             self.conf.set_trace_color(color, trace=trace)
+            self.colwids[trace].SetColour(color)
+            self.conf.set_trace_alpha(alpha, trace=trace)
+
         elif item == 'grid':
             self.conf.set_gridcolor(color)
         elif item == 'face':
@@ -668,9 +693,9 @@ class PlotConfigFrame(wx.Frame):
             self.conf.set_framecolor(color)
         elif item == 'text':
             self.conf.set_textcolor(color)
-
         if draw:
             self.canvas.draw()
+
 
     def onTheme(self, event):
         theme = event.GetString()
@@ -712,6 +737,9 @@ class PlotConfigFrame(wx.Frame):
     def onJoinStyle(self, event, trace=0):
         self.conf.set_trace_drawstyle(event.GetString(), trace=trace)
 
+    def onFillStyle(self, event, trace=0):
+        self.conf.set_trace_fillstyle(event.IsChecked(), trace=trace)
+
     def onSymbol(self, event, trace=0):
         self.conf.set_trace_marker(event.GetString(), trace=trace)
 
@@ -724,6 +752,9 @@ class PlotConfigFrame(wx.Frame):
         else:
             self.conf.set_trace_markersize(val, trace=trace)
 
+    def onAlpha(self, event, trace=0):
+        self.conf.set_trace_alpha(event.GetEventObject().GetValue(), trace=trace,
+                                  delay_draw=False)
 
     def onZorder(self, event, trace=0):
         self.conf.set_trace_zorder(event.GetEventObject().GetValue(),

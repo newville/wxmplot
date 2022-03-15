@@ -112,14 +112,14 @@ class PlotPanel(BasePanel):
     def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,
               ylabel=None, y2label=None, title=None, dy=None,
               ylog_scale=None, xlog_scale=None, grid=None, xmin=None,
-              xmax=None, ymin=None, ymax=None, color=None, style=None,
-              drawstyle=None, linewidth=2, marker=None, markersize=None,
-              refresh=True, show_legend=None, legend_loc='best',
-              legend_on=True, delay_draw=False, bgcolor=None,
-              framecolor=None, gridcolor=None, labelfontsize=None,
-              titlefontsize=None, legendfontsize=None, fullbox=None,
-              axes_style=None, zorder=None, viewpad=None, theme=None,
-              use_dates=None, dates_style=None, **kws):
+              xmax=None, ymin=None, ymax=None, color=None, style=None, alpha=None,
+              fillstyle=None, drawstyle=None, linewidth=2,
+              marker=None, markersize=None, refresh=True, show_legend=None,
+              legend_loc='best', legend_on=True, delay_draw=False,
+              bgcolor=None, framecolor=None, gridcolor=None,
+              labelfontsize=None, titlefontsize=None, legendfontsize=None,
+              fullbox=None, axes_style=None, zorder=None, viewpad=None,
+              theme=None, use_dates=None, dates_style=None, **kws):
         """
         basic plot method, adding to an existing display
 
@@ -219,10 +219,26 @@ class PlotPanel(BasePanel):
             conf.set_trace_markersize(markersize, delay_draw=True)
         if drawstyle is not None:
             conf.set_trace_drawstyle(drawstyle, delay_draw=True)
-        if dy is None:
-            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
+        if alpha is not None:
+            conf.set_trace_alpha(alpha, delay_draw=True)
+
+        if dy is None and fillstyle in (None, 'None'):
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle,
+                               zorder=zorder)
         else:
             _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+        _fill = None
+        if fillstyle not in (None, 'None'):
+            args = dict(step=None, zorder=zorder, color=color)
+            if drawstyle != 'default':
+                args['step'] = drawstyle
+            if dy is None:
+                _fill = axes.fill_between(xdata, ydata, y2=0, **args)
+            else:
+                _fill = axes.fill_between(xdata, ydata-dy, y2=ydata+dy, **args)
+
+            conf.traces[conf.ntrace].fillstyle=fillstyle
+
 
         if axes not in conf.data_save:
             conf.data_save[axes] = []
@@ -259,9 +275,11 @@ class PlotPanel(BasePanel):
 
         if conf.ntrace < len(conf.lines):
             conf.lines[conf.ntrace] = _lines
+            conf.fills[conf.ntrace] = _fill
         else:
             conf.init_trace(conf.ntrace, 'black', 'solid')
             conf.lines.append(_lines)
+            conf.fills.append(_fill)
 
         # now set plot limits:
         if not delay_draw:
@@ -709,12 +727,15 @@ class PlotPanel(BasePanel):
     def __onPickEvent(self, event=None):
         """pick events"""
         legline = event.artist
-        trace = self.conf.legend_map.get(legline, None)
+        legtrace = self.conf.legend_map.get(legline, None)
         visible = True
-        if trace is not None and self.conf.hidewith_legend:
-            line, legline, legtext = trace
+        if legtrace is not None and self.conf.hidewith_legend:
+            line, trace, legline, legtext = legtrace
             visible = not line.get_visible()
             line.set_visible(visible)
+            if self.conf.fills[trace] is not None:
+                self.conf.fills[trace].set_visible(visible)
+
             if visible:
                 legline.set_zorder(10.00)
                 legline.set_alpha(1.00)

@@ -25,8 +25,8 @@ except ImportError:
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
-ISPINSIZE = 70
-FSPINSIZE = 70
+ISPINSIZE = 65
+FSPINSIZE = 65
 
 def autopack(panel, sizer):
     panel.SetAutoLayout(True)
@@ -583,8 +583,9 @@ class PlotConfigFrame(wx.Frame):
 
         irow = 5
 
-        for t in ('#','Label','Color', 'Alpha', 'Style', 'Thickness', 'Symbol',
-                  'Size', 'Z Order', 'Join Style', 'Fill'):
+        for t in ('#','Label','Color', 'Alpha', 'Fill', 'Line Style',
+                  'Thickness', 'Symbol',
+                  'Size', 'Z Order', 'Join Style'):
             x = wx.StaticText(panel, -1, t)
             x.SetFont(font)
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
@@ -642,7 +643,7 @@ class PlotConfigFrame(wx.Frame):
             jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
             jsty.SetStringSelection(djsty)
 
-            ffil = wx.CheckBox(panel, -1, ' ')
+            ffil = wx.CheckBox(panel, -1, '')
             ffil.Bind(wx.EVT_CHECKBOX, partial(self.onFill, trace=i))
             ffil.SetValue(dfill)
 
@@ -655,13 +656,14 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(col, (irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(alp, (irow,3),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(sty, (irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(thk, (irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(sym, (irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(msz, (irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(zor, (irow,8),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(jsty, (irow,9),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
-            sizer.Add(ffil, (irow,10),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(ffil,(irow,4),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(sty, (irow,5),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(thk, (irow,6),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(sym, (irow,7),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(msz, (irow,8),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(zor, (irow,9),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+            sizer.Add(jsty, (irow,10),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
+
 
         autopack(panel,sizer)
         panel.SetupScrolling()

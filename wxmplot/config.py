@@ -197,12 +197,12 @@ class LineProps:
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=4,
-                 markercolor=None, fillstyle=False, alpha=1.0, zorder=1, label='', mpline=None):
+                 markercolor=None, fill=False, alpha=1.0, zorder=1, label='', mpline=None):
         self.color      = color
         self.alpha      = alpha
         self.style      = style
         self.drawstyle  = drawstyle
-        self.fillstyle = fillstyle
+        self.fill       = fill
         self.linewidth  = linewidth
         self.marker     = marker
         self.markersize = markersize
@@ -221,11 +221,11 @@ class LineProps:
 
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
-            label=None, fillstyle=False, alpha=None):
+            label=None, fill=False, alpha=None):
         self.color = ifnotNOne(color, self.color)
         self.style = style
         self.drawstyle  = drawstyle
-        self.fillstyle  = fillstyle
+        self.fill       = fill
         self.linewidth  = linewidth
         self.marker     = marker
         self.markersize = markersize
@@ -358,6 +358,7 @@ class PlotConfig:
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
+        self.dy    = [None]*len(self.traces)
         self.fills = [None]*len(self.traces)
         self.ntrace = 0
         return self.lines
@@ -376,11 +377,12 @@ class PlotConfig:
 
     def init_trace(self, n, color, style, label=None, linewidth=None,
                    zorder=None, marker=None, markersize=None,
-                   drawstyle=None, fillstyle=None, alpha=1):
+                   drawstyle=None, fill=None, alpha=1):
         """ used for building set of traces"""
         while n >= len(self.traces):
             self.traces.append(LineProps())
             self.fills.append(None)
+            self.dy.append(None)
         line = self.traces[n]
 
         line.label     = ifnotNone(label, "trace %i" % (n+1))
@@ -389,7 +391,7 @@ class PlotConfig:
         line.style     = ifnotNone(style, line.style)
         line.linewidth = ifnotNone(linewidth, line.linewidth)
         line.drawstyle = ifnotNone(drawstyle, line.drawstyle)
-        line.fillstyle = ifnotNone(fillstyle, line.fillstyle)
+        line.fill      = ifnotNone(fill, line.fill)
         line.zorder    = ifnotNone(zorder, 5*(n+1))
         line.marker    = ifnotNone(marker, line.marker)
         line.markersize = ifnotNone(markersize, line.markersize)
@@ -528,7 +530,7 @@ class PlotConfig:
         self.set_trace_alpha(prop.alpha, trace=trace, delay_draw=True)
         self.set_trace_style(prop.style, trace=trace, delay_draw=True)
         self.set_trace_drawstyle(prop.drawstyle, trace=trace, delay_draw=True)
-        self.set_trace_fillstyle(prop.fillstyle, trace=trace, delay_draw=True)
+        self.set_trace_fill(prop.fill, trace=trace, delay_draw=True)
         self.set_trace_marker(prop.marker, trace=trace, delay_draw=True)
         self.set_trace_markersize(prop.markersize, trace=trace, delay_draw=True)
         self.set_trace_zorder(prop.zorder, trace=trace, delay_draw=True)
@@ -545,6 +547,10 @@ class PlotConfig:
                         l.set_color(color)
                 else:
                     comp.set_color(color)
+
+        if self.fills[trace] is not None:
+            self.fills[trace].set_color(color)
+
         if not delay_draw:
             self.draw_legend()
         if callable(self.trace_color_callback) and mline:
@@ -623,7 +629,7 @@ class PlotConfig:
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_fillstyle(self, fillstyle, trace=None, delay_draw=False):
+    def set_trace_fill(self, fill, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
 
         cur_fill = self.fills[trace]
@@ -634,30 +640,35 @@ class PlotConfig:
                 if id(thisfill) == id(coll):
                     del axes.collections[i]
 
-        if not fillstyle:
-            self.traces[trace].fillstyle = False
+        if not fill:
+            self.traces[trace].fill = False
             if cur_fill is not None:
                 del_collection(cur_fill)
                 del cur_fill
                 self.fills[trace] = None
-        elif fillstyle:
+        else:
             if cur_fill is not None:
                 del_collection(cur_fill)
                 del cur_fill
 
-            self.traces[trace].fillstyle = True
+            self.traces[trace].fill = True
             atrace = self.traces[trace]
             this = self.get_mpline(trace)
+            dy  = self.dy[trace]
             if this is not None:
-                args = dict(step=None, zorder=atrace.zorder,
+                fkws = dict(step=None, zorder=atrace.zorder,
                             color=atrace.color,
                             alpha=atrace.alpha)
                 if atrace.drawstyle != 'default':
-                    args['step'] = drawstyle
+                    fkws['step'] = drawstyle
+                x = this[0].get_xdata()
+                y = this[0].get_ydata()
+                y2 = 0
+                if dy is not None:
+                    y, y2 = y-dy, y+dy
 
-                _fill = axes.fill_between(this[0].get_xdata(),
-                                          this[0].get_ydata(),
-                                          y2=0, **args)
+                _fill = axes.fill_between(x, y, y2=y2, **fkws)
+
                 self.fills[trace] = _fill
         if not delay_draw:
             self.draw_legend()

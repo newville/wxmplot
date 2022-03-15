@@ -584,7 +584,7 @@ class PlotConfigFrame(wx.Frame):
         irow = 5
 
         for t in ('#','Label','Color', 'Alpha', 'Style', 'Thickness', 'Symbol',
-                  'Size', 'Z Order', 'Join Style', 'Fill to Zero'):
+                  'Size', 'Z Order', 'Join Style', 'Fill'):
             x = wx.StaticText(panel, -1, t)
             x.SetFont(font)
             sizer.Add(x,(irow,i),(1,1),wx.ALIGN_LEFT|wx.ALL, 3)
@@ -604,7 +604,7 @@ class PlotConfigFrame(wx.Frame):
             dmsz = lin.markersize
             dsty = lin.style
             djsty = lin.drawstyle
-            dfill = lin.fillstyle
+            dfill = lin.fill
             dzord = lin.zorder
             dsym = lin.marker
             lab = LabeledTextCtrl(panel, dlab, size=(125, -1), labeltext="%i" % (i+1),
@@ -643,7 +643,7 @@ class PlotConfigFrame(wx.Frame):
             jsty.SetStringSelection(djsty)
 
             ffil = wx.CheckBox(panel, -1, ' ')
-            ffil.Bind(wx.EVT_CHECKBOX, partial(self.onFillStyle, trace=i))
+            ffil.Bind(wx.EVT_CHECKBOX, partial(self.onFill, trace=i))
             ffil.SetValue(dfill)
 
             alp = FloatSpin(panel, size=(FSPINSIZE, -1), value=dalp,
@@ -674,16 +674,10 @@ class PlotConfigFrame(wx.Frame):
         event_col = event.GetValue()
         if color is None and event is not None:
             color = hexcolor(event_col)
-        try:
-            alpha = event_col.Alpha()
-        except:
-            alpha = 1.0
-        print("Set Color ", color, alpha)
 
         if item == 'trace':
             self.conf.set_trace_color(color, trace=trace)
             self.colwids[trace].SetColour(color)
-            self.conf.set_trace_alpha(alpha, trace=trace)
 
         elif item == 'grid':
             self.conf.set_gridcolor(color)
@@ -737,8 +731,8 @@ class PlotConfigFrame(wx.Frame):
     def onJoinStyle(self, event, trace=0):
         self.conf.set_trace_drawstyle(event.GetString(), trace=trace)
 
-    def onFillStyle(self, event, trace=0):
-        self.conf.set_trace_fillstyle(event.IsChecked(), trace=trace)
+    def onFill(self, event, trace=0):
+        self.conf.set_trace_fill(event.IsChecked(), trace=trace)
 
     def onSymbol(self, event, trace=0):
         self.conf.set_trace_marker(event.GetString(), trace=trace)

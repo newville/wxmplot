@@ -20,15 +20,7 @@ sys.path.append(os.path.abspath(os.path.join('.')))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.todo',
-              'sphinx.ext.coverage',
-              'sphinx.ext.extlinks',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.napoleon',
-              'sphinx.ext.todo',
-              'jupyter_sphinx',
-              ]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.napoleon']
 
 autoclass_content = 'both'
 
@@ -103,11 +95,8 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
 html_theme_path = ['sphinx_theme']
-html_theme = 'wxmplotdoc'
+html_theme = 'sphinxdoc'
 
-# The name for this set of Sphinx documents.  If None, it defaults to
-# "<project> v<release> documentation".
-#html_title = None
 
 html_title = "WXMPLOT: plotting widgets using wxPython and matplotlib"
 html_short_title = "WXMPLOT: wxPython+matplotlib"

@@ -118,15 +118,19 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | linewidth      | int        | 2       | linewidth for trace                            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  4  |  no         |
+  | alpha          | float      | 1.0     | opacity (from 0 to 1) for trace                |  4  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  5  |  no         |
+  | fill           | bool       | False   | fill to 0 or between [y-dy,y+dy]               |  5  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | drawstyle      | string     | line    | style connecting points of trace               |  6  |  no         |
+  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  6  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  7  |  no         |
+  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+  | drawstyle      | string     | line    | style connecting points of trace               |  8  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | side           | left/right | left    | side for y-axis and label                      |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  7  |  no         |
+  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  9  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | markersize     | int        | 8       | size of marker shown for each point            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -136,39 +140,39 @@ same meaning, as indicated by the right-most column.
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | dy             | array      | None    | uncertainties for y values; error bars         |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmin           | float      | None    | minimum displayed x value                      |  8  |  yes        |
+  | xmin           | float      | None    | minimum displayed x value                      |  10 |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmax           | float      | None    | maximum displayed x value                      |  8  |  yes        |
+  | xmax           | float      | None    | maximum displayed x value                      |  10 |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymin           | float      | None    | minimum displayed y value                      |  8  |  yes        |
+  | ymin           | float      | None    | minimum displayed y value                      |  10 |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymax           | float      | None    | maximum displayed y value                      |  8  |  yes        |
+  | ymax           | float      | None    | maximum displayed y value                      |  10 |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  8  |  yes        |
+  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  10 |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | autoscale      | bool       | True    | whether to automatically set plot limits       |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  9  |  no         |
+  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  11 |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  9  |  no         |
+  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  11 |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | grid           | None/bool  | None    | to show grid lines                             |     |  yes        |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | show_legend    | None/bool  | None    | whether to display legend (None: leave as is)  |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_loc     | string     | 'ur'    | location of legend                             | 10  |  no         |
+  | legend_loc     | string     | 'ur'    | location of legend                             | 12  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_on      | bool       | True    | whether legend is on Axis                      | 10  |  no         |
+  | legend_on      | bool       | True    | whether legend is on Axis                      | 12  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | delay_draw     | bool       | False   | whether to delay draw until later.             | 11  |  no         |
+  | delay_draw     | bool       | False   | whether to delay draw until later.             | 13  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   | refresh        | bool       | True    | whether to refresh display                     |     |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 12  |  no         |
+  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 14  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | dates_style    | str        | ''      | aid conversion of floats to time data          | 12  |  no         |
+  | dates_style    | str        | ''      | aid conversion of floats to time data          | 14  |  no         |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
   |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
   +----------------+------------+---------+------------------------------------------------+-----+-------------+
@@ -200,47 +204,54 @@ same meaning, as indicated by the right-most column.
       standard X11 color names ("cadetblue3", "darkgreen", etc), or an RGB hex color
       string of the form "#RRGGBB".
 
-   4. *zorder* is the depth (that is, height above the plane of the screen) to draw the
+   4. The *alpha* opacity value ranges from 0 (transpaent) to 1 (opaque) for the color
+      used for the line trace and the *fill*.  While supplying a color string of the form
+      "#RRGGBBAA" can also set *alpha*, setting it directly here is more robust and should
+      be preferred.
+
+   5. The *fill* value controls whether to fill under the curve to 0.  When `dy` is supplied
+      for errorbars, using `fill=True` will not show error bars as vertical lines, but fill
+      in the curve between `y-dy` and `y+dy`.
+
+   6. *zorder* is the depth (that is, height above the plane of the screen) to draw the
       object at, controlling which element will be on top of others.  By default, each
       :meth:`oplot` plots at a zorder of 10*(n+1), where n is the counter for the trace.
       That is, each subsequent trace is drawn *over* the previous, by defualt.
 
-   5. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or
+   7. *style* is one of ('solid', 'dashed', 'short dashed', 'long dashed', 'dotted', or
       'dash-dot')
 
-   6. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').
+   8. *drawstyles* is one of (``None``, 'steps-pre', 'steps-mid', or 'steps-post').
       ``None`` connects points with a straight line between points.  The others give
       horizontal lines with a vertical step at the starting point ('step-pre'),
       mid-point ('step-mid') the ending point ('steps-post').  Note that if displaying
       discrete values as a function of time, left-to-right, and want to show a
       transition to a new value as a sudden step, you want 'steps-post'.
 
-   7. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
+   9. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
       'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
 
-   8. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
-      percentage of the data range for the view to be extended.  That is, with xmin=0,
-      xmin=100, viewpad=5, the range for x will be [-5, 105].
+   10. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
+       percentage of the data range for the view to be extended.  That is, with xmin=0,
+       xmin=100, viewpad=5, the range for x will be [-5, 105].
 
-   9. *fullbox* can be used to turn on or off the top and right Axes lines (or spines),
-      giving a more open figure.  The 'axes_style' option gives a little more control --
-      you can set this to either 'box' for a complete box, 'open' for left and right
-      Axes lines only (same as *fullbox=False*), or 'bottom' which will suppress the
-      top, right, and left Axes.
+   11. *fullbox* can be used to turn on or off the top and right Axes lines (or spines),
+       giving a more open figure.  The 'axes_style' option gives a little more control --
+       you can set this to either 'box' for a complete box, 'open' for left and right
+       Axes lines only (same as *fullbox=False*), or 'bottom' which will suppress the
+       top, right, and left Axes.
 
-   10. *legend_loc* sets the position of the leggend on the plot, and is one of 'ur',
+   12. *legend_loc* sets the position of the legend on the plot, and is one of 'ur',
        'ul', 'cr', 'cl', 'lr' 'll', 'uc', 'lc', or 'cc' for 'upper right' , 'upper
        left', 'center right', 'center left', 'lower right', 'lower left', 'upper center',
        'lower center', or 'center'.
 
-   11. The *delay_draw* option will delay the actual drawing the plot to the
+   13. The *delay_draw* option will delay the actual drawing the plot to the
        screen. This can be give a noticeable speed up when plotting multiple line traces
        at once.  See also :meth:`plot_many` for a convenience function to plot many
        traces at once.
 
-   12. For more on using data with dates or times, see :ref:`sect_datetime`.
-
-
+   14. For more on using data with dates or times, see :ref:`sect_datetime`.
 
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be

@@ -254,7 +254,7 @@ class PlotConfig:
         self.current_theme = theme
         if self.current_theme is None:
             self.current_theme = 'light'
-
+        self.legend_map = {}
         self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
                             'upper center', 'lower center', 'center']
@@ -862,7 +862,6 @@ class PlotConfig:
                 self.legend_map[legline] = (mainline, trace, legline, legtext)
                 self.legend_map[legtext] = (mainline, trace, legline, legtext)
                 legtext.set_color(self.textcolor)
-
 
         self.set_added_text_size()
         if not delay_draw:

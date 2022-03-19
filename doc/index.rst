@@ -1,13 +1,13 @@
 .. wxmplot documentation master file
 
-wxmplot: plotting widgets using wxPython and matplotlib
+wxmplot: wxPython plotting widgets using matplotlib
 ========================================================
 
 .. _wxPython: http://www.wxpython.org/
 .. _matplotlib:  http://matplotlib.sourceforge.net/
 
 `wxmplot` provides `wxPython`_ widgets and python functions for displaying
-numerical data.
+numerical data using `matplotlib`_.
 
 While `matplotlib`_ provides excellent general-purpose plotting
 functionality supports many backends, it does not have tight integration

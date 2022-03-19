@@ -38,7 +38,7 @@ Installation from Source
 wxmplot is a pure python module, so installation on all platforms can use
 the source kit and a standard installation using::
 
-   python setup.py install
+   pip install .
 
 
 License

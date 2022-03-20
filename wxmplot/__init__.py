@@ -10,8 +10,8 @@
    data and customizing the plots and displays.  wxmplot panels are more
    interactive than typical displayss from matplotlib's pyplot module.
 
-   version: 0.9.31
-   last update: 2018-Oct-13
+   version: 0.9.49
+   last update: 2022-Mar-20
    License:  MIT
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,

@@ -546,14 +546,18 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 
         mview.AppendSeparator()
-        MenuItem(self, mview, 'Show Histogram\tCtrl+G',
+        MenuItem(self, mview, 'Show Histogram\tCtrl+H',
                  'Show Intensity Histogram', self.show_histogram)
-
 
         m = MenuItem(self, mview, 'Toggle Axes Labels\tCtrl+A',
                      'Toggle displacy of Axis labels',
                      self.onAxesLabels, kind=wx.ITEM_CHECK,
                      checked=conf.show_axis)
+
+        m = MenuItem(self, mview, 'Toggle Grid Lines\tCtrl+G',
+                     'Toggle displacy of Grid Lines at Axis labels',
+                     self.onAxesGrid, kind=wx.ITEM_CHECK,
+                     checked=conf.show_grid)
 
         m = MenuItem(self, mview, 'Toggle Contour Plot\tCtrl+N',
                      'Shown as Contour Plot',
@@ -575,7 +579,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         mslice = wx.Menu()
         m1 = MenuItem(self, mslice, 'Show No X/Y Slices', 'Do not show X/Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
-        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices\tCtrl+x', 'show X slices',
+        m2 = MenuItem(self, mslice, 'Show X (Horizontal) Slices\tCtrl+x',
+                      'show X slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
         m3 = MenuItem(self, mslice, 'Show Y (Vertical) Slices\tCtrl+Y', 'show Y slices',
                       self.onSliceChoice, kind=wx.ITEM_RADIO)
@@ -732,6 +737,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.panel.autoset_margins()
         self.panel.redraw()
 
+    def onAxesGrid(self, event=None):
+        conf = self.panel.conf
+        conf.show_grid = not conf.show_grid
+        if conf.show_axis:
+            self.panel.autoset_margins()
+            self.panel.redraw()
+
     def onSliceMotion(self, event=None):
         conf = self.panel.conf
         conf.slice_onmotion = not conf.slice_onmotion
@@ -844,6 +856,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
                 self.cmap_panels[ix].redraw_cmap()
         self.panel.redraw()
+
+    def show_grid(self, event=None):
+        conf = self.panel.conf
+
 
     def show_histogram(self, event=None):
         conf = self.panel.conf

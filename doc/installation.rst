@@ -9,7 +9,7 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The current version of wxmplot is |release|, released in May, 2021.
+The current version of wxmplot is |release|, released in March, 2022.
 
 The wxmplot package requires Python3.6 or higher, wxPython 4.0.3 or higher,
 matplotlib 3.0 or higher, and numpy 1.12 or higher.  All of

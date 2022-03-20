@@ -1,4 +1,3 @@
-
 ==========================================================
 :class:`ImagePanel`:  A wx.Panel for Image Display
 ==========================================================
@@ -8,7 +7,7 @@
 The :class:`ImagePanel` class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
 :class:`ImagePanel` is derived from a :class:`wx.Panel` and so can be
-easily included in a wx GUI.
+easily included in a wxPython GUI application.
 
 While the image can be customized programmatically, the only interactivity
 built in to the :class:`ImagePanel` itself is the ability to zoom in and
@@ -53,7 +52,7 @@ manipulate the displayed image, as will be discussed below.
 
 .. method:: update_image(data)
 
-  update the image with new data.  This can be signficantly faster than
+  update the image with new data.  This can be significantly faster than
   re-displaying the data.
 
 .. method:: redraw()

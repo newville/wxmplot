@@ -9,7 +9,7 @@ Here we show a few more examples.  These and more are given in the *examples*
 directory in the source distribution kit.
 
 
-Examples not shown here
+Dynamic examples not shown here
 ----------------------------------
 
 Several examples are not shown here either because they show many plots or are
@@ -52,6 +52,8 @@ gives:
 .. image:: images/errorbar.png
    :width: 85 %
 
+
+
 Plotting data from a datafile
 -----------------------------------------
 
@@ -79,6 +81,40 @@ and gives a plot that looks like this:
 .. image:: images/two_axes.png
    :width: 85 %
 
+
+Plotting with alpha-fill to show area under a curve
+-----------------------------------------------------
+
+It is sometimes desirable to fill the area below a curve, typically to 0.
+Using the `alpha` value can be especially helpful for this, so that
+
+.. literalinclude:: ../examples/fill_to_zero.py
+
+will give:
+
+.. image:: images/plot_alphafill_to_zero.png
+   :width: 85 %
+
+
+Plotting with alpha-fill to show uncertainty
+-----------------------------------------------------
+
+Another use of a filled band is to fill between two traces.  An important
+use of this is to show uncertainties in a function, similar to showing
+errorbars above.  If `dy` and `fill=True` are both given, then a band
+between `y-dy` and `y+dy` will be filled, as with:
+
+
+.. literalinclude:: ../examples/fill_uncertainties.py
+
+which gives:
+
+.. image:: images/plot_alphafill_to_dy.png
+   :width: 85 %
+
+Of course, you can use that to recast showing a band between any two curves
+by assigning the average of the 2 curves to `y` and half the difference to
+`dy`, and perhaps setting `linewidth=0` to suppress showing the mean value.
 
 
 Displaying and image of a TIFF file

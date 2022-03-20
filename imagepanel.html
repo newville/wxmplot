@@ -8,44 +8,16 @@
 
     <title>ImagePanel: A wx.Panel for Image Display &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/wxmplotdoc.css" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/thebelab-helper.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="wxmplot Examples" href="examples.html" />
-    <link rel="prev" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
-  <script type="text/x-mathjax-config">
-     MathJax.Hub.Config({
-        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
-        "HTML-CSS": {scale: 90}
-  });</script>
-
+    <link rel="prev" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" /> 
   </head><body>
-<div>
-<table border=0>
-	<tr><td width=5%></td>
-	<td width=25%>
-	  <a href="index.html">
-	    <font size=+2 color=#157>WXMPLOT</font>
-	  </a>
-	</td>
-	  <td width=60% align=left>
-	    <a href="index.html">
-	      <font size=+2 color=#157>wxPython + matplotlib</font>
-	    </a>
-	</td>
-</tr>
-</table>
-</div>
-
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,62 +30,10 @@
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              accesskey="P">previous</a> |</li>
-   <li>[<a href="installation.html">Installation</a>|</li>
-   <li><a href="overview.html"> Overview</a>|</li>
-   <li><a href="interactive.html"> Interactive Displays</a>|</li>
-   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
-   <li><a href="#"> Image API</a>|</li>
-   <li><a href="examples.html"> Examples</a>|</li>
-   <li><a href="other.html"> Speciality Displays</a>|</li>
-
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
-    </div>
-
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
-<li><a class="reference internal" href="#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
-<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
-<li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
-<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="plotpanel.html"
-                          title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="examples.html"
-                          title="next chapter">wxmplot Examples</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/imagepanel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -125,7 +45,7 @@
 <p>The <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> class supports image display, including gray-scale
 and false-color maps or contour plots for 2-D arrays of intensity.
 <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> is derived from a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code> and so can be
-easily included in a wx GUI.</p>
+easily included in a wxPython GUI application.</p>
 <p>While the image can be customized programmatically, the only interactivity
 built in to the <a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> itself is the ability to zoom in and
 out.  In contrast, an <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code> provides many more ways to
@@ -173,7 +93,7 @@ display purposes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imagepanel.update_image">
 <span class="sig-name descname"><span class="pre">update_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>update the image with new data.  This can be signficantly faster than
+<dd><p>update the image with new data.  This can be significantly faster than
 re-displaying the data.</p>
 </dd></dl>
 
@@ -393,6 +313,50 @@ same intensity intensity scale.</p></li>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
+<li><a class="reference internal" href="#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
+<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
+<li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="plotpanel.html"
+                          title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="examples.html"
+                          title="next chapter">wxmplot Examples</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imagepanel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -407,14 +371,7 @@ same intensity intensity scale.</p></li>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
              >previous</a> |</li>
-   <li>[<a href="installation.html">Installation</a>|</li>
-   <li><a href="overview.html"> Overview</a>|</li>
-   <li><a href="interactive.html"> Interactive Displays</a>|</li>
-   <li><a href="plotpanel.html"> 2D PlotPanel API</a>|</li>
-   <li><a href="#"> Image API</a>|</li>
-   <li><a href="examples.html"> Examples</a>|</li>
-   <li><a href="other.html"> Speciality Displays</a>|</li>
-
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
     </div>

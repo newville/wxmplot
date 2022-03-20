@@ -456,11 +456,14 @@ class BasePanel(wx.Panel):
             return
 
         axes = self.fig.get_axes()[0]
-        if len(self.conf.zoom_lims) > 0:
-            x0, x1, y0, y1 = self.conf.zoom_lims[-1][axes]
-        else:
-            x0, x1 = axes.get_xlim()
-            y0, y1 = axes.get_ylim()
+        try:
+            if len(self.conf.zoom_lims) > 0:
+                x0, x1, y0, y1 = self.conf.zoom_lims[-1][axes]
+            else:
+                x0, x1 = axes.get_xlim()
+                y0, y1 = axes.get_ylim()
+        except:
+            return
 
         step = 0.10 if shift else 0.02
         if direction in ('left', 'right'):
@@ -471,7 +474,7 @@ class BasePanel(wx.Panel):
             y0, y1 = y0+step, y1+step
 
         self.conf.zoom_lims.append({axes: [x0, x1, y0, y1]})
-        self.conf.set_viewlimits()
+        self.set_viewlimits()
         self.canvas.draw()
 
     def __onMouseButtonEvent(self, event=None):

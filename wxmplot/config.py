@@ -929,6 +929,8 @@ class PlotConfig:
             if ax in self.axes_traces:
                 try:
                     for trace, lines in enumerate(ax.get_lines()):
+                        if lines.get_label() == '_nolegend_':
+                            continue
                         x, y = lines.get_xdata(), lines.get_ydata()
                         try:
                             if not isinstance(y, np.ndarray):

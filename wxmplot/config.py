@@ -171,6 +171,11 @@ for tname in ('light',  'white-background', 'dark',
         if tname.startswith('seaborn-'):
             theme.update(matplotlib.style.library['seaborn'])
         theme.update(matplotlib.style.library[tname])
+        if tname == 'fivethirtyeight__test':  # text sizes are way off the norm
+            theme.update({'legend.fontsize': 10, 'xtick.labelsize': 9,
+                          'ytick.labelsize': 9, 'axes.labelsize': 9,
+                          'axes.titlesize': 13})
+
     Themes[tname.lower()] = theme
 
 def bool_ifnotNone(val, default):

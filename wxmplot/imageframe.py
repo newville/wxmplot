@@ -92,7 +92,6 @@ class ColorMapPanel(wx.Panel):
         self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmapname,
                                   interpolation='bilinear')
 
-        print("CMAP : ", maxval)
         self.cmap_lo = wx.Slider(self, -1, 0, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
 
@@ -831,7 +830,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             conf.cmap_lo[col] = xlo = int((jmin-imin)*conf.cmap_range/(imax-imin))
             conf.cmap_hi[col] = xhi = int((jmax-imin)*conf.cmap_range/(imax-imin))
 
-            print("Contrast ", xhi, xlo)
             self.cmap_panels[col].cmap_hi.SetValue(xhi)
             self.cmap_panels[col].cmap_lo.SetValue(xlo)
             self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))

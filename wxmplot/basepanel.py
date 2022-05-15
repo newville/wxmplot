@@ -554,7 +554,7 @@ class BasePanel(wx.Panel):
             width = 1 + int(round(limits[2][0] - limits[0][0]))
             x0 = 1 + int(round(limits[0][0]))
 
-        self.rbbox = (x0, y0, width, height)
+        self.rbbox = (int(x0), int(y0), int(width), int(height))
         self.canvas.Refresh()
 
 

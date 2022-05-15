@@ -91,6 +91,8 @@ class ColorMapPanel(wx.Panel):
 
         self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmapname,
                                   interpolation='bilinear')
+
+        print("CMAP : ", maxval)
         self.cmap_lo = wx.Slider(self, -1, 0, 0, maxval,
                                  style=wx.SL_HORIZONTAL)
 
@@ -777,9 +779,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             conf.int_hi[0] = imax
             cpan = self.cmap_panels[0]
 
-            cpan.cmap_lo.SetValue(imin)
-            cpan.cmap_hi.SetValue(imax)
-
             cpan.imin_val.SetValue('%.4g' % imin)
             cpan.imax_val.SetValue('%.4g' % imax)
             cpan.imin_val.Enable()
@@ -829,10 +828,10 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             jmin, jmax = np.percentile(img, clevels)
             if imax == imin:
                 imax = imin + 0.5
-            conf.cmap_lo[col] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
-            conf.cmap_hi[col] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
+            conf.cmap_lo[col] = xlo = int((jmin-imin)*conf.cmap_range/(imax-imin))
+            conf.cmap_hi[col] = xhi = int((jmax-imin)*conf.cmap_range/(imax-imin))
 
-
+            print("Contrast ", xhi, xlo)
             self.cmap_panels[col].cmap_hi.SetValue(xhi)
             self.cmap_panels[col].cmap_lo.SetValue(xlo)
             self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
@@ -848,8 +847,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 jmin, jmax = np.percentile(img[:,:,ix], clevels)
                 if imax == imin:
                     imax = imin + 0.5
-                conf.cmap_lo[ix] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
-                conf.cmap_hi[ix] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
+                conf.cmap_lo[ix] = xlo = int((jmin-imin)*conf.cmap_range/(imax-imin))
+                conf.cmap_hi[ix] = xhi = int((jmax-imin)*conf.cmap_range/(imax-imin))
                 self.cmap_panels[ix].cmap_hi.SetValue(xhi)
                 self.cmap_panels[ix].cmap_lo.SetValue(xlo)
 

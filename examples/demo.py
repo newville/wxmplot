@@ -192,24 +192,24 @@ class TestFrame(wx.Frame):
 
         dt = time.time()-t0
         self.plotframe.write_message(
-            "Plot 20 traces without delay_draw=True, elapsed time=%8.3f s" % (dt))
+            "Plot 20 traces without delay_draw, time=%8.3f s" % (dt))
 
     def onPlotMany_Delay(self, event=None):
         self.ShowPlotFrame()
         dlist = self.many_dlist
 
         t0 = time.time()
-        opts = dict(title='Plot 20 traces with delay_draw',
-            show_legend=True, xlabel='x')
+        opts0 = dict(title='Plot 20 traces with delay_draw',
+                     show_legend=True, xlabel='x', new=True, delay_draw=True)
+        opts1 = dict(new=False, delay_draw=True)
+        for i, tdat in enumerate(dlist):
+            opts = opts0 if i == 0 else opts1
+            if i == len(dlist)-1: opts['delay_draw'] = False
+            self.plotframe.oplot(tdat[0], tdat[1], **opts)
 
-        self.plotframe.plot(dlist[0][0], dlist[0][1], delay_draw=True, **opts)
-        for tdat in dlist[1:-1]:
-            self.plotframe.oplot(tdat[0], tdat[1], delay_draw=True)
-        self.plotframe.oplot(dlist[-1][0], dlist[-1][1])
         dt = time.time()-t0
         self.plotframe.write_message(
-            "Plot 20 traces with delay_draw=True, elapsed time=%8.3f s" % (dt))
-
+            "Plot 20 traces with delay_draw, time=%8.3f s" % (dt))
 
     def onPlotMany_Fast(self, event=None):
         self.ShowPlotFrame()
@@ -222,7 +222,7 @@ class TestFrame(wx.Frame):
 
         dt = time.time()-t0
         self.plotframe.write_message(
-            "Plot 20 traces with plot_many(), elapsed time=%8.3f s" % (dt))
+            "Plot 20 traces with plot_many(), time=%8.3f s" % (dt))
 
     def report_memory(i):
         pid = os.getpid()
@@ -241,22 +241,8 @@ class TestFrame(wx.Frame):
         self.start_mem= self.report_memory()
         self.timer.Start(10)
 
-    def timer_results(self):
-        if (self.count < 2): return
-        etime = time.time() - self.time0
-        tpp   = etime/max(1,self.count)
-        s = "drew %i points in %8.3f s: time/point= %8.4f s" % (self.count,etime,tpp)
-        self.plotframe.write_message(s)
-        self.time0 = 0
-        self.count = 0
-        self.datrange = None
-
     def onStopTimer(self,event=None):
         self.timer.Stop()
-        try:
-            self.timer_results()
-        except:
-            pass
 
     def onTimer(self, event):
         # print 'timer ', self.count, time.time()
@@ -265,17 +251,19 @@ class TestFrame(wx.Frame):
         if n < 2:
             self.ShowPlotFrame(do_raise=False, clear=False)
             return
-        if n >= self.npts:
-            self.timer.Stop()
-            self.timer_results()
-        elif n <= 3:
+        if n <= 3:
             self.plotframe.plot(self.x[:n], self.y1[:n])# , grid=False)
 
         else:
             self.plotframe.update_line(0, self.x[:n], self.y1[:n], update_limits=True, draw=True)
             etime = time.time() - self.time0
-            s = " %i / %i points in %8.4f s" % (n,self.npts,etime)
+            rate  = n / max(0.004, etime)
+            s = " %i / %i points in %8.2f s: %8.2f draws/sec" % (n,self.npts,etime, rate)
+
             self.plotframe.write_message(s)
+        if n >= self.npts:
+            self.timer.Stop()
+
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This sample program shows some\n"

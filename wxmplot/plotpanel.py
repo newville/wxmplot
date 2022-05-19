@@ -222,10 +222,6 @@ class PlotPanel(BasePanel):
             conf.set_trace_alpha(alpha, delay_draw=True)
 
         conf.dy[conf.ntrace] = dy
-        _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
-        if dy is not None and not fill:
-            _lines = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
-        _fill = None
         if fill:
             fkws = dict(step=None, zorder=zorder, color=color)
             if drawstyle != 'default':
@@ -234,9 +230,14 @@ class PlotPanel(BasePanel):
                 _fill = axes.fill_between(xdata, ydata, y2=0, **fkws)
             else:
                 _fill = axes.fill_between(xdata, ydata-dy, y2=ydata+dy, **fkws)
-
+        else: # not filling -- most plots here
+            _fill = None
+            if dy is not None:
+                ebar = axes.errorbar(xdata, ydata, yerr=dy, zorder=zorder)
+                _lines = [ebar.lines[0], ebar.lines[2]]
+            else:
+                _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
         conf.traces[conf.ntrace].fill = fill
-
 
         if axes not in conf.data_save:
             conf.data_save[axes] = []

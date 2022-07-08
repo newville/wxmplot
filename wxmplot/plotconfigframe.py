@@ -915,15 +915,14 @@ class PlotConfigFrame(wx.Frame):
             s = ''
 
         if '\\' in s and '$' in s:
-            s = clean_texmath(s)
-            # print(" s = ", s)
+            sclean = clean_texmath(s)
         if item in ('xlabel', 'ylabel', 'y2label', 'title'):
             try:
                 kws = {item: s}
                 self.conf.relabel(**kws)
                 wid.SetBackgroundColour((255, 255, 255))
             except: # as from latex error!
-                wid.SetBackgroundColour((250, 250, 200))
+                wid.SetBackgroundColour((250, 250, 150))
         elif item == 'trace':
             try:
                 self.conf.set_trace_label(s, trace=trace)

@@ -326,19 +326,30 @@ class PlotPanel(BasePanel):
                 ydata = tdat[1]
             return (xdata, ydata, out)
 
+        conf = self.conf
         opts = dict(side=side, title=title, xlabel=xlabel, ylabel=ylabel,
                     delay_draw=True)
         opts.update(kws)
         x0, y0, opts = unpack_tracedata(datalist[0], **opts)
 
+        nplot_traces = len(conf.traces)
+        nplot_request = len(datalist)
+        if nplot_request > nplot_traces:
+            linecolors = conf.linecolors
+            ncols = len(linecolors)
+            for i in range(nplot_traces, nplot_request+5):
+                conf.init_trace(i,  linecolors[i%ncols], 'dashed')
+
+
         self.plot(x0, y0, **opts)
+
 
         for dat in datalist[1:]:
             x, y, opts = unpack_tracedata(dat, delay_draw=True)
             self.oplot(x, y, **opts)
 
         self.reset_formats()
-        conf = self.conf
+
         if conf.show_legend:
             conf.draw_legend()
         conf.relabel()

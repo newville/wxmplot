@@ -4,12 +4,22 @@
 ##   with the top panel being the main panel and the lower panel
 ##   being 1/4 the height (configurable) and the dependent panel
 
+from tempfile import NamedTemporaryFile
+import os
 import wx
 import numpy as np
 import matplotlib
 from matplotlib.ticker import NullFormatter, NullLocator
+
+from wxutils import get_cwd
+try:
+    from PIL import Image
+    HAS_IMAGE = True
+except ImportError:
+    HAS_IMAGE = False
+
 from functools import partial
-from .utils import pack, MenuItem
+from .utils import pack, MenuItem, Printer
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
 
@@ -98,12 +108,72 @@ class StackedPlotFrame(BaseFrame):
 
     def save_figure(self, event=None, panel='top'):
         """ save figure image to file"""
-        panel = self.get_panel(panel)
-        panel.save_figure(event=event)
+        transparent = False
+        dpi = 600
+        file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|PDF (*.pdf)|*.pdf"
+
+        tpanel = self.get_panel('top')
+        bpanel = self.get_panel('bottom')
+
+        if HAS_IMAGE:
+            tfile = NamedTemporaryFile(suffix='top.png', delete=False)
+            bfile = NamedTemporaryFile(suffix='bot.png', delete=False)
+
+            tpanel.canvas.print_figure(tfile, transparent=False, dpi=600)
+            bpanel.canvas.print_figure(bfile, transparent=False, dpi=600)
+
+            timg = Image.open(tfile.name)
+            bimg = Image.open(bfile.name)
+
+
+            nimg = Image.new(size=(timg.size[0],
+                                   timg.size[1]+bimg.size[1]),
+                             mode=timg.mode)
+            nimg.paste(timg, (0, 0))
+            nimg.paste(bimg, (0, timg.size[1]))
+            os.unlink(tfile.name)
+            os.unlink(bfile.name)
+
+
+        else:
+            nimg = None
+        try:
+            ofile = tpanel.conf.title.strip()
+        except:
+            ofile = 'Image'
+        if len(ofile) > 64:
+            ofile = ofile[:63].strip()
+        if len(ofile) < 1:
+            ofile = 'plot'
+
+        for c in ' :";|/\\': # "
+            ofile = ofile.replace(c, '_')
+
+        ofile = ofile + '.png'
+        orig_dir = os.path.abspath(get_cwd())
+        dlg = wx.FileDialog(self, message='Save Plot Figure as...',
+                            defaultDir=orig_dir,
+                            defaultFile=ofile,
+                            wildcard=file_choices,
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if nimg is not None:
+                nimg.save(path)
+            elif hasattr(self, 'fig'):
+                tpanel.fig.savefig(path, transparent=transparent, dpi=dpi)
+            else:
+                tpanel.canvas.print_figure(path, transparent=transparent, dpi=dpi)
+
+            self.write_message('Saved plot to %s' % path)
+        os.chdir(orig_dir)
+
 
     def configure(self, event=None, panel='top'):
         panel = self.get_panel(panel)
         panel.configure(event=event)
+
 
     ####
     ## create GUI
@@ -128,7 +198,8 @@ class StackedPlotFrame(BaseFrame):
         self.panel_bot = PlotPanel(self, size=botsize)
         self.panel.xformatter = self.null_formatter
         lsize = self.panel.conf.labelfont.get_size()
-        self.panel_bot.conf.labelfont.set_size(lsize-2)
+        # self.panel_bot.conf = self.panel.conf
+        # self.panel_bot.conf.labelfont.set_size(lsize-2)
         self.panel_bot.yformatter = self.bot_yformatter
 
         self.panel.conf.theme_color_callback = self.onThemeColor
@@ -178,7 +249,6 @@ class StackedPlotFrame(BaseFrame):
         MenuItem(self, mopts, "Toggle Grid\tCtrl+G",
                  "Toggle Grid Display",
                  self.toggle_grid)
-
 
         mopts.AppendSeparator()
 

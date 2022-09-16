@@ -3,8 +3,8 @@
 wxmplot: wxPython plotting widgets using matplotlib
 ========================================================
 
-.. _wxPython: http://www.wxpython.org/
-.. _matplotlib:  http://matplotlib.sourceforge.net/
+.. _wxPython: https://www.wxpython.org/
+.. _matplotlib:  https://matplotlib.org/
 
 `wxmplot` provides `wxPython`_ widgets and python functions for displaying
 numerical data using `matplotlib`_.
@@ -46,3 +46,4 @@ to explore their data.
    imagepanel
    examples
    other
+   comparisons

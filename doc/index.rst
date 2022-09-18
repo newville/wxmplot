@@ -10,7 +10,7 @@ wxmplot: wxPython plotting widgets using matplotlib
 numerical data using `matplotlib`_.
 
 While `matplotlib`_ provides excellent general-purpose plotting
-functionality supports many backends, it does not have tight integration
+functionality supporting many backends, it does not have tight integration
 with any particular GUI toolkit.  While The `matplotlib.pyplot` module provides
 easy-to-use functions for plotting and displaying data, the features of its
 Navigation Toolbars for interactivity and customizations are minimal.  On
@@ -18,7 +18,7 @@ the other hand, while `wxPython`_ has some basic plotting functionality, it
 has nothing as good as `matplotlib`_.
 
 `wxmplot` bridges the gap between `matplotlib`_ and `wxPython`_ by
-providing wxPython widgets and user-friendly functions for basic 2D line
+providing wxPython widgets and user-friendly functions for basic XY line
 plots, image display, and some custom plots.  The displays made with
 `wxmplot` give end-users highly interactive displays of their data that
 allow zooming and un-zooming, reporting mouse positions, rotating images,
@@ -30,7 +30,7 @@ and image display tools that handle many of the most common plotting and
 image display needs for scientific data.
 
 The easy-to-use :mod:`wxmplot.interactive` functions enable script writers
-to make 2D line plots and image displays from their data, and to interact
+to make XY line plots and image displays from their data, and to interact
 with and configure these displays as part of exploratory data analysis.
 Programmers can use the `wxmplot` widgets to include these high quality
 graphical displays of data in their wxPython applications to enable users

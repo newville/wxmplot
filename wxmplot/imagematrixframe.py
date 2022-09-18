@@ -21,13 +21,7 @@ from wxutils import get_cwd
 import numpy as np
 import matplotlib
 
-
-HAS_IMAGE = False
-try:
-    from PIL import Image
-    HAS_IMAGE = True
-except ImportError:
-    pass
+from PIL import Image
 
 from .baseframe  import BaseFrame
 from .plotpanel  import PlotPanel
@@ -234,9 +228,6 @@ class ImageMatrixFrame(BaseFrame):
 
 
     def save_figure(self, event=None):
-        if not HAS_IMAGE:
-            return
-
         file_choices = "PNG (*.png)|*.png|SVG (*.svg)|*.svg|PDF (*.pdf)|*.pdf"
         ofile = "%s.png" % self.title
         dlg = wx.FileDialog(self, message='Save Figure as...',

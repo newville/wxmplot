@@ -1,4 +1,5 @@
 numpy>=1.12
-matplotlib>=3.0
+matplotlib>=3.0.3
 wxpython>=4.0.3
 wxutils>=0.2.7
+Pillow>=7.0

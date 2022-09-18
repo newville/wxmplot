@@ -12,11 +12,7 @@ import matplotlib
 from matplotlib.ticker import NullFormatter, NullLocator
 
 from wxutils import get_cwd
-try:
-    from PIL import Image
-    HAS_IMAGE = True
-except ImportError:
-    HAS_IMAGE = False
+from PIL import Image
 
 from functools import partial
 from .utils import pack, MenuItem, Printer
@@ -115,28 +111,24 @@ class StackedPlotFrame(BaseFrame):
         tpanel = self.get_panel('top')
         bpanel = self.get_panel('bottom')
 
-        if HAS_IMAGE:
-            tfile = NamedTemporaryFile(suffix='top.png', delete=False)
-            bfile = NamedTemporaryFile(suffix='bot.png', delete=False)
+        tfile = NamedTemporaryFile(suffix='top.png', delete=False)
+        bfile = NamedTemporaryFile(suffix='bot.png', delete=False)
 
-            tpanel.canvas.print_figure(tfile, transparent=False, dpi=600)
-            bpanel.canvas.print_figure(bfile, transparent=False, dpi=600)
+        tpanel.canvas.print_figure(tfile, transparent=False, dpi=600)
+        bpanel.canvas.print_figure(bfile, transparent=False, dpi=600)
 
-            timg = Image.open(tfile.name)
-            bimg = Image.open(bfile.name)
-
-
-            nimg = Image.new(size=(timg.size[0],
-                                   timg.size[1]+bimg.size[1]),
-                             mode=timg.mode)
-            nimg.paste(timg, (0, 0))
-            nimg.paste(bimg, (0, timg.size[1]))
-            os.unlink(tfile.name)
-            os.unlink(bfile.name)
+        timg = Image.open(tfile.name)
+        bimg = Image.open(bfile.name)
 
 
-        else:
-            nimg = None
+        nimg = Image.new(size=(timg.size[0],
+                               timg.size[1]+bimg.size[1]),
+                         mode=timg.mode)
+        nimg.paste(timg, (0, 0))
+        nimg.paste(bimg, (0, timg.size[1]))
+        os.unlink(tfile.name)
+        os.unlink(bfile.name)
+
         try:
             ofile = tpanel.conf.title.strip()
         except:

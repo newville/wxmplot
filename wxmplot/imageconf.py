@@ -1,5 +1,4 @@
 import wx
-import wx.lib.scrolledpanel as scrolled
 import wx.lib.colourselect as csel
 
 from math import log10
@@ -7,13 +6,13 @@ from math import log10
 import numpy as np
 
 import matplotlib.cm as cmap
-from matplotlib.ticker import FuncFormatter, ScalarFormatter
+from matplotlib.ticker import FuncFormatter
 
 from wxutils import get_cwd
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import bool_ifnotNone, ifnotNone
-from .plotconfigframe import FNB_STYLE, autopack
-from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, pack, FloatSpin, MenuItem
+from .plotconfigframe import autopack
+from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, FloatSpin, MenuItem
 
 try:
     import yaml

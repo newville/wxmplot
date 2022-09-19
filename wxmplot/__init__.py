@@ -32,10 +32,13 @@ from .version import version as __version__
 import sys
 import wx
 
-from .baseframe import BaseFrame
-from .plotframe import PlotFrame
 from .plotpanel import PlotPanel
 from .imagepanel import ImagePanel
+
+from .baseframe import BaseFrame
+from .plotframe import PlotFrame
+
+
 from .imageframe import ImageFrame
 from .multiframe import MultiPlotFrame
 from .stackedplotframe import StackedPlotFrame

@@ -19,10 +19,10 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
 
-from .plotconfigframe import PlotConfigFrame
 from .basepanel import BasePanel
 from .config import PlotConfig, ifnotNone, ifNone
 from .utils import inside_poly, fix_filename, gformat, MenuItem
+from .plotconfigframe import PlotConfigFrame
 
 to_rgba = colorConverter.to_rgba
 

@@ -2,26 +2,20 @@
 #
 # wxmplott GUI to Configure Line Plots
 #
-import os, sys
-import time
+import os
 from functools import partial
+import yaml
+import numpy as np
+
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
 
 import wx.lib.scrolledpanel as scrolled
-import numpy as np
 from wxutils import get_cwd
-from .utils import (LabeledTextCtrl, MenuItem, SimpleText, Choice,
-                    FloatSpin)
+from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
 from .colors import hexcolor, hex2rgb, mpl_color
-
-try:
-    import yaml
-    HAS_YAML = True
-except ImportError:
-    HAS_YAML = False
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
@@ -100,8 +94,6 @@ class PlotConfigFrame(wx.Frame):
         self.SetMenuBar(mbar)
 
     def save_config(self, evt=None, fname='wxmplot.yaml'):
-        if not HAS_YAML:
-            return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Save plot configuration',
                             defaultDir=get_cwd(),
@@ -117,8 +109,6 @@ class PlotConfigFrame(wx.Frame):
 
 
     def load_config(self, evt=None):
-        if not HAS_YAML:
-            return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Read plot configuration',
                             defaultDir=get_cwd(),
@@ -176,10 +166,7 @@ class PlotConfigFrame(wx.Frame):
         if font is None:
             font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
-        conf = self.conf
-
         sizer = wx.GridBagSizer(4, 4)
-
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
         mtitle = wx.StaticText(panel, -1, 'Linear/Log Scale: ')
 
@@ -389,13 +376,7 @@ class PlotConfigFrame(wx.Frame):
             font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
 
         sizer = wx.GridBagSizer(2, 2)
-        i = 0
-        irow = 0
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-
-        ax = self.axes[0]
-
 
         self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
                                     action = partial(self.onText, item='title'),
@@ -505,7 +486,6 @@ class PlotConfigFrame(wx.Frame):
         ax = self.axes[0]
 
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
-        opts = dict(size=(40, 30), style=labstyle)
 
         theme_names = list(cnf.themes.keys())
         themechoice = Choice(panel, choices=theme_names, action=self.onTheme)
@@ -860,7 +840,6 @@ class PlotConfigFrame(wx.Frame):
 
         axes.cla()
         xd, yd = conf.scatter_xdata, conf.scatter_ydata
-        sdat = zip(xd, yd)
         mask = conf.scatter_mask
         if mask is  None:
             axes.scatter(xd, yd, s=conf.scatter_size,
@@ -914,8 +893,6 @@ class PlotConfigFrame(wx.Frame):
         except TypeError:
             s = ''
 
-        if '\\' in s and '$' in s:
-            sclean = clean_texmath(s)
         if item in ('xlabel', 'ylabel', 'y2label', 'title'):
             try:
                 kws = {item: s}

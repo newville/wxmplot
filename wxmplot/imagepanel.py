@@ -3,9 +3,7 @@
 ## wxmplot ImagePanel: a wx.Panel for image display, using matplotlib
 ##
 
-import sys
 import time
-import os
 import wx
 from threading import Thread
 
@@ -672,10 +670,10 @@ class ImagePanel(BasePanel):
         except:
             return
         if len(self.conf.data.shape) == 3:
-            ymax, xmax, nc = self.conf.data.shape
+            ymax, xmax, _nc = self.conf.data.shape
         elif len(self.conf.data.shape) == 2:
             ymax, xmax = self.conf.data.shape
-            nc = 0
+            _nc = 0
         else:
             return
         if x < 0 or y < 0 or x > xmax or y > ymax:

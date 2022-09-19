@@ -1,18 +1,12 @@
 #!/usr/bin/python
 """
-color support for MPlot.
+color support for wxmplot.
 
 """
 import numpy as np
+from matplotlib.colors import LinearSegmentedColormap, colorConverter
+from matplotlib.cm import register_cmap
 
-HAS_MPL = False
-
-try:
-    from matplotlib.colors import LinearSegmentedColormap, colorConverter
-    from matplotlib.cm import register_cmap
-    HAS_MPL = True
-except:
-    pass
 
 x11_colors = {'aliceblue': (240,248,255), 'antiquewhite': (250,235,215),
               'antiquewhite1': (255,239,219), 'antiquewhite2': (238,223,204),
@@ -420,8 +414,6 @@ def register_custom_colormaps():
     """
     registers custom color maps
     """
-    if not HAS_MPL:
-        return ()
     makemap = LinearSegmentedColormap.from_list
     for name, val in custom_colormap_data.items():
         cm1 = np.array(val).transpose().astype('f8')/256.0

@@ -35,7 +35,7 @@ class TestFrame(wx.Frame):
         panel      = wx.Panel(self, -1, size=(-1, -1))
         panelsizer = wx.BoxSizer(wx.VERTICAL)
 
-        panelsizer.Add( wx.StaticText(panel, -1, 'wxmplot 2D PlotPanel examples '),
+        panelsizer.Add( wx.StaticText(panel, -1, 'wxmplot PlotPanel examples '),
                         0, wx.ALIGN_LEFT|wx.LEFT|wx.EXPAND, 10)
 
         b10 = wx.Button(panel, -1, 'Example #1',          size=(-1,-1))

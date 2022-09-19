@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
- MPlot PlotFrame: a wx.Frame for 2D line plotting, using matplotlib
+ wxmplot PlotFrame: a wx.Frame for line plotting, using matplotlib
 """
 import numpy as np
 
@@ -14,7 +14,7 @@ class PlotFrame(BaseFrame):
     """
     def __init__(self, parent=None, title=None, with_data_process=True, **kws):
         if title is None:
-            title = '2D Plot Frame'
+            title = 'Line Plot Frame'
         BaseFrame.__init__(self, parent=parent, title=title,
                            with_data_process=with_data_process, **kws)
         self.BuildFrame()

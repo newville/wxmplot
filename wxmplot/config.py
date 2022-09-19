@@ -241,7 +241,7 @@ class LineProps:
 
 
 class PlotConfig:
-    """Plot Configuration for 2D Plots... holder class for most configuration data """
+    """Plot Configuration for Line Plots, holding most configuration data """
 
     def __init__(self, canvas=None, panel=None, with_data_process=True,
                  theme=None, theme_color_callback=None,

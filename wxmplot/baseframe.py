@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ##
-## MPlot PlotFrame: a wx.Frame for 2D line plotting, using matplotlib
+## wxmplot PlotFrame: a wx.Frame for line plotting, using matplotlib
 ##
 
 from . import __version__

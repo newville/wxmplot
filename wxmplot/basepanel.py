@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ##
-## MPlot BasePanel: a Basic Panel for 2D line and image plotting
+## wxmplot BasePanel: a Basic Panel for line and image plotting
 ##
 
 import sys

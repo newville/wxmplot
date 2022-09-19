@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ##
-## MPlot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
+## wxmplot ImagePanel: a wx.Panel for image display, using matplotlib
 ##
 
 import sys

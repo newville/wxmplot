@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# WXMPlot GUI to Configure (2D) Plots
+# wxmplott GUI to Configure Line Plots
 #
 import os, sys
 import time

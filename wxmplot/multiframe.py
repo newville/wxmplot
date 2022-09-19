@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ##
-## MPlot PlotFrame: a wx.Frame for 2D line plotting, using matplotlib
+## wxmplot MulitPlotFrame: a wx.Frame for multiple line plots
 ##
 
 import wx
@@ -13,7 +13,7 @@ from .utils import MenuItem
 
 class MultiPlotFrame(BaseFrame):
     """
-    MatPlotlib Array of 2D plot as a wx.Frame, using PlotPanel
+    MatPlotlib Array of line plot as a wx.Frame, using PlotPanel
     """
     default_panelopts = dict(labelfontsize=7, legendfontsize=6)
 
@@ -21,7 +21,7 @@ class MultiPlotFrame(BaseFrame):
                  panelsize=(400, 320), panelopts=None, **kws):
 
         BaseFrame.__init__(self, parent=parent,
-                           title  = '2D Plot Array Frame',
+                           title  = 'Line Plot Array Frame',
                            size=framesize, **kws)
         self.panels = {}
         self.rows = rows

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-wxmplot PlotPanel: a wx.Panel for 2D line plotting, using matplotlib
+wxmplot PlotPanel: a wx.Panel for line plotting, using matplotlib
 """
 import os
 import sys
@@ -28,7 +28,7 @@ to_rgba = colorConverter.to_rgba
 
 class PlotPanel(BasePanel):
     """
-    MatPlotlib 2D plot as a wx.Panel, suitable for embedding
+    MatPlotlib line plot as a wx.Panel, suitable for embedding
     in any wx.Frame.   This does provide a right-click popup
     menu for configuration, zooming, saving an image of the
     figure, and Ctrl-C for copy-image-to-clipboard.

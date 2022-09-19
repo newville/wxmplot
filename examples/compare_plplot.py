@@ -5,7 +5,7 @@
 ##
 ## def main(w):
 ##    w.plenv( 0, 100, 0, 1, 0, 0)
-##    w.pllab( "x", "y=100 x#u2#d", "Simple PLplot demo of a 2D line plot" )
+##    w.pllab( "x", "y=100 x#u2#d", "Simple PLplot demo of a line plot" )
 ##    w.plline( x, y )
 
 
@@ -16,6 +16,4 @@ y = 100*x**2
 
 import wxmplot.interactive as wi
 wi.plot(x, y, color='red', xlabel='x', ylabel=r'$y=100 x^2$',
-        title="Simple PLplot demo of a 2D line plot", theme='dark')        
-
-
+        title="Simple PLplot demo of a line plot", theme='dark')

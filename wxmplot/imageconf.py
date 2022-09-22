@@ -10,7 +10,7 @@ from matplotlib.ticker import FuncFormatter
 
 from wxutils import get_cwd
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
-from .config import bool_ifnotNone, ifnotNone
+from .config import ifnot_none
 from .plotconfigframe import autopack
 from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, FloatSpin, MenuItem
 
@@ -323,10 +323,10 @@ class ImageConfig:
         if contrast_level is not None:
             self.contrast_level = float(contrast_level)
 
-        self.cmap_reverse = bool_ifnotNone(reverse_colormap, self.cmap_reverse)
-        self.flip_ud = bool_ifnotNone(flip_ud, self.flip_ud)
-        self.flip_lr = bool_ifnotNone(flip_lr, self.flip_lr)
-        self.rot     = bool_ifnotNone(rot, self.rot)
+        self.cmap_reverse = bool(ifnot_none(reverse_colormap, self.cmap_reverse))
+        self.flip_ud = bool(ifnot_none(flip_ud, self.flip_ud))
+        self.flip_lr = bool(ifnot_none(flip_lr, self.flip_lr))
+        self.rot     = bool(ifnot_none(rot, self.rot))
 
         if tricolor_bg is not None:
             tricolor_bg = tricolor_bg.lower()
@@ -341,7 +341,7 @@ class ImageConfig:
             if style in ('image', 'contour'):
                 self.style = style
 
-        self.title = ifnotNone(title, self.title)
+        self.title = ifnot_none(title, self.title)
 
 
     def get_config(self):

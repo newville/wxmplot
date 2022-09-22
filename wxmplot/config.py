@@ -41,31 +41,17 @@ StyleMap  = OrderedDict()
 DrawStyleMap  = OrderedDict()
 MarkerMap = OrderedDict()
 
-default_config = dict(viewpad=2.5,
-                      title='',
-                      xscale='linear',
-                      yscale='linear',
-                      xlabel='',
-                      ylabel='',
-                      y2label='',
-                      plot_type='lineplot',
-                      scatter_size=30,
+default_config = dict(viewpad=2.5, title='', xscale='linear',
+                      yscale='linear', xlabel='', ylabel='', y2label='',
+                      plot_type='lineplot', scatter_size=30,
                       scatter_normalcolor='blue',
-                      scatter_normaledge='blue',
-                      scatter_selectcolor='red',
-                      scatter_selectedge='red',
-                      auto_margins=True,
-                      legend_loc= 'best',
-                      legend_onaxis='on plot',
-                      draggable_legend=False,
-                      hidewith_legend=True,
-                      show_legend=False,
-                      show_legend_frame=False,
-                      axes_style='box',
-                      labelfont=9,
-                      legendfont=7,
-                      titlefont=10,
-                      theme='light')
+                      scatter_normaledge='blue', scatter_selectcolor='red',
+                      scatter_selectedge='red', auto_margins=True,
+                      legend_loc= 'best', legend_onaxis='on plot',
+                      draggable_legend=False, hidewith_legend=True,
+                      show_legend=False, show_legend_frame=False,
+                      axes_style='box', labelfont=9, legendfont=7,
+                      titlefont=10, theme='light')
 
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
@@ -91,8 +77,6 @@ ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 
 linecolors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd',
               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf')
-
-
 
 light_theme = {'axes.grid': True,
                'axes.axisbelow': True,
@@ -175,20 +159,11 @@ for tname in ('light',  'white-background', 'dark',
             theme.update({'legend.fontsize': 10, 'xtick.labelsize': 9,
                           'ytick.labelsize': 9, 'axes.labelsize': 9,
                           'axes.titlesize': 13})
-
     Themes[tname.lower()] = theme
 
-def bool_ifnotNone(val, default):
-    "return bool(val) if val is not None else default"
-    return bool(val) if val is not None else default
-
-def ifnotNone(val, default):
+def ifnot_none(val, default):
     "return val if val is not None else default"
     return val if val is not None else default
-
-def ifNone(test, val):
-    "return val if test is None else test"
-    return val if test is None else test
 
 
 class LineProps:
@@ -288,6 +263,7 @@ class PlotConfig:
         if custom_config is not None:
             self.configdict.update(custom_config)
         self.themes = Themes
+
         self.set_defaults()
 
     def set_defaults(self):
@@ -390,16 +366,16 @@ class PlotConfig:
             self.dy.append(None)
         line = self.traces[n]
 
-        line.label     = ifnotNone(label, "trace %i" % (n+1))
-        line.color     = ifnotNone(color, line.color)
-        line.alpha     = ifnotNone(alpha, line.alpha)
-        line.style     = ifnotNone(style, line.style)
-        line.linewidth = ifnotNone(linewidth, line.linewidth)
-        line.drawstyle = ifnotNone(drawstyle, line.drawstyle)
-        line.fill      = ifnotNone(fill, line.fill)
-        line.zorder    = ifnotNone(zorder, 5*(n+1))
-        line.marker    = ifnotNone(marker, line.marker)
-        line.markersize = ifnotNone(markersize, line.markersize)
+        line.label     = ifnot_none(label, "trace %i" % (n+1))
+        line.color     = ifnot_none(color, line.color)
+        line.alpha     = ifnot_none(alpha, line.alpha)
+        line.style     = ifnot_none(style, line.style)
+        line.linewidth = ifnot_none(linewidth, line.linewidth)
+        line.drawstyle = ifnot_none(drawstyle, line.drawstyle)
+        line.fill      = ifnot_none(fill, line.fill)
+        line.zorder    = ifnot_none(zorder, 5*(n+1))
+        line.marker    = ifnot_none(marker, line.marker)
+        line.markersize = ifnot_none(markersize, line.markersize)
 
 
     def get_mpline(self, trace):
@@ -581,7 +557,7 @@ class PlotConfig:
 
     def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
-        zorder = ifNone(zorder, 5*(trace+1))
+        zorder = ifnot_none(zorder, 5*(trace+1))
         self.traces[trace].zorder = zorder
         mline = self.get_mpline(trace)
         if mline:
@@ -768,11 +744,11 @@ class PlotConfig:
             return
 
         for tline in (ax.xaxis.get_majorticklines() + ax.yaxis.get_majorticklines()):
-                tline.set_color(rcParams['xtick.color'])
-                tline.set_markeredgewidth(rcParams['xtick.major.width'])
-                tline.set_markersize(rcParams['xtick.major.size'])
-                tline.set_linestyle('-')
-                tline.set_visible(True)
+            tline.set_color(rcParams['xtick.color'])
+            tline.set_markeredgewidth(rcParams['xtick.major.width'])
+            tline.set_markersize(rcParams['xtick.major.size'])
+            tline.set_linestyle('-')
+            tline.set_visible(True)
 
         col = rcParams['axes.edgecolor']
         for spine in ('top', 'bottom', 'left', 'right'):

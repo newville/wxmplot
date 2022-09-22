@@ -18,7 +18,7 @@ the other hand, while `wxPython`_ has some basic plotting functionality, it
 has nothing as good as `matplotlib`_.
 
 `wxmplot` bridges the gap between `matplotlib`_ and `wxPython`_ by
-providing wxPython widgets and user-friendly functions for basic XY line
+providing wxPython widgets and user-friendly functions for basic line
 plots, image display, and some custom plots.  The displays made with
 `wxmplot` give end-users highly interactive displays of their data that
 allow zooming and un-zooming, reporting mouse positions, rotating images,

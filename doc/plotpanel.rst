@@ -1,12 +1,10 @@
 ==========================================================
-:class:`PlotPanel`:  A wx.Panel for Basic 2D Line Plots
+:class:`PlotPanel`:  A wx.Panel for Basic Line Plots
 ==========================================================
 
 .. module:: plotpanel
 
-
-
-The :class:`PlotPanel` class supports standard 2D line plots, including
+The :class:`PlotPanel` class supports standard line plots, including
 scatter plots.  It has both an easy-to-use programming interface, and a rich
 graphical user interface for manipulating the plot after it has been drawn.
 The :class:`PlotPanel` class is derived from a :class:`wx.Panel` and so that

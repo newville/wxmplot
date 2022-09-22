@@ -20,7 +20,7 @@ from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
 
 from .basepanel import BasePanel
-from .config import PlotConfig, ifnotNone, ifNone
+from .config import PlotConfig, ifnot_none
 from .utils import inside_poly, fix_filename, gformat, MenuItem
 from .plotconfigframe import PlotConfigFrame
 
@@ -56,8 +56,8 @@ class PlotPanel(BasePanel):
         self.parent  = parent
         self.figsize = (size[0]*1.0/dpi, size[1]*1.0/dpi)
         self.dpi  = dpi
-        self.conf.facecolor = ifnotNone(axisbg, self.conf.facecolor)
-        self.conf.facecolor = ifnotNone(facecolor, self.conf.facecolor)
+        self.conf.facecolor = ifnot_none(axisbg, self.conf.facecolor)
+        self.conf.facecolor = ifnot_none(facecolor, self.conf.facecolor)
 
         # axesmargins : margins in px left/top/right/bottom
         self.axesmargins = (30, 30, 30, 30)
@@ -103,8 +103,8 @@ class PlotPanel(BasePanel):
             self.set_y2label(y2label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
-        self.dates_style = ifnotNone(dates_style, self.dates_style)
-        self.use_dates = ifnotNone(use_dates, self.use_dates)
+        self.dates_style = ifnot_none(dates_style, self.dates_style)
+        self.use_dates = ifnot_none(use_dates, self.use_dates)
         return self.oplot(xdata, ydata, side=side, **kws)
 
 
@@ -115,7 +115,7 @@ class PlotPanel(BasePanel):
               fill=False, drawstyle=None, linewidth=2,
               marker=None, markersize=None, refresh=True, show_legend=None,
               legend_loc='best', legend_on=True, delay_draw=False,
-              bgcolor=None, framecolor=None, gridcolor=None,
+              bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
               labelfontsize=None, titlefontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, viewpad=None,
               theme=None, use_dates=None, dates_style=None, **kws):
@@ -139,8 +139,8 @@ class PlotPanel(BasePanel):
             conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
-        self.dates_style = ifnotNone(dates_style, self.dates_style)
-        self.use_dates = ifnotNone(use_dates, self.use_dates)
+        self.dates_style = ifnot_none(dates_style, self.dates_style)
+        self.use_dates = ifnot_none(use_dates, self.use_dates)
         if isinstance(xdata[0], datetime):
             self.use_dates = True
 
@@ -160,8 +160,8 @@ class PlotPanel(BasePanel):
                 xdata = dates.datestr2num(xdata)
             elif not dstyle.lower().startswith('dates'):
                 xdata = dates.epoch2num(xdata)
-        linewidth = ifNone(linewidth, 2)
-        conf.viewpad = ifnotNone(viewpad, conf.viewpad)
+        linewidth = ifnot_none(linewidth, 2)
+        conf.viewpad = ifnot_none(viewpad, conf.viewpad)
 
         if xlabel is not None:
             self.set_xlabel(xlabel, delay_draw=delay_draw)
@@ -175,7 +175,7 @@ class PlotPanel(BasePanel):
             conf.set_legend_location(legend_loc, legend_on)
             conf.show_legend = show_legend
 
-        conf.show_grid = ifnotNone(grid, conf.show_grid)
+        conf.show_grid = ifnot_none(grid, conf.show_grid)
 
         # set data range for this trace
         # datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
@@ -183,27 +183,33 @@ class PlotPanel(BasePanel):
         if axes not in conf.user_limits:
             conf.user_limits[axes] = [None, None, None, None]
 
-        conf.user_limits[axes][0] = ifnotNone(xmin, conf.user_limits[axes][0])
-        conf.user_limits[axes][1] = ifnotNone(xmax, conf.user_limits[axes][1])
-        conf.user_limits[axes][2] = ifnotNone(ymin, conf.user_limits[axes][2])
-        conf.user_limits[axes][3] = ifnotNone(ymax, conf.user_limits[axes][3])
+        conf.user_limits[axes][0] = ifnot_none(xmin, conf.user_limits[axes][0])
+        conf.user_limits[axes][1] = ifnot_none(xmax, conf.user_limits[axes][1])
+        conf.user_limits[axes][2] = ifnot_none(ymin, conf.user_limits[axes][2])
+        conf.user_limits[axes][3] = ifnot_none(ymax, conf.user_limits[axes][3])
 
         if axes == self.axes:
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
         else:
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
 
-        zorder = ifNone(zorder, 5*(conf.ntrace+1))
+        zorder = ifnot_none(zorder, 5*(conf.ntrace+1))
 
         if axes not in conf.axes_traces:
             conf.axes_traces[axes] = []
         conf.axes_traces[axes].append(conf.ntrace)
 
-        conf.gridcolor = ifnotNone(gridcolor, conf.gridcolor)
-        conf.facecolor = ifnotNone(bgcolor, conf.facecolor)
+        conf.gridcolor = ifnot_none(gridcolor, conf.gridcolor)
+        conf.set_gridcolor(conf.gridcolor)
+
+        conf.facecolor = ifnot_none(bgcolor, conf.facecolor)
+        conf.set_facecolor(conf.facecolor)
+
+        conf.textcolor = ifnot_none(textcolor, conf.textcolor)
+        conf.set_textcolor(conf.textcolor)
 
         if framecolor is not None:
-            self.canvas.figure.set_facecolor(framecolor)
+            conf.set_framecolor(framecolor)
 
         conf.set_trace_zorder(zorder, delay_draw=True)
         if color:

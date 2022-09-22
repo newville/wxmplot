@@ -6,23 +6,23 @@ wxmplot Overview
 
 .. module:: wxmplot
 
-`wxmplot` provides simple functions for making 2D line plots and displaying
-image data.  These are similar to the simplest functions from
-`matplotlib.pyplot`, but offer richer interactivity and customization.  It
-is not easy to convey interactivity in a static document, but here and in
-:ref:`ch_interactive`, we will try to show how easy it is to use `wxmplot`
-for exploratory data analysis.  Importantly, `wxmplot` not only makes more
-interactive plotting available, but also exposes that interactivity and
-flexibility to the end-user at run time, and not only when writing a
-script. This allows a programmer to add plotting capabilities to an
-application and enable the end-user to interact with their data and fully
-customize the plots when running the application.
+`wxmplot` provides simple functions for making Line Plots (or 2D or XY
+Plots) and displaying image data.  These are similar to the simplest
+functions from `matplotlib.pyplot`, but offer richer interactivity and
+customization.  It is not easy to convey interactivity in a static
+document, but here and in :ref:`ch_interactive`, we will try to show how
+easy it is to use `wxmplot` for exploratory data analysis.  Importantly,
+`wxmplot` not only makes more interactive plotting available when writing a
+script, but but also exposes that interactivity and flexibility to the
+end-user at run time. This allows a programmer to add plotting capabilities
+to an application and enable the end-user to interact with their data and
+fully customize the plots when running the application.
 
 
-2D Line Plots with :func:`plot`
+Line Plots with :func:`plot`
 ===============================
 
-Let's start with a simple script using  :mod:`matplotlib.pyplot`::
+Let's start with a simple script using :mod:`matplotlib.pyplot`::
 
     #!/usr/bin/python
     import numpy as np
@@ -39,8 +39,8 @@ Let's start with a simple script using  :mod:`matplotlib.pyplot`::
     plt.legend()
     plt.show()
 
-This is a pretty straight-forward matplotlib script and produces a plot of
-(depending a bit on the backend and OS):
+This is a pretty straight-forward matplotlib script and produces a very
+high-quality plot of (depending a bit on the backend and OS):
 
 .. _plot_mpl:
 
@@ -78,17 +78,16 @@ and yields the plot shown below.
     .. image:: images/plot_wxmplot.png
        :width: 75%
 
-There are some stylistic differences in the results, but the point so far
-is that the results are very similar.  There is a difference in programming
-interface in that the configuration of the plot details (labels, titles,
-whether the legend is shown) is encapsulated into fewer functions -- one
-per plot trace -- rather than several function calls to set up the plot
-configuration and then one `show()` method to render and display that
-static plot.  In fact, the `wxmplot` example has no `show()` function at
-all.  As will be discussed more in :ref:`ch_interactive`, the `wxmplot`
-functions display results immediately when in an interactive session and
-allow interaction at the shell to continue, without the need for a blocking
-`show()` function.
+There are some stylistic differences in the results, but the displayed
+results are very similar.  There is a difference in programming interface
+in that the configuration of the plot details (labels, titles, whether the
+legend is shown) is encapsulated into fewer functions -- one per plot trace
+-- rather than several function calls to set up the plot configuration and
+then one `show()` method to render the plot.  In fact, the `wxmplot`
+example has no `show()` function at all.  As will be discussed more in
+:ref:`ch_interactive`, the `wxmplot` functions immediately generate displays
+when in an interactive session and allow interaction at the shell to
+continue, without the need for a blocking `show()` function.
 
 `Wxmplot` gives more run-time interaction and flexibility to the end-user
 than the `matplotlib` display, and without cluttering the display with
@@ -102,12 +101,12 @@ detail in the next section.
 
 
 In addition to the :func:`interactive.plot` function, there are several
-more functions to augment 2D line plots, including those to add text,
+more functions to augment these line plots, including those to add text,
 arrows, lines, and markers to plots.  These and more functions are
 discussed in detail in :ref:`ch_interactive`.
 
 
-User Interaction and Configuring 2D line plots
+User Interaction and Configuring Line Plots
 ==============================================
 
 The basic `wxmplot` line plots support a few basic user interactions.
@@ -155,7 +154,7 @@ The Help menu will display a quick cheat-sheet to remind you of these
 Ctrl-Key options.
 
 The *Plot Configuration Window* is an important tool for configuring and
-customizing 2D line plots.  This is a tabbed window frame with 4 panels to
+customizing line plots.  This is a tabbed window frame with 4 panels to
 allow the user to configure essentially every aspect of the plot:
 
     * Colors and Line Properties
@@ -250,9 +249,8 @@ for scatter plots.
 Displaying images with :func:`imshow` and :func:`contour`
 =========================================================
 
-
-As for 2D line plotting, `wxmplot` has a simple :func:`interactive.imshow`
-function that displays 2D image data and adds user-friendly controls to
+As with line plotting, `wxmplot` has a simple :func:`interactive.imshow`
+function that displays image data and adds user-friendly controls to
 manipulate and adjust the display of such data.  While
 `matplotlib.pyplot.imshow()` has the basic user action of zooming and
 saving image files, :func:`interactive.imshow` has interactions that are
@@ -295,12 +293,12 @@ from the Image menu or with Ctrl-N.
 User Interaction and Configuring Image and Contour displays
 ===============================================================
 
-As with the 2D line plots, clicking anywhere on the image will show the x, y,
-and intensity values in the status bar.  If arrays for `x` and `y` values have
-been passed in, both the indices and `x` and `y` values for the pixel selected
-will be displayed.  Similarly, clicking and dragging will zoom in on a portion
-of the image, and using the arrow keys will pan the image. Zooming and
-panning can be repeated indefinitely and undone.
+As with te displays created with :func:`plot`, clicking anywhere on the image will
+show the x, y, and intensity values in the status bar.  If arrays for `x`
+and `y` values have been passed in, both the indices and `x` and `y` values
+for the pixel selected will be displayed.  Similarly, clicking and dragging
+will zoom in on a portion of the image, and using the arrow keys will pan
+the image. Zooming and panning can be repeated indefinitely and undone.
 
 From the Image or Contour panel, a few display customizations are
 immediately available. On the left hand side of the frame, there are a few
@@ -341,7 +339,7 @@ From the Image menu, the user can:
    * Toggle whether a 3-color map uses a black or white background [Ctrl-W]
 
 From the X/Y Slices menu, the user can control whether clicking on a pixel
-on the image displays a X- or Y- slice through the image data as a 2D line
+on the image displays a X- or Y- slice through the image data as a line
 plot in a separate plotting window.  From this menu, the user can select:
 
    * Show No X/Y Slices

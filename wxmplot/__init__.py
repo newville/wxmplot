@@ -27,11 +27,10 @@
 
       ImageFrame: wx.Frame containing ImagePanel
 """
-from .version import version as __version__
-
 import sys
 import wx
 
+from .version import version as __version__
 from .plotpanel import PlotPanel
 from .imagepanel import ImagePanel
 

@@ -414,7 +414,7 @@ def register_custom_colormaps():
     """
     registers custom color maps
     """
-,    makemap = LinearSegmentedColormap.from_list
+    makemap = LinearSegmentedColormap.from_list
     for name, val in custom_colormap_data.items():
         cm1 = np.array(val).transpose().astype('f8')/256.0
         cm2 = cm1[::-1]

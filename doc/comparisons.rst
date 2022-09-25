@@ -12,7 +12,7 @@ to emphasize priorities that informed the development of `wxmplot`. If you
 have comments or suggestions for improving this section, please use the
 Github discussion page.
 
-We believe that data visulaization and in particular exploratory data
+We believe that data visualization and in particular exploratory data
 analysis are importants part of working with many kinds of scientific data.
 One of the aims for `wxmplot`, and especially :mod:`wxmplot.interactive`,
 is to make exploratory data analysis with Python particularly easy and
@@ -94,12 +94,11 @@ and essentially re-imagines the `pyplot` functions `plot` and `imshow`. But
 that you can add more complex components and manipulate the plot as needed,
 assuming that you know the `matplotlib` programming interface.
 
-
-In :ref:`ch_overview`, we give a brief comparsion of
+In :ref:`ch_overview`, we give a brief comparison of
 :mod:`matplotlib.pyplot` and :mod:`wxmplot.plot` and will not repeat those
 examples here.  From the point of view of "brevity" and "beauty", these are
 approximately equal.  The `matplotlib` API is certainly much more common,
-and deliberately mimicks the plotting functions in `matlab`, so will be
+and deliberately mimics the plotting functions in `Matlab`, so will be
 familiar to many people.  mod:`wxmplot.plot` puts a lot more arguments into
 a single function call.
 
@@ -110,6 +109,320 @@ out, pan around the plot area, and save the image.  `wxmplot` includes all
 of those features, and has much more flexibility at run-time for the user
 to be able to manipulate the display of the data.
 
+For completeness, the example using plain matplotlib would look like
+
+.. _plot_compare_mpl:
+
+    .. image:: images/plot_mpl.png
+       :width: 75%
+
+and with wxmplot the code would look like::
+
+    import numpy as np
+    import wxmplot.interactive as wi
+
+    np.random.seed(0)
+    x = np.linspace(0.0, 15.0, 151)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+    wi.plot(x, y, label='data', marker='+', xlabel='t (sec)', ylabel='y',
+	    title='wxmplot example', show_legend=True)
+    wi.plot(x, m, label='model')
+
+
+and give a result of
+
+.. _plot_wxmplot:
+
+    .. image:: images/plot_wxmplot.png
+       :width: 75%
+
+
+Comparison with WxPlot
+===============================
+
+The wxPython library comes with a plot submodule that supports basic line
+plots.  An example of using this would be::
+
+    import wx
+    import numpy as np
+    from wx.lib.plot import PolySpline, PlotCanvas, PlotGraphics
+
+    class PlotExample(wx.Frame):
+	def __init__(self):
+	    wx.Frame.__init__(self, None, title="wx.lib.plot example",
+			       size=(700, 500))
+
+	    np.random.seed(0)
+	    x = np.linspace(0.0, 15.0, 151)
+	    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+	    m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+	    xy_data = np.column_stack((x, y))
+	    xm_data = np.column_stack((x, m))
+
+	    traces = [PolySpline(xy_data, width=3, colour='#1f77b4'),
+		      PolySpline(xm_data, width=3, colour='#d62728')]
+	    canvas = PlotCanvas(self)
+	    canvas.Draw(PlotGraphics(traces))
+
+    if __name__ == '__main__':
+	app = wx.App()
+	PlotExample().Show()
+	app.MainLoop()
+
+and give a plot of
+
+.. _plot_compare_wxplot_wx:
+
+    .. image:: images/plot_compare_wxplot_wx.png
+       :width: 75%
+
+
+As written, there is not interactivity, though zooming can be enabled. The
+need to create a subclass of a `Frame` and initiate a wxApp adds a fair
+amount of boiler-plate code which would be painful for one-off scripts.
+
+
+
+Comparison with Plotly
+===============================
+
+The Plotly library includes a Python interface (https://plotly.com/python/)
+that is very good and renders interactive plots into a web browser.  This
+is very useful for web-based applications and gives good looking and
+interactive plots into a local browser. Then again, getting information
+back from the web-browser to an application or script is somewhat
+challenging.
+
+Many of the Plotly examples make assumptions about using Pandas dataframes,
+and makes working with lists and arrays a bit more complicated.  For a
+simple plot of a single trace, Plotly could be used as::
+
+    import numpy as np
+    import plotly.express as px
+
+    np.random.seed(0)
+    x = np.linspace(0.0, 15.0, 151)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+    data = {'x': x, 'y': y}
+    fig = px.line(data, x='x', y='y', title='example using plotly')
+    fig.show()
+
+Which is pretty good for brevity and readability. But (as far as I can
+tell), the simplest way to repeat our example uses a bit more complicated
+code::
+
+    import numpy as np
+    import plotly.graph_objects as go
+
+    np.random.seed(0)
+    x = np.linspace(0.0, 15.0, 151)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, name='data'))
+    fig.add_trace(go.Scatter(x=x, y=m, name='model'))
+    fig.update_layout( {'title': {'text': 'example using plotly'}})
+
+    fig.show()
+
+
+That's a bit more complicated than wxmplot, but not too bad.  The resulting
+plot looks like
+
+.. _plot_compare_plotly:
+
+    .. image:: images/plot_compare_plotly.png
+       :width: 75%
+
+which is a decent starting point. Plotly also gives basic interactivity by
+default, including zooming and displaying coordinates of data points.
+Again, Plotly is especially well-suited to work with Pandas dataframes, and
+provides a fairly rich set of graphics types, so if you're looking to
+visualize complex datasets that are already in Pandas dataframes, Plotly
+might be a reasonable choice.
+
+
+Comparison with PyQtGraph
+===================================
+
+Pyqtgraph (https://pyqtgraph.readthedocs.io/en/latest/) provides a very
+comprehensive library for plotting and visualization with PyQt and PySide.
+
+
+
+import numpy as np
+import PyQt6
+import pyqtgraph as pg
+
+np.random.seed(0)
+x = np.linspace(0.0, 15.0, 151)
+y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+pwin = pg.plot(x, y, pen='#1f77b4', symbol='+')
+pwin.plot(x, m, pen='#d62728')
+pg.exec()
+
+
+For brevity and clarity, I will say that is very good.  The resulting plot
+looks like
+
+.. _plot_compare_qt:
+
+    .. image:: images/plot_compare_qt.png
+       :width: 75%
+
+I find this somewhat worse than the plots made with matplotlib (including
+wxmplot), but being not very familiar with `pyqtgraph`, I am not certain
+how to adjust things like margins and the sizes of markers and text.  I
+find that it is important to select the PyQt "family" (here, PyQt6) before
+importing `pyqtgraph`, but that may depend some on operating system and
+environment.  Being very familiar with wxPython and not very proficient
+with the Qt world, I would happily say that someone more proficient with
+PyQt might be able to make excellent use of this.  I definitely see
+applications using this library to produce good visualizations of data.
+
+The plots with `pyqtqraph` are interactive. Though perhaps not quite as
+customizable as `wxmplot`, it is much better than any other library
+described here and `pyqtgraph` definitely values view user interaction with
+the data.  And, in fairness to the `pyqtgraph`, it is explicitly designed
+to do more than simple line plots.
+
+
+Comparison with PyQtGraph/PythonGUIs
+=====================================
+
+Here we compare to tutorials at https://www.pythonguis.com/tutorials/ which
+describe using using GUIs with the PyQt and PySide family of GUI toolkits
+based on Qt.  The existence of this chapter was inspired by seeing these
+tutorials, especially advertised as being aimed at showing how to make
+"simple and highly interactive plots" plots.
+
+I agree strongly with the quote introducing these tutorials::
+
+    One of the major strengths of Python is in exploratory data science and
+    visualization, using tools such as Pandas, numpy, sklearn for data
+    analysis and matplotlib plotting.
+
+and I believe the authors of those tutorials mean well, but when
+
+    In this tutorial we'll walk through the first steps of creating a plot
+    widget with PyQtGraph
+
+I am obligated to reply "There has to be a better way". In fact, it should
+be clear from the section above that `pyqtgraph` by itself is very good and
+satisfying our criteria of brevity and interactivity.  A comparison with
+wxmplot below also demonstrates that, indeed, there is.
+
+The tutorials at https://www.pythonguis.com/tutorials/ make a slight
+distinction between using PySide and PyQt6 (see
+https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/) start with
+a "simple" plot. There code is::
+
+    from PyQt6 import QtWidgets
+    from pyqtgraph import PlotWidget, plot
+    import pyqtgraph as pg
+    import sys
+    import os
+
+    class MainWindow(QtWidgets.QMainWindow):
+	def __init__(self, *args, **kwargs):
+	    super(MainWindow, self).__init__(*args, **kwargs)
+
+	    self.graphWidget = pg.PlotWidget()
+	    self.setCentralWidget(self.graphWidget)
+
+	    hour = [1,2,3,4,5,6,7,8,9,10]
+	    temperature = [30,32,34,32,33,31,29,32,35,45]
+
+	    # plot data: x, y values
+	    self.graphWidget.plot(hour, temperature)
+
+
+    def main():
+	app = QtWidgets.QApplication(sys.argv)
+	main = MainWindow()
+	main.show()
+	sys.exit(app.exec())
+
+
+    if __name__ == '__main__':
+	main()
+
+producing a very, very basic plot. There are no links to the images
+available, but running this locally gives a plot of
+
+.. _plot_compare_qttutorial1_qt:
+
+    .. image:: images/plot_compare_qttutorial1_qt.png
+       :width: 75%
+
+
+At 20 lines of code, with three levels of indentation, and with
+data is buried in a class, this is hard to recommend as "brief".
+With `wxmplot`, even creating an equivalent wxApp, that becomes::
+
+    from wxmplot import PlotApp
+
+    hour = [1,2,3,4,5,6,7,8,9,10]
+    temperature = [30,32,34,32,33,31,29,32,35,45]
+
+    plotapp = PlotApp()
+    plotapp.plot(hour, temperature)
+    plotapp.run()
+
+or with :mod:`wxmplot.interactive`::
+
+    from wxmplot.interactive import plot
+
+    hour = [1,2,3,4,5,6,7,8,9,10]
+    temperature = [30,32,34,32,33,31,29,32,35,45]
+
+    plot(hour, temperature, xlabel='hour', ylabel='temperature')
+
+
+That is either 4 or 6 lines of code instead of 20 for the PyQt example.
+That matters, especially for a stated goal of "exploratory data analysis".
+Importantly, the data is not buried in the initialization of the main
+Window.  The resulting plot from `wxmplot` is
+
+.. _plot_compare_qttutorial1:
+
+    .. image:: images/plot_compare_qttutorial1.png
+       :width: 75%
+
+
+There is some basic interactivity with the Qt example in that the plot can
+be panned and zoomed.  Some plot features can be altered by the end-user
+after the plot is displayed.  A fair amount of the tutorial listed above
+covers changing colors of plot elements and color and line-style from
+within the code, perhaps adding code like::
+
+	self.graphWidget.setBackground('w')
+
+	pen = pg.mkPen(color=(255, 0, 0), width=5, style=QtCore.Qt.DashLine)
+	self.graphWidget.plot(hour, temperature, pen=pen)
+
+	styles = {'color':'b', 'font-size':'20px'}
+	self.graphWidget.setLabel('left', 'Temperature (°C)', **styles)
+	self.graphWidget.setLabel('bottom', 'Hour (H)', **styles)
+
+and so.  With `wxmplot` such settings would be done with::
+
+    plot(hour, temperature, xlabel='Hour (H)', ylabel='temperature (°C)',
+	 bgcolor='white', color='red', style='dashed', linewdith=5,
+	 textcolor='blue')
+
+Similarly, there is quite a bit of discussion in the pyqtgraph tutorial on
+how to display a legend for the plot.  This is much simpler with `wxmplot`
+and more interactive, as the displayed legend is "active" in toggling the
+display of the corresponding line.
 
 
 Comparison with PLPlot
@@ -188,7 +501,7 @@ surprising that its Python interface is not quite as elegant as
 `matplotlib` or `wxmplot`.  Their Python example for a basic line plot is::
 
 
-    mport math
+    import math
     import dislin
 
     n = 101
@@ -263,238 +576,18 @@ and give a plot of
        :width: 75%
 
 
-Comparison with WxPlot
+Conclusion
 ===============================
-
-The wxPython library comes with a plot submodule that supports basic line
-plots.  An example of using ths would be::
-
-    import wx
-    import numpy as np
-    from wx.lib.plot import PolySpline, PlotCanvas, PlotGraphics
-
-    class PlotExample(wx.Frame):
-	def __init__(self):
-	wx.Frame.__init__(self, None, title="wx.lib.plot example",
-			  size=(700, 500))
-
-	x = np.linspace(-50, 50, 201)
-	y = np.sin(x/10.0) + np.cos((x-0.5)/3)
-	xy_data = np.column_stack((x, y))
-
-	traces = [PolySpline(xy_data, width=3)]
-	canvas = PlotCanvas(self)
-	canvas.Draw(PlotGraphics(traces))
-
-    if __name__ == '__main__':
-	app = wx.App()
-	PlotExample().Show()
-	app.MainLoop()
-
-and give a plot of
-
-.. _plot_compare_wxplot_wx:
-
-    .. image:: images/plot_compare_wxplot_wx.png
-       :width: 75%
-
-
-As written, there is not interactivity. The need to create a subclass of a
-`Frame` and initiate a wxApp adds a fair amount of boiler-plate code which
-would be painful for one-off scripts.
-
-Converting that to `wxmplot` would be::
-
-
-    import numpy as np
-    import wxmplot.interactive as wi
-
-    x = np.linspace(-50, 50, 201)
-    y = np.sin(x/10.0) + np.cos((x-0.5)/3)
-
-    wi.plot(x, y, xlabel='x', ylabel='y',
-	    title='Comparison of wxplot and wx.lib.plot')
-
-giving a result of
-
-.. _plot_compare_wxplot_wxmplot:
-
-    .. image:: images/plot_compare_wxplot_wxmplot.png
-       :width: 75%
-
-
-
-Comparison with Plotly
-===============================
-
-The Plotly library includes a Python interface (https://plotly.com/python/)
-that is very good and renders interactive plots into a web browser.  This
-is very useful for web-based applications, but also gives good looking and
-interactive plots into a local browser.  The example shown above for wxPlot
-would be reproduced with::
-
-
-    import numpy as np
-    import plotly.express as px
-
-    x = np.linspace(-50, 50, 201)
-    y = np.sin(x/10.0) + np.cos((x-0.5)/3)
-
-    data = {'x': x, 'y': y}
-    fig = px.line(data, x='x', y='y', title='example using plotly')
-    fig.show()
-
-From the point-of-view of "brevity", this is approximately as good as
-`wxmplot`.  The resulting plot looks like
-
-.. _plot_compare_plotly:
-
-    .. image:: images/plot_compare_plotly.png
-       :width: 75%
-
-which is good, and can be improved with. Plotly also gives basic
-interactivity by default, including zooming and displaying coordinates of
-data points.  Plotly is especially well-suited to work with Pandas
-dataframes, and provides a fairly rich set of graphics types.
-
-
-
-
-Comparison with PyQtGraph and PyQt/matplotlib
-==================================================
-
-Here we compare to tutorials at https://www.pythonguis.com/tutorials/ which
-describe using using GUIs with the PyQt and PySide family of GUI toolkits
-based on Qt.  The existence of this chapter was inspired by seeing these
-tutorials, especially advertised as being aimed at showing how to make
-"simple and highly interactive plots" plots.
-
-I agree strongly with the quote introducing these tutorials::
-
-    One of the major strengths of Python is in exploratory data science and
-    visualization, using tools such as Pandas, numpy, sklearn for data
-    analysis and matplotlib plotting.
-
-and I believe the authors of those tutorials mean well, but when
-
-    In this tutorial we'll walk through the first steps of creating a plot
-    widget with PyQtGraph
-
-I am obligated to reply "There has to be a better way", and demonstrate
-below that, indeed, there is.  The tutorials make a slight distinction
-between using PySide and PyQt -- I'll ignore that below.
-
-Plotting with PyQtGraph
----------------------------
-
-The tutorials at
-https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/ and
-https://www.pythonguis.com/tutorials/pyside6-plotting-pyqtgraph/
-start with a "simple" plot. There code is::
-
-    from PyQt6 import QtWidgets
-    from pyqtgraph import PlotWidget, plot
-    import pyqtgraph as pg
-    import sys
-    import os
-
-    class MainWindow(QtWidgets.QMainWindow):
-	def __init__(self, *args, **kwargs):
-	    super(MainWindow, self).__init__(*args, **kwargs)
-
-	    self.graphWidget = pg.PlotWidget()
-	    self.setCentralWidget(self.graphWidget)
-
-	    hour = [1,2,3,4,5,6,7,8,9,10]
-	    temperature = [30,32,34,32,33,31,29,32,35,45]
-
-	    # plot data: x, y values
-	    self.graphWidget.plot(hour, temperature)
-
-
-    def main():
-	app = QtWidgets.QApplication(sys.argv)
-	main = MainWindow()
-	main.show()
-	sys.exit(app.exec())
-
-
-    if __name__ == '__main__':
-	main()
-
-producing a very, very basic plot. There are no links to the images
-available, but running this locally gives a plot of
-
-.. _plot_compare_qttutorial1_qt:
-
-    .. image:: images/plot_compare_qttutorial1_qt.png
-       :width: 75%
-
-
-At 20 lines of code, wtih three levels of indendation, and with
-data is buried in a class, this is hard to recommend as "brief".
-
-With `wxmplot`, even creatng an equivalent wxApp, that becomes::
-
-    from wxmplot import PlotApp
-
-    hour = [1,2,3,4,5,6,7,8,9,10]
-    temperature = [30,32,34,32,33,31,29,32,35,45]
-
-    plotapp = PlotApp()
-    plotapp.plot(hour, temperature)
-    plotapp.run()
-
-or with :mod:`wxmplot.interactive`::
-
-    from wxmplot.interactive import plot
-
-    hour = [1,2,3,4,5,6,7,8,9,10]
-    temperature = [30,32,34,32,33,31,29,32,35,45]
-
-    plot(hour, temperature, xlabel='hour', ylabel='temperature')
-
-
-That is either 4 or 6 lines of code instead of 20 for the PyQt example.
-Yes, that matters, especially for a stated goal of "exploratory data
-analysis".  Importantly, the data is not buried in the initialization of
-the main Window.  The resulting plot from `wxmplot` is
-
-.. _plot_compare_qttutorial1:
-
-    .. image:: images/plot_compare_qttutorial1.png
-       :width: 75%
-
-
-There is some basic interactivity with the Qt example in that the plot can
-be panned and zoomed.  Some plot features can be altered by the end-user
-after the plot is displayed.  A fair amount of the tutorial listed above
-covers changing colors of plot elements and color and line-style from
-within the code, perhaps adding code like::
-
-	self.graphWidget.setBackground('w')
-
-	pen = pg.mkPen(color=(255, 0, 0), width=5, style=QtCore.Qt.DashLine)
-	self.graphWidget.plot(hour, temperature, pen=pen)
-
-	styles = {'color':'b', 'font-size':'20px'}
-	self.graphWidget.setLabel('left', 'Temperature (°C)', **styles)
-	self.graphWidget.setLabel('bottom', 'Hour (H)', **styles)
-
-and so.  With `wxmplot` such settings would be done with::
-
-    plot(hour, temperature, xlabel='Hour (H)', ylabel='temperature (°C)',
-	 bgcolor='white', color='red', style='dashed', linewdith=5,
-	 textcolor='blue')
-
-Similarly, there is quite a bit of discussion in the pyqtgraph tutorial on
-how to display a legend for the plot.  This is much simpler with `wxmplot`
-and more interactive, as the displayed legend is "active" in toggling the
-display of the corresponding line.
 
 In conclusion, succint code that is free from lots of boilerplate code and
 that still gives interactive displays is highly valuable for exploratory
-data analysis. While therer are many plotting and visualization tools
-available for Python, we hope you find that `wxmplot` offers important
-capabilities that enable script writers and end-users of applications to
-have rich interactions with their data.
+data analysis. While there are many plotting and visualization tools
+available for Python, many shown here are pretty poor, lacking in code
+brevity, plot quality, or interactivity.  If you are are using web
+applications or *want to* embed plots in a web browser, `plotly` looks like
+a pretty good choice.  If you are using `PyQt`, `pyqtgraph` is an
+interesting alternative.  For maximum portability, plain
+`matplotlib.pyplot` is an acceptable choice.  But if you are using looking
+for interactive exploration of your data, we hope you find that `wxmplot`
+offers important capabilities that enable script writers and end-users of
+applications to have rich interactions with their data.

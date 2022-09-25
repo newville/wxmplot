@@ -266,6 +266,8 @@ Constructing the example plot above with `pyqtgraph` would look like::
 
     pwin = pg.plot(x, y, pen='#1f77b4', symbol='+')
     pwin.plot(x, m, pen='#d62728')
+    pwin.setWindowTitle('Plot with PyQtGraph')
+    pwin.setLabel(axis='bottom', text='t (sec)')
     pg.exec()
 
 
@@ -276,8 +278,8 @@ with the Qt world, I would happily say that someone more proficient with
 PyQt might be able to make excellent use of this.  I definitely see
 applications using this library to produce good visualizations of data.
 
-That aside, for brevity and clarity, this is very good (but notice that no
-labels are shown).  The resulting plot looks like
+That aside, for brevity and clarity, this is very good.  The resulting plot
+looks like
 
 .. _plot_compare_qt:
 
@@ -292,24 +294,11 @@ the data.  And, in fairness to the `pyqtgraph`, it is explicitly designed
 to do more than simple line plots.
 
 I find the quality of the Line plots to be somewhat worse than the plots
-made with matplotlib (including wxmplot).  Being not very familiar with
-`pyqtgraph`, I am not certain how to adjust things like margins and the
-sizes of markers and text, so I am willing to call some of these things a
-matter of taste and say they probably can be improved....
-
-Well, except for one important point. It seems that `pyqtgraph` does not
-really expect axes to be labeled.  There seems to be no simple methods for
-adding such labels, and very few of their examples show labeled axes or
-even legends identifying traces.  This is sort of surprising and should be
-a show-stopper for any scientist displaying data.  Plots without labeled
-axes should not be tolerated, even from 1st year college students, even for
-plots where the context of the plot would make those axes obvious to many
-people interpreting the plot. Scientific plots always require labeled axes.
-Pyqtgraph has a large number of examples with no labels, and makes setting
-labels very difficult.  Unless this is fixed, we must conclude that
-`pyqtgraph` is suitable for displaying graphical images, but it is not a
-tool that should be tolerated for displaying scientific data.
-
+made with matplotlib (including wxmplot).  The text is hard to read.  Being
+not very familiar with `pyqtgraph`, I am not certain how to adjust things
+like margins and the sizes of markers and text, so I am willing to call
+some of these things a matter of taste and say they might be possible to
+improve.
 
 
 Comparison with PyQtGraph/PythonGUIs
@@ -603,10 +592,9 @@ available for Python, many shown here are pretty poor, lacking in code
 brevity, plot quality, or interactivity.  If you are are using web
 applications or *want to* embed plots in a web browser, `plotly` looks like
 a pretty good choice.  If you are using `PyQt`, `pyqtgraph` is an
-interesting alternative, but it fails spectacularly at a basic requirement
-for scientific plots that all axes must be labeled and traces identified.
-For maximum portability, plain `matplotlib.pyplot` is an acceptable choice,
-though it offers relatively little in the way of interactivity.  If you are
-using looking for interactive exploration of your data, we hope you find
-that `wxmplot` offers important capabilities that enable script writers and
-end-users of applications to have rich interactions with their data.
+interesting alternative. For maximum portability, plain `matplotlib.pyplot`
+is an acceptable choice, though it offers relatively little in the way of
+interactivity.  If you are using looking for interactive exploration of
+your data, we hope you find that `wxmplot` offers important capabilities
+that enable script writers and end-users of applications to have rich
+interactions with their data.

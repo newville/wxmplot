@@ -253,40 +253,37 @@ Comparison with PyQtGraph
 
 Pyqtgraph (https://pyqtgraph.readthedocs.io/en/latest/) provides a very
 comprehensive library for plotting and visualization with PyQt and PySide.
+Constructing the example plot above with `pyqtgraph` would look like::
+
+    import numpy as np
+    import PyQt6
+    import pyqtgraph as pg
+
+    np.random.seed(0)
+    x = np.linspace(0.0, 15.0, 151)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
+
+    pwin = pg.plot(x, y, pen='#1f77b4', symbol='+')
+    pwin.plot(x, m, pen='#d62728')
+    pg.exec()
 
 
+I find that it is important to select the PyQt "family" (here, PyQt6)
+before importing `pyqtgraph`, but that may depend some on operating system
+and environment.  Being very familiar with wxPython and not very proficient
+with the Qt world, I would happily say that someone more proficient with
+PyQt might be able to make excellent use of this.  I definitely see
+applications using this library to produce good visualizations of data.
 
-import numpy as np
-import PyQt6
-import pyqtgraph as pg
-
-np.random.seed(0)
-x = np.linspace(0.0, 15.0, 151)
-y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
-m = 5.0*np.sin(4.0*x)/(x*x+10)
-
-pwin = pg.plot(x, y, pen='#1f77b4', symbol='+')
-pwin.plot(x, m, pen='#d62728')
-pg.exec()
-
-
-For brevity and clarity, I will say that is very good.  The resulting plot
-looks like
+That aside, for brevity and clarity, this is very good (but notice that no
+labels are shown).  The resulting plot looks like
 
 .. _plot_compare_qt:
 
     .. image:: images/plot_compare_qt.png
        :width: 75%
 
-I find this somewhat worse than the plots made with matplotlib (including
-wxmplot), but being not very familiar with `pyqtgraph`, I am not certain
-how to adjust things like margins and the sizes of markers and text.  I
-find that it is important to select the PyQt "family" (here, PyQt6) before
-importing `pyqtgraph`, but that may depend some on operating system and
-environment.  Being very familiar with wxPython and not very proficient
-with the Qt world, I would happily say that someone more proficient with
-PyQt might be able to make excellent use of this.  I definitely see
-applications using this library to produce good visualizations of data.
 
 The plots with `pyqtqraph` are interactive. Though perhaps not quite as
 customizable as `wxmplot`, it is much better than any other library
@@ -294,13 +291,33 @@ described here and `pyqtgraph` definitely values view user interaction with
 the data.  And, in fairness to the `pyqtgraph`, it is explicitly designed
 to do more than simple line plots.
 
+I find the quality of the Line plots to be somewhat worse than the plots
+made with matplotlib (including wxmplot).  Being not very familiar with
+`pyqtgraph`, I am not certain how to adjust things like margins and the
+sizes of markers and text, so I am willing to call some of these things a
+matter of taste and say they probably can be improved....
+
+Well, except for one important point. It seems that `pyqtgraph` does not
+really expect axes to be labeled.  There seems to be no simple methods for
+adding such labels, and very few of their examples show labeled axes or
+even legends identifying traces.  This is sort of surprising and should be
+a show-stopper for any scientist displaying data.  Plots without labeled
+axes should not be tolerated, even from 1st year college students, even for
+plots where the context of the plot would make those axes obvious to many
+people interpreting the plot. Scientific plots always require labeled axes.
+Pyqtgraph has a large number of examples with no labels, and makes setting
+labels very difficult.  Unless this is fixed, we must conclude that
+`pyqtgraph` is suitable for displaying graphical images, but it is not a
+tool that should be tolerated for displaying scientific data.
+
+
 
 Comparison with PyQtGraph/PythonGUIs
 =====================================
 
 Here we compare to tutorials at https://www.pythonguis.com/tutorials/ which
 describe using using GUIs with the PyQt and PySide family of GUI toolkits
-based on Qt.  The existence of this chapter was inspired by seeing these
+based on Qt. The existence of this chapter was inspired by seeing these
 tutorials, especially advertised as being aimed at showing how to make
 "simple and highly interactive plots" plots.
 
@@ -586,8 +603,10 @@ available for Python, many shown here are pretty poor, lacking in code
 brevity, plot quality, or interactivity.  If you are are using web
 applications or *want to* embed plots in a web browser, `plotly` looks like
 a pretty good choice.  If you are using `PyQt`, `pyqtgraph` is an
-interesting alternative.  For maximum portability, plain
-`matplotlib.pyplot` is an acceptable choice.  But if you are using looking
-for interactive exploration of your data, we hope you find that `wxmplot`
-offers important capabilities that enable script writers and end-users of
-applications to have rich interactions with their data.
+interesting alternative, but it fails spectacularly at a basic requirement
+for scientific plots that all axes must be labeled and traces identified.
+For maximum portability, plain `matplotlib.pyplot` is an acceptable choice,
+though it offers relatively little in the way of interactivity.  If you are
+using looking for interactive exploration of your data, we hope you find
+that `wxmplot` offers important capabilities that enable script writers and
+end-users of applications to have rich interactions with their data.

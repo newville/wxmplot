@@ -26,15 +26,16 @@ Let's start with a simple script using :mod:`matplotlib.pyplot`::
 
     #!/usr/bin/python
     import numpy as np
+    np.random.seed(0)
     x = np.linspace(0.0, 15.0, 151)
-    y = 5*np.sin(4*x)/(x*x+6)
-    z = 4.8*np.sin(4.3*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
 
     import matplotlib.pyplot as plt
-    plt.plot(x, y, '-+', label='reference')
-    plt.plot(x, z, '-', label='signal')
+    plt.plot(x, y, '-+', label='data')
+    plt.plot(x, m, '-', label='model')
     plt.title('matplotlib example')
-    plt.xlabel('x')
+    plt.xlabel('t (sec)')
     plt.ylabel('y')
     plt.legend()
     plt.show()
@@ -61,14 +62,16 @@ With `wxmplot`, that script would be rewritten as::
 
     #!/usr/bin/python
     import numpy as np
+
+    np.random.seed(0)
     x = np.linspace(0.0, 15.0, 151)
-    y = 5*np.sin(4*x)/(x*x+6)
-    z = 4.8*np.sin(4.3*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    y = 4.8*np.sin(4.2*x)/(x*x+8) + np.random.normal(size=len(x), scale=0.05)
+    m = 5.0*np.sin(4.0*x)/(x*x+10)
 
     import wxmplot.interactive as wi
-    wi.plot(x, y, label='reference', marker='+', xlabel='x', ylabel='y',
+    wi.plot(x, y, label='data', marker='+', xlabel='t (sec)', ylabel='y',
 	    title='wxmplot example', show_legend=True)
-    wi.plot(x, z, label='signal')
+    wi.plot(x, m, label='model')
 
 and yields the plot shown below.
 

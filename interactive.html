@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Interactive wxmplot displays &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,10 +12,11 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PlotPanel: A wx.Panel for Basic 2D Line Plots" href="plotpanel.html" />
+    <link rel="next" title="PlotPanel: A wx.Panel for Basic Line Plots" href="plotpanel.html" />
     <link rel="prev" title="wxmplot Overview" href="overview.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -25,7 +26,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
+          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="overview.html" title="wxmplot Overview"
@@ -41,7 +42,7 @@
           <div class="body" role="main">
             
   <section id="module-wxmplot.interactive">
-<span id="interactive-wxmplot-displays"></span><span id="ch-interactive"></span><h1>Interactive wxmplot displays<a class="headerlink" href="#module-wxmplot.interactive" title="Permalink to this headline">¶</a></h1>
+<span id="interactive-wxmplot-displays"></span><span id="ch-interactive"></span><h1>Interactive wxmplot displays<a class="headerlink" href="#module-wxmplot.interactive" title="Permalink to this heading">¶</a></h1>
 <p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a> describes the main features of <cite>wxmplot</cite> and shows
 how <cite>wxmplot</cite> plotting functions give a richer level of customization and
 interactivity to the end user than is available from the standard
@@ -64,7 +65,7 @@ prefers a long list of keyword arguments to <a class="reference internal" href="
 separate function calls.</p>
 <p>The functions in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> are described in detail below.</p>
 <section id="plotting-in-an-interactive-session">
-<h2>Plotting in an interactive session<a class="headerlink" href="#plotting-in-an-interactive-session" title="Permalink to this headline">¶</a></h2>
+<h2>Plotting in an interactive session<a class="headerlink" href="#plotting-in-an-interactive-session" title="Permalink to this heading">¶</a></h2>
 <p>As an example using <a class="reference internal" href="#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> in a Jupyter-qtconsole
 session might look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jupyter</span> <span class="n">QtConsole</span> <span class="mf">4.5.4</span>
@@ -118,7 +119,7 @@ plot, as with:</p>
 </pre></div>
 </div>
 <p>and so forth.</p>
-<p>If we wanted to bring up a second 2D Line Plot window, we can use the
+<p>If we wanted to bring up a second Line Plot window, we can use the
 <strong>win=2</strong> option:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x110b2fb88</span><span class="o">&gt;</span>
@@ -132,7 +133,7 @@ passing the <cite>win</cite> option to the plotting functions.</p>
 these plotting functions well-suited for exploratory displays of data.</p>
 </section>
 <section id="using-the-interactive-functions-from-a-script">
-<h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Permalink to this headline">¶</a></h2>
+<h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Permalink to this heading">¶</a></h2>
 <p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions by running a script in a
 non-interactive way, the display will still appear. It does not block
 further execution of the script and the display does not disappear when the
@@ -142,14 +143,14 @@ running script is explicitly closed with Crtl-C.  That means that you can
 add <cite>wi.plot()</cite> and <cite>wi.imshow()</cite> to your short- or long-running scripts
 and the plots will be displayed until you no longer want to use them.</p>
 </section>
-<section id="d-plotting-with-plot-and-related-functions">
-<h2>2D Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#d-plotting-with-plot-and-related-functions" title="Permalink to this headline">¶</a></h2>
+<section id="line-plotting-with-plot-and-related-functions">
+<h2>Line Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#line-plotting-with-plot-and-related-functions" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot trace of x, y arrays in a PlotFrame</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>array-like</em>) – ordinate values</p></li>
 <li><p><strong>y</strong> (<em>array-like</em>) – abscissa values (x and y must be same size!)</p></li>
@@ -194,7 +195,7 @@ and the plots will be displayed until you no longer want to use them.</p>
 <li><p><strong>delay_draw</strong> (<em>boole</em>) – whether to delay drawing [False]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>plotter, a PlotFrame</p>
 </dd>
 </dl>
@@ -223,7 +224,7 @@ or ‘steps-post’.</p></li>
 <span class="sig-name descname"><span class="pre">hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.hist" title="Permalink to this definition">¶</a></dt>
 <dd><p>display a histogram</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>array-like</em>) – array of values</p></li>
 <li><p><strong>bins</strong> (<em>int</em>) – number of bins to show</p></li>
@@ -239,7 +240,7 @@ or ‘steps-post’.</p></li>
 <dd><p>update a plot trace with new data, avoiding complete redraw
 This can significantly descrease drawing time:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>array-like</em>) – ordinate values</p></li>
 <li><p><strong>y</strong> (<em>array-like</em>) – abscissa values (x and y must be same size)</p></li>
@@ -256,7 +257,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_setlimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_setlimits" title="Permalink to this definition">¶</a></dt>
 <dd><p>set plot view limits for plot in window <cite>win</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>xmin</strong> (<em>float</em>) – minimum x value</p></li>
 <li><p><strong>ymax</strong> (<em>float</em>) – maximum x value</p></li>
@@ -273,7 +274,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>add text at x, y coordinates of a plot</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<em>str</em>) – text to draw</p></li>
 <li><p><strong>x</strong> (<em>float</em>) – x position of text</p></li>
@@ -293,7 +294,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_arrow" title="Permalink to this definition">¶</a></dt>
 <dd><p>draw arrow from x1, y1 to x2, y2.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x1</strong> (<em>float</em>) – starting x coordinate</p></li>
 <li><p><strong>y1</strong> (<em>float</em>) – starting y coordinate</p></li>
@@ -317,7 +318,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_marker" title="Permalink to this definition">¶</a></dt>
 <dd><p>draw a marker at x, y</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>float</em>) – x coordinate for marker</p></li>
 <li><p><strong>float</strong><strong>)</strong> (<em>y</em>) – y coordinate</p></li>
@@ -341,7 +342,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_axhline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_axhline" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot a horizontal line spanning the plot axes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>float</em>) – y position of line</p></li>
 <li><p><strong>xmin</strong> (<em>float</em>) – starting x fraction (window units – not user units!)</p></li>
@@ -357,7 +358,7 @@ This can significantly descrease drawing time:</p>
 <span class="sig-name descname"><span class="pre">plot_axvline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_axvline" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot a vertical line spanning the plot axes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>float</em>) – x position of line</p></li>
 <li><p><strong>ymin</strong> (<em>float</em>) – starting y fraction (window units – not user units!)</p></li>
@@ -370,13 +371,13 @@ This can significantly descrease drawing time:</p>
 
 </section>
 <section id="displaying-images-with-imshow-and-contour">
-<h2>Displaying images with <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and <a class="reference internal" href="#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this headline">¶</a></h2>
+<h2>Displaying images with <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and <a class="reference internal" href="#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.imshow">
 <span class="sig-name descname"><span class="pre">imshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display an 2-D array of intensities as a false-color map</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>map</strong> (<em>ndarray</em>) – map array data (see Note 1)</p></li>
 <li><p><strong>y</strong> (<em>array-like</em>) – values for pixels along vertical direction</p></li>
@@ -394,7 +395,7 @@ This can significantly descrease drawing time:</p>
 <li><p><strong>contrast_level</strong> (<em>float</em>) – percent level for contrast [0]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>img, an ImageFrame</p>
 </dd>
 </dl>
@@ -416,16 +417,16 @@ imshow(map, …, style=’contour’)</p>
 
 </section>
 <section id="functions-for-working-with-the-interactive-windows">
-<h2>Functions for working with the interactive windows<a class="headerlink" href="#functions-for-working-with-the-interactive-windows" title="Permalink to this headline">¶</a></h2>
+<h2>Functions for working with the interactive windows<a class="headerlink" href="#functions-for-working-with-the-interactive-windows" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.set_theme">
 <span class="sig-name descname"><span class="pre">set_theme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theme</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.set_theme" title="Permalink to this definition">¶</a></dt>
 <dd><p>set plotting theme by name with a theme name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>theme</strong> (<em>str</em>) – name of theme</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -440,7 +441,7 @@ imshow(map, …, style=’contour’)</p>
 <span class="sig-name descname"><span class="pre">available_themes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.available_themes" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of available theme</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of theme names.</p>
 </dd>
 </dl>
@@ -463,14 +464,14 @@ imshow(map, …, style=’contour’)</p>
 <span class="sig-name descname"><span class="pre">get_wxapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearSigInt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_wxapp" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the wx App</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>redirect</strong> (<em>bool</em>) – whether to redirect output that would otherwise
 be written to the Console [False]</p></li>
 <li><p><strong>clearSigInt</strong> (<em>bool</em>) – whether to clear interrupts of Ctrl-C [True]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a wx.App instance</p>
 </dd>
 </dl>
@@ -481,7 +482,7 @@ be written to the Console [False]</p></li>
 <span class="sig-name descname"><span class="pre">get_plot_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_plot_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a plot display</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>win</strong> (<em>int</em>) – index of Plot Window (1 to 100)</p></li>
 <li><p><strong>size</strong> (<em>tuple</em>) – width, height in pixels of Plot Window</p></li>
@@ -489,7 +490,7 @@ be written to the Console [False]</p></li>
 <li><p><strong>theme</strong> (<em>str</em>) – theme for Plot Window [‘light’]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>diplay, a wxmplot PlotFrame.</p>
 </dd>
 </dl>
@@ -504,10 +505,6 @@ matplotlib Axes and Canvas objects.</p>
 <p id="plotframe-objects-table"><strong>Table of PlotFrame attributes</strong></p>
 <blockquote>
 <div><table class="docutils align-default">
-<colgroup>
-<col style="width: 24%" />
-<col style="width: 76%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
 <th class="head"><p>object type</p></th>
@@ -537,14 +534,14 @@ matplotlib Axes and Canvas objects.</p>
 <span class="sig-name descname"><span class="pre">get_image_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_image_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>return an image display</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>win</strong> (<em>int</em>) – index of Image Window (1 to 100)</p></li>
 <li><p><strong>size</strong> (<em>tuple</em>) – width, height in pixels of Image Window</p></li>
 <li><p><strong>wintitle</strong> (<em>str</em>) – text for Window title [Image Window N]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>diplay, a wxmplot ImageFrame.</p>
 </dd>
 </dl>
@@ -572,7 +569,7 @@ objects.</p>
 <li><a class="reference internal" href="#">Interactive wxmplot displays</a><ul>
 <li><a class="reference internal" href="#plotting-in-an-interactive-session">Plotting in an interactive session</a></li>
 <li><a class="reference internal" href="#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
-<li><a class="reference internal" href="#d-plotting-with-plot-and-related-functions">2D Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
+<li><a class="reference internal" href="#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
 <li><a class="reference internal" href="#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
 <li><a class="reference internal" href="#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a></li>
 </ul>
@@ -588,7 +585,7 @@ objects.</p>
   <div>
     <h4>Next topic</h4>
     <p class="topless"><a href="plotpanel.html"
-                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></p>
+                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -606,7 +603,7 @@ objects.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -618,7 +615,7 @@ objects.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic 2D Line Plots"
+          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
              >next</a> |</li>
         <li class="right" >
           <a href="overview.html" title="wxmplot Overview"
@@ -629,7 +626,7 @@ objects.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

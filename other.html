@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Speciality wxmplot displays &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,9 +12,11 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparisons of wxmplot with other Python Plotting tools" href="comparisons.html" />
     <link rel="prev" title="wxmplot Examples" href="examples.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -23,6 +25,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="comparisons.html" title="Comparisons of wxmplot with other Python Plotting tools"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="examples.html" title="wxmplot Examples"
              accesskey="P">previous</a> |</li>
@@ -37,13 +42,13 @@
           <div class="body" role="main">
             
   <section id="speciality-wxmplot-displays">
-<h1>Speciality wxmplot displays<a class="headerlink" href="#speciality-wxmplot-displays" title="Permalink to this headline">¶</a></h1>
+<h1>Speciality wxmplot displays<a class="headerlink" href="#speciality-wxmplot-displays" title="Permalink to this heading">¶</a></h1>
 <p>There are a few custom classes for speciality plots included in
 wxmplot.  Since these build on the <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> and
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> clases, these are described briefly here and an
 example shown for each.</p>
 <section id="multiplotframe">
-<h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this headline">¶</a></h2>
+<h2>MultiPlotFrame<a class="headerlink" href="#multiplotframe" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="MultiPlotFrame">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiPlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(600,</span> <span class="pre">350)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MultiPlotFrame" title="Permalink to this definition">¶</a></dt>
@@ -81,7 +86,7 @@ plot panel, and counts to left to right and top to bottom.</p>
 
 <p>Many more methods are supported – essentially all of those for <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>.</p>
 <section id="multiplotframe-example">
-<h3>MultiPlotFrame Example<a class="headerlink" href="#multiplotframe-example" title="Permalink to this headline">¶</a></h3>
+<h3>MultiPlotFrame Example<a class="headerlink" href="#multiplotframe-example" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1"># simple example of MPlot</span>
@@ -122,7 +127,7 @@ plot panel, and counts to left to right and top to bottom.</p>
 </section>
 </section>
 <section id="stackedplotframe">
-<h2>StackedPlotFrame<a class="headerlink" href="#stackedplotframe" title="Permalink to this headline">¶</a></h2>
+<h2>StackedPlotFrame<a class="headerlink" href="#stackedplotframe" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="StackedPlotFrame">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StackedPlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(850,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panelsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(550,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#StackedPlotFrame" title="Permalink to this definition">¶</a></dt>
@@ -163,7 +168,7 @@ panel.</p>
 </dd></dl>
 
 <section id="stackedplotframe-example">
-<h3>StackedPlotFrame Example<a class="headerlink" href="#stackedplotframe-example" title="Permalink to this headline">¶</a></h3>
+<h3>StackedPlotFrame Example<a class="headerlink" href="#stackedplotframe-example" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1"># Stacked Plot shows two related plots stacked top and bottom that are</span>
@@ -204,7 +209,7 @@ panel.</p>
 </section>
 </section>
 <section id="imagematrixframe">
-<h2>ImageMatrixFrame<a class="headerlink" href="#imagematrixframe" title="Permalink to this headline">¶</a></h2>
+<h2>ImageMatrixFrame<a class="headerlink" href="#imagematrixframe" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="ImageMatrixFrame">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImageMatrixFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(900,</span> <span class="pre">600)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ImageMatrixFrame" title="Permalink to this definition">¶</a></dt>
@@ -232,7 +237,7 @@ superposition image in the upper right panel.</p>
 
 <p>display two images or maps on the <a class="reference internal" href="#ImageMatrixFrame" title="ImageMatrixFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageMatrixFrame</span></code></a></p>
 <section id="imagematrixframe-example">
-<h3>ImageMatrixFrame Example<a class="headerlink" href="#imagematrixframe-example" title="Permalink to this headline">¶</a></h3>
+<h3>ImageMatrixFrame Example<a class="headerlink" href="#imagematrixframe-example" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example showing 2 maps</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -306,6 +311,11 @@ superposition image in the upper right panel.</p>
     <p class="topless"><a href="examples.html"
                           title="previous chapter">wxmplot Examples</a></p>
   </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="comparisons.html"
+                          title="next chapter">Comparisons of wxmplot with other Python Plotting tools</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -322,7 +332,7 @@ superposition image in the upper right panel.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -334,6 +344,9 @@ superposition image in the upper right panel.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="comparisons.html" title="Comparisons of wxmplot with other Python Plotting tools"
+             >next</a> |</li>
+        <li class="right" >
           <a href="examples.html" title="wxmplot Examples"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
@@ -342,7 +355,7 @@ superposition image in the upper right panel.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

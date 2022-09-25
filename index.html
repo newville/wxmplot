@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>wxmplot: wxPython plotting widgets using matplotlib &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,18 +38,18 @@
           <div class="body" role="main">
             
   <section id="wxmplot-wxpython-plotting-widgets-using-matplotlib">
-<h1>wxmplot: wxPython plotting widgets using matplotlib<a class="headerlink" href="#wxmplot-wxpython-plotting-widgets-using-matplotlib" title="Permalink to this headline">¶</a></h1>
-<p><cite>wxmplot</cite> provides <a class="reference external" href="http://www.wxpython.org/">wxPython</a> widgets and python functions for displaying
-numerical data using <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>.</p>
-<p>While <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> provides excellent general-purpose plotting
-functionality supports many backends, it does not have tight integration
+<h1>wxmplot: wxPython plotting widgets using matplotlib<a class="headerlink" href="#wxmplot-wxpython-plotting-widgets-using-matplotlib" title="Permalink to this heading">¶</a></h1>
+<p><cite>wxmplot</cite> provides <a class="reference external" href="https://www.wxpython.org/">wxPython</a> widgets and python functions for displaying
+numerical data using <a class="reference external" href="https://matplotlib.org/">matplotlib</a>.</p>
+<p>While <a class="reference external" href="https://matplotlib.org/">matplotlib</a> provides excellent general-purpose plotting
+functionality supporting many backends, it does not have tight integration
 with any particular GUI toolkit.  While The <cite>matplotlib.pyplot</cite> module provides
 easy-to-use functions for plotting and displaying data, the features of its
 Navigation Toolbars for interactivity and customizations are minimal.  On
-the other hand, while <a class="reference external" href="http://www.wxpython.org/">wxPython</a> has some basic plotting functionality, it
-has nothing as good as <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a>.</p>
-<p><cite>wxmplot</cite> bridges the gap between <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> and <a class="reference external" href="http://www.wxpython.org/">wxPython</a> by
-providing wxPython widgets and user-friendly functions for basic 2D line
+the other hand, while <a class="reference external" href="https://www.wxpython.org/">wxPython</a> has some basic plotting functionality, it
+has nothing as good as <a class="reference external" href="https://matplotlib.org/">matplotlib</a>.</p>
+<p><cite>wxmplot</cite> bridges the gap between <a class="reference external" href="https://matplotlib.org/">matplotlib</a> and <a class="reference external" href="https://www.wxpython.org/">wxPython</a> by
+providing wxPython widgets and user-friendly functions for basic line
 plots, image display, and some custom plots.  The displays made with
 <cite>wxmplot</cite> give end-users highly interactive displays of their data that
 allow zooming and un-zooming, reporting mouse positions, rotating images,
@@ -59,7 +60,7 @@ not expose all of matplotlib’s capabilities, but it does provide plotting
 and image display tools that handle many of the most common plotting and
 image display needs for scientific data.</p>
 <p>The easy-to-use <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> functions enable script writers
-to make 2D line plots and image displays from their data, and to interact
+to make XY line plots and image displays from their data, and to interact
 with and configure these displays as part of exploratory data analysis.
 Programmers can use the <cite>wxmplot</cite> widgets to include these high quality
 graphical displays of data in their wxPython applications to enable users
@@ -75,8 +76,8 @@ to explore their data.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">wxmplot Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#d-line-plots-with-plot">2D Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#user-interaction-and-configuring-2d-line-plots">User Interaction and Configuring 2D line plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#line-plots-with-plot">Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#user-interaction-and-configuring-line-plots">User Interaction and Configuring Line Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#user-interaction-and-configuring-image-and-contour-displays">User Interaction and Configuring Image and Contour displays</a></li>
 </ul>
@@ -84,12 +85,12 @@ to explore their data.</p>
 <li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive wxmplot displays</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#plotting-in-an-interactive-session">Plotting in an interactive session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interactive.html#d-plotting-with-plot-and-related-functions">2D Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interactive.html#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
@@ -121,6 +122,17 @@ to explore their data.</p>
 <li class="toctree-l2"><a class="reference internal" href="other.html#imagematrixframe">ImageMatrixFrame</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons of wxmplot with other Python Plotting tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-matplotlib-pyplot">Comparison with Matplotlib.pyplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-wxplot">Comparison with WxPlot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-plotly">Comparison with Plotly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-pyqtgraph">Comparison with PyQtGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-pyqtgraph-pythonguis">Comparison with PyQtGraph/PythonGUIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-plplot">Comparison with PLPlot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-dislin">Comparison with Dislin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#conclusion">Conclusion</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -146,7 +158,7 @@ to explore their data.</p>
 
 
 <h3>Downloads</h3>
-<p>Current version: <b>0.9.50</b></p>
+<p>Current version: <b>0.9.51</b></p>
 <p>Downloads:
 <ul>
   <li>&nbsp; &nbsp; <a href="http://pypi.python.org/pypi/wxmplot/">PyPI (Python.org)</a> <p>
@@ -167,7 +179,7 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxm
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -187,7 +199,7 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/wxm
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

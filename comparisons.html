@@ -1,0 +1,634 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Comparisons of wxmplot with other Python Plotting tools &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Speciality wxmplot displays" href="other.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="other.html" title="Speciality wxmplot displays"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Comparisons of wxmplot with other Python Plotting tools</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="comparisons-of-wxmplot-with-other-python-plotting-tools">
+<h1>Comparisons of wxmplot with other Python Plotting tools<a class="headerlink" href="#comparisons-of-wxmplot-with-other-python-plotting-tools" title="Permalink to this heading">¶</a></h1>
+<p>Disclaimer: this section is essentially opinion of the lead author of
+<cite>wxmplot</cite>. While it aims to be fair, there is clearly a bias in this view
+to emphasize priorities that informed the development of <cite>wxmplot</cite>. If you
+have comments or suggestions for improving this section, please use the
+Github discussion page.</p>
+<p>We believe that data visualization and in particular exploratory data
+analysis are importants part of working with many kinds of scientific data.
+One of the aims for <cite>wxmplot</cite>, and especially <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a>,
+is to make exploratory data analysis with Python particularly easy and
+useful.  We are obviously biased towards <cite>wxmplot</cite>, but here we give a few
+comparisons of <cite>wxmplot</cite> with some other tools and libraries for plotting
+scientific data with Python.  The main emphasis here is on Line Plots,
+basic plots of <cite>y</cite> versus <cite>x</cite>.  while other graphical displays of data are
+important, in our experience, these are very common across many scientific
+and engineering disciplines and essentially any plotting library will
+support such plots.</p>
+<p>For both exploratory data analysis and for displays of scientific data from
+within data analysis applications, we value the following characteristics:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>brevity</strong>, or simplicity of code.  We’re using Python because it is
+succint and elegant.</p></li>
+<li><p><strong>beauty</strong>. The rendered plots should be high-quality with attractive
+fonts.  Ideally, images made would be directly suitable for
+presentations and publications.</p></li>
+<li><p><strong>interactivity</strong>.  After the plot or image of data is rendered, we want
+to be able to manipulate and modify the display, including zooming in
+on certain portions of the data, changing scales, color schemes, line
+types, and even plot labels.  In fact, not only do we want to be able
+to do that, we want <em>users</em> of the plotting scripts and applications
+to be able to do that.</p></li>
+</ol>
+</div></blockquote>
+<p>The comparisons we make with other packages are mostly in regard to these
+three characteristics.  In all cases, the <em>interactivity</em> of data displayed
+with <cite>wxmplot</cite> is simply unmatched as is the ability of the end-user to
+manipulate the details of the display, including for basic line plots:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>change color, line widths, line types, marker types, marker sizes,
+display order for each “trace” (x, y pair) in the plot.</p></li>
+<li><p>change the color theme of the entire display, the color of each
+component of the display window, the size of the plot
+margins, how to set the data display range.</p></li>
+<li><p>whether and where a legend is shown, whether grid lines are shown,
+and whether the plot is enclosed in a full box or only the left and
+bottom axes are drawn.</p></li>
+<li><p>changing the label for each trace, and the title and label for each
+axis, including setting font sizes.</p></li>
+<li><p>changing whether each axis is displayed linearly or logarithmically,
+and apply common manipulations such as showing derivative or y*x,
+1/y, and so forth.</p></li>
+<li><p>copy image to the system clipboard, save image to PNG file, or send
+directly to a system printer.</p></li>
+</ol>
+</div></blockquote>
+<p>For image display, users can lookup tables for mapping intensity to
+color, set thresholds and contrast levels, as well as showing axes and
+setting the size and location of a scalebar, and its label.  Images can be
+flipped, rotated (and reset).  Smoothing of pixelated data can be adjusted.
+Images can be toggled back-and-forth between “image mode” and “contour
+mode”.</p>
+<section id="comparison-with-matplotlib-pyplot">
+<h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Permalink to this heading">¶</a></h2>
+<p>To be clear, <cite>wxmplot</cite> uses <cite>matplotlib</cite> for plotting and image display.
+Any aspect of “beauty” in <cite>wxmplot</cite> comes from <cite>matplotlib</cite>, which makes
+plots and images of scientific data that are of excellent quality.
+Allowing <cite>LaTeX</cite> rendering for mathematical symbols and expressions in
+labels is particularly helpful for plotting data from the physical
+sciences.</p>
+<p>Of course, <cite>matplotlib</cite> is much more comprehensive than <cite>wxmplot</cite> and
+supports some display types that <cite>wxmplot</cite> does not. <cite>wxmplot</cite> focuses its
+attention on Line Plots and display of grey-scale and false-color images,
+and essentially re-imagines the <cite>pyplot</cite> functions <cite>plot</cite> and <cite>imshow</cite>. But
+<cite>wxmplot</cite> also gives you access to the underlying <cite>matplotlib</cite> objects so
+that you can add more complex components and manipulate the plot as needed,
+assuming that you know the <cite>matplotlib</cite> programming interface.</p>
+<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, we give a brief comparison of
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> and will not repeat those
+examples here.  From the point of view of “brevity” and “beauty”, these are
+approximately equal.  The <cite>matplotlib</cite> API is certainly much more common,
+and deliberately mimics the plotting functions in <cite>Matlab</cite>, so will be
+familiar to many people.  mod:<cite>wxmplot.plot</cite> puts a lot more arguments into
+a single function call.</p>
+<p>Plots made with <cite>matplotlib.pyplot</cite> have some interactivity and
+customizability after the plot is displayed with its Navigation Toolbar, so
+that users can read plot coordinates as the mouse moves around, zoom in and
+out, pan around the plot area, and save the image.  <cite>wxmplot</cite> includes all
+of those features, and has much more flexibility at run-time for the user
+to be able to manipulate the display of the data.</p>
+<p>For completeness, the example using plain matplotlib would look like</p>
+<blockquote id="plot-compare-mpl">
+<div><a class="reference internal image-reference" href="_images/plot_mpl.png"><img alt="_images/plot_mpl.png" src="_images/plot_mpl.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>and with wxmplot the code would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;t (sec)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;wxmplot example&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and give a result of</p>
+<blockquote id="plot-wxmplot">
+<div><a class="reference internal image-reference" href="_images/plot_wxmplot.png"><img alt="_images/plot_wxmplot.png" src="_images/plot_wxmplot.png" style="width: 75%;" /></a>
+</div></blockquote>
+</section>
+<section id="comparison-with-wxplot">
+<h2>Comparison with WxPlot<a class="headerlink" href="#comparison-with-wxplot" title="Permalink to this heading">¶</a></h2>
+<p>The wxPython library comes with a plot submodule that supports basic line
+plots.  An example of using this would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">wx.lib.plot</span> <span class="kn">import</span> <span class="n">PolySpline</span><span class="p">,</span> <span class="n">PlotCanvas</span><span class="p">,</span> <span class="n">PlotGraphics</span>
+
+<span class="k">class</span> <span class="nc">PlotExample</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;wx.lib.plot example&quot;</span><span class="p">,</span>
+                           <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">xy_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="n">xm_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">[</span><span class="n">PolySpline</span><span class="p">(</span><span class="n">xy_data</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">),</span>
+                  <span class="n">PolySpline</span><span class="p">(</span><span class="n">xm_data</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#d62728&#39;</span><span class="p">)]</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="n">PlotCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">PlotGraphics</span><span class="p">(</span><span class="n">traces</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+    <span class="n">PlotExample</span><span class="p">()</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and give a plot of</p>
+<blockquote id="plot-compare-wxplot-wx">
+<div><a class="reference internal image-reference" href="_images/plot_compare_wxplot_wx.png"><img alt="_images/plot_compare_wxplot_wx.png" src="_images/plot_compare_wxplot_wx.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>As written, there is not interactivity, though zooming can be enabled. The
+need to create a subclass of a <cite>Frame</cite> and initiate a wxApp adds a fair
+amount of boiler-plate code which would be painful for one-off scripts.</p>
+</section>
+<section id="comparison-with-plotly">
+<h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Permalink to this heading">¶</a></h2>
+<p>The Plotly library includes a Python interface (<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>)
+that is very good and renders interactive plots into a web browser.  This
+is very useful for web-based applications and gives good looking and
+interactive plots into a local browser. Then again, getting information
+back from the web-browser to an application or script is somewhat
+challenging.</p>
+<p>Many of the Plotly examples make assumptions about using Pandas dataframes,
+and makes working with lists and arrays a bit more complicated.  For a
+simple plot of a single trace, Plotly could be used as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;example using plotly&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Which is pretty good for brevity and readability. But (as far as I can
+tell), the simplest way to repeat our example uses a bit more complicated
+code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span> <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;example using plotly&#39;</span><span class="p">}})</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>That’s a bit more complicated than wxmplot, but not too bad.  The resulting
+plot looks like</p>
+<blockquote id="plot-compare-plotly">
+<div><a class="reference internal image-reference" href="_images/plot_compare_plotly.png"><img alt="_images/plot_compare_plotly.png" src="_images/plot_compare_plotly.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>which is a decent starting point. Plotly also gives basic interactivity by
+default, including zooming and displaying coordinates of data points.
+Again, Plotly is especially well-suited to work with Pandas dataframes, and
+provides a fairly rich set of graphics types, so if you’re looking to
+visualize complex datasets that are already in Pandas dataframes, Plotly
+might be a reasonable choice.</p>
+</section>
+<section id="comparison-with-pyqtgraph">
+<h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Permalink to this heading">¶</a></h2>
+<p>Pyqtgraph (<a class="reference external" href="https://pyqtgraph.readthedocs.io/en/latest/">https://pyqtgraph.readthedocs.io/en/latest/</a>) provides a very
+comprehensive library for plotting and visualization with PyQt and PySide.
+Constructing the example plot above with <cite>pyqtgraph</cite> would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">PyQt6</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">pwin</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="n">pwin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s1">&#39;#d62728&#39;</span><span class="p">)</span>
+<span class="n">pwin</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Plot with PyQtGraph&#39;</span><span class="p">)</span>
+<span class="n">pwin</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;t (sec)&#39;</span><span class="p">)</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>I find that it is important to select the PyQt “family” (here, PyQt6)
+before importing <cite>pyqtgraph</cite>, but that may depend some on operating system
+and environment.  Being very familiar with wxPython and not very proficient
+with the Qt world, I would happily say that someone more proficient with
+PyQt might be able to make excellent use of this.  I definitely see
+applications using this library to produce good visualizations of data.</p>
+<p>That aside, for brevity and clarity, this is very good.  The resulting plot
+looks like</p>
+<blockquote id="plot-compare-qt">
+<div><a class="reference internal image-reference" href="_images/plot_compare_qt.png"><img alt="_images/plot_compare_qt.png" src="_images/plot_compare_qt.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>The plots with <cite>pyqtqraph</cite> are interactive. Though perhaps not quite as
+customizable as <cite>wxmplot</cite>, it is much better than any other library
+described here and <cite>pyqtgraph</cite> definitely values view user interaction with
+the data.  And, in fairness to the <cite>pyqtgraph</cite>, it is explicitly designed
+to do more than simple line plots.</p>
+<p>I find the quality of the Line plots to be somewhat worse than the plots
+made with matplotlib (including wxmplot).  The text is hard to read.  Being
+not very familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust things
+like margins and the sizes of markers and text, so I am willing to call
+some of these things a matter of taste and say they might be possible to
+improve.</p>
+</section>
+<section id="comparison-with-pyqtgraph-pythonguis">
+<h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Permalink to this heading">¶</a></h2>
+<p>Here we compare to tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> which
+describe using using GUIs with the PyQt and PySide family of GUI toolkits
+based on Qt. The existence of this chapter was inspired by seeing these
+tutorials, especially advertised as being aimed at showing how to make
+“simple and highly interactive plots” plots.</p>
+<p>I agree strongly with the quote introducing these tutorials:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">One</span> <span class="n">of</span> <span class="n">the</span> <span class="n">major</span> <span class="n">strengths</span> <span class="n">of</span> <span class="n">Python</span> <span class="ow">is</span> <span class="ow">in</span> <span class="n">exploratory</span> <span class="n">data</span> <span class="n">science</span> <span class="ow">and</span>
+<span class="n">visualization</span><span class="p">,</span> <span class="n">using</span> <span class="n">tools</span> <span class="n">such</span> <span class="k">as</span> <span class="n">Pandas</span><span class="p">,</span> <span class="n">numpy</span><span class="p">,</span> <span class="n">sklearn</span> <span class="k">for</span> <span class="n">data</span>
+<span class="n">analysis</span> <span class="ow">and</span> <span class="n">matplotlib</span> <span class="n">plotting</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>and I believe the authors of those tutorials mean well, but when</p>
+<blockquote>
+<div><p>In this tutorial we’ll walk through the first steps of creating a plot
+widget with PyQtGraph</p>
+</div></blockquote>
+<p>I am obligated to reply “There has to be a better way”. In fact, it should
+be clear from the section above that <cite>pyqtgraph</cite> by itself is very good and
+satisfying our criteria of brevity and interactivity.  A comparison with
+wxmplot below also demonstrates that, indeed, there is.</p>
+<p>The tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> make a slight
+distinction between using PySide and PyQt6 (see
+<a class="reference external" href="https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/">https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/</a>) start with
+a “simple” plot. There code is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyQt6</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">PlotWidget</span><span class="p">,</span> <span class="n">plot</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MainWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="p">)</span>
+
+        <span class="n">hour</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+        <span class="n">temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">45</span><span class="p">]</span>
+
+        <span class="c1"># plot data: x, y values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">main</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">())</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>producing a very, very basic plot. There are no links to the images
+available, but running this locally gives a plot of</p>
+<blockquote id="plot-compare-qttutorial1-qt">
+<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1_qt.png"><img alt="_images/plot_compare_qttutorial1_qt.png" src="_images/plot_compare_qttutorial1_qt.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>At 20 lines of code, with three levels of indentation, and with
+data is buried in a class, this is hard to recommend as “brief”.
+With <cite>wxmplot</cite>, even creating an equivalent wxApp, that becomes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wxmplot</span> <span class="kn">import</span> <span class="n">PlotApp</span>
+
+<span class="n">hour</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">45</span><span class="p">]</span>
+
+<span class="n">plotapp</span> <span class="o">=</span> <span class="n">PlotApp</span><span class="p">()</span>
+<span class="n">plotapp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+<span class="n">plotapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or with <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wxmplot.interactive</span> <span class="kn">import</span> <span class="n">plot</span>
+
+<span class="n">hour</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">45</span><span class="p">]</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That is either 4 or 6 lines of code instead of 20 for the PyQt example.
+That matters, especially for a stated goal of “exploratory data analysis”.
+Importantly, the data is not buried in the initialization of the main
+Window.  The resulting plot from <cite>wxmplot</cite> is</p>
+<blockquote id="plot-compare-qttutorial1">
+<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" /></a>
+</div></blockquote>
+<p>There is some basic interactivity with the Qt example in that the plot can
+be panned and zoomed.  Some plot features can be altered by the end-user
+after the plot is displayed.  A fair amount of the tutorial listed above
+covers changing colors of plot elements and color and line-style from
+within the code, perhaps adding code like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">setBackground</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+<span class="n">pen</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">pen</span><span class="p">)</span>
+
+<span class="n">styles</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;font-size&#39;</span><span class="p">:</span><span class="s1">&#39;20px&#39;</span><span class="p">}</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;Temperature (°C)&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">styles</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;Hour (H)&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">styles</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and so.  With <cite>wxmplot</cite> such settings would be done with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Hour (H)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;temperature (°C)&#39;</span><span class="p">,</span>
+     <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewdith</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+     <span class="n">textcolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similarly, there is quite a bit of discussion in the pyqtgraph tutorial on
+how to display a legend for the plot.  This is much simpler with <cite>wxmplot</cite>
+and more interactive, as the displayed legend is “active” in toggling the
+display of the corresponding line.</p>
+</section>
+<section id="comparison-with-plplot">
+<h2>Comparison with PLPlot<a class="headerlink" href="#comparison-with-plplot" title="Permalink to this heading">¶</a></h2>
+<p><cite>PLPlot</cite> (<a class="reference external" href="http://plplot.sourceforge.net/">http://plplot.sourceforge.net/</a>) is a general purpose plotting
+library with bindings for many languages, including Python.  It supports
+many plot types, including map displays which is outside the scope of
+wxmplot. Since it is not specifically written for Python, it is not too
+surprising that its Python interface is not quite as elegant as
+<cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example for a basic line plot is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">NSIZE</span> <span class="o">=</span> <span class="mi">101</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+    <span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="mf">100.</span>
+
+    <span class="c1"># Prepare data to be plotted.</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">NSIZE</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span> <span class="n">NSIZE</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">ymax</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="c1"># Create a labelled box to hold the plot.</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">plenv</span><span class="p">(</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">pllab</span><span class="p">(</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y=100 x#u2#d&quot;</span><span class="p">,</span> <span class="s2">&quot;Simple PLplot demo of a line plot&quot;</span> <span class="p">)</span>
+
+    <span class="c1"># Plot the data that was prepared above.</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">plline</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)</span>
+
+    <span class="c1"># Restore defaults</span>
+    <span class="c1"># Must be done independently because otherwise this changes output files</span>
+    <span class="c1"># and destroys agreement with C examples.</span>
+    <span class="c1">#w.plcol0(1)</span>
+</pre></div>
+</div>
+<p>which is not too bad from the point of view of “brevity”.  But it is
+actually not complete code, so it is not clear how to actually run the
+example – some sort of <cite>import</cite> must be missing.  The result at
+<a class="reference external" href="http://plplot.sourceforge.net/examples-data/demo00/x00.01.png">http://plplot.sourceforge.net/examples-data/demo00/x00.01.png</a> is not too
+bad, though a bit hard to call “beautiful”.  I believe <cite>PLPlot</cite> has
+essentially no interactivity for the plots themselves, though some programs
+may be able to have the user advance through a series of plots.</p>
+<p>Converting that to <cite>wxmplot</cite> would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$y=100 x^2$&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Simple PLplot demo of a line plot&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;dark&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which gives a plot of</p>
+<blockquote id="plot-compare-plplot">
+<div><a class="reference internal image-reference" href="_images/plot_compare_plplot.png"><img alt="_images/plot_compare_plplot.png" src="_images/plot_compare_plplot.png" style="width: 75%;" /></a>
+</div></blockquote>
+</section>
+<section id="comparison-with-dislin">
+<h2>Comparison with Dislin<a class="headerlink" href="#comparison-with-dislin" title="Permalink to this heading">¶</a></h2>
+<p>Like <cite>PLPlot</cite>, <cite>Dislin</cite> (<a class="reference external" href="https://dislin.de/">https://dislin.de/</a>) is a plotting library with
+bindings for many languages, including Python. It also supports many plot
+types, including 3-d volume displays which is outside the scope of
+wxmplot. Since it is not specifically written for Python, it is not too
+surprising that its Python interface is not quite as elegant as
+<cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example for a basic line plot is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">dislin</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">101</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">3.1415926</span> <span class="o">/</span> <span class="mf">180.</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">3.6</span>
+  <span class="n">v</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">3.6</span> <span class="o">*</span> <span class="n">f</span>
+  <span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span>
+  <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">scrmod</span> <span class="p">(</span><span class="s1">&#39;revers&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">metafl</span> <span class="p">(</span><span class="s1">&#39;xwin&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">disini</span> <span class="p">()</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">complx</span> <span class="p">()</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">pagera</span> <span class="p">()</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">axspos</span> <span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">1800</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">axslen</span> <span class="p">(</span><span class="mi">2200</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">name</span>   <span class="p">(</span><span class="s1">&#39;X-axis&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">name</span>   <span class="p">(</span><span class="s1">&#39;Y-axis&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">labdig</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">ticks</span>  <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">ticks</span>  <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">titlin</span> <span class="p">(</span><span class="s1">&#39;Demonstration of CURVE&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">titlin</span> <span class="p">(</span><span class="s1">&#39;SIN (X), COS (X)&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ic</span> <span class="o">=</span> <span class="n">dislin</span><span class="o">.</span><span class="n">intrgb</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">axsbgd</span> <span class="p">(</span><span class="n">ic</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">graf</span>   <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">360.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">90.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">setrgb</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">grid</span>   <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">color</span>  <span class="p">(</span><span class="s1">&#39;fore&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">height</span> <span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">title</span>  <span class="p">()</span>
+
+<span class="n">dislin</span><span class="o">.</span><span class="n">color</span>  <span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">curve</span>  <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">color</span>  <span class="p">(</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">curve</span>  <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">dislin</span><span class="o">.</span><span class="n">disfin</span> <span class="p">()</span>
+</pre></div>
+</div>
+<p>with a result at <a class="reference external" href="https://dislin.de/exa_curv.html">https://dislin.de/exa_curv.html</a>.  For “brevity” and
+“beauty”, this is difficult to recommend.  I believe there is essentially
+no interactivity. Converting that to <cite>wxmplot</cite> would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+
+<span class="n">x</span>  <span class="o">=</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">18</span><span class="p">)</span><span class="mi">0</span>
+
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;DISLIN Comparison</span><span class="se">\n</span><span class="s1">sin(x) and cos(x)&#39;</span><span class="p">)</span>
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green3&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and give a plot of</p>
+<blockquote id="plot-compare-dislin">
+<div><a class="reference internal image-reference" href="_images/plot_compare_dislin.png"><img alt="_images/plot_compare_dislin.png" src="_images/plot_compare_dislin.png" style="width: 75%;" /></a>
+</div></blockquote>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
+<p>In conclusion, succint code that is free from lots of boilerplate code and
+that still gives interactive displays is highly valuable for exploratory
+data analysis. While there are many plotting and visualization tools
+available for Python, many shown here are pretty poor, lacking in code
+brevity, plot quality, or interactivity.  If you are are using web
+applications or <em>want to</em> embed plots in a web browser, <cite>plotly</cite> looks like
+a pretty good choice.  If you are using <cite>PyQt</cite>, <cite>pyqtgraph</cite> is an
+interesting alternative. For maximum portability, plain <cite>matplotlib.pyplot</cite>
+is an acceptable choice, though it offers relatively little in the way of
+interactivity.  If you are using looking for interactive exploration of
+your data, we hope you find that <cite>wxmplot</cite> offers important capabilities
+that enable script writers and end-users of applications to have rich
+interactions with their data.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Comparisons of wxmplot with other Python Plotting tools</a><ul>
+<li><a class="reference internal" href="#comparison-with-matplotlib-pyplot">Comparison with Matplotlib.pyplot</a></li>
+<li><a class="reference internal" href="#comparison-with-wxplot">Comparison with WxPlot</a></li>
+<li><a class="reference internal" href="#comparison-with-plotly">Comparison with Plotly</a></li>
+<li><a class="reference internal" href="#comparison-with-pyqtgraph">Comparison with PyQtGraph</a></li>
+<li><a class="reference internal" href="#comparison-with-pyqtgraph-pythonguis">Comparison with PyQtGraph/PythonGUIs</a></li>
+<li><a class="reference internal" href="#comparison-with-plplot">Comparison with PLPlot</a></li>
+<li><a class="reference internal" href="#comparison-with-dislin">Comparison with Dislin</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="other.html"
+                          title="previous chapter">Speciality wxmplot displays</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/comparisons.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="other.html" title="Speciality wxmplot displays"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Comparisons of wxmplot with other Python Plotting tools</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

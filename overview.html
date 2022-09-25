@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>wxmplot Overview &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -42,39 +43,40 @@
           <div class="body" role="main">
             
   <section id="module-wxmplot">
-<span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Permalink to this headline">¶</a></h1>
-<p><cite>wxmplot</cite> provides simple functions for making 2D line plots and displaying
-image data.  These are similar to the simplest functions from
-<cite>matplotlib.pyplot</cite>, but offer richer interactivity and customization.  It
-is not easy to convey interactivity in a static document, but here and in
-<a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, we will try to show how easy it is to use <cite>wxmplot</cite>
-for exploratory data analysis.  Importantly, <cite>wxmplot</cite> not only makes more
-interactive plotting available, but also exposes that interactivity and
-flexibility to the end-user at run time, and not only when writing a
-script. This allows a programmer to add plotting capabilities to an
-application and enable the end-user to interact with their data and fully
-customize the plots when running the application.</p>
-<section id="d-line-plots-with-plot">
-<h2>2D Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#d-line-plots-with-plot" title="Permalink to this headline">¶</a></h2>
-<p>Let’s start with a simple script using  <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
+<span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Permalink to this heading">¶</a></h1>
+<p><cite>wxmplot</cite> provides simple functions for making Line Plots (or 2D or XY
+Plots) and displaying image data.  These are similar to the simplest
+functions from <cite>matplotlib.pyplot</cite>, but offer richer interactivity and
+customization.  It is not easy to convey interactivity in a static
+document, but here and in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, we will try to show how
+easy it is to use <cite>wxmplot</cite> for exploratory data analysis.  Importantly,
+<cite>wxmplot</cite> not only makes more interactive plotting available when writing a
+script, but but also exposes that interactivity and flexibility to the
+end-user at run time. This allows a programmer to add plotting capabilities
+to an application and enable the end-user to interact with their data and
+fully customize the plots when running the application.</p>
+<section id="line-plots-with-plot">
+<h2>Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#line-plots-with-plot" title="Permalink to this heading">¶</a></h2>
+<p>Let’s start with a simple script using <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">z</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.3</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-+&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-+&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;matplotlib example&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;t (sec)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This is a pretty straight-forward matplotlib script and produces a plot of
-(depending a bit on the backend and OS):</p>
+<p>This is a pretty straight-forward matplotlib script and produces a very
+high-quality plot of (depending a bit on the backend and OS):</p>
 <blockquote id="plot-mpl">
 <div><a class="reference internal image-reference" href="_images/plot_mpl.png"><img alt="_images/plot_mpl.png" src="_images/plot_mpl.png" style="width: 75%;" /></a>
 </div></blockquote>
@@ -89,31 +91,32 @@ display.</p>
 <p>With <cite>wxmplot</cite>, that script would be rewritten as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">z</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.3</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">4.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
-<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;t (sec)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;wxmplot example&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">)</span>
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and yields the plot shown below.</p>
 <blockquote id="plot-wxmplot">
 <div><a class="reference internal image-reference" href="_images/plot_wxmplot.png"><img alt="_images/plot_wxmplot.png" src="_images/plot_wxmplot.png" style="width: 75%;" /></a>
 </div></blockquote>
-<p>There are some stylistic differences in the results, but the point so far
-is that the results are very similar.  There is a difference in programming
-interface in that the configuration of the plot details (labels, titles,
-whether the legend is shown) is encapsulated into fewer functions – one
-per plot trace – rather than several function calls to set up the plot
-configuration and then one <cite>show()</cite> method to render and display that
-static plot.  In fact, the <cite>wxmplot</cite> example has no <cite>show()</cite> function at
-all.  As will be discussed more in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, the <cite>wxmplot</cite>
-functions display results immediately when in an interactive session and
-allow interaction at the shell to continue, without the need for a blocking
-<cite>show()</cite> function.</p>
+<p>There are some stylistic differences in the results, but the displayed
+results are very similar.  There is a difference in programming interface
+in that the configuration of the plot details (labels, titles, whether the
+legend is shown) is encapsulated into fewer functions – one per plot trace
+– rather than several function calls to set up the plot configuration and
+then one <cite>show()</cite> method to render the plot.  In fact, the <cite>wxmplot</cite>
+example has no <cite>show()</cite> function at all.  As will be discussed more in
+<a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, the <cite>wxmplot</cite> functions immediately generate displays
+when in an interactive session and allow interaction at the shell to
+continue, without the need for a blocking <cite>show()</cite> function.</p>
 <p><cite>Wxmplot</cite> gives more run-time interaction and flexibility to the end-user
 than the <cite>matplotlib</cite> display, and without cluttering the display with
 little icons.  As with the <cite>pyplot</cite> example, moving the mouse around
@@ -124,12 +127,12 @@ printing the image, and many more options for configuring the details of
 the plot from the File and Options menus.  These will be described in more
 detail in the next section.</p>
 <p>In addition to the <a class="reference internal" href="interactive.html#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.plot()</span></code></a> function, there are several
-more functions to augment 2D line plots, including those to add text,
+more functions to augment these line plots, including those to add text,
 arrows, lines, and markers to plots.  These and more functions are
 discussed in detail in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>.</p>
 </section>
-<section id="user-interaction-and-configuring-2d-line-plots">
-<h2>User Interaction and Configuring 2D line plots<a class="headerlink" href="#user-interaction-and-configuring-2d-line-plots" title="Permalink to this headline">¶</a></h2>
+<section id="user-interaction-and-configuring-line-plots">
+<h2>User Interaction and Configuring Line Plots<a class="headerlink" href="#user-interaction-and-configuring-line-plots" title="Permalink to this heading">¶</a></h2>
 <p>The basic <cite>wxmplot</cite> line plots support a few basic user interactions.
 First, as mentioned above, the user can zoom in by drawing a box: Clicking
 the left mouse button and dragging will draw a rectangular box, and
@@ -174,7 +177,7 @@ use as shortcuts to Menu selections.  From the File menu, the user can:</p>
 <p>The Help menu will display a quick cheat-sheet to remind you of these
 Ctrl-Key options.</p>
 <p>The <em>Plot Configuration Window</em> is an important tool for configuring and
-customizing 2D line plots.  This is a tabbed window frame with 4 panels to
+customizing line plots.  This is a tabbed window frame with 4 panels to
 allow the user to configure essentially every aspect of the plot:</p>
 <blockquote>
 <div><ul class="simple">
@@ -187,7 +190,7 @@ allow the user to configure essentially every aspect of the plot:</p>
 <p>with these configuration settings available, any user should be able to
 create beautiful presentation-quality image from their data.</p>
 <section id="color-and-line-properties">
-<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Permalink to this headline">¶</a></h3>
+<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Permalink to this heading">¶</a></h3>
 <p>The <strong>Colors and Line Properties</strong> tab of the <em>Plot Configuration Window</em>
 allows the user to configure the basic colors for the plot.  This includes
 setting the plotting theme.  Selecting any of the available themes (there
@@ -209,7 +212,7 @@ aspect of the plot displaying their data.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_LineProps.png"><img alt="_images/PlotConfig_LineProps.png" src="_images/PlotConfig_LineProps.png" style="width: 95%;" /></a>
 </section>
 <section id="ranges-and-margins-properties">
-<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Permalink to this headline">¶</a></h3>
+<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Permalink to this heading">¶</a></h3>
 <p>The <strong>Ranges and Margins</strong> tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.</p>
@@ -225,7 +228,7 @@ top of the plot, they may need to adjust these margins.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Ranges.png"><img alt="_images/PlotConfig_Ranges.png" src="_images/PlotConfig_Ranges.png" style="width: 95%;" /></a>
 </section>
 <section id="text-properties">
-<h3>Text Properties<a class="headerlink" href="#text-properties" title="Permalink to this headline">¶</a></h3>
+<h3>Text Properties<a class="headerlink" href="#text-properties" title="Permalink to this heading">¶</a></h3>
 <p>The <strong>Text and Labels</strong> tab allows the user to set the title and labels for
 the X and Y axes, and to adjust the font size for these text components.
 Here, the details of the Legend can also be customized: whether it is
@@ -237,16 +240,16 @@ symbols.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Text.png"><img alt="_images/PlotConfig_Text.png" src="_images/PlotConfig_Text.png" style="width: 95%;" /></a>
 </section>
 <section id="scatterplot-properties">
-<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Permalink to this headline">¶</a></h3>
+<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Permalink to this heading">¶</a></h3>
 <p>The <strong>Scatterplot</strong> tab allows the user to set the colors and marker sizes
 for scatter plots.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Scatter.png"><img alt="_images/PlotConfig_Scatter.png" src="_images/PlotConfig_Scatter.png" style="width: 95%;" /></a>
 </section>
 </section>
 <section id="displaying-images-with-imshow-and-contour">
-<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this headline">¶</a></h2>
-<p>As for 2D line plotting, <cite>wxmplot</cite> has a simple <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a>
-function that displays 2D image data and adds user-friendly controls to
+<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this heading">¶</a></h2>
+<p>As with line plotting, <cite>wxmplot</cite> has a simple <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a>
+function that displays image data and adds user-friendly controls to
 manipulate and adjust the display of such data.  While
 <cite>matplotlib.pyplot.imshow()</cite> has the basic user action of zooming and
 saving image files, <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a> has interactions that are
@@ -276,13 +279,13 @@ dataset but using:</p>
 from the Image menu or with Ctrl-N.</p>
 </section>
 <section id="user-interaction-and-configuring-image-and-contour-displays">
-<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Permalink to this headline">¶</a></h2>
-<p>As with the 2D line plots, clicking anywhere on the image will show the x, y,
-and intensity values in the status bar.  If arrays for <cite>x</cite> and <cite>y</cite> values have
-been passed in, both the indices and <cite>x</cite> and <cite>y</cite> values for the pixel selected
-will be displayed.  Similarly, clicking and dragging will zoom in on a portion
-of the image, and using the arrow keys will pan the image. Zooming and
-panning can be repeated indefinitely and undone.</p>
+<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Permalink to this heading">¶</a></h2>
+<p>As with te displays created with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code>, clicking anywhere on the image will
+show the x, y, and intensity values in the status bar.  If arrays for <cite>x</cite>
+and <cite>y</cite> values have been passed in, both the indices and <cite>x</cite> and <cite>y</cite> values
+for the pixel selected will be displayed.  Similarly, clicking and dragging
+will zoom in on a portion of the image, and using the arrow keys will pan
+the image. Zooming and panning can be repeated indefinitely and undone.</p>
 <p>From the Image or Contour panel, a few display customizations are
 immediately available. On the left hand side of the frame, there are a few
 controls to adjust the displayed image.  First, the color lookup table for
@@ -325,7 +328,7 @@ Display Window to give more interaction.  From the File menu, the user can</p>
 </ul>
 </div></blockquote>
 <p>From the X/Y Slices menu, the user can control whether clicking on a pixel
-on the image displays a X- or Y- slice through the image data as a 2D line
+on the image displays a X- or Y- slice through the image data as a line
 plot in a separate plotting window.  From this menu, the user can select:</p>
 <blockquote>
 <div><ul class="simple">
@@ -348,7 +351,7 @@ plot in a separate plotting window.  From this menu, the user can select:</p>
 methods to smooth the data across pixels.</p>
 <p>Finally, the Help menu will give a quick list of keyboard shortcuts.</p>
 <section id="image-configuration-window">
-<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Permalink to this headline">¶</a></h3>
+<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Permalink to this heading">¶</a></h3>
 <p>Most of options for working with images and contour maps can be found from
 the main window or menu selections, but some options need more specialized
 configurations that can be accessed from the Image Configuration Window
@@ -380,8 +383,8 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">wxmplot Overview</a><ul>
-<li><a class="reference internal" href="#d-line-plots-with-plot">2D Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
-<li><a class="reference internal" href="#user-interaction-and-configuring-2d-line-plots">User Interaction and Configuring 2D line plots</a><ul>
+<li><a class="reference internal" href="#line-plots-with-plot">Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li><a class="reference internal" href="#user-interaction-and-configuring-line-plots">User Interaction and Configuring Line Plots</a><ul>
 <li><a class="reference internal" href="#color-and-line-properties">Color and Line Properties</a></li>
 <li><a class="reference internal" href="#ranges-and-margins-properties">Ranges and Margins Properties</a></li>
 <li><a class="reference internal" href="#text-properties">Text Properties</a></li>
@@ -424,7 +427,7 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -447,7 +450,7 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

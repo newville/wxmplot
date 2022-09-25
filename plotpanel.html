@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>PlotPanel: A wx.Panel for Basic 2D Line Plots &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
+    <title>PlotPanel: A wx.Panel for Basic Line Plots &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,7 +32,7 @@
           <a href="interactive.html" title="Interactive wxmplot displays"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></li> 
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></li> 
       </ul>
     </div>  
 
@@ -41,8 +42,8 @@
           <div class="body" role="main">
             
   <section id="module-plotpanel">
-<span id="plotpanel-a-wx-panel-for-basic-2d-line-plots"></span><h1><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots<a class="headerlink" href="#module-plotpanel" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> class supports standard 2D line plots, including
+<span id="plotpanel-a-wx-panel-for-basic-line-plots"></span><h1><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots<a class="headerlink" href="#module-plotpanel" title="Permalink to this heading">¶</a></h1>
+<p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> class supports standard line plots, including
 scatter plots.  It has both an easy-to-use programming interface, and a rich
 graphical user interface for manipulating the plot after it has been drawn.
 The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> class is derived from a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code> and so that
@@ -77,7 +78,7 @@ many additional methods to interact with the plots.</p>
 <dd><p>Create a Plot Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code> with a matplotlib Figure.
 This takes many optional arguments:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>parent</strong> – wx parent object.</p></li>
 <li><p><strong>size</strong> (<em>wx.Size</em><em>  or </em><em>tuple of 2 integers.</em>) – figure size in wxPython pixel coordinates ((700, 450)).</p></li>
@@ -102,7 +103,7 @@ plot, or save the image to a file.</p>
 </dd></dl>
 
 <section id="plotpanel-methods">
-<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Permalink to this heading">¶</a></h2>
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Permalink to this definition">¶</a></dt>
@@ -128,14 +129,6 @@ plot, so that both traces are visible.</p>
 same meaning, as indicated by the right-most column.</p>
 <blockquote>
 <div><table class="docutils align-default">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 12%" />
-<col style="width: 9%" />
-<col style="width: 47%" />
-<col style="width: 5%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>argument</p></th>
 <th class="head"><p>type</p></th>
@@ -511,7 +504,7 @@ configured interactively (see Plot Configuration).</p>
 <span class="sig-name descname"><span class="pre">update_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.update_line" title="Permalink to this definition">¶</a></dt>
 <dd><p>update an existing trace.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>trace</strong> – integer index for the trace (0 is the first trace)</p></li>
 <li><p><strong>x</strong> – array of x values</p></li>
@@ -562,7 +555,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>add text to the plot.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> – text to write</p></li>
 <li><p><strong>x</strong> – x coordinate for text</p></li>
@@ -582,7 +575,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <span class="sig-name descname"><span class="pre">add_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overhang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_arrow" title="Permalink to this definition">¶</a></dt>
 <dd><p>draw arrow from (x1, y1) to (x2, y2).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x1</strong> – starting x coordinate</p></li>
 <li><p><strong>y1</strong> – starting y coordinate</p></li>
@@ -604,7 +597,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <span class="sig-name descname"><span class="pre">set_xylims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">axes=None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">side=None</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xylims" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the x and y limits for a plot based on a 2x2 list.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>limits</strong> (<em>a 4-element list:</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em>) – x and y limits</p></li>
 <li><p><strong>axes</strong> – instance of matplotlib axes to use (i.e, for right or left side y axes)</p></li>
@@ -689,7 +682,7 @@ a <code class="xref py py-class docutils literal notranslate"><span class="pre">
 
 </section>
 <section id="using-date-time-data-with-plot">
-<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Permalink to this headline">¶</a></h2>
+<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Permalink to this heading">¶</a></h2>
 <p>If the <cite>x</cite> values to be plotted holds date or time data, these can be handled in
 a few different formats.  In order for the X-axis labels to be properly
 displayed as a string showing the date, the values must be eventually converted
@@ -710,7 +703,7 @@ will depend on the ability of this function to parse and interpret the date
 strings used.</p>
 </section>
 <section id="module-plotframe">
-<span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Permalink to this headline">¶</a></h2>
+<span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Permalink to this heading">¶</a></h2>
 <p>A <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a> is a wx.Frame – a separate window – that
 contains a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> and is decorated with a status bar and
 menubar.  A <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a> inherits many of the methods of a
@@ -766,7 +759,7 @@ for plot interaction.</p>
 
 </section>
 <section id="module-plotapp">
-<span id="plotapp-a-wx-app-showing-a-plotframe"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><a class="headerlink" href="#module-plotapp" title="Permalink to this headline">¶</a></h2>
+<span id="plotapp-a-wx-app-showing-a-plotframe"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><a class="headerlink" href="#module-plotapp" title="Permalink to this heading">¶</a></h2>
 <p>A <a class="reference internal" href="#plotapp.PlotApp" title="plotapp.PlotApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code></a> is a wx.App – an application – that consists of a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>.  This show a frame that is decorated with a status bar
 and menubar with menu items for saving, printing and configuring plots.</p>
@@ -792,7 +785,7 @@ customization.</p>
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
 <li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a></li>
 <li><a class="reference internal" href="#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
@@ -828,7 +821,7 @@ customization.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -846,12 +839,12 @@ customization.</p>
           <a href="interactive.html" title="Interactive wxmplot displays"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic 2D Line Plots</a></li> 
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

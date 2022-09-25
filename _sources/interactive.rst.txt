@@ -97,7 +97,7 @@ plot, as with::
 
 and so forth.
 
-If we wanted to bring up a second 2D Line Plot window, we can use the
+If we wanted to bring up a second Line Plot window, we can use the
 **win=2** option::
 
 
@@ -127,7 +127,7 @@ add `wi.plot()` and `wi.imshow()` to your short- or long-running scripts
 and the plots will be displayed until you no longer want to use them.
 
 
-2D Plotting with :func:`plot` and related functions
+Line Plotting with :func:`plot` and related functions
 ==========================================================================
 
 .. autofunction:: plot

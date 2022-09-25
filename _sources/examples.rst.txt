@@ -15,7 +15,7 @@ Dynamic examples not shown here
 Several examples are not shown here either because they show many plots or are
 otherwise more complex.  They are worth trying out.
 
-*demo.py* will show several 2D Line plot examples, including a plot which uses
+*demo.py* will show several Line plot examples, including a plot which uses
 a timer to simulate a dynamic plot, updating the plot as fast as it can -
 typically 10 to 30 times per second, depending on your machine.
 
@@ -24,7 +24,7 @@ typically 10 to 30 times per second, depending on your machine.
 *theme_compare.py* renders the same plot with a selection of different themes.
 
 *image_scroll.py* shows an updating set of images on a single display.
-Perhaps surprisingly, this can be faster than updating the 2D line plots.
+Perhaps surprisingly, this can be faster than updating the line plots.
 
 
 Scatterplot Example

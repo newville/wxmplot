@@ -15,7 +15,6 @@ import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
 from matplotlib.backends.backend_wx import RendererWx
-from matplotlib.tight_layout import get_renderer
 
 from .utils import Printer, MenuItem
 
@@ -512,7 +511,7 @@ class BasePanel(wx.Panel):
         try:
             renderer = getattr(fig, '_cachedRenderer', None)
             if renderer is None:
-                renderer = get_renderer(fig)
+                renderer = fig._get_renderer()
             self.wx_renderer = isinstance(renderer, RendererWx)
         except:
             pass

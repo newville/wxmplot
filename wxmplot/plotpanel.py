@@ -232,6 +232,7 @@ class PlotPanel(BasePanel):
             fkws = dict(step=None, zorder=zorder, color=color)
             if drawstyle != 'default':
                 fkws['step'] = drawstyle
+            _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder, color=color)
             if dy is None:
                 _fill = axes.fill_between(xdata, ydata, y2=0, **fkws)
             else:

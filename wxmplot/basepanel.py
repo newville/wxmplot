@@ -56,6 +56,7 @@ class BasePanel(wx.Panel):
         self.cursor_modes = {}
         self.cursor_mode = 'report'
         self.parent = parent
+        self.wx_renderer = None
         self.motion_sbar = None
         self.printer = Printer(self, title=output_title)
         self.add_cursor_mode('report', motion = self.report_motion,
@@ -504,6 +505,17 @@ class BasePanel(wx.Panel):
         self.cursor_mode_action('motion', event=event)
 
 
+    def set_wx_renderer(self, fig):
+        "set whether using Wx renderer (as opposed to Agg)"
+        self.wx_renderer = False
+        try:
+            renderer = getattr(fig, '_cachedRenderer', None)
+            if renderer is None:
+                renderer = fig._get_renderer()
+            self.wx_renderer = isinstance(renderer, RendererWx)
+        except:
+            pass
+
     def gui_repaint(self, drawDC=None):
         """
         Update the displayed image on the GUI canvas, using the supplied
@@ -515,9 +527,12 @@ class BasePanel(wx.Panel):
             drawDC = wx.ClientDC(self.canvas)
 
         bmp = self.canvas.bitmap
-        if (wx.Platform == '__WXMSW__'
-            and isinstance(self.canvas.figure._cachedRenderer, RendererWx)):
-            bmp = bmp.ConvertToImage().ConvertToBitmap()
+
+        if wx.Platform == '__WXMSW__':
+            if self.wx_renderer is None:
+                self.set_wx_renderer(self.fig)
+            if self.wx_renderer:
+                bmp = bmp.ConvertToImage().ConvertToBitmap()
 
         drawDC.DrawBitmap(bmp, 0, 0)
         if self.rbbox is not None:

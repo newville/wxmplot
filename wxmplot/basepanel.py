@@ -516,7 +516,7 @@ class BasePanel(wx.Panel):
         except:
             pass
 
-    def gui_repaint(self, drawDC=None):
+    def gui_repaint(self, drawDC=None, origin=None):
         """
         Update the displayed image on the GUI canvas, using the supplied
         wx.PaintDC device context.
@@ -527,8 +527,7 @@ class BasePanel(wx.Panel):
             drawDC = wx.ClientDC(self.canvas)
 
         bmp = self.canvas.bitmap
-
-        if wx.Platform == '__WXMSW__':
+        if wx.Platform == '__WXMSW__' and origin != 'WXAgg':
             if self.wx_renderer is None:
                 self.set_wx_renderer(self.fig)
             if self.wx_renderer:

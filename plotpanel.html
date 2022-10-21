@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
@@ -81,7 +82,7 @@ This takes many optional arguments:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>parent</strong> – wx parent object.</p></li>
-<li><p><strong>size</strong> (<em>wx.Size</em><em>  or </em><em>tuple of 2 integers.</em>) – figure size in wxPython pixel coordinates ((700, 450)).</p></li>
+<li><p><strong>size</strong> (<em>wx.Size</em><em>  or </em><em>tuple</em><em> of </em><em>2 integers.</em>) – figure size in wxPython pixel coordinates ((700, 450)).</p></li>
 <li><p><strong>dpi</strong> (<em>integer</em>) – dots per inch for figure (150).</p></li>
 <li><p><strong>axisbg</strong> (<em>valid colour name</em>) – background colour for Axis (‘#FEFEFE’).</p></li>
 <li><p><strong>fontsize</strong> (<em>integer</em>) – font size for wxFont for labels and ticks (9).</p></li>
@@ -786,10 +787,46 @@ customization.</p>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
-<li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a></li>
+<li><a class="reference internal" href="#plotpanel.PlotPanel"><code class="docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a><ul>
+<li><a class="reference internal" href="#plotpanel.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.oplot"><code class="docutils literal notranslate"><span class="pre">oplot()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.update_line"><code class="docutils literal notranslate"><span class="pre">update_line()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.plot_many"><code class="docutils literal notranslate"><span class="pre">plot_many()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.scatterplot"><code class="docutils literal notranslate"><span class="pre">scatterplot()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.add_text"><code class="docutils literal notranslate"><span class="pre">add_text()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.add_arrow"><code class="docutils literal notranslate"><span class="pre">add_arrow()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_xylims"><code class="docutils literal notranslate"><span class="pre">set_xylims()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.get_xylims"><code class="docutils literal notranslate"><span class="pre">get_xylims()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.unzoom"><code class="docutils literal notranslate"><span class="pre">unzoom()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.unzoom_all"><code class="docutils literal notranslate"><span class="pre">unzoom_all()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_title"><code class="docutils literal notranslate"><span class="pre">set_title()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_xlabel"><code class="docutils literal notranslate"><span class="pre">set_xlabel()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_ylabel"><code class="docutils literal notranslate"><span class="pre">set_ylabel()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_y2label"><code class="docutils literal notranslate"><span class="pre">set_y2label()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_bgcol"><code class="docutils literal notranslate"><span class="pre">set_bgcol()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.write_message"><code class="docutils literal notranslate"><span class="pre">write_message()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.save_figure"><code class="docutils literal notranslate"><span class="pre">save_figure()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
-<li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
-<li><a class="reference internal" href="#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
+<li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
+<li><a class="reference internal" href="#plotframe.PlotFrame"><code class="docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.oplot"><code class="docutils literal notranslate"><span class="pre">oplot()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.scatterplot"><code class="docutils literal notranslate"><span class="pre">scatterplot()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.update_trace"><code class="docutils literal notranslate"><span class="pre">update_trace()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><ul>
+<li><a class="reference internal" href="#plotapp.PlotApp"><code class="docutils literal notranslate"><span class="pre">PlotApp</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -844,7 +881,7 @@ customization.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

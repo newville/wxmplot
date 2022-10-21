@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Speciality wxmplot displays" href="other.html" /> 
@@ -284,10 +285,10 @@ customizable as <cite>wxmplot</cite>, it is much better than any other library
 described here and <cite>pyqtgraph</cite> definitely values view user interaction with
 the data.  And, in fairness to the <cite>pyqtgraph</cite>, it is explicitly designed
 to do more than simple line plots.</p>
-<p>I find the quality of the Line plots to be somewhat worse than the plots
-made with matplotlib (including wxmplot).  The text is hard to read.  Being
-not very familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust things
-like margins and the sizes of markers and text, so I am willing to call
+<p>I find the quality of the Line plots to be somewhat worse than the plots made
+with matplotlib (including wxmplot).  The text in the plot is very hard to
+read.  Being not very familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust
+things like margins and the sizes of markers and text, so I am willing to call
 some of these things a matter of taste and say they might be possible to
 improve.</p>
 </section>
@@ -304,19 +305,19 @@ tutorials, especially advertised as being aimed at showing how to make
 <span class="n">analysis</span> <span class="ow">and</span> <span class="n">matplotlib</span> <span class="n">plotting</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>and I believe the authors of those tutorials mean well, but when</p>
-<blockquote>
-<div><p>In this tutorial we’ll walk through the first steps of creating a plot
-widget with PyQtGraph</p>
-</div></blockquote>
-<p>I am obligated to reply “There has to be a better way”. In fact, it should
-be clear from the section above that <cite>pyqtgraph</cite> by itself is very good and
-satisfying our criteria of brevity and interactivity.  A comparison with
-wxmplot below also demonstrates that, indeed, there is.</p>
+<p>and I believe the authors of those tutorials mean well, but when they also say:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="n">this</span> <span class="n">tutorial</span> <span class="n">we</span> <span class="n">will</span> <span class="n">walk</span> <span class="n">through</span> <span class="n">the</span> <span class="n">first</span> <span class="n">steps</span> <span class="n">of</span> <span class="n">creating</span> <span class="n">a</span> <span class="n">plot</span>
+<span class="n">widget</span> <span class="k">with</span> <span class="n">PyQtGraph</span>
+</pre></div>
+</div>
+<p>I am obligated to reply “There has to be a better way”.</p>
+<p>In fact, it should be clear from the section above that <cite>pyqtgraph</cite> by itself
+is very good and satisfying our criteria of brevity and interactivity.  A
+comparison with wxmplot below also demonstrates that, indeed, there is.</p>
 <p>The tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> make a slight
 distinction between using PySide and PyQt6 (see
 <a class="reference external" href="https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/">https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/</a>) start with
-a “simple” plot. There code is:</p>
+a “simple” plot. The code given for this is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyQt6</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">PlotWidget</span><span class="p">,</span> <span class="n">plot</span>
 <span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -353,9 +354,9 @@ available, but running this locally gives a plot of</p>
 <blockquote id="plot-compare-qttutorial1-qt">
 <div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1_qt.png"><img alt="_images/plot_compare_qttutorial1_qt.png" src="_images/plot_compare_qttutorial1_qt.png" style="width: 75%;" /></a>
 </div></blockquote>
-<p>At 20 lines of code, with three levels of indentation, and with
-data is buried in a class, this is hard to recommend as “brief”.
-With <cite>wxmplot</cite>, even creating an equivalent wxApp, that becomes:</p>
+<p>At 20 lines of code, with three levels of indentation, and with data is buried
+in a class, this is hardly “brief”.  With <cite>wxmplot</cite>, even creating an
+equivalent wxApp, that becomes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wxmplot</span> <span class="kn">import</span> <span class="n">PlotApp</span>
 
 <span class="n">hour</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
@@ -366,7 +367,7 @@ With <cite>wxmplot</cite>, even creating an equivalent wxApp, that becomes:</p>
 <span class="n">plotapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>or with <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a>:</p>
+<p>With <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> it is down to 4 lines of code total:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wxmplot.interactive</span> <span class="kn">import</span> <span class="n">plot</span>
 
 <span class="n">hour</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
@@ -375,10 +376,14 @@ With <cite>wxmplot</cite>, even creating an equivalent wxApp, that becomes:</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>That is either 4 or 6 lines of code instead of 20 for the PyQt example.
-That matters, especially for a stated goal of “exploratory data analysis”.
-Importantly, the data is not buried in the initialization of the main
-Window.  The resulting plot from <cite>wxmplot</cite> is</p>
+<p>That is either 4 or 6 lines of code instead of 20 for the PyQt example.  That
+difference matters, especially the stated goal of “exploratory data analysis”.
+In addition, the data in the <cite>wxmplot</cite> examples is not buried in the
+initialization of the main Window as it is in the pythonguis example.  That is
+just bad code design, and disappointing to see in a tutorial.  None of the
+plots shown in the pythonguis pages have axes labeled - that is a significant
+problem for the display of scientific data.</p>
+<p>With <cite>wxmplot</cite>, the resulting plot looks like:</p>
 <blockquote id="plot-compare-qttutorial1">
 <div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" /></a>
 </div></blockquote>
@@ -547,19 +552,20 @@ no interactivity. Converting that to <cite>wxmplot</cite> would be:</p>
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
-<p>In conclusion, succint code that is free from lots of boilerplate code and
-that still gives interactive displays is highly valuable for exploratory
-data analysis. While there are many plotting and visualization tools
-available for Python, many shown here are pretty poor, lacking in code
-brevity, plot quality, or interactivity.  If you are are using web
-applications or <em>want to</em> embed plots in a web browser, <cite>plotly</cite> looks like
-a pretty good choice.  If you are using <cite>PyQt</cite>, <cite>pyqtgraph</cite> is an
-interesting alternative. For maximum portability, plain <cite>matplotlib.pyplot</cite>
-is an acceptable choice, though it offers relatively little in the way of
-interactivity.  If you are using looking for interactive exploration of
-your data, we hope you find that <cite>wxmplot</cite> offers important capabilities
-that enable script writers and end-users of applications to have rich
-interactions with their data.</p>
+<p>Succint code that is free of boilerplate code and that gives high quality plots
+and interactive displays is highly valuable for exploratory data
+analysis. While there are many plotting and visualization tools available for
+Python, many shown here are found lacking in at least one of code brevity, plot
+quality, or interactivity.</p>
+<p>If you are are using web applications or <em>want to</em> embed plots in a web
+browser, <cite>plotly</cite> looks like a pretty good choice – to be clear, the author
+uses <cite>plotly</cite> for web applications.  If you are using <cite>PyQt</cite>, <cite>pyqtgraph</cite> is an
+a perfectly reasonable choice. For maximum portability, plain
+<cite>matplotlib.pyplot</cite> is an acceptable choice, though it offers relatively little
+in the way of interactivity.</p>
+<p>If you are using looking for interactive exploration of your data, we hope you
+find that <cite>wxmplot</cite> offers important capabilities that enable script writers
+and end-users of applications to have rich interactions with their data.</p>
 </section>
 </section>
 
@@ -628,7 +634,7 @@ interactions with their data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

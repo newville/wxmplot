@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="PlotPanel: A wx.Panel for Basic Line Plots" href="plotpanel.html" />
@@ -569,9 +570,31 @@ objects.</p>
 <li><a class="reference internal" href="#">Interactive wxmplot displays</a><ul>
 <li><a class="reference internal" href="#plotting-in-an-interactive-session">Plotting in an interactive session</a></li>
 <li><a class="reference internal" href="#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
-<li><a class="reference internal" href="#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
-<li><a class="reference internal" href="#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
-<li><a class="reference internal" href="#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a></li>
+<li><a class="reference internal" href="#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a><ul>
+<li><a class="reference internal" href="#wxmplot.interactive.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.update_trace"><code class="docutils literal notranslate"><span class="pre">update_trace()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_setlimits"><code class="docutils literal notranslate"><span class="pre">plot_setlimits()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_text"><code class="docutils literal notranslate"><span class="pre">plot_text()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_arrow"><code class="docutils literal notranslate"><span class="pre">plot_arrow()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_marker"><code class="docutils literal notranslate"><span class="pre">plot_marker()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_axhline"><code class="docutils literal notranslate"><span class="pre">plot_axhline()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_axvline"><code class="docutils literal notranslate"><span class="pre">plot_axvline()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><ul>
+<li><a class="reference internal" href="#wxmplot.interactive.imshow"><code class="docutils literal notranslate"><span class="pre">imshow()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.contour"><code class="docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a><ul>
+<li><a class="reference internal" href="#wxmplot.interactive.set_theme"><code class="docutils literal notranslate"><span class="pre">set_theme()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.available_themes"><code class="docutils literal notranslate"><span class="pre">available_themes()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_wxapp"><code class="docutils literal notranslate"><span class="pre">get_wxapp()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_plot_window"><code class="docutils literal notranslate"><span class="pre">get_plot_window()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_image_window"><code class="docutils literal notranslate"><span class="pre">get_image_window()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -626,7 +649,7 @@ objects.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

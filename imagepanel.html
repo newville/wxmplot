@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="wxmplot Examples" href="examples.html" />
@@ -314,9 +315,25 @@ same intensity intensity scale.</p></li>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
-<li><a class="reference internal" href="#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
-<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
-<li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a></li>
+<li><a class="reference internal" href="#imagepanel.ImagePanel"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a><ul>
+<li><a class="reference internal" href="#imagepanel.display"><code class="docutils literal notranslate"><span class="pre">display()</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.update_image"><code class="docutils literal notranslate"><span class="pre">update_image()</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.redraw"><code class="docutils literal notranslate"><span class="pre">redraw()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a><ul>
+<li><a class="reference internal" href="#imagepanel.data_callback"><code class="docutils literal notranslate"><span class="pre">data_callback</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.lasso_callback"><code class="docutils literal notranslate"><span class="pre">lasso_callback</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.cursor_callback"><code class="docutils literal notranslate"><span class="pre">cursor_callback</span></code></a></li>
+<li><a class="reference internal" href="#imagepanel.contour_callback"><code class="docutils literal notranslate"><span class="pre">contour_callback</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-imageframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageFrame</span></code>:  A wx.Frame for Image Display</a><ul>
+<li><a class="reference internal" href="#imageframe.ImageFrame"><code class="docutils literal notranslate"><span class="pre">ImageFrame</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
 </ul>
 </li>
@@ -372,7 +389,7 @@ same intensity intensity scale.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2022, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

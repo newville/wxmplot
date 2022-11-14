@@ -316,7 +316,7 @@ class PlotPanel(BasePanel):
         return _lines
 
     def plot_many(self, datalist, side='left', title=None,
-                  xlabel=None, ylabel=None, **kws):
+                  xlabel=None, ylabel=None, zoom_limits=None, **kws):
         """
         plot many traces at once, taking a list of (x, y) pairs
         """
@@ -347,21 +347,41 @@ class PlotPanel(BasePanel):
             for i in range(nplot_traces, nplot_request+5):
                 conf.init_trace(i,  linecolors[i%ncols], 'dashed')
 
-
         self.plot(x0, y0, **opts)
-
-
         for dat in datalist[1:]:
             x, y, opts = unpack_tracedata(dat, delay_draw=True)
             self.oplot(x, y, **opts)
 
         self.reset_formats()
-
+        print("--plot_many ", zoom_limits)
+        self.set_zoomlimits(zoom_limits)
         if conf.show_legend:
-            conf.draw_legend()
-        conf.relabel()
+            conf.draw_legend(delay_draw=True)
+        conf.relabel(delay_draw=True)
         self.draw()
-        self.canvas.Refresh()
+        # self.canvas.Refresh()
+
+    def get_zoomlimits(self):
+        return self.axes, self.get_viewlimits(), self.conf.zoom_lims
+    
+    def set_zoomlimits(self, limits):
+        """set zoom limits returned from get_zoomlimits()"""
+        if limits is None:
+            print("panel.set_zoom none")
+            return False
+        ax, vlims, zoom_lims = limits
+        if ax == self.axes:
+            try:
+                ax.set_xlim((vlims[0], vlims[1]), emit=True)
+                ax.set_ylim((vlims[2], vlims[3]), emit=True)
+                if len(zoom_lims) > 0:
+                    self.conf.zoom_lims = zoom_lims
+            except:
+                print("panel.set_zoom error")                                  
+                return False
+        print("panel.set_zoom ok")                                              
+        return True
+        
 
     def add_text(self, text, x, y, side='left', size=None,
                  rotation=None, ha='left', va='center',

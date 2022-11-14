@@ -164,13 +164,13 @@ class PlotPanel(BasePanel):
         conf.viewpad = ifnot_none(viewpad, conf.viewpad)
 
         if xlabel is not None:
-            self.set_xlabel(xlabel, delay_draw=delay_draw)
+            self.set_xlabel(xlabel, delay_draw=True)
         if ylabel is not None:
-            self.set_ylabel(ylabel, delay_draw=delay_draw)
+            self.set_ylabel(ylabel, delay_draw=True)
         if y2label is not None:
-            self.set_y2label(y2label, delay_draw=delay_draw)
+            self.set_y2label(y2label, delay_draw=True)
         if title  is not None:
-            self.set_title(title, delay_draw=delay_draw)
+            self.set_title(title, delay_draw=True)
         if show_legend is not None:
             conf.set_legend_location(legend_loc, legend_on)
             conf.show_legend = show_legend
@@ -179,7 +179,6 @@ class PlotPanel(BasePanel):
 
         # set data range for this trace
         # datarange = [min(xdata), max(xdata), min(ydata), max(ydata)]
-
         if axes not in conf.user_limits:
             conf.user_limits[axes] = [None, None, None, None]
 
@@ -201,13 +200,10 @@ class PlotPanel(BasePanel):
 
         conf.gridcolor = ifnot_none(gridcolor, conf.gridcolor)
         conf.set_gridcolor(conf.gridcolor)
-
         conf.facecolor = ifnot_none(bgcolor, conf.facecolor)
         conf.set_facecolor(conf.facecolor)
-
         conf.textcolor = ifnot_none(textcolor, conf.textcolor)
-        conf.set_textcolor(conf.textcolor)
-
+        conf.set_textcolor(conf.textcolor, delay_draw=True)
         if framecolor is not None:
             conf.set_framecolor(framecolor)
 
@@ -228,6 +224,7 @@ class PlotPanel(BasePanel):
             conf.set_trace_alpha(alpha, delay_draw=True)
 
         conf.dy[conf.ntrace] = dy
+
         if fill:
             fkws = dict(step=None, zorder=zorder, color=color)
             if drawstyle != 'default':
@@ -244,6 +241,7 @@ class PlotPanel(BasePanel):
                 _lines = [ebar.lines[0], ebar.lines[2]]
             else:
                 _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
+
         conf.traces[conf.ntrace].fill = fill
 
         if axes not in conf.data_save:
@@ -262,7 +260,7 @@ class PlotPanel(BasePanel):
         if (self.conf.xscale == 'log' or self.conf.yscale == 'log'):
             self.set_logscale(xscale=self.conf.xscale,
                               yscale=self.conf.yscale,
-                              delay_draw=delay_draw)
+                              delay_draw=True)
 
         if label is None:
             label = 'trace %i' % (conf.ntrace+1)
@@ -301,17 +299,18 @@ class PlotPanel(BasePanel):
         if needs_relabel and not delay_draw:
             conf.relabel()
 
-
         # axes style ('box' or 'open')
         conf.axes_style = 'box'
         if fullbox is not None and not fullbox:
             conf.axes_style = 'open'
         if axes_style in ('open', 'box', 'bottom'):
             conf.axes_style = axes_style
-        conf.set_axes_style(delay_draw=delay_draw)
+
+        # conf.set_axes_style(delay_draw=delay_draw)
+
         if not delay_draw:
             self.draw()
-            self.canvas.Refresh()
+
         conf.ntrace = conf.ntrace + 1
         return _lines
 
@@ -353,13 +352,11 @@ class PlotPanel(BasePanel):
             self.oplot(x, y, **opts)
 
         self.reset_formats()
-        print("--plot_many ", zoom_limits)
         self.set_zoomlimits(zoom_limits)
         if conf.show_legend:
             conf.draw_legend(delay_draw=True)
         conf.relabel(delay_draw=True)
         self.draw()
-        # self.canvas.Refresh()
 
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims
@@ -367,7 +364,7 @@ class PlotPanel(BasePanel):
     def set_zoomlimits(self, limits):
         """set zoom limits returned from get_zoomlimits()"""
         if limits is None:
-            print("panel.set_zoom none")
+            # print("panel.set_zoom none")
             return False
         ax, vlims, zoom_lims = limits
         if ax == self.axes:
@@ -377,9 +374,8 @@ class PlotPanel(BasePanel):
                 if len(zoom_lims) > 0:
                     self.conf.zoom_lims = zoom_lims
             except:
-                print("panel.set_zoom error")                                  
+                # print("panel.set_zoom error")                                  
                 return False
-        print("panel.set_zoom ok")                                              
         return True
         
 

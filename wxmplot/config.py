@@ -486,10 +486,10 @@ class PlotConfig:
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'figure.facecolor')
 
-    def set_textcolor(self, color):
+    def set_textcolor(self, color, delay_draw=True):
         """set color for labels and axis text"""
         self.textcolor = color
-        self.relabel()
+        self.relabel(delay_draw=delay_draw)
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'text')
 

@@ -242,6 +242,7 @@ class PlotPanel(BasePanel):
             else:
                 _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
 
+        b = """ """
         conf.traces[conf.ntrace].fill = fill
 
         if axes not in conf.data_save:
@@ -307,7 +308,8 @@ class PlotPanel(BasePanel):
             conf.axes_style = axes_style
 
         # conf.set_axes_style(delay_draw=delay_draw)
-
+        """
+        """
         if not delay_draw:
             self.draw()
 
@@ -315,7 +317,7 @@ class PlotPanel(BasePanel):
         return _lines
 
     def plot_many(self, datalist, side='left', title=None,
-                  xlabel=None, ylabel=None, zoom_limits=None, **kws):
+                  xlabel=None, ylabel=None, show_legend=False, zoom_limits=None, **kws):
         """
         plot many traces at once, taking a list of (x, y) pairs
         """
@@ -332,9 +334,10 @@ class PlotPanel(BasePanel):
                 ydata = tdat[1]
             return (xdata, ydata, out)
 
+
         conf = self.conf
         opts = dict(side=side, title=title, xlabel=xlabel, ylabel=ylabel,
-                    delay_draw=True)
+                    delay_draw=True, show_legend=False)
         opts.update(kws)
         x0, y0, opts = unpack_tracedata(datalist[0], **opts)
 
@@ -353,14 +356,15 @@ class PlotPanel(BasePanel):
 
         self.reset_formats()
         self.set_zoomlimits(zoom_limits)
-        if conf.show_legend:
+        self.conf.show_legend = show_legend
+        if show_legend:
             conf.draw_legend(delay_draw=True)
         conf.relabel(delay_draw=True)
         self.draw()
 
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims
-    
+
     def set_zoomlimits(self, limits):
         """set zoom limits returned from get_zoomlimits()"""
         if limits is None:
@@ -374,10 +378,10 @@ class PlotPanel(BasePanel):
                 if len(zoom_lims) > 0:
                     self.conf.zoom_lims = zoom_lims
             except:
-                # print("panel.set_zoom error")                                  
+                # print("panel.set_zoom error")
                 return False
         return True
-        
+
 
     def add_text(self, text, x, y, side='left', size=None,
                  rotation=None, ha='left', va='center',

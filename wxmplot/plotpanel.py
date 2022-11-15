@@ -10,7 +10,7 @@ from datetime import datetime
 import wx
 
 from numpy import nonzero, where
-import matplotlib
+import matplotlib as mpl
 from matplotlib import dates
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -123,10 +123,12 @@ class PlotPanel(BasePanel):
         basic plot method, adding to an existing display
 
         """
+
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'
         axes = self.axes
+ 
         if theme is not None:
             conf.set_theme(theme=theme)
         if side == 'right':
@@ -183,7 +185,7 @@ class PlotPanel(BasePanel):
             conf.user_limits[axes] = [None, None, None, None]
 
         conf.user_limits[axes][0] = ifnot_none(xmin, conf.user_limits[axes][0])
-        conf.user_limits[axes][1] = ifnot_none(xmax, conf.user_limits[axes][1])
+        conf.user_limits[axes][1] = ifnot_none(ymin, conf.user_limits[axes][1])
         conf.user_limits[axes][2] = ifnot_none(ymin, conf.user_limits[axes][2])
         conf.user_limits[axes][3] = ifnot_none(ymax, conf.user_limits[axes][3])
 
@@ -224,7 +226,6 @@ class PlotPanel(BasePanel):
             conf.set_trace_alpha(alpha, delay_draw=True)
 
         conf.dy[conf.ntrace] = dy
-
         if fill:
             fkws = dict(step=None, zorder=zorder, color=color)
             if drawstyle != 'default':
@@ -242,7 +243,6 @@ class PlotPanel(BasePanel):
             else:
                 _lines = axes.plot(xdata, ydata, drawstyle=drawstyle, zorder=zorder)
 
-        b = """ """
         conf.traces[conf.ntrace].fill = fill
 
         if axes not in conf.data_save:
@@ -251,9 +251,13 @@ class PlotPanel(BasePanel):
 
         if conf.show_grid and axes == self.axes:
             # I'm sure there's a better way...
-            for i in axes.get_xgridlines() + axes.get_ygridlines():
-                i.set_color(conf.gridcolor)
-                i.set_zorder(-100)
+            # conf.set_gridcolor(conf.gridcolor)
+            mpl.rcParams['grid.color'] = conf.gridcolor
+            
+            # grid_color = mpl.rcParams["grid.color"]            
+            # for i in axes.get_xgridlines() + axes.get_ygridlines():
+            #     i.set_color(conf.gridcolor)
+            #     i.set_zorder(-100)
             axes.grid(True)
         else:
             axes.grid(False)
@@ -293,12 +297,11 @@ class PlotPanel(BasePanel):
         if refresh:
             conf.refresh_trace(conf.ntrace)
             needs_relabel = True
+        if conf.show_legend:
+            conf.draw_legend(delay_draw=True)
 
-        if conf.show_legend and not delay_draw:
-            conf.draw_legend()
-
-        if needs_relabel and not delay_draw:
-            conf.relabel()
+        if needs_relabel:
+            conf.relabel(delay_draw=True)
 
         # axes style ('box' or 'open')
         conf.axes_style = 'box'
@@ -308,11 +311,8 @@ class PlotPanel(BasePanel):
             conf.axes_style = axes_style
 
         # conf.set_axes_style(delay_draw=delay_draw)
-        """
-        """
         if not delay_draw:
             self.draw()
-
         conf.ntrace = conf.ntrace + 1
         return _lines
 

@@ -128,7 +128,7 @@ class PlotPanel(BasePanel):
         conf = self.conf
         conf.plot_type = 'lineplot'
         axes = self.axes
- 
+
         if theme is not None:
             conf.set_theme(theme=theme)
         if side == 'right':
@@ -253,8 +253,8 @@ class PlotPanel(BasePanel):
             # I'm sure there's a better way...
             # conf.set_gridcolor(conf.gridcolor)
             mpl.rcParams['grid.color'] = conf.gridcolor
-            
-            # grid_color = mpl.rcParams["grid.color"]            
+
+            # grid_color = mpl.rcParams["grid.color"]
             # for i in axes.get_xgridlines() + axes.get_ygridlines():
             #     i.set_color(conf.gridcolor)
             #     i.set_zorder(-100)
@@ -310,9 +310,10 @@ class PlotPanel(BasePanel):
         if axes_style in ('open', 'box', 'bottom'):
             conf.axes_style = axes_style
 
-        # conf.set_axes_style(delay_draw=delay_draw)
+        conf.set_axes_style(delay_draw=delay_draw)
         if not delay_draw:
             self.draw()
+            self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
         return _lines
 
@@ -361,6 +362,8 @@ class PlotPanel(BasePanel):
             conf.draw_legend(delay_draw=True)
         conf.relabel(delay_draw=True)
         self.draw()
+        self.canvas.Refresh()
+
 
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims

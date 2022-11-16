@@ -463,7 +463,7 @@ class PlotConfig:
         self.gridcolor = color
         if self.canvas is None: return
 
-        rcParams['grid.color'] = color        
+        rcParams['grid.color'] = color
         for ax in self.canvas.figure.get_axes():
             for i in ax.get_xgridlines()+ax.get_ygridlines():
                 i.set_color(color)

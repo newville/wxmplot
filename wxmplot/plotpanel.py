@@ -185,7 +185,7 @@ class PlotPanel(BasePanel):
             conf.user_limits[axes] = [None, None, None, None]
 
         conf.user_limits[axes][0] = ifnot_none(xmin, conf.user_limits[axes][0])
-        conf.user_limits[axes][1] = ifnot_none(ymin, conf.user_limits[axes][1])
+        conf.user_limits[axes][1] = ifnot_none(xmax, conf.user_limits[axes][1])
         conf.user_limits[axes][2] = ifnot_none(ymin, conf.user_limits[axes][2])
         conf.user_limits[axes][3] = ifnot_none(ymax, conf.user_limits[axes][3])
 
@@ -313,7 +313,7 @@ class PlotPanel(BasePanel):
         conf.set_axes_style(delay_draw=delay_draw)
         if not delay_draw:
             self.draw()
-            self.canvas.Refresh()
+            # self.canvas.Refresh()
         conf.ntrace = conf.ntrace + 1
         return _lines
 
@@ -362,7 +362,7 @@ class PlotPanel(BasePanel):
             conf.draw_legend(delay_draw=True)
         conf.relabel(delay_draw=True)
         self.draw()
-        self.canvas.Refresh()
+        # self.canvas.Refresh()
 
 
     def get_zoomlimits(self):

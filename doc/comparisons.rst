@@ -191,13 +191,13 @@ Comparison with Plotly
 The Plotly library includes a Python interface (https://plotly.com/python/)
 that is very good and renders interactive plots into a web browser.  This is
 very useful for web-based applications and gives good looking and interactive
-plots into a local browser. To be clear, I have uses plotly for multiple web
-apps.  Then again, getting information back from the web-browser to an
-application or script is somewhat challenging.
+plots into a local or remote web browser. To be clear, I use plotly for more
+than one web application.  Then again, getting information back from the
+web-browser to an application or script is somewhat challenging.
 
 Many of the Plotly examples make assumptions about using Pandas dataframes,
-and makes working with lists and arrays a bit more complicated.  For a
-simple plot of a single trace, Plotly could be used as::
+which is a fine default, but makes working with lists and arrays a bit more
+complicated.  For a simple plot of a single trace, Plotly could be used as::
 
     import numpy as np
     import plotly.express as px
@@ -211,9 +211,9 @@ simple plot of a single trace, Plotly could be used as::
     fig = px.line(data, x='x', y='y', title='example using plotly')
     fig.show()
 
-Which is pretty good for brevity and readability. But (as far as I can
-tell), the simplest way to repeat our example uses a bit more complicated
-code::
+Which is pretty good for brevity and readability. But (as far as I can tell),
+the simplest way to repeat our example to show two traces together uses a bit
+more complicated code::
 
     import numpy as np
     import plotly.graph_objects as go

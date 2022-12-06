@@ -45,11 +45,11 @@
 to emphasize priorities that informed the development of <cite>wxmplot</cite>. If you
 have comments or suggestions for improving this section, please use the
 Github discussion page.</p>
-<p>We believe that data visualization and in particular exploratory data
+<p>I believe that data visualization and in particular exploratory data
 analysis are importants part of working with many kinds of scientific data.
 One of the aims for <cite>wxmplot</cite>, and especially <a class="reference internal" href="interactive.html#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a>,
 is to make exploratory data analysis with Python particularly easy and
-useful.  We are obviously biased towards <cite>wxmplot</cite>, but here we give a few
+useful.  I am obviously biased towards <cite>wxmplot</cite>, but here I give a few
 comparisons of <cite>wxmplot</cite> with some other tools and libraries for plotting
 scientific data with Python.  The main emphasis here is on Line Plots,
 basic plots of <cite>y</cite> versus <cite>x</cite>.  while other graphical displays of data are
@@ -57,10 +57,10 @@ important, in our experience, these are very common across many scientific
 and engineering disciplines and essentially any plotting library will
 support such plots.</p>
 <p>For both exploratory data analysis and for displays of scientific data from
-within data analysis applications, we value the following characteristics:</p>
+within data analysis applications, the following characteristics are vital:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><p><strong>brevity</strong>, or simplicity of code.  We’re using Python because it is
+<li><p><strong>brevity</strong>, or simplicity of code.  We are using Python because it is
 succint and elegant.</p></li>
 <li><p><strong>beauty</strong>. The rendered plots should be high-quality with attractive
 fonts.  Ideally, images made would be directly suitable for
@@ -73,10 +73,10 @@ to do that, we want <em>users</em> of the plotting scripts and applications
 to be able to do that.</p></li>
 </ol>
 </div></blockquote>
-<p>The comparisons we make with other packages are mostly in regard to these
-three characteristics.  In all cases, the <em>interactivity</em> of data displayed
-with <cite>wxmplot</cite> is simply unmatched as is the ability of the end-user to
-manipulate the details of the display, including for basic line plots:</p>
+<p>The comparisons with other packages here emphasize these three characteristics.
+In all cases, the <em>interactivity</em> of data displayed with <cite>wxmplot</cite> is simply
+unmatched as is the ability of the end-user to manipulate the details of the
+display, including for basic line plots:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>change color, line widths, line types, marker types, marker sizes,
@@ -104,12 +104,13 @@ Images can be toggled back-and-forth between “image mode” and “contour
 mode”.</p>
 <section id="comparison-with-matplotlib-pyplot">
 <h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Permalink to this heading">¶</a></h2>
-<p>To be clear, <cite>wxmplot</cite> uses <cite>matplotlib</cite> for plotting and image display.
-Any aspect of “beauty” in <cite>wxmplot</cite> comes from <cite>matplotlib</cite>, which makes
-plots and images of scientific data that are of excellent quality.
-Allowing <cite>LaTeX</cite> rendering for mathematical symbols and expressions in
-labels is particularly helpful for plotting data from the physical
-sciences.</p>
+<p>To be clear, <cite>wxmplot</cite> uses <cite>matplotlib</cite> for plotting and image display.  Any
+aspect of “beauty” in <cite>wxmplot</cite> comes from <cite>matplotlib</cite>, which makes plots and
+images of scientific data that are of excellent quality.  Allowing <cite>LaTeX</cite>
+rendering for mathematical symbols and expressions in labels is particularly
+helpful for plotting data from the physical sciences.  For clarity, I include
+the Seaborn package as essentially <cite>matplotlib</cite> with different theming (that
+can be used from <cite>wxmplot</cite>!).</p>
 <p>Of course, <cite>matplotlib</cite> is much more comprehensive than <cite>wxmplot</cite> and
 supports some display types that <cite>wxmplot</cite> does not. <cite>wxmplot</cite> focuses its
 attention on Line Plots and display of grey-scale and false-color images,
@@ -117,13 +118,12 @@ and essentially re-imagines the <cite>pyplot</cite> functions <cite>plot</cite> 
 <cite>wxmplot</cite> also gives you access to the underlying <cite>matplotlib</cite> objects so
 that you can add more complex components and manipulate the plot as needed,
 assuming that you know the <cite>matplotlib</cite> programming interface.</p>
-<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, we give a brief comparison of
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> and will not repeat those
-examples here.  From the point of view of “brevity” and “beauty”, these are
-approximately equal.  The <cite>matplotlib</cite> API is certainly much more common,
-and deliberately mimics the plotting functions in <cite>Matlab</cite>, so will be
-familiar to many people.  mod:<cite>wxmplot.plot</cite> puts a lot more arguments into
-a single function call.</p>
+<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, a brief comparison of <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> and
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> is given and will not repeated here.  From the point of
+view of “brevity” and “beauty”, these are approximately equal.  The
+<cite>matplotlib</cite> API is certainly much more common, and deliberately mimics the
+plotting functions in <cite>Matlab</cite>, so will be familiar to many people.
+mod:<cite>wxmplot.plot</cite> puts a lot more arguments into a single function call.</p>
 <p>Plots made with <cite>matplotlib.pyplot</cite> have some interactivity and
 customizability after the plot is displayed with its Navigation Toolbar, so
 that users can read plot coordinates as the mouse moves around, zoom in and
@@ -196,14 +196,14 @@ amount of boiler-plate code which would be painful for one-off scripts.</p>
 <section id="comparison-with-plotly">
 <h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Permalink to this heading">¶</a></h2>
 <p>The Plotly library includes a Python interface (<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>)
-that is very good and renders interactive plots into a web browser.  This
-is very useful for web-based applications and gives good looking and
-interactive plots into a local browser. Then again, getting information
-back from the web-browser to an application or script is somewhat
-challenging.</p>
+that is very good and renders interactive plots into a web browser.  This is
+very useful for web-based applications and gives good looking and interactive
+plots into a local or remote web browser. To be clear, I use plotly for more
+than one web application.  Then again, getting information back from the
+web-browser to an application or script is somewhat challenging.</p>
 <p>Many of the Plotly examples make assumptions about using Pandas dataframes,
-and makes working with lists and arrays a bit more complicated.  For a
-simple plot of a single trace, Plotly could be used as:</p>
+which is a fine default, but makes working with lists and arrays a bit more
+complicated.  For a simple plot of a single trace, Plotly could be used as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 
@@ -217,9 +217,9 @@ simple plot of a single trace, Plotly could be used as:</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Which is pretty good for brevity and readability. But (as far as I can
-tell), the simplest way to repeat our example uses a bit more complicated
-code:</p>
+<p>Which is pretty good for brevity and readability. But (as far as I can tell),
+the simplest way to repeat our example to show two traces together uses a bit
+more complicated code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
 
@@ -236,7 +236,7 @@ code:</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>That’s a bit more complicated than wxmplot, but not too bad.  The resulting
+<p>That is a bit more complicated than wxmplot, but not too bad.  The resulting
 plot looks like</p>
 <blockquote id="plot-compare-plotly">
 <div><a class="reference internal image-reference" href="_images/plot_compare_plotly.png"><img alt="_images/plot_compare_plotly.png" src="_images/plot_compare_plotly.png" style="width: 75%;" /></a>
@@ -244,9 +244,9 @@ plot looks like</p>
 <p>which is a decent starting point. Plotly also gives basic interactivity by
 default, including zooming and displaying coordinates of data points.
 Again, Plotly is especially well-suited to work with Pandas dataframes, and
-provides a fairly rich set of graphics types, so if you’re looking to
+provides a fairly rich set of graphics types, so if you are looking to
 visualize complex datasets that are already in Pandas dataframes, Plotly
-might be a reasonable choice.</p>
+is a good choice.</p>
 </section>
 <section id="comparison-with-pyqtgraph">
 <h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Permalink to this heading">¶</a></h2>
@@ -286,11 +286,11 @@ described here and <cite>pyqtgraph</cite> definitely values view user interactio
 the data.  And, in fairness to the <cite>pyqtgraph</cite>, it is explicitly designed
 to do more than simple line plots.</p>
 <p>I find the quality of the Line plots to be somewhat worse than the plots made
-with matplotlib (including wxmplot).  The text in the plot is very hard to
-read.  Being not very familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust
-things like margins and the sizes of markers and text, so I am willing to call
-some of these things a matter of taste and say they might be possible to
-improve.</p>
+with <cite>matplotlib</cite> and <cite>wxmplot</cite>.  The text in the plot is very hard to read,
+which I find troubling. But not being very familiar with <cite>pyqtgraph</cite>, I am not
+certain how to adjust things like margins and the sizes of markers and text, so
+I am willing to call some of these things a matter of taste and say they might
+be possible to improve.</p>
 </section>
 <section id="comparison-with-pyqtgraph-pythonguis">
 <h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Permalink to this heading">¶</a></h2>
@@ -311,13 +311,17 @@ tutorials, especially advertised as being aimed at showing how to make
 </pre></div>
 </div>
 <p>I am obligated to reply “There has to be a better way”.</p>
-<p>In fact, it should be clear from the section above that <cite>pyqtgraph</cite> by itself
-is very good and satisfying our criteria of brevity and interactivity.  A
-comparison with wxmplot below also demonstrates that, indeed, there is.</p>
+<p>It should be clear from the section above that <cite>pyqtgraph</cite> by itself is good,
+and satisfies our criteria of brevity and interactivity.  But the example code
+given on these web tutorials is another matter.  As the comparison with
+<cite>wxmplot</cite> below demonstrates, there is indeed a better way than is implied in
+those tutorials.</p>
 <p>The tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> make a slight
 distinction between using PySide and PyQt6 (see
-<a class="reference external" href="https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/">https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/</a>) start with
-a “simple” plot. The code given for this is:</p>
+<a class="reference external" href="https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/">https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/</a>). By itself,
+that does not necessarily indicate a problem, but it does add a level of
+complication that cannot be good for brevity, beauty, or portability.  The
+tutorials start with a “simple” plot. The code given for this is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyQt6</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">PlotWidget</span><span class="p">,</span> <span class="n">plot</span>
 <span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -380,9 +384,9 @@ equivalent wxApp, that becomes:</p>
 difference matters, especially the stated goal of “exploratory data analysis”.
 In addition, the data in the <cite>wxmplot</cite> examples is not buried in the
 initialization of the main Window as it is in the pythonguis example.  That is
-just bad code design, and disappointing to see in a tutorial.  None of the
-plots shown in the pythonguis pages have axes labeled - that is a significant
-problem for the display of scientific data.</p>
+bad code design and disappointing to see in a tutorial.  None of the plots
+shown in the pythonguis pages have axes labeled, which is another significant
+problem for the display of scientific data.  Axes should be labeled.</p>
 <p>With <cite>wxmplot</cite>, the resulting plot looks like:</p>
 <blockquote id="plot-compare-qttutorial1">
 <div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" /></a>
@@ -402,7 +406,7 @@ within the code, perhaps adding code like:</p>
 <span class="bp">self</span><span class="o">.</span><span class="n">graphWidget</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;Hour (H)&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">styles</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>and so.  With <cite>wxmplot</cite> such settings would be done with:</p>
+<p>and so on.  With <cite>wxmplot</cite> such settings would be done with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Hour (H)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;temperature (°C)&#39;</span><span class="p">,</span>
      <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewdith</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
      <span class="n">textcolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
@@ -412,6 +416,9 @@ within the code, perhaps adding code like:</p>
 how to display a legend for the plot.  This is much simpler with <cite>wxmplot</cite>
 and more interactive, as the displayed legend is “active” in toggling the
 display of the corresponding line.</p>
+<p>If aiming to teach people how to use Python for interactive exploratory data
+analysis, the tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> are profoundly
+disappointing.</p>
 </section>
 <section id="comparison-with-plplot">
 <h2>Comparison with PLPlot<a class="headerlink" href="#comparison-with-plplot" title="Permalink to this heading">¶</a></h2>

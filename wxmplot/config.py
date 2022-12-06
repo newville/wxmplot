@@ -130,15 +130,15 @@ whitebg_theme = {'axes.facecolor': '#FFFFFF',
 
 Themes = OrderedDict()
 
-for tname in ('light',  'white-background', 'dark',
-              'matplotlib', 'seaborn', 'ggplot', 'bmh',
-              'fivethirtyeight', 'grayscale', 'dark_background',
-              'tableau-colorblind10', 'seaborn-bright',
-              'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
-              'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
-              'seaborn-muted', 'seaborn-pastel', 'seaborn-paper',
-              'seaborn-poster', 'seaborn-talk', 'seaborn-ticks',
-              'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'):
+
+for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
+              'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
+              'tableau-colorblind10', 'Solarize_Light2', 'seaborn',
+              'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
+              'seaborn-darkgrid', 'seaborn-dark-palette', 'seaborn-deep',
+              'seaborn-notebook', 'seaborn-muted', 'seaborn-pastel',
+              'seaborn-paper', 'seaborn-poster', 'seaborn-talk',
+              'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid'):
     theme = rc_params()
     theme['backend'] = 'WXAgg'
     if tname == 'matplotlib':
@@ -151,14 +151,17 @@ for tname in ('light',  'white-background', 'dark',
     elif tname == 'white-background':
         theme.update(light_theme)
         theme.update(whitebg_theme)
+    elif tname == 'fivethirtyeight':  # text sizes are way off the norm
+        theme.update(matplotlib.style.library['fivethirtyeight'])
+        theme.update({'legend.fontsize': 10, 'xtick.labelsize': 9,
+                      'ytick.labelsize': 9, 'axes.labelsize': 9,
+                      'axes.titlesize': 13})
+    elif tname.startswith('seaborn'):
+        theme.update(matplotlib.style.library['seaborn'])
+        if '-' in tname:
+            theme.update(matplotlib.style.library[tname])
     elif tname in matplotlib.style.library:
-        if tname.startswith('seaborn-'):
-            theme.update(matplotlib.style.library['seaborn'])
         theme.update(matplotlib.style.library[tname])
-        if tname == 'fivethirtyeight__test':  # text sizes are way off the norm
-            theme.update({'legend.fontsize': 10, 'xtick.labelsize': 9,
-                          'ytick.labelsize': 9, 'axes.labelsize': 9,
-                          'axes.titlesize': 13})
     Themes[tname.lower()] = theme
 
 def ifnot_none(val, default):

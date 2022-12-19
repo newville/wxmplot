@@ -3,19 +3,23 @@ import time
 import numpy as np
 import sys
 import wx
+from datetime import datetime
 from wx.lib import masked
 from floatcontrol import FloatCtrl
 from wxmplot import PlotPanel
+
 
 def next_data():
     "simulated data"
     t0 = time.time()
     lt = time.localtime(t0)
-    tmin, tsec = lt[4],lt[5]
+    dt0 = datetime.fromtimestamp(t0)
+
+    tmin, tsec = lt[4], lt[5]
     u = np.random.random()
     v = np.random.random()
     x = np.sin( (u + tsec)/3.0) + tmin/30. + v/5.0
-    return t0, x
+    return dt0, x
 
 class StripChartFrame(wx.Frame):
     def __init__(self, parent, ID, **kws):
@@ -108,7 +112,13 @@ class StripChartFrame(wx.Frame):
         t1, y1 = next_data()
         self.tlist.append(t1)
         self.ylist.append(y1)
-        tdat = np.array(self.tlist) - t1
+        if isinstance(t1, datetime):
+            t1 = t1.timestamp()
+            tdat = [dt.timestamp()for dt in self.tlist]
+        else:
+            tdat = [dt for dt in self.tlist]
+
+        tdat = np.array(tdat)-t1
         mask = np.where(tdat > -abs(self.tmin))
         ydat = np.array(self.ylist)
 

@@ -18,6 +18,7 @@ import sys
 import atexit
 
 import wx
+import wx.lib.mixins.inspection
 
 from . import inputhook
 from .plotframe import PlotFrame
@@ -55,8 +56,31 @@ def get_wxapp(redirect=False, clearSigInt=True):
     if wxapp is None:
         wxapp = wx.GetApp()
         if wxapp is None:
-            wxapp = wx.App(redirect=redirect, clearSigInt=clearSigInt)
+            wxapp = wxmplotApp(redirect=redirect, clearSigInt=clearSigInt)
     return wxapp
+
+class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
+    """wrapper for wx apps, with optional inspection
+
+    with_inspect (bool):            use wx inspection tool for debugging [False]
+
+    """
+    def __init__(self, with_inspect=False, **kws):
+        self.with_inspect = with_inspect
+        wx.App.__init__(self, **kws)
+
+    def OnInit(self):
+        self.createApp()
+        if self.with_inspect:
+            self.ShowInspectionTool()
+        return True
+
+    def createApp(self):
+        return True
+
+    def run(self):
+        self.MainLoop()
+
 
 @atexit.register
 def __wxmainloop__():

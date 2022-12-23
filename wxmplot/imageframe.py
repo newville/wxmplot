@@ -212,8 +212,14 @@ class ColorMapPanel(wx.Panel):
         if (hi-lo)<2:
             hi = min(hi, conf.cmap_range)
             lo = max(lo, 0)
-        self.cmap_lo.SetValue(float(lo))
-        self.cmap_hi.SetValue(float(hi))
+        try:
+            self.cmap_lo.SetValue(float(lo))
+        except TypeError:
+            self.cmap_lo.SetValue(lo)
+        try:
+            self.cmap_hi.SetValue(float(hi))
+        except TypeError:
+            self.cmap_hi.SetValue(hi)
         conf.cmap_lo[col] = lo
         conf.cmap_hi[col] = hi
         imin = float(self.imin_val.GetValue())

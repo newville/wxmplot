@@ -570,7 +570,7 @@ class ImagePanel(BasePanel):
             y, x = conf.scalebar_pos
             y, x = int(y), int(x)
             h, w = conf.scalebar_size
-            h, w = int(h), int(w/xstep)
+            h, w = h, w/xstep
             col =  conf.scalebar_color
 
             self.scalebar_rect = Rectangle((x, y), w, h,linewidth=1, edgecolor=col,

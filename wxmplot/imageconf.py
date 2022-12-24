@@ -1,5 +1,7 @@
 import wx
 import wx.lib.colourselect as csel
+import wx.lib.agw.flatnotebook as flat_nb
+import wx.lib.scrolledpanel as scrolled
 
 from math import log10
 
@@ -24,20 +26,29 @@ cm_names = register_custom_colormaps()
 
 ColorMap_List = []
 
-for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma', 'red',
-           'green', 'blue', 'magenta', 'yellow', 'cyan', 'Reds', 'Greens',
-           'Blues', 'cool', 'hot', 'copper', 'red_heat', 'green_heat',
-           'blue_heat', 'spring', 'summer', 'autumn', 'winter', 'ocean',
-           'terrain', 'jet', 'stdgamma', 'hsv', 'Accent', 'Spectral', 'PiYG',
-           'PRGn', 'Spectral', 'YlGn', 'YlGnBu', 'RdBu', 'RdPu', 'RdYlBu',
-           'RdYlGn'):
-
-    if cm in cm_names or hasattr(cmap, cm):
+for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
+           'cividis', 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
+           'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu', 'GnBu', 'PuBu',
+           'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn' 'PiYG', 'PRGn', 'RdBu', 'RdPu',
+           'RdYlBu', 'RdYlGn', 'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
+           'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic',
+           'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
+           'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia', 'hot',
+           'afmhot', 'gist_heat', 'copper', 'red', 'green', 'blue', 'magenta',
+           'yellow', 'cyan', 'red_heat', 'green_heat', 'blue_heat', 'ocean',
+           'terrain', 'jet', 'stdgamma', 'hsv', 'twilight', 'twilight_shifted',
+           'Accent', 'Spectral', 'Pastel1', 'Pastel2', 'Paired', 'Accent',
+           'Dark2', 'Set1', 'Set2', 'Set3', 'tab10', 'tab20', 'tab20b',
+           'tab20c', 'flag', 'prism', 'ocean', 'gist_earth', 'terrain',
+           'gist_stern', 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
+           'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
+           'gist_ncar' ):
+    if cm in cm_names or hasattr(cmap, cm) and cm not in ColorMap_List:
         ColorMap_List.append(cm)
 
 
-Contrast_List = ['None', '0.01', '0.02', '0.05', '0.1', '0.2', '0.5', '1.0',
-                 '2.0', '5.0']
+Contrast_List = ['None', '0.001', '0.002', '0.005', '0.01', '0.02', '0.05',
+                 '0.1', '0.2', '0.5', '1.0', '2.0', '5.0', '10.0']
 
 Contrast_NDArray = np.array((-1.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1., 2, 5.))
 
@@ -48,6 +59,9 @@ Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
 Slices_List = ('None', 'X', 'Y')
 
 RGB_COLORS = ('red', 'green', 'blue')
+
+labstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
+FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):
@@ -60,7 +74,7 @@ class ImageConfig:
         self.show_axis = False
         self.show_grid = False
         self.grid_color = '#807030'
-        self.grid_alpha = 0.25
+        self.grid_alpha = 0.5
         self.log_scale = False
         self.flip_ud = False
         self.flip_lr = False
@@ -353,7 +367,7 @@ class ImageConfig:
             out[attr] = getattr(self, attr)
         return out
 
-labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
+
 
 class ImageConfigFrame(wx.Frame):
     """ GUI Configure Frame for Images"""
@@ -406,100 +420,112 @@ class ImageConfigFrame(wx.Frame):
             conf = yaml.safe_load(open(os.path.abspath(dlg.GetPath()), 'r').read())
             self.conf.load_config(conf)
 
-    def DrawPanel(self):
-        style = wx.DEFAULT_FRAME_STYLE
-        wx.Frame.__init__(self, self.parent, -1, 'Configure Image', style=style)
+    def begin_subpanel(self, parent, font=None):
+        panel = scrolled.ScrolledPanel(parent, size=(550, 450),
+                                       style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
+        if font is None:
+            font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
 
-        conf = self.conf
-
-        self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False))
-        self.SetBackgroundColour(hex2rgb('#FEFEFE'))
-
+        panel.SetFont(font)
         sizer = wx.GridBagSizer(2, 2)
-        irow = 0
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
+        return panel, sizer
 
+    def finish_subpanel(self, panel, sizer):
+        autopack(panel, sizer)
+        panel.SetupScrolling()
+        return panel
+
+
+    def make_contour_panel(self, parent, font=None):
+        panel, sizer = self.begin_subpanel(parent, font=font)
 
         # contours
-        ctitle = SimpleText(self, 'Contours:', colour='#DD0000')
-        label = SimpleText(self,  "# Levels:")
+        label = SimpleText(panel,  "# Levels:")
 
-        self.ncontours = FloatSpin(self, value=conf.ncontour_levels,
-                                     min_val=0, max_val=5000,
-                                     increment=1, digits=0, size=(60, -1),
-                                     action=self.onContourEvents)
+        self.ncontours = FloatSpin(panel, value=self.conf.ncontour_levels,
+                                   min_val=0, max_val=5000,
+                                   increment=1, digits=0, size=(60, -1),
+                                   action=self.onContourEvents)
 
-        self.showlabels = Check(self, label='Show Labels?',
-                                default=conf.contour_labels,
+        self.showlabels = Check(panel, label='Show Contour Labels?',
+                                default=self.conf.contour_labels,
                                 action=self.onContourEvents)
 
-        sizer.Add(ctitle,          (irow, 0), (1, 2), labstyle, 2)
-        irow += 1
+        irow = 0
         sizer.Add(label,           (irow, 0), (1, 1), labstyle, 2)
         sizer.Add(self.ncontours,  (irow, 1), (1, 1), labstyle, 2)
-        sizer.Add(self.showlabels, (irow, 2), (1, 1), labstyle, 2)
         irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+        sizer.Add(self.showlabels, (irow, 0), (1, 2), labstyle, 2)
+
+        return self.finish_subpanel(panel, sizer)
+
+
+    def make_grid_panel(self, parent, font=None):
+        panel, sizer = self.begin_subpanel(parent, font=font)
 
         # Grid
-        title = SimpleText(self, 'Image Grid:', colour='#DD0000')
-        label_gcolor = SimpleText(self, "Color:")
-        label_galpha = SimpleText(self, "Alpha:")
-        self.show_grid = Check(self, label='Show Grid with Labeled Axes?',
-                               default=conf.show_grid,
+        label_gcolor = SimpleText(panel, "Color:")
+        label_galpha = SimpleText(panel, "Alpha:")
+        self.show_grid = Check(panel, label='Show Grid with Labeled Axes?',
+                               default=self.conf.show_grid,
                                action=self.onGridEvents)
 
-        self.grid_alpha = FloatSpin(self, value=conf.grid_alpha,
-                                     min_val=0, max_val=1,
-                                     increment=0.05, digits=3, size=(130, -1),
-                                     action=self.onGridEvents)
-        self.grid_color = csel.ColourSelect(self,  -1, "",
-                                            mpl_color(conf.grid_color),
+        self.grid_alpha = FloatSpin(panel, value=self.conf.grid_alpha,
+                                    min_val=0, max_val=1,
+                                    increment=0.05, digits=3, size=(130, -1),
+                                    action=self.onGridEvents)
+
+        self.grid_color = csel.ColourSelect(panel,  -1, "",
+                                            mpl_color(self.conf.grid_color),
                                             size=(50, -1))
         self.grid_color.Bind(csel.EVT_COLOURSELECT, self.onGridEvents)
 
-        irow += 1
-        sizer.Add(title,          (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.show_grid, (irow, 1), (1, 1), labstyle, 2)
+        irow = 0
+        sizer.Add(self.show_grid, (irow, 0), (1, 2), labstyle, 2)
         irow += 1
         sizer.Add(label_gcolor,     (irow, 0), (1, 1), labstyle, 2)
         sizer.Add(self.grid_color,  (irow, 1), (1, 1), labstyle, 2)
-        sizer.Add(label_galpha,     (irow, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.grid_alpha,  (irow, 3), (1, 1), labstyle, 2)
-
         irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+        sizer.Add(label_galpha,     (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.grid_alpha,  (irow, 1), (1, 1), labstyle, 2)
 
+        return self.finish_subpanel(panel, sizer)
+
+    def make_slice_panel(self, parent, font=None):
+        panel, sizer = self.begin_subpanel(parent, font=font)
 
         # X/Y Slices
-        title =  SimpleText(self, 'X/Y Slices:', colour='#DD0000')
-        label_dir = SimpleText(self, "Direction:")
-        label_wid = SimpleText(self, "Width (pixels):")
-        self.slice_width = FloatSpin(self, value=conf.slice_width,
+
+        label_dir = SimpleText(panel, "Direction:")
+        label_wid = SimpleText(panel, "Width (pixels):")
+        self.slice_width = FloatSpin(panel, value=self.conf.slice_width,
                                      min_val=0, max_val=5000,
                                      increment=1, digits=0, size=(60, -1),
                                      action=self.onSliceEvents)
-        self.slice_dir =  Choice(self, size=(90, -1),
+        self.slice_dir =  Choice(panel, size=(90, -1),
                                  choices=Slices_List,
                                  action=self.onSliceEvents)
-        self.slice_dir.SetStringSelection(conf.slices)
+        self.slice_dir.SetStringSelection(self.conf.slices)
 
-        self.slice_dynamic = Check(self,label='Slices Follow Mouse Motion?',
-                                   default=conf.slice_onmotion,
+        self.slice_dynamic = Check(panel,label='Slices Follow Mouse Motion?',
+                                   default=self.conf.slice_onmotion,
                                    action=self.onSliceEvents)
-        irow += 1
-        sizer.Add(title,            (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_dynamic, (irow, 1), (1, 2), labstyle, 2)
+        irow = 0
+        sizer.Add(self.slice_dynamic, (irow, 0), (1, 2), labstyle, 2)
         irow += 1
         sizer.Add(label_dir,        (irow, 0), (1, 1), labstyle, 2)
         sizer.Add(self.slice_dir,   (irow, 1), (1, 1), labstyle, 2)
-        sizer.Add(label_wid,        (irow, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.slice_width, (irow, 3), (1, 1), labstyle, 2)
-
         irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+        sizer.Add(label_wid,        (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.slice_width, (irow, 1), (1, 1), labstyle, 2)
+
+        return self.finish_subpanel(panel, sizer)
+
+    def make_scalebar_panel(self, parent, font=None):
+        panel, sizer = self.begin_subpanel(parent, font=font)
 
         # Scalebar
+        conf = self.conf
         ypos, xpos = conf.scalebar_pos
         tyoff, txoff = conf.scalebar_textoffset
         ysiz, xsiz = conf.scalebar_size
@@ -509,56 +535,55 @@ class ImageConfigFrame(wx.Frame):
         if xstep is None or ystep is None:
             ystep, xstep = 1, 1
             if conf.xdata is not None:
-                xstep = abs(np.diff(conf.xdata).mean())
+                xstep = abs(np.diff(self.conf.xdata).mean())
             if conf.ydata is not None:
-                ystep = abs(np.diff(conf.ydata).mean())
+                ystep = abs(np.diff(self.conf.ydata).mean())
             conf.scalebar_pixelsize = ystep, xstep
-
-        title =  SimpleText(self, 'Scalebar:', colour='#DD0000')
 
 
         lab_opts = dict(size=(120, -1))
-        color_label = SimpleText(self, 'Color: ')
-        xpos_label = SimpleText(self, 'X Position: ')
-        ypos_label = SimpleText(self, 'Y Position: ')
-        size_label = SimpleText(self, 'Scalebar Size: ')
-        pos_label = SimpleText(self, 'Scalebar Position (pixels from lower left):')
-        toff_label = SimpleText(self, 'Scalebar Label Position (pixels from scalebar):')
-        xoff_label = SimpleText(self, 'X Offset: ')
-        yoff_label = SimpleText(self, 'Y Offset: ')
+        color_label = SimpleText(panel, 'Color: ')
+        xpos_label = SimpleText(panel, 'X Position: ')
+        ypos_label = SimpleText(panel, 'Y Position: ')
+        size_label = SimpleText(panel, 'Scalebar Size: ')
+        pos_label = SimpleText(panel, 'Scalebar Position (pixels from lower left):')
+        toff_label = SimpleText(panel, 'Label Position (pixels from scalebar):')
+        xoff_label = SimpleText(panel, 'X Offset: ')
+        yoff_label = SimpleText(panel, 'Y Offset: ')
 
-        width_label = SimpleText(self, 'Width (%s): ' % units)
-        height_label = SimpleText(self, 'Height (pixels): ')
-        pixsize_label = SimpleText(self, 'Pixel Size: ')
-        xpix_label = SimpleText(self, 'X pixelsize: ')
-        ypix_label = SimpleText(self, 'Y pixelsize: ')
+        width_label = SimpleText(panel, 'Width (%s): ' % units)
+        self.width_label = width_label
+        height_label = SimpleText(panel, 'Height (pixels): ')
+        pixsize_label = SimpleText(panel, 'Pixel Size: ')
+        xpix_label = SimpleText(panel, 'X pixelsize: ')
+        ypix_label = SimpleText(panel, 'Y pixelsize: ')
 
 
-        self.pixunits = LabeledTextCtrl(self, value=conf.scalebar_units,
+        self.pixunits = LabeledTextCtrl(panel, value=self.conf.scalebar_units,
                                         size=(80, -1),
-                                        labeltext='Units:',
+                                        labeltext=' Units:',
                                         action=self.onScalebarEvents)
 
-        self.show_scalebar = Check(self, label='Show Scalebar',
-                                   default=conf.scalebar_show,
+        self.show_scalebar = Check(panel, label='Show Scalebar',
+                                   default=self.conf.scalebar_show,
                                    action=self.onScalebarEvents)
 
-        self.show_label = Check(self, label='Show Label?',
-                                default=conf.scalebar_showlabel,
+        self.show_label = Check(panel, label='Show Label?',
+                                default=self.conf.scalebar_showlabel,
                                 action=self.onScalebarEvents)
 
 
         stext = "Image Size: X=%d, Y=%d pixels" % (dshape[1], dshape[0])
 
-        scale_text = SimpleText(self, label=stext)
+        scale_text = SimpleText(panel, label=stext)
 
-        self.label  = LabeledTextCtrl(self, value=conf.scalebar_label,
+        self.label  = LabeledTextCtrl(panel, value=self.conf.scalebar_label,
                                       size=(150, -1),
                                       labeltext='Label:',
                                       action=self.onScalebarEvents)
 
-        self.color = csel.ColourSelect(self,  -1, "",
-                                       mpl_color(conf.scalebar_color),
+        self.color = csel.ColourSelect(panel,  -1, "",
+                                       mpl_color(self.conf.scalebar_color),
                                        size=(50, -1))
         self.color.Bind(csel.EVT_COLOURSELECT, self.onScalebarEvents)
 
@@ -567,33 +592,39 @@ class ImageConfigFrame(wx.Frame):
         opts = dict(increment=1, digits=0, size=(100, -1),
                     action=self.onScalebarEvents)
 
-        self.xpos = FloatSpin(self,  value=xpos, max_val=dshape[1],
+        self.xpos = FloatSpin(panel,  value=xpos, max_val=dshape[1],
                               min_val=0, **opts)
-        self.ypos = FloatSpin(self,  value=ypos, max_val=dshape[0],
+        self.ypos = FloatSpin(panel,  value=ypos, max_val=dshape[0],
                               min_val=0, **opts)
-        self.height = FloatSpin(self, value=ysiz, max_val=dshape[0],
-                                min_val=0, **opts)
 
-        self.txoff = FloatSpin(self,  value=txoff, max_val=dshape[1],
+        self.txoff = FloatSpin(panel,  value=txoff, max_val=dshape[1],
                                min_val=-dshape[1], **opts)
-        self.tyoff = FloatSpin(self,  value=tyoff, max_val=dshape[0],
+        self.tyoff = FloatSpin(panel,  value=tyoff, max_val=dshape[0],
                                min_val=-dshape[0], **opts)
+
+        opts['increment'] = 0.5
+        opts['digits'] = 1
+        self.height = FloatSpin(panel, value=ysiz, max_val=dshape[0],
+                                min_val=0, **opts)
 
 
         opts['increment'] = xstep
         opts['digits'] = max(1, 2 - int(np.log10(abs(xstep))))
-        self.width = FloatSpin(self, value=xsiz, max_val=dshape[1]*xstep, **opts)
+        self.width = FloatSpin(panel, value=xsiz, max_val=dshape[1]*xstep, **opts)
 
         opts['increment'] = 0.001
         opts['digits'] = 5
-        self.xpix = FloatSpin(self, value=xstep, **opts)
-        self.ypix = FloatSpin(self, value=ystep, **opts)
+        self.xpix = FloatSpin(panel, value=xstep, **opts)
+        self.ypix = FloatSpin(panel, value=ystep, **opts)
 
+
+        irow = 0
+        sizer.Add(scale_text,      (irow, 0), (1, 4), labstyle, 2)
 
         irow += 1
-        sizer.Add(title,           (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(scale_text,      (irow, 1), (1, 4), labstyle, 2)
-
+        sizer.Add(self.show_scalebar,  (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(color_label,     (irow, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.color,      (irow, 3), (1, 1), labstyle, 2)
 
         irow += 1
         sizer.Add(pixsize_label,       (irow, 0), (1, 1), labstyle, 2)
@@ -607,9 +638,9 @@ class ImageConfigFrame(wx.Frame):
         sizer.Add(self.ypix,       (irow, 3), (1, 1), labstyle, 2)
 
         irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
-        irow += 1
+        sizer.Add(HLine(panel, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
 
+        irow += 1
         sizer.Add(size_label,       (irow, 0), (1, 3), labstyle, 2)
 
         irow += 1
@@ -618,8 +649,6 @@ class ImageConfigFrame(wx.Frame):
         sizer.Add(height_label,    (irow, 2), (1, 1), labstyle, 2)
         sizer.Add(self.height,     (irow, 3), (1, 1), labstyle, 2)
 
-        irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
 
         irow += 1
         sizer.Add(pos_label,     (irow, 0), (1, 3), labstyle, 2)
@@ -630,15 +659,13 @@ class ImageConfigFrame(wx.Frame):
         sizer.Add(ypos_label,   (irow, 2), (1, 1), labstyle, 2)
         sizer.Add(self.ypos,    (irow, 3), (1, 1), labstyle, 2)
 
+        irow += 1
+        sizer.Add(HLine(panel, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
 
         irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
-
-        irow += 1
-        sizer.Add(self.label.label,      (irow, 0), (1, 1), labstyle, 2)
-        sizer.Add(self.label,       (irow, 1), (1, 1), labstyle, 2)
-        sizer.Add(color_label,     (irow, 2), (1, 1), labstyle, 2)
-        sizer.Add(self.color,      (irow, 3), (1, 1), labstyle, 2)
+        sizer.Add(self.show_label,  (irow, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.label.label, (irow, 1), (1, 1), labstyle, 2)
+        sizer.Add(self.label,       (irow, 2), (1, 3), labstyle, 2)
 
         irow += 1
         sizer.Add(toff_label,   (irow, 0), (1, 3), labstyle, 2)
@@ -649,13 +676,39 @@ class ImageConfigFrame(wx.Frame):
         sizer.Add(yoff_label,   (irow, 2), (1, 1), labstyle, 2)
         sizer.Add(self.tyoff,   (irow, 3), (1, 1), labstyle, 2)
 
-        irow += 1
-        sizer.Add(self.show_scalebar,  (irow, 1), (1, 1), labstyle, 2)
-        sizer.Add(self.show_label,  (irow, 2), (1, 2), labstyle, 2)
 
-        irow += 1
-        sizer.Add(HLine(self, size=(500, -1)), (irow, 0), (1, 4), labstyle, 2)
+        return self.finish_subpanel(panel, sizer)
 
+    def DrawPanel(self):
+        style = wx.DEFAULT_FRAME_STYLE
+        wx.Frame.__init__(self, self.parent, -1, 'Configure Image', style=style)
+        bgcol = hex2rgb('#FEFEFE')
+
+        font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
+        self.SetFont(font)
+        self.SetBackgroundColour(hex2rgb('#FEFEFE'))
+
+        self.nb = flat_nb.FlatNotebook(self, wx.ID_ANY, agwStyle=FNB_STYLE)
+
+        self.nb.SetActiveTabColour((253, 253, 230))
+        self.nb.SetTabAreaColour((bgcol[0]-8, bgcol[1]-8, bgcol[2]-8))
+        self.nb.SetNonActiveTabTextColour((10, 10, 100))
+        self.nb.SetActiveTabTextColour((100, 10, 10))
+
+        self.nb.AddPage(self.make_contour_panel(parent=self.nb, font=font),
+                        'Contours', True)
+
+        self.nb.AddPage(self.make_grid_panel(parent=self.nb, font=font),
+                        'Grid Overlay', True)
+
+        self.nb.AddPage(self.make_slice_panel(parent=self.nb, font=font),
+                        'X/Y Slices', True)
+
+        self.nb.AddPage(self.make_scalebar_panel(parent=self.nb, font=font),
+                        'Scalebar', True)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.nb, 1, wx.GROW|wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND, 3)
         autopack(self, sizer)
 
         self.SetMinSize((500, 350))
@@ -692,5 +745,8 @@ class ImageConfigFrame(wx.Frame):
 
         self.conf.scalebar_color = col = hexcolor(self.color.GetValue()[:3])
         self.conf.scalebar_units  = self.pixunits.GetValue()
+
+        self.width_label.SetLabel('Width (%s): ' % self.conf.scalebar_units)
+
         self.conf.scalebar_pixelsize =  self.ypix.GetValue(), self.xpix.GetValue()
         self.parent.panel.redraw()

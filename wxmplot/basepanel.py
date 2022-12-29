@@ -320,22 +320,26 @@ class BasePanel(wx.Panel):
         span = self.axes.xaxis.get_view_interval()
         tmin = max(1.0, span[0])
         tmax = max(2.0, span[1])
-        tmin = time.mktime(dates.num2date(tmin).timetuple())
-        tmax = time.mktime(dates.num2date(tmax).timetuple())
-        nhours = (tmax - tmin)/3600.0
-        fmt = "%m/%d"
+        tmin = dates.num2date(tmin).timestamp()
+        tmax = dates.num2date(tmax).timestamp()
+        nsec = (tmax - tmin)
+        fmt = "%H:%M\n%S"
         frac = None
-        if nhours < (1./30):
+        if nsec < 0.5:
+            frac = "%.6f"
             fmt = "%H:%M\n%S"
+        elif nsec <  5:
             frac = "%.3f"
-            if nhours < 1.e-4:
-                frac = "%.6f"
-        elif nhours < 0.1:
+            fmt = "%H:%M\n%S"
+        elif nsec < 60:
             fmt = "%l %p\n%M:%S"
-        elif nhours < 4:
+        elif nsec < 5*3600:
             fmt = "%m/%d\n%H:%M"
-        elif nhours < 24*8:
+        elif nsec < 24*8*3600:
             fmt = "%m/%d\n%H:%M"
+        else:
+            fmt = "%m/%d"
+
         try:
             dtval = dates.num2date(x)
             out = dtval.strftime(fmt)

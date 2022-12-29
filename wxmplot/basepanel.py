@@ -336,7 +336,7 @@ class BasePanel(wx.Panel):
             fmt = "%m/%d\n%H:%M"
         elif nhours < 24*8:
             fmt = "%m/%d\n%H:%M"
-        if True:
+        try:
             dtval = dates.num2date(x)
             out = dtval.strftime(fmt)
             if frac is not None:

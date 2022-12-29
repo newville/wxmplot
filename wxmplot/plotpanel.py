@@ -11,7 +11,8 @@ import wx
 
 from numpy import nonzero, where
 import matplotlib as mpl
-from matplotlib import dates
+from matplotlib.dates import date2num, datestr2num, epoch2num
+
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -141,6 +142,7 @@ class PlotPanel(BasePanel):
             conf.xscale = {False:'linear', True:'log'}[xlog_scale]
 
         axes.xaxis.set_major_formatter(FuncFormatter(self.xformatter))
+
         self.dates_style = ifnot_none(dates_style, self.dates_style)
         self.use_dates = ifnot_none(use_dates, self.use_dates)
         if isinstance(xdata[0], datetime):
@@ -155,13 +157,15 @@ class PlotPanel(BasePanel):
             #        b) else: convert as unix timestamp to mpl dates
             x0 = xdata[0]
             dstyle = self.dates_style
-            if dstyle is None: dstyle = ''
+            if dstyle is None:
+                dstyle = ''
             if isinstance(x0, datetime):
-                xdata = dates.date2num(xdata)
+                xdata = date2num(xdata)
             elif isinstance(x0, str) or dstyle.lower().startswith('str'):
-                xdata = dates.datestr2num(xdata)
+                xdata = datestr2num(xdata)
             elif not dstyle.lower().startswith('dates'):
-                xdata = dates.epoch2num(xdata)
+                xdata = epoch2num(xdata)
+
         linewidth = ifnot_none(linewidth, 2)
         conf.viewpad = ifnot_none(viewpad, conf.viewpad)
 

@@ -127,7 +127,7 @@ class PlotConfigFrame(wx.Frame):
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour(bgcol)
 
-        font = wx.Font(12,wx.SWISS,wx.NORMAL,wx.NORMAL,False)
+        font = wx.Font(12, wx.SWISS, wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)

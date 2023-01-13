@@ -69,7 +69,10 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         self.user_menus = user_menus
         self.with_data_process = with_data_process
         self.size = size
-        self.panelkws = panelkws or {}
+        self.panelkws = {'dpi': dpi}
+        if panelkws is not None:
+            self.panelkw.update(panelkws)
+
         self.theme = theme
         if axisbg is not None:
             self.panelkws['axisbg'] = axisbg

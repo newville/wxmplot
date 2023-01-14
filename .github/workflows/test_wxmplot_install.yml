@@ -27,11 +27,15 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install conda and dependencies
       run: |
-        conda install numpy matplotlib pytest pip
+        conda install python=${{ matrix.python-version }} numpy matplotlib
         conda list
         conda install -y -c conda-forge wxpython
-        conda info
         conda list
+        conda install -y pip
+        conda list
+        conda install -y pytest
+        conda list
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

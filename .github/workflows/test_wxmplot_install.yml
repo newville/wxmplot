@@ -27,21 +27,16 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install conda and dependencies
       run: |
-        conda install python=${{ matrix.python-version }} numpy matplotlib
-        conda list
+        conda install python=${{ matrix.python-version }} numpy matplotlib pip pytest fonttools  pyparsing
         conda install -y -c conda-forge wxpython
         conda list
-        conda install -y pip
-        conda list
-        conda install -y pytest
-        conda list
 
-    - name: Install dependencies
+    - name: Install wxmplot with pip
       run: |
         python -m pip install --upgrade pip
-        pip install wxutils
+        pip install .
+
     - name: Test with pytest
       run: |
-        python setup.py install
         cd tests
         pytest

@@ -11,6 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 5
       fail-fast: false
       matrix:
         python-version: [3.7, 3.8, 3.9, "3.10"]
@@ -20,17 +21,20 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
+        miniconda-version: latest
         python-version: ${{ matrix.python-version }}
     - name: Add conda to system path
       run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install conda and dependencies
       run: |
+        conda update -n base -c defaults conda
+        conda config --set always_yes true --set changeps1 true
+        conda config --add channels conda-forge
         conda install python=${{ matrix.python-version }} numpy matplotlib pip pytest fonttools  pyparsing
-        conda install -y -c conda-forge wxpython
+        conda install wxpython
+        conda info -a
         conda list
-
     - name: Install wxmplot with pip
       run: |
         python -m pip install --upgrade pip

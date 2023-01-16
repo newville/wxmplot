@@ -29,8 +29,8 @@ jobs:
         conda update -n base -c defaults conda
         conda config --set always_yes true --set changeps1 true
         conda config --add channels conda-forge
-        conda install python=${{ matrix.python-version }} numpy matplotlib pip pytest
-        conda install wxpython
+        conda install python=${{ matrix.python-version }} numpy=>1.21 matplotlib=>3.5 pip pytest
+        conda install wxpython=>4.1
         conda info -a
         conda list
     - name: Install wxmplot with pip

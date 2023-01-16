@@ -194,12 +194,13 @@ try:
     capture_CtrlC()
 except:
     pass
+
 cback = CFUNCTYPE(c_int)(inputhook_wx)
 py_inphook = c_void_p.in_dll(pythonapi, 'PyOS_InputHook')
 py_inphook.value = cast(cback, c_void_p).value
 
 # import for Darwin!
-allow_idle()
+# allow_idle()
 
 def ping(timeout=0.001):
     "ping wx"

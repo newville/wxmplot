@@ -258,7 +258,7 @@ class TestFrame(wx.Frame):
             self.plotframe.update_line(0, self.x[:n], self.y1[:n], update_limits=True, draw=True)
             etime = time.time() - self.time0
             rate  = n / max(0.004, etime)
-            s = " %i / %i points in %8.2f s: %8.2f draws/sec" % (n,self.npts,etime, rate)
+            s = " %i / %i points in %8.2f sec: %8.2f draws/sec" % (n,self.npts,etime, rate)
 
             self.plotframe.write_message(s)
         if n >= self.npts:

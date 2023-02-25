@@ -11,7 +11,7 @@ import wx
 
 from numpy import nonzero, where
 import matplotlib as mpl
-from matplotlib.dates import date2num, datestr2num, epoch2num
+from matplotlib.dates import date2num, datestr2num
 
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -152,9 +152,7 @@ class PlotPanel(BasePanel):
             # date handling options to get xdate to mpl dates
             #   1. xdate are in datetime: convert to mpl dates
             #   2. xdata are strings: parse with datestr2num
-            #   3. xdata are floats:
-            #        a) dates_styles=='dates': use directly
-            #        b) else: convert as unix timestamp to mpl dates
+            #   3. xdata are floats: convert as unix timestamp to mpl dates
             x0 = xdata[0]
             dstyle = self.dates_style
             if dstyle is None:
@@ -163,8 +161,6 @@ class PlotPanel(BasePanel):
                 xdata = date2num(xdata)
             elif isinstance(x0, str) or dstyle.lower().startswith('str'):
                 xdata = datestr2num(xdata)
-            elif not dstyle.lower().startswith('dates'):
-                xdata = epoch2num(xdata)
 
         linewidth = ifnot_none(linewidth, 2)
         conf.viewpad = ifnot_none(viewpad, conf.viewpad)

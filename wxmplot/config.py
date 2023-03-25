@@ -159,8 +159,8 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
     elif tname.startswith('seaborn'):
         theme.update(matplotlib.style.library['seaborn-v0_8'])
         if '-' in tname:
-            tname = tname.replace('seaborn', 'seaborn-v0_8')
-            theme.update(matplotlib.style.library[tname])
+            sname = tname.replace('seaborn', 'seaborn-v0_8')
+            theme.update(matplotlib.style.library[sname])
     elif tname in matplotlib.style.library:
         theme.update(matplotlib.style.library[tname])
     Themes[tname.lower()] = theme

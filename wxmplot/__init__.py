@@ -30,6 +30,9 @@
 import sys
 import wx
 
+if sys.platform.lower() == 'darwin':
+    wx.PyApp.IsDisplayAvailable = lambda _: True
+
 from .version import version as __version__
 from .plotpanel import PlotPanel
 from .imagepanel import ImagePanel

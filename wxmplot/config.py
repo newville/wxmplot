@@ -157,8 +157,9 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
                       'ytick.labelsize': 9, 'axes.labelsize': 9,
                       'axes.titlesize': 13})
     elif tname.startswith('seaborn'):
-        theme.update(matplotlib.style.library['seaborn'])
+        theme.update(matplotlib.style.library['seaborn-v0_8'])
         if '-' in tname:
+            tname = tname.replace('seaborn', 'seaborn-v0_8')
             theme.update(matplotlib.style.library[tname])
     elif tname in matplotlib.style.library:
         theme.update(matplotlib.style.library[tname])

@@ -1,6 +1,6 @@
 name: Test Installing wxmplot, using mamba
 
-on: [push[
+on: [push]
 
 jobs:
   build:

@@ -745,9 +745,12 @@ class PlotConfig:
             self.axes_style = style
 
         try:
-            ax = self.canvas.figure.get_axes()[0]
+            axes = self.canvas.figure.get_axes()
+            ax = axes[0]
         except AttributeError:
             return
+
+
 
         for tline in (ax.xaxis.get_majorticklines() + ax.yaxis.get_majorticklines()):
             tline.set_color(rcParams['xtick.color'])
@@ -784,6 +787,10 @@ class PlotConfig:
             ax.spines['left'].set_visible(False)
             ax.spines['right'].set_visible(False)
 
+        # if 2 y-axes, don't draw ticks on right side for axes[0]
+        if len(axes) > 1:
+            axes[0].yaxis.set_tick_params(right=False)
+            axes[1].yaxis.set_tick_params(left=False)
 
         if not delay_draw:
             self.canvas.draw()

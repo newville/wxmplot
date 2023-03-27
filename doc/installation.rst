@@ -9,13 +9,13 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The current version of wxmplot is |release|, released in September, 2022.
+The current version of wxmplot is |release|, released in March, 2023.
 
-The wxmplot package requires Python3.7 or higher, wxPython 4.0.3 or higher,
-matplotlib 3.0 or higher, numpy 1.12 or higher, and Pillow 7.0 or higher.
+The wxmplot package requires Python 3.7 or higher, wxPython 4.1.0 or higher,
+matplotlib 3.5.0 or higher, numpy 1.18 or higher, and Pillow 7.0 or higher.
 All of these are readily available from `pip` or on `conda` channels.
 
-
+.
 Installation
 ~~~~~~~~~~~~~
 

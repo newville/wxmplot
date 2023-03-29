@@ -33,13 +33,9 @@ import matplotlib.style
 from cycler import cycler
 from .colors import hexcolor, mpl_color, mpl2hexcolor
 
-# use ordered dictionary to control order displayed in GUI dropdown lists
-from collections import OrderedDict
-# from collections.abc import Iterable
-
-StyleMap  = OrderedDict()
-DrawStyleMap  = OrderedDict()
-MarkerMap = OrderedDict()
+StyleMap  = {}
+DrawStyleMap  = {}
+MarkerMap = {}
 
 default_config = dict(viewpad=2.5, title='', xscale='linear',
                       yscale='linear', xlabel='', ylabel='', y2label='',
@@ -128,8 +124,7 @@ whitebg_theme = {'axes.facecolor': '#FFFFFF',
                'figure.facecolor': '#FFFFFF'}
 
 
-Themes = OrderedDict()
-
+Themes = {}
 
 for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
               'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
@@ -157,10 +152,14 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
                       'ytick.labelsize': 9, 'axes.labelsize': 9,
                       'axes.titlesize': 13})
     elif tname.startswith('seaborn'):
-        theme.update(matplotlib.style.library['seaborn-v0_8'])
-        if '-' in tname:
-            sname = tname.replace('seaborn', 'seaborn-v0_8')
-            theme.update(matplotlib.style.library[sname])
+        sthemes = ['seaborn', 'seaborn-v0_8']
+        sname = tname.replace('seaborn', 'seaborn-v0_8')
+        for xname in (tname, sname):
+            if xname not in sthemes:
+                sthemes.append(xname)
+        for xname in sthemes:
+            if xname in matplotlib.style.library:
+                theme.update(matplotlib.style.library[xname])
     elif tname in matplotlib.style.library:
         theme.update(matplotlib.style.library[tname])
     Themes[tname.lower()] = theme

@@ -18,6 +18,7 @@ from functools import partial
 from .utils import pack, MenuItem, Printer
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
+from .utils import gformat
 
 class StackedPlotFrame(BaseFrame):
     """
@@ -35,6 +36,69 @@ class StackedPlotFrame(BaseFrame):
         self.panel_bot = None
         self.xlabel = None
         self.BuildFrame()
+
+    def ExportTextFile(self, fname, title='uknown plot'):
+        "save plot data to external file"
+
+        buff = ["# Plot Data for %s" % title,
+                "#---------------------------------"]
+
+        out = []
+        labels = []
+        itrace = 0
+        for ax in self.panel.fig.get_axes():
+            for line in ax.lines:
+                itrace += 1
+                x = line.get_xdata()
+                y = line.get_ydata()
+                ylab = line.get_label()
+
+                if len(ylab) < 1:
+                    ylab = 'Y%i' % itrace
+                for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+                    ylab = ylab.replace(c, '_')
+                xlab = (' X%d' % itrace + ' '*3)[:4]
+                ylab = ' '*(18-len(ylab)) + ylab + '  '
+                out.extend([x, y])
+                labels.extend([xlab, ylab])
+
+        for ax in self.panel_bot.fig.get_axes():
+            for line in ax.lines:
+                itrace += 1
+                x = line.get_xdata()
+                y = line.get_ydata()
+                ylab = line.get_label()
+
+                if len(ylab) < 1:
+                    ylab = 'Y%i' % itrace
+                for c in ' .:";|/\\(){}[]\'&^%*$+=-?!@#':
+                    ylab = ylab.replace(c, '_')
+                xlab = (' X%d' % itrace + ' '*3)[:4]
+                ylab = ' '*(18-len(ylab)) + ylab + '  '
+                out.extend([x, y])
+                labels.extend([xlab, ylab])
+
+        if itrace == 0:
+            return
+
+        buff.append('# %s' % (' '.join(labels)))
+
+        npts = [len(a) for a in out]
+        for i in range(max(npts)):
+            oline = []
+            for a in out:
+                d = np.nan
+                if i < len(a):
+                    d = a[i]
+                oline.append(gformat(d, 12))
+            buff.append(' '.join(oline))
+
+        buff.append('')
+        with open(fname, 'w') as fout:
+            fout.write("\n".join(buff))
+        fout.close()
+        self.write_message("Exported data to '%s'" % fname, panel=0)
+
 
     def get_panel(self, panelname):
         if panelname.lower().startswith('bot'):

@@ -10,8 +10,8 @@
    data and customizing the plots and displays.  wxmplot panels are more
    interactive than typical displayss from matplotlib's pyplot module.
 
-   version: 0.9.49
-   last update: 2022-Mar-20
+   version: 0.9.56
+   last update: 2023-Jul-02
    License:  MIT
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
@@ -30,9 +30,6 @@
 import sys
 import wx
 
-if sys.platform.lower() == 'darwin':
-    wx.PyApp.IsDisplayAvailable = lambda _: True
-
 from .version import version as __version__
 from .plotpanel import PlotPanel
 from .imagepanel import ImagePanel
@@ -40,10 +37,12 @@ from .imagepanel import ImagePanel
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 
-
 from .imageframe import ImageFrame
 from .multiframe import MultiPlotFrame
 from .stackedplotframe import StackedPlotFrame
 from .residualplotframe import ResidualPlotFrame
 from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp
+
+if sys.platform.lower() == 'darwin':
+    wx.PyApp.IsDisplayAvailable = lambda _: True

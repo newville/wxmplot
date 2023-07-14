@@ -89,7 +89,10 @@ def __wxmainloop__():
     Note that this should not be necessary to run explicitly,
     as it is registered to run when Python exits
     """
-    get_wxapp().MainLoop()
+    try:
+        get_wxapp().MainLoop()
+    except SystemExit:
+        pass
 
 
 def set_theme(theme):

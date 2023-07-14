@@ -24,7 +24,7 @@ pframe = StackedPlotFrame(title='Stacked Example', ratio=3.000)
 pframe.plot(x, y2, label='data(fake)', ylabel='signal', xlabel='x', title='some fit')
 
 pframe.oplot(x, y1, label='simple theory', show_legend=True)
-pframe.plot(x, noise, panel='bottom', ylabel='residual')
+pframe.plot(x, noise, panel='bottom', label='residual', ylabel='residual')
 
 
 pframe.Show()

@@ -151,10 +151,15 @@ def gformat(val, length=11):
      Positive values will have leading blank.
 
     """
+    if val is None or isinstance(val, bool):
+        return f'{repr(val):>{length}s}'
     try:
         expon = int(log10(abs(val)))
     except (OverflowError, ValueError):
         expon = 0
+    except TypeError:
+        return f'{repr(val):>{length}s}'
+
     length = max(length, 7)
     form = 'e'
     prec = length - 7
@@ -166,8 +171,7 @@ def gformat(val, length=11):
         prec += 4
         if expon > 0:
             prec -= expon
-    fmt = '{0: %i.%i%s}' % (length, prec, form)
-    return fmt.format(val)
+    return f'{val:{length}.{prec}{form}}'
 
 
 class LabeledTextCtrl(wx.TextCtrl):

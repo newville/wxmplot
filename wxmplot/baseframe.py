@@ -1,17 +1,15 @@
 #!/usr/bin/python
-##
-## wxmplot PlotFrame: a wx.Frame for line plotting, using matplotlib
-##
+"""
+wxmplot PlotFrame: a wx.Frame for line plotting, using matplotlib
+"""
 
-from . import __version__
 import os
-import time
-import wx
-import matplotlib
 from functools import partial
 
+import wx
 from wxutils import get_cwd
 
+from . import __version__
 from .plotpanel import PlotPanel
 from .utils import MenuItem, fix_filename
 
@@ -91,26 +89,26 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         if self.panel is not None:
             self.panel.clear()
 
-    def unzoom_all(self,event=None):
+    def unzoom_all(self, event=None):
         """zoom out full data range """
         if self.panel is not None:
             self.panel.unzoom_all(event=event)
 
-    def unzoom(self,event=None):
+    def unzoom(self, event=None):
         """zoom out 1 level, or to full data range """
         if self.panel is not None: self.panel.unzoom(event=event)
 
-    def set_title(self,s):
+    def set_title(self, s):
         "set plot title"
         if self.panel is not None:
             self.panel.set_title(s)
 
-    def set_xlabel(self,s):
+    def set_xlabel(self, s):
         "set plot xlabel"
         if self.panel is not None: self.panel.set_xlabel(s)
         self.panel.canvas.draw()
 
-    def set_ylabel(self,s):
+    def set_ylabel(self, s):
         "set plot xlabel"
         if self.panel is not None: self.panel.set_ylabel(s)
         self.panel.canvas.draw()
@@ -283,7 +281,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
         mbar.Append(mhelp, '&Help')
 
         self.SetMenuBar(mbar)
-        self.Bind(wx.EVT_CLOSE,self.onExit)
+        self.Bind(wx.EVT_CLOSE, self.onExit)
 
     def BindMenuToPanel(self, panel=None):
         pass

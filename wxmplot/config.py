@@ -624,18 +624,28 @@ class PlotConfig:
         def del_collection(thisfill):
             for i, coll in enumerate(axes.collections):
                 if id(thisfill) == id(coll):
-                    del axes.collections[i]
+                    try:
+                        axes.collections[i].remove()
+                    except:
+                        pass
 
         if not fill:
             self.traces[trace].fill = False
             if cur_fill is not None:
                 del_collection(cur_fill)
-                del cur_fill
+                try:
+                    del cur_fill
+                except:
+                    pass
                 self.fills[trace] = None
         else:
             if cur_fill is not None:
                 del_collection(cur_fill)
-                del cur_fill
+                try:
+                    del cur_fill
+                except:
+                    pass
+
 
             self.traces[trace].fill = True
             atrace = self.traces[trace]

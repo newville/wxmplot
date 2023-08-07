@@ -19,8 +19,8 @@ from .colors import hexcolor, hex2rgb, mpl_color
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
-ISPINSIZE = 65
-FSPINSIZE = 65
+ISPINSIZE = 60
+FSPINSIZE = 80
 
 def autopack(panel, sizer):
     panel.SetAutoLayout(True)
@@ -155,8 +155,8 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(self.nb, 1, wx.GROW|sty, 3)
         autopack(panel, sizer)
-        self.SetMinSize((875, 250))
-        self.SetSize((975, 450))
+        self.SetMinSize((750, 250))
+        self.SetSize((1050, 475))
         self.Show()
         self.Raise()
 
@@ -219,7 +219,7 @@ class PlotConfigFrame(wx.Frame):
             if user_lims[2] is not None: y2b0 = user_lims[2]
             if user_lims[3] is not None: y2b1 = user_lims[3]
 
-        opts = dict(size=(100, -1), labeltext='', action=self.onBounds)
+        opts = dict(size=(125, -1), labeltext='', action=self.onBounds)
 
         self.xbounds  = [LabeledTextCtrl(panel,value=ffmt(xb0), **opts),
                          LabeledTextCtrl(panel,value=ffmt(xb1), **opts)]
@@ -314,7 +314,7 @@ class PlotConfigFrame(wx.Frame):
         slab = wx.StaticText(panel, -1, 'Symbol Size:', size=(-1,-1),style=labstyle)
 
         ssize = FloatSpin(panel, value=self.conf.scatter_size,
-                          size=(ISPINSIZE, -1), min_val=1, max_val=500,
+                          size=(FSPINSIZE, -1), min_val=1, max_val=500,
                           action=partial(self.onScatter, item='size'))
 
         sizer.Add(slab,  (0, 0), (1,1), labstyle, 5)
@@ -380,16 +380,16 @@ class PlotConfigFrame(wx.Frame):
 
         self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
                                     action = partial(self.onText, item='title'),
-                                    labeltext='Title: ', size=(400, -1))
+                                    labeltext='Title: ', size=(475, -1))
         self.ylab = LabeledTextCtrl(panel, self.conf.ylabel.replace('\n', '\\n'),
                                     action = partial(self.onText, item='ylabel'),
-                                    labeltext='Y Label: ', size=(400, -1))
+                                    labeltext='Y Label: ', size=(475, -1))
         self.y2lab= LabeledTextCtrl(panel, self.conf.y2label.replace('\n', '\\n'),
                                     action = partial(self.onText, item='y2label'),
-                                    labeltext='Y2 Label: ', size=(400, -1))
+                                    labeltext='Y2 Label: ', size=(475, -1))
         self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
                                     action = partial(self.onText, item='xlabel'),
-                                    labeltext='X Label: ', size=(400, -1))
+                                    labeltext='X Label: ', size=(475, -1))
 
         sizer.Add(self.titl.label,  (0, 0), (1, 1), labstyle)
         sizer.Add(self.titl,        (0, 1), (1, 4), labstyle)
@@ -527,10 +527,10 @@ class PlotConfigFrame(wx.Frame):
         tsizer.Add(wx.StaticText(panel, -1, ' Theme: '), 0, labstyle, 3)
         tsizer.Add(themechoice,  1, labstyle, 3)
         tsizer.Add(wx.StaticText(panel, -1, ' Colors: '), 0, labstyle, 3)
-        tsizer.Add(textcol,   0, labstyle, 3)
-        tsizer.Add(gridcol,   0, labstyle, 3)
-        tsizer.Add(bgcol,     0, labstyle, 3)
-        tsizer.Add(fbgcol ,   0, labstyle, 3)
+        tsizer.Add(textcol,   0, labstyle, 5)
+        tsizer.Add(gridcol,   0, labstyle, 5)
+        tsizer.Add(bgcol,     0, labstyle, 5)
+        tsizer.Add(fbgcol ,   0, labstyle, 5)
         sizer.Add(tsizer,    (1, 0), (1, 9), labstyle, 3)
 
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -559,9 +559,7 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(tsizer,    (3, 0), (1, 9), labstyle, 3)
 
-        sizer.Add(wx.StaticText(panel, -1, 'Thing 1'), (4, 0), (1, 9), labstyle, 3)
-
-        irow = 5
+        irow = 4
 
         for t in ('#','Label','Color', 'Alpha', 'Fill', 'Line Style',
                   'Thickness', 'Symbol',
@@ -573,7 +571,7 @@ class PlotConfigFrame(wx.Frame):
         self.trace_labels = []
         self.choice_linewidths = []
         self.choice_markersizes = []
-        ntrace_display = min(cnf.ntrace+2, len(cnf.traces))
+        ntrace_display = min(cnf.ntrace+3, len(cnf.traces))
         for i in range(ntrace_display):
             irow += 1
             label  = "trace %i" % i
@@ -597,12 +595,12 @@ class PlotConfigFrame(wx.Frame):
 
             self.colwids[i] = col
 
-            thk = FloatSpin(panel, size=(FSPINSIZE, -1), value=dthk,
+            thk = FloatSpin(panel, size=(ISPINSIZE, -1), value=dthk,
                             min_val=0, max_val=20, increment=0.5, digits=1,
                             action=partial(self.onThickness, trace=i))
             self.choice_linewidths.append(thk)
 
-            sty = Choice(panel, choices=cnf.styles, size=(100,-1),
+            sty = Choice(panel, choices=cnf.styles, size=(150,-1),
                          action=partial(self.onStyle,trace=i))
             sty.SetStringSelection(dsty)
 
@@ -610,16 +608,16 @@ class PlotConfigFrame(wx.Frame):
                             min_val=0, max_val=30, increment=0.5, digits=1,
                             action=partial(self.onMarkerSize, trace=i))
             self.choice_markersizes.append(msz)
-            zor = FloatSpin(panel, size=(FSPINSIZE, -1), value=dzord,
+            zor = FloatSpin(panel, size=(ISPINSIZE, -1), value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0,
                             action=partial(self.onZorder, trace=i))
 
-            sym = Choice(panel, choices=cnf.symbols, size=(120,-1),
+            sym = Choice(panel, choices=cnf.symbols, size=(125,-1),
                          action=partial(self.onSymbol,trace=i))
 
             sym.SetStringSelection(dsym)
 
-            jsty = wx.Choice(panel, -1, choices=cnf.drawstyles, size=(100,-1))
+            jsty = wx.Choice(panel, -1, choices=cnf.drawstyles, size=(125,-1))
             jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
             jsty.SetStringSelection(djsty)
 

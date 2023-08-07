@@ -100,7 +100,6 @@ class ImageMatrixFrame(BaseFrame):
                           self.img2_panel,
                           self.dual_panel]
 
-
         lsty = wx.LEFT|wx.TOP|wx.EXPAND
 
         ir = 0
@@ -424,8 +423,10 @@ class ImageMatrixFrame(BaseFrame):
             conf.contrast_level = contrast_level
             clevels = [contrast_level, 100.0-contrast_level]
 
-            jmin = imin = img.min()
-            jmax = imax = img.max()
+            imax = img.max()
+            imin = img.min()
+            if imax - imin < 1:
+                imax = imax + 1
             cmap_panel.imin_val.SetValue('%.4g' % imin)
             cmap_panel.imax_val.SetValue('%.4g' % imax)
             jmin, jmax = np.percentile(img, clevels)
@@ -435,8 +436,8 @@ class ImageMatrixFrame(BaseFrame):
             conf.cmap_lo[0] = xlo = (jmin-imin)*conf.cmap_range/(imax-imin)
             conf.cmap_hi[0] = xhi = (jmax-imin)*conf.cmap_range/(imax-imin)
 
-            cmap_panel.cmap_hi.SetValue(xhi)
-            cmap_panel.cmap_lo.SetValue(xlo)
+            cmap_panel.cmap_hi.SetValue(int(xhi))
+            cmap_panel.cmap_lo.SetValue(int(xlo))
             cmap_panel.islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
             cmap_panel.redraw_cmap()
             img_panel.redraw()

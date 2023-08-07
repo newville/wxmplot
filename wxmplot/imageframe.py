@@ -212,14 +212,9 @@ class ColorMapPanel(wx.Panel):
         if (hi-lo)<2:
             hi = min(hi, conf.cmap_range)
             lo = max(lo, 0)
-        try:
-            self.cmap_lo.SetValue(float(lo))
-        except TypeError:
-            self.cmap_lo.SetValue(lo)
-        try:
-            self.cmap_hi.SetValue(float(hi))
-        except TypeError:
-            self.cmap_hi.SetValue(hi)
+
+        self.cmap_lo.SetValue(int(lo))
+        self.cmap_hi.SetValue(int(hi))
         conf.cmap_lo[col] = lo
         conf.cmap_hi[col] = hi
         imin = float(self.imin_val.GetValue())
@@ -836,8 +831,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             conf.cmap_lo[col] = xlo = int((jmin-imin)*conf.cmap_range/(imax-imin))
             conf.cmap_hi[col] = xhi = int((jmax-imin)*conf.cmap_range/(imax-imin))
 
-            self.cmap_panels[col].cmap_hi.SetValue(xhi)
-            self.cmap_panels[col].cmap_lo.SetValue(xlo)
+            self.cmap_panels[col].cmap_hi.SetValue(int(xhi))
+            self.cmap_panels[col].cmap_lo.SetValue(int(xlo))
             self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
             self.cmap_panels[col].redraw_cmap()
 
@@ -853,8 +848,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     imax = imin + 0.5
                 conf.cmap_lo[ix] = xlo = int((jmin-imin)*conf.cmap_range/(imax-imin))
                 conf.cmap_hi[ix] = xhi = int((jmax-imin)*conf.cmap_range/(imax-imin))
-                self.cmap_panels[ix].cmap_hi.SetValue(xhi)
-                self.cmap_panels[ix].cmap_lo.SetValue(xlo)
+                self.cmap_panels[ix].cmap_hi.SetValue(int(xhi))
+                self.cmap_panels[ix].cmap_lo.SetValue(int(xlo))
 
                 self.cmap_panels[ix].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
                 self.cmap_panels[ix].redraw_cmap()

@@ -308,7 +308,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
             title = self.GetTitle()
 
         title = title.strip()
-        if title is None:
+        if title in (None, '', 'None'):
             title = 'wxmplot'
 
         fname = fix_filename(title + '.dat')

@@ -133,7 +133,7 @@ class StackedPlotFrame(BaseFrame):
     def unzoom(self, event=None, panel='top'):
         """zoom out 1 level, or to full data range """
         panel = self.get_panel(panel)
-        panel.conf.unzoom(event=event)
+        panel.conf.unzoom()
         self.panel.set_viewlimits()
 
     def update_line(self, t, x, y, panel='top', **kws):

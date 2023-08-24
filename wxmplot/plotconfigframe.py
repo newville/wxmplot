@@ -66,6 +66,42 @@ def clean_texmath(txt):
             break
     return ''.join(out).strip()
 
+############################################################
+#  monkey-patch of ColourSelect text setting
+#  yes, a PR has been submitted to wx, no it is not merged or released.
+def MyMakeBitmap(self):
+    """ Creates a bitmap representation of the current selected colour. """
+
+    bdr = 8
+    width, height = self.GetSize()
+
+    # yes, this is weird, but it appears to work around a bug in wxMac
+    if "wxMac" in wx.PlatformInfo and width == height:
+        height -= 1
+
+    bmp = wx.Bitmap(width-bdr, height-bdr)
+    dc = wx.MemoryDC()
+    dc.SelectObject(bmp)
+    dc.SetFont(self.GetFont())
+    label = self.GetLabel()
+    # Just make a little colored bitmap
+    dc.SetBackground(wx.Brush(self.colour))
+    dc.Clear()
+    if label:
+        # Add a label to it
+        labcol =  self.colour.Get()
+        avg = (labcol[0] + labcol[1] + labcol[2])/3
+        if "wxMac" in wx.PlatformInfo and len(labcol) > 3: # alpha included
+            avg *= labcol[3]/255.0
+        dc.SetTextForeground(wx.BLACK if avg > 128 else wx.WHITE)
+        dc.DrawLabel(label, (0, 0, width-bdr, height-bdr),
+                     wx.ALIGN_CENTER)
+
+    dc.SelectObject(wx.NullBitmap)
+    return bmp
+csel.ColourSelect.MakeBitmap = MyMakeBitmap
+############################################################
+
 class PlotConfigFrame(wx.Frame):
     """ GUI Configure Frame"""
     def __init__(self, parent=None, config=None, trace_color_callback=None):

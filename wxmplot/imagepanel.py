@@ -194,7 +194,7 @@ class ImagePanel(BasePanel):
         if 1 in data.shape:
             data = data.squeeze()
         if self.conf.contrast_level is not None:
-            clevel = float(conf.contrast_level)
+            clevel = float(self.conf.contrast_level)
             imin, imax = np.percentile(data, [clevel, 100.0-clevel])
             data = np.clip((data - imin)/(imax - imin + 1.e-8), 0, 1)
         self.axes.images[0].set_data(data)

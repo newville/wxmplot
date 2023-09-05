@@ -46,11 +46,11 @@ for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
     if cm in cm_names or hasattr(cmap, cm) and cm not in ColorMap_List:
         ColorMap_List.append(cm)
 
-
-Contrast_List = ['None', '0.001', '0.002', '0.005', '0.01', '0.02', '0.05',
-                 '0.1', '0.2', '0.5', '1.0', '2.0', '5.0', '10.0']
-
-Contrast_NDArray = np.array((-1.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1., 2, 5.))
+Contrast_Levels = ('0', '0.00010', '0.00015', '0.00020', '0.0003', '0.0005',
+                   '0.0007', '0.0010', '0.0015', '0.0020', '0.003', '0.005',
+                   '0.007', '0.010', '0.015', '0.020', '0.03', '0.05', '0.07',
+                   '0.10', '0.15', '0.20', '0.3', '0.5', '0.7', '1.0', '1.5',
+                   '2.0', '3.0', '5.0', '7.0', '10.0', '15.0', '20.0', '30.0')
 
 Interp_List = ('nearest', 'bicubic', 'quadric', 'gaussian', 'kaiser',
                'bessel', 'mitchell', 'catrom', 'spline16', 'spline36',
@@ -315,12 +315,12 @@ class ImageConfig:
         return out
 
     def set_config(self, interp=None, colormap=None, reverse_colormap=None,
-                   contrast_level=None, flip_ud=None, flip_lr=None,
+                   contrast_level=0, flip_ud=None, flip_lr=None,
                    rot=None, tricolor_bg=None, ncontour_levels=None,
                    title=None, style=None):
         """set configuration options:
 
-           interp, colormap, reverse_colormap, contrast_levels, flip_ud,
+           interp, colormap, reverse_colormap, contrast_level, flip_ud,
            flip_lr, rot, tricolor_bg, ncontour_levels, title, style
         """
         if interp is not None:
@@ -361,13 +361,11 @@ class ImageConfig:
     def get_config(self):
         """get dictionary of configuration options"""
         out = {'reverse_colormap': self.cmap_reverse}
-        for attr in ('interp', 'colormap', 'contrast_levels', 'flip_ud',
+        for attr in ('interp', 'colormap', 'contrast_level', 'flip_ud',
                      'flip_lr', 'rot', 'tricolor_bg', 'ncontour_levels',
                      'title', 'style'):
             out[attr] = getattr(self, attr)
         return out
-
-
 
 class ImageConfigFrame(wx.Frame):
     """ GUI Configure Frame for Images"""

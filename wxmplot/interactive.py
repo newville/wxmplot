@@ -537,7 +537,7 @@ def hist(x, bins=10, win=1, new=False, size=None,
     return out
 
 def imshow(map, y=None, x=None, colormap=None, win=1,
-           wintitle=None, size=None, **kws):
+           wintitle=None, size=None, contrast_level=0.1, **kws):
     """imshow(map, ...)
 
     Display an 2-D array of intensities as a false-color map
@@ -556,7 +556,7 @@ def imshow(map, y=None, x=None, colormap=None, win=1,
         nlevels (int): number of levels for contour
         contour_labels (bool): whether to show contour labels [True]
         show_axis (bool): whether to shos Axis [False]
-        contrast_level (float): percent level for contrast [0]
+        contrast_level (float or None): percent level for contrast ['0.1']
 
     Returns:
         img, an ImageFrame
@@ -570,7 +570,10 @@ def imshow(map, y=None, x=None, colormap=None, win=1,
     img = get_image_window(win=win, size=size,
                           wintitle=wintitle)
     if img is not None:
-        img.display(map, x=x, y=y, colormap=colormap, **kws)
+        img.display(map, x=x, y=y, colormap=colormap,
+                    contrast_level=contrast_level, **kws)
+    print("CONTRAST " , contrast_level)
+    img.set_contrast_level(contrast_level)
     return img
 
 def contour(map, x=None, y=None, **kws):

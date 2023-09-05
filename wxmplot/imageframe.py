@@ -19,9 +19,8 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from wxutils import get_cwd
 
 from .imagepanel import ImagePanel
-from .imageconf import (ColorMap_List, Interp_List, Contrast_List,
-                        Contrast_NDArray, Slices_List, RGB_COLORS,
-                        ImageConfigFrame)
+from .imageconf import (ColorMap_List, Interp_List, Contrast_Levels,
+                        Slices_List, RGB_COLORS, ImageConfigFrame)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
 from .colors import rgb2hex, mpl_color
@@ -78,7 +77,7 @@ class ColorMapPanel(wx.Panel):
         self.imgpanel.conf.cmap[color] = cmap.get_cmap(cmapname)
 
         maxval = self.imgpanel.conf.cmap_range
-        wd, ht = 1.00, 0.125
+        wd, ht = 1.00, 0.15
 
         self.cmap_dat = np.outer(np.ones(int(maxval*ht)),
                                  np.linspace(0, 1, maxval))
@@ -265,41 +264,49 @@ class ContrastPanel(wx.Panel):
         sizer = wx.GridBagSizer(2, 2)
 
         title = wx.StaticText(self, label='Auto-Contrast (%):', size=(120, -1))
-        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
+        stitle = wx.StaticText(self, label='Adjust Contrast:', size=(120, -1))
 
-        self.choice = wx.Choice(self, size=(100, -1), choices=Contrast_List)
+
+        self.choice = wx.Choice(self, size=(100, -1), choices=Contrast_Levels)
         self.choice.Bind(wx.EVT_CHOICE,  self.onChoice)
         self.choice.SetSelection(default)
-        sizer.Add(self.choice, (0, 1), (1, 1), labstyle, 2)
+
+        bplus = wx.Button(self, -1, '+',  size=(50, 25))
+        bminus = wx.Button(self, -1, '-',  size=(50, 25))
+
+        bplus.Bind(wx.EVT_BUTTON, self.advance)
+        bminus.Bind(wx.EVT_BUTTON, self.retreat)
+
+        sizer.Add(title, (0, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.choice, (0, 1), (1, 2), labstyle, 2)
+        sizer.Add(stitle, (1, 0), (1, 1), labstyle, 2)
+        sizer.Add(bminus, (1, 1), (1, 1), labstyle, 2)
+        sizer.Add(bplus,  (1, 2), (1, 1), labstyle, 2)
+
+
         pack(self, sizer)
 
-    def set(self, choice=None):
-        if choice in Contrast_List:
+    def set(self, choice=0):
+        if choice is None:
+            choice = 0.0
+        if isinstance(choice, (float, integer)):
+            choice = str(choice)
+        if choice in Contrast_Levels:
             self.SetStringSelection(choice)
 
-    def advance(self):
+    def advance(self, evt=None):
         clevel = 1 + self.choice.GetSelection()
-        if clevel >= len(Contrast_List):
+        if clevel >= len(Contrast_Levels):
             clevel = 0
         self.choice.SetSelection(clevel)
-        clevel = Contrast_List[clevel]
-        if clevel == 'None':
-            clevel = 0
-        else:
-            clevel = float(clevel)
-        self.callback(contrast_level=clevel)
+        self.callback(contrast_level=float(Contrast_Levels[clevel]))
 
-    def retreat(self):
+    def retreat(self, evt=None):
         clevel = -1 + self.choice.GetSelection()
         if clevel < 0:
-            clevel = len(Contrast_List) - 1
+            clevel = len(Contrast_Levels) - 1
         self.choice.SetSelection(clevel)
-        clevel = Contrast_List[clevel]
-        if clevel == 'None':
-            clevel = 0
-        else:
-            clevel = float(clevel)
-        self.callback(contrast_level=clevel)
+        self.callback(contrast_level=float(Contrast_Levels[clevel]))
 
 
     def onChoice(self, event=None):
@@ -411,7 +418,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.SetSize(self.GetBestVirtualSize())
 
     def display(self, img, title=None, colormap=None, style='image',
-                subtitles=None, auto_contrast=False, contrast_level=None, **kws):
+                subtitles=None, auto_contrast=False, contrast_level='0.10', **kws):
         """display image"""
         if title is not None:
             self.SetTitle(title)
@@ -442,27 +449,22 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.config_mode = 'int'
                 self.Build_ConfigPanel()
 
+
         if contrast_level is None:
-            if auto_contrast:
-                cl_str = '1.0'
-            else:
-                cl_str = self.contrast_panel.choice.GetStringSelection()
-        else:
-            cl_int = max(np.where(Contrast_NDArray<=contrast_level)[0])
-            cl_str = Contrast_List[cl_int]
-
-        if cl_str == 'None':
             contrast_level = 0
-        else:
-            contrast_level = float(cl_str)
 
-        self.contrast_panel.choice.SetStringSelection(cl_str)
-        self.panel.conf.contrast_level = contrast_level
+        cl_str = str(contrast_level)
+        if cl_str not in Contrast_Levels:
+            cl_str  = '0.10'
+            contrast_level = 0.1
+
 
         self.panel.display(img, style=style, contrast_level=contrast_level,
                            colormap=colormap, **kws)
 
-        self.set_contrast_levels(contrast_level=contrast_level)
+        self.contrast_panel.choice.SetStringSelection(cl_str)
+        self.panel.conf.contrast_level = contrast_level
+        self.set_contrast_level(contrast_level=float(contrast_level))
 
         self.panel.conf.title = title
         if colormap is not None and self.config_mode == 'int':
@@ -659,7 +661,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         lsty = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
 
         self.contrast_panel = ContrastPanel(panel,
-                                            callback=self.set_contrast_levels)
+                                            callback=self.set_contrast_level)
 
         if self.config_mode == 'rgb':
             for icol, col in enumerate(RGB_COLORS):
@@ -800,7 +802,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         else:
             self.contrast_panel.retreat()
 
-    def set_contrast_levels(self, contrast_level=None):
+    def set_contrast_level(self, contrast_level=None):
         """enhance contrast levels, or use full data range
         according to value of self.panel.conf.contrast_level
         """
@@ -809,13 +811,13 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             if clevel == 'None':
                 contrast_level = 0
             else:
-                contrast_level = float(clevel)
+                contrast_level = clevel
 
         conf = self.panel.conf
         img  = self.panel.conf.data
         if contrast_level is None:
             contrast_level = 0
-        conf.contrast_level = contrast_level
+        conf.contrast_level = contrast_level = float(contrast_level)
         clevels = [contrast_level, 100.0-contrast_level]
 
         if len(img.shape) == 2: # intensity map

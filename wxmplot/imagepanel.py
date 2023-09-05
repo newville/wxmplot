@@ -94,10 +94,23 @@ class ImagePanel(BasePanel):
         if 1 in data.shape:
             data = data.squeeze()
         self.data_range = [0, data.shape[1], 0, data.shape[0]]
-        if contrast_level not in (0, None):
+        if contrast_level in (0, None):
+            conf.contrast_level = 0
+        else:
             conf.contrast_level = contrast_level
         if auto_contrast:
-            conf.contrast_level = 1
+            conf.contrast_level = 0.10
+
+        if conf.contrast_level not in (0, None):
+            clevel = float(conf.contrast_level)
+            imin, imax = np.percentile(data, [clevel, 100.0-clevel])
+            img = np.clip(data, imin, imax)
+        else:
+            img = data[:]
+
+        if store_data:
+            conf.data = data
+
         if x is not None:
             conf.xdata = np.array(x)
             if conf.xdata.shape[0] != data.shape[1]:
@@ -111,8 +124,6 @@ class ImagePanel(BasePanel):
             conf.xlab = xlabel
         if ylabel is not None:
             conf.ylab = ylabel
-        if store_data:
-            conf.data = data
 
         if self.conf.style == 'contour':
             if levels is None:
@@ -123,17 +134,12 @@ class ImagePanel(BasePanel):
                 nlevels = self.conf.ncontour_levels = 9
             nlevels = max(2, nlevels)
 
-            if conf.contrast_level is not None:
-                contrast = [conf.contrast_level, 100.0-conf.contrast_level]
-                imin, imax = np.percentile(conf.data, contrast)
-                data = np.clip(conf.data, imin, imax)
-
-            clevels  = np.linspace(data.min(), data.max(), nlevels+1)
+            clevels  = np.linspace(img.min(), img.max(), nlevels+1)
             self.conf.contour_levels = clevels
-            self.conf.image = self.axes.contourf(data, cmap=self.conf.cmap[col],
+            self.conf.image = self.axes.contourf(img, cmap=self.conf.cmap[col],
                                                  levels=clevels)
 
-            self.conf.contour = self.axes.contour(data, cmap=self.conf.cmap[col],
+            self.conf.contour = self.axes.contour(img, cmap=self.conf.cmap[col],
                                                   levels=clevels)
             cmap_name = self.conf.cmap[col].name
             xname = 'gray'
@@ -161,10 +167,8 @@ class ImagePanel(BasePanel):
             if hasattr(self.contour_callback , '__call__'):
                 self.contour_callback(levels=clevels)
         else:
-            if data.max() == data.min():
-                img = data
-            else:
-                img = (data - data.min()) /(1.0*data.max() - data.min())
+            if img.max() > img.min():
+                img = (img - img.min()) /(1.0*img.max() - img.min())
             if colormap is not None:
                 self.conf.set_colormap(colormap, icol=col)
             self.conf.image = self.axes.imshow(img, cmap=self.conf.cmap[col],
@@ -190,8 +194,8 @@ class ImagePanel(BasePanel):
         if 1 in data.shape:
             data = data.squeeze()
         if self.conf.contrast_level is not None:
-            clevels = [self.conf.contrast_level, 100.0-self.conf.contrast_level]
-            imin, imax = np.percentile(data, clevels)
+            clevel = float(conf.contrast_level)
+            imin, imax = np.percentile(data, [clevel, 100.0-clevel])
             data = np.clip((data - imin)/(imax - imin + 1.e-8), 0, 1)
         self.axes.images[0].set_data(data)
         self.canvas.draw()

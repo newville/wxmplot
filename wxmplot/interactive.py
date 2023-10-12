@@ -11,11 +11,12 @@ Interactive wxmplot
  set_theme(themename): set plotting theme ('light', 'dark', 'seaborn', ...).
 
 """
-
+import numpy as np
 import time
 import os
 import sys
 import atexit
+from types import GeneratorType
 
 import wx
 import wx.lib.mixins.inspection
@@ -140,7 +141,8 @@ def available_themes():
 
 class PlotDisplay(PlotFrame):
     def __init__(self, window=1, size=None, theme=None,
-                 wintitle=None, **kws):
+                 wintitle=None, data_generator=None,
+                 data_polltime=25, **kws):
         get_wxapp()
         theme = DEFAULT_THEME if theme is None else theme
 
@@ -162,6 +164,63 @@ class PlotDisplay(PlotFrame):
         if window not in PLOT_DISPLAYS:
             PLOT_DISPLAYS[window] = self
 
+        self.Bind(wx.EVT_TIMER, self.onDataPoller)
+        self.poller = wx.Timer(self)
+
+        self.data_polltime  = data_polltime
+        self.data_generator = data_generator
+        wx.CallAfter(self.start_poller)
+
+    def set_data_generator(self, data_generator, polltime=25):
+        """set data generating function and polltime for live updates
+        Arguments
+        ---------
+        data_generator:
+                callable function that will return data to plot
+        polltime:  optional number
+                time, in ms, to wait for polling [25]
+
+        Notes
+        -----
+        the generator function takes no arguments (but can be a partial)
+        and returns either None to stop updating or a list of pairs of
+        x, y that update each trace.
+
+        To update a single dataset, your function should return with
+               return [(xnew, ynew)]
+        whereas to update mulitple traces, your function should return with
+               return [(xnew, ynew), (xnew, y2new)]
+
+        """
+        self.data_generator = data_generator
+        self.start_poller(polltime)
+
+    def start_poller(self, polltime=None):
+        if polltime is not None:
+            self.data_polltime = polltime
+        if self.data_generator is not None:
+            self.poller.Start(self.data_polltime)
+
+    def onDataPoller(self, event=None):
+        try:
+            traces = self.data_generator()
+        except:
+            traces = None
+
+        if isinstance(traces, GeneratorType):
+            try:
+                traces = next(traces)
+            except StopIteration:
+                traces = None
+
+        if traces is None:
+            self.poller.Stop()
+        else:
+            ntraces = len(traces)
+            for itrace, trace in enumerate(traces):
+                x, y = trace
+                if len(x) >  1 and len(x) == len(y):
+                    self.update_line(itrace, x, y, draw=(itrace==(ntraces-1)))
 
     def onExit(self, o, **kw):
         if self.window in PLOT_DISPLAYS:
@@ -344,6 +403,42 @@ def newplot(x, y, win=1, wintitle=None, **kws):
     """
     kws['new'] = True
     return plot(x, y, win=win, wintitle=wintitle, **kws)
+
+
+def set_data_generator(data_generator, polltime=25, win=1):
+    """set_data_generator(data_generrator, polltime=25, win=1)
+
+    Set data generator function for a plot window that will be
+    called to generate new data to be displayed. The data-generating
+    funcion will be call at intervals set by polltime
+
+    Arguments
+    ---------
+    data_generator:: callable function that will return data to plot (see Notes)
+    polltime:        time, in ms, to wait for polling [default=25]
+
+
+    Returns
+    -------
+    plot window
+
+    Notes
+    -----
+    the generator function takes no arguments (but can be a partial)
+    and must return either None to stop updating, or a list of pairs of
+    x, y that update each trace in the plot.
+
+    To update a single dataset, your function should return a list with (x, y) values,
+    as with
+          return [(xnew, ynew)]
+
+    To update multiple traces, your function should return with
+          return [(x1, y1), (x2, y2)]
+
+    """
+    plotter = get_plot_window(win=win)
+    plotter.set_data_generator(data_generator, polltime=polltime)
+    return plotter
 
 
 def update_trace(x, y, trace=1, win=1, **kws):
@@ -572,7 +667,6 @@ def imshow(map, y=None, x=None, colormap=None, win=1,
     if img is not None:
         img.display(map, x=x, y=y, colormap=colormap,
                     contrast_level=contrast_level, **kws)
-    print("CONTRAST " , contrast_level)
     img.set_contrast_level(contrast_level)
     return img
 

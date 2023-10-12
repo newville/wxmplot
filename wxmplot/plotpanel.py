@@ -749,8 +749,9 @@ class PlotPanel(BasePanel):
     def update_line(self, trace, xdata, ydata, side='left', draw=False,
                     update_limits=True):
         """ update a single trace, for faster redraw """
-
         x = self.conf.get_mpl_line(trace)
+        if trace >= self.conf.ntrace:
+            self.oplot(xdata, ydata, side=side, delay_draw=True)
         x.set_data(xdata, ydata)
         axes = self.axes
         if side == 'right':

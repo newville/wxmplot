@@ -1,22 +1,29 @@
 
-<!DOCTYPE html>
 
-<html lang="en">
+<!doctype html>
+
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wxmplot Overview &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <title>wxmplot Overview &#8212; WXMPLOT: interactive plotting with Python</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    
+    <script src="_static/documentation_options.js?v=47164abe"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Interactive wxmplot displays" href="interactive.html" />
-    <link rel="prev" title="Downloading and Installation" href="installation.html" /> 
+    <link rel="prev" title="Downloading and Installation" href="installation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -41,7 +48,7 @@
           <div class="body" role="main">
             
   <section id="module-wxmplot">
-<span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Permalink to this heading">¶</a></h1>
+<span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Link to this heading">¶</a></h1>
 <p><cite>wxmplot</cite> provides simple functions for making Line Plots (or 2D or XY
 Plots) and displaying image data.  These are similar to the simplest
 functions from <cite>matplotlib.pyplot</cite>, but offer richer interactivity and
@@ -54,7 +61,7 @@ end-user at run time. This allows a programmer to add plotting capabilities
 to an application and enable the end-user to interact with their data and
 fully customize the plots when running the application.</p>
 <section id="line-plots-with-plot">
-<h2>Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#line-plots-with-plot" title="Permalink to this heading">¶</a></h2>
+<h2>Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#line-plots-with-plot" title="Link to this heading">¶</a></h2>
 <p>Let’s start with a simple script using <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -130,7 +137,7 @@ arrows, lines, and markers to plots.  These and more functions are
 discussed in detail in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>.</p>
 </section>
 <section id="user-interaction-and-configuring-line-plots">
-<h2>User Interaction and Configuring Line Plots<a class="headerlink" href="#user-interaction-and-configuring-line-plots" title="Permalink to this heading">¶</a></h2>
+<h2>User Interaction and Configuring Line Plots<a class="headerlink" href="#user-interaction-and-configuring-line-plots" title="Link to this heading">¶</a></h2>
 <p>The basic <cite>wxmplot</cite> line plots support a few basic user interactions.
 First, as mentioned above, the user can zoom in by drawing a box: Clicking
 the left mouse button and dragging will draw a rectangular box, and
@@ -188,7 +195,7 @@ allow the user to configure essentially every aspect of the plot:</p>
 <p>with these configuration settings available, any user should be able to
 create beautiful presentation-quality image from their data.</p>
 <section id="color-and-line-properties">
-<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Permalink to this heading">¶</a></h3>
+<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Link to this heading">¶</a></h3>
 <p>The <strong>Colors and Line Properties</strong> tab of the <em>Plot Configuration Window</em>
 allows the user to configure the basic colors for the plot.  This includes
 setting the plotting theme.  Selecting any of the available themes (there
@@ -210,7 +217,7 @@ aspect of the plot displaying their data.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_LineProps.png"><img alt="_images/PlotConfig_LineProps.png" src="_images/PlotConfig_LineProps.png" style="width: 95%;" /></a>
 </section>
 <section id="ranges-and-margins-properties">
-<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Permalink to this heading">¶</a></h3>
+<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Link to this heading">¶</a></h3>
 <p>The <strong>Ranges and Margins</strong> tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.</p>
@@ -226,7 +233,7 @@ top of the plot, they may need to adjust these margins.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Ranges.png"><img alt="_images/PlotConfig_Ranges.png" src="_images/PlotConfig_Ranges.png" style="width: 95%;" /></a>
 </section>
 <section id="text-properties">
-<h3>Text Properties<a class="headerlink" href="#text-properties" title="Permalink to this heading">¶</a></h3>
+<h3>Text Properties<a class="headerlink" href="#text-properties" title="Link to this heading">¶</a></h3>
 <p>The <strong>Text and Labels</strong> tab allows the user to set the title and labels for
 the X and Y axes, and to adjust the font size for these text components.
 Here, the details of the Legend can also be customized: whether it is
@@ -238,14 +245,14 @@ symbols.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Text.png"><img alt="_images/PlotConfig_Text.png" src="_images/PlotConfig_Text.png" style="width: 95%;" /></a>
 </section>
 <section id="scatterplot-properties">
-<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Permalink to this heading">¶</a></h3>
+<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Link to this heading">¶</a></h3>
 <p>The <strong>Scatterplot</strong> tab allows the user to set the colors and marker sizes
 for scatter plots.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Scatter.png"><img alt="_images/PlotConfig_Scatter.png" src="_images/PlotConfig_Scatter.png" style="width: 95%;" /></a>
 </section>
 </section>
 <section id="displaying-images-with-imshow-and-contour">
-<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Permalink to this heading">¶</a></h2>
+<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Link to this heading">¶</a></h2>
 <p>As with line plotting, <cite>wxmplot</cite> has a simple <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a>
 function that displays image data and adds user-friendly controls to
 manipulate and adjust the display of such data.  While
@@ -277,7 +284,7 @@ dataset but using:</p>
 from the Image menu or with Ctrl-N.</p>
 </section>
 <section id="user-interaction-and-configuring-image-and-contour-displays">
-<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Permalink to this heading">¶</a></h2>
+<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Link to this heading">¶</a></h2>
 <p>As with te displays created with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code>, clicking anywhere on the image will
 show the x, y, and intensity values in the status bar.  If arrays for <cite>x</cite>
 and <cite>y</cite> values have been passed in, both the indices and <cite>x</cite> and <cite>y</cite> values
@@ -349,7 +356,7 @@ plot in a separate plotting window.  From this menu, the user can select:</p>
 methods to smooth the data across pixels.</p>
 <p>Finally, the Help menu will give a quick list of keyboard shortcuts.</p>
 <section id="image-configuration-window">
-<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Permalink to this heading">¶</a></h3>
+<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Link to this heading">¶</a></h3>
 <p>Most of options for working with images and contour maps can be found from
 the main window or menu selections, but some options need more specialized
 configurations that can be accessed from the Image Configuration Window
@@ -447,8 +454,8 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2023-10-13, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

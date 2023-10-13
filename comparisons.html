@@ -1,20 +1,27 @@
 
-<!DOCTYPE html>
 
-<html lang="en">
+<!doctype html>
+
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparisons of wxmplot with other Python Plotting tools &#8212; WXMPLOT: plotting widgets using wxPython and matplotlib</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <title>Comparisons of wxmplot with other Python Plotting tools &#8212; WXMPLOT: interactive plotting with Python</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    
+    <script src="_static/documentation_options.js?v=47164abe"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Speciality wxmplot displays" href="other.html" /> 
+    <link rel="prev" title="Speciality wxmplot displays" href="other.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -36,7 +43,7 @@
           <div class="body" role="main">
             
   <section id="comparisons-of-wxmplot-with-other-python-plotting-tools">
-<h1>Comparisons of wxmplot with other Python Plotting tools<a class="headerlink" href="#comparisons-of-wxmplot-with-other-python-plotting-tools" title="Permalink to this heading">¶</a></h1>
+<h1>Comparisons of wxmplot with other Python Plotting tools<a class="headerlink" href="#comparisons-of-wxmplot-with-other-python-plotting-tools" title="Link to this heading">¶</a></h1>
 <p>Disclaimer: this section is essentially opinion of the lead author of
 <cite>wxmplot</cite>. While it aims to be fair, there is clearly a bias in this view
 to emphasize priorities that informed the development of <cite>wxmplot</cite>. If you
@@ -100,7 +107,7 @@ flipped, rotated (and reset).  Smoothing of pixelated data can be adjusted.
 Images can be toggled back-and-forth between “image mode” and “contour
 mode”.</p>
 <section id="comparison-with-matplotlib-pyplot">
-<h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Link to this heading">¶</a></h2>
 <p>To be clear, <cite>wxmplot</cite> uses <cite>matplotlib</cite> for plotting and image display.  Any
 aspect of “beauty” in <cite>wxmplot</cite> comes from <cite>matplotlib</cite>, which makes plots and
 images of scientific data that are of excellent quality.  Allowing <cite>LaTeX</cite>
@@ -151,7 +158,7 @@ to be able to manipulate the display of the data.</p>
 </div></blockquote>
 </section>
 <section id="comparison-with-wxplot">
-<h2>Comparison with WxPlot<a class="headerlink" href="#comparison-with-wxplot" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with WxPlot<a class="headerlink" href="#comparison-with-wxplot" title="Link to this heading">¶</a></h2>
 <p>The wxPython library comes with a plot submodule that supports basic line
 plots.  An example of using this would be:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
@@ -191,7 +198,7 @@ need to create a subclass of a <cite>Frame</cite> and initiate a wxApp adds a fa
 amount of boiler-plate code which would be painful for one-off scripts.</p>
 </section>
 <section id="comparison-with-plotly">
-<h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Link to this heading">¶</a></h2>
 <p>The Plotly library includes a Python interface (<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>)
 that is very good and renders interactive plots into a web browser.  This is
 very useful for web-based applications and gives good looking and interactive
@@ -246,7 +253,7 @@ visualize complex datasets that are already in Pandas dataframes, Plotly
 is a good choice.</p>
 </section>
 <section id="comparison-with-pyqtgraph">
-<h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Link to this heading">¶</a></h2>
 <p>Pyqtgraph (<a class="reference external" href="https://pyqtgraph.readthedocs.io/en/latest/">https://pyqtgraph.readthedocs.io/en/latest/</a>) provides a very
 comprehensive library for plotting and visualization with PyQt and PySide.
 Constructing the example plot above with <cite>pyqtgraph</cite> would look like:</p>
@@ -290,7 +297,7 @@ I am willing to call some of these things a matter of taste and say they might
 be possible to improve.</p>
 </section>
 <section id="comparison-with-pyqtgraph-pythonguis">
-<h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Link to this heading">¶</a></h2>
 <p>Here we compare to tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> which
 describe using using GUIs with the PyQt and PySide family of GUI toolkits
 based on Qt. The existence of this chapter was inspired by seeing these
@@ -418,7 +425,7 @@ analysis, the tutorials at <a class="reference external" href="https://www.pytho
 disappointing.</p>
 </section>
 <section id="comparison-with-plplot">
-<h2>Comparison with PLPlot<a class="headerlink" href="#comparison-with-plplot" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with PLPlot<a class="headerlink" href="#comparison-with-plplot" title="Link to this heading">¶</a></h2>
 <p><cite>PLPlot</cite> (<a class="reference external" href="http://plplot.sourceforge.net/">http://plplot.sourceforge.net/</a>) is a general purpose plotting
 library with bindings for many languages, including Python.  It supports
 many plot types, including map displays which is outside the scope of
@@ -476,7 +483,7 @@ may be able to have the user advance through a series of plots.</p>
 </div></blockquote>
 </section>
 <section id="comparison-with-dislin">
-<h2>Comparison with Dislin<a class="headerlink" href="#comparison-with-dislin" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison with Dislin<a class="headerlink" href="#comparison-with-dislin" title="Link to this heading">¶</a></h2>
 <p>Like <cite>PLPlot</cite>, <cite>Dislin</cite> (<a class="reference external" href="https://dislin.de/">https://dislin.de/</a>) is a plotting library with
 bindings for many languages, including Python. It also supports many plot
 types, including 3-d volume displays which is outside the scope of
@@ -555,7 +562,7 @@ no interactivity. Converting that to <cite>wxmplot</cite> would be:</p>
 </div></blockquote>
 </section>
 <section id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
 <p>Succint code that is free of boilerplate code and that gives high quality plots
 and interactive displays is highly valuable for exploratory data
 analysis. While there are many plotting and visualization tools available for
@@ -637,8 +644,8 @@ and end-users of applications to have rich interactions with their data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2023-10-13, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

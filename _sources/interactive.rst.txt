@@ -139,6 +139,8 @@ More details of Plot Options are given in
 
 .. autofunction:: update_trace
 
+.. autofunction:: set_data_generator
+
 .. autofunction:: plot_setlimits
 
 .. autofunction:: plot_text

@@ -420,7 +420,7 @@ def set_data_generator(data_generator, polltime=25, win=1):
 
     Arguments
     ---------
-    data_generator:: callable function that will return or yield data to plot
+    data_generator:: callable function that will return or yield data to plot.
     polltime:        time in ms to wait for polling [default=25]
 
 

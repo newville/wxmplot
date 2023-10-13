@@ -147,8 +147,17 @@ which will generate a plot like this:
 Note that your function should return or yield a list of (x, y) pairs.
 
 
+By way of comparison with the matplotlib example at
+https://matplotlib.org/stable/gallery/animation/strip_chart.html, a similar
+result can be generated with the somewhat shorter and less involved code
+example
 
+.. literalinclude:: ../examples/scope_mode_mpl_compare.py
 
+Unlike with the matplotlib example, which mixes data generation and management
+with plotting code, the :class:`Scope` here only generates the code, and
+wxmplot functions handles all the plotting.  This code is both shorter and
+better designed than the standard matplotlib example.
 
 
 Displaying and image of a TIFF file

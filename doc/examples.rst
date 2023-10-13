@@ -8,18 +8,24 @@ The :ref:`ch_overview` showed a few illustrative  examples using `wxmplot`.
 Here we show a few more examples.  These and more are given in the *examples*
 directory in the source distribution kit.
 
+.. _wxmplot examples: https://github.com/newville/wxmplot/tree/master/examples
 
 Dynamic examples not shown here
 ----------------------------------
 
-Several examples are not shown here either because they show many plots or are
-otherwise more complex.  They are worth trying out.
+Several examples that can be found at `wxmplot examples`_ are not shown here
+either because they show many plots or are otherwise more complex.  They are
+worth trying out.
 
 *demo.py* will show several Line plot examples, including a plot which uses
 a timer to simulate a dynamic plot, updating the plot as fast as it can -
-typically 10 to 30 times per second, depending on your machine.
+typically 20 to 30 times per second, depending on your machine.
 
-*stripchart.py* also shows a dynamic, time-based plot.
+*stripchart.py* also shows dynamic, time-based plot.
+
+*scope_mode_function.py* and *scope_mode_generator.py* both
+show dynamic plots with data uddated with a user-supplied function that either
+returns or yields datasets to update plot traces.
 
 *theme_compare.py* renders the same plot with a selection of different themes.
 
@@ -51,7 +57,6 @@ gives:
 
 .. image:: images/errorbar.png
    :width: 85 %
-
 
 
 Plotting data from a datafile
@@ -115,6 +120,35 @@ which gives:
 Of course, you can use that to recast showing a band between any two curves
 by assigning the average of the 2 curves to `y` and half the difference to
 `dy`, and perhaps setting `linewidth=0` to suppress showing the mean value.
+
+Using `set_data_generator` for user-controlled, dynamic plotting
+---------------------------------------------------------------------
+
+There are two examples use :func:`set_data_generator` to specify how to update a
+plot from a user-supplied function.  As seen in the two examples, the function
+definied can either return data to update the data or use a Python geneator to
+yiel the data.  In both cases, you first create a plot, and then set the
+function for that plot window to call to grab new data.   The plot window will
+call the function you pass in periodically, with a time (in milliseconds) given
+by the `polltime` argument.  With a simple function, it might look like
+
+.. literalinclude:: ../examples/scope_mode_function.py
+
+As a second example, this time using a generator, you might do something like this:
+
+.. literalinclude:: ../examples/scope_mode_generator.py
+
+which will generate a plot like this:
+
+.. video:: _static/scope_mode.mp4
+   :alt: capture of images generated in scope mode.
+   :muted:
+
+Note that your function should return or yield a list of (x, y) pairs.
+
+
+
+
 
 
 Displaying and image of a TIFF file

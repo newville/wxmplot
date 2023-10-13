@@ -124,15 +124,24 @@ by assigning the average of the 2 curves to `y` and half the difference to
 Using `set_data_generator` for user-controlled, dynamic plotting
 ---------------------------------------------------------------------
 
-There are two examples use :func:`set_data_generator` to specify how to update a
-plot from a user-supplied function.  As seen in the two examples, the function
-definied can either return data to update the data or use a Python geneator to
-yiel the data.  In both cases, you first create a plot, and then set the
-function for that plot window to call to grab new data.   The plot window will
-call the function you pass in periodically, with a time (in milliseconds) given
-by the `polltime` argument.  With a simple function, it might look like
+There are three examples that use :func:`set_data_generator` to specify how to
+update a plot from a user-supplied function.  As seen in these examples, the
+function definied can either return data to update the data, or it can use a
+Python geneator to yield the data.  In both cases, you first create a plot (it
+can be empty), and then set the function for that plot window to call to grab
+new data.  The plot window will then periodically call the function you supply,
+with a time interval (in milliseconds) given by the `polltime` argument.  With
+a simple function, it might look like
 
 .. literalinclude:: ../examples/scope_mode_function.py
+
+
+This will generate a continuously updating plot adding data as it goes:
+
+.. video:: _static/scope_mode_function.mp4
+   :alt: capture of images generated from scope_mode_function.py
+   :muted:
+
 
 As a second example, this time using a generator, you might do something like this:
 
@@ -140,14 +149,13 @@ As a second example, this time using a generator, you might do something like th
 
 which will generate a plot like this:
 
-.. video:: _static/scope_mode.mp4
-   :alt: capture of images generated in scope mode.
+.. video:: _static/scope_mode_generator.mp4
+   :alt: capture of images generated from scope_mode_generator.py
    :muted:
 
 Note that your function should return or yield a list of (x, y) pairs.
 
-
-By way of comparison with the matplotlib example at
+As a third example, and by way of comparison with the matplotlib example at
 https://matplotlib.org/stable/gallery/animation/strip_chart.html, a similar
 result can be generated with the somewhat shorter and less involved code
 example

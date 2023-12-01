@@ -127,20 +127,17 @@ class ImagePanel(BasePanel):
 
         if self.conf.style == 'contour':
             if levels is None:
-                levels = self.conf.ncontour_levels
+                if nlevels is None:
+                    nlevels = self.conf.ncontour_levels = 9
+                nlevels = max(2, nlevels)
+                levels  = np.linspace(img.min(), img.max(), nlevels+1)
             else:
-                self.conf.ncontour_levels = levels
-            if nlevels is None:
-                nlevels = self.conf.ncontour_levels = 9
-            nlevels = max(2, nlevels)
-
-            clevels  = np.linspace(img.min(), img.max(), nlevels+1)
-            self.conf.contour_levels = clevels
+                self.conf.contour_levels = levels
             self.conf.image = self.axes.contourf(img, cmap=self.conf.cmap[col],
-                                                 levels=clevels)
+                                                 levels=levels)
 
             self.conf.contour = self.axes.contour(img, cmap=self.conf.cmap[col],
-                                                  levels=clevels)
+                                                  levels=levels)
             cmap_name = self.conf.cmap[col].name
             xname = 'gray'
             try:
@@ -157,7 +154,7 @@ class ImagePanel(BasePanel):
             if contour_labels is None:
                 contour_labels = self.conf.contour_labels
             if contour_labels:
-                nlog = np.log10(abs(clevels[1]-clevels[0]))
+                nlog = np.log10(abs(levels[1]-levels[0]))
                 fmt = "%.4f"
                 if nlog < -2:
                     fmt = "%%.%df" % (1-nlog)
@@ -165,7 +162,7 @@ class ImagePanel(BasePanel):
                     fmt = "%.1f"
                 self.axes.clabel(self.conf.contour, fontsize=10, inline=1, fmt=fmt)
             if hasattr(self.contour_callback , '__call__'):
-                self.contour_callback(levels=clevels)
+                self.contour_callback(levels=levels)
         else:
             if img.max() > img.min():
                 img = (img - img.min()) /(1.0*img.max() - img.min())

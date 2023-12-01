@@ -217,7 +217,7 @@ class ImageConfig:
         if len(dticks) < 2:
             dticks.append(dat.min())
             dticks.append(dat.max())
-
+        dticks = np.array(dticks)
         dstep = max(2.e-15, abs(np.diff(dticks).mean()))
         if dstep > 5e4 or (dstep < 5.e-4 and dticks.mean() < 5.e-2):
             fmt = '%.2e'

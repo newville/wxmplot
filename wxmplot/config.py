@@ -841,7 +841,7 @@ class PlotConfig:
             labs.append(xl)
         labs = tuple(labs)
 
-        lgn = axes[0].legend
+        lgn = axes[-1].legend
         if self.legend_onaxis.startswith('off'):
             lgn = self.canvas.figure.legend
             # 'best' and 'off axis' not implemented yet

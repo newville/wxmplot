@@ -431,11 +431,12 @@ class PlotConfig:
             self.y2label not in ('', None, 'None')):
             axes[1].set_ylabel(self.y2label, **kws)
 
-        for ax in axes[0].xaxis, axes[0].yaxis:
-            for t in ax.get_ticklabels():
-                t.set_color(self.textcolor)
-                if hasattr(t, 'set_fontsize'):
-                    t.set_fontsize(n)
+        for axes in self.canvas.figure.get_axes():
+            for ax in axes.xaxis, axes.yaxis:
+                for t in ax.get_ticklabels():
+                    t.set_color(self.textcolor)
+                    if hasattr(t, 'set_fontsize'):
+                        t.set_fontsize(n)
 
         self.set_added_text_size()
         if self.mpl_legend is not None:

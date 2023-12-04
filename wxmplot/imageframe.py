@@ -181,7 +181,7 @@ class ColorMapPanel(wx.Panel):
             conf.int_hi[col] = val
         lo = conf.int_lo[col]
         hi = conf.int_hi[col]
-        self.islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (lo, hi))
+        self.islider_range.SetLabel('Shown: [%.4g : %.4g]' % (lo, hi))
         self.imgpanel.redraw()
 
     def redraw_cmap(self):
@@ -263,7 +263,7 @@ class ContrastPanel(wx.Panel):
         labstyle = wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.EXPAND
         sizer = wx.GridBagSizer(2, 2)
 
-        title = wx.StaticText(self, label='Auto-Contrast (%):', size=(120, -1))
+        title = wx.StaticText(self,  label='AutoContrast(%):', size=(120, -1))
         stitle = wx.StaticText(self, label='Adjust Contrast:', size=(120, -1))
 
 

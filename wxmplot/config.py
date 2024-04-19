@@ -37,17 +37,7 @@ StyleMap  = {}
 DrawStyleMap  = {}
 MarkerMap = {}
 
-default_config = dict(viewpad=2.5, title='', xscale='linear',
-                      yscale='linear', xlabel='', ylabel='', y2label='',
-                      plot_type='lineplot', scatter_size=30,
-                      scatter_normalcolor='blue',
-                      scatter_normaledge='blue', scatter_selectcolor='red',
-                      scatter_selectedge='red', auto_margins=True,
-                      legend_loc= 'best', legend_onaxis='on plot',
-                      draggable_legend=False, hidewith_legend=True,
-                      show_legend=False, show_legend_frame=False,
-                      axes_style='box', labelfont=9, legendfont=7,
-                      titlefont=10, theme='light')
+
 
 
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
@@ -164,6 +154,43 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
         theme.update(matplotlib.style.library[tname])
     Themes[tname.lower()] = theme
 
+default_config = dict(auto_margins=True,
+                      axes_style='box',
+                      current_theme='light',
+                      data_deriv=False,
+                      data_expr=None,
+                      draggable_legend=False,
+                      hidewith_legend=True,
+                      legend_loc= 'best',
+                      legend_onaxis='on plot',
+                      linecolors=linecolors,
+                      margins=(0.15, 0.05, 0.05, 0.15),
+                      mpl_legend=None,
+                      plot_type='lineplot',
+                      scatter_size=30,
+                      scatter_mask=None,
+                      scatter_normalcolor='blue',
+                      scatter_normaledge='blue',
+                      scatter_selectcolor='red',
+                      scatter_selectedge='red',
+                      show_grid=True,
+                      show_legend=False,
+                      show_legend_frame=False,
+                      textcolor='#000000',
+                      title='',
+                      xscale='linear',
+                      yscale='linear',
+                      xlabel='',
+                      ylabel='',
+                      y2label='',
+                      viewpad=2.5,
+                      with_data_process=True,
+                      zoom_style='both x and y',
+                      labelfont=9,
+                      legendfont=7,
+                      titlefont=10)
+
+
 def ifnot_none(val, default):
     "return val if val is not None else default"
     return val if val is not None else default
@@ -175,7 +202,7 @@ class LineProps:
     to  make the matplotlib calls to set the Line2D properties
     """
     REPRFMT = """LineProps(color='{color:s}', style='{style:s}', linewidth={linewidth:.1f},
-          label='{label:s}', zorder={zorder:d}, drawstyle='{drawstyle:s}',
+          label='{label:s}', zorder={zorder:d}, drawstyle='{drawstyle:s}', alpha={alpha:3f},
           marker='{marker:s}', markersize={markersize:.1f}, markercolor={markercolor:s})"""
 
     def __init__(self, color='black', style='solid', drawstyle='default',
@@ -199,13 +226,13 @@ class LineProps:
 
     def __repr__(self):
         if self.zorder is None:
-            self.zorder = 33
+            self.zorder = 30
         return self.REPRFMT.format(**self.__dict__)
 
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
             label=None, fill=False, alpha=None):
-        self.color = ifnotNOne(color, self.color)
+        self.color = ifnot_none(color, self.color)
         self.style = style
         self.drawstyle  = drawstyle
         self.fill       = fill
@@ -216,6 +243,14 @@ class LineProps:
         self.label      = label
         self.zorder     = zorder
         self.alpha      = alpha
+
+    def asdict(self):
+        return dict(color=self.color, style=self.style,
+                    linewidth=self.linewidth, zorder=self.zorder,
+                    fill=self.fill, label=self.label, drawstyle=self.drawstyle,
+                    alpha=self.alpha, markersize=self.markersize,
+                    marker=self.marker, markercolor=self.markercolor)
+
 
 
 class PlotConfig:
@@ -262,7 +297,7 @@ class PlotConfig:
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
 
-        self.configdict = default_config
+        self.configdict = {k: v for k, v in default_config.items()}
         if custom_config is not None:
             self.configdict.update(custom_config)
         self.themes = Themes
@@ -270,18 +305,12 @@ class PlotConfig:
         self.set_defaults()
 
     def set_defaults(self):
-        fontsize = {}
-        for key, val in self.configdict.items():
-            if 'font' in key:
-                fontsize[key] = val
-            else:
-                setattr(self, key, val)
-
         self.zoom_lims = []
         self.added_texts = []
         self.scatter_xdata = None
         self.scatter_ydata = None
         self.scatter_mask = None
+
         self.margins = None
         self.mpl_legend  = None
         self.axes_traces = {}
@@ -290,14 +319,18 @@ class PlotConfig:
         self.traces = []
         self.reset_lines()
 
-        f0 =  FontProperties()
-        self.labelfont = f0.copy()
-        self.titlefont = f0.copy()
-        self.legendfont = f0.copy()
-        self.legendfont.set_size(fontsize['legendfont'])
-        self.labelfont.set_size(fontsize['labelfont'])
-        self.titlefont.set_size(fontsize['titlefont'])
+        self.labelfont = FontProperties()
+        self.titlefont = FontProperties()
+        self.legendfont = FontProperties()
+
+        for key, val in self.configdict.items():
+            if 'font' in key:
+                thisfont = getattr(self, key, FontProperties())
+                thisfont.set_size(val)
+            else:
+                setattr(self, key, val)
         self.set_theme()
+
 
     def set_theme(self, theme=None):
         if theme in self.themes:
@@ -320,25 +353,73 @@ class PlotConfig:
         self.reset_trace_properties()
         self.set_axes_style()
 
-    def get_current_config(self):
-        """save dict of current configuration options to self.configdict
+    def get_config(self):
+        """save json-ifiable dict of current configuration options
+        to self.configdict
         """
         cnf = {}
-        for key in self.configdict:
-            if hasattr(self, key):
-                val = getattr(self, key)
-                if key in ('legendfont', 'labelfont', 'titlefont'):
-                    val = val.get_size()
-                elif key == 'linecolors':
-                    val = [trace.color for trace in self.traces[:10]]
-                cnf[key] = val
+        for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
+                     'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
+                     'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
+                     'legend_onaxis', 'linecolors', 'margins', 'mpl_legend', 'ntrace',
+                     'plot_type', 'scatter_mask', 'scatter_normalcolor',
+                     'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
+                     'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
+                     'textcolor', 'title', 'viewpad', 'with_data_process',
+                     'xlabel', 'xscale', 'y2label', 'ylabel', 'yscale', 'zoom_lims',
+                     'zoom_style', 'legendfont', 'labelfont', 'titlefont',
+                     'fills', 'traces'):
+            val = getattr(self, attr)
+            if attr in ('legendfont', 'labelfont', 'titlefont'):
+                val = val.get_size()
+            elif attr == 'fills':
+                val = val[:self.ntrace]
+            elif attr == 'traces':
+                val = self.get_traces()[:self.ntrace]
+
+            cnf[attr] = val
         self.configdict = cnf
         return cnf
 
     def load_config(self, conf):
-        self.get_current_config()
+        self.get_config()
         self.configdict.update(conf)
-        self.set_defaults()
+        cnf = self.configdict
+
+        self.ntrace = cnf.get('ntrace', 1)
+
+        # self.lines = [None]*self.ntrace
+        # self.dy    = [None]*self.ntrace
+        # self.fills = [None]*self.ntrace
+
+        self.set_theme(theme=cnf['current_theme'])
+        for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
+                     'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
+                     'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
+                     'legend_onaxis', 'linecolors', 'margins', 'mpl_legend',
+                     'plot_type', 'scatter_mask', 'scatter_normalcolor',
+                     'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
+                     'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
+                     'textcolor', 'title', 'viewpad', 'with_data_process',
+                     'xlabel', 'xscale', 'y2label', 'ylabel', 'yscale', 'zoom_lims',
+                     'zoom_style'):
+            if attr in cnf:
+                setattr(self, attr, cnf.get(attr))
+
+#         for fname in ('legendfont', 'labelfont', 'titlefont'):
+#             fsize = cnf.get(fname, None)
+#             if fsize is not None:
+#                 thisfont = getattr(self, fname).set_size(fsize)
+#
+#         for i, xfill in enumerate(cnf['fills']):
+#             self.fills[i] = xfill
+#
+#         self.traces = []
+#         for trace in cnf['traces']:
+#             thistrace = LineProps()
+#             thistrace.set(**trace)
+#             self.traces.append(thistrace)
+
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
@@ -393,13 +474,19 @@ class PlotConfig:
         except:
             return self.lines[n-1]
 
-
     def get_trace(self, trace):
         if trace is None:
             trace = self.ntrace
         while trace >= len(self.traces):
             self.traces.append(LineProps())
         return trace
+
+    def get_traces(self):
+        out = []
+        for i in range(self.ntrace):
+            out.append(self.traces[i].asdict())
+        return out
+
 
     def relabel(self, xlabel=None, ylabel=None,
                 y2label=None, title=None, delay_draw=False):

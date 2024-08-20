@@ -18,6 +18,7 @@ from matplotlib.backends.backend_wx import RendererWx
 
 from .utils import Printer, MenuItem
 
+
 class BasePanel(wx.Panel):
     """
     wx.Panel component shared by PlotPanel and ImagePanel.
@@ -568,11 +569,20 @@ class BasePanel(wx.Panel):
             self.x_lastmove = event.xdata
         if event.ydata is not None:
             self.y_lastmove = event.ydata
-        x0     = min(x, ini_x)
-        ymax   = max(y, ini_y)
-        width  = abs(x-ini_x)
-        height = abs(y-ini_y)
-        y0     = self.canvas.figure.bbox.height - ymax
+
+        dpi_sf = 1.0
+        if wx.Platform != '__WXMSW__':
+            try:
+                dpi_sf = self.canvas.GetDPIScaleFactor()
+            except:
+                dpi_sf = 1.0
+
+        bheight = self.canvas.figure.bbox.height/dpi_sf
+        x0     = min(x, ini_x)/dpi_sf
+        ymax   = max(y, ini_y)/dpi_sf
+        width  = abs(x-ini_x)/dpi_sf
+        height = abs(y-ini_y)/dpi_sf
+        y0     = bheight - ymax
         limits = self.canvas.figure.axes[0].bbox.corners()
         if self.conf.zoom_style.startswith('x'):
             height = int(round(limits[3][1] - limits[0][1]))
@@ -635,7 +645,6 @@ class BasePanel(wx.Panel):
                     tlims[ax][2:] = [ymin, ymax]
                 elif self.conf.zoom_style.startswith('y'):
                     tlims[ax][:2] = [xmin, xmax]
-
             self.conf.zoom_lims.append(tlims)
             # now apply limits:
             self.set_viewlimits()

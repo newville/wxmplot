@@ -1,6 +1,5 @@
 
-
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en" data-content_root="./">
   <head>
@@ -9,10 +8,10 @@
 
     <title>Comparisons of wxmplot with other Python Plotting tools &#8212; WXMPLOT: interactive plotting with Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
     
-    <script src="_static/documentation_options.js?v=47164abe"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=e36ecea7"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -23,7 +22,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -136,7 +135,8 @@ of those features, and has much more flexibility at run-time for the user
 to be able to manipulate the display of the data.</p>
 <p>For completeness, the example using plain matplotlib would look like</p>
 <blockquote id="plot-compare-mpl">
-<div><a class="reference internal image-reference" href="_images/plot_mpl.png"><img alt="_images/plot_mpl.png" src="_images/plot_mpl.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_mpl.png"><img alt="_images/plot_mpl.png" src="_images/plot_mpl.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>and with wxmplot the code would look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -154,7 +154,8 @@ to be able to manipulate the display of the data.</p>
 </div>
 <p>and give a result of</p>
 <blockquote id="plot-wxmplot">
-<div><a class="reference internal image-reference" href="_images/plot_wxmplot.png"><img alt="_images/plot_wxmplot.png" src="_images/plot_wxmplot.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_wxmplot.png"><img alt="_images/plot_wxmplot.png" src="_images/plot_wxmplot.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 </section>
 <section id="comparison-with-wxplot">
@@ -191,7 +192,8 @@ plots.  An example of using this would be:</p>
 </div>
 <p>and give a plot of</p>
 <blockquote id="plot-compare-wxplot-wx">
-<div><a class="reference internal image-reference" href="_images/plot_compare_wxplot_wx.png"><img alt="_images/plot_compare_wxplot_wx.png" src="_images/plot_compare_wxplot_wx.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_wxplot_wx.png"><img alt="_images/plot_compare_wxplot_wx.png" src="_images/plot_compare_wxplot_wx.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>As written, there is not interactivity, though zooming can be enabled. The
 need to create a subclass of a <cite>Frame</cite> and initiate a wxApp adds a fair
@@ -243,7 +245,8 @@ more complicated code:</p>
 <p>That is a bit more complicated than wxmplot, but not too bad.  The resulting
 plot looks like</p>
 <blockquote id="plot-compare-plotly">
-<div><a class="reference internal image-reference" href="_images/plot_compare_plotly.png"><img alt="_images/plot_compare_plotly.png" src="_images/plot_compare_plotly.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_plotly.png"><img alt="_images/plot_compare_plotly.png" src="_images/plot_compare_plotly.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>which is a decent starting point. Plotly also gives basic interactivity by
 default, including zooming and displaying coordinates of data points.
@@ -282,7 +285,8 @@ applications using this library to produce good visualizations of data.</p>
 <p>That aside, for brevity and clarity, this is very good.  The resulting plot
 looks like</p>
 <blockquote id="plot-compare-qt">
-<div><a class="reference internal image-reference" href="_images/plot_compare_qt.png"><img alt="_images/plot_compare_qt.png" src="_images/plot_compare_qt.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_qt.png"><img alt="_images/plot_compare_qt.png" src="_images/plot_compare_qt.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>The plots with <cite>pyqtqraph</cite> are interactive. Though perhaps not quite as
 customizable as <cite>wxmplot</cite>, it is much better than any other library
@@ -360,7 +364,8 @@ tutorials start with a “simple” plot. The code given for this is:</p>
 <p>producing a very, very basic plot. There are no links to the images
 available, but running this locally gives a plot of</p>
 <blockquote id="plot-compare-qttutorial1-qt">
-<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1_qt.png"><img alt="_images/plot_compare_qttutorial1_qt.png" src="_images/plot_compare_qttutorial1_qt.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1_qt.png"><img alt="_images/plot_compare_qttutorial1_qt.png" src="_images/plot_compare_qttutorial1_qt.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>At 20 lines of code, with three levels of indentation, and with data is buried
 in a class, this is hardly “brief”.  With <cite>wxmplot</cite>, even creating an
@@ -393,7 +398,8 @@ shown in the pythonguis pages have axes labeled, which is another significant
 problem for the display of scientific data.  Axes should be labeled.</p>
 <p>With <cite>wxmplot</cite>, the resulting plot looks like:</p>
 <blockquote id="plot-compare-qttutorial1">
-<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 <p>There is some basic interactivity with the Qt example in that the plot can
 be panned and zoomed.  Some plot features can be altered by the end-user
@@ -479,7 +485,8 @@ may be able to have the user advance through a series of plots.</p>
 </div>
 <p>which gives a plot of</p>
 <blockquote id="plot-compare-plplot">
-<div><a class="reference internal image-reference" href="_images/plot_compare_plplot.png"><img alt="_images/plot_compare_plplot.png" src="_images/plot_compare_plplot.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_plplot.png"><img alt="_images/plot_compare_plplot.png" src="_images/plot_compare_plplot.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 </section>
 <section id="comparison-with-dislin">
@@ -558,7 +565,8 @@ no interactivity. Converting that to <cite>wxmplot</cite> would be:</p>
 </div>
 <p>and give a plot of</p>
 <blockquote id="plot-compare-dislin">
-<div><a class="reference internal image-reference" href="_images/plot_compare_dislin.png"><img alt="_images/plot_compare_dislin.png" src="_images/plot_compare_dislin.png" style="width: 75%;" /></a>
+<div><a class="reference internal image-reference" href="_images/plot_compare_dislin.png"><img alt="_images/plot_compare_dislin.png" src="_images/plot_compare_dislin.png" style="width: 75%;" />
+</a>
 </div></blockquote>
 </section>
 <section id="conclusion">
@@ -585,7 +593,7 @@ and end-users of applications to have rich interactions with their data.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -616,7 +624,7 @@ and end-users of applications to have rich interactions with their data.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -624,13 +632,13 @@ and end-users of applications to have rich interactions with their data.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -644,8 +652,8 @@ and end-users of applications to have rich interactions with their data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2023-10-13, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    &#169; Copyright 2024-08-20, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>
 </html>

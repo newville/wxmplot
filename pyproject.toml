@@ -43,10 +43,10 @@ classifiers = [
     ]
 
 dependencies = [
-   "wxPython>=4.1.0",
+   "wxPython>=4.2.0",
    "wxutils>=0.3.0",
-   "matplotlib>=3.5.0",
-   "numpy>=1.18",
+   "matplotlib>=3.6.0",
+   "numpy>=1.22",
    "Pillow>=7.0",
    "pyyaml>=5.0",
    "pyshortcuts>=1.9.5"]

@@ -1,4 +1,4 @@
-name: Test Installing wxmplot, using mamba
+name: Test Installing wxmplot, using conda
 
 on: [push]
 
@@ -9,26 +9,26 @@ jobs:
       max-parallel: 4
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
     defaults:
       run:
         shell: bash -l {0}
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python with Miniconda/mamba
+    - name: Set up Python with Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
         miniconda-version: latest
-        mamba-version: "*"
+        conda-version: "*"
         channels: conda-forge,defaults
         channel-priority: true
         activate-environment: anaconda-client-env
         python-version: ${{ matrix.python-version }}
-    - name: Install mamb dependencies
+    - name: Install conda dependencies
       run: |
-        mamba install -y -c conda-forge python=${{ matrix.python-version }} numpy=>1.22 matplotlib=>3.6 wxpython=>4.2 pip pytest
-        mamba info -a
-        mamba list
+        conda install -y -c conda-forge python=${{ matrix.python-version }} numpy=>1.22 matplotlib=>3.6 wxpython=>4.2 pip pytest
+        conda info -a
+        conda list
     - name: Install wxmplot with pip
       run: |
         python -m pip install --upgrade pip

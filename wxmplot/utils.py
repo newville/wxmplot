@@ -1,76 +1,12 @@
 #!/usr/bin/python
 #
-from math import log10
-
 from matplotlib.path import Path as mplPath
 
 import wx
 from wxutils import (pack, SimpleText, HLine, MenuItem, Check,
-                    Choice, FloatSpin, LabeledTextCtrl
-                         )
+                    Choice, FloatSpin, LabeledTextCtrl)
 
-
-def fix_filename(s):
-    """fix string to be a 'good' filename.
-    This may be a more restrictive than the OS, but
-    avoids nasty cases."""
-    badchars = ' <>:"\'\\\t\r\n/|?*!%$'
-    t = s.translate(s.maketrans(badchars, '_'*len(badchars)))
-    if t.count('.') > 1:
-        for i in range(t.count('.') - 1):
-            idot = t.find('.')
-            t = "%s_%s" % (t[:idot], t[idot+1:])
-    return t
-
-
-def gformat(val, length=11):
-    """Format a number with '%g'-like format, except that
-
-        a) the length of the output string will be the requested length.
-        b) positive numbers will have a leading blank.
-        b) the precision will be as high as possible.
-        c) trailing zeros will not be trimmed.
-
-    The precision will typically be length-7.
-
-    Arguments
-    ---------
-    val       value to be formatted
-    length    length of output string
-
-    Returns
-    -------
-    string of specified length.
-
-    Notes
-    ------
-     Positive values will have leading blank.
-
-    """
-    if val is None or isinstance(val, bool):
-        return f'{repr(val):>{length}s}'
-    try:
-        expon = int(log10(abs(val)))
-    except (OverflowError, ValueError):
-        expon = 0
-    except TypeError:
-        return f'{repr(val):>{length}s}'
-
-    length = max(length, 7)
-    form = 'e'
-    prec = length - 7
-    if abs(expon) > 99:
-        prec -= 1
-    elif ((expon > 0 and expon < (prec+4)) or
-          (expon <= 0 and -expon < (prec-1))):
-        form = 'f'
-        prec += 4
-        if expon > 0:
-            prec -= expon
-    return f'{val:{length}.{prec}{form}}'
-
-
-
+from pyshortcuts import fix_filename, gformat
 
 class PrintoutWx(wx.Printout):
     """Simple wrapper around wx Printout class -- all the real work

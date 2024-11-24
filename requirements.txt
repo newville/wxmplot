@@ -1,6 +1,0 @@
-numpy>=1.18
-matplotlib>=3.5.0
-wxpython>=4.1.0
-wxutils>=0.3.0
-Pillow>=7.0
-pyyaml>=5.0

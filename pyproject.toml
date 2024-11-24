@@ -5,3 +5,59 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "wxmplot/version.py"
 version_scheme = "post-release"
+
+[tool.setuptools.packages.find]
+include = ["wxmplot"]
+
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[project]
+name = "wxmplot"
+dynamic = ["version"]
+requires-python = ">= 3.9"
+description = "wxPython plotting widgets using matplotlib"
+readme = "README.md"
+authors = [
+  {name = "Matthew Newville", email = "matt.newville@gmail.com"}
+  ]
+license = {file = "LICENSE"}
+keywords = ["wxPython", "matplotlib"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+    ]
+
+dependencies = [
+   "wxPython>=4.1.0",
+   "wxutils>=0.3.0",
+   "matplotlib>=3.5.0",
+   "numpy>=1.18",
+   "Pillow>=7.0",
+   "pyyaml>=5.0",
+   "pyshortcuts>=1.9.5"]
+
+[project.urls]
+Hoempage = "https://github.com/newville/wxmplot"
+Documentation = "https://newville.github.io/wxmplot"
+Tracker = "https://github.com/newville/wxmplot/issues"
+
+[project.optional-dependencies]
+dev = ["build", "twine"]
+doc = ["Sphinx", "jupyter_sphinx"]
+test = ["pytest", "pytest-cov", "coverage"]
+all = ["wxmplotls[dev, doc, test]"]

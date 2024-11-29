@@ -71,8 +71,8 @@ class PlotPanel(BasePanel):
         self.use_dates = False
         self.dates_style = None
 
-    def plot(self, xdata, ydata, side='left', title=None,
-             xlabel=None, ylabel=None, y2label=None,
+    def plot(self, xdata, ydata, side='left', title=None, xlabel=None,
+             ylabel=None, y2label=None, y3label=None, y4label=None,
              use_dates=False, dates_style=None, **kws):
         """
         create a new plot of x/y data, clearing any existing plot on the panel
@@ -90,8 +90,9 @@ class PlotPanel(BasePanel):
         self.conf.axes_traces = {}
         self.clear()
         axes = self.axes
-        if side == 'right':
-            axes = self.get_right_axes()
+        if side.startswith('right'):
+            axes = self.get_right_axes(side=side)
+
         self.conf.reset_lines()
         self.conf.yscale = 'linear'
         self.conf.user_limits[axes] = 4*[None]
@@ -102,6 +103,10 @@ class PlotPanel(BasePanel):
             self.set_ylabel(ylabel, delay_draw=True)
         if y2label is not None:
             self.set_y2label(y2label, delay_draw=True)
+        if y3label is not None:
+            self.set_y3label(y3label, delay_draw=True)
+        if y4label is not None:
+            self.set_y4label(y4label, delay_draw=True)
         if title is not None:
             self.set_title(title, delay_draw=True)
         self.dates_style = ifnot_none(dates_style, self.dates_style)
@@ -110,10 +115,10 @@ class PlotPanel(BasePanel):
 
 
     def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,
-              ylabel=None, y2label=None, title=None, dy=None,
-              ylog_scale=None, xlog_scale=None, grid=None, xmin=None,
-              xmax=None, ymin=None, ymax=None, color=None, style=None, alpha=None,
-              fill=False, drawstyle=None, linewidth=2,
+              ylabel=None, y2label=None, y3label=None, y4label=None,
+              title=None, dy=None, ylog_scale=None, xlog_scale=None, grid=None,
+              xmin=None, xmax=None, ymin=None, ymax=None, color=None,
+              style=None, alpha=None, fill=False, drawstyle=None, linewidth=2,
               marker=None, markersize=None, refresh=True, show_legend=None,
               legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
@@ -132,8 +137,9 @@ class PlotPanel(BasePanel):
 
         if theme is not None:
             conf.set_theme(theme=theme)
-        if side == 'right':
-            axes = self.get_right_axes()
+        if side.startswith('right'):
+            axes = self.get_right_axes(side=side)
+
         # set y scale to log/linear
         if ylog_scale is not None:
             conf.yscale = {False:'linear', True:'log'}[ylog_scale]
@@ -171,6 +177,10 @@ class PlotPanel(BasePanel):
             self.set_ylabel(ylabel, delay_draw=True)
         if y2label is not None:
             self.set_y2label(y2label, delay_draw=True)
+        if y3label is not None:
+            self.set_y3label(y3label, delay_draw=True)
+        if y4label is not None:
+            self.set_y4label(y4label, delay_draw=True)
         if title  is not None:
             self.set_title(title, delay_draw=True)
         if show_legend is not None:
@@ -189,10 +199,15 @@ class PlotPanel(BasePanel):
         conf.user_limits[axes][2] = ifnot_none(ymin, conf.user_limits[axes][2])
         conf.user_limits[axes][3] = ifnot_none(ymax, conf.user_limits[axes][3])
 
-        if axes == self.axes:
+
+        if side=='left':
             axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        else:
+        elif side == 'right':
             axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
+        elif side == 'right2':
+            axes.yaxis.set_major_formatter(FuncFormatter(self.y3formatter))
+        elif side == 'right3':
+            axes.yaxis.set_major_formatter(FuncFormatter(self.y4formatter))
 
         zorder = ifnot_none(zorder, 5*(conf.ntrace+1))
 
@@ -337,8 +352,8 @@ class PlotPanel(BasePanel):
 
 
         conf = self.conf
-        opts = dict(side=side, title=title, xlabel=xlabel, ylabel=ylabel,
-                    delay_draw=True, show_legend=False)
+        opts = {'side': side, 'title': title, 'xlabel': xlabel,
+               'ylabel': ylabel, 'delay_draw': True, 'show_legend': False}
         opts.update(kws)
         x0, y0, opts = unpack_tracedata(datalist[0], **opts)
 
@@ -392,8 +407,8 @@ class PlotPanel(BasePanel):
         """add text at supplied x, y position
         """
         axes = self.axes
-        if side == 'right':
-            axes = self.get_right_axes()
+        if side.startwith('right'):
+            axes = self.get_right_axes(side=side)
         dynamic_size = False
         if size is None:
             size = self.conf.legendfont.get_size()
@@ -410,8 +425,9 @@ class PlotPanel(BasePanel):
         dx, dy = x2-x1, y2-y1
 
         axes = self.axes
-        if side == 'right':
-            axes = self.get_right_axes()
+        if side.startwith('right'):
+            axes = self.get_right_axes(side=side)
+
         axes.arrow(x1, y1, dx, dy, shape=shape,
                    length_includes_head=True,
                    fc=color, edgecolor=color,
@@ -527,8 +543,9 @@ class PlotPanel(BasePanel):
         "set user-defined limits and apply them"
         if axes is None:
             axes = self.axes
-            if side == 'right':
-                axes = self.get_right_axes()
+            if side.startswith('right'):
+                axes = self.get_right_axes(side=side)
+
         self.conf.user_limits[axes] = list(limits)
         self.unzoom_all()
 
@@ -554,6 +571,8 @@ class PlotPanel(BasePanel):
         self.conf.xlabel = ''
         self.conf.ylabel = ''
         self.conf.y2label = ''
+        self.conf.y3label = ''
+        self.conf.y4label = ''
         self.conf.title  = ''
         self.conf.data_save = {}
 
@@ -713,18 +732,17 @@ class PlotPanel(BasePanel):
 
         # Extent
         dl, dt, dr, db = 0, 0, 0, 0
-        for ax in self.fig.get_axes():
+        for i, ax in enumerate(self.fig.get_axes()):
             (x0, y0),(x1, y1) = ax.get_position().get_points()
             try:
                 (ox0, oy0), (ox1, oy1) = ax.get_tightbbox(self.canvas.get_renderer()).get_points()
                 (ox0, oy0), (ox1, oy1) = trans(((ox0 ,oy0),(ox1 ,oy1)))
                 dl = min(0.2, max(dl, (x0 - ox0)))
                 dt = min(0.2, max(dt, (oy1 - y1)))
-                dr = min(0.2, max(dr, (ox1 - x1)))
+                dr = min(0.2*(i+1), max(dr, (ox1 - x1)))
                 db = min(0.2, max(db, (y0 - oy0)))
             except:
                 pass
-
         return (l + dl, t + dt, r + dr, b + db)
 
     def autoset_margins(self):
@@ -754,8 +772,8 @@ class PlotPanel(BasePanel):
             self.oplot(xdata, ydata, side=side, delay_draw=True)
         x.set_data(xdata, ydata)
         axes = self.axes
-        if side == 'right':
-            axes = self.get_right_axes()
+        if side.startwith('right'):
+            axes = self.get_right_axes(side=side)
 
         if update_limits:
             self.set_viewlimits()

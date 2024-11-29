@@ -183,6 +183,9 @@ default_config = dict(auto_margins=True,
                       xlabel='',
                       ylabel='',
                       y2label='',
+                      y3label='',
+                      y4label='',
+                      y3offset=0.2,
                       viewpad=2.5,
                       with_data_process=True,
                       zoom_style='both x and y',
@@ -366,7 +369,8 @@ class PlotConfig:
                      'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
                      'textcolor', 'title', 'viewpad', 'with_data_process',
-                     'xlabel', 'xscale', 'y2label', 'ylabel', 'yscale', 'zoom_lims',
+                     'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
+                     'ylabel', 'yscale', 'zoom_lims',
                      'zoom_style', 'legendfont', 'labelfont', 'titlefont',
                      'fills', 'traces'):
             val = getattr(self, attr)
@@ -401,8 +405,8 @@ class PlotConfig:
                      'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
                      'textcolor', 'title', 'viewpad', 'with_data_process',
-                     'xlabel', 'xscale', 'y2label', 'ylabel', 'yscale', 'zoom_lims',
-                     'zoom_style'):
+                     'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
+                     'ylabel', 'yscale', 'zoom_lims', 'zoom_style'):
             if attr in cnf:
                 setattr(self, attr, cnf.get(attr))
 
@@ -488,8 +492,8 @@ class PlotConfig:
         return out
 
 
-    def relabel(self, xlabel=None, ylabel=None,
-                y2label=None, title=None, delay_draw=False):
+    def relabel(self, xlabel=None, ylabel=None, y2label=None, y3label=None,
+                y4label=None, title=None, delay_draw=False):
         " re draw labels (title, x, y labels)"
         n = self.labelfont.get_size()
         # self.titlefont.set_size(n+1)
@@ -501,6 +505,10 @@ class PlotConfig:
             self.ylabel = ylabel
         if y2label is not None:
             self.y2label = y2label
+        if y3label is not None:
+            self.y3label = y3label
+        if y4label is not None:
+            self.y4label = y4label
         if title is not None:
             self.title = title
         if self.canvas is None: return
@@ -517,6 +525,18 @@ class PlotConfig:
         if (len(axes) > 1 and len(self.y2label) > 0 and
             self.y2label not in ('', None, 'None')):
             axes[1].set_ylabel(self.y2label, **kws)
+        if (len(axes) > 2 and len(self.y3label) > 0 and
+            self.y3label not in ('', None, 'None')):
+            axes[2].set_ylabel(self.y3label, **kws)
+        if (len(axes) > 3 and len(self.y4label) > 0 and
+            self.y4label not in ('', None, 'None')):
+            axes[3].set_ylabel(self.y4label, **kws)
+
+
+        if len(axes) > 2:
+            axes[2].spines.right.set_position(("axes", 1 + self.y3offset))
+            if len(axes) > 3:
+                axes[3].spines.right.set_position(("axes", 1 + 2*self.y3offset))
 
         for axes in self.canvas.figure.get_axes():
             for ax in axes.xaxis, axes.yaxis:
@@ -539,9 +559,10 @@ class PlotConfig:
         if self.panel is not None:
             self.panel.gridspec.update(left=left, top=1-top,
                                        right=1-right, bottom=bottom)
-        for ax in self.canvas.figure.get_axes():
+        for i, ax in enumerate(self.canvas.figure.get_axes()):
             # ax.update_params()
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)
+            print("Set Margins ", i, figpos)
             ax.set_position(figpos)
 
         if not delay_draw:

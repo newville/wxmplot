@@ -44,6 +44,7 @@ class BasePanel(wx.Panel):
 
         self.popup_menu =  None
         self._yfmt  = self._y2fmt = self._xfmt  = None
+        self._y3fmt  = self._y4fmt = None
         self.use_dates = False
         self.show_config_popup = show_config_popup
         self.launch_dir  = get_cwd()
@@ -138,12 +139,26 @@ class BasePanel(wx.Panel):
 
         self.canvas.draw()
 
-    def get_right_axes(self):
-        "create, if needed, and return right-hand y axes"
-        if len(self.fig.get_axes()) < 2:
-            ax = self.axes.twinx()
+    def get_right_axes(self, side='right'):
+        """
+        return right-hand (y2, y3, or y4) axes, creating if needed)
 
-        return self.fig.get_axes()[1]
+        use side='right' [default], or side='right2', 'right3' for further sides
+        """
+        n = 1
+        if side.startswith('right'):
+            ext = side[5:]
+            if len(ext) > 0:
+                try:
+                    n = int(ext)
+                except:
+                    pass
+
+        naxes = len(self.fig.get_axes())
+        while len(self.fig.get_axes()) < (n+1):
+            self.axes.twinx()
+
+        return self.fig.get_axes()[n]
 
     def set_xylims(self, limits, axes=None):
         if axes not in self.user_limits:
@@ -170,8 +185,16 @@ class BasePanel(wx.Panel):
         self.conf.relabel(ylabel=s, delay_draw=delay_draw)
 
     def set_y2label(self, s, delay_draw=False):
-        "set plot ylabel"
+        "set plot y2 label"
         self.conf.relabel(y2label=s, delay_draw=delay_draw)
+
+    def set_y3label(self, s, delay_draw=False):
+        "set plot y3 label"
+        self.conf.relabel(y3label=s, delay_draw=delay_draw)
+
+    def set_y4label(self, s, delay_draw=False):
+        "set plot y4 label"
+        self.conf.relabel(y4label=s, delay_draw=delay_draw)
 
     def write_message(self, s, panel=0):
         """ write message to message handler
@@ -366,8 +389,16 @@ class BasePanel(wx.Panel):
         return self.__format(y, type='y')
 
     def y2formatter(self, y, pos):
-        " y-axis formatter "
+        " y2-axis formatter "
         return self.__format(y, type='y2')
+
+    def y3formatter(self, y, pos):
+        " y3-axis formatter "
+        return self.__format(y, type='y3')
+
+    def y4formatter(self, y, pos):
+        " y4-axis formatter "
+        return self.__format(y, type='y4')
 
     def set_format_str(self, axis):
         try:
@@ -378,8 +409,9 @@ class BasePanel(wx.Panel):
         if len(ticks) < 2:
             ticks.append(0)
             ticks.append(1)
-
         step = max(2.e-15, abs(np.diff(ticks).mean()))
+        # print("set format str: axis= " , id(axis), step)
+        # print(" ---> ", ticks)
         if step > 5e4 or (step < 5.e-4 and ticks.mean() < 5.e-2):
             fmt = '%.2e'
         else:
@@ -390,6 +422,7 @@ class BasePanel(wx.Panel):
                 else:
                     break
             fmt = '%%1.%df' % min(9, ndigs+1)
+            # print("set format str: ndig = " , fmt, ndigs)
         return fmt
 
 
@@ -411,6 +444,16 @@ class BasePanel(wx.Panel):
             if self._y2fmt is None:
                 self._y2fmt = self.set_format_str(ax)
             fmt = self._y2fmt
+        elif type == 'y3' and len(self.fig.get_axes()) > 2:
+            ax =  self.fig.get_axes()[2].yaxis
+            if self._y3fmt is None:
+                self._y3fmt = self.set_format_str(ax)
+            fmt = self._y3fmt
+        elif type == 'y4' and len(self.fig.get_axes()) > 3:
+            ax =  self.fig.get_axes()[2].yaxis
+            if self._y4fmt is None:
+                self._y4fmt = self.set_format_str(ax)
+            fmt = self._y4fmt
         else:
             ax = self.axes.xaxis
             if self._xfmt is None:

@@ -376,7 +376,7 @@ class BasePanel(wx.Panel):
 
     def reset_formats(self):
         self._xfmt = self._yfmt = self._y2fmt = None
-        self._y3fmt = self._yf4mt = None
+        self._y3fmt = self._y4fmt = None
 
     def xformatter(self, x, pos):
         " x-axis formatter "
@@ -411,19 +411,16 @@ class BasePanel(wx.Panel):
             ticks.append(0)
             ticks.append(1)
         step = max(2.e-15, abs(np.diff(ticks).mean()))
-        # print("set format str: axis= " , id(axis), step)
-        # print(" ---> ", ticks)
         if step > 5e4 or (step < 5.e-4 and ticks.mean() < 5.e-2):
             fmt = '%.2e'
         else:
-            ndigs = max(0, 3 - round(log10(5.*step)))
+            ndigs = max(0, 3 - round(log10(1.25*step)))
             while ndigs >= 0:
                 if np.abs(ticks- np.round(ticks, decimals=ndigs)).max() < 2e-3*step:
                     ndigs -= 1
                 else:
                     break
             fmt = '%%1.%df' % min(9, ndigs+1)
-            # print("set format str: ndig = " , fmt, ndigs)
         return fmt
 
 
@@ -451,7 +448,7 @@ class BasePanel(wx.Panel):
                 self._y3fmt = self.set_format_str(ax)
             fmt = self._y3fmt
         elif type == 'y4' and len(self.fig.get_axes()) > 3:
-            ax =  self.fig.get_axes()[2].yaxis
+            ax =  self.fig.get_axes()[3].yaxis
             if self._y4fmt is None:
                 self._y4fmt = self.set_format_str(ax)
             fmt = self._y4fmt

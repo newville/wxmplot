@@ -376,6 +376,7 @@ class BasePanel(wx.Panel):
 
     def reset_formats(self):
         self._xfmt = self._yfmt = self._y2fmt = None
+        self._y3fmt = self._yf4mt = None
 
     def xformatter(self, x, pos):
         " x-axis formatter "
@@ -415,7 +416,7 @@ class BasePanel(wx.Panel):
         if step > 5e4 or (step < 5.e-4 and ticks.mean() < 5.e-2):
             fmt = '%.2e'
         else:
-            ndigs = max(0, 3 - round(log10(step)))
+            ndigs = max(0, 3 - round(log10(5.*step)))
             while ndigs >= 0:
                 if np.abs(ticks- np.round(ticks, decimals=ndigs)).max() < 2e-3*step:
                     ndigs -= 1

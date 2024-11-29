@@ -37,9 +37,6 @@ StyleMap  = {}
 DrawStyleMap  = {}
 MarkerMap = {}
 
-
-
-
 for k in ('default', 'steps-pre','steps-mid', 'steps-post'):
     DrawStyleMap[k] = k
 
@@ -113,7 +110,6 @@ dark_theme = {'axes.facecolor': '#202020',
 whitebg_theme = {'axes.facecolor': '#FFFFFF',
                'figure.facecolor': '#FFFFFF'}
 
-
 Themes = {}
 
 for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
@@ -186,6 +182,7 @@ default_config = dict(auto_margins=True,
                       y3label='',
                       y4label='',
                       y3offset=0.2,
+                      yaxes_tracecolor=False,
                       viewpad=2.5,
                       with_data_process=True,
                       zoom_style='both x and y',
@@ -210,7 +207,8 @@ class LineProps:
 
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=4,
-                 markercolor=None, fill=False, alpha=1.0, zorder=1, label='', mpline=None):
+                 markercolor=None, fill=False, alpha=1.0, zorder=1, label='',
+                 mpline=None, side='left'):
         self.color      = color
         self.alpha      = alpha
         self.style      = style
@@ -225,7 +223,7 @@ class LineProps:
         self.label      = label
         self.zorder     = zorder
         self.mpline     = mpline
-
+        self.side       = side
 
     def __repr__(self):
         if self.zorder is None:
@@ -234,25 +232,27 @@ class LineProps:
 
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
-            label=None, fill=False, alpha=None):
-        self.color = ifnot_none(color, self.color)
-        self.style = style
-        self.drawstyle  = drawstyle
-        self.fill       = fill
-        self.linewidth  = linewidth
-        self.marker     = marker
-        self.markersize = markersize
-        self.markercolor= markercolor
-        self.label      = label
-        self.zorder     = zorder
-        self.alpha      = alpha
+            label=None, fill=False, alpha=None, side=None):
+        self.color      = ifnot_none(color, self.color)
+        self.style      = ifnot_none(style, self.style)
+        self.drawstyle  = ifnot_none(drawstyle, self.drawstyle)
+        self.fill       = ifnot_none(fill, self.fill)
+        self.linewidth  = ifnot_none(linewidth, self.linewidth)
+        self.marker     = ifnot_none(marker, self.marker)
+        self.markersize = ifnot_none(markersize, self.markersize)
+        self.markercolor= ifnot_none(markercolor,self.markercolor)
+        self.label      = ifnot_none(label, self.label)
+        self.zorder     = ifnot_none(zorder, self.zoder)
+        self.alpha      = ifnot_none(alpha, self.alpha)
+        self.side       = ifnot_none(side, self.side)
+
 
     def asdict(self):
         return dict(color=self.color, style=self.style,
                     linewidth=self.linewidth, zorder=self.zorder,
                     fill=self.fill, label=self.label, drawstyle=self.drawstyle,
                     alpha=self.alpha, markersize=self.markersize,
-                    marker=self.marker, markercolor=self.markercolor)
+                    marker=self.marker, markercolor=self.markercolor, side=side)
 
 
 
@@ -392,10 +392,6 @@ class PlotConfig:
 
         self.ntrace = cnf.get('ntrace', 1)
 
-        # self.lines = [None]*self.ntrace
-        # self.dy    = [None]*self.ntrace
-        # self.fills = [None]*self.ntrace
-
         self.set_theme(theme=cnf['current_theme'])
         for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
                      'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
@@ -409,21 +405,6 @@ class PlotConfig:
                      'ylabel', 'yscale', 'zoom_lims', 'zoom_style'):
             if attr in cnf:
                 setattr(self, attr, cnf.get(attr))
-
-#         for fname in ('legendfont', 'labelfont', 'titlefont'):
-#             fsize = cnf.get(fname, None)
-#             if fsize is not None:
-#                 thisfont = getattr(self, fname).set_size(fsize)
-#
-#         for i, xfill in enumerate(cnf['fills']):
-#             self.fills[i] = xfill
-#
-#         self.traces = []
-#         for trace in cnf['traces']:
-#             thistrace = LineProps()
-#             thistrace.set(**trace)
-#             self.traces.append(thistrace)
-
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
@@ -549,6 +530,8 @@ class PlotConfig:
         if self.mpl_legend is not None:
             for t in self.mpl_legend.get_texts():
                 t.set_color(self.textcolor)
+
+        self.set_yaxes_tracecolor(delay_draw=True)
         if not delay_draw:
             self.canvas.draw()
 
@@ -646,6 +629,7 @@ class PlotConfig:
         if self.fills[trace] is not None:
             self.fills[trace].set_color(color)
 
+        self.set_yaxes_tracecolor(delay_draw=False)
         if not delay_draw:
             self.draw_legend()
         if callable(self.trace_color_callback) and mline:
@@ -668,6 +652,12 @@ class PlotConfig:
         if not delay_draw:
             self.draw_legend()
 
+    def set_trace_side(self, side='left', trace=None, delay_draw=False):
+        trace = self.get_trace(trace)
+        if side in ('left', 'right', 'right2', 'right3'):
+            self.traces[trace].side = side
+        if not delay_draw:
+            self.canvas.draw()
 
     def set_trace_zorder(self, zorder, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
@@ -679,6 +669,7 @@ class PlotConfig:
 
         if not delay_draw:
             self.canvas.draw()
+
 
     def set_trace_label(self, label, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
@@ -853,6 +844,36 @@ class PlotConfig:
         if not delay_draw:
             self.canvas.draw()
 
+    def set_yaxes_tracecolor(self, yaxes_tracecolor=None, delay_draw=False):
+        """set yaxes_tracecolor, to control whether the
+        tick markers and labels for the y axes use the
+        color of the first trace for that 'side'
+        """
+        if yaxes_tracecolor is not None:
+            self.yaxes_tracecolor = bool(yaxes_tracecolor)
+
+        cur_theme = self.themes[self.current_theme]
+        tcolor = mpl2hexcolor(cur_theme['ytick.color'])
+
+        axes = self.canvas.figure.get_axes()
+        colors = [tcolor]*(len(axes)+2)
+        if self.yaxes_tracecolor:
+            for iside, yname in enumerate(('left', 'right', 'right2', 'right3')):
+                for iline, line in enumerate(self.lines):
+                    if line is not None:
+                        trace = self.traces[iline]
+                        if trace.side == yname:
+                            colors[iside] = trace.color
+                            break
+        for i, ax in enumerate(axes):
+            color = colors[i]
+            if color is not None:
+                ax.yaxis.label.set_color(color)
+                ax.tick_params(axis='y', colors=color)
+
+        if not delay_draw:
+            self.canvas.draw()
+
     def set_axes_style(self, style=None, delay_draw=False):
         """set axes style: one of
            'box' / 'fullbox'  : show all four axes borders
@@ -867,8 +888,6 @@ class PlotConfig:
             ax = axes[0]
         except AttributeError:
             return
-
-
 
         for tline in (ax.xaxis.get_majorticklines() + ax.yaxis.get_majorticklines()):
             tline.set_color(rcParams['xtick.color'])

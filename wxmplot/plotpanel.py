@@ -124,7 +124,8 @@ class PlotPanel(BasePanel):
               bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
               labelfontsize=None, titlefontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, viewpad=None,
-              theme=None, use_dates=None, dates_style=None, **kws):
+              theme=None, use_dates=None, dates_style=None,
+              yaxes_tracecolor=None, **kws):
         """
         basic plot method, adding to an existing display
 
@@ -225,6 +226,7 @@ class PlotPanel(BasePanel):
             conf.set_framecolor(framecolor)
 
         conf.set_trace_zorder(zorder, delay_draw=True)
+        conf.set_trace_side(side, delay_draw=True)
         if color:
             conf.set_trace_color(color, delay_draw=True)
         if style:
@@ -326,6 +328,8 @@ class PlotPanel(BasePanel):
             conf.axes_style = axes_style
 
         conf.set_axes_style(delay_draw=delay_draw)
+        conf.set_yaxes_tracecolor(yaxes_tracecolor, delay_draw=True)
+
         if not delay_draw:
             self.draw()
             # self.canvas.Refresh()
@@ -370,12 +374,12 @@ class PlotPanel(BasePanel):
             x, y, opts = unpack_tracedata(dat, delay_draw=True)
             self.oplot(x, y, **opts)
 
-        self.reset_formats()
         self.set_zoomlimits(zoom_limits)
         self.conf.show_legend = show_legend
         if show_legend:
             conf.draw_legend(delay_draw=True)
         conf.relabel(delay_draw=True)
+        self.reset_formats()
         self.draw()
         # self.canvas.Refresh()
 

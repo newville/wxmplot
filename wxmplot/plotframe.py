@@ -34,10 +34,22 @@ class PlotFrame(BaseFrame):
     def plot(self, x, y, **kw):
         """plot after clearing current plot """
         self.panel.plot(x, y, **kw)
+        self._adjust_framesize(side=kw.get('side', None))
 
     def oplot(self, x, y, **kw):
         """generic plotting method, overplotting any existing plot """
         self.panel.oplot(x, y, **kw)
+        self._adjust_framesize(side=kw.get('side', None))
+
+    def _adjust_framesize(self, side=None):
+        if side is not None and side.startswith('right'):
+            fsize = self.GetSize()
+            if side == 'right':
+                fsize[0] = int(fsize[0]*1.05)
+            else:
+                fsize[0] = int(fsize[0]*1.10)
+            self.SetSize(fsize)
+
 
     def plot_many(self, datalist, **kws):
         self.panel.plot_many(datalist, **kws)

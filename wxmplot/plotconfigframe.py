@@ -36,7 +36,6 @@ def ffmt(val):
             pass
     return repr(val)
 
-
 def clean_texmath(txt):
     """
     clean tex math string, preserving control sequences
@@ -255,6 +254,22 @@ class PlotConfigFrame(wx.Frame):
             if user_lims[2] is not None: y2b0 = user_lims[2]
             if user_lims[3] is not None: y2b1 = user_lims[3]
 
+        y3b0, y3b1 = [None, None]
+        if len(axes) > 2:
+            ax3 = axes[2]
+            y3b0, y3b1 = ax3.get_ylim()
+            user_lims = self.conf.user_limits[ax3]
+            if user_lims[2] is not None: y3b0 = user_lims[2]
+            if user_lims[3] is not None: y3b1 = user_lims[3]
+
+        y4b0, y4b1 = [None, None]
+        if len(axes) > 3:
+            ax4 = axes[3]
+            y4b0, y4b1 = ax4.get_ylim()
+            user_lims = self.conf.user_limits[ax4]
+            if user_lims[2] is not None: y4b0 = user_lims[2]
+            if user_lims[3] is not None: y4b1 = user_lims[3]
+
         opts = dict(size=(125, -1), labeltext='', action=self.onBounds)
 
         self.xbounds  = [LabeledTextCtrl(panel,value=ffmt(xb0), **opts),
@@ -263,24 +278,41 @@ class PlotConfigFrame(wx.Frame):
                          LabeledTextCtrl(panel,value=ffmt(yb1), **opts)]
         self.y2bounds = [LabeledTextCtrl(panel,value=ffmt(y2b0), **opts),
                          LabeledTextCtrl(panel,value=ffmt(y2b1), **opts)]
+        self.y3bounds = [LabeledTextCtrl(panel,value=ffmt(y3b0), **opts),
+                         LabeledTextCtrl(panel,value=ffmt(y3b1), **opts)]
+        self.y4bounds = [LabeledTextCtrl(panel,value=ffmt(y4b0), **opts),
+                         LabeledTextCtrl(panel,value=ffmt(y4b1), **opts)]
+
+
+        self.y3offset = FloatSpin(panel, value=self.conf.y3offset, min_val=0,
+                                  max_val=0.8, increment=0.01, digits=3,
+                                  size=(FSPINSIZE, -1), action=self.onY3Offset)
 
         self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
                                   increment=0.5, digits=2,
-                                  size=(FSPINSIZE, -1),
-                                  action=self.onViewPadEvent)
+                                  size=(FSPINSIZE, -1), action=self.onViewPadEvent)
 
         if user_lims == 4*[None]:
             [w.Disable() for w in self.xbounds]
             [w.Disable() for w in self.ybounds]
-
-        if raxes is None:
             [w.Disable() for w in self.y2bounds]
+            [w.Disable() for w in self.y3bounds]
+            [w.Disable() for w in self.y4bounds]
+        else:
+            for yb in self.y4bounds:
+                yb.Enable(len(axes) > 3)
+            for yb in self.y3bounds:
+                yb.Enable(len(axes) > 2)
+            for yb in self.y2bounds:
+                yb.Enable(len(axes) > 1)
 
         btext  = 'Plot Boundaries : '
         ptext  = ' Padding (% of Data Range): '
         xtext  = '   X axis:'
         ytext  = '   Y axis:'
         y2text = '   Y2 axis:'
+        y3text = '   Y3 axis:'
+        y4text = '   Y4 axis:'
         def showtext(t):
             return wx.StaticText(panel, -1, t)
 
@@ -304,6 +336,17 @@ class PlotConfigFrame(wx.Frame):
         sizer.Add(showtext(' : '),  (6, 2), (1, 1), labstyle, 2)
         sizer.Add(self.y2bounds[1], (6, 3), (1, 1), labstyle, 2)
 
+        sizer.Add(showtext(y3text), (7, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.y3bounds[0], (7, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(' : '),  (7, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.y3bounds[1], (7, 3), (1, 1), labstyle, 2)
+
+        sizer.Add(showtext(y4text), (8, 0), (1, 1), labstyle, 2)
+        sizer.Add(self.y4bounds[0], (8, 1), (1, 1), labstyle, 2)
+        sizer.Add(showtext(' : '),  (8, 2), (1, 1), labstyle, 2)
+        sizer.Add(self.y4bounds[1], (8, 3), (1, 1), labstyle, 2)
+
+        irow = 9
         # Margins
         _left, _top, _right, _bot = ["%.3f"% x for x in self.conf.margins]
 
@@ -332,10 +375,15 @@ class PlotConfigFrame(wx.Frame):
         msizer.AddMany((ltitle, lmarg, rtitle, rmarg,
                         btitle, bmarg, ttitle, tmarg))
 
-        sizer.Add(mtitle,  (8, 0), (1,1), labstyle, 2)
-        sizer.Add(auto_m,  (8, 1), (1,1), labstyle, 2)
-        sizer.Add(msizer,  (9, 1), (1,6), labstyle, 2)
+        sizer.Add(mtitle,  (irow, 0), (1,1), labstyle, 2)
+        sizer.Add(auto_m,  (irow, 1), (1,1), labstyle, 2)
+        sizer.Add(msizer,  (irow+1, 1), (1,6), labstyle, 2)
 
+        irow += 2
+        y3title = wx.StaticText(panel, -1, 'Extra Padding Y3 & Y4 Axes: ')
+        self.y3offset
+        sizer.Add(y3title,  (irow, 0), (1,2), labstyle, 2)
+        sizer.Add(self.y3offset,  (irow, 2), (1,3), labstyle, 2)
         autopack(panel, sizer)
         return panel
 
@@ -423,18 +471,44 @@ class PlotConfigFrame(wx.Frame):
         self.y2lab= LabeledTextCtrl(panel, self.conf.y2label.replace('\n', '\\n'),
                                     action = partial(self.onText, item='y2label'),
                                     labeltext='Y2 Label: ', size=(475, -1))
+        self.y3lab= LabeledTextCtrl(panel, self.conf.y3label.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='y3label'),
+                                    labeltext='Y3 Label: ', size=(475, -1))
+        self.y4lab= LabeledTextCtrl(panel, self.conf.y4label.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='y4label'),
+                                    labeltext='Y4 Label: ', size=(475, -1))
         self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
                                     action = partial(self.onText, item='xlabel'),
                                     labeltext='X Label: ', size=(475, -1))
 
+        self.yax_color = wx.CheckBox(panel,-1, 'Use Trace Color for Y Axes', (-1, -1), (-1, -1))
+        self.yax_color.Bind(wx.EVT_CHECKBOX, self.onYaxes_tracecolor)
+        self.yax_color.SetValue(self.conf.yaxes_tracecolor)
+
+        axes = self.canvas.figure.get_axes()
+        self.yax_color.Enable(len(axes) > 1)
+        self.y2lab.label.Enable(len(axes) > 1)
+        self.y3lab.label.Enable(len(axes) > 2)
+        self.y4lab.label.Enable(len(axes) > 3)
+        self.y2lab.Enable(len(axes) > 1)
+        self.y3lab.Enable(len(axes) > 2)
+        self.y4lab.Enable(len(axes) > 3)
+
         sizer.Add(self.titl.label,  (0, 0), (1, 1), labstyle)
         sizer.Add(self.titl,        (0, 1), (1, 4), labstyle)
-        sizer.Add(self.ylab.label,  (1, 0), (1, 1), labstyle)
-        sizer.Add(self.ylab,        (1, 1), (1, 4), labstyle)
-        sizer.Add(self.y2lab.label, (2, 0), (1, 1), labstyle)
-        sizer.Add(self.y2lab,       (2, 1), (1, 4), labstyle)
-        sizer.Add(self.xlab.label,  (3, 0), (1, 1), labstyle)
-        sizer.Add(self.xlab,        (3, 1), (1, 4), labstyle)
+        sizer.Add(self.xlab.label,  (1, 0), (1, 1), labstyle)
+        sizer.Add(self.xlab,        (1, 1), (1, 4), labstyle)
+        sizer.Add(self.ylab.label,  (2, 0), (1, 1), labstyle)
+        sizer.Add(self.ylab,        (2, 1), (1, 4), labstyle)
+        sizer.Add(self.y2lab.label, (3, 0), (1, 1), labstyle)
+        sizer.Add(self.y2lab,       (3, 1), (1, 4), labstyle)
+        sizer.Add(self.y3lab.label, (4, 0), (1, 1), labstyle)
+        sizer.Add(self.y3lab,       (4, 1), (1, 4), labstyle)
+        sizer.Add(self.y4lab.label, (5, 0), (1, 1), labstyle)
+        sizer.Add(self.y4lab,       (5, 1), (1, 4), labstyle)
+        sizer.Add(self.yax_color,   (6, 0), (1, 4), labstyle)
+
+        irow = 7
 
         t0 = wx.StaticText(panel, -1, 'Text Sizes:', style=labstyle)
         t1 = wx.StaticText(panel, -1, 'Titles:', style=labstyle)
@@ -457,14 +531,15 @@ class PlotConfigFrame(wx.Frame):
         self.legend_fontsize = leg_size
         self.label_fontsize = lab_size
 
-        sizer.Add(t0,        (4, 0), (1, 1), labstyle)
-        sizer.Add(t1,        (4, 1), (1, 1), labstyle)
-        sizer.Add(ttl_size,  (4, 2), (1, 2), labstyle)
-        sizer.Add(t2,        (5, 1), (1, 1), labstyle)
-        sizer.Add(lab_size,  (5, 2), (1, 2), labstyle)
-        sizer.Add(t3,        (6, 1), (1, 1), labstyle)
-        sizer.Add(leg_size,  (6, 2), (1, 2), labstyle)
+        sizer.Add(t0,        (irow, 0), (1, 1), labstyle)
+        sizer.Add(t1,        (irow, 1), (1, 1), labstyle)
+        sizer.Add(ttl_size,  (irow, 2), (1, 2), labstyle)
+        sizer.Add(t2,        (irow+1, 1), (1, 1), labstyle)
+        sizer.Add(lab_size,  (irow+1, 2), (1, 2), labstyle)
+        sizer.Add(t3,        (irow+2, 1), (1, 1), labstyle)
+        sizer.Add(leg_size,  (irow+2, 2), (1, 2), labstyle)
 
+        irow = irow + 3
         # Legend
         bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
@@ -500,11 +575,13 @@ class PlotConfigFrame(wx.Frame):
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         lsizer.AddMany((leg_ttl, show_leg, show_lfr, togg_leg))
-        sizer.Add(lsizer,    (8, 0), (1, 8), labstyle, 2)
+        sizer.Add(lsizer,    (irow, 0), (1, 8), labstyle, 2)
+
+        irow += 1
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lsizer.AddMany((loc_ttl, leg_loc, leg_onax))
-        sizer.Add(lsizer,  (9, 1), (1, 4), labstyle, 2)
+        sizer.Add(lsizer,  (irow, 1), (1, 4), labstyle, 2)
         autopack(panel, sizer)
         return panel
 
@@ -683,6 +760,9 @@ class PlotConfigFrame(wx.Frame):
         panel.SetupScrolling()
         return panel
 
+    def onYaxes_tracecolor(self, event=None):
+        self.conf.set_yaxes_tracecolor(yaxes_tracecolor=event.IsChecked(), delay_draw=False)
+
     def onResetLines(self, event=None):
         pass
 
@@ -694,6 +774,8 @@ class PlotConfigFrame(wx.Frame):
         if item == 'trace':
             self.conf.set_trace_color(color, trace=trace)
             self.colwids[trace].SetColour(color)
+            if self.conf.show_legend:
+                self.conf.draw_legend()
 
         elif item == 'grid':
             self.conf.set_gridcolor(color)
@@ -780,7 +862,7 @@ class PlotConfigFrame(wx.Frame):
             self.conf.set_trace_linewidth(val, trace=trace)
 
 
-    def onAutoBounds(self,event):
+    def onAutoBounds(self, event):
         axes = self.canvas.figure.get_axes()
         if event.IsChecked():
             for ax in axes:
@@ -788,6 +870,8 @@ class PlotConfigFrame(wx.Frame):
             [m.Disable() for m in self.xbounds]
             [m.Disable() for m in self.ybounds]
             [m.Disable() for m in self.y2bounds]
+            [m.Disable() for m in self.y3bounds]
+            [m.Disable() for m in self.y4bounds]
             self.vpad_val.Enable()
             self.conf.unzoom(full=True)
         else:
@@ -805,6 +889,17 @@ class PlotConfigFrame(wx.Frame):
                 for m, v in zip(self.y2bounds, y2b):
                     m.Enable()
                     m.SetValue(ffmt(v))
+            if len(axes) > 2:
+                y3b = axes[2].get_ylim()
+                for m, v in zip(self.y3bounds, y3b):
+                    m.Enable()
+                    m.SetValue(ffmt(v))
+            if len(axes) > 3:
+                y4b = axes[3].get_ylim()
+                for m, v in zip(self.y4bounds, y4b):
+                    m.Enable()
+                    m.SetValue(ffmt(v))
+
 
     def onBounds(self, event=None):
         def FloatNone(v):
@@ -823,9 +918,14 @@ class PlotConfigFrame(wx.Frame):
         if len(axes) > 1:
             y2min, y2max = [FloatNone(w.GetValue()) for w in self.y2bounds]
             self.conf.user_limits[axes[1]] = [xmin, xmax, y2min, y2max]
+        if len(axes) > 2:
+            y3min, y3max = [FloatNone(w.GetValue()) for w in self.y3bounds]
+            self.conf.user_limits[axes[2]] = [xmin, xmax, y3min, y3max]
+        if len(axes) > 3:
+            y4min, y4max = [FloatNone(w.GetValue()) for w in self.y4bounds]
+            self.conf.user_limits[axes[3]] = [xmin, xmax, y4min, y4max]
         self.conf.set_viewlimits()
         self.conf.canvas.draw()
-
 
     def onAutoMargin(self,event):
         self.conf.auto_margins = event.IsChecked()
@@ -842,6 +942,10 @@ class PlotConfigFrame(wx.Frame):
     def onMargins(self, event=None):
         left, top, right, bottom = [float(w.GetValue()) for w in self.margins]
         self.conf.set_margins(left=left, top=top, right=right, bottom=bottom)
+
+    def onY3Offset(self, event=None):
+        self.conf.y3offset = float(self.y3offset.GetValue())
+        self.conf.relabel()
 
     def onViewPadEvent(self, event=None):
 
@@ -916,6 +1020,10 @@ class PlotConfigFrame(wx.Frame):
             wid = self.ylab
         elif item == 'y2label':
             wid = self.y2lab
+        elif item == 'y3label':
+            wid = self.y3lab
+        elif item == 'y4label':
+            wid = self.y4lab
         elif item == 'xlabel':
             wid = self.xlab
         elif item == 'trace':
@@ -927,7 +1035,7 @@ class PlotConfigFrame(wx.Frame):
         except TypeError:
             s = ''
 
-        if item in ('xlabel', 'ylabel', 'y2label', 'title'):
+        if item in ('xlabel', 'ylabel', 'y2label', 'y3label', 'y4label', 'title'):
             try:
                 kws = {item: s}
                 self.conf.relabel(**kws)

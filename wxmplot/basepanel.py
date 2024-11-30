@@ -139,26 +139,6 @@ class BasePanel(wx.Panel):
 
         self.canvas.draw()
 
-    def get_right_axes(self, side='right'):
-        """
-        return right-hand (y2, y3, or y4) axes, creating if needed)
-
-        use side='right' [default], or side='right2', 'right3' for further sides
-        """
-        n = 1
-        if side.startswith('right'):
-            ext = side[5:]
-            if len(ext) > 0:
-                try:
-                    n = int(ext)
-                except:
-                    pass
-
-        naxes = len(self.fig.get_axes())
-        while len(self.fig.get_axes()) < (n+1):
-            self.axes.twinx()
-
-        return self.fig.get_axes()[n]
 
     def set_xylims(self, limits, axes=None):
         if axes not in self.user_limits:

@@ -13,4 +13,4 @@ y2 = 92 + 65*np.cos(x/16.) * np.exp(-x*x/7e3) + noise(size=n, scale=0.3)
 
 wi.plot(x, y1, title='Test 2 Axes with different y scales',
         xlabel='x (mm)', ylabel='y1', ymin=-0.75, ymax=0.75)
-wi.plot(x, y2, y2label='y2', side='right', ymin=0)
+wi.plot(x, y2, y2label='y2', yaxes=2, ymin=0)

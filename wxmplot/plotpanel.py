@@ -21,7 +21,7 @@ from matplotlib.colors import colorConverter
 from matplotlib.collections import CircleCollection
 
 from .basepanel import BasePanel
-from .config import PlotConfig, ifnot_none
+from .config import PlotConfig, ifnot_none, SIDE_YAXES
 from .utils import inside_poly, fix_filename, gformat, MenuItem
 from .plotconfigframe import PlotConfigFrame
 
@@ -71,12 +71,11 @@ class PlotPanel(BasePanel):
         self.use_dates = False
         self.dates_style = None
 
-    def plot(self, xdata, ydata, side='left', title=None, xlabel=None,
-             ylabel=None, y2label=None, y3label=None, y4label=None,
-             use_dates=False, dates_style=None, **kws):
+    def plot(self, xdata, ydata, title=None, xlabel=None, ylabel=None,
+             y2label=None, y3label=None, y4label=None, use_dates=False,
+             dates_style=None, yaxes=1, side=None, **kws):
         """
         create a new plot of x/y data, clearing any existing plot on the panel
-
         """
         allaxes = self.fig.get_axes()
         if len(allaxes) > 1:
@@ -89,9 +88,7 @@ class PlotPanel(BasePanel):
         self.conf.zoom_lims = []
         self.conf.axes_traces = {}
         self.clear()
-        axes = self.axes
-        if side.startswith('right'):
-            axes = self.get_right_axes(side=side)
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
 
         self.conf.reset_lines()
         self.conf.yscale = 'linear'
@@ -111,36 +108,33 @@ class PlotPanel(BasePanel):
             self.set_title(title, delay_draw=True)
         self.dates_style = ifnot_none(dates_style, self.dates_style)
         self.use_dates = ifnot_none(use_dates, self.use_dates)
-        return self.oplot(xdata, ydata, side=side, **kws)
+        return self.oplot(xdata, ydata, yaxes=yaxes, **kws)
 
 
-    def oplot(self, xdata, ydata, side='left', label=None, xlabel=None,
-              ylabel=None, y2label=None, y3label=None, y4label=None,
-              title=None, dy=None, ylog_scale=None, xlog_scale=None, grid=None,
-              xmin=None, xmax=None, ymin=None, ymax=None, color=None,
-              style=None, alpha=None, fill=False, drawstyle=None, linewidth=2,
-              marker=None, markersize=None, refresh=True, show_legend=None,
+    def oplot(self, xdata, ydata, label=None, xlabel=None, ylabel=None,
+              y2label=None, y3label=None, y4label=None, title=None, dy=None,
+              ylog_scale=None, xlog_scale=None, grid=None, xmin=None,
+              xmax=None, ymin=None, ymax=None, color=None, style=None,
+              alpha=None, fill=False, drawstyle=None, linewidth=2, marker=None,
+              markersize=None, refresh=True, show_legend=None,
               legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
               labelfontsize=None, titlefontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, viewpad=None,
-              theme=None, use_dates=None, dates_style=None,
+              theme=None, use_dates=None, dates_style=None, yaxes=1, side=None,
               yaxes_tracecolor=None, **kws):
+
         """
         basic plot method, adding to an existing display
-
         """
-
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'
-        axes = self.axes
 
         if theme is not None:
             conf.set_theme(theme=theme)
-        if side.startswith('right'):
-            axes = self.get_right_axes(side=side)
 
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
         # set y scale to log/linear
         if ylog_scale is not None:
             conf.yscale = {False:'linear', True:'log'}[ylog_scale]
@@ -200,15 +194,12 @@ class PlotPanel(BasePanel):
         conf.user_limits[axes][2] = ifnot_none(ymin, conf.user_limits[axes][2])
         conf.user_limits[axes][3] = ifnot_none(ymax, conf.user_limits[axes][3])
 
+        yformatter = {1: self.yformatter,
+                      2: self.y2formatter,
+                      3: self.y3formatter,
+                      4: self.y4formatter}.get(yaxes, self.yformatter)
 
-        if side=='left':
-            axes.yaxis.set_major_formatter(FuncFormatter(self.yformatter))
-        elif side == 'right':
-            axes.yaxis.set_major_formatter(FuncFormatter(self.y2formatter))
-        elif side == 'right2':
-            axes.yaxis.set_major_formatter(FuncFormatter(self.y3formatter))
-        elif side == 'right3':
-            axes.yaxis.set_major_formatter(FuncFormatter(self.y4formatter))
+        axes.yaxis.set_major_formatter(FuncFormatter(yformatter))
 
         zorder = ifnot_none(zorder, 5*(conf.ntrace+1))
 
@@ -226,7 +217,7 @@ class PlotPanel(BasePanel):
             conf.set_framecolor(framecolor)
 
         conf.set_trace_zorder(zorder, delay_draw=True)
-        conf.set_trace_side(side, delay_draw=True)
+        conf.set_trace_yaxes(yaxes, delay_draw=True)
         if color:
             conf.set_trace_color(color, delay_draw=True)
         if style:
@@ -336,8 +327,9 @@ class PlotPanel(BasePanel):
         conf.ntrace = conf.ntrace + 1
         return _lines
 
-    def plot_many(self, datalist, side='left', title=None,
-                  xlabel=None, ylabel=None, show_legend=False, zoom_limits=None, **kws):
+    def plot_many(self, datalist, title=None, xlabel=None, ylabel=None,
+                  show_legend=False, zoom_limits=None, yaxes=1, side=None,
+                  **kws):
         """
         plot many traces at once, taking a list of (x, y) pairs
         """
@@ -356,7 +348,7 @@ class PlotPanel(BasePanel):
 
 
         conf = self.conf
-        opts = {'side': side, 'title': title, 'xlabel': xlabel,
+        opts = {'yaxes': yaxes, 'title': title, 'xlabel': xlabel,
                'ylabel': ylabel, 'delay_draw': True, 'show_legend': False}
         opts.update(kws)
         x0, y0, opts = unpack_tracedata(datalist[0], **opts)
@@ -405,14 +397,11 @@ class PlotPanel(BasePanel):
         return True
 
 
-    def add_text(self, text, x, y, side='left', size=None,
-                 rotation=None, ha='left', va='center',
-                 family=None, **kws):
+    def add_text(self, text, x, y, size=None, rotation=None, ha='left',
+                 va='center', family=None, yaxes=1, side=None, **kws):
         """add text at supplied x, y position
         """
-        axes = self.axes
-        if side.startwith('right'):
-            axes = self.get_right_axes(side=side)
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
         dynamic_size = False
         if size is None:
             size = self.conf.legendfont.get_size()
@@ -422,16 +411,13 @@ class PlotPanel(BasePanel):
         self.conf.added_texts.append((dynamic_size, t))
         self.draw()
 
-    def add_arrow(self, x1, y1, x2, y2,  side='left',
-                  shape='full', color='black',
-                  width=0.01, head_width=0.03, overhang=0, **kws):
+    def add_arrow(self, x1, y1, x2, y2, shape='full', color='black',
+                  width=0.01, head_width=0.03, overhang=0, yaxes=1, side=None,
+                  **kws):
         """add arrow supplied x, y position"""
         dx, dy = x2-x1, y2-y1
 
-        axes = self.axes
-        if side.startwith('right'):
-            axes = self.get_right_axes(side=side)
-
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
         axes.arrow(x1, y1, dx, dy, shape=shape,
                    length_includes_head=True,
                    fc=color, edgecolor=color,
@@ -543,12 +529,10 @@ class PlotPanel(BasePanel):
             self.lasso_callback(data = sdat,
                                 selected=pts, mask=mask)
 
-    def set_xylims(self, limits, axes=None, side='left'):
+    def set_xylims(self, limits, axes=None, yaxes=1, side=None):
         "set user-defined limits and apply them"
         if axes is None:
-            axes = self.axes
-            if side.startswith('right'):
-                axes = self.get_right_axes(side=side)
+            yaxes, axes = self.get_yaxes(yaxes, side=side)
 
         self.conf.user_limits[axes] = list(limits)
         self.unzoom_all()
@@ -566,6 +550,38 @@ class PlotPanel(BasePanel):
         xmin, xmax = axes.get_xlim()
         ymin, ymax = axes.get_ylim()
         return (xmin, xmax, ymin, ymax)
+
+    def get_yaxes(self, n, side=None):
+        """get y axis number 1, 2, 3, or 4, where
+        n=1 is the normal left-hand y-axis (aka "y"),
+        n=2 is the right-hand y-axis (aka "y2"), and
+        n=3 is a second right-hand y-axis (aka "y3"), and
+        n=4 is a third right-hand y-axis (aka "y4")
+        """
+        if side is not None:
+            _n = SIDE_YAXES.get(side, None)
+            if _n in (1, 2, 3, 4):
+                n = _n
+        if n not in (1, 2, 3, 4):
+            raise ValueError("get_yaxes() needs value 1, 2, 3, or 4")
+
+        while len(self.fig.get_axes()) < n:
+            self.axes.twinx()
+        return (n, self.fig.get_axes()[n-1])
+
+    def get_right_axes(self, side='right'):
+        """
+        return right-hand (y2, y3, or y4) axes, creating if needed)
+
+        use side='right' or 'y2' [default], or side='right2', or 'y3', or
+       'right3' or 'y4',   See also  get_yaxes()
+        """
+        if side in ('right3', 'y4'):
+            return self.get_yaxes(4)[1]
+        elif side in ('right2', 'y3'):
+            return self.get_yaxes(3)[1]
+        else:
+            return self.get_yaxes(2)[1]
 
     def clear(self):
         """ clear plot """
@@ -768,16 +784,13 @@ class PlotPanel(BasePanel):
     def draw(self):
         self.canvas.draw()
 
-    def update_line(self, trace, xdata, ydata, side='left', draw=False,
-                    update_limits=True):
+    def update_line(self, trace, xdata, ydata,draw=False,
+                    update_limits=True, yaxes=1, side=None):
         """ update a single trace, for faster redraw """
         x = self.conf.get_mpl_line(trace)
         if trace >= self.conf.ntrace:
-            self.oplot(xdata, ydata, side=side, delay_draw=True)
+            self.oplot(xdata, ydata, yaxes=yaxes, side=side, delay_draw=True)
         x.set_data(xdata, ydata)
-        axes = self.axes
-        if side.startwith('right'):
-            axes = self.get_right_axes(side=side)
 
         if update_limits:
             self.set_viewlimits()

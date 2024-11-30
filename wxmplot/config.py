@@ -33,6 +33,8 @@ import matplotlib.style
 from cycler import cycler
 from .colors import hexcolor, mpl_color, mpl2hexcolor
 
+SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
+
 StyleMap  = {}
 DrawStyleMap  = {}
 MarkerMap = {}
@@ -208,7 +210,7 @@ class LineProps:
     def __init__(self, color='black', style='solid', drawstyle='default',
                  linewidth=2, marker='no symbol',markersize=4,
                  markercolor=None, fill=False, alpha=1.0, zorder=1, label='',
-                 mpline=None, side='left'):
+                 mpline=None, yaxes=1):
         self.color      = color
         self.alpha      = alpha
         self.style      = style
@@ -223,7 +225,7 @@ class LineProps:
         self.label      = label
         self.zorder     = zorder
         self.mpline     = mpline
-        self.side       = side
+        self.yaxes      = yaxes
 
     def __repr__(self):
         if self.zorder is None:
@@ -232,7 +234,7 @@ class LineProps:
 
     def set(self, color=None, style=None, drawstyle=None, linewidth=None,
             marker=None, markersize=None, markercolor=None, zorder=None,
-            label=None, fill=False, alpha=None, side=None):
+            label=None, fill=False, alpha=None, yaxes=None):
         self.color      = ifnot_none(color, self.color)
         self.style      = ifnot_none(style, self.style)
         self.drawstyle  = ifnot_none(drawstyle, self.drawstyle)
@@ -244,7 +246,7 @@ class LineProps:
         self.label      = ifnot_none(label, self.label)
         self.zorder     = ifnot_none(zorder, self.zoder)
         self.alpha      = ifnot_none(alpha, self.alpha)
-        self.side       = ifnot_none(side, self.side)
+        self.yaxes      = ifnot_none(yaxes, self.yaxes)
 
 
     def asdict(self):
@@ -252,7 +254,8 @@ class LineProps:
                     linewidth=self.linewidth, zorder=self.zorder,
                     fill=self.fill, label=self.label, drawstyle=self.drawstyle,
                     alpha=self.alpha, markersize=self.markersize,
-                    marker=self.marker, markercolor=self.markercolor, side=side)
+                    marker=self.marker, markercolor=self.markercolor,
+                    yaxes=self.yaxes)
 
 
 
@@ -543,9 +546,7 @@ class PlotConfig:
             self.panel.gridspec.update(left=left, top=1-top,
                                        right=1-right, bottom=bottom)
         for i, ax in enumerate(self.canvas.figure.get_axes()):
-            # ax.update_params()
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)
-            print("Set Margins ", i, figpos)
             ax.set_position(figpos)
 
         if not delay_draw:
@@ -652,10 +653,14 @@ class PlotConfig:
         if not delay_draw:
             self.draw_legend()
 
-    def set_trace_side(self, side='left', trace=None, delay_draw=False):
+    def set_trace_yaxes(self, yaxes=1, side=None, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
-        if side in ('left', 'right', 'right2', 'right3'):
-            self.traces[trace].side = side
+        # print("SET TRACE YAXES ", trace, yaxes, side)
+        if side is not None:
+            _yaxes = SIDE_YAXES.get(side, None)
+            if _yaxes is not None:
+                yaxes = _yaxes
+        self.traces[trace].yaxes = yaxes
         if not delay_draw:
             self.canvas.draw()
 
@@ -840,7 +845,7 @@ class PlotConfig:
             i.set_zorder(-1)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
-            ax.grid(False)
+            ax.g1rid(False)
         if not delay_draw:
             self.canvas.draw()
 
@@ -858,13 +863,14 @@ class PlotConfig:
         axes = self.canvas.figure.get_axes()
         colors = [tcolor]*(len(axes)+2)
         if self.yaxes_tracecolor:
-            for iside, yname in enumerate(('left', 'right', 'right2', 'right3')):
+            for iax in range(4):
                 for iline, line in enumerate(self.lines):
                     if line is not None:
                         trace = self.traces[iline]
-                        if trace.side == yname:
-                            colors[iside] = trace.color
+                        if trace.yaxes == (iax+1):
+                            colors[iax] = trace.color
                             break
+        # print(colors, len(axes))
         for i, ax in enumerate(axes):
             color = colors[i]
             if color is not None:

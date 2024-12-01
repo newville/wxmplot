@@ -17,6 +17,6 @@ disp = wi.plot(x, y1, title='Test 4 Axes with different y scales',
                show_legend=True, yaxes_tracecolor=True,
                xlabel='x (mm)', label='signal 1', ylabel='ylabel')
 
-wi.plot(x, y4, y2label='y2label', label='signal 2', yaxes=2)
+wi.plot(x, y2, y2label='y2label', label='signal 2', yaxes=2)
 wi.plot(x, y3, y3label='y3label', label='signal 3', yaxes=3)
-wi.plot(x, y2, y4label='y4label', label='signal 4', yaxes=4)
+wi.plot(x, y4, y4label='y4label', label='signal 4', yaxes=4)

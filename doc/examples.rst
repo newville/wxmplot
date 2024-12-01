@@ -87,6 +87,19 @@ and gives a plot that looks like this:
    :width: 85 %
 
 
+Using 3 and 4 Y Axes
+----------------------------
+
+If 2 different scales is not enough, you extend that to 3 or even 4 separate Y Axes with:
+
+.. literalinclude:: ../examples/multiple_yaxes.py
+
+(note the use of `yaxes_tracecolor=True`). This gives a plot like this:
+
+.. image:: images/multiple_yaxes.png
+   :width: 85 %
+
+
 Plotting with alpha-fill to show area under a curve
 -----------------------------------------------------
 

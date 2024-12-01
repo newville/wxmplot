@@ -812,7 +812,10 @@ class PlotConfig:
         mline = self.get_mpline(trace)
         if mline:
             for line in mline:
-                line.set_linewidth(linewidth/2.0)
+                try:
+                    line.set_linewidth(linewidth/2.0)
+                except AttributeError:
+                    pass
 
         if not delay_draw:
             self.draw_legend()

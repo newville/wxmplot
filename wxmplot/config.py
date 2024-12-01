@@ -23,7 +23,6 @@ Valid marker names are:
    'tripod 1','tripod 2'
 
 """
-import time
 from copy import copy
 import numpy as np
 import matplotlib
@@ -31,7 +30,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
-from .colors import hexcolor, mpl_color, mpl2hexcolor
+from .colors import hexcolor, mpl2hexcolor
 
 SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
 
@@ -152,45 +151,38 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
         theme.update(matplotlib.style.library[tname])
     Themes[tname.lower()] = theme
 
-default_config = dict(auto_margins=True,
-                      axes_style='box',
-                      current_theme='light',
-                      data_deriv=False,
-                      data_expr=None,
-                      draggable_legend=False,
-                      hidewith_legend=True,
-                      legend_loc= 'best',
-                      legend_onaxis='on plot',
-                      linecolors=linecolors,
-                      margins=(0.15, 0.05, 0.05, 0.15),
-                      mpl_legend=None,
-                      plot_type='lineplot',
-                      scatter_size=30,
-                      scatter_mask=None,
-                      scatter_normalcolor='blue',
-                      scatter_normaledge='blue',
-                      scatter_selectcolor='red',
-                      scatter_selectedge='red',
-                      show_grid=True,
-                      show_legend=False,
-                      show_legend_frame=False,
-                      textcolor='#000000',
-                      title='',
-                      xscale='linear',
-                      yscale='linear',
-                      xlabel='',
-                      ylabel='',
-                      y2label='',
-                      y3label='',
-                      y4label='',
-                      y3offset=0.2,
-                      yaxes_tracecolor=False,
-                      viewpad=2.5,
-                      with_data_process=True,
-                      zoom_style='both x and y',
-                      labelfont=9,
-                      legendfont=7,
-                      titlefont=10)
+default_config = {'auto_margins': True,
+                  'axes_style': 'box',
+                  'current_theme': 'light',
+                  'data_deriv': False,
+                  'data_expr': None,
+                  'draggable_legend': False,
+                  'hidewith_legend': True,
+                  'legend_loc':  'best',
+                  'legend_onaxis': 'on plot',
+                  'linecolors': linecolors,
+                  'margins': (0.15, 0.05, 0.05, 0.15),
+                  'mpl_legend': None,
+                  'plot_type': 'lineplot',
+                  'scatter_size': 30,
+                  'scatter_mask': None,
+                  'scatter_normalcolor': 'blue',
+                  'scatter_normaledge': 'blue',
+                  'scatter_selectcolor': 'red',
+                  'scatter_selectedge': 'red',
+                  'show_grid': True,
+                  'show_legend': False,
+                  'show_legend_frame': False,
+                  'textcolor': '#000000',
+                  'title': '',
+                  'xscale': 'linear', 'yscale': 'linear',
+                  'xlabel': '',  'ylabel': '',
+                  'y2label': '', 'y3label': '', 'y4label': '',
+                  'y3offset': 0.2, 'yaxes_tracecolor': False,
+                  'viewpad': 2.5,
+                  'with_data_process': True,
+                  'zoom_style': 'both x and y',
+                  'labelfont': 9, 'legendfont': 7, 'titlefont': 10}
 
 
 def ifnot_none(val, default):
@@ -244,18 +236,19 @@ class LineProps:
         self.markersize = ifnot_none(markersize, self.markersize)
         self.markercolor= ifnot_none(markercolor,self.markercolor)
         self.label      = ifnot_none(label, self.label)
-        self.zorder     = ifnot_none(zorder, self.zoder)
+        self.zorder     = ifnot_none(zorder, self.zorder)
         self.alpha      = ifnot_none(alpha, self.alpha)
         self.yaxes      = ifnot_none(yaxes, self.yaxes)
 
 
     def asdict(self):
-        return dict(color=self.color, style=self.style,
-                    linewidth=self.linewidth, zorder=self.zorder,
-                    fill=self.fill, label=self.label, drawstyle=self.drawstyle,
-                    alpha=self.alpha, markersize=self.markersize,
-                    marker=self.marker, markercolor=self.markercolor,
-                    yaxes=self.yaxes)
+        "as dictionary"
+        return {'color': self.color, 'style': self.style,
+                'linewidth': self.linewidth, 'zorder': self.zorder,
+                'fill': self.fill, 'label': self.label, 'yaxes': self.yaxes,
+                'drawstyle': self.drawstyle, 'alpha': self.alpha,
+                'marker': self.marker, 'markersize': self.markersize,
+                'markercolor': self.markercolor}
 
 
 
@@ -364,6 +357,7 @@ class PlotConfig:
         to self.configdict
         """
         cnf = {}
+
         for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
                      'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
                      'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
@@ -376,6 +370,7 @@ class PlotConfig:
                      'ylabel', 'yscale', 'zoom_lims',
                      'zoom_style', 'legendfont', 'labelfont', 'titlefont',
                      'fills', 'traces'):
+
             val = getattr(self, attr)
             if attr in ('legendfont', 'labelfont', 'titlefont'):
                 val = val.get_size()
@@ -418,7 +413,6 @@ class PlotConfig:
 
     def reset_trace_properties(self):
         i = -1
-        t0 = time.time()
         for style, marker in (('solid', None), ('short dashed', None),
                               ('dash-dot', None), ('solid', 'o'),
                               ('dotted', None), ('solid', '+'),
@@ -459,7 +453,7 @@ class PlotConfig:
             self.lines.append(None)
         try:
             return self.lines[n]
-        except:
+        except IndexError:
             return self.lines[n-1]
 
     def get_trace(self, trace):
@@ -495,7 +489,8 @@ class PlotConfig:
             self.y4label = y4label
         if title is not None:
             self.title = title
-        if self.canvas is None: return
+        if self.canvas is None:
+            return
         axes = self.canvas.figure.get_axes()
         kws = dict(fontproperties=self.titlefont, color=self.textcolor)
         axes[0].set_title(self.title, **kws)
@@ -557,7 +552,8 @@ class PlotConfig:
     def set_gridcolor(self, color):
         """set color for grid"""
         self.gridcolor = color
-        if self.canvas is None: return
+        if self.canvas is None:
+            return
 
         rcParams['grid.color'] = color
         for ax in self.canvas.figure.get_axes():
@@ -570,7 +566,8 @@ class PlotConfig:
     def set_facecolor(self, color):
         """set color for background of plot"""
         self.facecolor = color
-        if self.canvas is None: return
+        if self.canvas is None:
+            return
         for ax in self.canvas.figure.get_axes():
             ax.set_facecolor(color)
         if callable(self.theme_color_callback):
@@ -579,7 +576,8 @@ class PlotConfig:
     def set_framecolor(self, color):
         """set color for outer frame"""
         self.framecolor = color
-        if self.canvas is None: return
+        if self.canvas is None:
+            return
         self.canvas.figure.set_facecolor(color)
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'figure.facecolor')
@@ -622,8 +620,8 @@ class PlotConfig:
         if mline:
             for comp in mline:
                 if hasattr(comp, '__iter__'):
-                    for l in comp:
-                        l.set_color(color)
+                    for line in comp:
+                        line.set_color(color)
                 else:
                     comp.set_color(color)
 
@@ -644,8 +642,8 @@ class PlotConfig:
         if mline:
             for comp in mline:
                 if hasattr(comp, '__iter__'):
-                    for l in comp:
-                        l.set_alpha(alpha)
+                    for line in comp:
+                        line.set_alpha(alpha)
                 else:
                     comp.set_alpha(alpha)
         if self.fills[trace] is not None:
@@ -691,8 +689,9 @@ class PlotConfig:
         if style in StyleMap:
             sty = style
         elif style in StyleMap.values():
-            for k,v in StyleMap.items():
-                if v == style:  sty = k
+            for k, v in StyleMap.items():
+                if v == style:
+                    sty = k
         style = sty
         self.traces[trace].style = style
         mline = self.get_mpline(trace)
@@ -731,7 +730,7 @@ class PlotConfig:
                 if id(thisfill) == id(coll):
                     try:
                         axes.collections[i].remove()
-                    except:
+                    except Exception:
                         pass
 
         if not fill:
@@ -740,7 +739,7 @@ class PlotConfig:
                 del_collection(cur_fill)
                 try:
                     del cur_fill
-                except:
+                except Exception:
                     pass
                 self.fills[trace] = None
         else:
@@ -748,7 +747,7 @@ class PlotConfig:
                 del_collection(cur_fill)
                 try:
                     del cur_fill
-                except:
+                except Exception:
                     pass
 
 
@@ -761,7 +760,7 @@ class PlotConfig:
                             color=atrace.color,
                             alpha=atrace.alpha)
                 if atrace.drawstyle != 'default':
-                    fkws['step'] = drawstyle
+                    fkws['step'] = atrace.drawstyle
                 x = this[0].get_xdata()
                 y = this[0].get_ydata()
                 y2 = 0
@@ -781,7 +780,8 @@ class PlotConfig:
             sym = marker
         elif marker in MarkerMap.values():
             for k,v in MarkerMap.items():
-                if v == marker:  sym = k
+                if v == marker:
+                    sym = k
         marker = sym
         self.traces[trace].marker = marker
 
@@ -812,10 +812,7 @@ class PlotConfig:
         mline = self.get_mpline(trace)
         if mline:
             for line in mline:
-                try:
-                    line.set_linewidth(linewidth/2.0)
-                except:
-                    pass
+                line.set_linewidth(linewidth/2.0)
 
         if not delay_draw:
             self.draw_legend()
@@ -845,7 +842,7 @@ class PlotConfig:
             i.set_zorder(-1)
         axes[0].grid(self.show_grid)
         for ax in axes[1:]:
-            ax.g1rid(False)
+            ax.grid(False)
         if not delay_draw:
             self.canvas.draw()
 
@@ -902,7 +899,6 @@ class PlotConfig:
             tline.set_linestyle('-')
             tline.set_visible(True)
 
-        col = rcParams['axes.edgecolor']
         for spine in ('top', 'bottom', 'left', 'right'):
             ax.spines[spine].set_linewidth(rcParams['axes.linewidth'])
             ax.spines[spine].set_facecolor(rcParams['axes.facecolor'])
@@ -955,7 +951,7 @@ class PlotConfig:
                     i.set_marker('None')
                 lgn.draw_frame(False)
                 lgn.set_visible(False)
-        except:
+        except Exception:
             pass
 
         labs = []
@@ -968,9 +964,10 @@ class PlotConfig:
                     lins.append(xline)
                     traces.append(trace)
 
-        for l in lins:
-            xl = l.get_label()
-            if not self.show_legend: xl = ''
+        for lin in lins:
+            xl = lin.get_label()
+            if not self.show_legend:
+                xl = ''
             labs.append(xl)
         labs = tuple(labs)
 
@@ -1093,8 +1090,10 @@ class PlotConfig:
                                       max(limits[3], max(y))]
                 except ValueError:
                     pass
-            if x_minpos is None: x_minpos = 1.e-8
-            if y_minpos is None: y_minpos = 1.e-8
+            if x_minpos is None:
+                x_minpos = 1.e-8
+            if y_minpos is None:
+                y_minpos = 1.e-8
             if ax in self.user_limits:
                 for i, val in  enumerate(self.user_limits[ax]):
                     if val is not None:

@@ -66,25 +66,15 @@ many additional methods to interact with the plots.
    Keyword parameters in ``**kws`` other than those listed above are sent to the wx.Panel.
 
 
-:class:`PlotPanel` methods
-=============================================
+:class:`PlotPanel` conventions and common arguments
+============================================================
 
+The :class:`PlotPanel` methods below share many conventions and use
+common arguments where possible.  A list of common function argumets
+for :meth:`plot`, :meth:`oplot`, and :meth:`scatterplot is given in
+:ref:`Table of Plot Arguments <plotopt_table>`.  Many of these
+arguments and terms are alsoe used in the other function methods.
 
-.. method:: plot(x, y, **kws)
-
-   Draw a plot of the numpy arrays *x* and *y*, erasing any existing plot.  The
-   displayed curve for these data is called a *trace*.  The :meth:`plot` method
-   has many optional parameters, all using keyword/value argument.  Since most
-   of these are shared with the :meth:`oplot` method, the full set of parameters
-   is given in :ref:`Table of Plot Arguments <plotopt_table>`
-
-.. method:: oplot(x, y, **kws)
-
-   Draw a plot of the numpy arrays *x* and *y*, overplotting any existing
-   plot, so that both traces are visible.
-
-   The :meth:`oplot` method has many optional parameters,  as listed in
-   :ref:`Table of Plot Arguments <plotopt_table>`
 
 .. _plotopt_table:
 
@@ -127,9 +117,9 @@ same meaning, as indicated by the right-most column.
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   | drawstyle        | string     | line    | style connecting points of trace               |  8  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
-  | side             | string     | left    | location (side) for y-axis and label           |  9  |  no          |
+  | side             | string     | None    | location (side) for y-axes and label           |  9  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
-  | yaxes            | 1,2,3,4    | 1       | location (side) for y-axis and label           |  9  |  no          |
+  | yaxes            | 1,2,3,4    | 1       | location (side) for y-axes and label           |  9  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   | yaxes_tracecolor | bool       | False   | use trace color for multiple y-axes            |  9  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
@@ -189,16 +179,16 @@ same meaning, as indicated by the right-most column.
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
 
 
-  As a general note, the configuration for the plot (title, labels, grid
-  displays) and for each trace (color, linewidth, ...) are preserved for a
-  :class:`PlotPanel`. A few specific notes:
+  As a general note, the configuration for the plot (title, labels, grid displays) and
+  for each trace (color, linewidth, ...) are preserved for a :class:`PlotPanel`. A few
+  specific notes:
 
    1. The title, label, and grid arguments to :meth:`plot` default to ``None``, which
       means to use the previously used value.
 
-   2. The *theme* will set the color palette and make stylistic choices.  Choices
-      include 'light' (the default), 'white-background', 'dark', 'matplotlib',
-      'seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
+   2. The *theme* will set the color palette and make stylistic choices.  Choices include
+      'light' (the default), 'white-background', 'dark', 'matplotlib', 'seaborn',
+      'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
       'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
       'seaborn-darkgrid', 'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
       'seaborn-muted', 'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
@@ -232,10 +222,10 @@ same meaning, as indicated by the right-most column.
       discrete values as a function of time, left-to-right, and want to show a
       transition to a new value as a sudden step, you want 'steps-post'.
 
-   9. *side* can by one of ('left', 'right', 'right2', 'right3') or *yaxes* can
-      be one on (1, 2, 3, 4).  These are exactly equivalent ways to spectify
-      which Y axes to use.  Setting *yaxes_tracecolor* will make the
-      Y axes use the same color as the trace using that Y axes.
+   9. *side* can by one of (``None``, 'left', 'right', 'right2', 'right3') (default=``None``)
+      or *yaxes* can be one on (1, 2, 3, 4) (default=1, for left-hand axes).  Setting
+      *yaxes_tracecolor* will make the Y axes use the same color as the trace using that
+      Y axes. See :ref:`sect_yaxes_side` for details.
 
    10. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
        'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
@@ -266,14 +256,92 @@ same meaning, as indicated by the right-most column.
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
   configured interactively (see Plot Configuration).
 
-.. method:: update_line(trace, x, y, side='left', update_limits=True, draw=False)
+
+.. _sect_yaxes_side:
+
+Selecting Y-axes (left- or right-hand side)
+=======================================================
+
+While a basic use of :class:`PlotPanel` will have a single Y-axes, it
+is sometimes useful to plot multiple traces together that have
+different ranges of Y values. Using 2 Y-axes -- the left- and
+right-hand sides of the plot is a very common need. Sometimes 3 or
+even 4 Y axes sharing an X axes can be helpful, and :class:`PlotPanel`
+supports plots with up to 4 of these.
+
+To specify which Y axes to use, we recommeded using the argument
+`yaxes` which can be an integer 1, 2, 3, or 4, where 1 (the default)
+means the left-hand side of the plot, 2 the right-hand side, and 3 and
+4 additional axes displaced from the right-hand side.  (see
+:ref:`example_leftright` and :ref:`example_multiple_yaxes`).  For backward
+compatibility (and with no intention to deprecate this), this can also
+be set with the argument `side`, which can be ``None`` (meaning "use
+the value of `yaxes`") or one of ('left', 'right', 'right2',
+'right3'), m (default=``None``).
+
+Setting `yaxes_tracecolor` to ``True`` will make each of the Y axes
+use the same color as the trace using that Y axes.
+
+
+.. _sect_datetime:
+
+Using date-time data with :func:`plot`
+===========================================
+
+If the `x` values to be plotted holds date or time data, these can be handled in
+a few different formats.  In order for the X-axis labels to be properly
+displayed as a string showing the date, the values must be eventually converted
+to a `matplotlib.dates` object, which uses a floating point number to represent
+the number of days since year 0, BCE.  The `wxmplot` user is not expected to do
+this conversion.
+
+The best way to specify datetime information is to use `datetime` objects
+from the `datetime` library.  These will be automatically recognized and
+properly converted.
+
+If the `x` data is a list or array of integers or floats and `use_dates=True` is
+used, the values will be interpreted as Unix timestamps (seconds since 1970),
+unless `dates_styles='dates'`, in which case they will be interpreted as
+`matplotlib.dates`.
+
+Finally, it is possible to pass in a list or array of strings as `x`, and set
+`use_dates=True`.  In this case, the `matplotlib.dates.datestr2num` function
+will be used convert the string.  Of course, whether this actually works well
+will depend on the ability of this function to parse and interpret the date
+strings used.
+
+
+
+
+:class:`PlotPanel` methods
+=============================================
+
+
+.. method:: plot(x, y, **kws)
+
+   Draw a plot of the numpy arrays *x* and *y*, erasing any existing plot.  The
+   displayed curve for these data is called a *trace*.  The :meth:`plot` method
+   has many optional parameters, all using keyword/value argument.  Since most
+   of these are shared with the :meth:`oplot` method, the full set of parameters
+   is given in :ref:`Table of Plot Arguments <plotopt_table>`
+
+.. method:: oplot(x, y, **kws)
+
+   Draw a plot of the numpy arrays *x* and *y*, overplotting any existing
+   plot, so that both traces are visible.
+
+   The :meth:`oplot` method has many optional parameters,  as listed in
+   :ref:`Table of Plot Arguments <plotopt_table>`
+
+.. method:: update_line(trace, x, y, yaxes=1, side=None, update_limits=True, draw=False)
 
    update an existing trace.
 
    :param trace: integer index for the trace (0 is the first trace)
    :param x:     array of x values
    :param y:     array of y values
-   :param side:  which y axis to use ('left', 'right', 'right2', or 'right3').
+   :param side:  which y axis to use. See :ref:`sect_yaxes_side`.
+   :param yaxes:  which y axis to use.
    :param update_limits:  whether to force an update of the limits.
    :param draw:    whether to force a redrawing of the canvas.
 
@@ -306,20 +374,21 @@ same meaning, as indicated by the right-most column.
 
    Clear the plot.
 
-.. method:: add_text(text, x, y, side='left', rotation=None, ha='left', va='center', family=None, **kws)
+.. method:: add_text(text, x, y, yaxes=1, side=None, rotation=None, ha='left', va='center', family=None, **kws)
 
    add text to the plot.
 
    :param text: text to write
    :param x:    x coordinate for text
    :param y:    y coordinate for text
-   :param side: which axis to use ('left' or 'right') for coordinates.
+   :param side: which y-axes to use for coordinates. See :ref:`sect_yaxes_side`.
+   :param yaxes: which y-axes to use for coordinates.
    :param rotation:  text rotation: angle in degrees or 'vertical' or 'horizontal'
    :param ha:  horizontal alignment ('left', 'center', 'right')
    :param va:  vertical alignment ('top', 'center', 'bottom', 'baseline')
    :param family:  name of font family ('serif', 'sans-serif', etc)
 
-.. method:: add_arrow(x1, y1, x2, y2, side='left', shape='full', color='black', wdith=0.01, head_width=0.03, overhang=0)
+.. method:: add_arrow(x1, y1, x2, y2, yaxes=1, side=None, shape='full', color='black', wdith=0.01, head_width=0.03, overhang=0)
 
 
    draw arrow from (x1, y1) to (x2, y2).
@@ -328,7 +397,8 @@ same meaning, as indicated by the right-most column.
    :param y1: starting y coordinate
    :param x2: endnig x coordinate
    :param y2: ending y coordinate
-   :param side: which axis to use ('left' or 'right') for coordinates.
+   :param side: which y-axes to use for coordinates. See :ref:`sect_yaxes_side`.
+   :param yaxes: which y-axes to use for coordinates.
    :param shape:  arrow head shape ('full', 'left', 'right')
    :param color:  arrow fill color ('black')
    :param width:  width of arrow line (in points. default=0.01)
@@ -336,14 +406,15 @@ same meaning, as indicated by the right-most column.
    :param overhang:    amount the arrow is swept back (in points. default=0)
 
 
-.. method:: set_xylims(limits[, axes=None[, side=None]])
+.. method:: set_xylims(limits[, axes=None[, side=None, yaxes=1]])
 
    Set the x and y limits for a plot based on a 2x2 list.
 
    :param limits: x and y limits
    :type limits: a 4-element list: [xmin, xmax, ymin, ymax]
    :param axes: instance of matplotlib axes to use (i.e, for right or left side y axes)
-   :param side: set to 'right' to get right-hand axes.
+   :param side: which y-axes to use. See :ref:`sect_yaxes_side`.
+   :param yaxes: which y-axis to use.
 
 .. method:: get_xylims()
 
@@ -394,33 +465,6 @@ same meaning, as indicated by the right-most column.
 
    reset the configuration to default settings.
 
-
-.. _sect_datetime:
-
-Using date-time data with :func:`plot`
-===========================================
-
-If the `x` values to be plotted holds date or time data, these can be handled in
-a few different formats.  In order for the X-axis labels to be properly
-displayed as a string showing the date, the values must be eventually converted
-to a `matplotlib.dates` object, which uses a floating point number to represent
-the number of days since year 0, BCE.  The `wxmplot` user is not expected to do
-this conversion.
-
-The best way to specify datetime information is to use `datetime` objects
-from the `datetime` library.  These will be automatically recognized and
-properly converted.
-
-If the `x` data is a list or array of integers or floats and `use_dates=True` is
-used, the values will be interpreted as Unix timestamps (seconds since 1970),
-unless `dates_styles='dates'`, in which case they will be interpreted as
-`matplotlib.dates`.
-
-Finally, it is possible to pass in a list or array of strings as `x`, and set
-`use_dates=True`.  In this case, the `matplotlib.dates.datestr2num` function
-will be used convert the string.  Of course, whether this actually works well
-will depend on the ability of this function to parse and interpret the date
-strings used.
 
 
 

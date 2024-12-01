@@ -72,6 +72,7 @@ gives:
 .. image:: images/datafile_plot.png
    :width: 85 %
 
+.. _example_leftright:
 
 Using Left and Right Axes
 ----------------------------
@@ -86,6 +87,7 @@ and gives a plot that looks like this:
 .. image:: images/two_axes.png
    :width: 85 %
 
+.. _example_multiple_yaxes:
 
 Using 3 and 4 Y Axes
 ----------------------------

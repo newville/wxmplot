@@ -93,95 +93,101 @@ many additional methods to interact with the plots.
 :meth:`oplot`.  In addition, the :meth:`scatterplot` method uses many of the same arguments for the
 same meaning, as indicated by the right-most column.
 
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | argument       |   type     | default | meaning                                        |note | scatterplot?|
-  +================+============+=========+================================================+=====+=============+
-  | title          | string     | None    | Plot title                                     |  1  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ylabel         | string     | None    | abscissa label                                 |  1  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | y2label        | string     | None    | right-hand abscissa label                      |  1  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | label          | string     | None    | trace label (defaults to 'trace N')            |  1  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | theme          | str        | ''      | theme for colors and text size                 |  2  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | color          | string     | blue    | color to use for trace                         |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | bgcolor        | string     | #FEFEFE | color for background of Axis (plot area)       |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | framecolor     | string     | white   | color for frame outside Axis                   |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | gridcolor      | string     | #E5E5E5 | color for grid lines                           |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | linewidth      | int        | 2       | linewidth for trace                            |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | alpha          | float      | 1.0     | opacity (from 0 to 1) for trace                |  4  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | fill           | bool       | False   | fill to 0 or between [y-dy,y+dy]               |  5  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | zorder         | int        | 10      | depth order of trace (what trace is on top)    |  6  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | style          | string     | solid   | line-style for trace (solid, dashed, ...)      |  7  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | drawstyle      | string     | line    | style connecting points of trace               |  8  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | side           | left/right | left    | side for y-axis and label                      |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | marker         | string     | None    | symbol to show for each point (+, o, ....)     |  9  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | markersize     | int        | 8       | size of marker shown for each point            |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legendfontsize | int        | 7       | text size for legend                           |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | labelfontsize  | int        | 9       | text size for Axis labels                      |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | dy             | array      | None    | uncertainties for y values; error bars         |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmin           | float      | None    | minimum displayed x value                      |  10 |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | xmax           | float      | None    | maximum displayed x value                      |  10 |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymin           | float      | None    | minimum displayed y value                      |  10 |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ymax           | float      | None    | maximum displayed y value                      |  10 |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | viewpad        | float      | 2.5     | percent past data range to pad data limits     |  10 |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | ylog_scale     | bool       | False   | draw y axis with log(base 10) scale            |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | autoscale      | bool       | True    | whether to automatically set plot limits       |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | fullbox        | bool       | True    | whether to show top and right Axes lines       |  11 |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | axes_style     | string     | 'box'   | whether to show top, left, right Axes lines    |  11 |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | grid           | None/bool  | None    | to show grid lines                             |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | show_legend    | None/bool  | None    | whether to display legend (None: leave as is)  |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_loc     | string     | 'ur'    | location of legend                             | 12  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | legend_on      | bool       | True    | whether legend is on Axis                      | 12  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | delay_draw     | bool       | False   | whether to delay draw until later.             | 13  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | refresh        | bool       | True    | whether to refresh display                     |     |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | use_dates      | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 14  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | dates_style    | str        | ''      | aid conversion of floats to time data          | 14  |  no         |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  |                | **arguments that apply only for** :meth:`scatterplot`                       |             |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | size           | int        | 10      | size of marker                                 |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | edgecolor      | string     | black   | edge color of marker                           |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | selectcolor    | string     | red     | color for selected points                      |  3  |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
-  | callback       | function   | None    | user-supplied callback to run on selection     |     |  yes        |
-  +----------------+------------+---------+------------------------------------------------+-----+-------------+
+
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | argument         |   type     | default | meaning                                        |note | scatterplot? |
+  +==================+============+=========+================================================+=====+==============+
+  | title            | string     | None    | Plot title                                     |  1  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | ylabel           | string     | None    | abscissa label                                 |  1  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | y2label          | string     | None    | right-hand abscissa label                      |  1  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | label            | string     | None    | trace label (defaults to 'trace N')            |  1  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | theme            | str        | ''      | theme for colors and text size                 |  2  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | color            | string     | blue    | color to use for trace                         |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | bgcolor          | string     | #FEFEFE | color for background of Axis (plot area)       |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | framecolor       | string     | white   | color for frame outside Axis                   |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | gridcolor        | string     | #E5E5E5 | color for grid lines                           |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | linewidth        | int        | 2       | linewidth for trace                            |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | alpha            | float      | 1.0     | opacity (from 0 to 1) for trace                |  4  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | fill             | bool       | False   | fill to 0 or between [y-dy,y+dy]               |  5  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | zorder           | int        | 10      | depth order of trace (what trace is on top)    |  6  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | style            | string     | solid   | line-style for trace (solid, dashed, ...)      |  7  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | drawstyle        | string     | line    | style connecting points of trace               |  8  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | side             | string     | left    | location (side) for y-axis and label           |  9  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | yaxes            | 1,2,3,4    | 1       | location (side) for y-axis and label           |  9  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | yaxes_tracecolor | bool       | False   | use trace color for multiple y-axes            |  9  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | marker           | string     | None    | symbol to show for each point (+, o, ....)     | 10  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | markersize       | int        | 8       | size of marker shown for each point            |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | legendfontsize   | int        | 7       | text size for legend                           |     |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | labelfontsize    | int        | 9       | text size for Axis labels                      |     |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | dy               | array      | None    | uncertainties for y values; error bars         |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | xmin             | float      | None    | minimum displayed x value                      |  11 |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | xmax             | float      | None    | maximum displayed x value                      |  11 |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | ymin             | float      | None    | minimum displayed y value                      |  11 |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | ymax             | float      | None    | maximum displayed y value                      |  11 |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | viewpad          | float      | 2.5     | percent past data range to pad data limits     |  11 |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | ylog_scale       | bool       | False   | draw y axis with log(base 10) scale            |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | autoscale        | bool       | True    | whether to automatically set plot limits       |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | fullbox          | bool       | True    | whether to show top and right Axes lines       |  12 |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | axes_style       | string     | 'box'   | whether to show top, left, right Axes lines    |  12 |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | grid             | None/bool  | None    | to show grid lines                             |     |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | show_legend      | None/bool  | None    | whether to display legend (None: no change)    |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | legend_loc       | string     | 'ur'    | location of legend                             | 13  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | legend_on        | bool       | True    | whether legend is on Axis                      | 13  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | delay_draw       | bool       | False   | whether to delay draw until later.             | 14  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | refresh          | bool       | True    | whether to refresh display                     |     |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | use_dates        | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 15  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | dates_style      | str        | ''      | aid conversion of floats to time data          | 15  |  no          |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  |                  | **arguments that apply only for** :meth:`scatterplot`                       |              |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | size             | int        | 10      | size of marker                                 |     |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | edgecolor        | string     | black   | edge color of marker                           |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | selectcolor      | string     | red     | color for selected points                      |  3  |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+  | callback         | function   | None    | user-supplied callback to run on selection     |     |  yes         |
+  +------------------+------------+---------+------------------------------------------------+-----+--------------+
+
 
   As a general note, the configuration for the plot (title, labels, grid
   displays) and for each trace (color, linewidth, ...) are preserved for a
@@ -226,30 +232,35 @@ same meaning, as indicated by the right-most column.
       discrete values as a function of time, left-to-right, and want to show a
       transition to a new value as a sudden step, you want 'steps-post'.
 
-   9. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
-      'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
+   9. *side* can by one of ('left', 'right', 'right2', 'right3') or *yaxes* can
+      be one on (1, 2, 3, 4).  These are exactly equivalent ways to spectify
+      which Y axes to use.  Setting *yaxes_tracecolor* will make the
+      Y axes use the same color as the trace using that Y axes.
 
-   10. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
+   10. *marker* is one of ('+', 'o', 'x', '^', 'v', '>', '<', '|', '_', 'square',
+       'diamond', 'thin diamond', 'hexagon', 'pentagon', 'tripod 1', or 'tripod 2').
+
+   11. By default, xmin, xmax, ymin, and ymax are set from the data. *viewpad* gives a
        percentage of the data range for the view to be extended.  That is, with xmin=0,
        xmin=100, viewpad=5, the range for x will be [-5, 105].
 
-   11. *fullbox* can be used to turn on or off the top and right Axes lines (or spines),
+   12. *fullbox* can be used to turn on or off the top and right Axes lines (or spines),
        giving a more open figure.  The 'axes_style' option gives a little more control --
        you can set this to either 'box' for a complete box, 'open' for left and right
        Axes lines only (same as *fullbox=False*), or 'bottom' which will suppress the
        top, right, and left Axes.
 
-   12. *legend_loc* sets the position of the legend on the plot, and is one of 'ur',
+   13. *legend_loc* sets the position of the legend on the plot, and is one of 'ur',
        'ul', 'cr', 'cl', 'lr' 'll', 'uc', 'lc', or 'cc' for 'upper right' , 'upper
        left', 'center right', 'center left', 'lower right', 'lower left', 'upper center',
        'lower center', or 'center'.
 
-   13. The *delay_draw* option will delay the actual drawing the plot to the
+   14. The *delay_draw* option will delay the actual drawing the plot to the
        screen. This can be give a noticeable speed up when plotting multiple line traces
        at once.  See also :meth:`plot_many` for a convenience function to plot many
        traces at once.
 
-   14. For more on using data with dates or times, see :ref:`sect_datetime`.
+   15. For more on using data with dates or times, see :ref:`sect_datetime`.
 
 
   All of these values, and a few more settings controlling whether and how to display a plot legend can be
@@ -262,7 +273,7 @@ same meaning, as indicated by the right-most column.
    :param trace: integer index for the trace (0 is the first trace)
    :param x:     array of x values
    :param y:     array of y values
-   :param side:  which y axis to use ('left' or 'right').
+   :param side:  which y axis to use ('left', 'right', 'right2', or 'right3').
    :param update_limits:  whether to force an update of the limits.
    :param draw:    whether to force a redrawing of the canvas.
 

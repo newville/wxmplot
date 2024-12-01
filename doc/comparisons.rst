@@ -12,67 +12,64 @@ to emphasize priorities that informed the development of `wxmplot`. If you
 have comments or suggestions for improving this section, please use the
 Github discussion page.
 
-I believe that data visualization and in particular exploratory data
-analysis are importants part of working with many kinds of scientific data.
-One of the aims for `wxmplot`, and especially :mod:`wxmplot.interactive`,
-is to make exploratory data analysis with Python particularly easy and
-useful.  I am obviously biased towards `wxmplot`, but here I give a few
-comparisons of `wxmplot` with some other tools and libraries for plotting
-scientific data with Python.  The main emphasis here is on Line Plots,
-basic plots of `y` versus `x`.  while other graphical displays of data are
-important, in our experience, these are very common across many scientific
-and engineering disciplines and essentially any plotting library will
-support such plots.
+Data visualization and exploratory data analysis are important for working with
+all kinds of scientific data. One of the aims for `wxmplot`, and especially
+:mod:`wxmplot.interactive`, is to make exploratory data analysis with Python as
+easy as possible for the end-user. Here I give a few comparisons of `wxmplot`
+with some other tools and libraries for plotting scientific data with Python.
+The main emphasis here is on Line Plots, basic plots of `y` versus `x`.  While
+other graphical displays of data are important, basic Line Plots are very
+common across many scientific and engineering disciplines, and often the first
+view of a datasset.  All plotting library will support such plots,
 
-For both exploratory data analysis and for displays of scientific data from
+For interactive exploratory data analysis and for displays of scientific data
 within data analysis applications, the following characteristics are vital:
 
   1. **brevity**, or simplicity of code.  We are using Python because it is
      succint and elegant.
 
   2. **beauty**. The rendered plots should be high-quality with attractive
-     fonts.  Ideally, images made would be directly suitable for
-     presentations and publications.
+     fonts.  Ideally, images made would be directly suitable for presentations
+     and publications, without needing to export and re-create the plot with
+     other software.
 
   3. **interactivity**.  After the plot or image of data is rendered, we want
-     to be able to manipulate and modify the display, including zooming in
-     on certain portions of the data, changing scales, color schemes, line
-     types, and even plot labels.  In fact, not only do we want to be able
-     to do that, we want *users* of the plotting scripts and applications
-     to be able to do that.
+     to be able to manipulate and modify the display, including zooming in on
+     certain portions of the data, changing scales, color schemes, line types,
+     and plot labels.  In fact, not only do we want to do this, we want *users*
+     of the plotting scripts and applications to be able to do this.
 
 The comparisons with other packages here emphasize these three characteristics.
-In all cases, the *interactivity* of data displayed with `wxmplot` is simply
-unmatched as is the ability of the end-user to manipulate the details of the
-display, including for basic line plots:
+In all cases, the *interactivity* of plots created with `wxmplot` and the
+ability of the end-user to manipulate the details of the display are simply
+unmatched.   For basic line plots, the end-user can do all of the following:
 
-   1. change color, line widths, line types, marker types, marker sizes,
+   1. change the color, linewidth, line type, marker type, marker size, and
       display order for each "trace" (x, y pair) in the plot.
 
-   2. change the color theme of the entire display, the color of each
-      component of the display window, the size of the plot
-      margins, how to set the data display range.
+   2. change the color theme of the entire display, the color of each component
+      of the display window, the size of the plot margins, and how to set the
+      data display range.
 
-   3. whether and where a legend is shown, whether grid lines are shown,
+   3. change whether and where a legend is shown, whether grid lines are shown,
       and whether the plot is enclosed in a full box or only the left and
       bottom axes are drawn.
 
-   4. changing the label for each trace, and the title and label for each
-      axis, including setting font sizes.
+   4. change the label for each trace, and the title and label for each axis,
+      including setting font sizes.
 
-   5. changing whether each axis is displayed linearly or logarithmically,
-      and apply common manipulations such as showing derivative or y*x,
-      1/y, and so forth.
+   5. change whether each axis is displayed linearly or logarithmically, and
+      apply common manipulations such as showing derivative or y*x, 1/y, and so
+      forth.
 
-   6. copy image to the system clipboard, save image to PNG file, or send
+   6. copy images to the system clipboard, save image to PNG file, or send
       directly to a system printer.
 
-For image display, users can lookup tables for mapping intensity to
-color, set thresholds and contrast levels, as well as showing axes and
-setting the size and location of a scalebar, and its label.  Images can be
-flipped, rotated (and reset).  Smoothing of pixelated data can be adjusted.
-Images can be toggled back-and-forth between "image mode" and "contour
-mode".
+For image display, users can lookup tables for mapping intensity to color, set
+thresholds and contrast levels, as well as showing axes and setting the size
+and location of a scalebar, and its label.  Images can be flipped, rotated (and
+reset).  Smoothing of pixelated data can be adjusted.  Images can be toggled
+back-and-forth between "image mode" and "contour mode".
 
 
 
@@ -87,27 +84,28 @@ helpful for plotting data from the physical sciences.  For clarity, I include
 the Seaborn package as essentially `matplotlib` with different theming (that
 can be used from `wxmplot`!).
 
-Of course, `matplotlib` is much more comprehensive than `wxmplot` and
-supports some display types that `wxmplot` does not. `wxmplot` focuses its
-attention on Line Plots and display of grey-scale and false-color images,
-and essentially re-imagines the `pyplot` functions `plot` and `imshow`. But
-`wxmplot` also gives you access to the underlying `matplotlib` objects so
-that you can add more complex components and manipulate the plot as needed,
-assuming that you know the `matplotlib` programming interface.
+Of course, `matplotlib` is much more comprehensive than `wxmplot` and supports
+some display types that `wxmplot` does not. `wxmplot` focuses its attention on
+Line Plots and display of grey-scale and false-color images, and essentially
+re-imagines the `pyplot` functions `plot` and `imshow`. But `wxmplot` also
+gives you access to the underlying `matplotlib` objects so that you can add
+more complex components and manipulate the plot as needed, assuming that you
+know the `matplotlib` programming interface.
 
 In :ref:`ch_overview`, a brief comparison of :mod:`matplotlib.pyplot` and
 :mod:`wxmplot.plot` is given and will not repeated here.  From the point of
 view of "brevity" and "beauty", these are approximately equal.  The
 `matplotlib` API is certainly much more common, and deliberately mimics the
 plotting functions in `Matlab`, so will be familiar to many people.
-mod:`wxmplot.plot` puts a lot more arguments into a single function call.
+mod:`wxmplot.plot` puts a lot more arguments into a small number of function
+calls.
 
-Plots made with `matplotlib.pyplot` have some interactivity and
-customizability after the plot is displayed with its Navigation Toolbar, so
-that users can read plot coordinates as the mouse moves around, zoom in and
-out, pan around the plot area, and save the image.  `wxmplot` includes all
-of those features, and has much more flexibility at run-time for the user
-to be able to manipulate the display of the data.
+Plots made with `matplotlib.pyplot` have limited interactivity and
+customizability after the plot is displayed with its Navigation Toolbar.  The
+end-user can read plot coordinates as the mouse moves around, zoom in and out,
+pan around the plot area, and save the image.  `wxmplot` includes all of those
+features, and has much more flexibility at run-time for the user to be able to
+manipulate the display of the data.
 
 For completeness, the example using plain matplotlib would look like
 
@@ -180,9 +178,10 @@ and give a plot of
        :width: 75%
 
 
-As written, there is not interactivity, though zooming can be enabled. The
-need to create a subclass of a `Frame` and initiate a wxApp adds a fair
-amount of boiler-plate code which would be painful for one-off scripts.
+As written, there is not interactivity, though zooming can be enabled. The need
+to create a subclass of a `Frame` and initiate a wxApp adds a fair amount of
+boiler-plate code which make it painful for simple scripts or exploratory data
+analysis.
 
 
 Comparison with Plotly
@@ -191,8 +190,8 @@ Comparison with Plotly
 The Plotly library includes a Python interface (https://plotly.com/python/)
 that is very good and renders interactive plots into a web browser.  This is
 very useful for web-based applications and gives good looking and interactive
-plots into a local or remote web browser. To be clear, I use plotly for more
-than one web application.  Then again, getting information back from the
+plots into a local or remote web browser. To be clear, I use plotly for more a
+few web applications.  Then again, getting information back from the
 web-browser to an application or script is somewhat challenging.
 
 Many of the Plotly examples make assumptions about using Pandas dataframes,
@@ -231,8 +230,8 @@ more complicated code::
     fig.show()
 
 
-That is a bit more complicated than wxmplot, but not too bad.  The resulting
-plot looks like
+That is a bit more complicated than using wxmplot, but not too bad.  The
+resulting plot looks like
 
 .. _plot_compare_plotly:
 
@@ -240,11 +239,10 @@ plot looks like
        :width: 75%
 
 which is a decent starting point. Plotly also gives basic interactivity by
-default, including zooming and displaying coordinates of data points.
-Again, Plotly is especially well-suited to work with Pandas dataframes, and
-provides a fairly rich set of graphics types, so if you are looking to
-visualize complex datasets that are already in Pandas dataframes, Plotly
-is a good choice.
+default, including zooming and displaying coordinates of data points.  Again,
+Plotly is especially well-suited to work with Pandas dataframes, and provides a
+fairly rich set of graphics types, so if you are looking to visualize complex
+datasets that are already in Pandas dataframes, Plotly is a good choice.
 
 
 Comparison with PyQtGraph
@@ -270,15 +268,16 @@ Constructing the example plot above with `pyqtgraph` would look like::
     pg.exec()
 
 
-I find that it is important to select the PyQt "family" (here, PyQt6)
-before importing `pyqtgraph`, but that may depend some on operating system
-and environment.  Being very familiar with wxPython and not very proficient
-with the Qt world, I would happily say that someone more proficient with
-PyQt might be able to make excellent use of this.  I definitely see
-applications using this library to produce good visualizations of data.
+I see many applications using this library to produce good visualizations of
+data.  I must also admit that I often struggle to get a working version of the
+PyQt library.  For this example I I find that it is important to
+select the PyQt "family" (here, PyQt6, but on some systems PySide6 appears to
+work more reliably) before importing `pyqtgraph`.  That may depend some on
+operating system and environment.  Being very familiar with wxPython and not
+very proficient with the Qt world, I would happily say that someone more
+proficient with PyQt might be able to make excellent use of this.
 
-That aside, for brevity and clarity, this is very good.  The resulting plot
-looks like
+For brevity and clarity, this is very good.  The resulting plot looks like
 
 .. _plot_compare_qt:
 
@@ -287,35 +286,32 @@ looks like
 
 
 The plots with `pyqtqraph` are interactive. Though perhaps not quite as
-customizable as `wxmplot`, it is much better than any other library
-described here and `pyqtgraph` definitely values view user interaction with
-the data.  And, in fairness to the `pyqtgraph`, it is explicitly designed
-to do more than simple line plots.
+customizable as `wxmplot`, it is much better than any other library described
+here and `pyqtgraph` definitely values user interaction with the data.  To be
+clear, `pyqtgraph` is explicitly designed to do more than simple line plots.
 
 I find the quality of the Line plots to be somewhat worse than the plots made
-with `matplotlib` and `wxmplot`.  The text in the plot is very hard to read,
-which I find troubling. But not being very familiar with `pyqtgraph`, I am not
-certain how to adjust things like margins and the sizes of markers and text, so
-I am willing to call some of these things a matter of taste and say they might
-be possible to improve.
+with `matplotlib` and `wxmplot`.  The text in the plot is very hard to read, I
+see very little in the online documentation about this.  I find troubling.  But
+not being very familiar with `pyqtgraph`, I am not certain how to adjust things
+like margins and the sizes of markers and text, so I am willing to call some of
+these things a matter of taste and say they might be possible to improve.
 
 
 Comparison with PyQtGraph/PythonGUIs
 ===============================================
 
 Here we compare to tutorials at https://www.pythonguis.com/tutorials/ which
-describe using using GUIs with the PyQt and PySide family of GUI toolkits
-based on Qt. The existence of this chapter was inspired by seeing these
-tutorials, especially advertised as being aimed at showing how to make
-"simple and highly interactive plots" plots.
-
-I agree strongly with the quote introducing these tutorials::
+describe using using GUIs with the PyQt and PySide family of GUI toolkits based
+on Qt.  The fact that these pages are advertised as showing how to make "simple
+and highly interactive plots" plots was the main inspiration for this chapter.
+While I agree strongly with the quote introducing these tutorials::
 
     One of the major strengths of Python is in exploratory data science and
     visualization, using tools such as Pandas, numpy, sklearn for data
     analysis and matplotlib plotting.
 
-and I believe the authors of those tutorials mean well, but when they also say::
+and I believe the authors of those tutorials mean well.  But, when they also say::
 
     In this tutorial we will walk through the first steps of creating a plot
     widget with PyQtGraph
@@ -330,10 +326,11 @@ those tutorials.
 
 The tutorials at https://www.pythonguis.com/tutorials/ make a slight
 distinction between using PySide and PyQt6 (see
-https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/). By itself,
-that does not necessarily indicate a problem, but it does add a level of
-complication that cannot be good for brevity, beauty, or portability.  The
-tutorials start with a "simple" plot. The code given for this is::
+https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/), which is
+perhaps further indication of a general problem in the "Python+ Qt" universe.
+For the discussion her, it adds a level of complication that cannot be good for
+brevity, beauty, or portability.  The tutorials start with a "simple" plot. The
+code given for this is::
 
     from PyQt6 import QtWidgets
     from pyqtgraph import PlotWidget, plot
@@ -374,9 +371,14 @@ available, but running this locally gives a plot of
        :width: 75%
 
 
-At 20 lines of code, with three levels of indentation, and with data is buried
-in a class, this is hardly "brief".  With `wxmplot`, even creating an
-equivalent wxApp, that becomes::
+At 20 lines of code, this is hardly "brief".  The results are also just hard to
+see - the gray on black has poor contrast, the line joining the point is too
+thin and noticeably jagged.  The code is just awful Python.  With three levels
+of indentation, and with data is buried in the initialization method of a
+derived class that has no other methods defined, this is code that should never
+be described in a tutorial.  What rubbish, https://www.pythonguis.com/tutorials/!
+
+With  `wxmplot`, even creating an equivalent wxApp, that becomes::
 
     from wxmplot import PlotApp
 
@@ -399,11 +401,13 @@ With :mod:`wxmplot.interactive` it is down to 4 lines of code total::
 
 That is either 4 or 6 lines of code instead of 20 for the PyQt example.  That
 difference matters, especially the stated goal of "exploratory data analysis".
-In addition, the data in the `wxmplot` examples is not buried in the
-initialization of the main Window as it is in the pythonguis example.  That is
-bad code design and disappointing to see in a tutorial.  None of the plots
-shown in the pythonguis pages have axes labeled, which is another significant
-problem for the display of scientific data.  Axes should be labeled.
+As above, burying the data in the initialization method of a main window is not
+horrible code design and especially disappointing to see in a tutorial, but
+makes exploratory data analysis very hard.
+
+In addition, the plot in the pythonguis example does not have axes labeled.
+This is a very serious problem for the display of scientific data.  Axes should
+be labeled.
 
 With `wxmplot`, the resulting plot looks like:
 
@@ -482,12 +486,13 @@ surprising that its Python interface is not quite as elegant as
         #w.plcol0(1)
 
 which is not too bad from the point of view of "brevity".  But it is
-actually not complete code, so it is not clear how to actually run the
+actually not complete code.  It is not clear how to actually run the
 example -- some sort of `import` must be missing.  The result at
 http://plplot.sourceforge.net/examples-data/demo00/x00.01.png is not too
 bad, though a bit hard to call "beautiful".  I believe `PLPlot` has
 essentially no interactivity for the plots themselves, though some programs
-may be able to have the user advance through a series of plots.
+may be able to have the user advance through a series of plots.   It is also
+not clear how supported or actively maintained this library is.
 
 Converting that to `wxmplot` would be::
 
@@ -507,6 +512,8 @@ which gives a plot of
 
     .. image:: images/plot_compare_plplot.png
        :width: 75%
+
+
 
 
 Comparison with Dislin
@@ -582,7 +589,7 @@ no interactivity. Converting that to `wxmplot` would be::
     y1 = np.cos(np.pi*x/180)
     y2 = np.sin(np.pi*x/18)0
 
-    wi.plot(x, y1, color='red', xlabel='x', ylabel='y',
+    wi.plot(x, y1, color='red', xlabel='X axis', ylabel='Y axis',
             title='DISLIN Comparison\nsin(x) and cos(x)')
     wi.plot(x, y2, color='green3', marker='+')
 
@@ -607,9 +614,10 @@ quality, or interactivity.
 If you are are using web applications or *want to* embed plots in a web
 browser, `plotly` looks like a pretty good choice -- to be clear, the author
 uses `plotly` for web applications.  If you are using `PyQt`, `pyqtgraph` is an
-a perfectly reasonable choice. For maximum portability, plain
-`matplotlib.pyplot` is an acceptable choice, though it offers relatively little
-in the way of interactivity.
+a perfectly reasonable choice, though the tutorials at
+https://www.pythonguis.com/tutorials/ should be avoided at all costs.  For
+maximum portability, plain `matplotlib.pyplot` is an acceptable choice, though
+it offers relatively little in the way of interactivity.
 
 If you are using looking for interactive exploration of your data, we hope you
 find that `wxmplot` offers important capabilities that enable script writers

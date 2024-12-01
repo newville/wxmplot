@@ -116,9 +116,9 @@ class ColorMapPanel(wx.Panel):
 
         self.imin_val = LabeledTextCtrl(self, 0, size=(80, -1),
                                         labeltext='Range:',
-                                        action=partial(self.onThreshold, argu='lo'))
+                                        action=partial(self.onThreshold, arg='lo'))
         self.imax_val = LabeledTextCtrl(self, maxval, size=(80, -1), labeltext=':',
-                                        action=partial(self.onThreshold, argu='hi'))
+                                        action=partial(self.onThreshold, arg='hi'))
         self.islider_range = wx.StaticText(self, label='Shown: ',
                                                 size=(90, -1))
         irow += 1
@@ -151,37 +151,40 @@ class ColorMapPanel(wx.Panel):
         try:
             if name is None:
                 name = self.cmap_choice.GetStringSelection()
-        except:
+        except Exception:
             return
 
         try:
             reverse = (1 == int(self.cmap_reverse.GetValue()))
-        except:
+        except Exception:
             reverse = False
 
         conf.set_colormap(name, reverse=reverse, icol=self.icol)
         self.redraw_cmap()
 
 
-    def onThreshold(self, event=None, argu='hi'):
+    def onThreshold(self, value=None, arg='hi', event=None):
         col = self.icol
         conf = self.imgpanel.conf
-        if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
-            try:
-                val =  float(str(event.GetString()).strip())
-            except:
-                return
-        elif (wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType()):
-            val = float(self.imax_val.GetValue())
-            if argu == 'lo':
-                val = float(self.imin_val.GetValue())
-        if argu == 'lo':
-            conf.int_lo[col] = val
+        if value is None and event is not None:
+            if (wx.EVT_TEXT_ENTER.evtType[0] == event.GetEventType()):
+                try:
+                    value =  float(str(event.GetString()).strip())
+                except:
+                    return
+            elif (wx.EVT_KILL_FOCUS.evtType[0] == event.GetEventType()):
+                val = float(self.imax_val.GetValue())
+                if arg == 'lo':
+                    value = float(self.imin_val.GetValue())
+        if value is None:
+            return
+        if arg == 'lo':
+            conf.int_lo[col] = float(value)
         else:
-            conf.int_hi[col] = val
+            conf.int_hi[col] = float(value)
         lo = conf.int_lo[col]
         hi = conf.int_hi[col]
-        self.islider_range.SetLabel('Shown: [%.4g : %.4g]' % (lo, hi))
+        self.islider_range.SetLabel(f'Shown: [{lo:.5g}:{hi:.5g}]')
         self.imgpanel.redraw()
 
     def redraw_cmap(self):
@@ -220,7 +223,7 @@ class ColorMapPanel(wx.Panel):
         imax = float(self.imax_val.GetValue())
         xlo = imin + (imax-imin)*lo/conf.cmap_range
         xhi = imin + (imax-imin)*hi/conf.cmap_range
-        self.islider_range.SetLabel('Shown: [%.4g: %.4g]' % (xlo, xhi))
+        self.islider_range.SetLabel(f'Shown: [{xlo:.4g}: {xhi:.4g}]')
         self.redraw_cmap()
         self.imgpanel.redraw()
 
@@ -666,7 +669,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         if self.config_mode == 'rgb':
             for icol, col in enumerate(RGB_COLORS):
                 self.cmap_panels[icol] =  ColorMapPanel(panel, self.panel,
-                                                        title='%s: ' % col.title(),
+                                                        title=f'{col.title()}:',
                                                         color=icol,
                                                         default=col,
                                                         colormap_list=None)
@@ -781,8 +784,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             conf.int_hi[0] = imax
             cpan = self.cmap_panels[0]
 
-            cpan.imin_val.SetValue('%.4g' % imin)
-            cpan.imax_val.SetValue('%.4g' % imax)
+            cpan.imin_val.SetValue(f'{imin:.5g}')
+            cpan.imax_val.SetValue(f'{imax:.5g}')
             cpan.imin_val.Enable()
             cpan.imax_val.Enable()
 
@@ -791,8 +794,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 imin, imax = data[:,:,ix].min(), data[:,:,ix].max()
                 conf.int_lo[ix] = imin
                 conf.int_hi[ix] = imax
-                self.cmap_panels[ix].imin_val.SetValue('%.4g' % imin)
-                self.cmap_panels[ix].imax_val.SetValue('%.4g' % imax)
+                self.cmap_panels[ix].imin_val.SetValue(f'{imin:.5g}')
+                self.cmap_panels[ix].imax_val.SetValue(f'{imax:.5g}')
                 self.cmap_panels[ix].imin_val.Enable()
                 self.cmap_panels[ix].imax_val.Enable()
 
@@ -824,8 +827,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
             col = 0
             jmin = imin = img.min()
             jmax = imax = img.max()
-            self.cmap_panels[col].imin_val.SetValue('%.4g' % imin)
-            self.cmap_panels[col].imax_val.SetValue('%.4g' % imax)
+            self.cmap_panels[col].imin_val.SetValue(f'{imin:.5g}')
+            self.cmap_panels[col].imax_val.SetValue(f'{imax:.5g}')
 
             jmin, jmax = np.percentile(img, clevels)
             if imax == imin:
@@ -835,15 +838,15 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
             self.cmap_panels[col].cmap_hi.SetValue(int(xhi))
             self.cmap_panels[col].cmap_lo.SetValue(int(xlo))
-            self.cmap_panels[col].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
+            self.cmap_panels[col].islider_range.SetLabel(f'Shown: [{jmin:5g}:{jmax:.5g}]')
             self.cmap_panels[col].redraw_cmap()
 
         if len(img.shape) == 3: # rgb map
             for ix in range(3):
                 jmin = imin = img[:,:,ix].min()
                 jmax = imax = img[:,:,ix].max()
-                self.cmap_panels[ix].imin_val.SetValue('%.4g' % imin)
-                self.cmap_panels[ix].imax_val.SetValue('%.4g' % imax)
+                self.cmap_panels[ix].imin_val.SetValue(f'{imin:.5g}')
+                self.cmap_panels[ix].imax_val.SetValue(f'{imax:.5g}')
 
                 jmin, jmax = np.percentile(img[:,:,ix], clevels)
                 if imax == imin:
@@ -853,7 +856,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                 self.cmap_panels[ix].cmap_hi.SetValue(int(xhi))
                 self.cmap_panels[ix].cmap_lo.SetValue(int(xlo))
 
-                self.cmap_panels[ix].islider_range.SetLabel('Shown: [ %.4g :  %.4g ]' % (jmin, jmax))
+                self.cmap_panels[ix].islider_range.SetLabel(f'Shown: [{jmin:5g}:{jmax:.5g}]')
                 self.cmap_panels[ix].redraw_cmap()
         self.panel.redraw()
 
@@ -865,7 +868,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         conf = self.panel.conf
         img  = conf.data
 
-        title = '%s: Histogram' % (self.GetTitle())
+        title = f'{self.GetTitle()}: Histogram'
         dat, color = None, None
 
         if len(img.shape) == 2:
@@ -910,14 +913,14 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 
     def ExportTextFile(self, fname, title='unknown map'):
-        buff = ["# Map Data for %s" % title,
+        buff = [f"# Map Data for {title}",
                 "#-------------------------------------"]
         data = self.panel.conf.data
         narr = 1
         labels = [' Y', ' X']
         if len(data.shape) == 3:
             ny, nx, narr = data.shape
-            labels.extend(['Map%d' % (i+1) for i in range(narr)])
+            labels.extend([f'Map{i+1}' for i in range(narr)])
         else:
             ny, nx = data.shape
             labels.append('Map')

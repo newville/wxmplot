@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
     
-    <script src="_static/documentation_options.js?v=e36ecea7"></script>
+    <script src="_static/documentation_options.js?v=c9d5097d"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/bizstyle.js"></script>
@@ -106,27 +106,13 @@ plot, or save the image to a file.</p>
 <p>Keyword parameters in <code class="docutils literal notranslate"><span class="pre">**kws</span></code> other than those listed above are sent to the wx.Panel.</p>
 </dd></dl>
 
-<section id="plotpanel-methods">
-<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Link to this heading">¶</a></h2>
-<dl class="py method">
-<dt class="sig sig-object py" id="plotpanel.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">¶</a></dt>
-<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, erasing any existing plot.  The
-displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method
-has many optional parameters, all using keyword/value argument.  Since most
-of these are shared with the <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method, the full set of parameters
-is given in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="plotpanel.oplot">
-<span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">¶</a></dt>
-<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overplotting any existing
-plot, so that both traces are visible.</p>
-<p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method has many optional parameters,  as listed in
-<a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
-</dd></dl>
-
+<section id="plotpanel-conventions-and-common-arguments">
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> conventions and common arguments<a class="headerlink" href="#plotpanel-conventions-and-common-arguments" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods below share many conventions and use
+common arguments where possible.  A list of common function argumets
+for <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot</span> <span class="pre">is</span> <span class="pre">given</span> <span class="pre">in</span>
+<span class="pre">:ref:`Table</span> <span class="pre">of</span> <span class="pre">Plot</span> <span class="pre">Arguments</span></code>.  Many of these
+arguments and terms are alsoe used in the other function methods.</p>
 <p id="plotopt-table"><strong>Table of Plot Arguments</strong> These arguments apply for the <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a>, and
 <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot()</span></code></a> methods.  Except where noted, the arguments are available for <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> and
 <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a>.  In addition, the <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot()</span></code></a> method uses many of the same arguments for the
@@ -249,17 +235,31 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>side</p></td>
-<td><p>left/right</p></td>
-<td><p>left</p></td>
-<td><p>side for y-axis and label</p></td>
-<td></td>
-<td><p>yes</p></td>
+<td><p>string</p></td>
+<td><p>None</p></td>
+<td><p>location (side) for y-axes and label</p></td>
+<td><p>9</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>yaxes</p></td>
+<td><p>1,2,3,4</p></td>
+<td><p>1</p></td>
+<td><p>location (side) for y-axes and label</p></td>
+<td><p>9</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>yaxes_tracecolor</p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>use trace color for multiple y-axes</p></td>
+<td><p>9</p></td>
+<td><p>no</p></td>
 </tr>
 <tr class="row-even"><td><p>marker</p></td>
 <td><p>string</p></td>
 <td><p>None</p></td>
 <td><p>symbol to show for each point (+, o, ….)</p></td>
-<td><p>9</p></td>
+<td><p>10</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>markersize</p></td>
@@ -294,35 +294,35 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>float</p></td>
 <td><p>None</p></td>
 <td><p>minimum displayed x value</p></td>
-<td><p>10</p></td>
+<td><p>11</p></td>
 <td><p>yes</p></td>
 </tr>
 <tr class="row-even"><td><p>xmax</p></td>
 <td><p>float</p></td>
 <td><p>None</p></td>
 <td><p>maximum displayed x value</p></td>
-<td><p>10</p></td>
+<td><p>11</p></td>
 <td><p>yes</p></td>
 </tr>
 <tr class="row-odd"><td><p>ymin</p></td>
 <td><p>float</p></td>
 <td><p>None</p></td>
 <td><p>minimum displayed y value</p></td>
-<td><p>10</p></td>
+<td><p>11</p></td>
 <td><p>yes</p></td>
 </tr>
 <tr class="row-even"><td><p>ymax</p></td>
 <td><p>float</p></td>
 <td><p>None</p></td>
 <td><p>maximum displayed y value</p></td>
-<td><p>10</p></td>
+<td><p>11</p></td>
 <td><p>yes</p></td>
 </tr>
 <tr class="row-odd"><td><p>viewpad</p></td>
 <td><p>float</p></td>
 <td><p>2.5</p></td>
 <td><p>percent past data range to pad data limits</p></td>
-<td><p>10</p></td>
+<td><p>11</p></td>
 <td><p>yes</p></td>
 </tr>
 <tr class="row-even"><td><p>ylog_scale</p></td>
@@ -343,14 +343,14 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>bool</p></td>
 <td><p>True</p></td>
 <td><p>whether to show top and right Axes lines</p></td>
-<td><p>11</p></td>
+<td><p>12</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>axes_style</p></td>
 <td><p>string</p></td>
 <td><p>‘box’</p></td>
 <td><p>whether to show top, left, right Axes lines</p></td>
-<td><p>11</p></td>
+<td><p>12</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-even"><td><p>grid</p></td>
@@ -363,7 +363,7 @@ same meaning, as indicated by the right-most column.</p>
 <tr class="row-odd"><td><p>show_legend</p></td>
 <td><p>None/bool</p></td>
 <td><p>None</p></td>
-<td><p>whether to display legend (None: leave as is)</p></td>
+<td><p>whether to display legend (None: no change)</p></td>
 <td></td>
 <td><p>no</p></td>
 </tr>
@@ -371,21 +371,21 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>string</p></td>
 <td><p>‘ur’</p></td>
 <td><p>location of legend</p></td>
-<td><p>12</p></td>
+<td><p>13</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>legend_on</p></td>
 <td><p>bool</p></td>
 <td><p>True</p></td>
 <td><p>whether legend is on Axis</p></td>
-<td><p>12</p></td>
+<td><p>13</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-even"><td><p>delay_draw</p></td>
 <td><p>bool</p></td>
 <td><p>False</p></td>
 <td><p>whether to delay draw until later.</p></td>
-<td><p>13</p></td>
+<td><p>14</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>refresh</p></td>
@@ -399,14 +399,14 @@ same meaning, as indicated by the right-most column.</p>
 <td><p>bool</p></td>
 <td><p>False</p></td>
 <td><p>to show dates in xlabel (<a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> only)</p></td>
-<td><p>14</p></td>
+<td><p>15</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>dates_style</p></td>
 <td><p>str</p></td>
 <td><p>‘’</p></td>
 <td><p>aid conversion of floats to time data</p></td>
-<td><p>14</p></td>
+<td><p>15</p></td>
 <td><p>no</p></td>
 </tr>
 <tr class="row-even"><td></td>
@@ -443,16 +443,16 @@ same meaning, as indicated by the right-most column.</p>
 </tr>
 </tbody>
 </table>
-<p>As a general note, the configuration for the plot (title, labels, grid
-displays) and for each trace (color, linewidth, …) are preserved for a
-<a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a>. A few specific notes:</p>
+<p>As a general note, the configuration for the plot (title, labels, grid displays) and
+for each trace (color, linewidth, …) are preserved for a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a>. A few
+specific notes:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>The title, label, and grid arguments to <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> default to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which
 means to use the previously used value.</p></li>
-<li><p>The <em>theme</em> will set the color palette and make stylistic choices.  Choices
-include ‘light’ (the default), ‘white-background’, ‘dark’, ‘matplotlib’,
-‘seaborn’, ‘ggplot’, ‘bmh’, ‘fivethirtyeight’, ‘grayscale’, ‘dark_background’,
+<li><p>The <em>theme</em> will set the color palette and make stylistic choices.  Choices include
+‘light’ (the default), ‘white-background’, ‘dark’, ‘matplotlib’, ‘seaborn’,
+‘ggplot’, ‘bmh’, ‘fivethirtyeight’, ‘grayscale’, ‘dark_background’,
 ‘tableau-colorblind10’, ‘seaborn-bright’, ‘seaborn-colorblind’, ‘seaborn-dark’,
 ‘seaborn-darkgrid’, ‘seaborn-dark-palette’, ‘seaborn-deep’, ‘seaborn-notebook’,
 ‘seaborn-muted’, ‘seaborn-pastel’, ‘seaborn-paper’, ‘seaborn-poster’,
@@ -479,6 +479,10 @@ horizontal lines with a vertical step at the starting point (‘step-pre’),
 mid-point (‘step-mid’) the ending point (‘steps-post’).  Note that if displaying
 discrete values as a function of time, left-to-right, and want to show a
 transition to a new value as a sudden step, you want ‘steps-post’.</p></li>
+<li><p><em>side</em> can by one of (<code class="docutils literal notranslate"><span class="pre">None</span></code>, ‘left’, ‘right’, ‘right2’, ‘right3’) (default=``None``)
+or <em>yaxes</em> can be one on (1, 2, 3, 4) (default=1, for left-hand axes).  Setting
+<em>yaxes_tracecolor</em> will make the Y axes use the same color as the trace using that
+Y axes. See <a class="reference internal" href="#sect-yaxes-side"><span class="std std-ref">Selecting Y-axes (left- or right-hand side)</span></a> for details.</p></li>
 <li><p><em>marker</em> is one of (‘+’, ‘o’, ‘x’, ‘^’, ‘v’, ‘&gt;’, ‘&lt;’, ‘|’, ‘_’, ‘square’,
 ‘diamond’, ‘thin diamond’, ‘hexagon’, ‘pentagon’, ‘tripod 1’, or ‘tripod 2’).</p></li>
 <li><p>By default, xmin, xmax, ymin, and ymax are set from the data. <em>viewpad</em> gives a
@@ -503,9 +507,72 @@ traces at once.</p></li>
 <p>All of these values, and a few more settings controlling whether and how to display a plot legend can be
 configured interactively (see Plot Configuration).</p>
 </div></blockquote>
+</section>
+<section id="selecting-y-axes-left-or-right-hand-side">
+<span id="sect-yaxes-side"></span><h2>Selecting Y-axes (left- or right-hand side)<a class="headerlink" href="#selecting-y-axes-left-or-right-hand-side" title="Link to this heading">¶</a></h2>
+<p>While a basic use of <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> will have a single Y-axes, it
+is sometimes useful to plot multiple traces together that have
+different ranges of Y values. Using 2 Y-axes – the left- and
+right-hand sides of the plot is a very common need. Sometimes 3 or
+even 4 Y axes sharing an X axes can be helpful, and <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a>
+supports plots with up to 4 of these.</p>
+<p>To specify which Y axes to use, we recommeded using the argument
+<cite>yaxes</cite> which can be an integer 1, 2, 3, or 4, where 1 (the default)
+means the left-hand side of the plot, 2 the right-hand side, and 3 and
+4 additional axes displaced from the right-hand side.  (see
+<a class="reference internal" href="examples.html#example-leftright"><span class="std std-ref">Using Left and Right Axes</span></a> and <a class="reference internal" href="examples.html#example-multiple-yaxes"><span class="std std-ref">Using 3 and 4 Y Axes</span></a>).  For backward
+compatibility (and with no intention to deprecate this), this can also
+be set with the argument <cite>side</cite>, which can be <code class="docutils literal notranslate"><span class="pre">None</span></code> (meaning “use
+the value of <cite>yaxes</cite>”) or one of (‘left’, ‘right’, ‘right2’,
+‘right3’), m (default=``None``).</p>
+<p>Setting <cite>yaxes_tracecolor</cite> to <code class="docutils literal notranslate"><span class="pre">True</span></code> will make each of the Y axes
+use the same color as the trace using that Y axes.</p>
+</section>
+<section id="using-date-time-data-with-plot">
+<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Link to this heading">¶</a></h2>
+<p>If the <cite>x</cite> values to be plotted holds date or time data, these can be handled in
+a few different formats.  In order for the X-axis labels to be properly
+displayed as a string showing the date, the values must be eventually converted
+to a <cite>matplotlib.dates</cite> object, which uses a floating point number to represent
+the number of days since year 0, BCE.  The <cite>wxmplot</cite> user is not expected to do
+this conversion.</p>
+<p>The best way to specify datetime information is to use <cite>datetime</cite> objects
+from the <cite>datetime</cite> library.  These will be automatically recognized and
+properly converted.</p>
+<p>If the <cite>x</cite> data is a list or array of integers or floats and <cite>use_dates=True</cite> is
+used, the values will be interpreted as Unix timestamps (seconds since 1970),
+unless <cite>dates_styles=’dates’</cite>, in which case they will be interpreted as
+<cite>matplotlib.dates</cite>.</p>
+<p>Finally, it is possible to pass in a list or array of strings as <cite>x</cite>, and set
+<cite>use_dates=True</cite>.  In this case, the <cite>matplotlib.dates.datestr2num</cite> function
+will be used convert the string.  Of course, whether this actually works well
+will depend on the ability of this function to parse and interpret the date
+strings used.</p>
+</section>
+<section id="plotpanel-methods">
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Link to this heading">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="plotpanel.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">¶</a></dt>
+<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, erasing any existing plot.  The
+displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method
+has many optional parameters, all using keyword/value argument.  Since most
+of these are shared with the <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method, the full set of parameters
+is given in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plotpanel.oplot">
+<span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">¶</a></dt>
+<dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overplotting any existing
+plot, so that both traces are visible.</p>
+<p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method has many optional parameters,  as listed in
+<a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.update_line">
-<span class="sig-name descname"><span class="pre">update_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.update_line" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.update_line" title="Link to this definition">¶</a></dt>
 <dd><p>update an existing trace.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -513,7 +580,8 @@ configured interactively (see Plot Configuration).</p>
 <li><p><strong>trace</strong> – integer index for the trace (0 is the first trace)</p></li>
 <li><p><strong>x</strong> – array of x values</p></li>
 <li><p><strong>y</strong> – array of y values</p></li>
-<li><p><strong>side</strong> – which y axis to use (‘left’ or ‘right’).</p></li>
+<li><p><strong>side</strong> – which y axis to use. See <a class="reference internal" href="#sect-yaxes-side"><span class="std std-ref">Selecting Y-axes (left- or right-hand side)</span></a>.</p></li>
+<li><p><strong>yaxes</strong> – which y axis to use.</p></li>
 <li><p><strong>update_limits</strong> – whether to force an update of the limits.</p></li>
 <li><p><strong>draw</strong> – whether to force a redrawing of the canvas.</p></li>
 </ul>
@@ -556,7 +624,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.add_text">
-<span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_text" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_text" title="Link to this definition">¶</a></dt>
 <dd><p>add text to the plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -564,7 +632,8 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <li><p><strong>text</strong> – text to write</p></li>
 <li><p><strong>x</strong> – x coordinate for text</p></li>
 <li><p><strong>y</strong> – y coordinate for text</p></li>
-<li><p><strong>side</strong> – which axis to use (‘left’ or ‘right’) for coordinates.</p></li>
+<li><p><strong>side</strong> – which y-axes to use for coordinates. See <a class="reference internal" href="#sect-yaxes-side"><span class="std std-ref">Selecting Y-axes (left- or right-hand side)</span></a>.</p></li>
+<li><p><strong>yaxes</strong> – which y-axes to use for coordinates.</p></li>
 <li><p><strong>rotation</strong> – text rotation: angle in degrees or ‘vertical’ or ‘horizontal’</p></li>
 <li><p><strong>ha</strong> – horizontal alignment (‘left’, ‘center’, ‘right’)</p></li>
 <li><p><strong>va</strong> – vertical alignment (‘top’, ‘center’, ‘bottom’, ‘baseline’)</p></li>
@@ -576,7 +645,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.add_arrow">
-<span class="sig-name descname"><span class="pre">add_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overhang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_arrow" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overhang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_arrow" title="Link to this definition">¶</a></dt>
 <dd><p>draw arrow from (x1, y1) to (x2, y2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -585,7 +654,8 @@ order that can be connected by a continuous line.    A full list of arguments ar
 <li><p><strong>y1</strong> – starting y coordinate</p></li>
 <li><p><strong>x2</strong> – endnig x coordinate</p></li>
 <li><p><strong>y2</strong> – ending y coordinate</p></li>
-<li><p><strong>side</strong> – which axis to use (‘left’ or ‘right’) for coordinates.</p></li>
+<li><p><strong>side</strong> – which y-axes to use for coordinates. See <a class="reference internal" href="#sect-yaxes-side"><span class="std std-ref">Selecting Y-axes (left- or right-hand side)</span></a>.</p></li>
+<li><p><strong>yaxes</strong> – which y-axes to use for coordinates.</p></li>
 <li><p><strong>shape</strong> – arrow head shape (‘full’, ‘left’, ‘right’)</p></li>
 <li><p><strong>color</strong> – arrow fill color (‘black’)</p></li>
 <li><p><strong>width</strong> – width of arrow line (in points. default=0.01)</p></li>
@@ -598,14 +668,15 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_xylims">
-<span class="sig-name descname"><span class="pre">set_xylims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">axes=None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">side=None</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xylims" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_xylims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">axes=None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">side=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes=1</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xylims" title="Link to this definition">¶</a></dt>
 <dd><p>Set the x and y limits for a plot based on a 2x2 list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>limits</strong> (<em>a 4-element list:</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em>) – x and y limits</p></li>
 <li><p><strong>axes</strong> – instance of matplotlib axes to use (i.e, for right or left side y axes)</p></li>
-<li><p><strong>side</strong> – set to ‘right’ to get right-hand axes.</p></li>
+<li><p><strong>side</strong> – which y-axes to use. See <a class="reference internal" href="#sect-yaxes-side"><span class="std std-ref">Selecting Y-axes (left- or right-hand side)</span></a>.</p></li>
+<li><p><strong>yaxes</strong> – which y-axis to use.</p></li>
 </ul>
 </dd>
 </dl>
@@ -684,27 +755,6 @@ a <code class="xref py py-class docutils literal notranslate"><span class="pre">
 <dd><p>reset the configuration to default settings.</p>
 </dd></dl>
 
-</section>
-<section id="using-date-time-data-with-plot">
-<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Link to this heading">¶</a></h2>
-<p>If the <cite>x</cite> values to be plotted holds date or time data, these can be handled in
-a few different formats.  In order for the X-axis labels to be properly
-displayed as a string showing the date, the values must be eventually converted
-to a <cite>matplotlib.dates</cite> object, which uses a floating point number to represent
-the number of days since year 0, BCE.  The <cite>wxmplot</cite> user is not expected to do
-this conversion.</p>
-<p>The best way to specify datetime information is to use <cite>datetime</cite> objects
-from the <cite>datetime</cite> library.  These will be automatically recognized and
-properly converted.</p>
-<p>If the <cite>x</cite> data is a list or array of integers or floats and <cite>use_dates=True</cite> is
-used, the values will be interpreted as Unix timestamps (seconds since 1970),
-unless <cite>dates_styles=’dates’</cite>, in which case they will be interpreted as
-<cite>matplotlib.dates</cite>.</p>
-<p>Finally, it is possible to pass in a list or array of strings as <cite>x</cite>, and set
-<cite>use_dates=True</cite>.  In this case, the <cite>matplotlib.dates.datestr2num</cite> function
-will be used convert the string.  Of course, whether this actually works well
-will depend on the ability of this function to parse and interpret the date
-strings used.</p>
 </section>
 <section id="module-plotframe">
 <span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Link to this heading">¶</a></h2>
@@ -791,6 +841,9 @@ customization.</p>
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
 <li><a class="reference internal" href="#plotpanel.PlotPanel"><code class="docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel-conventions-and-common-arguments"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> conventions and common arguments</a></li>
+<li><a class="reference internal" href="#selecting-y-axes-left-or-right-hand-side">Selecting Y-axes (left- or right-hand side)</a></li>
+<li><a class="reference internal" href="#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a><ul>
 <li><a class="reference internal" href="#plotpanel.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.oplot"><code class="docutils literal notranslate"><span class="pre">oplot()</span></code></a></li>
@@ -815,7 +868,6 @@ customization.</p>
 <li><a class="reference internal" href="#plotpanel.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-date-time-data-with-plot">Using date-time data with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
 <li><a class="reference internal" href="#plotframe.PlotFrame"><code class="docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
 <li><a class="reference internal" href="#plotframe.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
@@ -883,7 +935,7 @@ customization.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024-08-20, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2024-12-01, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>

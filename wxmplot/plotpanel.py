@@ -6,12 +6,11 @@ import os
 import sys
 from functools import partial
 from datetime import datetime
-
 import wx
 
 from numpy import nonzero, where
 import matplotlib as mpl
-from matplotlib.dates import date2num, datestr2num
+from matplotlib.dates import date2num, datestr2num, num2date
 
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -26,6 +25,20 @@ from .utils import inside_poly, fix_filename, gformat, MenuItem
 from .plotconfigframe import PlotConfigFrame
 
 to_rgba = colorConverter.to_rgba
+
+def format_date(x, xrange):
+    if xrange > 12: # 12 days
+        dtformat = "%Y-%m-%d"
+    elif xrange > 3: # 3 days
+        dtformat = "%Y-%m-%d %H"
+    elif xrange > 0.25: # 6 hours
+        dtformat = "%m-%d %H:%M"
+    elif xrange > 0.01: # 4.4 seconds
+        dtformat = "%m-%d %H:%M:%S"
+    else:
+        dtformat = "%H:%M:%S.%f"
+    return datetime.strftime(num2date(x), dtformat)
+
 
 class PlotPanel(BasePanel):
     """
@@ -836,15 +849,21 @@ class PlotPanel(BasePanel):
             x, y = event.xdata, event.ydata
 
         if x is not None and y is not None:
-            msg = "X,Y= %g, %g" % (x, y)
+            if self.use_dates:
+                ax  = self.canvas.figure.get_axes()[0]
+                xlims = ax.get_xlim()
+                xrange = abs(xlims[1] - xlims[0])
+                x = format_date(x, xrange)
+            else:
+                x = f"{x:g}"
+            msg = f"X,Y= {x}, {y:g}"
         if len(self.fig.get_axes()) > 1:
             ax2 = self.fig.get_axes()[1]
             try:
                 x2, y2 = ax2.transData.inverted().transform((ex, ey))
-                msg = "X,Y,Y2= %g, %g, %g" % (x, y, y2)
+                msg = f"X,Y,Y2= {x}, {y:g}, {y2:g}"
             except:
                 pass
-
         nsbar = getattr(self, 'nstatusbar', 1)
         self.write_message(msg,  panel=max(0, nsbar - 2))
         if (self.cursor_callback is not None and

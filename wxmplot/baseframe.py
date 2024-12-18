@@ -126,7 +126,7 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
     ## create GUI
     ####
     def BuildFrame(self):
-        sbar_widths = [-2, -1, -1]
+        sbar_widths = [-1, -1, -1]
         sbar = self.CreateStatusBar(len(sbar_widths), wx.CAPTION)
         sfont = sbar.GetFont()
         sfont.SetWeight(wx.BOLD)

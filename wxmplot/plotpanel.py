@@ -865,7 +865,29 @@ class PlotPanel(BasePanel):
             except:
                 pass
         nsbar = getattr(self, 'nstatusbar', 1)
-        self.write_message(msg,  panel=max(0, nsbar - 2))
+        self.write_message(msg,  panel=max(0, nsbar-2))
         if (self.cursor_callback is not None and
             hasattr(self.cursor_callback , '__call__')):
             self.cursor_callback(x=event.xdata, y=event.ydata)
+
+    def report_motion(self, event=None):
+        if event.inaxes is None:
+            return
+        x, y  = event.xdata, event.ydata
+        if len(self.fig.get_axes()) > 1:
+            try:
+                x, y = self.axes.transData.inverted().transform((event.x, event.y))
+            except:
+                pass
+        if x is not None and y is not None:
+            if self.use_dates:
+                ax  = self.canvas.figure.get_axes()[0]
+                xlims = ax.get_xlim()
+                xrange = abs(xlims[1] - xlims[0])
+                x = format_date(x, xrange)
+            else:
+                x = f"{x:g}"
+            msg = f"X,Y= {x}, {y:g}"
+
+        nsbar = getattr(self, 'nstatusbar', 1)
+        self.write_message(msg, panel=max(0, nsbar-1))

@@ -760,7 +760,10 @@ class PlotConfig:
                             color=atrace.color,
                             alpha=atrace.alpha)
                 if atrace.drawstyle != 'default':
-                    fkws['step'] = atrace.drawstyle
+                    dstyle = atrace.drawstyle[:]
+                    if dstyle.startswith('steps-'):
+                        dstyle = dstyle[6:]
+                    fkws['step'] = dstyle
                 x = this[0].get_xdata()
                 y = this[0].get_ydata()
                 y2 = 0

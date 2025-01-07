@@ -328,10 +328,10 @@ class BasePanel(wx.Panel):
         tmax = dates.num2date(tmax).timestamp()
         nsec = (tmax - tmin)
         fmt = "%H:%M\n%S"
-        frac = "%.3f"
+        frac = None
         if nsec < 0.1:
             frac = "%.6f"
-            fmt = "%H:%M\n%S"
+            fmt = "%M:%S\n"
         elif nsec <  25:
             frac = "%.3f"
             fmt = "%H:%M\n%S"
@@ -343,6 +343,7 @@ class BasePanel(wx.Panel):
             fmt = "%m/%d\n%H:%M"
         else:
             fmt = "%m/%d"
+
         dtval = dates.num2date(x)
         try:
             out = dtval.strftime(fmt)

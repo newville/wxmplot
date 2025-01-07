@@ -328,30 +328,33 @@ class BasePanel(wx.Panel):
         tmax = dates.num2date(tmax).timestamp()
         nsec = (tmax - tmin)
         fmt = "%H:%M\n%S"
-        frac = None
-        if nsec < 1:
+        frac = "%.3f"
+        if nsec < 0.1:
             frac = "%.6f"
             fmt = "%H:%M\n%S"
         elif nsec <  25:
             frac = "%.3f"
             fmt = "%H:%M\n%S"
         elif nsec < 600:
-            fmt = "%l %p\n%M:%S"
+            fmt = "%I %p\n%M:%S"
         elif nsec < 5*3600:
             fmt = "%m/%d\n%H:%M"
         elif nsec < 24*7*3600:
             fmt = "%m/%d\n%H:%M"
         else:
             fmt = "%m/%d"
+        dtval = dates.num2date(x)
         try:
-            dtval = dates.num2date(x)
             out = dtval.strftime(fmt)
-            if frac is not None:
+        except ValueError:
+            out = dtval.strftime("%H:%M\n%S")
+        if frac is not None:
+            try:
                 fval = frac % (1.e-6*dtval.microsecond)
                 out = out + fval[1:]
-            return out
-        except:
-            return "?"
+            except:
+                pass
+        return out
 
     def reset_formats(self):
         self._xfmt = self._yfmt = self._y2fmt = None

@@ -33,10 +33,12 @@ def format_date(x, xrange):
         dtformat = "%Y-%m-%d %H"
     elif xrange > 0.25: # 6 hours
         dtformat = "%m-%d %H:%M"
+    elif xrange > 0.12: #
+        dtformat = "%d %H:%M:%S"
     elif xrange > 0.01: # 4.4 seconds
-        dtformat = "%m-%d %H:%M:%S"
-    else:
         dtformat = "%H:%M:%S.%f"
+    else:
+        dtformat = "%M:%S.%f"
     return datetime.strftime(num2date(x), dtformat)
 
 

@@ -390,7 +390,6 @@ class PlotPanel(BasePanel):
         self.draw()
         # self.canvas.Refresh()
 
-
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims
 
@@ -411,7 +410,6 @@ class PlotPanel(BasePanel):
                 return False
         return True
 
-
     def add_text(self, text, x, y, size=None, rotation=None, ha='left',
                  va='center', family=None, yaxes=1, side=None, **kws):
         """add text at supplied x, y position
@@ -428,7 +426,7 @@ class PlotPanel(BasePanel):
 
     def add_arrow(self, x1, y1, x2, y2, shape='full', color='black',
                   width=0.01, head_width=0.03, overhang=0, yaxes=1, side=None,
-                  **kws):
+                  delay_draw=False, **kws):
         """add arrow supplied x, y position"""
         dx, dy = x2-x1, y2-y1
 
@@ -438,7 +436,69 @@ class PlotPanel(BasePanel):
                    fc=color, edgecolor=color,
                    width=width, head_width=head_width,
                    overhang=overhang, **kws)
-        self.draw()
+        if not delay_draw:
+            self.draw()
+
+    def add_vline(self, x, ymin=0, ymax=1, side=None, yaxes=1,
+                      delay_draw=False, label='_nolegend_', report_data=None, **kws):
+        """add a vertical line at x
+
+        Args:
+           x (float):      x position of line, in user coordinates
+           ymin (float):   starting y fraction (window units -- not user units!)
+           ymax (float):   ending y y fraction (window units -- not user units!)
+           delay_draw (bool): whether to delay drawing
+           label (str):    label to show in legend
+           report_data (dict or None): data to report on mouse cursor (left-down)
+        """
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+        axes.axvline(x, ymin=ymin, ymax=ymax, label=label, **kws)
+        if report_data is not None:
+            self.conf.marker_report_data.append((x, None, label, report_data))
+        if not delay_draw:
+            self.draw()
+
+    def add_hline(self, y, xmin=0, xmax=1, side=None, yaxes=1,
+                      delay_draw=False, label='_nolegend_', report_data=None, **kws):
+        """add a horizontal line at y
+
+        Args:
+           y (float):      y position of line, in user coordinates
+           xmin (float):   starting x fraction (window units -- not user units!)
+           xmax (float):   ending y x fraction (window units -- not user units!)
+           delay_draw (bool): whether to delay drawing
+           label (str):    label to show in legend
+           report_data (dict or None): data to report on mouse cursor (left-down)
+        """
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+        axes.axhline(y, xmin=xmin, xmax=xmax, label=label, **kws)
+        if report_data is not None:
+            self.conf.marker_report_data.append((None, y, label, report_data))
+        if not delay_draw:
+            self.draw()
+
+    def add_marker(self, x, y, marker='o', size=4, color='black', side=None, yaxes=1,
+                      delay_draw=False, label='_nolegend_', report_data=None, **kws):
+        """add a marker at x, y coordinates
+
+        Args:
+           x (float):      x position of line, in user coordinates
+           y (float):      y position of line, in user coordinates
+           marker (str):   marker type
+           size (float):   marker size
+           color (str):   marker color
+           delay_draw (bool): whether to delay drawing
+           label (str):    label to show in legend
+           report_data (dict or None): data to report on mouse cursor (left-down)
+        """
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+        self.oplot([x], [y], yaxes=yaxes, marker=marker, markersizer=size, color=color,
+                    label=label, *kws)
+        if report_data is not None:
+            self.conf.marker_report_data.append((x, y, label, report_data))
+        if not delay_draw:
+            self.draw()
+
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,
@@ -850,9 +910,9 @@ class PlotPanel(BasePanel):
         except:
             x, y = event.xdata, event.ydata
 
+        ax  = self.canvas.figure.get_axes()[0]
         if x is not None and y is not None:
             if self.use_dates:
-                ax  = self.canvas.figure.get_axes()[0]
                 xlims = ax.get_xlim()
                 xrange = abs(xlims[1] - xlims[0])
                 x = format_date(x, xrange)
@@ -866,11 +926,30 @@ class PlotPanel(BasePanel):
                 msg = f"X,Y,Y2= {x}, {y:g}, {y2:g}"
             except:
                 pass
+
         nsbar = getattr(self, 'nstatusbar', 1)
         self.write_message(msg,  panel=max(0, nsbar-2))
         if (self.cursor_callback is not None and
             hasattr(self.cursor_callback , '__call__')):
-            self.cursor_callback(x=event.xdata, y=event.ydata)
+            marker_data = []
+            if (len(self.conf.marker_report_data) > 0 and
+                    event.xdata is not None and
+                    event.ydata is not None):
+                xlims = ax.get_xlim()
+                ylims = ax.get_ylim()
+                xrange = max(xlims[1] - xlims[0], 1.e-14)
+                yrange = max(ylims[1] - ylims[0], 1.e-14)
+                for mx, my, label, extra in self.conf.marker_report_data:
+                    nearx, neary = True, True
+                    if mx is not None:
+                        nearx = (abs(event.xdata-mx) /xrange)  < 0.01
+                    if my is not None:
+                        neary = (abs(event.ydata-my) /yrange)  < 0.01
+                    if nearx and neary:
+                        marker_data.append((mx, my, label, extra))
+
+            self.cursor_callback(x=event.xdata, y=event.ydata,
+                                 message=msg, marker_data=marker_data)
 
     def report_motion(self, event=None):
         if event.inaxes is None:

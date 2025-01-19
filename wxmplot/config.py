@@ -292,7 +292,7 @@ class PlotConfig:
         self.data_expr  = None
         self.data_save  = {}
         self.with_data_process = with_data_process
-
+        self.marker_report_data = []
         self.axes_style_choices = ['box', 'open']
         self.legend_onaxis_choices =  ['on plot', 'off plot']
 
@@ -409,6 +409,7 @@ class PlotConfig:
         self.dy    = [None]*len(self.traces)
         self.fills = [None]*len(self.traces)
         self.ntrace = 0
+        self.marker_report_data = []
         return self.lines
 
     def reset_trace_properties(self):

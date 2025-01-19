@@ -504,16 +504,16 @@ class PlotPanel(BasePanel):
         set xtick labels from dict of {x: label} pairs
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        axes.set_xticks(list(xticks.keys()))
-        axes.set_xticklabels(list(xticks.values()))
+        axes.set_xticks(xticks.keys())
+        axes.set_xticklabels(xticks.values())
 
     def set_ytick_labels(self, yticks, yaxes=1, side=None):
         """
         set ytick labels from dict of {y: label} pairs
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        axes.set_yticks(list(yticks.keys()))
-        axes.set_yticklabels(list(yticks.values()))
+        axes.set_yticks(yticks.keys())
+        axes.set_yticklabels(yticks.values())
 
 
     def scatterplot(self, xdata, ydata, label=None, size=10,

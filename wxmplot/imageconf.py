@@ -82,8 +82,8 @@ class ImageConfig:
         self.contrast_level = 0
         self.datalimits = [None, None, None, None]
         self.cmap_lo = [0, 0, 0]
-        self.cmap_range = 10000
-        self.cmap_hi = [10000, 10000, 10000]
+        self.cmap_range = 5000
+        self.cmap_hi = [5000, 5000, 5000]
         self.tricolor_bg = 'black'
         self.tricolor_mode = 'rgb'
         self.int_lo = [0, 0, 0]

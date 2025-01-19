@@ -499,6 +499,22 @@ class PlotPanel(BasePanel):
         if not delay_draw:
             self.draw()
 
+    def set_xtick_labels(self, xticks, yaxes=1, side=None):
+        """
+        set xtick labels from dict of {x: label} pairs
+        """
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+        axes.set_xticks(list(xticks.keys()))
+        axes.set_xticklabels(list(xticks.values()))
+
+    def set_ytick_labels(self, yticks, yaxes=1, side=None):
+        """
+        set ytick labels from dict of {y: label} pairs
+        """
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+        axes.set_yticks(list(yticks.keys()))
+        axes.set_yticklabels(list(yticks.values()))
+
 
     def scatterplot(self, xdata, ydata, label=None, size=10,
                     color=None, edgecolor=None,

@@ -233,8 +233,19 @@ class PlotDisplay(PlotFrame):
             PLOT_DISPLAYS.pop(self.window)
         self.Destroy()
 
-    def onCursor(self, x=None, y=None, **kw):
+    def onCursor(self, x=None, y=None, message='',
+                marker_data=None, **kws):
         self.cursor_hist.insert(0, (x, y, time.time()))
+        rmsg = ''
+        if marker_data is not None:
+            try:
+                _x, _y, label, msg = marker_data[0]
+                rmsg = f'{msg}'
+                if label != '_nolegend_':
+                    rmsg = f'{label}: {msg}'
+            except:
+                pass
+        self.write_message(rmsg, panel=0)
         if len(self.cursor_hist) > MAX_CURSHIST:
             self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
 
@@ -540,8 +551,8 @@ def plot_arrow(x1, y1, x2, y2, win=1, side='left',
                       color=color, width=width, head_length=head_length,
                       head_width=head_width, **kws)
 
-def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
-                win=1,  **kws):
+def plot_marker(x, y, marker='o', size=4, color='black', win=1,
+                label='_nolegend_', report_data=None, **kws):
 
     """plot_marker(x, y, marker='o', size=4, color='black')
 
@@ -567,9 +578,13 @@ def plot_marker(x, y, marker='o', size=4, color='black', label='_nolegend_',
     plotter.Raise()
     plotter.oplot([x], [y], marker=marker, markersize=size, label=label,
                  color=color,  **kws)
+    if report_data is not None:
+        conf = plotter.panel.conf
+        conf.marker_report_data.append((x, y, label, report_data))
 
-def plot_axhline(y, xmin=0, xmax=1, win=1,
-                  size=None, delay_draw=False,  **kws):
+def plot_axhline(y, xmin=0, xmax=1, win=1, size=None,
+                 delay_draw=False, report_data=None,
+                 label='_noglegend_', **kws):
     """plot_axhline(y, xmin=None, ymin=None, **kws)
 
     plot a horizontal line spanning the plot axes
@@ -585,14 +600,16 @@ def plot_axhline(y, xmin=0, xmax=1, win=1,
     if plotter is None:
         return
     plotter.Raise()
-    if 'label' not in kws:
-        kws['label'] = '_nolegend_'
-    plotter.panel.axes.axhline(y, xmin=xmin, xmax=xmax, **kws)
+    plotter.panel.axes.axhline(y, xmin=xmin, xmax=xmax, label=label, **kws)
+    if report_data is not None:
+        conf = plotter.panel.conf
+        conf.marker_report_data.append((None, y, label, report_data))
     if delay_draw:
         plotter.panel.canvas.draw()
 
 def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
-                 delay_draw=False, **kws):
+                 delay_draw=False, report_data=None,
+                 label='_nolegend_', **kws):
     """plot_axvline(y, xmin=None, ymin=None, **kws)
 
     plot a vertical line spanning the plot axes
@@ -608,9 +625,12 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
     if plotter is None:
         return
     plotter.Raise()
-    if 'label' not in kws:
-        kws['label'] = '_nolegend_'
-    plotter.panel.axes.axvline(x, ymin=ymin, ymax=ymax, **kws)
+    if label is None:
+        label = '_nolegend_'
+    plotter.panel.axes.axvline(x, ymin=ymin, ymax=ymax, label=label, **kws)
+    if report_data is not None:
+        conf = plotter.panel.conf
+        conf.marker_report_data.append((x, None, label, report_data))
     if not delay_draw:
         plotter.panel.canvas.draw()
 

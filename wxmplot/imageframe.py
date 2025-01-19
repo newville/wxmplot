@@ -77,16 +77,16 @@ class ColorMapPanel(wx.Panel):
         self.imgpanel.conf.cmap[color] = cmap.get_cmap(cmapname)
 
         maxval = self.imgpanel.conf.cmap_range
-        wd, ht = 1.00, 0.15
-
+        wd, ht = 1.0, 0.15
         self.cmap_dat = np.outer(np.ones(int(maxval*ht)),
                                  np.linspace(0, 1, maxval))
 
-        fig = Figure((wd, ht), dpi=150)
+        fig = Figure((wd, ht), dpi=300)
 
-        ax = fig.add_axes([0, 0, 1, 1])
+        ax = fig.add_axes( [0, 0, 1, 1])
         ax.set_axis_off()
         self.cmap_canvas = FigureCanvas(self, -1, figure=fig)
+        self.cmap_canvas.SetSize((400, 25))
 
         self.cmap_img = ax.imshow(self.cmap_dat, cmap=cmapname,
                                   interpolation='bilinear')

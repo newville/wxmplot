@@ -59,6 +59,7 @@ gives:
    :width: 85 %
 
 
+
 Plotting data from a datafile
 -----------------------------------------
 
@@ -71,6 +72,25 @@ gives:
 
 .. image:: images/datafile_plot.png
    :width: 85 %
+
+
+.. _example_discrete:
+
+Plotting data with discrete values
+-----------------------------------------
+
+Some data has discrete values, or a set of enumerations.  For such
+data, you can set
+
+
+.. literalinclude:: ../examples/discrete_data.py
+
+gives:
+
+.. image:: images/discrete_data.png
+   :width: 85 %
+
+
 
 .. _example_leftright:
 

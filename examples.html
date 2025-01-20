@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>wxmplot Examples &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     
-    <script src="_static/documentation_options.js?v=c9d5097d"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=65f7d7c4"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -73,14 +73,14 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 <span class="c1">#</span>
 <span class="c1"># scatterplot example, with lassoing and</span>
 <span class="c1"># a user-level lasso-callback</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">import</span> <span class="nn">wxmplot</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
 <span class="n">x</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mf">20.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">y</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">onlasso</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">onlasso</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span> <span class="s1">&#39;:: lasso &#39;</span><span class="p">,</span> <span class="n">selected</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
@@ -97,14 +97,15 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </pre></div>
 </div>
 <p>and gives a plot (after having selected by “lasso”ing) that looks like this:</p>
-<a class="reference internal image-reference" href="_images/scatterplot.png"><img alt="_images/scatterplot.png" src="_images/scatterplot.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/scatterplot.png"><img alt="_images/scatterplot.png" src="_images/scatterplot.png" style="width: 85%;" />
+</a>
 </section>
 <section id="plotting-with-errorbars">
 <h2>Plotting with errorbars<a class="headerlink" href="#plotting-with-errorbars" title="Link to this heading">¶</a></h2>
 <p>An example plotting with error bars:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">npts</span> <span class="o">=</span> <span class="mi">41</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
@@ -117,15 +118,16 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </pre></div>
 </div>
 <p>gives:</p>
-<a class="reference internal image-reference" href="_images/errorbar.png"><img alt="_images/errorbar.png" src="_images/errorbar.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/errorbar.png"><img alt="_images/errorbar.png" src="_images/errorbar.png" style="width: 85%;" />
+</a>
 </section>
 <section id="plotting-data-from-a-datafile">
 <h2>Plotting data from a datafile<a class="headerlink" href="#plotting-data-from-a-datafile" title="Link to this heading">¶</a></h2>
 <p>Reading data with <cite>numpy.loadtext</cite> and plotting:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;xafs.dat&#39;</span>
 <span class="n">thisdir</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
@@ -139,7 +141,40 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </pre></div>
 </div>
 <p>gives:</p>
-<a class="reference internal image-reference" href="_images/datafile_plot.png"><img alt="_images/datafile_plot.png" src="_images/datafile_plot.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/datafile_plot.png"><img alt="_images/datafile_plot.png" src="_images/datafile_plot.png" style="width: 85%;" />
+</a>
+</section>
+<section id="plotting-data-with-discrete-values">
+<span id="example-discrete"></span><h2>Plotting data with discrete values<a class="headerlink" href="#plotting-data-with-discrete-values" title="Link to this heading">¶</a></h2>
+<p>Some data has discrete values, or a set of enumerations.  For such
+data, you can set</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">example setting yticks for categorical data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mf">0.06</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">y</span><span class="p">[</span><span class="mi">84</span><span class="p">:</span><span class="mi">86</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">94</span><span class="p">:]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">67</span><span class="p">:</span><span class="mi">69</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">43</span><span class="p">:</span><span class="mi">45</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+<span class="n">display</span> <span class="o">=</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;t (s)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Y label&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;discrete y data&#39;</span><span class="p">,</span>
+                  <span class="n">drawstyle</span><span class="o">=</span><span class="s1">&#39;steps-post&#39;</span><span class="p">)</span>
+
+<span class="n">display</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">set_ytick_labels</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span>
+                           <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;five&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;six&#39;</span><span class="p">})</span>
+<span class="n">display</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>gives:</p>
+<a class="reference internal image-reference" href="_images/discrete_data.png"><img alt="_images/discrete_data.png" src="_images/discrete_data.png" style="width: 85%;" />
+</a>
 </section>
 <section id="using-left-and-right-axes">
 <span id="example-leftright"></span><h2>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Link to this heading">¶</a></h2>
@@ -148,8 +183,8 @@ created with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1">#  example plot with left and right axes with different scales</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
@@ -164,7 +199,8 @@ created with:</p>
 </pre></div>
 </div>
 <p>and gives a plot that looks like this:</p>
-<a class="reference internal image-reference" href="_images/two_axes.png"><img alt="_images/two_axes.png" src="_images/two_axes.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/two_axes.png"><img alt="_images/two_axes.png" src="_images/two_axes.png" style="width: 85%;" />
+</a>
 </section>
 <section id="using-3-and-4-y-axes">
 <span id="example-multiple-yaxes"></span><h2>Using 3 and 4 Y Axes<a class="headerlink" href="#using-3-and-4-y-axes" title="Link to this heading">¶</a></h2>
@@ -172,37 +208,45 @@ created with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
 <span class="c1">#  example plot with 3 different right-hand axes with different y scales</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">3.4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="mf">92.2</span> <span class="o">+</span> <span class="mf">26.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">16.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mf">0.041</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 <span class="n">y3</span> <span class="o">=</span> <span class="mf">0.04</span> <span class="o">+</span> <span class="mf">0.07</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">46.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">)</span>
 <span class="n">y4</span> <span class="o">=</span> <span class="o">-</span><span class="mf">210.</span> <span class="o">+</span> <span class="mf">0.6</span><span class="o">*</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">7e3</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 
 <span class="n">disp</span> <span class="o">=</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Test 4 Axes with different y scales&#39;</span><span class="p">,</span>
                <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">yaxes_tracecolor</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-               <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal 1&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;ylabel&#39;</span><span class="p">)</span>
+               <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal 1&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span>
+               <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
 
-<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y2label</span><span class="o">=</span><span class="s1">&#39;y2label&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal 2&#39;</span><span class="p">,</span> <span class="n">yaxes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y2label</span><span class="o">=</span><span class="s1">&#39;y2label&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="n">yaxes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">drawstyle</span><span class="o">=</span><span class="s1">&#39;steps-post&#39;</span><span class="p">)</span>
+
+<span class="n">disp</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">set_ytick_labels</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;staged&#39;</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;running&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;finished&#39;</span><span class="p">},</span>
+                            <span class="n">yaxes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
 <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">y3label</span><span class="o">=</span><span class="s1">&#39;y3label&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal 3&#39;</span><span class="p">,</span> <span class="n">yaxes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y4</span><span class="p">,</span> <span class="n">y4label</span><span class="o">=</span><span class="s1">&#39;y4label&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal 4&#39;</span><span class="p">,</span> <span class="n">yaxes</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(note the use of <cite>yaxes_tracecolor=True</cite>). This gives a plot like this:</p>
-<a class="reference internal image-reference" href="_images/multiple_yaxes.png"><img alt="_images/multiple_yaxes.png" src="_images/multiple_yaxes.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/multiple_yaxes.png"><img alt="_images/multiple_yaxes.png" src="_images/multiple_yaxes.png" style="width: 85%;" />
+</a>
 </section>
 <section id="plotting-with-alpha-fill-to-show-area-under-a-curve">
 <h2>Plotting with alpha-fill to show area under a curve<a class="headerlink" href="#plotting-with-alpha-fill-to-show-area-under-a-curve" title="Link to this heading">¶</a></h2>
 <p>It is sometimes desirable to fill the area below a curve, typically to 0.
 Using the <cite>alpha</cite> value can be especially helpful for this, so that</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -213,7 +257,8 @@ Using the <cite>alpha</cite> value can be especially helpful for this, so that</
 </pre></div>
 </div>
 <p>will give:</p>
-<a class="reference internal image-reference" href="_images/plot_alphafill_to_zero.png"><img alt="_images/plot_alphafill_to_zero.png" src="_images/plot_alphafill_to_zero.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/plot_alphafill_to_zero.png"><img alt="_images/plot_alphafill_to_zero.png" src="_images/plot_alphafill_to_zero.png" style="width: 85%;" />
+</a>
 </section>
 <section id="plotting-with-alpha-fill-to-show-uncertainty">
 <h2>Plotting with alpha-fill to show uncertainty<a class="headerlink" href="#plotting-with-alpha-fill-to-show-uncertainty" title="Link to this heading">¶</a></h2>
@@ -222,8 +267,8 @@ use of this is to show uncertainties in a function, similar to showing
 errorbars above.  If <cite>dy</cite> and <cite>fill=True</cite> are both given, then a band
 between <cite>y-dy</cite> and <cite>y+dy</cite> will be filled, as with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -237,7 +282,8 @@ between <cite>y-dy</cite> and <cite>y+dy</cite> will be filled, as with:</p>
 </pre></div>
 </div>
 <p>which gives:</p>
-<a class="reference internal image-reference" href="_images/plot_alphafill_to_dy.png"><img alt="_images/plot_alphafill_to_dy.png" src="_images/plot_alphafill_to_dy.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/plot_alphafill_to_dy.png"><img alt="_images/plot_alphafill_to_dy.png" src="_images/plot_alphafill_to_dy.png" style="width: 85%;" />
+</a>
 <p>Of course, you can use that to recast showing a band between any two curves
 by assigning the average of the 2 curves to <cite>y</cite> and half the difference to
 <cite>dy</cite>, and perhaps setting <cite>linewidth=0</cite> to suppress showing the mean value.</p>
@@ -252,8 +298,8 @@ can be empty), and then set the function for that plot window to call to grab
 new data.  The plot window will then periodically call the function you supply,
 with a time interval (in milliseconds) given by the <cite>polltime</cite> argument.  With
 a simple function, it might look like</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">wxmplot.interactive</span> <span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
 
 <span class="n">npts</span> <span class="o">=</span> <span class="mi">501</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
@@ -261,7 +307,7 @@ a simple function, it might look like</p>
 <span class="n">z</span> <span class="o">=</span> <span class="mf">4.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.6</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">40</span><span class="o">+</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="mf">1.9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">3.2</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">21</span><span class="p">))</span>
 
 <span class="n">nx</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="k">def</span> <span class="nf">get_more_data</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_more_data</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">nx</span>
     <span class="n">nx</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">npts</span><span class="p">:</span>
@@ -279,9 +325,9 @@ a simple function, it might look like</p>
 </pre></div>
 </div>
 <p>This will generate a continuously updating plot adding data as it goes:</p>
-<video controls="True" muted="True" preload="auto"><source src="_images/scope_mode_function.mp4" type="video/mp4">capture of images generated from scope_mode_function.py</video><p>As a second example, this time using a generator, you might do something like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">wxmplot.interactive</span> <span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
+<div  class="align-left"><video controls="True" muted="True" preload="auto"><source src="_images/scope_mode_function.mp4" type="video/mp4">capture of images generated from scope_mode_function.py</video></div><p>As a second example, this time using a generator, you might do something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
 
 <span class="c1"># generator of datasets</span>
 <span class="n">npts</span> <span class="o">=</span> <span class="mi">501</span>
@@ -290,7 +336,7 @@ a simple function, it might look like</p>
              <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.6</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">nx</span><span class="o">/</span><span class="mi">43</span><span class="p">)))</span>
             <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npts</span><span class="p">))</span>
 
-<span class="k">def</span> <span class="nf">more_data</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">more_data</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;yield next pair of datasets from data generator&quot;&quot;&quot;</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -308,7 +354,7 @@ a simple function, it might look like</p>
 </pre></div>
 </div>
 <p>which will generate a plot like this:</p>
-<video controls="True" muted="True" preload="auto"><source src="_images/scope_mode_generator.mp4" type="video/mp4">capture of images generated from scope_mode_generator.py</video><p>Note that your function should return or yield a list of (x, y) pairs.</p>
+<div  class="align-left"><video controls="True" muted="True" preload="auto"><source src="_images/scope_mode_generator.mp4" type="video/mp4">capture of images generated from scope_mode_generator.py</video></div><p>Note that your function should return or yield a list of (x, y) pairs.</p>
 <p>As a third example, and by way of comparison with the matplotlib example at
 <a class="reference external" href="https://matplotlib.org/stable/gallery/animation/strip_chart.html">https://matplotlib.org/stable/gallery/animation/strip_chart.html</a>, a similar
 result can be generated with the somewhat shorter and less involved code
@@ -316,19 +362,19 @@ example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This could be comparable to</span>
 <span class="c1"># https://matplotlib.org/stable/gallery/animation/strip_chart.html</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">wxmplot.interactive</span> <span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">19680801</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">Scope</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Scope</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmax</span> <span class="o">=</span> <span class="n">nmax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">nmax</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmax</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
@@ -351,10 +397,10 @@ better designed than the standard matplotlib example.</p>
 <section id="displaying-and-image-of-a-tiff-file">
 <h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Link to this heading">¶</a></h2>
 <p>Reading a TIFF file and showing the image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
-<span class="kn">from</span> <span class="nn">tifffile</span> <span class="kn">import</span> <span class="n">imread</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tifffile</span><span class="w"> </span><span class="kn">import</span> <span class="n">imread</span>
 
-<span class="kn">import</span> <span class="nn">wxmplot.interactive</span> <span class="k">as</span> <span class="nn">wi</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
 
 <span class="n">thisdir</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 <span class="n">imgdata</span> <span class="o">=</span>  <span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">thisdir</span><span class="p">,</span> <span class="s1">&#39;ceo2.tiff&#39;</span><span class="p">))</span>
@@ -363,7 +409,8 @@ better designed than the standard matplotlib example.</p>
 </pre></div>
 </div>
 <p>gives:</p>
-<a class="reference internal image-reference" href="_images/tifffile_image.png"><img alt="_images/tifffile_image.png" src="_images/tifffile_image.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/tifffile_image.png"><img alt="_images/tifffile_image.png" src="_images/tifffile_image.png" style="width: 85%;" />
+</a>
 </section>
 <section id="color-image">
 <h2>3-Color Image<a class="headerlink" href="#color-image" title="Link to this heading">¶</a></h2>
@@ -374,11 +421,11 @@ each of the three colors.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example showing display of R, G, B maps</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span>
-<span class="kn">from</span> <span class="nn">wxmplot</span> <span class="kn">import</span> <span class="n">ImageFrame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wxmplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageFrame</span>
 
-<span class="k">def</span> <span class="nf">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gauss2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">outer</span><span class="p">(</span> <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">y</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
                   <span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(((</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sx</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
 
@@ -412,12 +459,14 @@ each of the three colors.</p>
 </pre></div>
 </div>
 <p>giving a plot that would look like this:</p>
-<a class="reference internal image-reference" href="_images/image_3color.png"><img alt="_images/image_3color.png" src="_images/image_3color.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/image_3color.png"><img alt="_images/image_3color.png" src="_images/image_3color.png" style="width: 85%;" />
+</a>
 <p>Note that there is also an Image-&gt;Toggle Background Color
 (Black/White) menu selection that can switch the zero intensity color
 between black and white.  The same image with a white background looks
 like:</p>
-<a class="reference internal image-reference" href="_images/image_3color_white.png"><img alt="_images/image_3color_white.png" src="_images/image_3color_white.png" style="width: 85%;" /></a>
+<a class="reference internal image-reference" href="_images/image_3color_white.png"><img alt="_images/image_3color_white.png" src="_images/image_3color_white.png" style="width: 85%;" />
+</a>
 <p>This gives a slightly different view of the same data, with results that
 may be more suitable for printed documents and presentations.</p>
 </section>
@@ -438,6 +487,7 @@ may be more suitable for printed documents and presentations.</p>
 <li><a class="reference internal" href="#scatterplot-example">Scatterplot Example</a></li>
 <li><a class="reference internal" href="#plotting-with-errorbars">Plotting with errorbars</a></li>
 <li><a class="reference internal" href="#plotting-data-from-a-datafile">Plotting data from a datafile</a></li>
+<li><a class="reference internal" href="#plotting-data-with-discrete-values">Plotting data with discrete values</a></li>
 <li><a class="reference internal" href="#using-left-and-right-axes">Using Left and Right Axes</a></li>
 <li><a class="reference internal" href="#using-3-and-4-y-axes">Using 3 and 4 Y Axes</a></li>
 <li><a class="reference internal" href="#plotting-with-alpha-fill-to-show-area-under-a-curve">Plotting with alpha-fill to show area under a curve</a></li>
@@ -498,8 +548,8 @@ may be more suitable for printed documents and presentations.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024-12-01, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025-01-19, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

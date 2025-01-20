@@ -305,7 +305,7 @@ Here we compare to tutorials at https://www.pythonguis.com/tutorials/ which
 describe using using GUIs with the PyQt and PySide family of GUI toolkits based
 on Qt.  The fact that these pages are advertised as showing how to make "simple
 and highly interactive plots" plots was the main inspiration for this chapter.
-While I agree strongly with the quote introducing these tutorials::
+I agree strongly with the quote introducing these tutorials::
 
     One of the major strengths of Python is in exploratory data science and
     visualization, using tools such as Pandas, numpy, sklearn for data
@@ -328,7 +328,7 @@ The tutorials at https://www.pythonguis.com/tutorials/ make a slight
 distinction between using PySide and PyQt6 (see
 https://www.pythonguis.com/tutorials/pyqt6-plotting-pyqtgraph/), which is
 perhaps further indication of a general problem in the "Python+ Qt" universe.
-For the discussion her, it adds a level of complication that cannot be good for
+For the discussion here, it adds a level of complication that cannot be good for
 brevity, beauty, or portability.  The tutorials start with a "simple" plot. The
 code given for this is::
 
@@ -375,8 +375,9 @@ At 20 lines of code, this is hardly "brief".  The results are also just hard to
 see - the gray on black has poor contrast, the line joining the point is too
 thin and noticeably jagged.  The code is just awful Python.  With three levels
 of indentation, and with data is buried in the initialization method of a
-derived class that has no other methods defined, this is code that should never
-be described in a tutorial.  What rubbish, https://www.pythonguis.com/tutorials/!
+derived class that has no other methods defined, this is code that
+should never be done, and especially not in a tutorial.
+What rubbish, https://www.pythonguis.com/tutorials/!
 
 With  `wxmplot`, even creating an equivalent wxApp, that becomes::
 
@@ -401,13 +402,16 @@ With :mod:`wxmplot.interactive` it is down to 4 lines of code total::
 
 That is either 4 or 6 lines of code instead of 20 for the PyQt example.  That
 difference matters, especially the stated goal of "exploratory data analysis".
-As above, burying the data in the initialization method of a main window is not
-horrible code design and especially disappointing to see in a tutorial, but
-makes exploratory data analysis very hard.
+As above, burying the data in the initialization method of a main window is just
+horrible code design, and especially disappointing to see in a
+tutorial.  It make exploratory data analysis very hard.
 
-In addition, the plot in the pythonguis example does not have axes labeled.
-This is a very serious problem for the display of scientific data.  Axes should
-be labeled.
+In addition, the plot in the pythonguis example does not have axes
+labeled.  This is a very serious problem for the display of scientific
+data.  Axes should be labeled, always.  The tutorials at
+https://www.pythonguis.com/tutorials/ don't label any axes until
+half-way through.  This cannot be meant for serious students of science.
+
 
 With `wxmplot`, the resulting plot looks like:
 
@@ -416,6 +420,8 @@ With `wxmplot`, the resulting plot looks like:
     .. image:: images/plot_compare_qttutorial1.png
        :width: 75%
 
+The axes are labeled, of course, the contrast is better. Because
+communication is the goal.
 
 There is some basic interactivity with the Qt example in that the plot can
 be panned and zoomed.  Some plot features can be altered by the end-user
@@ -443,9 +449,9 @@ how to display a legend for the plot.  This is much simpler with `wxmplot`
 and more interactive, as the displayed legend is "active" in toggling the
 display of the corresponding line.
 
-If aiming to teach people how to use Python for interactive exploratory data
-analysis, the tutorials at https://www.pythonguis.com/tutorials/ are profoundly
-disappointing.
+Given that the stated goal is to teach people how to use Python for
+interactive exploratory data analysis, the tutorials at
+https://www.pythonguis.com/tutorials/ are profoundly disappointing.
 
 
 Comparison with PLPlot

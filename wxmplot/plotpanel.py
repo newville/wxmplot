@@ -457,11 +457,12 @@ class PlotPanel(BasePanel):
            report_data (dict or None): data to report on mouse cursor (left-down)
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        axes.axvline(x, ymin=ymin, ymax=ymax, label=label, **kws)
+        vline = axes.axvline(x, ymin=ymin, ymax=ymax, label=label, **kws)
         if report_data is not None:
             self.conf.marker_report_data.append((x, None, label, report_data))
         if not delay_draw:
             self.draw()
+        return vline
 
     def add_hline(self, y, xmin=0, xmax=1, side=None, yaxes=1,
                       delay_draw=False, label='_nolegend_', report_data=None, **kws):
@@ -476,11 +477,12 @@ class PlotPanel(BasePanel):
            report_data (dict or None): data to report on mouse cursor (left-down)
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        axes.axhline(y, xmin=xmin, xmax=xmax, label=label, **kws)
+        hline = axes.axhline(y, xmin=xmin, xmax=xmax, label=label, **kws)
         if report_data is not None:
             self.conf.marker_report_data.append((None, y, label, report_data))
         if not delay_draw:
             self.draw()
+        return hline
 
     def add_marker(self, x, y, marker='o', size=4, color='black', side=None, yaxes=1,
                       delay_draw=False, label='_nolegend_', report_data=None, **kws):
@@ -497,12 +499,13 @@ class PlotPanel(BasePanel):
            report_data (dict or None): data to report on mouse cursor (left-down)
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        self.oplot([x], [y], yaxes=yaxes, marker=marker, markersizer=size, color=color,
-                    label=label, *kws)
+        mline = self.oplot([x], [y], yaxes=yaxes, marker=marker, markersizer=size,
+                           color=color, label=label, *kws)
         if report_data is not None:
             self.conf.marker_report_data.append((x, y, label, report_data))
         if not delay_draw:
             self.draw()
+        return mline
 
     def set_xtick_labels(self, xticks, yaxes=1, side=None):
         """

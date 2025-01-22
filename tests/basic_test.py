@@ -5,20 +5,13 @@ import numpy
 import matplotlib
 
 def test_import():
-    success = False
-    try:
-        import wxmplot
-        success = True
-    except:
-        pass
+    import wxmplot
+    success = True
+
     assert(success)
 
 
 def test_interactive_import():
-    success = False
-    try:
-        import wxmplot.interactive as wi
-        success = True
-    except:
-        pass
+    import wxmplot.interactive as wi
+    success = True
     assert(success)

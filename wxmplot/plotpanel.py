@@ -11,6 +11,7 @@ import wx
 from numpy import nonzero, where
 import matplotlib as mpl
 from matplotlib.dates import date2num, datestr2num, num2date
+from matplotlib.dates import AutoDateFormatter, AutoDateLocator
 
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
@@ -26,7 +27,7 @@ from .plotconfigframe import PlotConfigFrame
 
 to_rgba = colorConverter.to_rgba
 
-def format_date(x, xrange):
+def format_date(x, xrange, tz=None):
     if xrange > 12: # 12 days
         dtformat = "%Y-%m-%d"
     elif xrange > 3: # 3 days
@@ -39,7 +40,7 @@ def format_date(x, xrange):
         dtformat = "%H:%M:%S.%f"
     else:
         dtformat = "%M:%S.%f"
-    return datetime.strftime(num2date(x), dtformat)
+    return datetime.strftime(num2date(x, tz=tz), dtformat)
 
 
 class PlotPanel(BasePanel):
@@ -136,8 +137,8 @@ class PlotPanel(BasePanel):
               bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
               labelfontsize=None, titlefontsize=None, legendfontsize=None,
               fullbox=None, axes_style=None, zorder=None, viewpad=None,
-              theme=None, use_dates=None, dates_style=None, yaxes=1, side=None,
-              yaxes_tracecolor=None, **kws):
+              theme=None, use_dates=None, dates_style=None, timezone=None,
+              yaxes=1, side=None, yaxes_tracecolor=None, **kws):
 
         """
         basic plot method, adding to an existing display
@@ -161,6 +162,7 @@ class PlotPanel(BasePanel):
 
         self.dates_style = ifnot_none(dates_style, self.dates_style)
         self.use_dates = ifnot_none(use_dates, self.use_dates)
+
         if isinstance(xdata[0], datetime):
             self.use_dates = True
 
@@ -174,9 +176,12 @@ class PlotPanel(BasePanel):
             if dstyle is None:
                 dstyle = ''
             if isinstance(x0, datetime):
+                self.dates_tzinfo = xdata[0].tzinfo
                 xdata = date2num(xdata)
             elif isinstance(x0, str) or dstyle.lower().startswith('str'):
                 xdata = datestr2num(xdata)
+            if timezone is not None:
+                self.dates_tzinfo = timezone
 
         linewidth = ifnot_none(linewidth, 2)
         conf.viewpad = ifnot_none(viewpad, conf.viewpad)
@@ -931,7 +936,7 @@ class PlotPanel(BasePanel):
             if self.use_dates:
                 xlims = ax.get_xlim()
                 xrange = abs(xlims[1] - xlims[0])
-                x = format_date(x, xrange)
+                x = format_date(x, xrange, tz=self.dates_tzinfo)
             else:
                 x = f"{x:g}"
             msg = f"X,Y= {x}, {y:g}"
@@ -981,7 +986,7 @@ class PlotPanel(BasePanel):
                 ax  = self.canvas.figure.get_axes()[0]
                 xlims = ax.get_xlim()
                 xrange = abs(xlims[1] - xlims[0])
-                x = format_date(x, xrange)
+                x = format_date(x, xrange, tz=self.dates_tzinfo)
             else:
                 x = f"{x:g}"
             msg = f"X,Y= {x}, {y:g}"

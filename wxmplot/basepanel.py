@@ -15,9 +15,12 @@ import matplotlib
 from matplotlib.widgets import Lasso
 from matplotlib import dates
 from matplotlib.backends.backend_wx import RendererWx
+import pytz
 
 from .utils import Printer, MenuItem
 
+tzname = os.environ.get('TZ', 'UTC')
+TIMEZONE = pytz.timezone(tzname)
 
 class BasePanel(wx.Panel):
     """
@@ -46,6 +49,7 @@ class BasePanel(wx.Panel):
         self._yfmt  = self._y2fmt = self._xfmt  = None
         self._y3fmt  = self._y4fmt = None
         self.use_dates = False
+        self.dates_tzinfo = TIMEZONE
         self.show_config_popup = show_config_popup
         self.launch_dir  = get_cwd()
 
@@ -324,8 +328,8 @@ class BasePanel(wx.Panel):
         span = self.axes.xaxis.get_view_interval()
         tmin = max(1.0, span[0])
         tmax = max(2.0, span[1])
-        tmin = dates.num2date(tmin).timestamp()
-        tmax = dates.num2date(tmax).timestamp()
+        tmin = dates.num2date(tmin, tz=self.dates_tzinfo).timestamp()
+        tmax = dates.num2date(tmax, tz=self.dates_tzinfo).timestamp()
         nsec = (tmax - tmin)
         fmt = "%H:%M\n%S"
         frac = None
@@ -344,7 +348,7 @@ class BasePanel(wx.Panel):
         else:
             fmt = "%m/%d"
 
-        dtval = dates.num2date(x)
+        dtval = dates.num2date(x, tz=self.dates_tzinfo)
         try:
             out = dtval.strftime(fmt)
         except ValueError:

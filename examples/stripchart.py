@@ -1,25 +1,32 @@
 #!/usr/bin/python
+"""
+2-axes strip chart
+"""
+import os
 import time
 import numpy as np
 import sys
 import wx
-from datetime import datetime
 from wx.lib import masked
 from floatcontrol import FloatCtrl
 from wxmplot import PlotPanel
+from matplotlib.dates import date2num
+import pytz
 
+tzname = os.environ.get('TZ', 'US/Central')
+TZONE = pytz.timezone(tzname)
 
 def next_data():
     "simulated data"
     t0 = time.time()
     lt = time.localtime(t0)
-    dt0 = datetime.fromtimestamp(t0)
 
     tmin, tsec = lt[4], lt[5]
     u = np.random.random()
     v = np.random.random()
     x = np.sin( (u + tsec)/3.0) + tmin/30. + v/5.0
-    return dt0, x
+    y = 4*np.cos( (v + tsec)/3.0) + tmin/30. + u*3
+    return t0, x, y
 
 class StripChartFrame(wx.Frame):
     def __init__(self, parent, ID, **kws):
@@ -29,7 +36,7 @@ class StripChartFrame(wx.Frame):
                          wx.DefaultPosition, wx.Size(-1,-1), **kws)
         self.SetTitle("wxmplot StripChart Demo")
 
-        self.tmin = 15.0
+        self.tmin = 30.0
 
         self.SetFont(wx.Font(12,wx.SWISS,wx.NORMAL,wx.BOLD,False))
         menu = wx.Menu()
@@ -61,7 +68,7 @@ class StripChartFrame(wx.Frame):
         b_on.Bind(wx.EVT_BUTTON, self.onStartTimer)
         b_off.Bind(wx.EVT_BUTTON, self.onStopTimer)
 
-        tlabel = wx.StaticText(btnpanel, -1, '  Time range:')
+        tlabel = wx.StaticText(btnpanel, -1, '  Time range (seconds from present):')
         self.time_range = FloatCtrl(btnpanel,  size=(100, -1),
                                     value=abs(self.tmin), precision=1)
 
@@ -95,8 +102,10 @@ class StripChartFrame(wx.Frame):
 
     def onStartTimer(self,event=None):
         self.count    = 0
-        t0,y0 = next_data()
-        self.ylist = [y0]
+        t0, y0, y1 = next_data()
+        self.y2list = [y0]
+        self.y1list = [y0]
+        self.y2list = [y1]
         self.tlist = [t0]
         self.tmin_last = -10000
         self.time0    = time.time()
@@ -107,29 +116,29 @@ class StripChartFrame(wx.Frame):
 
     def onTimer(self, event):
         self.count += 1
-        etime = time.time() - self.time0
-        self.tmin = float(self.time_range.GetValue())
-        t1, y1 = next_data()
+        now = time.time()
+        tmin = now - float(self.time_range.GetValue())
+        t1, y1, y2 = next_data()
         self.tlist.append(t1)
-        self.ylist.append(y1)
-        if isinstance(t1, datetime):
-            t1 = t1.timestamp()
-            ts = [dt.timestamp()for dt in self.tlist]
-        else:
-            ts = [dt for dt in self.tlist]
+        self.y1list.append(y1)
+        self.y2list.append(y2)
+        t0 = self.tlist[0]
+        tdat = np.array(self.tlist)
+        mask = np.where(tdat > tmin)
 
-        del_ts = np.array(ts)-t1
-        mask = np.where(del_ts > -abs(self.tmin))
-
-        ydat = np.array(self.ylist)[mask]
+        y1dat = np.array(self.y1list)[mask]
+        y2dat = np.array(self.y2list)[mask]
         tdat = np.array(self.tlist)[mask]
+        tdat /= 86400.  # convert timestamps to matplotlib date, need TimeZone!!
+        n = len(self.y1list)
 
-        n = len(self.ylist)
         if n <= 2:
-            self.plotpanel.plot(tdat, ydat)
+            self.plotpanel.plot(tdat, y1dat, use_date=True, timezone=TZONE)
+            self.plotpanel.oplot(tdat, y2dat, yaxes=2, use_dates=True, timezone=TZONE)
         else:
-            self.plotpanel.update_line(0, tdat, ydat, draw=True)
-            self.write_message("update  %i points in %8.4f s" % (n,etime))
+            self.plotpanel.update_line(0, tdat, y1dat, draw=True)
+            self.plotpanel.update_line(1, tdat, y2dat, draw=True, yaxes=2)
+            # self.write_message(f"update {n} points in {(now-self.time0):.2f} sec")
 
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "wxmplot example: stripchart app",

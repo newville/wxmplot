@@ -171,6 +171,7 @@ class PlotPanel(BasePanel):
             #   1. xdate are in datetime: convert to mpl dates
             #   2. xdata are strings: parse with datestr2num
             #   3. xdata are floats: convert as unix timestamp to mpl dates
+            axes.xaxis.set_major_locator(AutoDateLocator())
             x0 = xdata[0]
             dstyle = self.dates_style
             if dstyle is None:

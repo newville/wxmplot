@@ -2,12 +2,12 @@
 
 from wxmplot import PlotApp
 from datetime import datetime
-f = open('time.dat','r')
-l = f.readlines()
-f.close()
-t = []
-x = []
-for i in l:
+
+with open('time.dat','r') as fh:
+    lines = fh.readlines()
+
+t, x = [], []
+for i in lines:
     j =  i[:-1].strip().split()
     t.append(datetime.fromtimestamp(float(j[0])))
     x.append(float(j[1]))

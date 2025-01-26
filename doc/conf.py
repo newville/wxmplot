@@ -17,7 +17,7 @@ import wxmplot
 project = 'wxmplot'
 copyright = f'{date.today()}, Matthew Newville, The University of Chicago'
 
-release = version_parse(wxmplot.__version__).public
+release = version_parse(wxmplot.__version__).base_version
 
 html_title = "WXMPLOT: interactive plotting with Python"
 html_short_title = "WXMPLOT"

@@ -165,7 +165,7 @@ same meaning, as indicated by the right-most column.
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   | use_dates        | bool       | False   | to show dates in xlabel (:meth:`plot` only)    | 15  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
-  | dates_style      | str        | ''      | aid conversion of floats to time data          | 15  |  no          |
+  | timezone         | timezone   | None    | timezone data for date and time data           | 15  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   |                  | **arguments that apply only for** :meth:`scatterplot`                       |              |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
@@ -288,27 +288,28 @@ use the same color as the trace using that Y axes.
 Using date-time data with :func:`plot`
 ===========================================
 
-If the `x` values to be plotted holds date or time data, these can be handled in
-a few different formats.  In order for the X-axis labels to be properly
-displayed as a string showing the date, the values must be eventually converted
-to a `matplotlib.dates` object, which uses a floating point number to represent
-the number of days since year 0, BCE.  The `wxmplot` user is not expected to do
-this conversion.
+If the `x` values to be plotted holds date or time data, it is
+necessary to use `use_dates=True`.
 
-The best way to specify datetime information is to use `datetime` objects
-from the `datetime` library.  These will be automatically recognized and
-properly converted.
+Values for dates can be handled in a few different formats, but
+eventually the values will be converted to `matplotlib.dates` object,
+which uses a floating point number to represent the number of days
+since 1970, and assumes the times are UTC.  See
+:ref:`example_multiple_yaxes` for example.
 
-If the `x` data is a list or array of integers or floats and `use_dates=True` is
-used, the values will be interpreted as Unix timestamps (seconds since 1970),
-unless `dates_styles='dates'`, in which case they will be interpreted as
-`matplotlib.dates`.
+If the source of the date data is Unix timestamps, this conversion is
+fairly easy to do, as the values can simply be divided by 86400 -- and
+you can do this on an array of timestamps.  When doing this, it is
+best to also provide timezone information, as from the `pytz` module.
 
-Finally, it is possible to pass in a list or array of strings as `x`, and set
-`use_dates=True`.  In this case, the `matplotlib.dates.datestr2num` function
-will be used convert the string.  Of course, whether this actually works well
-will depend on the ability of this function to parse and interpret the date
-strings used.
+If data comes as a list of `datetime` objects, from the `datetime`
+library, these will be automatically recognized and properly
+converted.  These can have a timezone specified, or you can provide
+one.  Finally, it is possible to pass in a list or array of strings as
+`x`, and set `use_dates=True`.  In this case, the
+`matplotlib.dates.datestr2num` function will be used convert the
+string.  Wether this actually works well will depend on the ability of
+this function to parse and interpret the date strings used.
 
 
 

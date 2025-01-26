@@ -109,7 +109,7 @@ class StripChartFrame(wx.Frame):
         self.tlist = [t0]
         self.tmin_last = -10000
         self.time0    = time.time()
-        self.timer.Start(100)
+        self.timer.Start(50)
 
     def onStopTimer(self,event=None):
         self.timer.Stop()
@@ -133,8 +133,10 @@ class StripChartFrame(wx.Frame):
         n = len(self.y1list)
 
         if n <= 2:
-            self.plotpanel.plot(tdat, y1dat, use_date=True, timezone=TZONE)
-            self.plotpanel.oplot(tdat, y2dat, yaxes=2, use_dates=True, timezone=TZONE)
+            self.plotpanel.plot(tdat, y1dat, use_date=True, timezone=TZONE,
+                                xlabel='time', ylabel='Val 1', yaxes_tracecolor=True)
+            self.plotpanel.oplot(tdat, y2dat, yaxes=2, y2label='Value 2',
+                                 use_dates=True, timezone=TZONE)
         else:
             self.plotpanel.update_line(0, tdat, y1dat, draw=True)
             self.plotpanel.update_line(1, tdat, y2dat, draw=True, yaxes=2)

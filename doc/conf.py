@@ -20,22 +20,24 @@ copyright = f'{date.today()}, Matthew Newville, The University of Chicago'
 release = version_parse(wxmplot.__version__).public
 
 html_title = "WXMPLOT: interactive plotting with Python"
-html_short_title = "WXMPLOT: wxPython+matplotlib"
+html_short_title = "WXMPLOT"
 
 # sys.path.append(os.path.abspath(os.path.join('.')))
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
-              'sphinx.ext.napoleon', 'sphinxcontrib.video']
+              'sphinx.ext.napoleon', 'sphinxcontrib.video',
+              'sphinx_copybutton']
 
-autoclass_content = 'both'
+# autoclass_content = 'both'
 templates_path = ['_templates']
 source_suffix = {'.rst': 'restructuredtext'}
-master_doc = 'index'
 
 exclude_trees = ['_build']
 default_role = None
+source_encoding = 'utf-8'
 
 add_function_parentheses = True
-add_module_names = False
+
+add_module_names = True
 pygments_style = 'sphinx'
 
 html_theme_path = ['sphinx_theme']
@@ -43,7 +45,11 @@ html_theme = 'bizstyle'
 
 
 html_static_path = ['_static']
-html_sidebars = {'index': ['indexsidebar.html', 'searchbox.html']}
+html_sidebars = {
+  'index': ["indexsidebar.html",  "sourcelink.html", "searchbox.html"],
+  "**": [ "localtoc.html",  "relations.html", "sourcelink.html", "searchbox.html"]
+}
+
 html_domain_indices = False
 html_use_index = True
 html_show_sourcelink = True

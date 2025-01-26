@@ -9,10 +9,13 @@
     <title>ImagePanel: A wx.Panel for Image Display &#8212; WXMPLOT: interactive plotting with Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=65f7d7c4"></script>
+    <script src="_static/documentation_options.js?v=c18f53dd"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
     </div>  
@@ -57,7 +60,7 @@ out.  In contrast, an <code class="xref py py-class docutils literal notranslate
 manipulate the displayed image, as will be discussed below.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="imagepanel.ImagePanel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImagePanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(525,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">messenger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">ImagePanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(525,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">messenger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.ImagePanel" title="Link to this definition">¶</a></dt>
 <dd><p>Create an Image Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -83,7 +86,7 @@ attributes.</p>
 <h2><a class="reference internal" href="#imagepanel.ImagePanel" title="imagepanel.ImagePanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a> methods<a class="headerlink" href="#imagepanel-methods" title="Link to this heading">¶</a></h2>
 <dl class="py method">
 <dt class="sig sig-object py" id="imagepanel.display">
-<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.display" title="Link to this definition">¶</a></dt>
 <dd><p>display a new image from the 2-D numpy array <em>data</em>.  If provided, the
 <em>x</em> and <em>y</em> values will be used as coordinates for the pixels for
 display purposes.</p>
@@ -91,20 +94,20 @@ display purposes.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imagepanel.clear">
-<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.clear" title="Link to this definition">¶</a></dt>
 <dd><p>clear the image</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imagepanel.update_image">
-<span class="sig-name descname"><span class="pre">update_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">update_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.update_image" title="Link to this definition">¶</a></dt>
 <dd><p>update the image with new data.  This can be significantly faster than
 re-displaying the data.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imagepanel.redraw">
-<span class="sig-name descname"><span class="pre">redraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">redraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagepanel.redraw" title="Link to this definition">¶</a></dt>
 <dd><p>redraw the image, as when the configuration attributes have been changed.</p>
 </dd></dl>
 
@@ -115,25 +118,25 @@ re-displaying the data.</p>
 image panel.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="imagepanel.data_callback">
-<span class="sig-name descname"><span class="pre">data_callback</span></span><a class="headerlink" href="#imagepanel.data_callback" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">data_callback</span></span><a class="headerlink" href="#imagepanel.data_callback" title="Link to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and <cite>x</cite> and <cite>y</cite> values each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="imagepanel.lasso_callback">
-<span class="sig-name descname"><span class="pre">lasso_callback</span></span><a class="headerlink" href="#imagepanel.lasso_callback" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">lasso_callback</span></span><a class="headerlink" href="#imagepanel.lasso_callback" title="Link to this definition">¶</a></dt>
 <dd><p>A function that is called with the data and selected points when the cursor is in <strong>lasso mode</strong> and a new set of points has been selected.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="imagepanel.cursor_callback">
-<span class="sig-name descname"><span class="pre">cursor_callback</span></span><a class="headerlink" href="#imagepanel.cursor_callback" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">cursor_callback</span></span><a class="headerlink" href="#imagepanel.cursor_callback" title="Link to this definition">¶</a></dt>
 <dd><p>A function that is called with the <cite>x</cite> and <cite>y</cite> position clicked on each left-button event.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="imagepanel.contour_callback">
-<span class="sig-name descname"><span class="pre">contour_callback</span></span><a class="headerlink" href="#imagepanel.contour_callback" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">imagepanel.</span></span><span class="sig-name descname"><span class="pre">contour_callback</span></span><a class="headerlink" href="#imagepanel.contour_callback" title="Link to this definition">¶</a></dt>
 <dd><p>A function that is called with the contour levels each time <a class="reference internal" href="other.html#display" title="display"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display()</span></code></a> is called with <code class="docutils literal notranslate"><span class="pre">style='contour'</span></code>.</p>
 </dd></dl>
 
@@ -158,7 +161,7 @@ manipulate the image:</p>
 configuration attributes and redrawing the image.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="imageframe.ImageFrame">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImageFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(550,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imageframe.</span></span><span class="sig-name descname"><span class="pre">ImageFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(550,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imageframe.ImageFrame" title="Link to this definition">¶</a></dt>
 <dd><p>Create an Image Frame, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Frame</span></code>.  This is a Frame with an
 <code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> and several menus and controls for changing the color table and
 smoothing options as well as switching the display style between “image” and “contour”.</p>
@@ -386,12 +389,12 @@ same intensity intensity scale.</p></li>
         <li class="right" >
           <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT: wxPython+matplotlib</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-01-19, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-01-25, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

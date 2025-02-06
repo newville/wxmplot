@@ -245,7 +245,6 @@ class ImagePanel(BasePanel):
                 cmap._init()
             except:
                 pass
-
         if hasattr(cmap, '_lut'):
             rgb  = [int(i*240)^255 for i in cmap._lut[0][:3]]
             col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
@@ -255,8 +254,10 @@ class ImagePanel(BasePanel):
                              colors=col, rightside_up=True)
 
         if col is not None:
-            for l in area.collections:
-                l.set_edgecolor(col)
+            if hasattr(area, 'collections'):
+                for l in area.collections:
+                    l.set_edgecolor(col)
+            area.set_edgecolor(col)
         self.canvas.draw()
 
     def set_viewlimits(self, axes=None):

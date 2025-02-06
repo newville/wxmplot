@@ -260,6 +260,21 @@ class ImagePanel(BasePanel):
             area.set_edgecolor(col)
         self.canvas.draw()
 
+    def clear_highlight_areas(self):
+        """clear all highlighted areas"""
+        for area in self.conf.highlight_areas:
+            if hasattr(area, 'collections'):
+                for w in area.collections:
+                    w.remove()
+            if hasattr(area, 'labelTexts'):
+                for w in area.labelTexts:
+                    w.remove()
+            area.remove()
+
+        self.conf.highlight_areas = []
+        self.canvas.redraw()
+
+
     def set_viewlimits(self, axes=None):
         """ update xy limits of a plot"""
         if axes is None:

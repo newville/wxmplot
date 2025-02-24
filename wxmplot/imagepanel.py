@@ -19,6 +19,7 @@ from .imageconf import ImageConfig, RGB_COLORS
 from .basepanel import BasePanel
 from .utils import inside_poly, MenuItem
 from .plotframe import PlotFrame
+from .colors import GUI_COLORS, wxcol2hex
 
 class ImagePanel(BasePanel):
     """
@@ -328,7 +329,7 @@ class ImagePanel(BasePanel):
         self.fig   = Figure(figsize, dpi=self.dpi)
         self.gridspec = GridSpec(1,1)
         self.axes  = self.fig.add_subplot(self.gridspec[0],
-                                          facecolor='#FFFFFD')
+                                          facecolor=wxcol2hex(GUI_COLORS.text_bg))
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
         self.canvas.gui_repaint = self.gui_repaint
         self.conf.axes  = self.axes
@@ -383,8 +384,6 @@ class ImagePanel(BasePanel):
             self.display(conf.data, x=conf.xdata, y=conf.ydata,
                          xlabel=conf.xlab, ylabel=conf.ylab,
                          show_axis=conf.show_axis)
-
-
 
 
     def toggle_curmode(self, event=None):

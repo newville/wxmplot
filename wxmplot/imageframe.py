@@ -322,8 +322,6 @@ class ContrastPanel(wx.Panel):
             self.callback(contrast_level=clevel)
 
 
-
-
 class ImageFrame(BaseFrame):
     """
     MatPlotlib Image Display ons a wx.Frame, using ImagePanel
@@ -395,8 +393,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         self.panel.nstatusbar = sbar.GetFieldsCount()
         self.BuildMenu()
-
-        self.SetBackgroundColour('#F8F8F4')
 
         self.config_panel = wx.Panel(self)
         self.imin_val = {}

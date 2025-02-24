@@ -11,7 +11,7 @@ import matplotlib.cm as cmap
 from matplotlib.ticker import FuncFormatter
 
 from wxutils import get_cwd
-from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
+from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color, GUI_COLORS
 from .config import ifnot_none
 from .plotconfigframe import autopack
 from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, FloatSpin, MenuItem
@@ -680,18 +680,15 @@ class ImageConfigFrame(wx.Frame):
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Image', style=style)
-        bgcol = hex2rgb('#FEFEFE')
 
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
         self.SetFont(font)
-        self.SetBackgroundColour(hex2rgb('#FEFEFE'))
 
         self.nb = flat_nb.FlatNotebook(self, wx.ID_ANY, agwStyle=FNB_STYLE)
-
-        self.nb.SetActiveTabColour((253, 253, 230))
-        self.nb.SetTabAreaColour((bgcol[0]-8, bgcol[1]-8, bgcol[2]-8))
-        self.nb.SetNonActiveTabTextColour((10, 10, 100))
-        self.nb.SetActiveTabTextColour((100, 10, 10))
+        self.nb.SetTabAreaColour(GUI_COLORS.nb_area)
+        self.nb.SetActiveTabColour(GUI_COLORS.nb_active)
+        self.nb.SetNonActiveTabTextColour(GUI_COLORS.nb_text)
+        self.nb.SetActiveTabTextColour(GUI_COLORS.nb_activetext)
 
         self.nb.AddPage(self.make_contour_panel(parent=self.nb, font=font),
                         'Contours', True)

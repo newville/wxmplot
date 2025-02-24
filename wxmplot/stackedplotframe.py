@@ -19,6 +19,7 @@ from .utils import pack, MenuItem, Printer
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
 from .utils import gformat
+from .colors import GUI_COLORS, wxcol2hex
 
 class StackedPlotFrame(BaseFrame):
     """
@@ -275,7 +276,7 @@ class StackedPlotFrame(BaseFrame):
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
             pan.unzoom_all = self.unzoom_all
             pan.unzoom = self.unzoom
-            pan.canvas.figure.set_facecolor('#F4F4EC')
+            pan.canvas.figure.set_facecolor(wxcol2hex(GUI_COLORS.bgalt))
 
         # suppress mouse events on the bottom panel
         null_events = {'leftdown': None, 'leftup': None, 'rightdown': None,

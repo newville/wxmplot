@@ -25,13 +25,13 @@ from . import inputhook
 from .plotframe import PlotFrame
 from .imageframe import ImageFrame
 from .stackedplotframe import StackedPlotFrame
-from .config import Themes
+from .config import Themes, DARK_THEME
 
 IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
 MAX_WINDOWS = 100
 MAX_CURSHIST = 100
-DEFAULT_THEME = 'light'
+DEFAULT_THEME = 'dark' if DARK_THEME else 'light'
 
 __all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
            'available_themes', 'get_plot_window', 'get_image_window',
@@ -286,7 +286,7 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
         win (int): index of Plot Window (1 to 100)
         size (tuple): width, height in pixels of Plot Window
         wintitle(str): text for Window title [Plot Window N]
-        theme (str): theme for Plot Window ['light']
+        theme (str): theme for Plot Window ['light' or 'dark']
 
     Returns:
         diplay, a wxmplot PlotFrame.

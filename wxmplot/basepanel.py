@@ -335,19 +335,18 @@ class BasePanel(wx.Panel):
         frac = None
         if nsec < 0.1:
             frac = "%.6f"
-            fmt = "%M:%S\n"
+            fmt = "%H:%M:%S\n"
         elif nsec <  25:
             frac = "%.3f"
             fmt = "%H:%M\n%S"
         elif nsec < 600:
-            fmt = "%I %p\n%M:%S"
+            fmt = "%H:%M\n%S sec"
         elif nsec < 5*3600:
             fmt = "%m/%d\n%H:%M"
         elif nsec < 24*7*3600:
             fmt = "%m/%d\n%H:%M"
         else:
             fmt = "%m/%d"
-
         dtval = dates.num2date(x, tz=self.dates_tzinfo)
         try:
             out = dtval.strftime(fmt)

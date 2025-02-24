@@ -15,7 +15,7 @@ import wx.lib.scrolledpanel as scrolled
 from wxutils import get_cwd
 from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
-from .colors import hexcolor, hex2rgb, mpl_color
+from .colors import hexcolor, hex2rgb, mpl_color, wxcol2hex, GUI_COLORS
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
@@ -154,23 +154,24 @@ class PlotConfigFrame(wx.Frame):
             conf = yaml.safe_load(open(os.path.abspath(dlg.GetPath()), 'r').read())
             self.conf.load_config(conf)
 
-
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
-        bgcol = hex2rgb('#FEFEFE')
+        # bgcol = hex2rgb('#FEFEFE')
         panel = wx.Panel(self, -1)
-        panel.SetBackgroundColour(bgcol)
+        # panel.SetBackgroundColour(bgcol)
 
         font = wx.Font(12, wx.SWISS, wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
 
         self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
 
-        self.nb.SetActiveTabColour((253, 253, 230))
-        self.nb.SetTabAreaColour((bgcol[0]-8, bgcol[1]-8, bgcol[2]-8))
-        self.nb.SetNonActiveTabTextColour((10, 10, 100))
-        self.nb.SetActiveTabTextColour((100, 10, 10))
+        self.nb.SetTabAreaColour(GUI_COLORS.nb_area)
+        self.nb.SetActiveTabColour(GUI_COLORS.nb_active)
+        self.nb.SetNonActiveTabTextColour(GUI_COLORS.nb_text)
+        self.nb.SetActiveTabTextColour(GUI_COLORS.nb_activetext)
+
+
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Colors and Line Properties', True)
         self.nb.AddPage(self.make_range_panel(parent=self.nb, font=font),
@@ -180,8 +181,8 @@ class PlotConfigFrame(wx.Frame):
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
-        for i in range(self.nb.GetPageCount()):
-            self.nb.GetPage(i).SetBackgroundColour(bgcol)
+        # for i in range(self.nb.GetPageCount()):
+        #    self.nb.GetPage(i).SetBackgroundColour(bgcol)
 
         self.nb.SetSelection(0)
 
@@ -1039,9 +1040,11 @@ class PlotConfigFrame(wx.Frame):
             try:
                 kws = {item: s}
                 self.conf.relabel(**kws)
-                wid.SetBackgroundColour((255, 255, 255))
-            except: # as from latex error!
-                wid.SetBackgroundColour((250, 250, 150))
+                wid.SetBackgroundColour(GUI_COLORS.text_bg)
+                wid.SetForegroundColour(GUI_COLORS.text)
+            except: # as from latex error!a
+                wid.SetBackgroundColour(GUI_COLORS.text_invalid_bg)
+                wid.SetForegroundColour(GUI_COLORS.text_invalid)
         elif item == 'trace':
             try:
                 self.conf.set_trace_label(s, trace=trace)

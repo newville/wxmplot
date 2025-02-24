@@ -30,7 +30,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
-from .colors import hexcolor, mpl2hexcolor
+from .colors import hexcolor, mpl2hexcolor, DARK_THEME
 
 SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
 
@@ -153,7 +153,7 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
 
 default_config = {'auto_margins': True,
                   'axes_style': 'box',
-                  'current_theme': 'light',
+                  'current_theme': 'dark' if DARK_THEME else 'light',
                   'data_deriv': False,
                   'data_expr': None,
                   'draggable_legend': False,
@@ -270,7 +270,7 @@ class PlotConfig:
         self.margin_callback = margin_callback
         self.current_theme = theme
         if self.current_theme is None:
-            self.current_theme = 'light'
+            self.current_theme = 'dark' if DARK_THEME else 'light'
         self.legend_map = {}
         self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
@@ -334,7 +334,6 @@ class PlotConfig:
     def set_theme(self, theme=None):
         if theme in self.themes:
             self.current_theme = theme
-
         cur_theme = self.themes[self.current_theme]
         rcParams.update(cur_theme)
 

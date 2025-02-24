@@ -15,7 +15,7 @@ import wx.lib.scrolledpanel as scrolled
 from wxutils import get_cwd
 from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
-from .colors import hexcolor, hex2rgb, mpl_color, wxcol2hex, GUI_COLORS
+from .colors import hexcolor, mpl_color, GUI_COLORS
 
 FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
@@ -157,9 +157,7 @@ class PlotConfigFrame(wx.Frame):
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, self.parent, -1, 'Configure Plot', style=style)
-        # bgcol = hex2rgb('#FEFEFE')
         panel = wx.Panel(self, -1)
-        # panel.SetBackgroundColour(bgcol)
 
         font = wx.Font(12, wx.SWISS, wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
@@ -181,8 +179,6 @@ class PlotConfigFrame(wx.Frame):
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
-        # for i in range(self.nb.GetPageCount()):
-        #    self.nb.GetPage(i).SetBackgroundColour(bgcol)
 
         self.nb.SetSelection(0)
 
@@ -242,34 +238,44 @@ class PlotConfigFrame(wx.Frame):
 
         xb0, xb1 = laxes.get_xlim()
         yb0, yb1 = laxes.get_ylim()
-        if user_lims[0] is not None: xb0 = user_lims[0]
-        if user_lims[1] is not None: xb1 = user_lims[1]
+        if user_lims[0] is not None:
+            xb0 = user_lims[0]
+        if user_lims[1] is not None:
+            xb1 = user_lims[1]
 
-        if user_lims[2] is not None: yb0 = user_lims[2]
-        if user_lims[3] is not None: yb1 = user_lims[3]
+        if user_lims[2] is not None:
+            yb0 = user_lims[2]
+        if user_lims[3] is not None:
+            yb1 = user_lims[3]
 
         y2b0, y2b1 = [None, None]
         if raxes is not None:
             y2b0, y2b1 = raxes.get_ylim()
             user_lims = self.conf.user_limits[raxes]
-            if user_lims[2] is not None: y2b0 = user_lims[2]
-            if user_lims[3] is not None: y2b1 = user_lims[3]
+            if user_lims[2] is not None:
+                y2b0 = user_lims[2]
+            if user_lims[3] is not None:
+                y2b1 = user_lims[3]
 
         y3b0, y3b1 = [None, None]
         if len(axes) > 2:
             ax3 = axes[2]
             y3b0, y3b1 = ax3.get_ylim()
             user_lims = self.conf.user_limits[ax3]
-            if user_lims[2] is not None: y3b0 = user_lims[2]
-            if user_lims[3] is not None: y3b1 = user_lims[3]
+            if user_lims[2] is not None:
+                y3b0 = user_lims[2]
+            if user_lims[3] is not None:
+                y3b1 = user_lims[3]
 
         y4b0, y4b1 = [None, None]
         if len(axes) > 3:
             ax4 = axes[3]
             y4b0, y4b1 = ax4.get_ylim()
             user_lims = self.conf.user_limits[ax4]
-            if user_lims[2] is not None: y4b0 = user_lims[2]
-            if user_lims[3] is not None: y4b1 = user_lims[3]
+            if user_lims[2] is not None:
+                y4b0 = user_lims[2]
+            if user_lims[3] is not None:
+                    y4b1 = user_lims[3]
 
         opts = dict(size=(125, -1), labeltext='', action=self.onBounds)
 
@@ -542,10 +548,10 @@ class PlotConfigFrame(wx.Frame):
 
         irow = irow + 3
         # Legend
-        bstyle=wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
-        labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
+        # bstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
+        labstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
-        ax = self.axes[0]
+        # ax = self.axes[0]
 
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
         loc_ttl = wx.StaticText(panel, -1, 'Location:', size=(-1, -1), style=labstyle)
@@ -688,7 +694,7 @@ class PlotConfigFrame(wx.Frame):
         ntrace_display = min(cnf.ntrace+3, len(cnf.traces))
         for i in range(ntrace_display):
             irow += 1
-            label  = "trace %i" % i
+            # label  = "trace %i" % i
             lin  = cnf.traces[i]
             dlab = lin.label
             dcol = hexcolor(lin.color)
@@ -1056,7 +1062,8 @@ class PlotConfigFrame(wx.Frame):
 
     def onShowBox(self, event=None):
         style='box'
-        if not event.IsChecked(): style='open'
+        if not event.IsChecked():
+            style='open'
         self.conf.set_axes_style(style=style)
 
     def onShowLegend(self, event, item=''):

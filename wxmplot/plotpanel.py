@@ -2,8 +2,6 @@
 """
 wxmplot PlotPanel: a wx.Panel for line plotting, using matplotlib
 """
-import os
-import sys
 from functools import partial
 from datetime import datetime
 import wx
@@ -11,18 +9,17 @@ import wx
 from numpy import nonzero, where
 import matplotlib as mpl
 from matplotlib.dates import date2num, datestr2num, num2date
-from matplotlib.dates import AutoDateFormatter, AutoDateLocator
+from matplotlib.dates import AutoDateLocator
 
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.gridspec import GridSpec
 from matplotlib.colors import colorConverter
-from matplotlib.collections import CircleCollection
 
 from .basepanel import BasePanel
 from .config import PlotConfig, ifnot_none, SIDE_YAXES
-from .utils import inside_poly, fix_filename, gformat, MenuItem
+from .utils import inside_poly, MenuItem
 from .plotconfigframe import PlotConfigFrame
 
 to_rgba = colorConverter.to_rgba
@@ -148,7 +145,7 @@ class PlotPanel(BasePanel):
         conf.plot_type = 'lineplot'
 
         if theme is not None:
-            conf.set_theme(theme=theme)
+            conf.set_themt(theme=theme)
 
         yaxes, axes = self.get_yaxes(yaxes, side=side)
         # set y scale to log/linear
@@ -646,7 +643,8 @@ class PlotPanel(BasePanel):
         self.conf.set_viewlimits()
 
     def get_viewlimits(self, axes=None):
-        if axes is None: axes = self.axes
+        if axes is None:
+                axes = self.axes
         xmin, xmax = axes.get_xlim()
         ymin, ymax = axes.get_ylim()
         return (xmin, xmax, ymin, ymax)
@@ -847,8 +845,8 @@ class PlotPanel(BasePanel):
         trans = self.fig.transFigure.inverted().transform
 
         # Static margins
-        l, t, r, b = self.axesmargins
-        (l, b), (r, t) = trans(((l, b), (r, t)))
+        left, top, right, bot = self.axesmargins
+        (left, bot), (right, top) = trans(((left, bot), (right, top)))
 
         # Extent
         dl, dt, dr, db = 0, 0, 0, 0
@@ -861,9 +859,9 @@ class PlotPanel(BasePanel):
                 dt = min(0.2, max(dt, (oy1 - y1)))
                 dr = min(0.2*(i+1), max(dr, (ox1 - x1)))
                 db = min(0.2, max(db, (y0 - oy0)))
-            except:
+            except ValueError:
                 pass
-        return (l + dl, t + dt, r + dr, b + db)
+        return (left + dl, top + dt, right + dr, bot + db)
 
     def autoset_margins(self):
         """auto-set margins  left, bottom, right, top
@@ -874,8 +872,8 @@ class PlotPanel(BasePanel):
         if not self.conf.auto_margins:
             return
 
-        self.conf.margins = l, t, r, b = self.get_default_margins()
-        self.gridspec.update(left=l, top=1-t, right=1-r, bottom=b)
+        self.conf.margins = left, top, right, bot = self.get_default_margins()
+        self.gridspec.update(left=left, top=1-top, right=1-right, bottom=bot)
         # Axes positions update
         for ax in self.fig.get_axes():
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)

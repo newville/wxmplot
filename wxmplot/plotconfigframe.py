@@ -6,13 +6,13 @@ import os
 from functools import partial
 import yaml
 import numpy as np
-
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
-
 import wx.lib.scrolledpanel as scrolled
+
 from wxutils import get_cwd
+
 from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
 from .colors import hexcolor, mpl_color, GUI_COLORS
@@ -169,7 +169,6 @@ class PlotConfigFrame(wx.Frame):
         self.nb.SetNonActiveTabTextColour(GUI_COLORS.nb_text)
         self.nb.SetActiveTabTextColour(GUI_COLORS.nb_activetext)
 
-
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Colors and Line Properties', True)
         self.nb.AddPage(self.make_range_panel(parent=self.nb, font=font),
@@ -179,7 +178,6 @@ class PlotConfigFrame(wx.Frame):
         self.nb.AddPage(self.make_scatter_panel(parent=self.nb, font=font),
                         'Scatterplot Settings',
                         self.conf.plot_type == 'scatter')
-
         self.nb.SetSelection(0)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -190,7 +188,6 @@ class PlotConfigFrame(wx.Frame):
         self.SetMinSize((750, 250))
         self.SetSize((1050, 475))
         self.Show()
-        self.Raise()
 
     def make_range_panel(self, parent, font=None):
         # bounds, margins, scales
@@ -594,7 +591,6 @@ class PlotConfigFrame(wx.Frame):
 
     def make_linetrace_panel(self, parent, font=None):
         """colours and line properties"""
-
         panel = scrolled.ScrolledPanel(parent, size=(900, 250),
                                        style=wx.GROW|wx.TAB_TRAVERSAL, name='p1')
         if font is None:
@@ -604,7 +600,6 @@ class PlotConfigFrame(wx.Frame):
         i = 0
         cnf = self.conf
         ax = self.axes[0]
-
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
         theme_names = list(cnf.themes.keys())
@@ -676,7 +671,6 @@ class PlotConfigFrame(wx.Frame):
         tsizer.Add(wx.StaticText(panel, -1, ' Symbol Size: '), 0, labstyle, 3)
         tsizer.Add(msz, 0, labstyle, 3)
 
-
         sizer.Add(tsizer,    (3, 0), (1, 9), labstyle, 3)
 
         irow = 4
@@ -691,7 +685,7 @@ class PlotConfigFrame(wx.Frame):
         self.trace_labels = []
         self.choice_linewidths = []
         self.choice_markersizes = []
-        ntrace_display = min(cnf.ntrace+3, len(cnf.traces))
+        ntrace_display = min(cnf.ntrace+2, len(cnf.traces))
         for i in range(ntrace_display):
             irow += 1
             # label  = "trace %i" % i
@@ -762,9 +756,8 @@ class PlotConfigFrame(wx.Frame):
             sizer.Add(zor, (irow,9),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(jsty, (irow,10),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
 
-
         autopack(panel,sizer)
-        panel.SetupScrolling()
+        wx.CallAfter(panel.SetupScrolling)
         return panel
 
     def onYaxes_tracecolor(self, event=None):

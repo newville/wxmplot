@@ -17,7 +17,6 @@ except ImportError:
     pass
 
 
-# copied from wxutils
 COLORS = {'text': wx.Colour(0, 0, 0),
           'text_bg': wx.Colour(255, 255, 255),
           'text_invalid': wx.Colour(240, 0, 10),
@@ -29,16 +28,18 @@ COLORS = {'text': wx.Colour(0, 0, 0),
           'nb_text': wx.Colour(10,10,180),
           'nb_activetext': wx.Colour(80,10,10),
           'title': wx.Colour(80,10,10),
+          'title_red': wx.Colour(120, 10, 10),
+          'title_blue': wx.Colour(10, 10, 120),
           'pvname': wx.Colour(10,10,80),
           'list_bg': wx.Colour(255, 255, 250),
           'list_fg': wx.Colour(5, 5, 25),
           'hline': wx.Colour(80, 80, 200),
+          'button_bg':  wx.Colour(252,  252, 245),
           'pt_frame_bg':  wx.Colour(253, 253, 250),
           'pt_fg':  wx.Colour( 20,  20, 120),
           'pt_bg': wx.Colour(253, 253, 250),
           'pt_fgsel': wx.Colour(200,   0,   0),
           'pt_bgsel': wx.Colour(250, 250, 200),
-          'bgalt': wx.Colour(240, 240, 230),
         }
 
 if DARK_THEME:
@@ -48,31 +49,24 @@ if DARK_THEME:
              'text_invalid_bg': wx.Colour(220, 220, 60),
              'bg': wx.Colour(20, 20, 20),
              'hyperlink': wx.Colour(200, 200, 255),
-             'nb_active': wx.Colour(50, 50, 50),
-             'nb_area': wx.Colour(100, 100, 80),
-             'nb_text': wx.Colour(200,200,255),
-             'nb_activetext': wx.Colour(255,200,200),
-             'title': wx.Colour(80,10,10),
+             'nb_active': wx.Colour(220, 220, 100),
+             'nb_area': wx.Colour(60, 60, 80),
+             'nb_text': wx.Colour(220,240,245),
+             'nb_activetext': wx.Colour(80, 80, 230),
+             'title': wx.Colour(240,120,120),
+             'title_red': wx.Colour(240,120,120),
+             'title_blue': wx.Colour(120,120,250),
              'pvname': wx.Colour(10,10,80),
-             'list_bg': wx.Colour(5, 5, 0),
+             'list_bg': wx.Colour(25, 25, 25),
              'list_fg': wx.Colour(5, 5, 125),
              'hline': wx.Colour(220, 220, 250),
+             'button_bg':  wx.Colour(220,  220, 100),
              'pt_frame_bg':  wx.Colour(10, 10, 10),
              'pt_fg':  wx.Colour(180,  200, 250),
              'pt_bg': wx.Colour(10, 10, 10),
              'pt_fgsel': wx.Colour(250, 180,  200),
              'pt_bgsel': wx.Colour(30, 20, 80),
-             'bgalt': wx.Colour(20, 20, 40),
     }
-
-
-# attribitue interface
-class GUIColors(object):
-    def __init__(self):
-        for key, rgb in COLORS.items():
-            setattr(self, key,rgb)
-
-GUI_COLORS = GUIColors()
 
 
 x11_colors = {'aliceblue': (240,248,255), 'antiquewhite': (250,235,215),
@@ -360,9 +354,12 @@ def rgb(color, default=(0,0,0)):
         r,g,b = [int(n, 16) for n in (r, g, b)]
         return (r,g,b)
 
-    if c.find(' ')>-1:    c = c.replace(' ','')
-    if c.find('gray')>-1: c = c.replace('gray','grey')
-    if c in x11_colors.keys():  return x11_colors[c]
+    if c.find(' ')>-1:
+        c = c.replace(' ','')
+    if c.find('gray')>-1:
+        c = c.replace('gray','grey')
+    if c in x11_colors.keys():
+        return x11_colors[c]
     return default
 
 def hex2rgb(hex):
@@ -401,8 +398,10 @@ def hexcolor(color):
         cvals = tuple(color)
     elif isinstance(color, str):
         c = color.lower()
-        if c.find(' ')>-1:    c = c.replace(' ','')
-        if c.find('gray')>-1: c = c.replace('gray','grey')
+        if c.find(' ')>-1:
+            c = c.replace(' ','')
+        if c.find('gray')>-1:
+                c = c.replace('gray','grey')
         if c in x11_colors:
             cvals = x11_colors[c]
     else:
@@ -506,3 +505,39 @@ def wxcol2hex(col):
 
 def mpl2hexcolor(c):
     return hexcolor(mpl_color(c))
+
+
+
+# attribitue interface
+class GUIColors(object):
+    def __init__(self):
+        for key, val in COLORS.items():
+            self.add_color(key, val)
+
+    def add_color(self, name,  value):
+        """add_color by name with a value that can be
+         - a wx.Colour
+         - a string of the form '#rrggbb', '#rrggbbaa'
+         - a supported X11 color name
+         - a tuple or list of (r, g, b), or (r,g,b,a) values
+        """
+        cval = None
+        if isinstance(value, str):
+            if value[0] == '#' and len(value) in (7, 9):
+                r, g, b = value[1:3], value[3:5], value[5:7]
+                r, g, b = [int(n, 16) for n in (r, g, b)]
+                a = int(value[7:9], 16) if len(value) == 9 else 255
+                cval = wx.Colour(r, g, b, a)
+            elif value in x11_colors:
+                cval = wx.Colour(*x11_colors[value])
+        if isinstance(value, (tuple, list)) and len(value) in (3, 4):
+            cval = wx.Colour(*value)
+
+        if isinstance(value, wx.Colour):
+            cval = value
+        if cval is not None:
+            setattr(self, name, cval)
+        else:
+            raise ValueError(f"unknown color value {value}")
+
+GUI_COLORS = GUIColors()

@@ -276,7 +276,7 @@ class StackedPlotFrame(BaseFrame):
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
             pan.unzoom_all = self.unzoom_all
             pan.unzoom = self.unzoom
-            pan.canvas.figure.set_facecolor(wxcol2hex(GUI_COLORS.bgalt))
+            pan.canvas.figure.set_facecolor(wxcol2hex(GUI_COLORS.bg))
 
         # suppress mouse events on the bottom panel
         null_events = {'leftdown': None, 'leftup': None, 'rightdown': None,

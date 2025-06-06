@@ -1,6 +1,11 @@
 name: Test Installing wxmplot, using conda
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 
 jobs:
   build:
@@ -30,7 +35,7 @@ jobs:
 
     - name: Install conda dependencies
       run: |
-        conda install -y -c conda-forge python=${{ matrix.python-version }} "numpy=>1.23" "matplotlib=>3.8" "wxpython=>4.2" pip pytest
+        conda install -y -c conda-forge python=${{ matrix.python-version }} "numpy>=1.23" "matplotlib>=3.8" "wxpython>=4.2" pip pytest
         conda info -a
         conda list
     - name: Install wxmplot with pip

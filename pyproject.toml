@@ -60,6 +60,6 @@ Tracker = "https://github.com/newville/wxmplot/issues"
 
 [project.optional-dependencies]
 dev = ["build", "twine"]
-doc = ["Sphinx", "jupyter_sphinx"]
+doc = ["Sphinx", "jupyter_sphinx", "sphinx-copybutton", "sphinxcontrib-video"]
 test = ["pytest", "pytest-cov", "coverage"]
 all = ["wxmplotls[dev, doc, test]"]

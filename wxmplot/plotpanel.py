@@ -105,6 +105,10 @@ class PlotPanel(BasePanel):
 
         self.conf.reset_lines()
         self.conf.yscale = 'linear'
+        self.conf.yscale = 'linear'
+        self.conf.y2scale = 'linear'
+        self.conf.y3scale = 'linear'
+        self.conf.y4scale = 'linear'
         self.conf.user_limits[axes] = 4*[None]
 
         if xlabel is not None:
@@ -126,7 +130,8 @@ class PlotPanel(BasePanel):
 
     def oplot(self, xdata, ydata, label=None, xlabel=None, ylabel=None,
               y2label=None, y3label=None, y4label=None, title=None, dy=None,
-              ylog_scale=None, xlog_scale=None, grid=None, xmin=None,
+              xlog_scale=None, ylog_scale=None, y2log_scale=None, y3log_scale=None,
+              y4log_scale=None, grid=None, xmin=None,
               xmax=None, ymin=None, ymax=None, color=None, style=None,
               alpha=None, fill=False, drawstyle=None, linewidth=2, marker=None,
               markersize=None, refresh=True, show_legend=None,
@@ -151,6 +156,12 @@ class PlotPanel(BasePanel):
         # set y scale to log/linear
         if ylog_scale is not None:
             conf.yscale = {False:'linear', True:'log'}[ylog_scale]
+        if y2log_scale is not None:
+            conf.y2scale = {False:'linear', True:'log'}[y2log_scale]
+        if y3log_scale is not None:
+            conf.y3scale = {False:'linear', True:'log'}[y3log_scale]
+        if y4log_scale is not None:
+            conf.y3scale = {False:'linear', True:'log'}[y4log_scale]
 
         if xlog_scale is not None:
             conf.xscale = {False:'linear', True:'log'}[xlog_scale]
@@ -288,9 +299,14 @@ class PlotPanel(BasePanel):
         else:
             axes.grid(False)
 
-        if (self.conf.xscale == 'log' or self.conf.yscale == 'log'):
+        if (self.conf.xscale == 'log' or self.conf.yscale == 'log'
+            or self.conf.y2scale == 'log' or self.conf.y3scale == 'log'
+            or self.conf.y4scale == 'log'):
             self.set_logscale(xscale=self.conf.xscale,
                               yscale=self.conf.yscale,
+                              y2scale=self.conf.y2scale,
+                              y3scale=self.conf.y3scale,
+                              y4scale=self.conf.y4scale,
                               delay_draw=True)
 
         if label is None:
@@ -733,10 +749,15 @@ class PlotPanel(BasePanel):
 
             self.conf.process_data()
 
-    def set_logscale(self, event=None, xscale='linear', yscale='linear',
+    def set_logscale(self, event=None, xscale='linear',
+                     yscale='linear', y2scale='linear',
+                     y3scale='linear', y4scale='linear',
                      delay_draw=False):
         "set log or linear scale for x, y axis"
         self.conf.set_logscale(xscale=xscale, yscale=yscale,
+                               y2scale=y2scale,
+                               y3scale=y3scale,
+                               y4scale=y4scale,
                                delay_draw=delay_draw)
 
     def toggle_legend(self, evt=None, show=None):

@@ -175,7 +175,11 @@ default_config = {'auto_margins': True,
                   'show_legend_frame': False,
                   'textcolor': '#000000',
                   'title': '',
-                  'xscale': 'linear', 'yscale': 'linear',
+                  'xscale': 'linear',
+                  'yscale': 'linear',
+                  'y2scale': 'linear',
+                  'y3scale': 'linear',
+                  'y4scale': 'linear',
                   'xlabel': '',  'ylabel': '',
                   'y2label': '', 'y3label': '', 'y4label': '',
                   'y3offset': 0.2, 'yaxes_tracecolor': False,
@@ -366,9 +370,9 @@ class PlotConfig:
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
                      'textcolor', 'title', 'viewpad', 'with_data_process',
                      'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
-                     'ylabel', 'yscale', 'zoom_lims',
-                     'zoom_style', 'legendfont', 'labelfont', 'titlefont',
-                     'fills', 'traces'):
+                     'ylabel', 'yscale', 'y2scale', 'y3scale', 'y4scale',
+                     'zoom_lims', 'zoom_style',
+                     'legendfont', 'labelfont', 'titlefont', 'fills', 'traces'):
 
             val = getattr(self, attr)
             if attr in ('legendfont', 'labelfont', 'titlefont'):
@@ -399,7 +403,8 @@ class PlotConfig:
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
                      'textcolor', 'title', 'viewpad', 'with_data_process',
                      'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
-                     'ylabel', 'yscale', 'zoom_lims', 'zoom_style'):
+                     'ylabel', 'yscale', 'y2scale', 'y3scale', 'y4scale',
+                     'zoom_lims', 'zoom_style'):
             if attr in cnf:
                 setattr(self, attr, cnf.get(attr))
 
@@ -1149,18 +1154,29 @@ class PlotConfig:
                 pass
         return all_limits
 
-    def set_logscale(self, xscale='linear', yscale='linear',
-                     delay_draw=False):
+    def set_logscale(self, xscale=None, yscale=None, y2scale=None,
+                     y3scale=None, y4scale=None, delay_draw=False):
         "set log or linear scale for x, y axis"
-        self.xscale = xscale
-        self.yscale = yscale
-        for axes in self.canvas.figure.get_axes():
+        if xscale in ('linear', 'log'):
+            self.xscale = xscale
+        if yscale in ('linear', 'log'):
+            self.yscale = yscale
+        if y2scale in ('linear', 'log'):
+            self.y2scale = y2scale
+        if y3scale in ('linear', 'log'):
+            self.y3scale = y3scale
+        if y4scale in ('linear', 'log'):
+            self.y4scale = y4scale
+        for i, axes in enumerate(self.canvas.figure.get_axes()):
             try:
-                axes.set_yscale(yscale)
+                ys = self.yscale
+                if i in (1, 2, 3):
+                    ys = getattr(self, f'y{i+1}scale', 'linear')
+                axes.set_yscale(ys)
             except:
                 axes.set_yscale('linear')
             try:
-                axes.set_xscale(xscale)
+                axes.set_xscale(self.xscale)
             except:
                 axes.set_xscale('linear')
         if not delay_draw:

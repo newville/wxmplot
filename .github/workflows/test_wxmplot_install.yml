@@ -6,9 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
-
 jobs:
   build:
+
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -19,20 +19,19 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-      - name: Set up Python from Miniconda/conda
-        uses: conda-incubator/setup-miniconda@v2.2.0
-        with:
-          miniconda-version: latest
-          channels: conda-forge,defaults
-          channel-priority: true
-          activate-environment: anaconda-client-env
-          python-version: ${{ matrix.python-version }}
-
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb
+    - name: Set up Python from Miniconda/conda
+      uses: conda-incubator/setup-miniconda@v2.2.0
+      with:
+        miniconda-version: latest
+        channels: conda-forge,defaults
+        channel-priority: true
+        activate-environment: anaconda-client-env
+        python-version: ${{ matrix.python-version }}
     - name: Install conda dependencies
       run: |
         conda install -y -c conda-forge python=${{ matrix.python-version }} "numpy>=1.23" "matplotlib>=3.8" "wxpython>=4.2" pip pytest

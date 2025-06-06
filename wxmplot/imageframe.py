@@ -939,6 +939,6 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
                     darr.extend(data[iy, ix])
                 buff.append("  ".join([gformat(arr, 12) for arr in darr]))
         buff.append("")
-        with open(fname, 'w') as fout:
+        with open(fname, 'w', encoding='utf-8') as fout:
             fout.write("\n".join(buff))
         fout.close()

@@ -114,7 +114,7 @@ class PlotFrame(BaseFrame):
             buff.append(' '.join(oline))
 
         buff.append('')
-        with open(fname, 'w') as fout:
+        with open(fname, 'w', encoding='utf-8') as fout:
             fout.write("\n".join(buff))
         fout.close()
         self.write_message("Exported data to '%s'" % fname, panel=0)

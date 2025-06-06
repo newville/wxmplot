@@ -139,7 +139,7 @@ class PlotConfigFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             conf = self.conf.get_current_config()
             ppath = os.path.abspath(dlg.GetPath())
-            with open(ppath, 'w') as fh:
+            with open(ppath, 'w', encoding='utf-8') as fh:
                 fh.write("%s\n" % yaml.dump(conf))
 
 

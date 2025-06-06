@@ -566,6 +566,5 @@ class ImageMatrixFrame(BaseFrame):
                 d = [ydat[iy], xdat[ix], self.map1[iy, ix], self.map2[iy, ix]]
                 buff.append("  ".join([gformat(a, 12) for a in d]))
 
-        fout = open(fname, 'w')
-        fout.write("%s\n" % "\n".join(buff))
-        fout.close()
+        with open(fname, 'w', encoding='utf-8') as fout:
+            fout.write("%s\n" % "\n".join(buff))

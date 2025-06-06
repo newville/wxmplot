@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=f677d9b7"></script>
+    <script src="_static/documentation_options.js?v=e36ecea7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -83,7 +83,7 @@ of optional arguments.  The <a class="reference internal" href="#plotpanel.PlotP
 many additional methods to interact with the plots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotpanel.PlotPanel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">PlotPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.PlotPanel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">PlotPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.PlotPanel" title="Link to this definition">¶</a></dt>
 <dd><p>Create a Plot Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code> with a matplotlib Figure.
 This takes many optional arguments:</p>
 <dl class="field-list simple">
@@ -775,7 +775,7 @@ plot to the system Clipboard, as well as ways to configure many of the
 plot attributes.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotframe.PlotFrame">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">PlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">size=(700</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">450)</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">title=None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.PlotFrame" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">PlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">size=(700</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">450)</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">title=None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.PlotFrame" title="Link to this definition">¶</a></dt>
 <dd><p>create a plot frame.  This frame will have a <code class="xref py py-data docutils literal notranslate"><span class="pre">panel</span></code> member
 holding the underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>, and have menus and statusbar
 for plot interaction.</p>
@@ -825,7 +825,7 @@ for plot interaction.</p>
 and menubar with menu items for saving, printing and configuring plots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotapp.PlotApp">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotapp.</span></span><span class="sig-name descname"><span class="pre">PlotApp</span></span><a class="headerlink" href="#plotapp.PlotApp" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotapp.</span></span><span class="sig-name descname"><span class="pre">PlotApp</span></span><a class="headerlink" href="#plotapp.PlotApp" title="Link to this definition">¶</a></dt>
 <dd><p>create a plot application.  This has methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code>, and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">write_message()</span></code>, which are sent to the underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>.
 This allows very simple scripts which give plot interactivity and
@@ -941,8 +941,8 @@ customization.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-03-03, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    &#169; Copyright 2025-06-06, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

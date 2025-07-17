@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=e36ecea7"></script>
+    <script src="_static/documentation_options.js?v=9986cd63"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -377,38 +377,38 @@ example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This could be comparable to</span>
 <span class="c1"># https://matplotlib.org/stable/gallery/animation/strip_chart.html</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">set_data_generator</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">19680801</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Scope</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmax</span> <span class="o">=</span> <span class="n">nmax</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">nmax</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">nmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmax</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mf">0.15</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmax</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="p">()</span> <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.15</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)]</span>
 
-<span class="n">NMAX</span><span class="p">,</span> <span class="n">DT</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mf">0.05</span>
-<span class="n">scope</span> <span class="o">=</span> <span class="n">Scope</span><span class="p">(</span><span class="n">nmax</span><span class="o">=</span><span class="n">NMAX</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">DT</span><span class="p">)</span>
+<span class="n">scope</span> <span class="o">=</span> <span class="n">Scope</span><span class="p">(</span><span class="n">nmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 
-<span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xmax</span><span class="o">=</span><span class="n">NMAX</span><span class="o">*</span><span class="n">DT</span><span class="p">)</span>
-<span class="n">set_data_generator</span><span class="p">(</span><span class="n">scope</span><span class="o">.</span><span class="n">update</span><span class="p">)</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xmax</span><span class="o">=</span><span class="n">scope</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=-</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span> <span class="n">drawstyle</span><span class="o">=</span><span class="s1">&#39;steps-mid&#39;</span><span class="p">)</span>
+
+<span class="n">set_data_generator</span><span class="p">(</span><span class="n">scope</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="n">plotter</span><span class="o">.</span><span class="n">window</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Unlike with the matplotlib example, which mixes data generation and management
 with plotting code, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Scope</span></code> here only generates the code, and
 wxmplot functions handles all the plotting.  This code is both shorter and
 better designed than the standard matplotlib example.</p>
-</section>
+<div  class="sphinx-contrib-video-container align-left"><video controls="True" muted="True" preload="auto" width="80%"><source src="_images/scope_mode_mpl_compare.mp4" type="video/mp4">capture of images generated from scope_mode_mpl_compare.py</video></div></section>
 <section id="displaying-and-image-of-a-tiff-file">
 <h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Link to this heading">¶</a></h2>
 <p>Reading a TIFF file and showing the image:</p>
@@ -563,7 +563,7 @@ may be more suitable for printed documents and presentations.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-06-06, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-07-17, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

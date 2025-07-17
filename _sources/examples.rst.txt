@@ -202,6 +202,11 @@ with plotting code, the :class:`Scope` here only generates the code, and
 wxmplot functions handles all the plotting.  This code is both shorter and
 better designed than the standard matplotlib example.
 
+.. video:: _static/scope_mode_mpl_compare.mp4
+   :alt: capture of images generated from scope_mode_mpl_compare.py
+   :muted:
+   :width: 80%
+
 
 Displaying and image of a TIFF file
 --------------------------------------

@@ -882,7 +882,7 @@ class PlotPanel(BasePanel):
                 db = min(0.2, max(db, (y0 - oy0)))
             except ValueError:
                 pass
-        return (left + dl, top + dt, right + dr, bot + db)
+        return [float(left+dl), float(top+dt), float(right+dr), float(bot+db)]
 
     def autoset_margins(self):
         """auto-set margins  left, bottom, right, top

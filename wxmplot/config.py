@@ -161,7 +161,7 @@ default_config = {'auto_margins': True,
                   'legend_loc':  'best',
                   'legend_onaxis': 'on plot',
                   'linecolors': linecolors,
-                  'margins': (0.15, 0.05, 0.05, 0.15),
+                  'margins': [0.15, 0.05, 0.05, 0.15],
                   'mpl_legend': None,
                   'plot_type': 'lineplot',
                   'scatter_size': 30,
@@ -360,11 +360,10 @@ class PlotConfig:
         to self.configdict
         """
         cnf = {}
-
         for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
                      'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
                      'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
-                     'legend_onaxis', 'linecolors', 'margins', 'mpl_legend', 'ntrace',
+                     'legend_onaxis', 'linecolors', 'margins','ntrace',
                      'plot_type', 'scatter_mask', 'scatter_normalcolor',
                      'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
@@ -393,11 +392,11 @@ class PlotConfig:
 
         self.ntrace = cnf.get('ntrace', 1)
 
-        self.set_theme(theme=cnf['current_theme'])
+        self.set_theme(theme=cnf.get('current_theme', 'dark' if DARK_THEME else 'light'))
         for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
                      'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
                      'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
-                     'legend_onaxis', 'linecolors', 'margins', 'mpl_legend',
+                     'legend_onaxis', 'linecolors', 'margins',
                      'plot_type', 'scatter_mask', 'scatter_normalcolor',
                      'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
                      'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
@@ -407,6 +406,8 @@ class PlotConfig:
                      'zoom_lims', 'zoom_style'):
             if attr in cnf:
                 setattr(self, attr, cnf.get(attr))
+
+        self.canvas.draw()
 
     def reset_lines(self):
         self.lines = [None]*len(self.traces)
@@ -541,7 +542,7 @@ class PlotConfig:
     def set_margins(self, left=0.1, top=0.1, right=0.1, bottom=0.1,
                     delay_draw=False):
         "set margins"
-        self.margins = (left, top, right, bottom)
+        self.margins = [float(left), float(top), float(right), float(bottom)]
         if self.panel is not None:
             self.panel.gridspec.update(left=left, top=1-top,
                                        right=1-right, bottom=bottom)

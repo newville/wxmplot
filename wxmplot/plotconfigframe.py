@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #
 # wxmplott GUI to Configure Line Plots
-#
-import os
+
+from pathlib import Path
 from functools import partial
 import yaml
 import numpy as np
@@ -13,7 +13,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from wxutils import get_cwd
 
-from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
+from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin, fix_filename
 from .config import PlotConfig
 from .colors import hexcolor, mpl_color, GUI_COLORS
 
@@ -128,7 +128,13 @@ class PlotConfigFrame(wx.Frame):
         mbar.Append(fmenu, 'File')
         self.SetMenuBar(mbar)
 
-    def save_config(self, evt=None, fname='wxmplot.yaml'):
+    def save_config(self, evt=None, fname='wxmplot'):
+        conf = self.conf.get_config()
+        title = conf.get('title', '').strip()
+        if len(title) < 2:
+            title = fname
+        fname = fix_filename(f'{title}.yaml')
+
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Save plot configuration',
                             defaultDir=get_cwd(),
@@ -137,10 +143,11 @@ class PlotConfigFrame(wx.Frame):
                             style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
 
         if dlg.ShowModal() == wx.ID_OK:
-            conf = self.conf.get_current_config()
-            ppath = os.path.abspath(dlg.GetPath())
+            conf = self.conf.get_config()
+            text = yaml.dump(conf, default_flow_style=None, indent=13, sort_keys=False)
+            ppath = Path(dlg.GetPath())
             with open(ppath, 'w', encoding='utf-8') as fh:
-                fh.write("%s\n" % yaml.dump(conf))
+                 fh.write(f"{text}\n")
 
 
     def load_config(self, evt=None):
@@ -151,7 +158,7 @@ class PlotConfigFrame(wx.Frame):
                             style=wx.FD_OPEN)
 
         if dlg.ShowModal() == wx.ID_OK:
-            conf = yaml.safe_load(open(os.path.abspath(dlg.GetPath()), 'r').read())
+            conf = yaml.safe_load(open(Path(dlg.GetPath()), 'r').read())
             self.conf.load_config(conf)
 
     def DrawPanel(self):

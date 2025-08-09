@@ -430,17 +430,14 @@ class PlotPanel(BasePanel):
         return True
 
     def add_text(self, text, x, y, size=None, rotation=None, ha='left',
-                 va='center', family=None, yaxes=1, side=None, **kws):
+                 va='center', yaxes=1, side=None, **kws):
         """add text at supplied x, y position
         """
         yaxes, axes = self.get_yaxes(yaxes, side=side)
-        dynamic_size = False
-        if size is None:
-            size = self.conf.legendfont.get_size()
-            dynamic_size = True
+        size = self.conf.legendfont.get_size()
         t = axes.text(x, y, text, ha=ha, va=va, size=size,
-                      rotation=rotation, family=family, **kws)
-        self.conf.added_texts.append((dynamic_size, t))
+                      rotation=rotation, **kws)
+        self.conf.added_texts.append(t)
         self.draw()
 
     def add_arrow(self, x1, y1, x2, y2, shape='full', color='black',
@@ -713,6 +710,14 @@ class PlotPanel(BasePanel):
     def reset_config(self):
         """reset configuration to defaults."""
         self.conf.set_defaults()
+
+    def set_config(self, **conf):
+        """set configuration with dict of configuration options"""
+        self.conf.set_config(**conf)
+
+    def get_config(self, **conf):
+        """get configuration as dict of configuration options"""
+        self.conf.get_config()
 
     def unzoom(self, event=None, **kws):
         """ zoom out 1 level, or to full data range """

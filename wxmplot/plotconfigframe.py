@@ -159,7 +159,7 @@ class PlotConfigFrame(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_OK:
             conf = yaml.safe_load(open(Path(dlg.GetPath()), 'r').read())
-            self.conf.load_config(conf)
+            self.conf.set_config(**conf)
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE

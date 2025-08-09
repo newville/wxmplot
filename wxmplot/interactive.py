@@ -496,7 +496,7 @@ def plot_setlimits(xmin=None, xmax=None, ymin=None, ymax=None, win=1):
     plotter.panel.set_xylims((xmin, xmax, ymin, ymax))
 
 def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
-              side='left', size=None, **kws):
+              side='left',**kws):
 
     """plot_text(x, y, text, win=1, options)
 
@@ -508,13 +508,13 @@ def plot_text(text, x, y, win=1, rotation=None, ha='left', va='center',
         y (float): y position of text
         win (int): index of plot window
         rotation (str or float):  text rotation. angle in degrees or 'vertical' or 'horizontal'
-        ha (str):    horizontal alignment ('left', 'center', 'right')
+        ha (str):   horizontal alignment ('left', 'center', 'right')
         va (str)    vertical alignment ('top', 'center', 'bottom', 'baseline')
         side (str): which axis to use ('left' or 'right') for coordinates.
 
 
     """
-    plotter = get_plot_window(win=win, size=size)
+    plotter = get_plot_window(win=win)
     if plotter is None:
         return
     plotter.Raise()

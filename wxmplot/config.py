@@ -360,18 +360,20 @@ class PlotConfig:
         to self.configdict
         """
         cnf = {}
-        for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
-                     'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
-                     'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
-                     'legend_onaxis', 'linecolors', 'margins','ntrace',
-                     'plot_type', 'scatter_mask', 'scatter_normalcolor',
-                     'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
-                     'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
-                     'textcolor', 'title', 'viewpad', 'with_data_process',
-                     'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
-                     'ylabel', 'yscale', 'y2scale', 'y3scale', 'y4scale',
-                     'zoom_lims', 'zoom_style',
-                     'legendfont', 'labelfont', 'titlefont', 'fills', 'traces'):
+        for attr in ('auto_margins', 'axes_style', 'current_theme',
+                     'data_deriv', 'data_expr', 'draggable_legend',
+                     'facecolor', 'framecolor', 'gridcolor',
+                     'hidewith_legend', 'legend_loc', 'legend_onaxis',
+                     'linecolors', 'margins', 'plot_type',
+                     'scatter_normalcolor',
+                     'scatter_normaledge', 'scatter_selectcolor',
+                     'scatter_selectedge', 'scatter_size',
+                     'show_grid', 'show_legend', 'show_legend_frame',
+                     'textcolor', 'viewpad', 'with_data_process',
+                     'xscale', 'yscale', 'y2scale', 'y3scale',
+                     'y4scale', 'zoom_lims', 'zoom_style',
+                     'legendfont', 'labelfont', 'titlefont', 'fills',
+                     'traces'):
 
             val = getattr(self, attr)
             if attr in ('legendfont', 'labelfont', 'titlefont'):
@@ -381,32 +383,85 @@ class PlotConfig:
             elif attr == 'traces':
                 val = self.get_traces()[:self.ntrace]
 
-            cnf[attr] = val
+            if attr == 'current_theme':
+                cnf['theme'] = val
+            else:
+                cnf[attr] = val
         self.configdict = cnf
         return cnf
 
-    def load_config(self, conf):
-        self.get_config()
-        self.configdict.update(conf)
-        cnf = self.configdict
+    def set_config(self, **conf):
+        """set configuration values, as from the dictionary in .get_config()
+        """
+        if 'current_theme' in conf:
+            self.current_theme = conf['current_theme']
+        if 'theme' in conf:
+            self.current_theme = conf['theme']
 
-        self.ntrace = cnf.get('ntrace', 1)
+        # set theme by name first, other settting may override the details
+        self.set_theme(self.current_theme)
 
-        self.set_theme(theme=cnf.get('current_theme', 'dark' if DARK_THEME else 'light'))
-        for attr in ('added_texts', 'auto_margins', 'axes_style', 'current_theme',
-                     'data_deriv', 'data_expr', 'draggable_legend', 'facecolor',
-                     'framecolor', 'gridcolor', 'hidewith_legend', 'legend_loc',
-                     'legend_onaxis', 'linecolors', 'margins',
-                     'plot_type', 'scatter_mask', 'scatter_normalcolor',
-                     'scatter_normaledge', 'scatter_selectcolor', 'scatter_selectedge',
-                     'scatter_size', 'show_grid', 'show_legend', 'show_legend_frame',
-                     'textcolor', 'title', 'viewpad', 'with_data_process',
-                     'xlabel', 'xscale', 'y2label', 'y3label', 'y4label',
-                     'ylabel', 'yscale', 'y2scale', 'y3scale', 'y4scale',
-                     'zoom_lims', 'zoom_style'):
-            if attr in cnf:
-                setattr(self, attr, cnf.get(attr))
+        for attr in ('auto_margins', 'axes_style', 'current_theme',
+                    'data_deriv', 'data_expr', 'draggable_legend',
+                    'hidewith_legend', 'legend_loc', 'legend_onaxis',
+                    'linecolors', 'margins', 'plot_type',
+                    'scatter_normalcolor', 'scatter_normaledge',
+                    'scatter_selectcolor', 'scatter_selectedge',
+                    'scatter_size', 'show_grid', 'show_legend',
+                    'show_legend_frame', 'viewpad', 'xscale',
+                    'yscale', 'y2scale', 'y3scale', 'y4scale',
+                    'with_data_process', 'zoom_lims', 'zoom_style'):
 
+            if attr in conf:
+                setattr(self, attr, conf[attr])
+
+        if self.with_data_process:
+            self.process_data()
+
+        l, r, t, b = self.margins
+        self.set_margins(l, r, t, b, delay_draw=True)
+        if self.auto_margins:
+            self.panel.autoset_margins()
+
+        ntrace = self.ntrace
+        self.reset_trace_properties()
+
+        if 'fills' in conf:
+            nfills = len(conf['fills'])
+            if nfills < ntrace:
+                self.fills[:nfills] = [a for a in conf['fills']]
+            else:
+                self.fills = [a for a in conf['fills']]
+
+        if 'traces' in conf:
+            for n, tracedict in enumerate(conf['traces']):
+                if 'label' in tracedict:
+                    tracedict.pop('label')
+                if 'yaxes' in tracedict:
+                    tracedict.pop('yaxes')
+                self.init_trace(n, **tracedict)
+                self.refresh_trace(n)
+
+        if 'facecolor' in conf:
+            self.set_facecolor(conf['facecolor'])
+        if 'framecolor' in conf:
+            self.set_framecolor(conf['framecolor'])
+        if 'gridcolor' in conf:
+            self.set_gridcolor(conf['gridcolor'])
+        if 'textcolor' in conf:
+            self.set_textcolor(conf['textcolor'])
+        if 'legendfont' in conf:
+            self.legendfont.set_size(conf['legendfont'])
+        if 'labelfont' in conf:
+            self.labelfont.set_size(conf['labelfont'])
+        if 'titlefont' in conf:
+            self.titlefont.set_size(conf['titlefont'])
+
+        self.set_axes_style(delay_draw=True)
+        self.enable_grid(show=self.show_grid, delay_draw=True)
+        self.draw_legend(delay_draw=True)
+        self.set_legend_location(self.legend_loc, self.legend_onaxis)
+        # self.mpl_legend.set_draggable(self.draggable_legend, update='loc')
         self.canvas.draw()
 
     def reset_lines(self):
@@ -429,7 +484,7 @@ class PlotConfig:
                 self.init_trace(i, color, style, marker=marker)
 
     def init_trace(self, n, color, style, label=None, linewidth=None,
-                   zorder=None, marker=None, markersize=None,
+                   zorder=None, marker=None, markersize=None, markercolor=None,
                    drawstyle=None, fill=None, alpha=1):
         """ used for building set of traces"""
         while n >= len(self.traces):
@@ -448,6 +503,7 @@ class PlotConfig:
         line.zorder    = ifnot_none(zorder, 5*(n+1))
         line.marker    = ifnot_none(marker, line.marker)
         line.markersize = ifnot_none(markersize, line.markersize)
+        line.markercolor = ifnot_none(markercolor, line.markercolor)
 
 
     def get_mpline(self, trace):
@@ -595,13 +651,11 @@ class PlotConfig:
         if callable(self.theme_color_callback):
             self.theme_color_callback(color, 'text')
 
-
     def set_added_text_size(self):
         # for text added to plot, reset font size to match legend
         n = self.legendfont.get_size()
-        for dynamic, txt in self.added_texts:
-            if dynamic:
-                txt.set_fontsize(n)
+        for txt in self.added_texts:
+            txt.set_fontsize(n)
 
     def refresh_trace(self, trace=None):
         trace = self.get_trace(trace)

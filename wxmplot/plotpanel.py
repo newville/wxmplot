@@ -4,6 +4,8 @@ wxmplot PlotPanel: a wx.Panel for line plotting, using matplotlib
 """
 from functools import partial
 from datetime import datetime
+from pathlib import Path
+import yaml
 import wx
 
 from numpy import nonzero, where
@@ -17,9 +19,10 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.gridspec import GridSpec
 from matplotlib.colors import colorConverter
 
+from wxutils import get_cwd
 from .basepanel import BasePanel
 from .config import PlotConfig, ifnot_none, SIDE_YAXES
-from .utils import inside_poly, MenuItem
+from .utils import inside_poly, MenuItem, fix_filename
 from .plotconfigframe import PlotConfigFrame
 
 to_rgba = colorConverter.to_rgba
@@ -415,7 +418,6 @@ class PlotPanel(BasePanel):
     def set_zoomlimits(self, limits):
         """set zoom limits returned from get_zoomlimits()"""
         if limits is None:
-            # print("panel.set_zoom none")
             return False
         ax, vlims, zoom_lims = limits
         if ax == self.axes:
@@ -711,13 +713,6 @@ class PlotPanel(BasePanel):
         """reset configuration to defaults."""
         self.conf.set_defaults()
 
-    def set_config(self, **conf):
-        """set configuration with dict of configuration options"""
-        self.conf.set_config(**conf)
-
-    def get_config(self, **conf):
-        """get configuration as dict of configuration options"""
-        self.conf.get_config()
 
     def unzoom(self, event=None, **kws):
         """ zoom out 1 level, or to full data range """
@@ -778,6 +773,14 @@ class PlotPanel(BasePanel):
             show = not self.conf.show_grid
         self.conf.enable_grid(show)
 
+    def set_config(self, **conf):
+        """set configuration with dict of configuration options"""
+        self.conf.set_config(**conf)
+
+    def get_config(self, **conf):
+        """get configuration as dict of configuration options"""
+        return self.conf.get_config()
+
     def configure(self, event=None):
         """show configuration frame"""
         if self.win_config is not None:
@@ -791,6 +794,39 @@ class PlotPanel(BasePanel):
                                               config=self.conf,
                                               trace_color_callback=self.trace_color_callback)
             self.win_config.Raise()
+
+
+    def config_save_dialog(self, evt=None):
+        title = self.conf.title.strip()
+        if len(title) < 2:
+            title = 'wxmplot'
+        fname = fix_filename(f'{title}.yaml')
+
+        file_choices = 'YAML Config File (*.yaml)|*.yaml'
+        dlg = wx.FileDialog(self, message='Save plot configuration',
+                            defaultDir=get_cwd(),
+                            defaultFile=fname,
+                            wildcard=file_choices,
+                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            conf = self.get_config()
+            text = yaml.dump(conf, default_flow_style=None, indent=5, sort_keys=False)
+            ppath = Path(dlg.GetPath())
+            with open(ppath, 'w', encoding='utf-8') as fh:
+                 fh.write(f"{text}\n")
+
+
+    def config_load_dialog(self, evt=None):
+        file_choices = 'YAML Config File (*.yaml)|*.yaml'
+        dlg = wx.FileDialog(self, message='Read plot configuration',
+                            defaultDir=get_cwd(),
+                            wildcard=file_choices,
+                            style=wx.FD_OPEN)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            conf = yaml.safe_load(open(Path(dlg.GetPath()), 'r').read())
+            self.set_config(**conf)
 
     ####
     ## create GUI

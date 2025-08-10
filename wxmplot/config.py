@@ -62,6 +62,17 @@ ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 linecolors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd',
               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf')
 
+CONFIG_SAVE = ('auto_margins', 'axes_style', 'current_theme',
+               'facecolor', 'framecolor', 'gridcolor',
+               'hidewith_legend', 'labelfont', 'legend_loc',
+               'legend_onaxis', 'legendfont', 'linecolors', 'margins',
+               'plot_type', 'scatter_normalcolor',
+               'scatter_normaledge', 'scatter_selectcolor',
+               'scatter_selectedge', 'scatter_size', 'show_grid',
+               'show_legend', 'show_legend_frame', 'textcolor',
+               'titlefont', 'traces', 'viewpad', 'xscale', 'yscale',
+               'y2scale', 'y3scale', 'y4scale', 'zoom_style')
+
 light_theme = {'axes.grid': True,
                'axes.axisbelow': True,
                'axes.linewidth': 0.5,
@@ -113,14 +124,18 @@ whitebg_theme = {'axes.facecolor': '#FFFFFF',
 
 Themes = {}
 
-for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
-              'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
-              'tableau-colorblind10', 'Solarize_Light2', 'seaborn',
-              'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
-              'seaborn-darkgrid', 'seaborn-dark-palette', 'seaborn-deep',
-              'seaborn-notebook', 'seaborn-muted', 'seaborn-pastel',
-              'seaborn-paper', 'seaborn-poster', 'seaborn-talk',
-              'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid'):
+for tname in ('light', 'white-background', 'dark', 'matplotlib',
+            'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
+            'dark_background', 'mpl_gallery', 'petroff10',
+            'tableau-colorblind10', 'Solarize_Light2', 'seaborn',
+            'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
+            'seaborn-darkgrid', 'seaborn-dark-palette',
+            'seaborn-deep', 'seaborn-notebook', 'seaborn-muted',
+            'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
+            'seaborn-talk', 'seaborn-ticks', 'seaborn-white',
+            'seaborn-whitegrid'):
+
+
     theme = rc_params()
     theme['backend'] = 'WXAgg'
     if tname == 'matplotlib':
@@ -133,6 +148,8 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib', 'ggplot',
     elif tname == 'white-background':
         theme.update(light_theme)
         theme.update(whitebg_theme)
+    elif tname == 'mpl_gallery':
+        theme.update(matplotlib.style.library['_mpl-gallery'])
     elif tname == 'fivethirtyeight':  # text sizes are way off the norm
         theme.update(matplotlib.style.library['fivethirtyeight'])
         theme.update({'legend.fontsize': 10, 'xtick.labelsize': 9,
@@ -360,29 +377,12 @@ class PlotConfig:
         to self.configdict
         """
         cnf = {}
-        for attr in ('auto_margins', 'axes_style', 'current_theme',
-                     'data_deriv', 'data_expr', 'draggable_legend',
-                     'facecolor', 'framecolor', 'gridcolor',
-                     'hidewith_legend', 'legend_loc', 'legend_onaxis',
-                     'linecolors', 'margins', 'plot_type',
-                     'scatter_normalcolor',
-                     'scatter_normaledge', 'scatter_selectcolor',
-                     'scatter_selectedge', 'scatter_size',
-                     'show_grid', 'show_legend', 'show_legend_frame',
-                     'textcolor', 'viewpad', 'with_data_process',
-                     'xscale', 'yscale', 'y2scale', 'y3scale',
-                     'y4scale', 'zoom_lims', 'zoom_style',
-                     'legendfont', 'labelfont', 'titlefont', 'fills',
-                     'traces'):
-
+        for attr in CONFIG_SAVE:
             val = getattr(self, attr)
             if attr in ('legendfont', 'labelfont', 'titlefont'):
                 val = val.get_size()
-            elif attr == 'fills':
-                val = val[:self.ntrace]
             elif attr == 'traces':
                 val = self.get_traces()[:self.ntrace]
-
             if attr == 'current_theme':
                 cnf['theme'] = val
             else:
@@ -401,22 +401,12 @@ class PlotConfig:
         # set theme by name first, other settting may override the details
         self.set_theme(self.current_theme)
 
-        for attr in ('auto_margins', 'axes_style', 'current_theme',
-                    'data_deriv', 'data_expr', 'draggable_legend',
-                    'hidewith_legend', 'legend_loc', 'legend_onaxis',
-                    'linecolors', 'margins', 'plot_type',
-                    'scatter_normalcolor', 'scatter_normaledge',
-                    'scatter_selectcolor', 'scatter_selectedge',
-                    'scatter_size', 'show_grid', 'show_legend',
-                    'show_legend_frame', 'viewpad', 'xscale',
-                    'yscale', 'y2scale', 'y3scale', 'y4scale',
-                    'with_data_process', 'zoom_lims', 'zoom_style'):
-
-            if attr in conf:
+        for attr in CONFIG_SAVE:
+            if attr in ('theme', 'current_theme', 'traces',
+                       'legendfont', 'labelfont', 'titlefont'):
+                pass
+            elif attr in conf:
                 setattr(self, attr, conf[attr])
-
-        if self.with_data_process:
-            self.process_data()
 
         l, r, t, b = self.margins
         self.set_margins(l, r, t, b, delay_draw=True)
@@ -425,13 +415,6 @@ class PlotConfig:
 
         ntrace = self.ntrace
         self.reset_trace_properties()
-
-        if 'fills' in conf:
-            nfills = len(conf['fills'])
-            if nfills < ntrace:
-                self.fills[:nfills] = [a for a in conf['fills']]
-            else:
-                self.fills = [a for a in conf['fills']]
 
         if 'traces' in conf:
             for n, tracedict in enumerate(conf['traces']):
@@ -461,7 +444,6 @@ class PlotConfig:
         self.enable_grid(show=self.show_grid, delay_draw=True)
         self.draw_legend(delay_draw=True)
         self.set_legend_location(self.legend_loc, self.legend_onaxis)
-        # self.mpl_legend.set_draggable(self.draggable_legend, update='loc')
         self.canvas.draw()
 
     def reset_lines(self):
@@ -560,9 +542,9 @@ class PlotConfig:
 
         if len(self.xlabel) > 0 and self.xlabel not in ('', None, 'None'):
             axes[0].set_xlabel(self.xlabel, **kws)
-
         if len(self.ylabel) > 0 and self.ylabel not in ('', None, 'None'):
             axes[0].set_ylabel(self.ylabel, **kws)
+
         if (len(axes) > 1 and len(self.y2label) > 0 and
             self.y2label not in ('', None, 'None')):
             axes[1].set_ylabel(self.y2label, **kws)
@@ -684,6 +666,8 @@ class PlotConfig:
                         line.set_color(color)
                 else:
                     comp.set_color(color)
+        if len(self.fills) < trace+1:
+            self.fills.extend([None]*(trace+1))
 
         if self.fills[trace] is not None:
             self.fills[trace].set_color(color)
@@ -713,7 +697,6 @@ class PlotConfig:
 
     def set_trace_yaxes(self, yaxes=1, side=None, trace=None, delay_draw=False):
         trace = self.get_trace(trace)
-        # print("SET TRACE YAXES ", trace, yaxes, side)
         if side is not None:
             _yaxes = SIDE_YAXES.get(side, None)
             if _yaxes is not None:
@@ -921,7 +904,7 @@ class PlotConfig:
             self.yaxes_tracecolor = bool(yaxes_tracecolor)
 
         cur_theme = self.themes[self.current_theme]
-        tcolor = mpl2hexcolor(cur_theme['ytick.color'])
+        tcolor = mpl2hexcolor(self.textcolor) # cur_theme['ytick.color'])
 
         axes = self.canvas.figure.get_axes()
         colors = [tcolor]*(len(axes)+2)
@@ -933,7 +916,6 @@ class PlotConfig:
                         if trace.yaxes == (iax+1):
                             colors[iax] = trace.color
                             break
-        # print(colors, len(axes))
         for i, ax in enumerate(axes):
             color = colors[i]
             if color is not None:

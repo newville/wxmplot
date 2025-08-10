@@ -206,6 +206,16 @@ Matt Newville <newville@cars.uchicago.edu>""" % __version__
                  "Configure Plot styles, colors, labels, etc",
                  self.panel.configure)
 
+        MenuItem(self, mopts, "Save Configuration",
+                 "Save Configuration of Plot styles, colors etc",
+                 self.panel.config_save_dialog)
+
+        MenuItem(self, mopts, "Load Configuration",
+                 "Load saved configuration",
+                 self.panel.config_load_dialog)
+
+        mopts.AppendSeparator()
+
         MenuItem(self, mopts, "Toggle Legend\tCtrl+L",
                  "Toggle Legend Display",
                  self.panel.toggle_legend)

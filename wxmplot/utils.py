@@ -3,8 +3,10 @@
 from matplotlib.path import Path as mplPath
 
 import wx
+
 from wxutils import (pack, SimpleText, HLine, MenuItem, Check,
-                    Choice, FloatSpin, LabeledTextCtrl)
+                    FileOpen, FileSave, Choice, FloatSpin,
+                    LabeledTextCtrl)
 
 from pyshortcuts import fix_filename, gformat
 

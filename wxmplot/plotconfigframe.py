@@ -2,7 +2,6 @@
 #
 # wxmplott GUI to Configure Line Plots
 
-from pathlib import Path
 from functools import partial
 import yaml
 import numpy as np
@@ -11,9 +10,7 @@ import wx.lib.colourselect  as csel
 import wx.lib.agw.flatnotebook as flat_nb
 import wx.lib.scrolledpanel as scrolled
 
-from wxutils import get_cwd
-
-from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin, fix_filename
+from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
 from .colors import hexcolor, mpl_color, GUI_COLORS
 
@@ -116,50 +113,7 @@ class PlotConfigFrame(wx.Frame):
         self.conf.relabel()
         self.show_legend_cbs = []
         self.DrawPanel()
-        mbar = wx.MenuBar()
 
-        fmenu = wx.Menu()
-        MenuItem(self, fmenu, "Save Configuration\tCtrl+S",
-                 "Save Configuration",
-                 self.save_config)
-        MenuItem(self, fmenu, "Load Configuration\tCtrl+R",
-                 "Load Configuration",
-                 self.load_config)
-        mbar.Append(fmenu, 'File')
-        self.SetMenuBar(mbar)
-
-    def save_config(self, evt=None, fname='wxmplot'):
-        conf = self.conf.get_config()
-        title = conf.get('title', '').strip()
-        if len(title) < 2:
-            title = fname
-        fname = fix_filename(f'{title}.yaml')
-
-        file_choices = 'YAML Config File (*.yaml)|*.yaml'
-        dlg = wx.FileDialog(self, message='Save plot configuration',
-                            defaultDir=get_cwd(),
-                            defaultFile=fname,
-                            wildcard=file_choices,
-                            style=wx.FD_SAVE|wx.FD_CHANGE_DIR)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            conf = self.conf.get_config()
-            text = yaml.dump(conf, default_flow_style=None, indent=13, sort_keys=False)
-            ppath = Path(dlg.GetPath())
-            with open(ppath, 'w', encoding='utf-8') as fh:
-                 fh.write(f"{text}\n")
-
-
-    def load_config(self, evt=None):
-        file_choices = 'YAML Config File (*.yaml)|*.yaml'
-        dlg = wx.FileDialog(self, message='Read plot configuration',
-                            defaultDir=get_cwd(),
-                            wildcard=file_choices,
-                            style=wx.FD_OPEN)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            conf = yaml.safe_load(open(Path(dlg.GetPath()), 'r').read())
-            self.conf.set_config(**conf)
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE

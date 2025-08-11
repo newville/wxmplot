@@ -847,7 +847,7 @@ class PlotConfigFrame(wx.Frame):
         conf.set_theme(theme=theme)
         self.wids['textcolor'].SetColour(conf.textcolor)
         self.wids['gridcolor'].SetColour(conf.gridcolor)
-        self.wids['facecolr'].SetColour(conf.facecolor)
+        self.wids['facecolor'].SetColour(conf.facecolor)
         self.wids['framecolor'].SetColour(conf.framecolor)
 
         self.title_fontsize.SetValue(self.conf.titlefont.get_size())

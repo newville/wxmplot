@@ -112,8 +112,18 @@ class PlotConfigFrame(wx.Frame):
         self.axes = self.canvas.figure.get_axes()
         self.conf.relabel()
         self.show_legend_cbs = []
+        self.wids = {}
         self.DrawPanel()
-
+        mbar = wx.MenuBar()
+        fmenu = wx.Menu()
+        MenuItem(self, fmenu, "Save Configuration\tCtrl+S",
+                 "Save Configuration",
+                 self.save_config)
+        MenuItem(self, fmenu, "Load Configuration\tCtrl+R",
+                "Load Configuration",
+                self.load_config)
+        mbar.Append(fmenu, 'File')
+        self.SetMenuBar(mbar)
 
     def DrawPanel(self):
         style = wx.DEFAULT_FRAME_STYLE
@@ -150,6 +160,55 @@ class PlotConfigFrame(wx.Frame):
         self.SetSize((1050, 475))
         self.Show()
 
+    def save_config(self, evt=None):
+        self.conf.panel.config_save_dialog()
+
+    def load_config(self, evt=None):
+        confdict = self.conf.panel.config_load_dialog()
+
+        # check boxes
+        for attr in ('auto_margins', 'hidewith_legend',
+                     'show_grid', 'show_legend', 'show_legend_frame'):
+            self.wids[attr].SetValue(confdict[attr])
+        self.wids['show_legend_2'].SetValue(confdict['show_legend'])
+        self.wids['axes_style'].SetValue('box'==confdict['axes_style'])
+
+        # choices
+        for attr in ('theme', 'legend_loc', 'legend_onaxis', 'zoom_style'):
+            self.wids[attr].SetStringSelection(confdict[attr])
+
+        xscale = confdict['xscale']
+        yscale = confdict['yscale']
+        self.wids['logchoice'].SetStringSelection(f"x {xscale} / y {yscale}")
+
+        # colors
+        for attr in ('facecolor', 'textcolor', 'framecolor', 'gridcolor',
+                     'scatter_normalcolor', 'scatter_normaledge',
+                     'scatter_selectcolor', 'scatter_selectedge'):
+            self.wids[attr].SetColour(confdict[attr])
+
+        # floats
+        for attr in ('labelfont', 'legendfont', 'titlefont',
+                     'viewpad', 'scatter_size'):
+            self.wids[attr].SetValue(confdict[attr])
+
+        margin_vals = confdict['margins']
+        for i in range(4):
+            self.wids['margins'][i].SetValue(margin_vals[i])
+
+        for i, trace in enumerate(confdict['traces']):
+            w = self.wids[f'trace_{i}']
+            w['color'].SetColour(trace['color'])
+            w['style'].SetStringSelection(trace['style'])
+            w['marker'].SetStringSelection(trace['marker'])
+            w['drawstyle'].SetStringSelection(trace['drawstyle'])
+            w['linewidth'].SetValue(trace['linewidth'])
+            w['alpha'].SetValue(trace['alpha'])
+            w['markersize'].SetValue(trace['markersize'])
+            w['zorder'].SetValue(trace['zorder'])
+            w['fill'].SetValue(trace['fill'])
+
+
     def make_range_panel(self, parent, font=None):
         # bounds, margins, scales
         panel = wx.Panel(parent)
@@ -163,6 +222,7 @@ class PlotConfigFrame(wx.Frame):
         logchoice = wx.Choice(panel, choices=self.conf.log_choices,  size=(200,-1))
         logchoice.SetStringSelection("x %s / y %s" % (self.conf.xscale, self.conf.yscale))
         logchoice.Bind(wx.EVT_CHOICE, self.onLogScale)
+        self.wids['logchoice'] = logchoice
 
         sizer.Add(mtitle,     (1, 0), (1,1), labstyle, 2)
         sizer.Add(logchoice,  (1, 1), (1,3), labstyle, 2)
@@ -171,6 +231,8 @@ class PlotConfigFrame(wx.Frame):
         # Zoom
         ztitle = wx.StaticText(panel, -1, 'Zoom Style: ')
         zoomchoice = wx.Choice(panel, choices=self.conf.zoom_choices, size=(200,-1))
+        self.wids['zoom_style'] = zoomchoice
+
         if self.conf.zoom_style in self.conf.zoom_choices:
             zoomchoice.SetStringSelection(self.conf.zoom_style)
         zoomchoice.Bind(wx.EVT_CHOICE, self.onZoomStyle)
@@ -256,6 +318,7 @@ class PlotConfigFrame(wx.Frame):
         self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
                                   increment=0.5, digits=2,
                                   size=(FSPINSIZE, -1), action=self.onViewPadEvent)
+        self.wids['viewpad'] = self.vpad_val
 
         if user_lims == 4*[None]:
             [w.Disable() for w in self.xbounds]
@@ -335,6 +398,8 @@ class PlotConfigFrame(wx.Frame):
         auto_m  = wx.CheckBox(panel,-1, ' Default ', (-1, -1), (-1, -1))
         auto_m.Bind(wx.EVT_CHECKBOX,self.onAutoMargin)
         auto_m.SetValue(self.conf.auto_margins)
+        self.wids['auto_margins'] = auto_m
+        self.wids['margins'] = (lmarg, rmarg, bmarg, tmarg)
 
         msizer = wx.BoxSizer(wx.HORIZONTAL)
         msizer.AddMany((ltitle, lmarg, rtitle, rmarg,
@@ -386,6 +451,13 @@ class PlotConfigFrame(wx.Frame):
                                   mpl_color(conf.scatter_selectedge,
                                            default=(200, 0, 0)),
                                   size=(25, 25))
+
+        self.wids['scatter_size'] = ssize
+        self.wids['scatter_normalcolor'] = nfcol
+        self.wids['scatter_normaledge'] = necol
+        self.wids['scatter_selectcolor'] = sfcol
+        self.wids['scatter_selectedge'] = secol
+
         nfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_nf'))
         necol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_ne'))
         sfcol.Bind(csel.EVT_COLOURSELECT, partial(self.onScatter, item='scatt_sf'))
@@ -495,6 +567,10 @@ class PlotConfigFrame(wx.Frame):
         self.title_fontsize = ttl_size
         self.legend_fontsize = leg_size
         self.label_fontsize = lab_size
+        self.wids['titlefont'] = ttl_size
+        self.wids['labelfont'] = lab_size
+        self.wids['legendfont'] = leg_size
+
 
         sizer.Add(t0,        (irow, 0), (1, 1), labstyle)
         sizer.Add(t1,        (irow, 1), (1, 1), labstyle)
@@ -537,6 +613,12 @@ class PlotConfigFrame(wx.Frame):
         show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,item='frame'))
         show_lfr.SetValue(self.conf.show_legend_frame)
 
+        self.wids['hidewith_legend'] = togg_leg
+        self.wids['legend_loc'] = leg_loc
+        self.wids['legend_onaxis'] = leg_onax
+        self.wids['show_legend_2'] = show_leg
+        self.wids['show_legend_frame'] = show_lfr
+
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
 
         lsizer.AddMany((leg_ttl, show_leg, show_lfr, togg_leg))
@@ -566,7 +648,7 @@ class PlotConfigFrame(wx.Frame):
         theme_names = list(cnf.themes.keys())
         themechoice = Choice(panel, choices=theme_names, action=self.onTheme)
         themechoice.SetStringSelection(cnf.current_theme)
-
+        self.wids['theme'] = themechoice
 
         textcol = csel.ColourSelect(panel, label=" Text ", size=(80, -1),
                                     colour=mpl_color(cnf.textcolor))
@@ -577,8 +659,8 @@ class PlotConfigFrame(wx.Frame):
         fbgcol = csel.ColourSelect(panel,  label=" Frame ", size=(80, -1),
                                    colour=mpl_color(self.canvas.figure.get_facecolor()))
 
-        self.colwids = {'text': textcol, 'face': bgcol,
-                        'grid': gridcol, 'frame': fbgcol}
+        self.wids.update({'textcolor': textcol, 'facecolor': bgcol,
+                           'gridcolor': gridcol, 'framecolor': fbgcol})
 
         bgcol.Bind(csel.EVT_COLOURSELECT,   partial(self.onColor, item='face'))
         fbgcol.Bind(csel.EVT_COLOURSELECT,  partial(self.onColor, item='frame'))
@@ -588,16 +670,19 @@ class PlotConfigFrame(wx.Frame):
         show_grid  = wx.CheckBox(panel,-1, ' Show Grid  ')
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(cnf.show_grid)
+        self.wids['show_grid'] = show_grid
 
         show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(cnf.axes_style == 'box')
+        self.wids['axes_style'] = show_box
 
         show_leg = wx.CheckBox(panel,-1, 'Show Legend  ')
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(cnf.show_legend)
         if show_leg not in self.show_legend_cbs:
             self.show_legend_cbs.append(show_leg)
+        self.wids['show_legend'] = show_leg
 
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
         tsizer.Add(wx.StaticText(panel, -1, ' Theme: '), 0, labstyle, 3)
@@ -632,10 +717,12 @@ class PlotConfigFrame(wx.Frame):
         tsizer.Add(wx.StaticText(panel, -1, ' Symbol Size: '), 0, labstyle, 3)
         tsizer.Add(msz, 0, labstyle, 3)
 
+        self.wids['def_thickness'] = allthk
+        self.wids['def_markersize'] = msz
+
         sizer.Add(tsizer,    (3, 0), (1, 9), labstyle, 3)
 
         irow = 4
-
         for t in ('#','Label','Color', 'Alpha', 'Fill', 'Line Style',
                   'Thickness', 'Symbol',
                   'Size', 'Z Order', 'Join Style'):
@@ -667,8 +754,6 @@ class PlotConfigFrame(wx.Frame):
 
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
             col.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, trace=i))
-
-            self.colwids[i] = col
 
             thk = FloatSpin(panel, size=(ISPINSIZE, -1), value=dthk,
                             min_val=0, max_val=20, increment=0.5, digits=1,
@@ -705,6 +790,12 @@ class PlotConfigFrame(wx.Frame):
                             action=partial(self.onAlpha, trace=i))
 
 
+            self.wids[f'trace_{i}'] = {'color': col, 'alpha': alp, 'fill': ffil,
+                                       'style': sty, 'linewidth': thk,
+                                       'marker': sym, 'markersize': msz,
+                                       'zorder': zor, 'drawstyle': jsty}
+
+
             sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(col, (irow,2),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
@@ -734,7 +825,7 @@ class PlotConfigFrame(wx.Frame):
 
         if item == 'trace':
             self.conf.set_trace_color(color, trace=trace)
-            self.colwids[trace].SetColour(color)
+            self.wids[f'trace_{trace}']['color'].SetColour(color)
             if self.conf.show_legend:
                 self.conf.draw_legend()
 
@@ -754,10 +845,10 @@ class PlotConfigFrame(wx.Frame):
         theme = event.GetString()
         conf = self.conf
         conf.set_theme(theme=theme)
-        self.colwids['text'].SetColour(conf.textcolor)
-        self.colwids['grid'].SetColour(conf.gridcolor)
-        self.colwids['face'].SetColour(conf.facecolor)
-        self.colwids['frame'].SetColour(conf.framecolor)
+        self.wids['textcolor'].SetColour(conf.textcolor)
+        self.wids['gridcolor'].SetColour(conf.gridcolor)
+        self.wids['facecolr'].SetColour(conf.facecolor)
+        self.wids['framecolor'].SetColour(conf.framecolor)
 
         self.title_fontsize.SetValue(self.conf.titlefont.get_size())
         self.legend_fontsize.SetValue(self.conf.legendfont.get_size())
@@ -766,9 +857,9 @@ class PlotConfigFrame(wx.Frame):
         for i in range(ntrace_display):
             try:
                 lin = self.conf.traces[i]
-                curcol = hexcolor(self.colwids[i].GetColour())
+                curcol = hexcolor(self.wids[f'trace_{i}']['color'].GetColour())
                 newcol = hexcolor(lin.color)
-                self.colwids[i].SetColour(newcol)
+                self.wids[f'trace_{i}']['color'].SetColour(newcol)
                 if newcol != curcol:
                     self.conf.set_trace_color(newcol, trace=i)
             except KeyError:

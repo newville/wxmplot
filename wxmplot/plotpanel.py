@@ -795,7 +795,6 @@ class PlotPanel(BasePanel):
                                               trace_color_callback=self.trace_color_callback)
             self.win_config.Raise()
 
-
     def config_save_dialog(self, evt=None):
         title = self.conf.title.strip()
         if len(title) < 2:
@@ -823,10 +822,11 @@ class PlotPanel(BasePanel):
                             defaultDir=get_cwd(),
                             wildcard=file_choices,
                             style=wx.FD_OPEN)
-
+        conf = None
         if dlg.ShowModal() == wx.ID_OK:
             conf = yaml.safe_load(open(Path(dlg.GetPath()), 'r').read())
             self.set_config(**conf)
+        return conf
 
     ####
     ## create GUI

@@ -207,6 +207,9 @@ class PlotConfigFrame(wx.Frame):
             w['markersize'].SetValue(trace['markersize'])
             w['zorder'].SetValue(trace['zorder'])
             w['fill'].SetValue(trace['fill'])
+            if i == 0:
+                self.wids['def_thickness'].SetValue(trace['linewidth'])
+                self.wids['def_markersize'].SetValue(trace['markersize'])
 
 
     def make_range_panel(self, parent, font=None):

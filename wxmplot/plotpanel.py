@@ -938,8 +938,11 @@ class PlotPanel(BasePanel):
         self.gridspec.update(left=left, top=1-top, right=1-right, bottom=bot)
         # Axes positions update
         for ax in self.fig.get_axes():
-            figpos = ax.get_subplotspec().get_position(self.canvas.figure)
-            ax.set_position(figpos)
+            try:
+                figpos = ax.get_subplotspec().get_position(self.canvas.figure)
+                ax.set_position(figpos)
+            except Exception:
+                pass
 
     def draw(self):
         self.canvas.draw()

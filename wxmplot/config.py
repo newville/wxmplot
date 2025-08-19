@@ -382,7 +382,7 @@ class PlotConfig:
             if attr in ('legendfont', 'labelfont', 'titlefont'):
                 val = val.get_size()
             elif attr == 'traces':
-                val = self.get_traces()[:self.ntrace]
+                val = self.get_traces(n=self.ntrace+2)
             if attr == 'current_theme':
                 cnf['theme'] = val
             else:
@@ -507,9 +507,12 @@ class PlotConfig:
             self.traces.append(LineProps())
         return trace
 
-    def get_traces(self):
+    def get_traces(self, n=None):
         out = []
-        for i in range(self.ntrace):
+        if n is None:
+            n = self.ntrace + 1
+        n = min(len(self.traces), max(2, n))
+        for i in range(n):
             out.append(self.traces[i].asdict())
         return out
 

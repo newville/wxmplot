@@ -258,7 +258,12 @@ class PlotConfigFrame(wx.Frame):
             auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
         except:
             pass
-
+        
+        self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
+                                  increment=0.5, digits=2,
+                                  size=(FSPINSIZE, -1), action=self.onViewPadEvent)
+        self.wids['viewpad'] = self.vpad_val
+       
         xb0, xb1 = laxes.get_xlim()
         yb0, yb1 = laxes.get_ylim()
         if user_lims[0] is not None:
@@ -317,11 +322,6 @@ class PlotConfigFrame(wx.Frame):
         self.y3offset = FloatSpin(panel, value=self.conf.y3offset, min_val=0,
                                   max_val=0.8, increment=0.01, digits=3,
                                   size=(FSPINSIZE, -1), action=self.onY3Offset)
-
-        self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
-                                  increment=0.5, digits=2,
-                                  size=(FSPINSIZE, -1), action=self.onViewPadEvent)
-        self.wids['viewpad'] = self.vpad_val
 
         if user_lims == 4*[None]:
             [w.Disable() for w in self.xbounds]
@@ -505,6 +505,9 @@ class PlotConfigFrame(wx.Frame):
         self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
                                     action = partial(self.onText, item='title'),
                                     labeltext='Title: ', size=(475, -1))
+        self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='xlabel'),
+                                    labeltext='X Label: ', size=(475, -1))
         self.ylab = LabeledTextCtrl(panel, self.conf.ylabel.replace('\n', '\\n'),
                                     action = partial(self.onText, item='ylabel'),
                                     labeltext='Y Label: ', size=(475, -1))
@@ -517,9 +520,6 @@ class PlotConfigFrame(wx.Frame):
         self.y4lab= LabeledTextCtrl(panel, self.conf.y4label.replace('\n', '\\n'),
                                     action = partial(self.onText, item='y4label'),
                                     labeltext='Y4 Label: ', size=(475, -1))
-        self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
-                                    action = partial(self.onText, item='xlabel'),
-                                    labeltext='X Label: ', size=(475, -1))
 
         self.yax_color = wx.CheckBox(panel,-1, 'Use Trace Color for Y Axes', (-1, -1), (-1, -1))
         self.yax_color.Bind(wx.EVT_CHECKBOX, self.onYaxes_tracecolor)
@@ -535,18 +535,18 @@ class PlotConfigFrame(wx.Frame):
         self.y4lab.Enable(len(axes) > 3)
 
         sizer.Add(self.titl.label,  (0, 0), (1, 1), labstyle)
-        sizer.Add(self.titl,        (0, 1), (1, 4), labstyle)
+        sizer.Add(self.titl,        (0, 1), (1, 6), labstyle)
         sizer.Add(self.xlab.label,  (1, 0), (1, 1), labstyle)
-        sizer.Add(self.xlab,        (1, 1), (1, 4), labstyle)
+        sizer.Add(self.xlab,        (1, 1), (1, 6), labstyle)
         sizer.Add(self.ylab.label,  (2, 0), (1, 1), labstyle)
-        sizer.Add(self.ylab,        (2, 1), (1, 4), labstyle)
+        sizer.Add(self.ylab,        (2, 1), (1, 6), labstyle)
         sizer.Add(self.y2lab.label, (3, 0), (1, 1), labstyle)
-        sizer.Add(self.y2lab,       (3, 1), (1, 4), labstyle)
+        sizer.Add(self.y2lab,       (3, 1), (1, 6), labstyle)
         sizer.Add(self.y3lab.label, (4, 0), (1, 1), labstyle)
-        sizer.Add(self.y3lab,       (4, 1), (1, 4), labstyle)
+        sizer.Add(self.y3lab,       (4, 1), (1, 6), labstyle)
         sizer.Add(self.y4lab.label, (5, 0), (1, 1), labstyle)
-        sizer.Add(self.y4lab,       (5, 1), (1, 4), labstyle)
-        sizer.Add(self.yax_color,   (6, 0), (1, 4), labstyle)
+        sizer.Add(self.y4lab,       (5, 1), (1, 6), labstyle)
+        sizer.Add(self.yax_color,   (6, 0), (1, 6), labstyle)
 
         irow = 7
 
@@ -559,12 +559,11 @@ class PlotConfigFrame(wx.Frame):
         ttl_size = FloatSpin(panel, value=self.conf.labelfont.get_size(),
                              action=partial(self.onText, item='titlesize'),
                              **fsopts)
-
-        leg_size = FloatSpin(panel, value=self.conf.legendfont.get_size(),
-                             action=partial(self.onText, item='legendsize'),
-                             **fsopts)
         lab_size = FloatSpin(panel, value=self.conf.labelfont.get_size(),
                              action=partial(self.onText, item='labelsize'),
+                             **fsopts)
+        leg_size = FloatSpin(panel, value=self.conf.legendfont.get_size(),
+                             action=partial(self.onText, item='legendsize'),
                              **fsopts)
 
         self.title_fontsize = ttl_size
@@ -577,19 +576,34 @@ class PlotConfigFrame(wx.Frame):
 
         sizer.Add(t0,        (irow, 0), (1, 1), labstyle)
         sizer.Add(t1,        (irow, 1), (1, 1), labstyle)
-        sizer.Add(ttl_size,  (irow, 2), (1, 2), labstyle)
-        sizer.Add(t2,        (irow+1, 1), (1, 1), labstyle)
-        sizer.Add(lab_size,  (irow+1, 2), (1, 2), labstyle)
-        sizer.Add(t3,        (irow+2, 1), (1, 1), labstyle)
-        sizer.Add(leg_size,  (irow+2, 2), (1, 2), labstyle)
+        sizer.Add(ttl_size,  (irow, 2), (1, 1), labstyle)
+        sizer.Add(t2,        (irow, 3), (1, 1), labstyle)
+        sizer.Add(lab_size,  (irow, 4), (1, 1), labstyle)
+        sizer.Add(t3,        (irow, 5), (1, 1), labstyle)
+        sizer.Add(leg_size,  (irow, 6), (1, 1), labstyle)
 
-        irow = irow + 3
+        irow = irow + 1
         # Legend
         # bstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ST_NO_AUTORESIZE
         labstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
         # ax = self.axes[0]
+        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
+        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
+        show_leg.SetValue(self.conf.show_legend)
+        if show_leg not in self.show_legend_cbs:
+            self.show_legend_cbs.append(show_leg)
 
+        show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
+        show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,item='frame'))
+        show_lfr.SetValue(self.conf.show_legend_frame)
+
+        togg_leg  = wx.CheckBox(panel,-1, 'Click Legend to Show/Hide Line',
+                                (-1, -1), (-1, -1))
+        togg_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
+        togg_leg.SetValue(self.conf.hidewith_legend)
+
+        
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
         loc_ttl = wx.StaticText(panel, -1, 'Location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(150, -1))
@@ -600,21 +614,6 @@ class PlotConfigFrame(wx.Frame):
                              size=(120, -1))
         leg_onax.Bind(wx.EVT_CHOICE,partial(self.onShowLegend, item='onaxis'))
         leg_onax.SetStringSelection(self.conf.legend_onaxis)
-
-        togg_leg  = wx.CheckBox(panel,-1, 'Click Legend to Show/Hide Line',
-                                (-1, -1), (-1, -1))
-        togg_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
-        togg_leg.SetValue(self.conf.hidewith_legend)
-
-        show_leg = wx.CheckBox(panel,-1, 'Show Legend', (-1, -1), (-1, -1))
-        show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
-        show_leg.SetValue(self.conf.show_legend)
-        if show_leg not in self.show_legend_cbs:
-            self.show_legend_cbs.append(show_leg)
-
-        show_lfr = wx.CheckBox(panel,-1, 'Show Legend Frame', (-1, -1), (-1, -1))
-        show_lfr.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend,item='frame'))
-        show_lfr.SetValue(self.conf.show_legend_frame)
 
         self.wids['hidewith_legend'] = togg_leg
         self.wids['legend_loc'] = leg_loc
@@ -631,7 +630,7 @@ class PlotConfigFrame(wx.Frame):
 
         lsizer = wx.BoxSizer(wx.HORIZONTAL)
         lsizer.AddMany((loc_ttl, leg_loc, leg_onax))
-        sizer.Add(lsizer,  (irow, 1), (1, 4), labstyle, 2)
+        sizer.Add(lsizer,  (irow, 1), (1, 5), labstyle, 2)
         autopack(panel, sizer)
         return panel
 
@@ -674,18 +673,19 @@ class PlotConfigFrame(wx.Frame):
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(cnf.show_grid)
         self.wids['show_grid'] = show_grid
-
-        show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
-        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
-        show_box.SetValue(cnf.axes_style == 'box')
-        self.wids['axes_style'] = show_box
-
+        
         show_leg = wx.CheckBox(panel,-1, 'Show Legend  ')
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(cnf.show_legend)
         if show_leg not in self.show_legend_cbs:
             self.show_legend_cbs.append(show_leg)
         self.wids['show_legend'] = show_leg
+        
+        show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
+        show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
+        show_box.SetValue(cnf.axes_style == 'box')
+        self.wids['axes_style'] = show_box
+
 
         tsizer = wx.BoxSizer(wx.HORIZONTAL)
         tsizer.Add(wx.StaticText(panel, -1, ' Theme: '), 0, labstyle, 3)
@@ -758,46 +758,46 @@ class PlotConfigFrame(wx.Frame):
             col = csel.ColourSelect(panel,  -1, "", dcol, size=(25, 25))
             col.Bind(csel.EVT_COLOURSELECT, partial(self.onColor, trace=i))
 
-            thk = FloatSpin(panel, size=(ISPINSIZE, -1), value=dthk,
-                            min_val=0, max_val=20, increment=0.5, digits=1,
-                            action=partial(self.onThickness, trace=i))
-            self.choice_linewidths.append(thk)
-
-            sty = Choice(panel, choices=cnf.styles, size=(150,-1),
-                         action=partial(self.onStyle,trace=i))
-            sty.SetStringSelection(dsty)
-
-            msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=dmsz,
-                            min_val=0, max_val=30, increment=0.5, digits=1,
-                            action=partial(self.onMarkerSize, trace=i))
-            self.choice_markersizes.append(msz)
-            zor = FloatSpin(panel, size=(ISPINSIZE, -1), value=dzord,
-                            min_val=-500, max_val=500, increment=1, digits=0,
-                            action=partial(self.onZorder, trace=i))
-
-            sym = Choice(panel, choices=cnf.symbols, size=(125,-1),
-                         action=partial(self.onSymbol,trace=i))
-
-            sym.SetStringSelection(dsym)
-
-            jsty = wx.Choice(panel, -1, choices=cnf.drawstyles, size=(125,-1))
-            jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
-            jsty.SetStringSelection(djsty)
+            alp = FloatSpin(panel, size=(FSPINSIZE, -1), value=dalp,
+                            min_val=0, max_val=1, increment=0.05, digits=2,
+                            action=partial(self.onAlpha, trace=i))
 
             ffil = wx.CheckBox(panel, -1, '')
             ffil.Bind(wx.EVT_CHECKBOX, partial(self.onFill, trace=i))
             ffil.SetValue(dfill)
 
-            alp = FloatSpin(panel, size=(FSPINSIZE, -1), value=dalp,
-                            min_val=0, max_val=1, increment=0.05, digits=2,
-                            action=partial(self.onAlpha, trace=i))
+            sty = Choice(panel, choices=cnf.styles, size=(150,-1),
+                         action=partial(self.onStyle,trace=i))
+            sty.SetStringSelection(dsty)
 
+            thk = FloatSpin(panel, size=(ISPINSIZE, -1), value=dthk,
+                            min_val=0, max_val=20, increment=0.5, digits=1,
+                            action=partial(self.onThickness, trace=i))
+            self.choice_linewidths.append(thk)
+
+            sym = Choice(panel, choices=cnf.symbols, size=(125,-1),
+                         action=partial(self.onSymbol,trace=i))
+
+            sym.SetStringSelection(dsym)
+            
+            msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=dmsz,
+                            min_val=0, max_val=30, increment=0.5, digits=1,
+                            action=partial(self.onMarkerSize, trace=i))
+            self.choice_markersizes.append(msz)
+            
+            zor = FloatSpin(panel, size=(ISPINSIZE, -1), value=dzord,
+                            min_val=-500, max_val=500, increment=1, digits=0,
+                            action=partial(self.onZorder, trace=i))
+
+
+            jsty = wx.Choice(panel, -1, choices=cnf.drawstyles, size=(125,-1))
+            jsty.Bind(wx.EVT_CHOICE, partial(self.onJoinStyle, trace=i))
+            jsty.SetStringSelection(djsty)
 
             self.wids[f'trace_{i}'] = {'color': col, 'alpha': alp, 'fill': ffil,
                                        'style': sty, 'linewidth': thk,
                                        'marker': sym, 'markersize': msz,
                                        'zorder': zor, 'drawstyle': jsty}
-
 
             sizer.Add(lab.label,(irow,0),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)
             sizer.Add(lab, (irow,1),(1,1),wx.ALIGN_LEFT|wx.ALL, 4)

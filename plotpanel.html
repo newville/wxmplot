@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=9986cd63"></script>
+    <script src="_static/documentation_options.js?v=3dfe497a"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -761,6 +761,21 @@ a <code class="xref py py-class docutils literal notranslate"><span class="pre">
 <dd><p>reset the configuration to default settings.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="plotpanel.get_config">
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.get_config" title="Link to this definition">¶</a></dt>
+<dd><p>get plot configuration data as a dictionary.  This can be saved to
+a file in YAML format using the <code class="docutils literal notranslate"><span class="pre">Options-&gt;Save</span> <span class="pre">Configuration</span></code> menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plotpanel.set_config">
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_config" title="Link to this definition">¶</a></dt>
+<dd><p>set plot configuration values, using keyword arguments matching the
+dictionary from <a class="reference internal" href="#plotpanel.get_config" title="plotpanel.get_config"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_config()</span></code></a>. This can also be done by
+reading a YAML file using the <code class="docutils literal notranslate"><span class="pre">Options-&gt;Load</span> <span class="pre">Configuration</span></code> menu.</p>
+</dd></dl>
+
 </section>
 <section id="module-plotframe">
 <span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Link to this heading">¶</a></h2>
@@ -872,6 +887,8 @@ customization.</p>
 <li><a class="reference internal" href="#plotpanel.save_figure"><code class="docutils literal notranslate"><span class="pre">save_figure()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.get_config"><code class="docutils literal notranslate"><span class="pre">get_config()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_config"><code class="docutils literal notranslate"><span class="pre">set_config()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
@@ -941,7 +958,7 @@ customization.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-07-17, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-08-20, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

@@ -466,6 +466,17 @@ this function to parse and interpret the date strings used.
 
    reset the configuration to default settings.
 
+.. method:: get_config()
+
+   get plot configuration data as a dictionary.  This can be saved to
+   a file in YAML format using the ``Options->Save Configuration`` menu.
+
+.. method:: set_config()
+
+   set plot configuration values, using keyword arguments matching the
+   dictionary from :meth:`get_config`. This can also be done by
+   reading a YAML file using the ``Options->Load Configuration`` menu.
+
 
 
 

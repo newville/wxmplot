@@ -376,7 +376,8 @@ class PlotConfig:
         """save json-ifiable dict of current configuration options
         to self.configdict
         """
-        cnf = {}
+        winsize = self.panel.parent.GetSize()
+        cnf = {'window_size': [winsize[0], winsize[1]]}
         for attr in CONFIG_SAVE:
             val = getattr(self, attr)
             if attr in ('legendfont', 'labelfont', 'titlefont'):
@@ -444,6 +445,8 @@ class PlotConfig:
         self.enable_grid(show=self.show_grid, delay_draw=True)
         self.draw_legend(delay_draw=True)
         self.set_legend_location(self.legend_loc, self.legend_onaxis)
+        if 'window_size' in conf:
+            self.panel.parent.SetSize(conf['window_size'])
         self.canvas.draw()
 
     def reset_lines(self):

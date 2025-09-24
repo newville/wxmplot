@@ -54,7 +54,7 @@ dependencies = [
    "pyshortcuts>=1.9.5"]
 
 [project.urls]
-Hoempage = "https://github.com/newville/wxmplot"
+Homepage = "https://github.com/newville/wxmplot"
 Documentation = "https://newville.github.io/wxmplot"
 Tracker = "https://github.com/newville/wxmplot/issues"
 

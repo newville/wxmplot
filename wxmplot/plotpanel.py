@@ -136,7 +136,7 @@ class PlotPanel(BasePanel):
               xlog_scale=None, ylog_scale=None, y2log_scale=None, y3log_scale=None,
               y4log_scale=None, grid=None, xmin=None,
               xmax=None, ymin=None, ymax=None, color=None, style=None,
-              alpha=None, fill=False, drawstyle=None, linewidth=2, marker=None,
+              alpha=None, fill=False, drawstyle=None, linewidth=None, marker=None,
               markersize=None, refresh=True, show_legend=None,
               legend_loc='best', legend_on=True, delay_draw=False,
               bgcolor=None, framecolor=None, gridcolor=None, textcolor=None,
@@ -194,8 +194,12 @@ class PlotPanel(BasePanel):
                 xdata = datestr2num(xdata)
             if timezone is not None:
                 self.dates_tzinfo = timezone
+        if linewidth is None:
+            try:
+                linewidth = conf.traces[0].linewidth
+            except:
+                linewidth = 2.0
 
-        linewidth = ifnot_none(linewidth, 2)
         conf.viewpad = ifnot_none(viewpad, conf.viewpad)
 
         if xlabel is not None:

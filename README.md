@@ -1,5 +1,5 @@
 [![Version](https://img.shields.io/pypi/v/wxmplot.svg)](https://pypi.org/project/wxmplot)
-[![Downloads](https://pepy.tech/badge/wxmplot/month)](https://pepy.tech/project/wxmplot)
+[![Downloads](https://img.shields.io/pypi/dm/wxmplot.svg)](https://pypistats.org/packages/wxmplot)
 
 
 wxmplot provides advanced `wxPython`_ widgets for plotting and image display
@@ -33,13 +33,13 @@ and better customizations than matplotlib's basic navigation toolbars.
 
 The main widigets provided by wxmplot are:
 
-	  PlotPanel: wx.Panel for basic 2-D line plots (roughly matplotlib `plot`)
+      PlotPanel: wx.Panel for basic 2-D line plots (roughly matplotlib `plot`)
 
-	  PlotFrame: wx.Frame containing a PlotPanel
+      PlotFrame: wx.Frame containing a PlotPanel
 
-	  ImagePanel: wx.Panel for image display (roughly matplotlib `imshow`)
+      ImagePanel: wx.Panel for image display (roughly matplotlib `imshow`)
 
-	  ImageFrame: wx.Frame containing ImagePanel
+      ImageFrame: wx.Frame containing ImagePanel
 
 2D Line plotting with PlotPanel  /PlotFrame
 ------------------------------------
@@ -49,10 +49,10 @@ The main widigets provided by wxmplot are:
    1. display x, y coordinates (left-click)
    2. zoom in on a particular region of the plot (left-drag)
    3. customize titles, labels, legend, color, linestyle, marker,
-	  and whether a grid is shown.  A separate configuration frame
-	  is used to set these attributes.
+      and whether a grid is shown.  A separate configuration frame
+      is used to set these attributes.
    4. save high-qualiy plot images (as PNGs), copy to system
-	  clipboard, or print.
+      clipboard, or print.
 
 For the programmer, these provide simple plotting methods:
 
@@ -60,19 +60,19 @@ For the programmer, these provide simple plotting methods:
 
 Some of the optional arguments (all keyword/values) include
 
-	  color='Blue'       for any X11 color name, (rgb) tuple, or '#RRGGBB'
-	  style='solid'      'solid,'dashed','dotted','dot-dash'
-	  linewidth=2      integer 0 (no line) to 10
-	  marker='None'  any of a wide range of marker symbols
-	  markersize=8    integer 0 to 30
-	  xlabel=' '           label for X axis
-	  ylabel=' '           label for Y axis
-	  title=' '              title for top of PlotFrame
-	  grid=True         boolean for whether to show grid.
+      color='Blue'       for any X11 color name, (rgb) tuple, or '#RRGGBB'
+      style='solid'      'solid,'dashed','dotted','dot-dash'
+      linewidth=2      integer 0 (no line) to 10
+      marker='None'  any of a wide range of marker symbols
+      markersize=8    integer 0 to 30
+      xlabel=' '           label for X axis
+      ylabel=' '           label for Y axis
+      title=' '              title for top of PlotFrame
+      grid=True         boolean for whether to show grid.
 
   oplot(x,y):  plot data x,y, on same plot as current data
 
-	 with optional arguments as plot()
+     with optional arguments as plot()
 
    clear():      clear plot
 

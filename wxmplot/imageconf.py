@@ -149,8 +149,11 @@ class ImageConfig:
             self.image.set_cmap(curr_cmap)
 
         if hasattr(self, 'highlight_areas') and hasattr(curr_cmap, '_lut'):
-            for area, mask in self.highlight_areas:
+            for area, mask, text, label in self.highlight_areas:
                 col = self.get_highlight_color(mask, curr_cmap)
+                area.set(edgecolor=col)
+                text.set(color=col)
+
                 for w in area.labelTexts:
                     w.set_color(col)
                 try:
@@ -158,7 +161,6 @@ class ImageConfig:
                         w.set_edgecolor(col)
                 except AttributeError:
                     pass
-                area.set(edgecolor=col)
 
     def get_highlight_color(self, mask, cmap):
         """get color for highlight to provide decent contrast with data"""
@@ -173,7 +175,6 @@ class ImageConfig:
                        int(rgb[0]+190)%255,
                        int(rgb[0]+50)%255]
         return '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-
 
     def flip_vert(self):
         "flip image along vertical axis (up/down)"

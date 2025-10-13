@@ -231,9 +231,7 @@ class ImagePanel(BasePanel):
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)
             ax.set_position(figpos)
 
-
-
-    def add_highlight_area(self, mask, label=None, col=0):
+    def add_highlight_area(self, mask, label=None, col=0, use_label_index=False):
         """add a highlighted area -- outline an arbitrarily shape --
         as if drawn from a Lasso event.
         This takes a mask, which should be a boolean array of the
@@ -242,19 +240,28 @@ class ImagePanel(BasePanel):
         patch = mask * np.ones(mask.shape) * 0.9
         cmap = self.conf.cmap[col]
         area = self.axes.contour(patch, cmap=cmap, levels=[0, 1])
-        self.conf.highlight_areas.append((area, mask))
+        bmask = np.where(mask)
+        if len(bmask[0]) == 1:
+            x = int(bmask[1])
+            y = int(bmask[0])
+        else:
+            x = int(bmask[1].mean())
+            y = int(bmask[0].mean())
+        if use_label_index:
+            clabel = f'{1+len(self.conf.highlight_areas)}'
+        else:
+            clabel = label
+
         if not hasattr(cmap, '_lut'):
             try:
                 cmap._init()
             except:
                 pass
-        if hasattr(cmap, '_lut'):
-            col = self.conf.get_highlight_color(mask, cmap)
-        if label is not None:
-            def fmt(*args, **kws):
-                return label
-            self.axes.clabel(area, fontsize=9, fmt=fmt,
-                             colors=col, rightside_up=True)
+
+        col = self.conf.get_highlight_color(mask, cmap)
+        htext = self.axes.text(x, y, clabel, color=col)
+
+        self.conf.highlight_areas.append((area, mask, htext, label))
 
         if col is not None:
             if hasattr(area, 'collections'):
@@ -265,7 +272,7 @@ class ImagePanel(BasePanel):
 
     def clear_highlight_areas(self):
         """clear all highlighted areas"""
-        for area, mask in self.conf.highlight_areas:
+        for area, mask, text, label in self.conf.highlight_areas:
             if hasattr(area, 'collections'):
                 for w in area.collections:
                     w.remove()
@@ -273,9 +280,10 @@ class ImagePanel(BasePanel):
                 for w in area.labelTexts:
                     w.remove()
             area.remove()
+            text.remove()
 
         self.conf.highlight_areas = []
-        self.canvas.redraw()
+        self.canvas.draw()
 
     def set_viewlimits(self, axes=None):
         """ update xy limits of a plot"""

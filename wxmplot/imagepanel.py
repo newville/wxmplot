@@ -231,6 +231,8 @@ class ImagePanel(BasePanel):
             figpos = ax.get_subplotspec().get_position(self.canvas.figure)
             ax.set_position(figpos)
 
+
+
     def add_highlight_area(self, mask, label=None, col=0):
         """add a highlighted area -- outline an arbitrarily shape --
         as if drawn from a Lasso event.
@@ -240,17 +242,17 @@ class ImagePanel(BasePanel):
         patch = mask * np.ones(mask.shape) * 0.9
         cmap = self.conf.cmap[col]
         area = self.axes.contour(patch, cmap=cmap, levels=[0, 1])
-        self.conf.highlight_areas.append(area)
+        self.conf.highlight_areas.append((area, mask))
         if not hasattr(cmap, '_lut'):
             try:
                 cmap._init()
             except:
                 pass
         if hasattr(cmap, '_lut'):
-            rgb  = [int(i*240)^255 for i in cmap._lut[0][:3]]
-            col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+            col = self.conf.get_highlight_color(mask, cmap)
         if label is not None:
-            def fmt(*args, **kws): return label
+            def fmt(*args, **kws):
+                return label
             self.axes.clabel(area, fontsize=9, fmt=fmt,
                              colors=col, rightside_up=True)
 
@@ -263,7 +265,7 @@ class ImagePanel(BasePanel):
 
     def clear_highlight_areas(self):
         """clear all highlighted areas"""
-        for area in self.conf.highlight_areas:
+        for area, mask in self.conf.highlight_areas:
             if hasattr(area, 'collections'):
                 for w in area.collections:
                     w.remove()
@@ -274,7 +276,6 @@ class ImagePanel(BasePanel):
 
         self.conf.highlight_areas = []
         self.canvas.redraw()
-
 
     def set_viewlimits(self, axes=None):
         """ update xy limits of a plot"""

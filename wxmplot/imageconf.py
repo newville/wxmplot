@@ -123,7 +123,6 @@ class ImageConfig:
         self._yfmt = None
         self.set_formatters()
 
-
     def set_colormap(self, name, reverse=False, icol=0):
         self.cmap_reverse = reverse
         if reverse and not name.endswith('_r'):
@@ -150,13 +149,31 @@ class ImageConfig:
             self.image.set_cmap(curr_cmap)
 
         if hasattr(self, 'highlight_areas') and hasattr(curr_cmap, '_lut'):
-            rgb  = [int(i*240)^255 for i in curr_cmap._lut[0][:3]]
-            col  = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
-            for area in self.highlight_areas:
+            for area, mask in self.highlight_areas:
+                col = self.get_highlight_color(mask, curr_cmap)
                 for w in area.labelTexts:
                     w.set_color(col)
-                for w in area.collections:
-                    w.set_edgecolor(col)
+                try:
+                    for w in area.collections:
+                        w.set_edgecolor(col)
+                except AttributeError:
+                    pass
+                area.set(edgecolor=col)
+
+    def get_highlight_color(self, mask, cmap):
+        """get color for highlight to provide decent contrast with data"""
+        rgb = [210, 190, 50]
+        if self.data is not None:
+            drange = np.ptp(self.data) + 1.e-9
+            dmask = np.where(abs(mask * self.data) > (drange*1.e-9))
+            dcolor = cmap(self.data[dmask].mean()/(drange))
+            rgb = [int(i*240)^255 for i in dcolor[:3]]
+            if rgb[0] == rgb[1] and rgb[1] == rgb[2]: # greyscale
+                rgb = [int(rgb[0]+210)%255,
+                       int(rgb[0]+190)%255,
+                       int(rgb[0]+50)%255]
+        return '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+
 
     def flip_vert(self):
         "flip image along vertical axis (up/down)"

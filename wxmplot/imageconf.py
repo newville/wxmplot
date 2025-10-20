@@ -167,6 +167,8 @@ class ImageConfig:
         rgb = [210, 190, 50]
         if self.data is not None:
             drange = np.ptp(self.data) + 1.e-9
+            if len(self.data.shape) == 3 and len(mask.shape) == 2:
+                mask.shape = (mask.shape[0], mask.shape[1], 1)
             dmask = np.where(abs(mask * self.data) > (drange*1.e-9))
             dcolor = cmap(self.data[dmask].mean()/(drange))
             rgb = [int(i*240)^255 for i in dcolor[:3]]

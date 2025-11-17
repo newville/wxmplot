@@ -5,10 +5,11 @@ wxmplot PlotPanel: a wx.Panel for line plotting, using matplotlib
 from functools import partial
 from datetime import datetime
 from pathlib import Path
+from copy import deepcopy
 import yaml
 import wx
 
-from numpy import nonzero, where
+from numpy import nonzero, where, arange
 import matplotlib as mpl
 from matplotlib.dates import date2num, datestr2num, num2date
 from matplotlib.dates import AutoDateLocator
@@ -87,7 +88,7 @@ class PlotPanel(BasePanel):
         self.use_dates = False
         self.dates_style = None
 
-    def plot(self, xdata, ydata, title=None, xlabel=None, ylabel=None,
+    def plot(self, xdata, ydata=None, title=None, xlabel=None, ylabel=None,
              y2label=None, y3label=None, y4label=None, use_dates=False,
              dates_style=None, yaxes=1, side=None, **kws):
         """
@@ -131,7 +132,7 @@ class PlotPanel(BasePanel):
         return self.oplot(xdata, ydata, yaxes=yaxes, **kws)
 
 
-    def oplot(self, xdata, ydata, label=None, xlabel=None, ylabel=None,
+    def oplot(self, xdata, ydata=None, label=None, xlabel=None, ylabel=None,
               y2label=None, y3label=None, y4label=None, title=None, dy=None,
               xlog_scale=None, ylog_scale=None, y2log_scale=None, y3log_scale=None,
               y4log_scale=None, grid=None, xmin=None,
@@ -148,6 +149,10 @@ class PlotPanel(BasePanel):
         """
         basic plot method, adding to an existing display
         """
+        if ydata is None:
+            ydata = deepcopy(xdata)
+            xdata = arange(len(ydata))
+
         self.cursor_mode = 'zoom'
         conf = self.conf
         conf.plot_type = 'lineplot'

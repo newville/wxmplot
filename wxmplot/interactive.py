@@ -61,8 +61,6 @@ def get_wxapp(redirect=False, clearSigInt=True):
 
     Returns:
         a wx.App instance
-
-
     """
     global wxapp
     if wxapp is None:
@@ -94,7 +92,7 @@ class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
         self.MainLoop()
 
 
-def __exit_wx_mainloop__():
+def __finish_wx_mainloop__():
     """run wxApp mainloop, allowing widget interaction
     until all plotting and image image windows are closed.
     Note that this should not be necessary to run explicitly,
@@ -103,11 +101,12 @@ def __exit_wx_mainloop__():
     time.sleep(0.05)
     try:
         app = get_wxapp()
-        app.Destroy()
+        app.MainLoop()
     except SystemExit:
         pass
 
-atexit.register(__exit_wx_mainloop__)
+if not ipython:
+    atexit.register(__finish_wx_mainloop__)
 
 def set_theme(theme):
     """set plotting theme by name with a theme name

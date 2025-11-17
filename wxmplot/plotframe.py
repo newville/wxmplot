@@ -12,12 +12,15 @@ class PlotFrame(BaseFrame):
     """
     MatPlotlib 2D plot as a wx.Frame, using PlotPanel
     """
-    def __init__(self, parent=None, title=None, with_data_process=True, **kws):
+    def __init__(self, parent=None, title=None, with_data_process=True,
+                 theme=None, **kws):
         if title is None:
             title = 'Line Plot Frame'
         BaseFrame.__init__(self, parent=parent, title=title,
                            with_data_process=with_data_process, **kws)
         self.BuildFrame()
+        if theme is not None:
+            self.panel.conf.set_theme(theme)
 
     def get_figure(self):
         """return MPL plot figure"""

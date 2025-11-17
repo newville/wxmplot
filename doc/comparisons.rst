@@ -92,13 +92,17 @@ gives you access to the underlying `matplotlib` objects so that you can add
 more complex components and manipulate the plot as needed, assuming that you
 know the `matplotlib` programming interface.
 
-In :ref:`ch_overview`, a brief comparison of :mod:`matplotlib.pyplot` and
-:mod:`wxmplot.plot` is given and will not repeated here.  From the point of
-view of "brevity" and "beauty", these are approximately equal.  The
-`matplotlib` API is certainly much more common, and deliberately mimics the
-plotting functions in `Matlab`, so will be familiar to many people.
-mod:`wxmplot.plot` puts a lot more arguments into a small number of function
-calls.
+In :ref:`ch_overview`, a brief comparison of :mod:`matplotlib.pyplot`
+and :mod:`wxmplot.plot` is given and will not repeated here.  From the
+point of view of "brevity" and "beauty", these are approximately
+equal.  The `matplotlib` API is certainly much more common, and
+deliberately mimics the plotting functions in `Matlab`, so will be
+familiar to many people.  :mod:`wxmplot.plot` puts a lot more
+arguments into a small number of function calls, which can be
+convenient but also somewhat harder to remember what all the options
+are.  The nature of plotting means there are many potential optional
+arguments, and how those are accessed almostly certainly means a large
+number of methods or keyword arguments.
 
 Plots made with `matplotlib.pyplot` have limited interactivity and
 customizability after the plot is displayed with its Navigation Toolbar.  The
@@ -178,7 +182,7 @@ and give a plot of
        :width: 75%
 
 
-As written, there is not interactivity, though zooming can be enabled. The need
+As written here, there is not interactivity, though zooming can be enabled. The need
 to create a subclass of a `Frame` and initiate a wxApp adds a fair amount of
 boiler-plate code which make it painful for simple scripts or exploratory data
 analysis.
@@ -190,8 +194,8 @@ Comparison with Plotly
 The Plotly library includes a Python interface (https://plotly.com/python/)
 that is very good and renders interactive plots into a web browser.  This is
 very useful for web-based applications and gives good looking and interactive
-plots into a local or remote web browser. To be clear, I use plotly for more a
-few web applications.  Then again, getting information back from the
+plots into a local or remote web browser. To be clear, I use plotly for multiple
+web applications.  Then again, getting information back from the
 web-browser to an application or script is somewhat challenging.
 
 Many of the Plotly examples make assumptions about using Pandas dataframes,

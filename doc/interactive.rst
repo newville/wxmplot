@@ -9,63 +9,74 @@ Interactive wxmplot displays
 The :ref:`ch_overview` describes the main features of `wxmplot` and shows
 how `wxmplot` plotting functions give a richer level of customization and
 interactivity to the end user than is available from the standard
-`matplotlib.pyplot`.  Here, the emphasis is on the immediacy of the
-interactivity of the data displays especially when used from interactive
-sessions.  An important feature of the :func:`plot`, :func:`imshow` and
-other functions of the :mod:`interactive` module is that they display their
-results immediately, without having to execute a `show()` method to render
-the display. For interactive work from the Python (or one of the Jupyter
-consoles or notebook) prompt, the displayed windows do not block the Python
-session.  This means that not only can you zoom in, change themes, etc from
-the Plot window, you can can also easily plot other functions or data,
-either on the same window or in a new top-level plotting window.
+`matplotlib.pyplot` when run from a script or program.
 
-While `wxmplot` provides :func:`plot`, :func:`imshow` and other functions
-that are roughly equivalent to the functions from `matplotlib.pyplot`, the
-functions are here not exact drop-in replacements for the `pyplot` functions.
-For one thing, there are many missing plot types and functions.  For another,
-the syntax for specifying options is different.  For example, `wxmplot`
-prefers a long list of keyword arguments to :func:`plot` over a series of
-separate function calls.
+Here, the emphasis is on the immediacy of the interactivity of the
+data displays especially when used from interactive sessions,
+including plain Python REPL, IPython/Jupyter consoles or Jupyter
+Notebooks.
+
+An important feature of the :func:`plot`, :func:`imshow` and other
+functions of the :mod:`interactive` module is that they display their
+results immediately, without having to execute a `show()` method to
+render the display. For interactive work from the Python REPL or one of
+the Jupyter consoles or notebook prompt, the displayed windows do not
+block the Python session.  This means that not only can you zoom in,
+change themes, etc from the Plot window, you can can also easily plot
+other functions or data, either on the same window or in a new
+top-level plotting window.
+
+For Jupyter Notebooks, it should be noted that while other plotting
+libraries (matplotlib, plotly, and bokeh) will show graphics in-line,
+as part of the Notebook, wxmplot will use separate display windows,
+outside of the browser.  While the interactive plots are then not
+saved directly in the Notebook, the code to generate the plots can be
+re-run. And images of the plot results can be copied and pasted as
+Markdown cells.
+
 
 The functions in the :mod:`interactive` are described in detail below.
+While the functions :func:`plot`, :func:`imshow` are roughly
+equivalent to those in `matplotlib.pyplot`, they are not exact drop-in
+replacements for the `pyplot` functions.
 
 
-Plotting in an interactive session
+Plotting in an interactive session or Jupyter
 ===========================================================
 
 
-As an example using :mod:`wxmplot.interactive` in a Jupyter-qtconsole
+As an example using :mod:`wxmplot.interactive` in a Jupyter console
 session might look like this::
 
-    Jupyter QtConsole 4.5.4
-    Python 3.7.4 (default, Aug 13 2019, 20:35:49)
+    ~> jupyter console
+    Jupyter console 6.6.3
+
+    Python 3.13.9 | packaged by conda-forge | (main, Oct 22 2025, 23:31:04) [Clang 19.1.7 ]
     Type 'copyright', 'credits' or 'license' for more information
-    IPython 7.7.0 -- An enhanced Interactive Python. Type '?' for help.
+    IPython 9.7.0 -- An enhanced Interactive Python. Type '?' for help.
+    Tip: Use `%timeit` or `%%timeit`, and the  `-r`, `-n`, and `-o`
+    option    s to easily profile your code.
 
     In [1]: import numpy as np
-
     In [2]: import wxmplot.interactive as wi
-
     In [3]: x = np.linspace(0, 20, 101)
-
     In [4]: wi.plot(x, np.sin(x), xlabel='t (sec)')
-    Out[4]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
+    Out[4]: <wxmplot.interactive.PlotDisplay at 0x11ef74290>
 
     In [5]:
+
 
 At this point a plot like this will be displayed:
 
 .. image:: images/interactive1.png
    :width: 50 %
 
-As with using `%matplotlib notebook` in a Jupyter notebook, the `wxmplot`
-display can be zoomed in and out, but as shown in :ref:`ch_overview`, it
-can also be configured and updated in many more ways.
+The `wxmplot` display will have full interatvity and can be configured
+after it is drown.
 
-For example, from the Plot Configuration window we could change the theme
-to 'Seaborn' and set the label for this trace to be 'sine'.  Then from the
-Jupyter console we can continue::
+For example, from the Plot Configuration window we could change the
+theme to 'Seaborn' and set the label for this trace to be 'sine'.
+Then from the Jupyter console we can continue::
 
     In [5]: wi.plot(x, np.cos(1.5*x), label='cosine', show_legend=True)
     Out[5]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
@@ -119,12 +130,13 @@ Using the :mod:`interactive` functions from a script
 
 When using the :mod:`interactive` functions by running a script in a
 non-interactive way, the display will still appear. It does not block
-further execution of the script and the display does not disappear when the
-script is complete.  Instead, the plots and images will remain displayed
-and fully operational until all windows have been closed or until the
-running script is explicitly closed with Crtl-C.  That means that you can
-add `wi.plot()` and `wi.imshow()` to your short- or long-running scripts
-and the plots will be displayed until you no longer want to use them.
+further execution of the script and the display does not disappear
+when the script is complete.  Instead, the plots and images will
+remain displayed and fully operational until all windows have been
+closed or until the running script is explicitly closed (say, with
+Ctrl-D).  That means that you can add `wi.plot()` and `wi.imshow()` to
+your short- or long-running scripts and the plots will be displayed
+until you no longer want to use them.
 
 
 Line Plotting with :func:`plot` and related functions

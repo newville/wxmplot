@@ -47,7 +47,7 @@ html_theme = 'bizstyle'
 html_static_path = ['_static']
 html_sidebars = {
   'index': ["indexsidebar.html",  "sourcelink.html", "searchbox.html"],
-  "**": [ "localtoc.html",  "relations.html", "sourcelink.html", "searchbox.html"]
+  "*": [ "localtoc.html",  "relations.html", "sourcelink.html", "searchbox.html"]
 }
 
 html_domain_indices = False

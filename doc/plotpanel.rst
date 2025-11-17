@@ -313,20 +313,21 @@ this function to parse and interpret the date strings used.
 
 
 
-
 :class:`PlotPanel` methods
 =============================================
 
 
-.. method:: plot(x, y, **kws)
+.. method:: plot(x, y=None, **kws)
 
    Draw a plot of the numpy arrays *x* and *y*, erasing any existing plot.  The
    displayed curve for these data is called a *trace*.  The :meth:`plot` method
    has many optional parameters, all using keyword/value argument.  Since most
    of these are shared with the :meth:`oplot` method, the full set of parameters
-   is given in :ref:`Table of Plot Arguments <plotopt_table>`
+   is given in :ref:`Table of Plot Arguments <plotopt_table>`.   Note
+   that if *y* is not given, then the values for *x* will be used as
+   *y*, and *x* will be set to the index of that array (`numpy.arange(len(y))`).
 
-.. method:: oplot(x, y, **kws)
+.. method:: oplot(x, y=None, **kws)
 
    Draw a plot of the numpy arrays *x* and *y*, overplotting any existing
    plot, so that both traces are visible.

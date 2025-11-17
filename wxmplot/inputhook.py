@@ -179,7 +179,7 @@ def inputhook_darwin():
                 ptime /= 10
             eloop.run(poll_time=ptime)
     except KeyboardInterrupt:
-        print(" See KeyboardInterrupt from darwin hook")
+        # print(" See KeyboardInterrupt from darwin hook")
         if callable(ON_INTERRUPT):
             ON_INTERRUPT()
     return 0

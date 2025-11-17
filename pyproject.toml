@@ -35,20 +35,20 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13"
+    "Programming Language :: Python :: 3.14"
     ]
 
 dependencies = [
    "wxPython>=4.2.0",
    "wxutils>=0.3.3",
    "darkdetect",
-   "matplotlib>=3.6.0",
+   "matplotlib>=3.9.0",
    "pytz",
-   "numpy>=1.22",
+   "numpy>=1.26",
    "Pillow>=7.0",
    "pyyaml>=5.0",
    "pyshortcuts>=1.9.5"]

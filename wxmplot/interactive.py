@@ -39,6 +39,17 @@ __all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
            'plot_marker', 'plot_axhline', 'plot_axvline', 'hist',
            'contour', 'DEFAULT_THEME']
 
+
+# test whether this code is running in an IPython/Jupyter environment.
+# if so, try to set the "IPython magic" of "%gui wx".
+try:
+    from IPython import get_ipython
+    ipython = get_ipython()
+    if ipython is not None:
+        ipython.find_magic('gui')('wx')
+except Exception:
+    ipython = None
+
 wxapp = None
 def get_wxapp(redirect=False, clearSigInt=True):
     """get the wx App
@@ -83,18 +94,20 @@ class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
         self.MainLoop()
 
 
-@atexit.register
-def __wxmainloop__():
+def __exit_wx_mainloop__():
     """run wxApp mainloop, allowing widget interaction
     until all plotting and image image windows are closed.
     Note that this should not be necessary to run explicitly,
     as it is registered to run when Python exits
     """
+    time.sleep(0.05)
     try:
-        get_wxapp().MainLoop()
+        app = get_wxapp()
+        app.Destroy()
     except SystemExit:
         pass
 
+atexit.register(__exit_wx_mainloop__)
 
 def set_theme(theme):
     """set plotting theme by name with a theme name
@@ -299,6 +312,8 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
     win = max(1, min(MAX_WINDOWS, int(abs(win))))
     if win in PLOT_DISPLAYS:
         display = PLOT_DISPLAYS[win]
+        if theme in available_themes():
+            display.panel.conf.set_theme(theme)
     else:
         display = PlotDisplay(window=win, size=size, theme=theme,
                               wintitle=wintitle)
@@ -328,14 +343,14 @@ def get_image_window(win=1, size=None, wintitle=None):
 
     return display
 
-def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
+def plot(x,y=None, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
     """plot(x, y, win=1, new=False, ...)
 
     Plot trace of x, y arrays in a PlotFrame
 
     Args:
-        x (array-like):  ordinate values
-        y (array-like):  abscissa values (x and y must be same size!)
+        x (array-like):  ordinate values [0]
+        y (array-like, None):  abscissa values (x and y must be same size!) [0]
         dy (array-like): array for error bars in y (must be same size as y!)
         new (bool): whether to start a new plot [False]
         win (int): index of Plot Window [1]
@@ -381,6 +396,8 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         plotter, a PlotFrame
 
     Notes:
+        0. If `y` is `None` (or not provided), the array for `x` becomes `y`,
+           and `x` will be set to the array index: `np.arange(len(y))`
         1. colors can be names such as 'red' or hex strings '#RRGGBB'.
            by default, they are set by the theme
         2. styles can be one of 'solid', 'short dashed', 'dash-dot',
@@ -407,7 +424,7 @@ def plot(x,y, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
         plotter.oplot(x, y, **kws)
     return plotter
 
-def newplot(x, y, win=1, wintitle=None, **kws):
+def newplot(x, y=None, win=1, wintitle=None, **kws):
     """newplot(x, y, ...)
 
     Plot trace of x, y arrays in a PlotFrame, clearing any

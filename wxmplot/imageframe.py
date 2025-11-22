@@ -354,7 +354,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
 """
 
-    def __init__(self, parent=None, size=(750, 625), lasso_callback=None,
+    def __init__(self, parent=None, size=(800, 650), lasso_callback=None,
                  mode='intensity', show_xsections=False,
                  cursor_labels=None, output_title='Image', subtitles=None,
                  user_menus=None, title='Image Display Frame', **kws):
@@ -387,7 +387,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         self.bgcol = rgb2hex(self.GetBackgroundColour()[:3])
 
         self.panel = ImagePanel(self, data_callback=self.onDataChange,
-                                size=(650, 725), dpi=100,
+                                size=(650, 650), dpi=100,
                                 lasso_callback=self.onLasso,
                                 output_title=self.output_title)
 
@@ -414,6 +414,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
 
         mainsizer.Add(self.panel,  1, wx.ALL|wx.GROW)
         self.SetSizer(mainsizer)
+        if size is not None:
+            self.SetSize(size)
         self.SetSize(self.GetBestVirtualSize())
 
     def display(self, img, title=None, colormap=None, style='image',
@@ -526,6 +528,8 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         # file menu
         mfile = self.Build_FileMenu(extras=(('Save Image of Colormap',
                                      'Save Image of Colormap',
+
+
                                       self.onCMapSave),))
 
         # image menua

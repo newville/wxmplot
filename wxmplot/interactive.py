@@ -274,7 +274,7 @@ class PlotDisplay(PlotFrame):
 
 
 class ImageDisplay(ImageFrame):
-    def __init__(self, window=1, size=(800, 600), theme=None,
+    def __init__(self, window=1, size=(800, 650), theme=None,
                  wintitle=None, **kws):
         get_wxapp()
         if wintitle is None:
@@ -290,9 +290,10 @@ class ImageDisplay(ImageFrame):
         self.window = int(window)
         if self.window not in IMG_DISPLAYS:
             IMG_DISPLAYS[self.window] = self
-
-        if size is not None:
-            self.SetSize(size)
+        if size is None:
+            size = (800, 650)
+        self.SetSize(size)
+        self.SetSize(self.GetBestVirtualSize())
 
     def onExit(self, o, **kw):
         if self.window in IMG_DISPLAYS:
@@ -692,7 +693,7 @@ def hist(x, bins=10, win=1, new=False, size=None,
     return out
 
 def imshow(map, y=None, x=None, colormap=None, win=1,
-           wintitle=None, size=None, contrast_level=0.1, **kws):
+           wintitle=None, size=(800, 600), contrast_level=0.1, **kws):
     """imshow(map, ...)
 
     Display an 2-D array of intensities as a false-color map

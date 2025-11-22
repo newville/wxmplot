@@ -69,7 +69,18 @@ class PlotFrame(BaseFrame):
         "clear plot"
         self.panel.clear()
 
+    def get_config(self):
+        "get plot configuration dictionary"
+        return self.panel.get_config()
+
+    def set_config(self, **kws):
+        """set plot configuration with keyword arguments
+        corresponding to the dictionary returned from get_config
+        """
+        self.panel.set_config(**kws)
+
     def reset_config(self):
+        "reset the plot configuration"
         self.panel.reset_config()
 
     def update_line(self, t, x, y, **kw):

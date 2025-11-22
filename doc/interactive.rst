@@ -166,6 +166,8 @@ More details of Plot Options are given in
 .. autofunction:: plot_axvline
 
 
+
+
 Displaying images with :func:`imshow` and :func:`contour`
 ==============================================================
 
@@ -184,17 +186,28 @@ Functions for working with the interactive windows
 
 .. autofunction:: get_plot_window
 
-The returned :class:`wx.PlotFrame` will have the heirarchy of attributes
-described in the table below.  This allows access to the underlying
-matplotlib Axes and Canvas objects.
+The returned :class:`wx.PlotFrame` will have the many attributes and
+methds, with some of the most useful described in the table below.
+This include access to the underlying matplotlib Axes and Canvas
+objects.
 
 .. _plotframe_objects_table:
 
-**Table of PlotFrame attributes**
+**Table of PlotFrame attributes and methods**
 
   +-----------------+-----------------------------------------------------+
   | name            |  object type                                        |
   +=================+=====================================================+
+  | .cursor_history | [(x, y, timestamp), ...] of cursor selections       |
+  +-----------------+-----------------------------------------------------+
+  | .save_figure()  | method to save image to a png file                  |
+  +-----------------+-----------------------------------------------------+
+  | .configure      | method to show Configuration window                 |
+  +-----------------+-----------------------------------------------------+
+  | .get_config     | method to return configuration dictionary           |
+  +-----------------+-----------------------------------------------------+
+  | .set_config     | method to update configuration with keyword/values  |
+  +-----------------+-----------------------------------------------------+
   | .panel          | wxmplot.PlotPanel, a wx.Panel                       |
   +-----------------+-----------------------------------------------------+
   | .panel.conf     | wxmplot.PlotConfig                                  |
@@ -205,6 +218,15 @@ matplotlib Axes and Canvas objects.
   +-----------------+-----------------------------------------------------+
   | .panel.canvas   | matplotlib.backends.backend_wxagg.FigureCanvasWxAgg |
   +-----------------+-----------------------------------------------------+
+
+Note that the `cursor_history` attribute will be a list of (`x`, `y`,
+`timestamp`) values with `x` and `y` being in "user coordinates,
+`timestamp` being the Unix timestamp for each even of pressing the
+left mouse button on the plot. The most recent event will be in
+`cursor_history[0]`, and the list will be in descending time
+order. Only the most recent 100 cursor events will be retained.
+
+Each new plot will clear the `cursor_history`.
 
 .. autofunction:: get_image_window
 

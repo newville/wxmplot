@@ -172,7 +172,7 @@ class PlotDisplay(PlotFrame):
         self.panel.cursor_callback = self.onCursor
         self.panel.cursor_mode = 'zoom'
         self.window = int(window)
-        self.cursor_hist = []
+        self.cursor_history = []
         if window not in PLOT_DISPLAYS:
             PLOT_DISPLAYS[window] = self
 
@@ -182,6 +182,17 @@ class PlotDisplay(PlotFrame):
         self.data_polltime  = data_polltime
         self.data_generator = data_generator
         wx.CallAfter(self.start_poller)
+
+    def save_figure(self, fname=None, dpi=600):
+      """save image to a png file
+
+      Arguments
+      ---------
+      fname  str or None  name of file, defaulting to Plot Panel's output_title
+      """
+      if fname is None:
+        fname = self.panel.output_title
+      self.panel.fig.savefig(fname, dpi=dpi)
 
     def set_data_generator(self, data_generator, polltime=25):
         """set data generating function and polltime for live updates
@@ -247,7 +258,7 @@ class PlotDisplay(PlotFrame):
 
     def onCursor(self, x=None, y=None, message='',
                 marker_data=None, **kws):
-        self.cursor_hist.insert(0, (x, y, time.time()))
+        self.cursor_history.insert(0, (float(x), float(y), time.time()))
         rmsg = ''
         if marker_data is not None:
             try:
@@ -258,11 +269,12 @@ class PlotDisplay(PlotFrame):
             except:
                 pass
         self.write_message(rmsg, panel=0)
-        if len(self.cursor_hist) > MAX_CURSHIST:
-            self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
+        if len(self.cursor_history) > MAX_CURSHIST:
+            self.cursor_history = self.cursor_history[:MAX_CURSHIST]
+
 
 class ImageDisplay(ImageFrame):
-    def __init__(self, window=1, size=None, theme=None,
+    def __init__(self, window=1, size=(800, 600), theme=None,
                  wintitle=None, **kws):
         get_wxapp()
         if wintitle is None:
@@ -271,15 +283,16 @@ class ImageDisplay(ImageFrame):
         ImageFrame.__init__(self, parent=None, size=size, title=wintitle,
                             exit_callback=self.onExit, **kws)
 
-        if size is not None:
-            self.SetSize(size)
         self.Show()
         self.Raise()
-        self.cursor_hist = []
+        self.cursor_history = []
         self.panel.cursor_callback = self.onCursor
         self.window = int(window)
         if self.window not in IMG_DISPLAYS:
             IMG_DISPLAYS[self.window] = self
+
+        if size is not None:
+            self.SetSize(size)
 
     def onExit(self, o, **kw):
         if self.window in IMG_DISPLAYS:
@@ -287,9 +300,11 @@ class ImageDisplay(ImageFrame):
         self.Destroy()
 
     def onCursor(self,x=None, y=None, ix=None, iy=None, val=None, **kw):
-        self.cursor_hist.insert(0, (x, y, ix, iy, time.time()))
-        if len(self.cursor_hist) > MAX_CURSHIST:
-            self.cursor_hist = self.cursor_hist[:MAX_CURSHIST]
+        self.cursor_history.insert(0, (float(x), float(y), ix, iy,
+                                    time.time()))
+        if len(self.cursor_history) > MAX_CURSHIST:
+            self.cursor_history = self.cursor_history[:MAX_CURSHIST]
+
 
 def get_plot_window(win=1, size=None, wintitle=None, theme=None):
     """return a plot display
@@ -419,6 +434,7 @@ def plot(x,y=None, win=1, new=False, size=None, wintitle=None, theme=None, **kws
     plotter.Raise()
     if new or plotter.panel.conf.ntrace == 0:
         plotter.plot(x, y, **kws)
+        plotter.cursor_history = []
     else:
         plotter.oplot(x, y, **kws)
     return plotter

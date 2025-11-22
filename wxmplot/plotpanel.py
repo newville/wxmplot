@@ -786,7 +786,7 @@ class PlotPanel(BasePanel):
         """set configuration with dict of configuration options"""
         self.conf.set_config(**conf)
 
-    def get_config(self, **conf):
+    def get_config(self):
         """get configuration as dict of configuration options"""
         return self.conf.get_config()
 

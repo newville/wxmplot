@@ -10,7 +10,7 @@ import wx
 from wx.lib import masked
 from floatcontrol import FloatCtrl
 from wxmplot import PlotPanel
-from matplotlib.dates import date2num
+
 import pytz
 
 tzname = os.environ.get('TZ', 'US/Central')

@@ -13,25 +13,27 @@ interactivity to the end user than is available from the standard
 
 Here, the emphasis is on the immediacy of the interactivity of the
 data displays especially when used from interactive sessions,
-including plain Python REPL, IPython/Jupyter consoles or Jupyter
-Notebooks.
+including plain Python REPL, IPython/Jupyter console, Jupyter
+Notebooks, or the Python Kernel in Jupyter Lab.
 
 An important feature of the :func:`plot`, :func:`imshow` and other
-functions of the :mod:`interactive` module is that they display their
-results immediately, without having to execute a `show()` method to
-render the display. For interactive work from the Python REPL or one of
-the Jupyter consoles or notebook prompt, the displayed windows do not
-block the Python session.  This means that not only can you zoom in,
-change themes, etc from the Plot window, you can can also easily plot
-other functions or data, either on the same window or in a new
+functions of the :mod:`interactive` module in general is that they
+display their results immediately, without having to execute a
+`show()` method to render the display. For interactive work from the
+Python REPL or one of the Jupyter prompts, the displayed windows do
+not block the Python session.  This means that not only can you zoom
+in, change themes, etc from the Plot window, you can can also easily
+plot other functions or data, either on the same window or in a new
 top-level plotting window.
 
 For Jupyter Notebooks, it should be noted that while other plotting
 libraries (matplotlib, plotly, and bokeh) will show graphics in-line,
 as part of the Notebook, wxmplot will use separate display windows,
-outside of the browser.  While the interactive plots are then not
-saved directly in the Notebook, the code to generate the plots can be
-re-run. And images of the plot results can be copied and pasted as
+outside of the browser.  Having the visual display of data outside the
+notebook can be considered an advantage,
+While the interactive plots are then not
+saved directly within the Notebook, the code to generate the plots can
+be re-run. And images of the plot results can be copied and pasted as
 Markdown cells.
 
 
@@ -43,7 +45,6 @@ replacements for the `pyplot` functions.
 
 Plotting in an interactive session or Jupyter
 ===========================================================
-
 
 As an example using :mod:`wxmplot.interactive` in a Jupyter console
 session might look like this::
@@ -63,8 +64,6 @@ session might look like this::
     In [4]: wi.plot(x, np.sin(x), xlabel='t (sec)')
     Out[4]: <wxmplot.interactive.PlotDisplay at 0x11ef74290>
 
-    In [5]:
-
 
 At this point a plot like this will be displayed:
 
@@ -81,7 +80,6 @@ Then from the Jupyter console we can continue::
     In [5]: wi.plot(x, np.cos(1.5*x), label='cosine', show_legend=True)
     Out[5]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
 
-    In [6]:
 
 which will now show:
 
@@ -96,14 +94,11 @@ something new, we might do something like::
     In [6]: wi.plot(x, x*np.log(x+1), label='xlogx', new=True)
     Out[6]: <wxmplot.interactive.PlotDisplay at 0x10db88678>
 
-    In [7]:
 
 We can also place a text string, arrow, horizontal, or vertical line on the
 plot, as with::
 
     In [7]: wi.plot_text('hello!', 9.1, 0.87)
-
-    In [8]:
 
 
 and so forth.
@@ -115,27 +110,30 @@ If we wanted to bring up a second Line Plot window, we can use the
     In [8]: wi.plot(x, np.sin(x)*np.exp(-x/8) , win=2, theme='ggplot')
     Out[8]: <wxmplot.interactive.PlotDisplay at 0x110b2fb88>
 
-    In [9]:
 
 and then control which of the displays any additional plot functions use by
 passing the `win` option to the plotting functions.
 
-
 The immediacy of the rendering and the ability to customize the plots makes
 these plotting functions well-suited for exploratory displays of data.
+
+Examples of ipython notebook files are included in the `examples`
+folder.
 
 
 Using the :mod:`interactive` functions from a script
 ===========================================================
 
-When using the :mod:`interactive` functions by running a script in a
-non-interactive way, the display will still appear. It does not block
-further execution of the script and the display does not disappear
-when the script is complete.  Instead, the plots and images will
-remain displayed and fully operational until all windows have been
-closed or until the running script is explicitly closed (say, with
-Ctrl-D).  That means that you can add `wi.plot()` and `wi.imshow()` to
-your short- or long-running scripts and the plots will be displayed
+When using the :mod:`interactive` functions in a script or program
+that is run in a non-interactive way, say from a commandline shell,
+the wxmplot displays will still appear.  The act of plotting will not
+block further execution of the script, and the script will continue to
+run, possibly making more wxmplot displays.  When the script reaches
+is end, the displays will not be automatically closed. Instead, the
+plots and images will remain displayed and fully interactive until all
+windows have been closed or until the running script is explicitly
+closed (say, with Ctrl-D).  That means that you can add `wi.plot()`
+and `wi.imshow()` to your scripts and the plots will be displayed
 until you no longer want to use them.
 
 
@@ -186,14 +184,15 @@ Functions for working with the interactive windows
 
 .. autofunction:: get_plot_window
 
-The returned :class:`wx.PlotFrame` will have the many attributes and
-methds, with some of the most useful described in the table below.
-This include access to the underlying matplotlib Axes and Canvas
-objects.
+The returned :class:`wx.PlotFrame` from :func:`get_plot_window` will
+have the many attributes and methods, with some of the most useful
+described in the table below.  This include access to the underlying
+matplotlib Axes and Canvas objects.
 
 .. _plotframe_objects_table:
 
-**Table of PlotFrame attributes and methods**
+**Table of attributes and methods of the interactive Plot Window**
+
 
   +-----------------+-----------------------------------------------------+
   | name            |  object type                                        |
@@ -202,11 +201,11 @@ objects.
   +-----------------+-----------------------------------------------------+
   | .save_figure()  | method to save image to a png file                  |
   +-----------------+-----------------------------------------------------+
-  | .configure      | method to show Configuration window                 |
+  | .configure()    | method to show Configuration window                 |
   +-----------------+-----------------------------------------------------+
-  | .get_config     | method to return configuration dictionary           |
+  | .get_config()   | method to return configuration dictionary           |
   +-----------------+-----------------------------------------------------+
-  | .set_config     | method to update configuration with keyword/values  |
+  | .set_config()   | method to update configuration with keyword/values  |
   +-----------------+-----------------------------------------------------+
   | .panel          | wxmplot.PlotPanel, a wx.Panel                       |
   +-----------------+-----------------------------------------------------+

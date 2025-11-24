@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=3dfe497a"></script>
+    <script src="_static/documentation_options.js?v=0a06c310"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -26,8 +26,6 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div style="background-color: #E4EAED; text-align: left; padding: 0px 0px 2px 5px">
-
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
@@ -55,58 +53,63 @@
 <p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a> describes the main features of <cite>wxmplot</cite> and shows
 how <cite>wxmplot</cite> plotting functions give a richer level of customization and
 interactivity to the end user than is available from the standard
-<cite>matplotlib.pyplot</cite>.  Here, the emphasis is on the immediacy of the
-interactivity of the data displays especially when used from interactive
-sessions.  An important feature of the <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and
-other functions of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> module is that they display their
-results immediately, without having to execute a <cite>show()</cite> method to render
-the display. For interactive work from the Python (or one of the Jupyter
-consoles or notebook) prompt, the displayed windows do not block the Python
-session.  This means that not only can you zoom in, change themes, etc from
-the Plot window, you can can also easily plot other functions or data,
-either on the same window or in a new top-level plotting window.</p>
-<p>While <cite>wxmplot</cite> provides <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and other functions
-that are roughly equivalent to the functions from <cite>matplotlib.pyplot</cite>, the
-functions are here not exact drop-in replacements for the <cite>pyplot</cite> functions.
-For one thing, there are many missing plot types and functions.  For another,
-the syntax for specifying options is different.  For example, <cite>wxmplot</cite>
-prefers a long list of keyword arguments to <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> over a series of
-separate function calls.</p>
-<p>The functions in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> are described in detail below.</p>
-<section id="plotting-in-an-interactive-session">
-<h2>Plotting in an interactive session<a class="headerlink" href="#plotting-in-an-interactive-session" title="Link to this heading">¶</a></h2>
-<p>As an example using <a class="reference internal" href="#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> in a Jupyter-qtconsole
+<cite>matplotlib.pyplot</cite> when run from a script or program.</p>
+<p>Here, the emphasis is on the immediacy of the interactivity of the
+data displays especially when used from interactive sessions,
+including plain Python REPL, IPython/Jupyter console, Jupyter
+Notebooks, or the Python Kernel in Jupyter Lab.</p>
+<p>An important feature of the <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and other
+functions of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> module in general is that they
+display their results immediately, without having to execute a
+<cite>show()</cite> method to render the display. For interactive work from the
+Python REPL or one of the Jupyter prompts, the displayed windows do
+not block the Python session.  This means that not only can you zoom
+in, change themes, etc from the Plot window, you can can also easily
+plot other functions or data, either on the same window or in a new
+top-level plotting window.</p>
+<p>For Jupyter Notebooks, it should be noted that while other plotting
+libraries (matplotlib, plotly, and bokeh) will show graphics in-line,
+as part of the Notebook, wxmplot will use separate display windows,
+outside of the browser.  Having the visual display of data outside the
+notebook can be considered an advantage,
+While the interactive plots are then not
+saved directly within the Notebook, the code to generate the plots can
+be re-run. And images of the plot results can be copied and pasted as
+Markdown cells.</p>
+<p>The functions in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> are described in detail below.
+While the functions <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> are roughly
+equivalent to those in <cite>matplotlib.pyplot</cite>, they are not exact drop-in
+replacements for the <cite>pyplot</cite> functions.</p>
+<section id="plotting-in-an-interactive-session-or-jupyter">
+<h2>Plotting in an interactive session or Jupyter<a class="headerlink" href="#plotting-in-an-interactive-session-or-jupyter" title="Link to this heading">¶</a></h2>
+<p>As an example using <a class="reference internal" href="#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> in a Jupyter console
 session might look like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jupyter</span> <span class="n">QtConsole</span> <span class="mf">4.5.4</span>
-<span class="n">Python</span> <span class="mf">3.7.4</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Aug</span> <span class="mi">13</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">49</span><span class="p">)</span>
-<span class="n">Type</span> <span class="s1">&#39;copyright&#39;</span><span class="p">,</span> <span class="s1">&#39;credits&#39;</span> <span class="ow">or</span> <span class="s1">&#39;license&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span>
-<span class="n">IPython</span> <span class="mf">7.7.0</span> <span class="o">--</span> <span class="n">An</span> <span class="n">enhanced</span> <span class="n">Interactive</span> <span class="n">Python</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;?&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>~&gt; jupyter console
+Jupyter console 6.6.3
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+Python 3.13.9 | packaged by conda-forge | (main, Oct 22 2025, 23:31:04) [Clang 19.1.7 ]
+Type &#39;copyright&#39;, &#39;credits&#39; or &#39;license&#39; for more information
+IPython 9.7.0 -- An enhanced Interactive Python. Type &#39;?&#39; for help.
+Tip: Use `%timeit` or `%%timeit`, and the  `-r`, `-n`, and `-o`
+option    s to easily profile your code.
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">import</span><span class="w"> </span><span class="nn">wxmplot.interactive</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wi</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;t (sec)&#39;</span><span class="p">)</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x10db88678</span><span class="o">&gt;</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span>
+In [1]: import numpy as np
+In [2]: import wxmplot.interactive as wi
+In [3]: x = np.linspace(0, 20, 101)
+In [4]: wi.plot(x, np.sin(x), xlabel=&#39;t (sec)&#39;)
+Out[4]: &lt;wxmplot.interactive.PlotDisplay at 0x11ef74290&gt;
 </pre></div>
 </div>
 <p>At this point a plot like this will be displayed:</p>
 <a class="reference internal image-reference" href="_images/interactive1.png"><img alt="_images/interactive1.png" src="_images/interactive1.png" style="width: 50%;" />
 </a>
-<p>As with using <cite>%matplotlib notebook</cite> in a Jupyter notebook, the <cite>wxmplot</cite>
-display can be zoomed in and out, but as shown in <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, it
-can also be configured and updated in many more ways.</p>
-<p>For example, from the Plot Configuration window we could change the theme
-to ‘Seaborn’ and set the label for this trace to be ‘sine’.  Then from the
-Jupyter console we can continue:</p>
+<p>The <cite>wxmplot</cite> display will have full interatvity and can be configured
+after it is drown.</p>
+<p>For example, from the Plot Configuration window we could change the
+theme to ‘Seaborn’ and set the label for this trace to be ‘sine’.
+Then from the Jupyter console we can continue:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.5</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x10db88678</span><span class="o">&gt;</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span>
 </pre></div>
 </div>
 <p>which will now show:</p>
@@ -118,15 +121,11 @@ toggle the display of that curve.  If we want to clear the data and plot
 something new, we might do something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;xlogx&#39;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x10db88678</span><span class="o">&gt;</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span>
 </pre></div>
 </div>
 <p>We can also place a text string, arrow, horizontal, or vertical line on the
 plot, as with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot_text</span><span class="p">(</span><span class="s1">&#39;hello!&#39;</span><span class="p">,</span> <span class="mf">9.1</span><span class="p">,</span> <span class="mf">0.87</span><span class="p">)</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span>
 </pre></div>
 </div>
 <p>and so forth.</p>
@@ -134,25 +133,28 @@ plot, as with:</p>
 <strong>win=2</strong> option:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">wi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">wxmplot</span><span class="o">.</span><span class="n">interactive</span><span class="o">.</span><span class="n">PlotDisplay</span> <span class="n">at</span> <span class="mh">0x110b2fb88</span><span class="o">&gt;</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span>
 </pre></div>
 </div>
 <p>and then control which of the displays any additional plot functions use by
 passing the <cite>win</cite> option to the plotting functions.</p>
 <p>The immediacy of the rendering and the ability to customize the plots makes
 these plotting functions well-suited for exploratory displays of data.</p>
+<p>Examples of ipython notebook files are included in the <cite>examples</cite>
+folder.</p>
 </section>
 <section id="using-the-interactive-functions-from-a-script">
 <h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Link to this heading">¶</a></h2>
-<p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions by running a script in a
-non-interactive way, the display will still appear. It does not block
-further execution of the script and the display does not disappear when the
-script is complete.  Instead, the plots and images will remain displayed
-and fully operational until all windows have been closed or until the
-running script is explicitly closed with Crtl-C.  That means that you can
-add <cite>wi.plot()</cite> and <cite>wi.imshow()</cite> to your short- or long-running scripts
-and the plots will be displayed until you no longer want to use them.</p>
+<p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions in a script or program
+that is run in a non-interactive way, say from a commandline shell,
+the wxmplot displays will still appear.  The act of plotting will not
+block further execution of the script, and the script will continue to
+run, possibly making more wxmplot displays.  When the script reaches
+is end, the displays will not be automatically closed. Instead, the
+plots and images will remain displayed and fully interactive until all
+windows have been closed or until the running script is explicitly
+closed (say, with Ctrl-D).  That means that you can add <cite>wi.plot()</cite>
+and <cite>wi.imshow()</cite> to your scripts and the plots will be displayed
+until you no longer want to use them.</p>
 </section>
 <section id="line-plotting-with-plot-and-related-functions">
 <h2>Line Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#line-plotting-with-plot-and-related-functions" title="Link to this heading">¶</a></h2>
@@ -163,8 +165,8 @@ and the plots will be displayed until you no longer want to use them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em>) – ordinate values</p></li>
-<li><p><strong>y</strong> (<em>array-like</em>) – abscissa values (x and y must be same size!)</p></li>
+<li><p><strong>x</strong> (<em>array-like</em>) – ordinate values [0]</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em>, </em><em>None</em>) – abscissa values (x and y must be same size!) [0]</p></li>
 <li><p><strong>dy</strong> (<em>array-like</em>) – array for error bars in y (must be same size as y!)</p></li>
 <li><p><strong>new</strong> (<em>bool</em>) – whether to start a new plot [False]</p></li>
 <li><p><strong>win</strong> (<em>int</em>) – index of Plot Window [1]</p></li>
@@ -211,7 +213,9 @@ and the plots will be displayed until you no longer want to use them.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<ol class="arabic simple">
+<ol class="arabic simple" start="0">
+<li><p>If <cite>y</cite> is <cite>None</cite> (or not provided), the array for <cite>x</cite> becomes <cite>y</cite>,
+and <cite>x</cite> will be set to the array index: <cite>np.arange(len(y))</cite></p></li>
 <li><p>colors can be names such as ‘red’ or hex strings ‘#RRGGBB’.
 by default, they are set by the theme</p></li>
 <li><p>styles can be one of ‘solid’, ‘short dashed’, ‘dash-dot’,
@@ -543,36 +547,11 @@ be written to the Console [False]</p></li>
 window index or create a new one.</p>
 </dd></dl>
 
-<p>The returned <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.PlotFrame</span></code> will have the heirarchy of attributes
-described in the table below.  This allows access to the underlying
-matplotlib Axes and Canvas objects.</p>
-<p id="plotframe-objects-table"><strong>Table of PlotFrame attributes</strong></p>
-<blockquote>
-<div><table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>object type</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>.panel</p></td>
-<td><p>wxmplot.PlotPanel, a wx.Panel</p></td>
-</tr>
-<tr class="row-odd"><td><p>.panel.conf</p></td>
-<td><p>wxmplot.PlotConfig</p></td>
-</tr>
-<tr class="row-even"><td><p>.panel.axes</p></td>
-<td><p>matplotlib.axes.AxesSubPlot</p></td>
-</tr>
-<tr class="row-odd"><td><p>.panel.fig</p></td>
-<td><p>matplotlib.figure.Figure</p></td>
-</tr>
-<tr class="row-even"><td><p>.panel.canvas</p></td>
-<td><p>matplotlib.backends.backend_wxagg.FigureCanvasWxAgg</p></td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
+<p>The returned <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.PlotFrame</span></code> from <a class="reference internal" href="#wxmplot.interactive.get_plot_window" title="wxmplot.interactive.get_plot_window"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_plot_window()</span></code></a> will
+have the many attributes and methods, with some of the most useful
+described in the table below, <a class="reference internal" href="#plotframe-attrs"><span class="std std-ref">Table of interactive Plot Window
+attributes and methods</span></a>. This includes access to the
+underlying matplotlib Axes and Canvas objects.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.get_image_window">
 <span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_image_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_image_window" title="Link to this definition">¶</a></dt>
@@ -597,6 +576,58 @@ window index or create a new one.</p>
 <p>As with <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.PlotFrame</span></code>, the returned <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.ImageFrame</span></code> will
 have the same principle attributes to access the matplotlib Axes and Canvas
 objects.</p>
+<section id="plot-frame-attributes-and-methods">
+<h3>Plot frame attributes and methods<a class="headerlink" href="#plot-frame-attributes-and-methods" title="Link to this heading">¶</a></h3>
+<p id="plotframe-attrs"><strong>Table of interactive Plot Window attributes and methods</strong></p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>object type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>.cursor_history</p></td>
+<td><p>[(x, y, timestamp), …] of cursor selections</p></td>
+</tr>
+<tr class="row-odd"><td><p>.save_figure()</p></td>
+<td><p>method to save image to a png file</p></td>
+</tr>
+<tr class="row-even"><td><p>.configure()</p></td>
+<td><p>method to show Configuration window</p></td>
+</tr>
+<tr class="row-odd"><td><p>.get_config()</p></td>
+<td><p>method to return configuration dictionary</p></td>
+</tr>
+<tr class="row-even"><td><p>.set_config()</p></td>
+<td><p>method to update configuration with keyword/values</p></td>
+</tr>
+<tr class="row-odd"><td><p>.panel</p></td>
+<td><p>wxmplot.PlotPanel, a wx.Panel</p></td>
+</tr>
+<tr class="row-even"><td><p>.panel.conf</p></td>
+<td><p>wxmplot.PlotConfig</p></td>
+</tr>
+<tr class="row-odd"><td><p>.panel.axes</p></td>
+<td><p>matplotlib.axes.AxesSubPlot</p></td>
+</tr>
+<tr class="row-even"><td><p>.panel.fig</p></td>
+<td><p>matplotlib.figure.Figure</p></td>
+</tr>
+<tr class="row-odd"><td><p>.panel.canvas</p></td>
+<td><p>matplotlib.backends.backend_wxagg.FigureCanvasWxAgg</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Note that the <cite>cursor_history</cite> attribute will be a list of (<cite>x</cite>, <cite>y</cite>,
+<cite>timestamp</cite>) values with <cite>x</cite> and <cite>y</cite> being in “user coordinates,
+<cite>timestamp</cite> being the Unix timestamp for each even of pressing the
+left mouse button on the plot. The most recent event will be in
+<cite>cursor_history[0]</cite>, and the list will be in descending time
+order. Only the most recent 100 cursor events will be retained.</p>
+<p>Each new plot will clear the <cite>cursor_history</cite>.</p>
+</section>
 </section>
 </section>
 
@@ -611,7 +642,7 @@ objects.</p>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Interactive wxmplot displays</a><ul>
-<li><a class="reference internal" href="#plotting-in-an-interactive-session">Plotting in an interactive session</a></li>
+<li><a class="reference internal" href="#plotting-in-an-interactive-session-or-jupyter">Plotting in an interactive session or Jupyter</a></li>
 <li><a class="reference internal" href="#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
 <li><a class="reference internal" href="#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a><ul>
 <li><a class="reference internal" href="#wxmplot.interactive.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
@@ -637,6 +668,7 @@ objects.</p>
 <li><a class="reference internal" href="#wxmplot.interactive.get_wxapp"><code class="docutils literal notranslate"><span class="pre">get_wxapp()</span></code></a></li>
 <li><a class="reference internal" href="#wxmplot.interactive.get_plot_window"><code class="docutils literal notranslate"><span class="pre">get_plot_window()</span></code></a></li>
 <li><a class="reference internal" href="#wxmplot.interactive.get_image_window"><code class="docutils literal notranslate"><span class="pre">get_image_window()</span></code></a></li>
+<li><a class="reference internal" href="#plot-frame-attributes-and-methods">Plot frame attributes and methods</a></li>
 </ul>
 </li>
 </ul>
@@ -692,7 +724,7 @@ objects.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-08-20, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-11-23, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

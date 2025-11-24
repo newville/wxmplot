@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=3dfe497a"></script>
+    <script src="_static/documentation_options.js?v=0a06c310"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -26,8 +26,6 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div style="background-color: #E4EAED; text-align: left; padding: 0px 0px 2px 5px">
-
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
@@ -559,17 +557,19 @@ this function to parse and interpret the date strings used.</p>
 <h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Link to this heading">¶</a></h2>
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.plot">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">¶</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, erasing any existing plot.  The
 displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method
 has many optional parameters, all using keyword/value argument.  Since most
 of these are shared with the <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method, the full set of parameters
-is given in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a></p>
+is given in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>.   Note
+that if <em>y</em> is not given, then the values for <em>x</em> will be used as
+<em>y</em>, and <em>x</em> will be set to the index of that array (<cite>numpy.arange(len(y))</cite>).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.oplot">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">¶</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overplotting any existing
 plot, so that both traces are visible.</p>
 <p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method has many optional parameters,  as listed in
@@ -958,7 +958,7 @@ customization.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-08-20, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-11-23, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=3dfe497a"></script>
+    <script src="_static/documentation_options.js?v=0a06c310"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -25,8 +25,6 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div style="background-color: #E4EAED; text-align: left; padding: 0px 0px 2px 5px">
-
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
@@ -123,13 +121,17 @@ re-imagines the <cite>pyplot</cite> functions <cite>plot</cite> and <cite>imshow
 gives you access to the underlying <cite>matplotlib</cite> objects so that you can add
 more complex components and manipulate the plot as needed, assuming that you
 know the <cite>matplotlib</cite> programming interface.</p>
-<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, a brief comparison of <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> and
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> is given and will not repeated here.  From the point of
-view of “brevity” and “beauty”, these are approximately equal.  The
-<cite>matplotlib</cite> API is certainly much more common, and deliberately mimics the
-plotting functions in <cite>Matlab</cite>, so will be familiar to many people.
-mod:<cite>wxmplot.plot</cite> puts a lot more arguments into a small number of function
-calls.</p>
+<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, a brief comparison of <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>
+and <code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> is given and will not repeated here.  From the
+point of view of “brevity” and “beauty”, these are approximately
+equal.  The <cite>matplotlib</cite> API is certainly much more common, and
+deliberately mimics the plotting functions in <cite>Matlab</cite>, so will be
+familiar to many people.  <code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> puts a lot more
+arguments into a small number of function calls, which can be
+convenient but also somewhat harder to remember what all the options
+are.  The nature of plotting means there are many potential optional
+arguments, and how those are accessed almostly certainly means a large
+number of methods or keyword arguments.</p>
 <p>Plots made with <cite>matplotlib.pyplot</cite> have limited interactivity and
 customizability after the plot is displayed with its Navigation Toolbar.  The
 end-user can read plot coordinates as the mouse moves around, zoom in and out,
@@ -198,19 +200,22 @@ plots.  An example of using this would be:</p>
 <div><a class="reference internal image-reference" href="_images/plot_compare_wxplot_wx.png"><img alt="_images/plot_compare_wxplot_wx.png" src="_images/plot_compare_wxplot_wx.png" style="width: 75%;" />
 </a>
 </div></blockquote>
-<p>As written, there is not interactivity, though zooming can be enabled. The need
+<p>As written here, there is not interactivity, though zooming can be enabled. The need
 to create a subclass of a <cite>Frame</cite> and initiate a wxApp adds a fair amount of
 boiler-plate code which make it painful for simple scripts or exploratory data
 analysis.</p>
 </section>
 <section id="comparison-with-plotly">
 <h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Link to this heading">¶</a></h2>
-<p>The Plotly library includes a Python interface (<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>)
-that is very good and renders interactive plots into a web browser.  This is
-very useful for web-based applications and gives good looking and interactive
-plots into a local or remote web browser. To be clear, I use plotly for more a
-few web applications.  Then again, getting information back from the
-web-browser to an application or script is somewhat challenging.</p>
+<p>The Plotly library includes a Python interface
+(<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>) that is very good and renders interactive
+plots into a web browser.  This is very useful for web-based
+applications and gives good looking and interactive plots into a local
+or remote web browser. Getting information back from the web-browser
+to an application or script is somewhat challenging.  While Plotly
+claims to work well with a Jupyter notebook, there are persistent
+difficulties with getting latex to work, and little attention from
+Plotly developers.</p>
 <p>Many of the Plotly examples make assumptions about using Pandas dataframes,
 which is a fine default, but makes working with lists and arrays a bit more
 complicated.  For a simple plot of a single trace, Plotly could be used as:</p>
@@ -279,29 +284,37 @@ Constructing the example plot above with <cite>pyqtgraph</cite> would look like:
 <span class="n">pg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>I see many applications using this library to produce good visualizations of
-data.  I must also admit that I often struggle to get a working version of the
-PyQt library.  For this example I I find that it is important to
-select the PyQt “family” (here, PyQt6, but on some systems PySide6 appears to
-work more reliably) before importing <cite>pyqtgraph</cite>.  That may depend some on
-operating system and environment.  Being very familiar with wxPython and not
-very proficient with the Qt world, I would happily say that someone more
+<p>I see many applications using this library to produce good
+visualizations of data.  I must also admit that I often struggle to
+get a working version of the PyQt library.  For this example I find
+that it is important to select the PyQt “family” (here, PyQt6, but on
+some systems PySide6 appears to work more reliably) before importing
+<cite>pyqtgraph</cite>.  That may depend some on operating system and
+environment.  Being very familiar with wxPython and not very
+proficient with the Qt world, I would happily say that someone more
 proficient with PyQt might be able to make excellent use of this.</p>
-<p>For brevity and clarity, this is very good.  The resulting plot looks like</p>
+<p>For brevity and clarity, this is pretty good, though I would hope that
+labelling axes could be simpler. The resulting plot looks like this</p>
 <blockquote id="plot-compare-qt">
-<div><a class="reference internal image-reference" href="_images/plot_compare_qt.png"><img alt="_images/plot_compare_qt.png" src="_images/plot_compare_qt.png" style="width: 75%;" />
+<div><a class="reference internal image-reference" href="_images/plot_compare_qt.png"><img alt="_images/plot_compare_qt.png" src="_images/plot_compare_qt.png" style="width: 85%;" />
 </a>
 </div></blockquote>
-<p>The plots with <cite>pyqtqraph</cite> are interactive. Though perhaps not quite as
-customizable as <cite>wxmplot</cite>, it is much better than any other library described
-here and <cite>pyqtgraph</cite> definitely values user interaction with the data.  To be
-clear, <cite>pyqtgraph</cite> is explicitly designed to do more than simple line plots.</p>
-<p>I find the quality of the Line plots to be somewhat worse than the plots made
-with <cite>matplotlib</cite> and <cite>wxmplot</cite>.  The text in the plot is very hard to read, I
-see very little in the online documentation about this.  I find troubling.  But
-not being very familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust things
-like margins and the sizes of markers and text, so I am willing to call some of
-these things a matter of taste and say they might be possible to improve.</p>
+<p>I find the quality of the Line plots to be signficantly worse than the
+plots made with <cite>matplotlib</cite> and <cite>wxmplot</cite>, and surprisingly poor
+given the wide-spread use of this library.  The grey text on the black
+background in the plot is very hard to read.  I see very little in the
+online documentation about labelling axes or improving layout or
+clarity.  Even in the above example, adding labels is pretty klunky.
+This should be a concern for any scientist.  But not being very
+familiar with <cite>pyqtgraph</cite>, I am not certain how to adjust things like
+margins and the sizes of markers and text, so I am willing to call
+some of these things a matter of taste and say they might be possible
+to improve.</p>
+<p>The plots with <cite>pyqtqraph</cite> are interactive. Though perhaps not quite
+as customizable as <cite>wxmplot</cite>, it is much better than any other library
+described here and <cite>pyqtgraph</cite> definitely values user interaction with
+the data.  To be clear, <cite>pyqtgraph</cite> is explicitly designed to do more
+than simple line plots.</p>
 </section>
 <section id="comparison-with-pyqtgraph-pythonguis">
 <h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Link to this heading">¶</a></h2>
@@ -405,8 +418,10 @@ tutorial.  It make exploratory data analysis very hard.</p>
 <p>In addition, the plot in the pythonguis example does not have axes
 labeled.  This is a very serious problem for the display of scientific
 data.  Axes should be labeled, always.  The tutorials at
-<a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> don’t label any axes until
-half-way through.  This cannot be meant for serious students of science.</p>
+<a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> don’t put a single label on any
+axes until half-way through the tutorial.  This cannot be meant for
+serious students of science.  As above, it is quite possible that
+PyQtGraph is just poor at labelling axes.</p>
 <p>With <cite>wxmplot</cite>, the resulting plot looks like:</p>
 <blockquote id="plot-compare-qttutorial1">
 <div><a class="reference internal image-reference" href="_images/plot_compare_qttutorial1.png"><img alt="_images/plot_compare_qttutorial1.png" src="_images/plot_compare_qttutorial1.png" style="width: 75%;" />
@@ -667,7 +682,7 @@ and end-users of applications to have rich interactions with their data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-08-20, Matthew Newville, The University of Chicago.
+    &#169; Copyright 2025-11-23, Matthew Newville, The University of Chicago.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

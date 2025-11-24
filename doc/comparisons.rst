@@ -274,34 +274,43 @@ Constructing the example plot above with `pyqtgraph` would look like::
     pg.exec()
 
 
-I see many applications using this library to produce good visualizations of
-data.  I must also admit that I often struggle to get a working version of the
-PyQt library.  For this example I I find that it is important to
-select the PyQt "family" (here, PyQt6, but on some systems PySide6 appears to
-work more reliably) before importing `pyqtgraph`.  That may depend some on
-operating system and environment.  Being very familiar with wxPython and not
-very proficient with the Qt world, I would happily say that someone more
+I see many applications using this library to produce good
+visualizations of data.  I must also admit that I often struggle to
+get a working version of the PyQt library.  For this example I find
+that it is important to select the PyQt "family" (here, PyQt6, but on
+some systems PySide6 appears to work more reliably) before importing
+`pyqtgraph`.  That may depend some on operating system and
+environment.  Being very familiar with wxPython and not very
+proficient with the Qt world, I would happily say that someone more
 proficient with PyQt might be able to make excellent use of this.
 
-For brevity and clarity, this is very good.  The resulting plot looks like
+For brevity and clarity, this is pretty good, though I would hope that
+labelling axes could be simpler. The resulting plot looks like this
 
 .. _plot_compare_qt:
 
     .. image:: images/plot_compare_qt.png
-       :width: 75%
+       :width: 85%
 
 
-The plots with `pyqtqraph` are interactive. Though perhaps not quite as
-customizable as `wxmplot`, it is much better than any other library described
-here and `pyqtgraph` definitely values user interaction with the data.  To be
-clear, `pyqtgraph` is explicitly designed to do more than simple line plots.
+I find the quality of the Line plots to be signficantly worse than the
+plots made with `matplotlib` and `wxmplot`, and surprisingly poor
+given the wide-spread use of this library.  The grey text on the black
+background in the plot is very hard to read.  I see very little in the
+online documentation about labelling axes or improving layout or
+clarity.  Even in the above example, adding labels is pretty klunky.
+This should be a concern for any scientist.  But not being very
+familiar with `pyqtgraph`, I am not certain how to adjust things like
+margins and the sizes of markers and text, so I am willing to call
+some of these things a matter of taste and say they might be possible
+to improve.
 
-I find the quality of the Line plots to be somewhat worse than the plots made
-with `matplotlib` and `wxmplot`.  The text in the plot is very hard to read, I
-see very little in the online documentation about this.  I find troubling.  But
-not being very familiar with `pyqtgraph`, I am not certain how to adjust things
-like margins and the sizes of markers and text, so I am willing to call some of
-these things a matter of taste and say they might be possible to improve.
+The plots with `pyqtqraph` are interactive. Though perhaps not quite
+as customizable as `wxmplot`, it is much better than any other library
+described here and `pyqtgraph` definitely values user interaction with
+the data.  To be clear, `pyqtgraph` is explicitly designed to do more
+than simple line plots.
+
 
 
 Comparison with PyQtGraph/PythonGUIs
@@ -415,8 +424,10 @@ tutorial.  It make exploratory data analysis very hard.
 In addition, the plot in the pythonguis example does not have axes
 labeled.  This is a very serious problem for the display of scientific
 data.  Axes should be labeled, always.  The tutorials at
-https://www.pythonguis.com/tutorials/ don't label any axes until
-half-way through.  This cannot be meant for serious students of science.
+https://www.pythonguis.com/tutorials/ don't put a single label on any
+axes until half-way through the tutorial.  This cannot be meant for
+serious students of science.  As above, it is quite possible that
+PyQtGraph is just poor at labelling axes.
 
 
 With `wxmplot`, the resulting plot looks like:

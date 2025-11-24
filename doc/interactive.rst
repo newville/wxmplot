@@ -186,12 +186,26 @@ Functions for working with the interactive windows
 
 The returned :class:`wx.PlotFrame` from :func:`get_plot_window` will
 have the many attributes and methods, with some of the most useful
-described in the table below.  This include access to the underlying
-matplotlib Axes and Canvas objects.
+described in the table below, :ref:`Table of interactive Plot Window
+attributes and methods <plotframe_attrs>`. This includes access to the
+underlying matplotlib Axes and Canvas objects.
 
-.. _plotframe_objects_table:
 
-**Table of attributes and methods of the interactive Plot Window**
+.. autofunction:: get_image_window
+
+As with :class:`wx.PlotFrame`, the returned :class:`wx.ImageFrame` will
+have the same principle attributes to access the matplotlib Axes and Canvas
+objects.
+
+
+
+Plot frame attributes and methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. _plotframe_attrs:
+
+**Table of interactive Plot Window attributes and methods**
 
 
   +-----------------+-----------------------------------------------------+
@@ -226,9 +240,3 @@ left mouse button on the plot. The most recent event will be in
 order. Only the most recent 100 cursor events will be retained.
 
 Each new plot will clear the `cursor_history`.
-
-.. autofunction:: get_image_window
-
-As with :class:`wx.PlotFrame`, the returned :class:`wx.ImageFrame` will
-have the same principle attributes to access the matplotlib Axes and Canvas
-objects.

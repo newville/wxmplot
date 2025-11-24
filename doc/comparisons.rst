@@ -187,7 +187,6 @@ to create a subclass of a `Frame` and initiate a wxApp adds a fair amount of
 boiler-plate code which make it painful for simple scripts or exploratory data
 analysis.
 
-
 Comparison with Plotly
 ===============================
 
@@ -195,13 +194,11 @@ The Plotly library includes a Python interface
 (https://plotly.com/python/) that is very good and renders interactive
 plots into a web browser.  This is very useful for web-based
 applications and gives good looking and interactive plots into a local
-or remote web browser.  Getting information back from the web-browser
+or remote web browser. Getting information back from the web-browser
 to an application or script is somewhat challenging.  While Plotly
 claims to work well with a Jupyter notebook, there are persistent
 difficulties with getting latex to work, and little attention from
-Plotly developers.  To be clear, I use plotly for multiple web
-applications, and find it quite reliable and high-quality for that
-use.
+Plotly developers.
 
 Many of the Plotly examples make assumptions about using Pandas dataframes,
 which is a fine default, but makes working with lists and arrays a bit more

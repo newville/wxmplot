@@ -258,7 +258,9 @@ class PlotDisplay(PlotFrame):
 
     def onCursor(self, x=None, y=None, message='',
                 marker_data=None, **kws):
-        self.cursor_history.insert(0, (float(x), float(y), time.time()))
+        xval = float(x) if instance(x, np.number) else x
+        yval = float(y) if instance(y, np.number) else y
+        self.cursor_history.insert(0, (x, y, time.time()))
         rmsg = ''
         if marker_data is not None:
             try:

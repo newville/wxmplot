@@ -241,12 +241,19 @@ class ImagePanel(BasePanel):
         cmap = self.conf.cmap[col]
         area = self.axes.contour(patch, cmap=cmap, levels=[0, 1])
         bmask = np.where(mask)
-        if len(bmask[0]) == 1:
-            x = int(bmask[1])
-            y = int(bmask[0])
-        else:
+
+        try:
             x = int(bmask[1].mean())
             y = int(bmask[0].mean())
+        except:
+            if len(bmask[0]) == 1:
+                try:
+                    x = int(bmask[1][0])
+                    y = int(bmask[0][0])
+                except:
+                    x = int(bmask[1])
+                    y = int(bmask[0])
+
         if use_label_index:
             clabel = f'{1+len(self.conf.highlight_areas)}'
         else:

@@ -258,8 +258,8 @@ class PlotDisplay(PlotFrame):
 
     def onCursor(self, x=None, y=None, message='',
                 marker_data=None, **kws):
-        xval = float(x) if instance(x, np.number) else x
-        yval = float(y) if instance(y, np.number) else y
+        xval = float(x) if isinstance(x, np.number) else x
+        yval = float(y) if isinstance(y, np.number) else y
         self.cursor_history.insert(0, (x, y, time.time()))
         rmsg = ''
         if marker_data is not None:
@@ -669,7 +669,6 @@ def plot_axvline(x, ymin=0, ymax=1, win=1, size=None,
     if not delay_draw:
         plotter.panel.canvas.draw()
 
-
 def hist(x, bins=10, win=1, new=False, size=None,
          force_draw=True, title=None, *args, **kws):
     """display a histogram
@@ -688,6 +687,7 @@ def hist(x, bins=10, win=1, new=False, size=None,
     if new:
         plotter.panel.axes.clear()
     out = plotter.panel.axes.hist(x, bins=bins, **kws)
+    # out = plotter.panel.hist(x, **kws)
     if title is not None:
         plotter.panel.set_title(title)
     plotter.panel.canvas.draw()

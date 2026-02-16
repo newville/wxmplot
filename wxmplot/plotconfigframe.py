@@ -7,14 +7,14 @@ import yaml
 import numpy as np
 import wx
 import wx.lib.colourselect  as csel
-import wx.lib.agw.flatnotebook as flat_nb
 import wx.lib.scrolledpanel as scrolled
+
+from wxutils import (flatnotebook, get_color, set_color,
+                     SimpleText, TextCtrl)
 
 from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
-from .colors import hexcolor, mpl_color, GUI_COLORS
-
-FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
+from .colors import hexcolor, mpl_color
 
 ISPINSIZE = 60
 FSPINSIZE = 80
@@ -133,12 +133,8 @@ class PlotConfigFrame(wx.Frame):
         font = wx.Font(12, wx.SWISS, wx.NORMAL,wx.NORMAL,False)
         panel.SetFont(font)
 
-        self.nb = flat_nb.FlatNotebook(panel, wx.ID_ANY, agwStyle=FNB_STYLE)
-
-        self.nb.SetTabAreaColour(GUI_COLORS.nb_area)
-        self.nb.SetActiveTabColour(GUI_COLORS.nb_active)
-        self.nb.SetNonActiveTabTextColour(GUI_COLORS.nb_text)
-        self.nb.SetActiveTabTextColour(GUI_COLORS.nb_activetext)
+        self.nb = flatnotebook(panel, with_nav_buttons=True, with_smart_tabs=True)
+        print("PlotConfigFrame ", self.nb)
 
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Colors and Line Properties', True)
@@ -258,12 +254,12 @@ class PlotConfigFrame(wx.Frame):
             auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
         except:
             pass
-        
+
         self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
                                   increment=0.5, digits=2,
                                   size=(FSPINSIZE, -1), action=self.onViewPadEvent)
         self.wids['viewpad'] = self.vpad_val
-       
+
         xb0, xb1 = laxes.get_xlim()
         yb0, yb1 = laxes.get_ylim()
         if user_lims[0] is not None:
@@ -502,9 +498,7 @@ class PlotConfigFrame(wx.Frame):
         sizer = wx.GridBagSizer(2, 2)
         labstyle= wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL
 
-        self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
-                                    action = partial(self.onText, item='title'),
-                                    labeltext='Title: ', size=(475, -1))
+
         self.xlab = LabeledTextCtrl(panel, self.conf.xlabel.replace('\n', '\\n'),
                                     action = partial(self.onText, item='xlabel'),
                                     labeltext='X Label: ', size=(475, -1))
@@ -521,6 +515,10 @@ class PlotConfigFrame(wx.Frame):
                                     action = partial(self.onText, item='y4label'),
                                     labeltext='Y4 Label: ', size=(475, -1))
 
+        self.titl = LabeledTextCtrl(panel, self.conf.title.replace('\n', '\\n'),
+                                    action = partial(self.onText, item='title'),
+                                    labeltext='Title: ', size=(475, -1))
+
         self.yax_color = wx.CheckBox(panel,-1, 'Use Trace Color for Y Axes', (-1, -1), (-1, -1))
         self.yax_color.Bind(wx.EVT_CHECKBOX, self.onYaxes_tracecolor)
         self.yax_color.SetValue(self.conf.yaxes_tracecolor)
@@ -534,21 +532,22 @@ class PlotConfigFrame(wx.Frame):
         self.y3lab.Enable(len(axes) > 2)
         self.y4lab.Enable(len(axes) > 3)
 
-        sizer.Add(self.titl.label,  (0, 0), (1, 1), labstyle)
-        sizer.Add(self.titl,        (0, 1), (1, 6), labstyle)
-        sizer.Add(self.xlab.label,  (1, 0), (1, 1), labstyle)
-        sizer.Add(self.xlab,        (1, 1), (1, 6), labstyle)
-        sizer.Add(self.ylab.label,  (2, 0), (1, 1), labstyle)
-        sizer.Add(self.ylab,        (2, 1), (1, 6), labstyle)
-        sizer.Add(self.y2lab.label, (3, 0), (1, 1), labstyle)
-        sizer.Add(self.y2lab,       (3, 1), (1, 6), labstyle)
-        sizer.Add(self.y3lab.label, (4, 0), (1, 1), labstyle)
-        sizer.Add(self.y3lab,       (4, 1), (1, 6), labstyle)
-        sizer.Add(self.y4lab.label, (5, 0), (1, 1), labstyle)
-        sizer.Add(self.y4lab,       (5, 1), (1, 6), labstyle)
-        sizer.Add(self.yax_color,   (6, 0), (1, 6), labstyle)
+        sizer.Add((5, 5),           (0, 0), (1, 1), labstyle)
+        sizer.Add(self.titl.label,  (1, 0), (1, 1), labstyle)
+        sizer.Add(self.titl,        (1, 1), (1, 6), labstyle)
+        sizer.Add(self.xlab.label,  (2, 0), (1, 1), labstyle)
+        sizer.Add(self.xlab,        (2, 1), (1, 6), labstyle)
+        sizer.Add(self.ylab.label,  (3, 0), (1, 1), labstyle)
+        sizer.Add(self.ylab,        (3, 1), (1, 6), labstyle)
+        sizer.Add(self.y2lab.label, (4, 0), (1, 1), labstyle)
+        sizer.Add(self.y2lab,       (4, 1), (1, 6), labstyle)
+        sizer.Add(self.y3lab.label, (5, 0), (1, 1), labstyle)
+        sizer.Add(self.y3lab,       (5, 1), (1, 6), labstyle)
+        sizer.Add(self.y4lab.label, (6, 0), (1, 1), labstyle)
+        sizer.Add(self.y4lab,       (6, 1), (1, 6), labstyle)
+        sizer.Add(self.yax_color,   (7, 0), (1, 6), labstyle)
 
-        irow = 7
+        irow = 8
 
         t0 = wx.StaticText(panel, -1, 'Text Sizes:', style=labstyle)
         t1 = wx.StaticText(panel, -1, 'Titles:', style=labstyle)
@@ -603,7 +602,7 @@ class PlotConfigFrame(wx.Frame):
         togg_leg.Bind(wx.EVT_CHECKBOX, self.onHideWithLegend)
         togg_leg.SetValue(self.conf.hidewith_legend)
 
-        
+
         leg_ttl = wx.StaticText(panel, -1, 'Legend:', size=(-1, -1), style=labstyle)
         loc_ttl = wx.StaticText(panel, -1, 'Location:', size=(-1, -1), style=labstyle)
         leg_loc = wx.Choice(panel, -1, choices=self.conf.legend_locs, size=(150, -1))
@@ -673,14 +672,14 @@ class PlotConfigFrame(wx.Frame):
         show_grid.Bind(wx.EVT_CHECKBOX,self.onShowGrid)
         show_grid.SetValue(cnf.show_grid)
         self.wids['show_grid'] = show_grid
-        
+
         show_leg = wx.CheckBox(panel,-1, 'Show Legend  ')
         show_leg.Bind(wx.EVT_CHECKBOX,partial(self.onShowLegend, item='legend'))
         show_leg.SetValue(cnf.show_legend)
         if show_leg not in self.show_legend_cbs:
             self.show_legend_cbs.append(show_leg)
         self.wids['show_legend'] = show_leg
-        
+
         show_box  = wx.CheckBox(panel,-1, ' Show Top/Right Axes  ')
         show_box.Bind(wx.EVT_CHECKBOX, self.onShowBox)
         show_box.SetValue(cnf.axes_style == 'box')
@@ -779,12 +778,12 @@ class PlotConfigFrame(wx.Frame):
                          action=partial(self.onSymbol,trace=i))
 
             sym.SetStringSelection(dsym)
-            
+
             msz = FloatSpin(panel, size=(FSPINSIZE, -1), value=dmsz,
                             min_val=0, max_val=30, increment=0.5, digits=1,
                             action=partial(self.onMarkerSize, trace=i))
             self.choice_markersizes.append(msz)
-            
+
             zor = FloatSpin(panel, size=(ISPINSIZE, -1), value=dzord,
                             min_val=-500, max_val=500, increment=1, digits=0,
                             action=partial(self.onZorder, trace=i))
@@ -868,6 +867,8 @@ class PlotConfigFrame(wx.Frame):
             except KeyError:
                 pass
         conf.draw_legend()
+        if callable(conf.theme_callback):
+            conf.theme_callback(theme)
 
     def onLogScale(self, event):
         xword, yword = event.GetString().split(' / ')
@@ -1094,11 +1095,13 @@ class PlotConfigFrame(wx.Frame):
             try:
                 kws = {item: s}
                 self.conf.relabel(**kws)
-                wid.SetBackgroundColour(GUI_COLORS.text_bg)
-                wid.SetForegroundColour(GUI_COLORS.text)
-            except: # as from latex error!a
-                wid.SetBackgroundColour(GUI_COLORS.text_invalid_bg)
-                wid.SetForegroundColour(GUI_COLORS.text_invalid)
+                wid.SetBackgroundColour(get_color('text_bg'))
+                wid.SetForegroundColour(get_color('text'))
+            except: # as from latex error
+                print("invalid text for item ", item, s)
+
+                wid.SetBackgroundColour(get_color('text_invalid_bg'))
+                wid.SetForegroundColour(get_color('text_invalid'))
         elif item == 'trace':
             try:
                 self.conf.set_trace_label(s, trace=trace)

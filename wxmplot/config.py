@@ -30,7 +30,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
-from .colors import hexcolor, mpl2hexcolor, DARK_THEME
+from .colors import hexcolor, mpl2hexcolor, DARK_THEME, use_darkdetect
 
 SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
 
@@ -62,6 +62,7 @@ ViewPadPercents = [0.0, 2.5, 5.0, 7.5, 10.0]
 linecolors = ('#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd',
               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf')
 
+
 CONFIG_SAVE = ('auto_margins', 'axes_style', 'current_theme',
                'facecolor', 'framecolor', 'gridcolor',
                'hidewith_legend', 'labelfont', 'legend_loc',
@@ -71,7 +72,12 @@ CONFIG_SAVE = ('auto_margins', 'axes_style', 'current_theme',
                'scatter_selectedge', 'scatter_size', 'show_grid',
                'show_legend', 'show_legend_frame', 'textcolor',
                'titlefont', 'traces', 'viewpad', 'xscale', 'yscale',
-               'y2scale', 'y3scale', 'y4scale', 'zoom_style')
+               'y2scale', 'y3scale', 'y4scale', 'zoom_style',
+               'hist_bins', 'hist_density', 'hist_cumulative',
+               'hist_histtype', 'hist_orientation', 'hist_align',
+               'hist_stacked', 'hist_rwidth', 'bar_width',
+               'bar_bottom', 'bar_align', 'bar_orientation')
+
 
 light_theme = {'axes.grid': True,
                'axes.axisbelow': True,
@@ -203,7 +209,13 @@ default_config = {'auto_margins': True,
                   'viewpad': 2.5,
                   'with_data_process': True,
                   'zoom_style': 'both x and y',
-                  'labelfont': 9, 'legendfont': 7, 'titlefont': 10}
+                  'labelfont': 9, 'legendfont': 7, 'titlefont': 10,
+                  'hist_bins': 10, 'hist_density': False,
+                  'hist_cumulative': False, 'hist_histtype': 'bar',
+                  'hist_orientation': 'vertical', 'hist_align': 'mid',
+                  'hist_stacked': False, 'hist_rwidth': None,
+                  'bar_width': 0.8,  'bar_bottom': 0,
+                  'bar_align': 'center', 'bar_orientation': 'vertical'}
 
 
 def ifnot_none(val, default):
@@ -277,7 +289,7 @@ class PlotConfig:
     """Plot Configuration for Line Plots, holding most configuration data """
 
     def __init__(self, canvas=None, panel=None, with_data_process=True,
-                 theme=None, theme_color_callback=None,
+                 theme=None, theme_callback=None, theme_color_callback=None,
                  margin_callback=None, trace_color_callback=None,
                  custom_config=None):
 
@@ -288,6 +300,7 @@ class PlotConfig:
         self.symbols     = list(MarkerMap.keys())
         self.trace_color_callback = trace_color_callback
         self.theme_color_callback = theme_color_callback
+        self.theme_callback = theme_callback
         self.margin_callback = margin_callback
         self.current_theme = theme
         if self.current_theme is None:
@@ -323,6 +336,7 @@ class PlotConfig:
         self.themes = Themes
 
         self.set_defaults()
+        use_darkdetect()
 
     def set_defaults(self):
         self.zoom_lims = []
@@ -1231,3 +1245,17 @@ class PlotConfig:
         if cur not in o:
             o.append(cur)
         return [i/100.0 for i in sorted(o)]
+
+    def make_hist_kwargs(self, trace=0):
+        """make keywords for axes.hist()"""
+        kwargs = {}
+
+        print("make hist kwargs")
+        trace = self.get_trace(trace)
+        prop = self.traces[trace]
+        print("L Trace ", prop)
+
+        for key in ('bins', 'density', 'cumulative', 'histtype',
+                    'orientation', 'align', 'stacked', 'rwidth'):
+            kwargs[key] = getattr(self, f'hist_{key}')
+        return kwargs

@@ -1,6 +1,6 @@
 import wx
 import wx.lib.colourselect as csel
-import wx.lib.scrolledpanel as sXFplocrolled
+import wx.lib.scrolledpanel as scrolled
 
 from math import log10
 

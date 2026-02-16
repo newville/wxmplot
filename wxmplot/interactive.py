@@ -79,7 +79,6 @@ class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
     def __init__(self, with_inspect=False, **kws):
         self.with_inspect = with_inspect
         wx.App.__init__(self, **kws)
-        print("wxmplotApp -- ", use_darkdetect)
         use_darkdetect()
 
     def OnInit(self):

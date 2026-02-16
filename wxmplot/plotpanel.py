@@ -421,6 +421,71 @@ class PlotPanel(BasePanel):
         self.draw()
         # self.canvas.Refresh()
 
+    def hist(self, x, bins=None, density=None, cumulative=None,
+             histtype=None, orientation=None, align=None,
+             stacked=None, rwidth=None, force_draw=True, title=None,
+             xlabel=None, ylabel=None, y2label=None, y3label=None,
+             y4label=None, use_dates=False, dates_style=None, yaxes=1,
+             side=None, **kws):
+        """hist"""
+        if bins is not None:
+            self.conf.hist_bins = bins
+        if density is not None:
+            self.conf.hist_density = density
+        if cumulative is not None:
+            self.conf.hist_cumulative = cumulative
+        if histtype is not None:
+            self.conf.hist_histtype = histtype
+        if orientation is not None:
+            self.conf.hist_orientation = orientation
+        if align is not None:
+            self.conf.hist_align = align
+        if stacked is not None:
+            self.conf.hist_stacked = stacked
+        if rwidth is not None:
+            self.conf.hist_rwidth = rwidth
+
+        allaxes = self.fig.get_axes()
+        if len(allaxes) > 1:
+            for ax in allaxes[1:]:
+                if ax in self.data_range:
+                    self.data_range.pop(ax)
+                self.fig.delaxes(ax)
+
+        self.data_range = {}
+        self.conf.zoom_lims = []
+        self.conf.axes_hist = {}
+        self.clear()
+        yaxes, axes = self.get_yaxes(yaxes, side=side)
+
+        self.conf.yscale = 'linear'
+        self.conf.yscale = 'linear'
+        self.conf.y2scale = 'linear'
+        self.conf.y3scale = 'linear'
+        self.conf.y4scale = 'linear'
+        self.conf.user_limits[axes] = 4*[None]
+
+        if xlabel is not None:
+            self.set_xlabel(xlabel, delay_draw=True)
+        if ylabel is not None:
+            self.set_ylabel(ylabel, delay_draw=True)
+        if y2label is not None:
+            self.set_y2label(y2label, delay_draw=True)
+        if y3label is not None:
+            self.set_y3label(y3label, delay_draw=True)
+        if y4label is not None:
+            self.set_y4label(y4label, delay_draw=True)
+        if title is not None:
+            self.set_title(title, delay_draw=True)
+        self.dates_style = ifnot_none(dates_style, self.dates_style)
+        self.use_dates = ifnot_none(use_dates, self.use_dates)
+
+        kws = self.conf.make_hist_kwargs()
+        print("hist : ", kws)
+        self.conf.axes_hist[0] = axes.hist(x, **kws)
+
+
+
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims
 
@@ -799,8 +864,7 @@ class PlotPanel(BasePanel):
                 self.win_config = None
 
         if self.win_config is None:
-            self.win_config = PlotConfigFrame(parent=self,
-                                              config=self.conf,
+            self.win_config = PlotConfigFrame(parent=self, config=self.conf,
                                               trace_color_callback=self.trace_color_callback)
             self.win_config.Raise()
 

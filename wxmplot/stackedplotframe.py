@@ -19,7 +19,7 @@ from .utils import pack, MenuItem, Printer
 from .plotpanel import PlotPanel
 from .baseframe import BaseFrame
 from .utils import gformat
-from .colors import GUI_COLORS, wxcol2hex
+from .colors import  wxcol2hex, get_color
 
 class StackedPlotFrame(BaseFrame):
     """
@@ -231,7 +231,6 @@ class StackedPlotFrame(BaseFrame):
         panel = self.get_panel(panel)
         panel.configure(event=event)
 
-
     ####
     ## create GUI
     ####
@@ -259,6 +258,7 @@ class StackedPlotFrame(BaseFrame):
         # self.panel_bot.conf.labelfont.set_size(lsize-2)
         self.panel_bot.yformatter = self.bot_yformatter
 
+        self.panel.conf.theme_callback = self.onTheme
         self.panel.conf.theme_color_callback = self.onThemeColor
         self.panel.conf.margin_callback = self.onMargins
 
@@ -276,7 +276,7 @@ class StackedPlotFrame(BaseFrame):
             pan.set_viewlimits = partial(self.set_viewlimits, panel=pname)
             pan.unzoom_all = self.unzoom_all
             pan.unzoom = self.unzoom
-            pan.canvas.figure.set_facecolor(wxcol2hex(GUI_COLORS.bg))
+            pan.canvas.figure.set_facecolor(wxcol2hex(get_color('bg')))
 
         # suppress mouse events on the bottom panel
         null_events = {'leftdown': None, 'leftup': None, 'rightdown': None,
@@ -335,6 +335,11 @@ class StackedPlotFrame(BaseFrame):
             show = not self.panel.conf.show_grid
         for p in (self.panel, self.panel_bot):
             p.conf.enable_grid(show)
+
+    def onTheme(self, theme):
+        """pass theme """
+        self.panel_bot.conf.set_theme(theme=theme)
+
 
     def onThemeColor(self, color, item):
         """pass theme colors to bottom panel"""

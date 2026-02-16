@@ -1,26 +1,24 @@
 import wx
 import wx.lib.colourselect as csel
-import wx.lib.agw.flatnotebook as flat_nb
-import wx.lib.scrolledpanel as scrolled
+import wx.lib.scrolledpanel as sXFplocrolled
 
 from math import log10
 
 import numpy as np
 
+import yaml
+
 import matplotlib.cm as cmap
 from matplotlib.ticker import FuncFormatter
 
-from wxutils import get_cwd
-from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color, GUI_COLORS
+from wxutils import (get_cwd, LabeledTextCtrl, SimpleText,
+                     Check, Choice, HLine, FloatSpin, MenuItem,
+                     flatnotebook, get_color, set_color, use_darkdetect)
+
+from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import ifnot_none
 from .plotconfigframe import autopack
-from .utils import  LabeledTextCtrl, SimpleText, Check, Choice, HLine, FloatSpin, MenuItem
 
-try:
-    import yaml
-    HAS_YAML = True
-except ImportError:
-    HAS_YAML = False
 
 cm_names = register_custom_colormaps()
 
@@ -61,7 +59,6 @@ Slices_List = ('None', 'X', 'Y')
 RGB_COLORS = ('red', 'green', 'blue')
 
 labstyle = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL
-FNB_STYLE = flat_nb.FNB_NO_X_BUTTON|flat_nb.FNB_SMART_TABS|flat_nb.FNB_NO_NAV_BUTTONS|flat_nb.FNB_NODRAG
 
 class ImageConfig:
     def __init__(self, axes=None, fig=None, canvas=None):
@@ -122,6 +119,7 @@ class ImageConfig:
         self._xfmt = None
         self._yfmt = None
         self.set_formatters()
+        use_darkdetect()
 
     def set_colormap(self, name, reverse=False, icol=0):
         self.cmap_reverse = reverse
@@ -409,8 +407,6 @@ class ImageConfigFrame(wx.Frame):
         self.SetMenuBar(mbar)
 
     def save_config(self, evt=None, fname='wxmplot.yaml'):
-        if not HAS_YAML:
-            return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Save image configuration',
                             defaultDir=get_cwd(),
@@ -426,8 +422,6 @@ class ImageConfigFrame(wx.Frame):
 
 
     def load_config(self, evt=None):
-        if not HAS_YAML:
-            return
         file_choices = 'YAML Config File (*.yaml)|*.yaml'
         dlg = wx.FileDialog(self, message='Read image configuration',
                             defaultDir=get_cwd(),
@@ -704,12 +698,7 @@ class ImageConfigFrame(wx.Frame):
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
         self.SetFont(font)
 
-        self.nb = flat_nb.FlatNotebook(self, wx.ID_ANY, agwStyle=FNB_STYLE)
-        self.nb.SetTabAreaColour(GUI_COLORS.nb_area)
-        self.nb.SetActiveTabColour(GUI_COLORS.nb_active)
-        self.nb.SetNonActiveTabTextColour(GUI_COLORS.nb_text)
-        self.nb.SetActiveTabTextColour(GUI_COLORS.nb_activetext)
-
+        self.nb = flatnotebook(self, with_nav_buttons=True, with_smart_tabs=True)
         self.nb.AddPage(self.make_contour_panel(parent=self.nb, font=font),
                         'Contours', True)
 

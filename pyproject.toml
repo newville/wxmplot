@@ -44,8 +44,9 @@ classifiers = [
 
 dependencies = [
    "wxPython>=4.2.0",
-   "wxutils>=0.3.3",
+   "wxutils>=0.3.7",
    "darkdetect",
+   "pyobjc-framework-Cocoa; platform_system == 'Darwin'",
    "matplotlib>=3.9.0",
    "pytz",
    "numpy>=1.26",

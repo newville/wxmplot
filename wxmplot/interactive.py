@@ -26,7 +26,6 @@ from .plotframe import PlotFrame
 from .imageframe import ImageFrame
 from .stackedplotframe import StackedPlotFrame
 from .config import Themes, DARK_THEME
-from wxutils import use_darkdetect
 
 IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
@@ -79,7 +78,6 @@ class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
     def __init__(self, with_inspect=False, **kws):
         self.with_inspect = with_inspect
         wx.App.__init__(self, **kws)
-        use_darkdetect()
 
     def OnInit(self):
         self.createApp()

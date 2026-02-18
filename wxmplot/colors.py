@@ -10,8 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap, colorConverter
 from matplotlib import colormaps
 
 from wxutils.colors import (COLORS, GUI_COLORS, GUIColors, X11_COLORS,
-                            set_color, DARK_THEME, use_darkdetect,
-                            register_darkdetect, get_color)
+                            set_color, DARK_THEME, get_color)
 
 def rgb(color, default=(0,0,0)):
     """ return rgb tuple for named color in rgb.txt or a hex color """

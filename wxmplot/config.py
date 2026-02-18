@@ -30,7 +30,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
 from cycler import cycler
-from .colors import hexcolor, mpl2hexcolor, DARK_THEME, use_darkdetect
+from .colors import hexcolor, mpl2hexcolor, DARK_THEME
 
 SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
 
@@ -336,7 +336,6 @@ class PlotConfig:
         self.themes = Themes
 
         self.set_defaults()
-        use_darkdetect()
 
     def set_defaults(self):
         self.zoom_lims = []

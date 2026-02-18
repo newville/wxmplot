@@ -13,7 +13,7 @@ from matplotlib.ticker import FuncFormatter
 
 from wxutils import (get_cwd, LabeledTextCtrl, SimpleText,
                      Check, Choice, HLine, FloatSpin, MenuItem,
-                     flatnotebook, get_color, set_color, use_darkdetect)
+                     flatnotebook, get_color, set_color)
 
 from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import ifnot_none
@@ -119,7 +119,6 @@ class ImageConfig:
         self._xfmt = None
         self._yfmt = None
         self.set_formatters()
-        use_darkdetect()
 
     def set_colormap(self, name, reverse=False, icol=0):
         self.cmap_reverse = reverse

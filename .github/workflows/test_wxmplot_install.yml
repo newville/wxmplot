@@ -14,7 +14,7 @@ jobs:
       max-parallel: 4
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     defaults:
       run:
         shell: bash -l {0}
@@ -34,7 +34,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install conda dependencies
       run: |
-        conda install -y -c conda-forge python=${{ matrix.python-version }} "numpy>=1.23" "matplotlib>=3.8" "wxpython>=4.2" pip pytest
+        conda install -y -c conda-forge python=${{ matrix.python-version }} "numpy>=1.23" "matplotlib>=3.8" "wxpython>=4.2.2" pip pytest
         conda info -a
         conda list
     - name: Install wxmplot with pip

@@ -19,7 +19,7 @@ from .imageconf import ImageConfig, RGB_COLORS
 from .basepanel import BasePanel
 from .utils import inside_poly, MenuItem
 from .plotframe import PlotFrame
-from .colors import GUI_COLORS, wxcol2hex
+from .colors import wxcol2hex, get_color
 
 class ImagePanel(BasePanel):
     """
@@ -345,7 +345,7 @@ class ImagePanel(BasePanel):
         self.fig   = Figure(figsize, dpi=self.dpi)
         self.gridspec = GridSpec(1,1)
         self.axes  = self.fig.add_subplot(self.gridspec[0],
-                                          facecolor=wxcol2hex(GUI_COLORS.text_bg))
+                                          facecolor=wxcol2hex(get_color('text_bg')))
         self.canvas = FigureCanvasWxAgg(self, -1, self.fig)
         self.canvas.gui_repaint = self.gui_repaint
         self.conf.axes  = self.axes

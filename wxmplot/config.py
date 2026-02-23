@@ -29,8 +29,9 @@ import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib import rc_params, rcParams
 import matplotlib.style
+from wxutils.colors import DARK_THEME
 from cycler import cycler
-from .colors import hexcolor, mpl2hexcolor, DARK_THEME
+from .colors import hexcolor, mpl2hexcolor
 
 SIDE_YAXES = {'left': 1, 'right': 2, 'right2': 3, 'right3': 4}
 
@@ -130,7 +131,7 @@ whitebg_theme = {'axes.facecolor': '#FFFFFF',
 
 Themes = {}
 
-for tname in ('light', 'white-background', 'dark', 'matplotlib',
+for tname in ('auto', 'light', 'white-background', 'dark', 'matplotlib',
             'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
             'dark_background', 'mpl_gallery', 'petroff10',
             'tableau-colorblind10', 'Solarize_Light2', 'seaborn',
@@ -140,8 +141,6 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib',
             'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
             'seaborn-talk', 'seaborn-ticks', 'seaborn-white',
             'seaborn-whitegrid'):
-
-
     theme = rc_params()
     theme['backend'] = 'WXAgg'
     if tname == 'matplotlib':
@@ -176,7 +175,7 @@ for tname in ('light', 'white-background', 'dark', 'matplotlib',
 
 default_config = {'auto_margins': True,
                   'axes_style': 'box',
-                  'current_theme': 'dark' if DARK_THEME else 'light',
+                  'current_theme': 'auto', #== 'dark' if DARK_THEME else 'light'
                   'data_deriv': False,
                   'data_expr': None,
                   'draggable_legend': False,
@@ -289,7 +288,7 @@ class PlotConfig:
     """Plot Configuration for Line Plots, holding most configuration data """
 
     def __init__(self, canvas=None, panel=None, with_data_process=True,
-                 theme=None, theme_callback=None, theme_color_callback=None,
+                 theme='auto', theme_callback=None, theme_color_callback=None,
                  margin_callback=None, trace_color_callback=None,
                  custom_config=None):
 
@@ -304,7 +303,7 @@ class PlotConfig:
         self.margin_callback = margin_callback
         self.current_theme = theme
         if self.current_theme is None:
-            self.current_theme = 'dark' if DARK_THEME else 'light'
+            self.current_theme = 'auto'
         self.legend_map = {}
         self.legend_locs = ['best', 'upper right' , 'lower right', 'center right',
                             'upper left', 'lower left',  'center left',
@@ -365,10 +364,15 @@ class PlotConfig:
         self.set_theme()
 
 
-    def set_theme(self, theme=None):
+    def set_theme(self, theme='auto', is_dark=None):
         if theme in self.themes:
             self.current_theme = theme
+
         cur_theme = self.themes[self.current_theme]
+        if theme in ('auto', 'None', '', None):
+            if is_dark is None:
+                is_dark = DARK_THEME
+            cur_theme = self.themes['dark'] if is_dark else self.themes['light']
         rcParams.update(cur_theme)
 
         self.show_grid  = cur_theme['axes.grid']
@@ -1249,10 +1253,10 @@ class PlotConfig:
         """make keywords for axes.hist()"""
         kwargs = {}
 
-        print("make hist kwargs")
+        # print("make hist kwargs")
         trace = self.get_trace(trace)
         prop = self.traces[trace]
-        print("L Trace ", prop)
+        # print("L Trace ", prop)
 
         for key in ('bins', 'density', 'cumulative', 'histtype',
                     'orientation', 'align', 'stacked', 'rwidth'):

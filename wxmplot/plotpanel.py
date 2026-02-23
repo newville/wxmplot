@@ -20,7 +20,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.gridspec import GridSpec
 from matplotlib.colors import colorConverter
 
-from wxutils import get_cwd
+from wxutils import get_cwd, DARK_THEME, register_darkdetect
 from .basepanel import BasePanel
 from .config import PlotConfig, ifnot_none, SIDE_YAXES
 from .utils import inside_poly, MenuItem, fix_filename
@@ -57,7 +57,7 @@ class PlotPanel(BasePanel):
 
     def __init__(self, parent, size=(700, 450), dpi=150, axisbg=None,
                  facecolor=None, fontsize=9, trace_color_callback=None,
-                 output_title='plot', with_data_process=True, theme=None,
+                 output_title='plot', with_data_process=True, theme='auto',
                  **kws):
 
         self.trace_color_callback = trace_color_callback
@@ -87,6 +87,12 @@ class PlotPanel(BasePanel):
         self.conf.axes_traces = {}
         self.use_dates = False
         self.dates_style = None
+        register_darkdetect(self.onDarkMode)
+
+    def onDarkMode(self, is_dark=None):
+        if self.conf.current_theme in ('auto', 'None', '', None):
+            self.conf.set_theme('auto', is_dark=is_dark)
+            wx.CallAfter(self.Refresh)
 
     def plot(self, xdata, ydata=None, title=None, xlabel=None, ylabel=None,
              y2label=None, y3label=None, y4label=None, use_dates=False,
@@ -481,7 +487,6 @@ class PlotPanel(BasePanel):
         self.use_dates = ifnot_none(use_dates, self.use_dates)
 
         kws = self.conf.make_hist_kwargs()
-        print("hist : ", kws)
         self.conf.axes_hist[0] = axes.hist(x, **kws)
 
 

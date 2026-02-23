@@ -360,7 +360,7 @@ def get_image_window(win=1, size=None, wintitle=None):
 
     return display
 
-def plot(x,y=None, win=1, new=False, size=None, wintitle=None, theme=None, **kws):
+def plot(x,y=None, win=1, new=False, size=None, wintitle=None, theme='auto', **kws):
     """plot(x, y, win=1, new=False, ...)
 
     Plot trace of x, y arrays in a PlotFrame

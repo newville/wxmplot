@@ -160,6 +160,8 @@ def mpl_color(c, default = (242, 243, 244)):
 
 def wxcol2hex(col):
     "convert wx colour to hex"
+    if isinstance(col, tuple):
+        col = wx.Colour(col)
     return '#'+ hex(col.RGB)[2:]
 
 

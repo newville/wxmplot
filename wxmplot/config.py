@@ -415,7 +415,6 @@ class PlotConfig:
             self.current_theme = conf['current_theme']
         if 'theme' in conf:
             self.current_theme = conf['theme']
-
         # set theme by name first, other settting may override the details
         self.set_theme(self.current_theme)
 
@@ -464,6 +463,9 @@ class PlotConfig:
         self.set_legend_location(self.legend_loc, self.legend_onaxis)
         if 'window_size' in conf:
             self.panel.parent.SetSize(conf['window_size'])
+        # yes, we set the theme again at the end of all of this
+        # which seems needed sometimes when the theme is 'auto'... hm.
+        self.set_theme(self.current_theme)
         self.canvas.draw()
 
     def reset_lines(self):

@@ -8,7 +8,7 @@ Interactive wxmplot
 
  imshow(array): display image of 2D array data on a wxmplot.ImageFrame
 
- set_theme(themename): set plotting theme ('light', 'dark', 'seaborn', ...).
+ set_theme(themename): set plotting theme ('auto', light', 'dark', 'seaborn', ...).
 
 """
 import numpy as np
@@ -31,7 +31,7 @@ IMG_DISPLAYS = {}
 PLOT_DISPLAYS = {}
 MAX_WINDOWS = 100
 MAX_CURSHIST = 100
-DEFAULT_THEME = 'dark' if DARK_THEME else 'light'
+DEFAULT_THEME = 'auto'
 
 __all__ = ['wxapp', 'plot', 'newplot', 'imshow', 'get_wxapp', 'set_theme',
            'available_themes', 'get_plot_window', 'get_image_window',
@@ -119,9 +119,11 @@ def set_theme(theme):
         None
 
     Notes:
-      1. Example themese are:'light', 'dark', 'white-background', 'matplotlib',
-      'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
+      1. Example themese are: 'auto', 'light', 'dark', 'white-background',
+         'matplotlib', 'seaborn', 'ggplot', 'bmh', 'fivethirtyeight'.
       2. See available_themes() for the list of available themes.
+      3. The theme 'auto' will reflect (and chnage with) the system dark-mode
+         setting, choosing 'light' or 'dark' as appropriate.
     """
     global DEFAULT_THEME
     if theme.lower() in Themes.keys():
@@ -133,19 +135,19 @@ def available_themes():
     """list of available theme
 
     Returns:
-        list of theme names.
+    list of theme names.
 
     Notes:
-        As of this writing, the list is:
+    As of this writing, the list is:
 
-      'light', 'dark', 'white-background', 'matplotlib', 'seaborn',
-      'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
-      'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind',
-      'seaborn-dark', 'seaborn-darkgrid', 'seaborn-dark-palette',
-      'seaborn-deep', 'seaborn-notebook', 'seaborn-muted',
-      'seaborn-pastel', 'seaborn-paper', 'seaborn-poster', 'seaborn-talk',
-      'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid',
-      'Solarize_Light2'
+    'auto', 'light', 'dark', 'white-background', 'matplotlib',
+    'seaborn', 'ggplot', 'bmh', 'fivethirtyeight', 'grayscale',
+    'dark_background', 'tableau-colorblind10', 'seaborn-bright',
+    'seaborn-colorblind', 'seaborn-dark', 'seaborn-darkgrid',
+    'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
+    'seaborn-muted', 'seaborn-pastel', 'seaborn-paper',
+    'seaborn-poster', 'seaborn-talk', 'seaborn-ticks',
+    'seaborn-white', 'seaborn-whitegrid', 'Solarize_Light2'
 
 
     """
@@ -316,7 +318,7 @@ def get_plot_window(win=1, size=None, wintitle=None, theme=None):
         win (int): index of Plot Window (1 to 100)
         size (tuple): width, height in pixels of Plot Window
         wintitle(str): text for Window title [Plot Window N]
-        theme (str): theme for Plot Window ['light' or 'dark']
+        theme (str): theme for Plot Window ['auto']
 
     Returns:
         diplay, a wxmplot PlotFrame.

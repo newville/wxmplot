@@ -369,7 +369,7 @@ class PlotConfig:
             self.current_theme = theme
 
         cur_theme = self.themes[self.current_theme]
-        if theme in ('auto', 'None', '', None):
+        if theme in ('auto', '<auto>', 'None', '', None):
             if is_dark is None:
                 is_dark = DARK_THEME
             cur_theme = self.themes['dark'] if is_dark else self.themes['light']

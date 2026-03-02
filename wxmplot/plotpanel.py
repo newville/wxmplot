@@ -90,7 +90,7 @@ class PlotPanel(BasePanel):
         register_darkdetect(self.onDarkMode)
 
     def onDarkMode(self, is_dark=None):
-        if self.conf.current_theme in ('auto', 'None', '', None):
+        if self.conf.current_theme in ('auto', '<auto>', 'None', '', None):
             self.conf.set_theme('auto', is_dark=is_dark)
             wx.CallAfter(self.Refresh)
 
@@ -433,7 +433,7 @@ class PlotPanel(BasePanel):
              xlabel=None, ylabel=None, y2label=None, y3label=None,
              y4label=None, use_dates=False, dates_style=None, yaxes=1,
              side=None, **kws):
-        """hist"""
+        """histogram"""
         if bins is not None:
             self.conf.hist_bins = bins
         if density is not None:
@@ -488,8 +488,6 @@ class PlotPanel(BasePanel):
 
         kws = self.conf.make_hist_kwargs()
         self.conf.axes_hist[0] = axes.hist(x, **kws)
-
-
 
     def get_zoomlimits(self):
         return self.axes, self.get_viewlimits(), self.conf.zoom_lims

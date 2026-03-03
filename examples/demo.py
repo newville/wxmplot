@@ -136,8 +136,8 @@ class TestFrame(wx.Frame):
         x  = arange(100)
         y1 = cos(pi*x/72)
         y2 = sin(pi*x/23)
-        self.plotframe.plot(x, y1, color='red')
-        self.plotframe.oplot(x, y2, color='green3', marker='+')
+        self.plotframe.plot(x, y1)
+        self.plotframe.oplot(x, y2,  marker='+')
         self.plotframe.write_message("Plot 2")
 
 
@@ -148,7 +148,7 @@ class TestFrame(wx.Frame):
         y  = 0.4 * cos(x/2.0) + random.normal(scale=0.03, size=npts)
         dy = 0.03 * (ones(npts) + random.normal(scale=0.2, size=npts))
 
-        self.plotframe.plot(x, y, dy=dy, color='red', linewidth=0,
+        self.plotframe.plot(x, y, dy=dy, linewidth=0,
                             xlabel='x', ylabel='y', marker='o',
                             title='Plot with error bars')
         self.plotframe.write_message("Errorbars!")
@@ -157,16 +157,14 @@ class TestFrame(wx.Frame):
     def onPlot2Axes(self,event=None):
         self.ShowPlotFrame()
 
-        self.plotframe.plot( self.x,self.y2, color='black',style='dashed')
-        self.plotframe.oplot(self.x,self.y5, color='red', side='right')
+        self.plotframe.plot( self.x,self.y2, style='dashed')
+        self.plotframe.oplot(self.x,self.y5, side='right')
         self.plotframe.write_message("Plot with 2 axes")
 
 
     def onPlotSLog(self,event=None):
         self.ShowPlotFrame()
-
-        self.plotframe.plot( self.x,self.y4,ylog_scale=True,
-                             color='black',style='dashed')
+        self.plotframe.plot(self.x,self.y4,ylog_scale=True, style='dashed')
         self.plotframe.write_message("Semi Log Plot")
 
     def onPlotBig(self,event=None):

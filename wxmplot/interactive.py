@@ -21,6 +21,8 @@ from types import GeneratorType
 import wx
 import wx.lib.mixins.inspection
 
+from wxutils.colors import use_darkdetect
+
 from . import inputhook
 from .plotframe import PlotFrame
 from .imageframe import ImageFrame
@@ -67,6 +69,7 @@ def get_wxapp(redirect=False, clearSigInt=True):
         wxapp = wx.GetApp()
         if wxapp is None:
             wxapp = wxmplotApp(redirect=redirect, clearSigInt=clearSigInt)
+        use_darkdetect()
     return wxapp
 
 class wxmplotApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):

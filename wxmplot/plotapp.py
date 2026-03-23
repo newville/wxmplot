@@ -1,4 +1,5 @@
 import wx
+from wxutils.colors import use_darkdetect
 from .plotframe import PlotFrame
 
 class PlotApp(object):
@@ -17,6 +18,7 @@ class PlotApp(object):
     def __init__(self, title='WXMPLOT', size=(700,450),  dpi=150, **kws):
         self.app   = wx.App()
         self.frame = PlotFrame(title=title, size=size, dpi=dpi, **kws)
+        use_darkdetect()
 
     def plot(self, x, y, **kw):
         """plot x, y values (erasing old plot),

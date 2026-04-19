@@ -14,10 +14,11 @@ import time
 import signal
 from select import select
 from ctypes import c_void_p, c_int, cast, CFUNCTYPE, pythonapi
+from pyshortcuts import isotime
 
 import wx
 
-POLLTIME = 10 # milliseconds
+POLLTIME = 20 # milliseconds
 ON_INTERRUPT = None
 IN_MODAL_DIALOG = False
 
@@ -96,12 +97,18 @@ class EventLoopRunner(object):
         try:
             if (not IN_MODAL_DIALOG and (stdin_ready() or
                                         update_requested() or
-                                        (clock() - self.t0) > 5)):
-                self.timer.Stop()
-                self.evtloop.Exit()
-                del self.timer, self.evtloop
-                clear_update_request()
+                                        (clock() - self.t0) > 10)):
 
+                if hasattr(self, 'timer'):
+                    self.timer.Stop()
+                    del self.timer
+
+                if hasattr(self, 'evtloop'):
+                    self.evtloop.Exit()
+                    self.evtloop
+                clear_update_request()
+        except AttributeError:
+            pass
         except KeyboardInterrupt:
             print('Captured Ctrl-C!')
         except:
@@ -176,7 +183,7 @@ def inputhook_darwin():
             eloop = EventLoopRunner(parent=app)
             ptime = POLLTIME
             if update_requested():
-                ptime /= 10
+                ptime /= 2
             eloop.run(poll_time=ptime)
     except KeyboardInterrupt:
         # print(" See KeyboardInterrupt from darwin hook")

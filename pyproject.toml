@@ -52,7 +52,9 @@ dependencies = [
    "numpy>=1.26",
    "Pillow>=7.0",
    "pyyaml>=5.0",
-   "pyshortcuts>=1.9.5"]
+   "pyshortcuts>=1.9.5",
+   "vispy>=0.16.2",
+]
 
 [project.urls]
 Homepage = "https://github.com/newville/wxmplot"

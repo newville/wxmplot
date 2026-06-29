@@ -43,6 +43,7 @@ from .stackedplotframe import StackedPlotFrame
 from .residualplotframe import ResidualPlotFrame
 from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp
+from .image_canvas import ImageCanvas
 
 if sys.platform.lower() == 'darwin':
     wx.PyApp.IsDisplayAvailable = lambda _: True

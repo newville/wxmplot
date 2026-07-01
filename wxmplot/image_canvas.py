@@ -4,20 +4,21 @@ wxmplot ImageCanvas: a generic hardware-accelerated image viewer widget using Vi
 with pan/zoom, ROI selection, line ROI, and pixel info overlay.
 """
 
-import sys
 import time
 from enum import StrEnum
 from typing import Callable
 
 import numpy as np
-import vispy
 import wx
 
-vispy.use(app="wx", gl="glplus" if sys.platform == "win32" else "gl2")
+from wxmplot.vispy_utils import vispy_colour, vispy_init, vsync_for_platform
+from wxmplot.colors import lookup_colormap
+from wxutils.themes import get_theme
+from wxutils.colors import register_darkdetect
+
+vispy_init()
 
 from vispy import scene  # noqa: E402
-
-from wxmplot.colors import lookup_colormap
 
 __all__ = ["ImageCanvas", "BinMethod"]
 
@@ -82,7 +83,7 @@ class ImageCanvas(wx.Panel):
             keys=None,
             parent=self,
             app="wx",
-            vsync=True,
+            vsync=vsync_for_platform(),
             size=(100, 100),
             config={"samples": 0, "double_buffer": True, "depth_size": 0, "stencil_size": 0},
         )
@@ -138,7 +139,7 @@ class ImageCanvas(wx.Panel):
 
         self._roi_line = scene.visuals.Line(
             pos=np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], dtype=np.float32),
-            color=(99 / 255, 179 / 255, 237 / 255, 180 / 255),
+            color=vispy_colour("plot_selection"),
             width=2,
             method="gl",
             parent=self._view.scene,
@@ -147,7 +148,7 @@ class ImageCanvas(wx.Panel):
 
         self._line_visual = scene.visuals.Line(
             pos=np.array([[0, 0], [1, 1]], dtype=np.float32),
-            color=(237 / 255, 179 / 255, 99 / 255, 200 / 255),
+            color=self._theme_yellow(200),
             width=2,
             method="gl",
             parent=self._view.scene,
@@ -165,7 +166,7 @@ class ImageCanvas(wx.Panel):
 
         self._pixel_info_text = scene.visuals.Text(
             text="",
-            color=(72 / 255, 199 / 255, 116 / 255, 1.0),
+            color=self._theme_green(255),
             font_size=8,
             bold=True,
             anchor_x="left",
@@ -178,6 +179,8 @@ class ImageCanvas(wx.Panel):
         sizer.Add(self._canvas.native, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self._canvas.show()
+
+        register_darkdetect(self._on_theme_change)
 
         self._canvas.native.Bind(wx.EVT_MOUSEWHEEL, self._on_mouse_wheel)
         self._canvas.native.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
@@ -281,6 +284,23 @@ class ImageCanvas(wx.Panel):
         """Register a callback with (x1, y1, x2, y2) when the line ROI changes."""
         self._on_line_changed = callback
 
+    def _theme_yellow(self, alpha: int) -> tuple:
+        """Return the theme yellow as a normalised (r, g, b, a) float tuple for VisPy."""
+        c = get_theme().yellow
+        return (c.Red() / 255, c.Green() / 255, c.Blue() / 255, alpha / 255)
+
+    def _theme_green(self, alpha: int) -> tuple:
+        """Return the theme green as a normalised (r, g, b, a) float tuple for VisPy."""
+        c = get_theme().green
+        return (c.Red() / 255, c.Green() / 255, c.Blue() / 255, alpha / 255)
+
+    def _on_theme_change(self, is_dark: bool = False) -> None:
+        """Update VisPy visual colours when the system theme changes."""
+        self._roi_line.set_data(color=vispy_colour("plot_selection"))
+        self._line_visual.set_data(color=self._theme_yellow(200))
+        self._pixel_info_text.color = self._theme_green(255)
+        self._canvas.update()
+
     def _on_redraw_tick(self, _: wx.TimerEvent) -> None:
         """Apply the latest pending frame and re-arm the timer if more arrived."""
         image = self._pending_image
@@ -378,10 +398,11 @@ class ImageCanvas(wx.Panel):
 
     def _set_line_start_marker(self, x: float, y: float) -> None:
         """Place and show the line start marker at the given image coordinate."""
+        c = self._theme_yellow(255)
         self._line_start_marker.set_data(
             pos=np.array([[x, y, 0]], dtype=np.float32),
-            face_color=(237 / 255, 179 / 255, 99 / 255, 1.0),
-            edge_color=(237 / 255, 179 / 255, 99 / 255, 1.0),
+            face_color=c,
+            edge_color=c,
             size=8,
         )
         self._line_start_marker.visible = True

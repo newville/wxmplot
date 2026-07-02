@@ -168,7 +168,7 @@ class ImageCanvas(wx.Panel):
         self._pixel_info_text = scene.visuals.Text(
             text="",
             color=self._theme_green(255),
-            font_size=8,
+            font_size=6,
             bold=True,
             anchor_x="left",
             anchor_y="top",

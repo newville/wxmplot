@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-wxmplot ImageCanvas: a generic 1D line plot widget with pan/zoom, fill area, zoom, and
+wxmplot LinePlot: a generic 1D line plot widget with pan/zoom, fill area, zoom, and
 hover overlay.  Axes, tick labels, and overlays are painted with wx.GraphicsContext
 on the outer wx.Panel and the curve and fill are rendered by a VisPy SceneCanvas
 embedded inside the plot margins.

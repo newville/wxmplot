@@ -224,10 +224,12 @@ class ImageCanvas(wx.Panel):
         if self._auto_scale and self._raw_image is not None:
             self.set_auto_scale(True)
 
-    def set_bin_method(self, method: BinMethod) -> None:
-        """Switch the live downsampling method; must be a BinMethod value."""
-        if not isinstance(method, BinMethod):
-            raise ValueError(f"Unknown bin method: {method!r}; expected a BinMethod value")
+    def set_bin_method(self, method: BinMethod | str) -> None:
+        """Switch the live downsampling method; accepts a BinMethod value or a plain string."""
+        try:
+            method = BinMethod(method)
+        except ValueError:
+            raise ValueError(f"Unknown bin method: {method!r}; expected one of {[m.value for m in BinMethod]}")
         self._bin_method = method
         if self._raw_image is not None:
             self._apply_image(self._raw_image)

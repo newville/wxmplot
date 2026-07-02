@@ -43,8 +43,9 @@ from .stackedplotframe import StackedPlotFrame
 from .residualplotframe import ResidualPlotFrame
 from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp
-from .image_canvas import ImageCanvas
-from .line_plot  import LinePlot
+from .image_canvas import ImageCanvas, BinMethod
+from .line_plot import LinePlot
+from .histogram import Histogram
 
 if sys.platform.lower() == 'darwin':
     wx.PyApp.IsDisplayAvailable = lambda _: True

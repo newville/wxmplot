@@ -65,4 +65,4 @@ Tracker = "https://github.com/newville/wxmplot/issues"
 dev = ["build", "twine"]
 doc = ["Sphinx", "jupyter_sphinx", "sphinx-copybutton", "sphinxcontrib-video"]
 test = ["pytest", "pytest-cov", "coverage"]
-all = ["wxmplotls[dev, doc, test]"]
+all = ["wxmplot[dev, doc, test]"]

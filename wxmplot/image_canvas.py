@@ -14,7 +14,7 @@ import wx
 from wxmplot.vispy_utils import vispy_colour, vispy_init, vsync_for_platform
 from wxmplot.colors import lookup_colormap
 from wxutils.themes import get_theme
-from wxutils.colors import register_darkdetect
+from wxutils.colors import get_color, register_darkdetect
 
 vispy_init()
 
@@ -85,6 +85,7 @@ class ImageCanvas(wx.Panel):
             app="wx",
             vsync=vsync_for_platform(),
             size=(100, 100),
+            bgcolor=tuple(c / 255 for c in get_color("bg")),
             config={"samples": 0, "double_buffer": True, "depth_size": 0, "stencil_size": 0},
         )
         self._view = self._canvas.central_widget.add_view()
@@ -298,6 +299,7 @@ class ImageCanvas(wx.Panel):
 
     def _on_theme_change(self, is_dark: bool = False) -> None:
         """Update VisPy visual colours when the system theme changes."""
+        self._canvas.bgcolor = tuple(c / 255 for c in get_color("bg"))
         self._roi_line.set_data(color=vispy_colour("plot_selection"))
         self._line_visual.set_data(color=self._theme_yellow(200))
         self._pixel_info_text.color = self._theme_green(255)

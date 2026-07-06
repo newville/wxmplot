@@ -167,7 +167,7 @@ class ImageCanvas(wx.Panel):
 
         self._pixel_info_text = scene.visuals.Text(
             text="",
-            color=self._theme_green(255),
+            color=vispy_colour("green"),
             font_size=6,
             bold=True,
             anchor_x="left",
@@ -302,7 +302,7 @@ class ImageCanvas(wx.Panel):
         self._canvas.bgcolor = tuple(c / 255 for c in get_color("bg"))
         self._roi_line.set_data(color=vispy_colour("plot_selection"))
         self._line_visual.set_data(color=self._theme_yellow(200))
-        self._pixel_info_text.color = self._theme_green(255)
+        self._pixel_info_text.color = vispy_colour("green")
         self._canvas.update()
 
     def _on_redraw_tick(self, _: wx.TimerEvent) -> None:

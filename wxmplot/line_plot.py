@@ -12,6 +12,7 @@ from typing import Callable
 import numpy as np
 import wx
 from wxutils.colors import get_color, is_dark_theme, register_darkdetect
+from wxutils.themes import get_theme
 
 from wxmplot.vispy_utils import vispy_colour, vispy_init, vsync_for_platform
 
@@ -566,5 +567,12 @@ class LinePlot(wx.Panel):
             gc.Rotate(-math.pi / 2)
             gc.DrawText(self._y_label, 0, 0)
             gc.PopState()
+
+        if self._hover_data_x is not None and self._hover_data_y is not None:
+            hover_font = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
+            gc.SetFont(hover_font, get_theme().green)
+            text = self.format_hover_info(self._hover_data_x, self._hover_data_y)
+            tw, th = gc.GetTextExtent(text)
+            gc.DrawText(text, ml + pw - tw - 6, mt + 4)
 
         self.draw_overlays(gc, W, H)

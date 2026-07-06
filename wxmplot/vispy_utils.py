@@ -6,6 +6,7 @@ wxmplot ImageCanvas: shared VisPy utilities used by all wxmplot VisPy widgets
 import sys
 
 import vispy
+import wx
 from wxutils.colors import get_color
 from wxutils.themes import get_theme
 
@@ -43,6 +44,11 @@ def vispy_colour(name: str) -> tuple:
     if name == "plot_selection":
         c = get_theme().selection_bg
         return (c.Red() / 255, c.Green() / 255, c.Blue() / 255, 178 / 255)
+    theme = get_theme()
+    if hasattr(theme, name):
+        c = getattr(theme, name)
+        if isinstance(c, wx.Colour):
+            return (c.Red() / 255, c.Green() / 255, c.Blue() / 255, 1.0)
     rgba = get_color(name)
     return tuple(c / 255 for c in rgba)
 

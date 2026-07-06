@@ -113,12 +113,16 @@ class LinePlot(wx.Panel):
         self.Bind(wx.EVT_LEAVE_WINDOW, self._on_leave)
         self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_down)
         self.Bind(wx.EVT_LEFT_UP, self._on_mouse_up)
+        self.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
+        self.Bind(wx.EVT_RIGHT_UP, self._on_right_up)
         self.Bind(wx.EVT_MOUSEWHEEL, self._on_mouse_wheel)
         self.Bind(wx.EVT_RIGHT_DCLICK, self._on_right_dclick)
 
         self._canvas.native.Bind(wx.EVT_MOUSEWHEEL, self._on_mouse_wheel)
         self._canvas.native.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_down)
         self._canvas.native.Bind(wx.EVT_LEFT_UP, self._on_mouse_up)
+        self._canvas.native.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
+        self._canvas.native.Bind(wx.EVT_RIGHT_UP, self._on_right_up)
         self._canvas.native.Bind(wx.EVT_MOTION, self._on_canvas_mouse_move)
         self._canvas.native.Bind(wx.EVT_LEAVE_WINDOW, self._on_canvas_leave)
         self._canvas.native.Bind(wx.EVT_RIGHT_DCLICK, self._on_right_dclick)
@@ -405,6 +409,24 @@ class LinePlot(wx.Panel):
         self.Refresh()
         event.Skip()
 
+    def _on_right_down(self, event: wx.MouseEvent) -> None:
+        """Start pan on right down."""
+        raw_pt = event.GetPosition()
+        obj = event.GetEventObject()
+        pt = self._canvas_pt_to_panel(raw_pt.x, raw_pt.y) if obj is self._canvas.native else raw_pt
+        if self._xs is None:
+            event.Skip()
+            return
+        self._panning = True
+        self._pan_last_pt = pt
+        event.Skip()
+
+    def _on_right_up(self, event: wx.MouseEvent) -> None:
+        """End pan on right up."""
+        self._panning = False
+        self._pan_last_pt = None
+        event.Skip()
+
     def _on_mouse_move(self, event: wx.MouseEvent) -> None:
         """Forward panel mouse-move to the shared handler."""
         self._handle_mouse_move(event.GetPosition(), event)
@@ -425,27 +447,19 @@ class LinePlot(wx.Panel):
         event.Skip()
 
     def _on_mouse_down(self, event: wx.MouseEvent) -> None:
-        """Start pan (plain click) or rubber-band zoom (ctrl+click) on left down."""
+        """Start rubber-band zoom on left down."""
         raw_pt = event.GetPosition()
         obj = event.GetEventObject()
         pt = self._canvas_pt_to_panel(raw_pt.x, raw_pt.y) if obj is self._canvas.native else raw_pt
         if self._xs is None:
             event.Skip()
             return
-        if event.ControlDown() and self._panel_pt_in_plot(pt):
+        if self._panel_pt_in_plot(pt):
             self._drag_start = self._drag_end = pt
-        else:
-            self._panning = True
-            self._pan_last_pt = pt
         event.Skip()
 
     def _on_mouse_up(self, event: wx.MouseEvent) -> None:
-        """Finalise pan or apply rubber-band zoom on left up."""
-        if self._panning:
-            self._panning = False
-            self._pan_last_pt = None
-            event.Skip()
-            return
+        """Apply rubber-band zoom on left up."""
         if self._drag_start is not None:
             raw_pt = event.GetPosition()
             obj = event.GetEventObject()

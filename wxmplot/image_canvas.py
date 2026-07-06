@@ -186,6 +186,8 @@ class ImageCanvas(wx.Panel):
         self._canvas.native.Bind(wx.EVT_MOUSEWHEEL, self._on_mouse_wheel)
         self._canvas.native.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
         self._canvas.native.Bind(wx.EVT_LEFT_UP, self._on_left_up)
+        self._canvas.native.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
+        self._canvas.native.Bind(wx.EVT_RIGHT_UP, self._on_right_up)
         self._canvas.native.Bind(wx.EVT_MOTION, self._on_mouse_move)
         self._canvas.native.Bind(wx.EVT_RIGHT_DCLICK, self._on_right_dclick)
 
@@ -465,7 +467,7 @@ class ImageCanvas(wx.Panel):
         self._canvas.update()
 
     def _on_left_down(self, event: wx.MouseEvent) -> None:
-        """Handle pan (plain click), line ROI (alt), and ROI selection or drag (ctrl)."""
+        """Handle line ROI (alt+click) and ROI selection or drag (plain left drag)."""
         if event.AltDown():
             img_pos = self._screen_to_image(event.GetX(), event.GetY())
             if img_pos is not None:
@@ -484,7 +486,7 @@ class ImageCanvas(wx.Panel):
                     self._set_line_visual(x1, y1, x2, y2)
                     if self._on_line_changed:
                         self._on_line_changed(x1, y1, x2, y2)
-        elif event.ControlDown():
+        else:
             self._line_start_img = None
             self._line_end_img = None
             self._line_coords = None
@@ -500,13 +502,22 @@ class ImageCanvas(wx.Panel):
                 self._roi_img_coords = None
                 self._roi_line.visible = False
                 self._canvas.update()
-        else:
-            self._panning = True
-            self._last_mouse_pos = (event.GetX(), event.GetY())
+        event.Skip()
+
+    def _on_right_down(self, event: wx.MouseEvent) -> None:
+        """Start pan on right down."""
+        self._panning = True
+        self._last_mouse_pos = (event.GetX(), event.GetY())
+        event.Skip()
+
+    def _on_right_up(self, event: wx.MouseEvent) -> None:
+        """End pan on right up."""
+        self._panning = False
+        self._last_mouse_pos = None
         event.Skip()
 
     def _on_left_up(self, event: wx.MouseEvent) -> None:
-        """Finalise pan, ROI drag, or ROI selection on mouse release."""
+        """Finalise ROI drag or ROI selection on mouse release."""
         if self._roi_dragging:
             self._roi_dragging = False
             self._roi_drag_start_img = None
@@ -537,8 +548,6 @@ class ImageCanvas(wx.Panel):
 
         self._roi_selecting = False
         self._roi_start = None
-        self._panning = False
-        self._last_mouse_pos = None
         self._canvas.update()
         event.Skip()
 

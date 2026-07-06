@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-wxmplot ImageCanvas: shared VisPy utilities used by all wxmplot VisPy widgets
+wxmplot vispy_utils: shared VisPy utilities used by all wxmplot VisPy widgets.
 """
 
 import sys

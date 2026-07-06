@@ -45,7 +45,7 @@ from .imagematrixframe import ImageMatrixFrame
 from .plotapp  import PlotApp
 from .image_canvas import ImageCanvas, BinMethod
 from .line_plot import LinePlot
-from .histogram import Histogram
+from .histogram import Histogram, compute_histogram_data
 
 if sys.platform.lower() == 'darwin':
     wx.PyApp.IsDisplayAvailable = lambda _: True

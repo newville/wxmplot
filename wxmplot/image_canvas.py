@@ -202,7 +202,9 @@ class ImageCanvas(wx.Panel):
         if image is None or image.size == 0:
             return
         self._pending_image = image
-        if not self._redraw_timer.IsRunning():
+        if self._auto_scale:
+            self._on_redraw_tick(None)
+        elif not self._redraw_timer.IsRunning():
             self._redraw_timer.StartOnce(self._redraw_interval_ms)
 
     def set_contrast(self, min_val: float, max_val: float) -> None:
@@ -334,7 +336,7 @@ class ImageCanvas(wx.Panel):
             gpu_image = np.ascontiguousarray(gpu_image)
 
         if self._auto_scale:
-            self._min_value, self._max_value = self._compute_auto_clim(gpu_image)
+            self._min_value, self._max_value = self._compute_auto_clim(full_res)
             self._data_min, self._data_max = self._min_value, self._max_value
             self._image_visual.clim = (self._min_value, self._max_value)
 
@@ -369,10 +371,19 @@ class ImageCanvas(wx.Panel):
                 k_lo = min(max(int(n * 0.01), 0), n - 1)
                 k_hi = min(max(int(n * 0.99), k_lo + 1), n - 1)
                 part = np.partition(nonzero, (k_lo, k_hi))
-                return float(part[k_lo]), float(part[k_hi])
-            if n > 0:
-                return float(nonzero.min()), float(nonzero.max())
-        return float(sample.min()), float(sample.max())
+                vmin, vmax = float(part[k_lo]), float(part[k_hi])
+            elif n > 0:
+                vmin, vmax = float(nonzero.min()), float(nonzero.max())
+            else:
+                vmin, vmax = 0.0, 1.0  # Fallback if all zeros
+        else:
+            vmin, vmax = float(sample.min()), float(sample.max())
+        
+        # Ensure min != max to avoid histogram handle overlap
+        if vmax <= vmin:
+            vmax = vmin + 1.0
+        
+        return vmin, vmax
 
     def _screen_to_image(self, sx: int, sy: int) -> tuple[float, float] | None:
         """Map a canvas screen position to image pixel coordinates, or None if no image is loaded."""

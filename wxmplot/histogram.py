@@ -115,6 +115,7 @@ class Histogram(wx.Panel):
         self._drag_start_x: float = 0.0
         self._drag_start_min: float = 0.0
         self._drag_start_max: float = 0.0
+        self._last_callback_levels: tuple[float, float] | None = None
         self._on_levels_changed = on_levels_changed
 
         register_darkdetect(self._on_theme_change)
@@ -131,27 +132,33 @@ class Histogram(wx.Panel):
         self._gradient_bitmap = None
         self.Refresh()
 
-    def set_data(self, data: np.ndarray, auto_scale: bool = False) -> None:
-        """Update histogram from a data array."""
+    def set_data(self, data: np.ndarray, auto_scale: bool = False, data_range: tuple[float, float] | None = None) -> None:
+        """Update histogram from a data array"""
         if data is None or data.size == 0:
             return
         raw_min = float(data.min())
         raw_max = float(data.max())
-        new_min = max(raw_min, -1.0) if self._log_scale else raw_min
-        new_max = raw_max if raw_max > new_min else new_min + 1.0
+        
+        # Use provided data_range for axis, or fall back to actual data range
+        if data_range is not None:
+            new_min, new_max = data_range
+        else:
+            new_min = raw_min
+            new_max = raw_max if raw_max > raw_min else raw_min + 1.0
+
         self._bin_centers, self._counts = compute_histogram_data(data, log_scale=self._log_scale)
         self._min_val = new_min
         self._max_val = new_max
         if auto_scale or self._level_min >= self._level_max:
             self._level_min = new_min
             self._level_max = new_max
-        else:
-            self._level_min = max(self._level_min, new_min)
-            self._level_max = min(self._level_max, new_max)
         self.Refresh()
 
     def set_levels(self, min_val: float, max_val: float) -> None:
         """Set the range handles directly."""
+        # Ensure handles don't overlap
+        if max_val <= min_val:
+            max_val = min_val + 1.0
         self._level_min = min_val
         self._level_max = max_val
         self.Refresh()
@@ -162,7 +169,7 @@ class Histogram(wx.Panel):
 
     def set_range(self, min_val: float, max_val: float) -> None:
         """Set the data range shown by the histogram axis."""
-        self._min_val = max(min_val, -1.0) if self._log_scale else min_val
+        self._min_val = min_val
         self._max_val = max_val if max_val > self._min_val else self._min_val + 1.0
         self.Refresh()
 
@@ -191,9 +198,16 @@ class Histogram(wx.Panel):
         """Map a data value to canvas x coordinate."""
         pl, _, pw, _ = self._plot_rect()
         if self._log_scale:
-            v_min = np.log1p(max(self._min_val, 0.0))
-            v_max = np.log1p(max(self._max_val, 0.0))
-            v = np.log1p(max(value, 0.0))
+            # Use log scale for positive values, linear for negative
+            if self._min_val >= 0.0:
+                v_min = np.log1p(self._min_val)
+                v_max = np.log1p(self._max_val)
+                v = np.log1p(max(value, 0.0))
+            else:
+                # Mixed range: map linearly when min is negative
+                v_min = self._min_val
+                v_max = self._max_val
+                v = value
         else:
             v_min = self._min_val
             v_max = self._max_val
@@ -207,14 +221,24 @@ class Histogram(wx.Panel):
         """Map a canvas x coordinate to a data value."""
         pl, _, pw, _ = self._plot_rect()
         if self._log_scale:
-            v_min = np.log1p(max(self._min_val, 0.0))
-            v_max = np.log1p(max(self._max_val, 0.0))
+            # Use log scale for positive values, linear for negative
+            if self._min_val >= 0.0:
+                v_min = np.log1p(self._min_val)
+                v_max = np.log1p(self._max_val)
+                t = max(0.0, min(1.0, (x - pl) / pw))
+                v = v_min + t * (v_max - v_min)
+                return np.expm1(v)
+            else:
+                # Mixed range: map linearly when min is negative
+                v_min = self._min_val
+                v_max = self._max_val
+                t = max(0.0, min(1.0, (x - pl) / pw))
+                return v_min + t * (v_max - v_min)
         else:
             v_min = self._min_val
             v_max = self._max_val
-        t = max(0.0, min(1.0, (x - pl) / pw))
-        v = v_min + t * (v_max - v_min)
-        return np.expm1(v) if self._log_scale else v
+            t = max(0.0, min(1.0, (x - pl) / pw))
+            return v_min + t * (v_max - v_min)
 
     def _build_gradient_bitmap(self, w: int, h: int) -> wx.Bitmap:
         """Build a wx.Bitmap of the current colormap gradient."""
@@ -362,12 +386,13 @@ class Histogram(wx.Panel):
         x = event.GetX()
         if self._dragging == "region":
             delta = x - self._drag_start_x
-            if self._log_scale:
-                log_span = np.log1p(max(self._drag_start_max, 0.0)) - np.log1p(max(self._drag_start_min, 0.0))
-                log_dmin = np.log1p(max(self._min_val, 0.0))
-                log_dmax = np.log1p(max(self._max_val, 0.0))
+            if self._log_scale and self._min_val >= 0.0:
+                # Use log scale only for fully positive range
+                log_span = np.log1p(self._drag_start_max) - np.log1p(self._drag_start_min)
+                log_dmin = np.log1p(self._min_val)
+                log_dmax = np.log1p(self._max_val)
                 new_min = self._x_to_val(self._val_to_x(self._drag_start_min) + delta)
-                lmin = np.log1p(max(new_min, 0.0))
+                lmin = np.log1p(new_min)
                 lmax = lmin + log_span
                 if lmin < log_dmin:
                     lmin, lmax = log_dmin, log_dmin + log_span
@@ -376,6 +401,7 @@ class Histogram(wx.Panel):
                 self._level_min = np.expm1(lmin)
                 self._level_max = np.expm1(lmax)
             else:
+                # Use linear scale for negative or mixed ranges
                 span = self._drag_start_max - self._drag_start_min
                 new_min = self._x_to_val(self._val_to_x(self._drag_start_min) + delta)
                 new_min = max(self._min_val, min(self._max_val - span, new_min))
@@ -388,7 +414,10 @@ class Histogram(wx.Panel):
             elif self._dragging == "max" and value > self._level_min:
                 self._level_max = value
         self.Refresh()
-        if self._on_levels_changed:
+        # Only fire callback if the value actually changed
+        current_levels = (self._level_min, self._level_max)
+        if self._on_levels_changed and current_levels != self._last_callback_levels:
+            self._last_callback_levels = current_levels
             self._on_levels_changed(self._level_min, self._level_max)
 
     def _on_size(self, event: wx.SizeEvent) -> None:

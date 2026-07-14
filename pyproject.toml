@@ -54,6 +54,8 @@ dependencies = [
    "pyyaml>=5.0",
    "pyshortcuts>=1.9.5",
    "vispy>=0.16.2",
+   "pyopengl>=3.1.10",
+   "pyopengl-accelerate>=3.1.10",
 ]
 
 [project.urls]

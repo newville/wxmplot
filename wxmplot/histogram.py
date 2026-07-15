@@ -139,22 +139,30 @@ class Histogram(wx.Panel):
             return
 
         # Use provided data_range for axis, or fall back to actual data range
+        flat = data.ravel().astype(np.float64)
+
         if data_range is not None:
             new_min, new_max = data_range
-        else:
-            flat = data.ravel()
-            if self._log_scale:
-                # Exclude zero/gap pixels so the axis spans the actual signal range
-                nonzero = flat[flat > 0]
-                raw_min = float(nonzero.min()) if nonzero.size > 0 else float(flat.min())
-                raw_max = float(flat.max())
-            else:
-                raw_min = float(flat.min())
-                raw_max = float(flat.max())
+            use_log = self._log_scale and new_min >= 0
+        elif self._log_scale:
+            # Always use positive pixels for log-scale detector images.
+            # Negative pixels (gap/masked pixels) are excluded from the axis and histogram.
+            positive = flat[flat > 0]
+            if positive.size == 0:
+                return
+            raw_min = float(positive.min())
+            raw_max = float(positive.max())
             new_min = raw_min
             new_max = raw_max if raw_max > raw_min else raw_min + 1.0
+            use_log = True
+        else:
+            actual_min = float(flat.min())
+            actual_max = float(flat.max())
+            new_min = actual_min
+            new_max = actual_max if actual_max > actual_min else actual_min + 1.0
+            use_log = False
 
-        self._bin_centers, self._counts = compute_histogram_data(data, log_scale=self._log_scale)
+        self._bin_centers, self._counts = compute_histogram_data(flat, log_scale=use_log)
         self._min_val = new_min
         self._max_val = new_max
         if auto_scale or self._level_min >= self._level_max:
@@ -308,9 +316,9 @@ class Histogram(wx.Panel):
             handle_bottom = pt + ph
 
         if self._bin_centers is not None and self._counts is not None and len(self._bin_centers) > 1:
-            if self._log_scale:
-                v_min = np.log1p(max(self._min_val, 0.0))
-                v_max = np.log1p(max(self._max_val, 0.0))
+            if self._log_scale and self._min_val >= 0:
+                v_min = np.log1p(self._min_val)
+                v_max = np.log1p(self._max_val)
             else:
                 v_min = self._min_val
                 v_max = self._max_val

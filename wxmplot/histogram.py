@@ -183,6 +183,10 @@ class Histogram(wx.Panel):
         """Return the current min, max handle values."""
         return self._level_min, self._level_max
 
+    def get_range(self) -> tuple[float, float]:
+        """Return the current axis data range."""
+        return self._min_val, self._max_val
+
     def set_range(self, min_val: float, max_val: float) -> None:
         """Set the data range shown by the histogram axis."""
         self._min_val = min_val

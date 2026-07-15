@@ -29,7 +29,7 @@ def compute_histogram_data(
     flat = flat.astype(np.float64)
 
     if log_scale:
-        positive = flat[flat >= 0]
+        positive = flat[flat > 0]
         if positive.size == 0:
             return None, None
         data = np.log1p(positive)
@@ -136,13 +136,20 @@ class Histogram(wx.Panel):
         """Update histogram from a data array"""
         if data is None or data.size == 0:
             return
-        raw_min = float(data.min())
-        raw_max = float(data.max())
-        
+
         # Use provided data_range for axis, or fall back to actual data range
         if data_range is not None:
             new_min, new_max = data_range
         else:
+            flat = data.ravel()
+            if self._log_scale:
+                # Exclude zero/gap pixels so the axis spans the actual signal range
+                nonzero = flat[flat > 0]
+                raw_min = float(nonzero.min()) if nonzero.size > 0 else float(flat.min())
+                raw_max = float(flat.max())
+            else:
+                raw_min = float(flat.min())
+                raw_max = float(flat.max())
             new_min = raw_min
             new_max = raw_max if raw_max > raw_min else raw_min + 1.0
 
@@ -253,9 +260,11 @@ class Histogram(wx.Panel):
         """Format a data value for display as a handle label."""
         if v == 0:
             return "0"
-        if abs(v) >= 10000 or (abs(v) < 0.01 and v != 0):
-            return f"{v:.2e}"
-        return f"{int(v):,}" if v == int(v) else f"{v:.1f}"
+        av = abs(v)
+        if v == int(v) and av < 1e15:
+            n = int(v)
+            return f"{n:,}" if av >= 1_000_000 else str(n)
+        return f"{v:.4g}"
 
     def _on_paint(self, _: wx.PaintEvent) -> None:
         """Paint the histogram, optional colorbar, handles, and labels."""

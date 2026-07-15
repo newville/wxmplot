@@ -3,6 +3,7 @@ wxmplot Histogram: histogram data computation and a generic histogram widget wit
 draggable range handles and an optional colorbar strip.
 """
 
+import math
 from typing import Callable
 
 import numpy as np
@@ -258,6 +259,8 @@ class Histogram(wx.Panel):
 
     def _fmt_value(self, v: float) -> str:
         """Format a data value for display as a handle label."""
+        if not math.isfinite(v):
+            return ""
         if v == 0:
             return "0"
         av = abs(v)

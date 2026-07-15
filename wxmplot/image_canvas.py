@@ -554,8 +554,12 @@ class ImageCanvas(wx.Panel):
                         self._on_roi_changed(x1, y1, x2, y2)
                 else:
                     self._roi_line.visible = False
+                    if self._on_roi_cleared:
+                        self._on_roi_cleared()
             else:
                 self._roi_line.visible = False
+                if self._on_roi_cleared:
+                    self._on_roi_cleared()
 
         self._roi_selecting = False
         self._roi_start = None

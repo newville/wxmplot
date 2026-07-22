@@ -176,6 +176,17 @@ class ImageCanvas(wx.Panel):
         )
         self._pixel_info_text.visible = False
 
+        self._fps_text = scene.visuals.Text(
+            text="",
+            color=vispy_colour("green"),
+            font_size=6,
+            bold=True,
+            anchor_x="left",
+            anchor_y="top",
+            parent=self._canvas.scene,
+        )
+        self._fps_text.visible = False
+
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self._canvas.native, 1, wx.EXPAND)
         self.SetSizer(sizer)
@@ -264,6 +275,17 @@ class ImageCanvas(wx.Panel):
     def get_contrast_range(self) -> tuple[float, float]:
         """Return the current contrast (min, max) limits."""
         return self._min_value, self._max_value
+
+    def set_fps(self, fps: float | None) -> None:
+        """Update the FPS overlay in the top-left corner. Pass None to hide."""
+        if fps is None:
+            self._fps_text.visible = False
+            return
+        canvas_h = self._canvas.size[1]
+        self._fps_text.text = f"{fps:.1f} fps"
+        self._fps_text.pos = (8, 12)
+        self._fps_text.visible = True
+        self._canvas.update()
 
     def format_pixel_info(self, ix: int, iy: int, intensity: float) -> str:
         """Return the pixel info string shown in the overlay. Override in a subclass to append specific fields."""

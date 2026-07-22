@@ -89,7 +89,7 @@ class Histogram(wx.Panel):
         handle_radius:     Radius of the handle circles in pixels (default 6)
         hit_radius:        Hit-test radius for handle dragging in pixels (default 10)
         """
-        super().__init__(parent)
+        super().__init__(parent, style=wx.BORDER_NONE)
         self.SetBackgroundStyle(wx.BG_STYLE_PAINT)
         self.SetMinSize((-1, 80))
 

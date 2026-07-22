@@ -35,7 +35,7 @@ class LinePlot(wx.Panel):
         margin_bottom: int = 50,
     ) -> None:
         """Initialise the LinePlot panel."""
-        super().__init__(parent)
+        super().__init__(parent, style=wx.BORDER_NONE)
         self.SetMinSize((-1, 160))
         self.SetBackgroundStyle(wx.BG_STYLE_PAINT)
 

@@ -276,6 +276,11 @@ class ImageCanvas(wx.Panel):
         """Return the current contrast (min, max) limits."""
         return self._min_value, self._max_value
 
+    def render_to_array(self) -> np.ndarray:
+        """Return the current canvas content as an RGB numpy array (H, W, 3)."""
+        rgba = self._canvas.render()
+        return rgba[:, :, :3]
+
     def set_fps(self, fps: float | None) -> None:
         """Update the FPS overlay in the top-left corner. Pass None to hide."""
         if fps is None:

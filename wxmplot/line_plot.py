@@ -502,14 +502,16 @@ class LinePlot(wx.Panel):
         gc = wx.GraphicsContext.Create(dc)
         if gc is None:
             return
+        self._draw_axes(gc, *self.GetSize())
 
+    def _draw_axes(self, gc: wx.GraphicsContext, W: int, H: int) -> None:
+        """Draw axes, labels, and overlays into gc at size (W, H)."""
         bg = get_color("bg")
         border = get_color("graytext")
         tick_label = get_color("text")
         axis_label = get_color("text")
         empty_text = get_color("graytext")
 
-        W, H = self.GetSize()
         ml, mr, mt, mb = self._ml, self._mr, self._mt, self._mb
         pw, ph = W - ml - mr, H - mt - mb
 
@@ -590,3 +592,36 @@ class LinePlot(wx.Panel):
             gc.DrawText(text, ml + pw - tw - 6, mt + 4)
 
         self.draw_overlays(gc, W, H)
+
+    def render_to_array(self) -> np.ndarray:
+        """Render the full plot (axes + embedded VisPy curve) to an RGB numpy array."""
+        W, H = self.GetSize()
+        ml, mr, mt, mb = self._ml, self._mr, self._mt, self._mb
+        pw, ph = W - ml - mr, H - mt - mb
+
+        # Axes, labels, overlays using memory DC
+        bmp = wx.Bitmap(W, H)
+        mem_dc = wx.MemoryDC(bmp)
+        mem_dc.SetBackground(wx.Brush(get_color("bg")))
+        mem_dc.Clear()
+        gc = wx.GraphicsContext.Create(mem_dc)
+        if gc is not None:
+            self._draw_axes(gc, W, H)
+        mem_dc.SelectObject(wx.NullBitmap)
+        img = bmp.ConvertToImage()
+        axes_rgb = np.frombuffer(img.GetData(), dtype=np.uint8).reshape(H, W, 3)
+
+        # Embedded VisPy curve using framebuffer readback
+        canvas_rgba = self._canvas.render()
+        canvas_rgb = canvas_rgba[:, :, :3]
+        ch, cw = canvas_rgb.shape[:2]
+        if (ch, cw) != (ph, pw):
+            img_c = wx.Image(cw, ch)
+            img_c.SetData(canvas_rgb.tobytes())
+            img_c = img_c.Scale(pw, ph, wx.IMAGE_QUALITY_HIGH)
+            canvas_rgb = np.frombuffer(img_c.GetData(), dtype=np.uint8).reshape(ph, pw, 3)
+
+        result = axes_rgb.copy()
+        result[mt:mt + ph, ml:ml + pw] = canvas_rgb
+        return result
+

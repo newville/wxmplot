@@ -116,6 +116,7 @@ class ImageCanvas(wx.Panel):
         self.Bind(wx.EVT_TIMER, self._on_redraw_tick, self._redraw_timer)
 
         self._bin_method = BinMethod.NONE
+        self._display_shape: tuple[int, int] | None = None
 
         self._panning = False
         self._last_mouse_pos = None
@@ -249,11 +250,12 @@ class ImageCanvas(wx.Panel):
         self._bin_method = method
         if self._raw_image is not None:
             self._apply_image(self._raw_image)
+            self.reset_view()
 
     def reset_view(self) -> None:
         """Reset pan/zoom to fit the image and clear any active ROI."""
-        if self._raw_image is not None:
-            h, w = self._raw_image.shape[:2]
+        if self._display_shape is not None:
+            h, w = self._display_shape
             self._view.camera.set_range(x=(0, w), y=(0, h))
         self._roi_img_coords = None
         self._roi_line.visible = False
@@ -367,6 +369,7 @@ class ImageCanvas(wx.Panel):
             self._data_min, self._data_max = self._min_value, self._max_value
             self._image_visual.clim = (self._min_value, self._max_value)
 
+        self._display_shape = gpu_image.shape[:2]
         self._image_visual.set_data(gpu_image)
         if self._first_image:
             self.reset_view()

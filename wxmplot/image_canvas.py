@@ -116,6 +116,7 @@ class ImageCanvas(wx.Panel):
         self.Bind(wx.EVT_TIMER, self._on_redraw_tick, self._redraw_timer)
 
         self._bin_method = BinMethod.NONE
+        self._norm: str = "linear"
         self._display_shape: tuple[int, int] | None = None
 
         self._panning = False
@@ -220,11 +221,11 @@ class ImageCanvas(wx.Panel):
             self._redraw_timer.StartOnce(self._redraw_interval_ms)
 
     def set_contrast(self, min_val: float, max_val: float) -> None:
-        """Set contrast limits and disable auto-scaling."""
+        """Set contrast limits (raw pixels) and disable auto-scaling."""
         self._auto_scale = False
         self._min_value = min_val
         self._max_value = max_val
-        self._image_visual.clim = (min_val, max_val)
+        self._image_visual.clim = (self._norm_fwd(min_val), self._norm_fwd(max_val))
         self._canvas.update()
 
     def set_auto_scale(self, enabled: bool) -> None:
@@ -232,7 +233,7 @@ class ImageCanvas(wx.Panel):
         self._auto_scale = enabled
         if enabled and self._raw_image is not None:
             self._min_value, self._max_value = self._compute_auto_clim(self._raw_image)
-            self._image_visual.clim = (self._min_value, self._max_value)
+            self._image_visual.clim = (self._norm_fwd(self._min_value), self._norm_fwd(self._max_value))
             self._canvas.update()
 
     def set_filter_gaps(self, enabled: bool) -> None:
@@ -251,6 +252,28 @@ class ImageCanvas(wx.Panel):
         if self._raw_image is not None:
             self._apply_image(self._raw_image)
             self.reset_view()
+
+    def set_norm(self, norm: str) -> None:
+        """Set the display normalization ('linear', 'sqrt', or 'log')."""
+        self._norm = norm
+        if self._raw_image is not None:
+            self._apply_image(self._raw_image)
+
+    def _norm_fwd(self, value: float) -> float:
+        """Convert a raw pixel value to the normalized display space."""
+        if self._norm == "log":
+            return float(np.log1p(max(value, 0.0)))
+        if self._norm == "sqrt":
+            return float(np.sqrt(max(value, 0.0)))
+        return float(value)
+
+    def _norm_apply(self, image: np.ndarray) -> np.ndarray:
+        """Apply the norm transform to an image array for GPU upload."""
+        if self._norm == "log":
+            return np.log1p(np.maximum(image.astype(np.float32), 0.0))
+        if self._norm == "sqrt":
+            return np.sqrt(np.maximum(image.astype(np.float32), 0.0))
+        return image.astype(np.float32) if image.dtype != np.float32 else image
 
     def reset_view(self) -> None:
         """Reset pan/zoom to fit the image and clear any active ROI."""
@@ -364,13 +387,14 @@ class ImageCanvas(wx.Panel):
         if not gpu_image.flags.c_contiguous:
             gpu_image = np.ascontiguousarray(gpu_image)
 
+        self._data_min, self._data_max = self._compute_full_range(full_res)
         if self._auto_scale:
             self._min_value, self._max_value = self._compute_auto_clim(full_res)
-            self._data_min, self._data_max = self._min_value, self._max_value
-            self._image_visual.clim = (self._min_value, self._max_value)
 
-        self._display_shape = gpu_image.shape[:2]
-        self._image_visual.set_data(gpu_image)
+        display_image = self._norm_apply(gpu_image)
+        self._display_shape = display_image.shape[:2]
+        self._image_visual.set_data(display_image)
+        self._image_visual.clim = (self._norm_fwd(self._min_value), self._norm_fwd(self._max_value))
         if self._first_image:
             self.reset_view()
             self._first_image = False
@@ -413,6 +437,20 @@ class ImageCanvas(wx.Panel):
         if vmax <= vmin:
             vmax = vmin + 1.0
         
+        return vmin, vmax
+
+    def _compute_full_range(self, img: np.ndarray) -> tuple[float, float]:
+        """Return the true (sampled) min/max of the image, excluding gaps if filter_gaps is on."""
+        flat = img.reshape(-1)
+        step = max(1, flat.size // self._AUTO_CLIM_SAMPLE_BUDGET)
+        sample = flat[::step]
+        if self._filter_gaps:
+            sample = sample[sample > 0]
+        if sample.size == 0:
+            return 0.0, 1.0
+        vmin, vmax = float(sample.min()), float(sample.max())
+        if vmax <= vmin:
+            vmax = vmin + 1.0
         return vmin, vmax
 
     def _screen_to_image(self, sx: int, sy: int) -> tuple[float, float] | None:

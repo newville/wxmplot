@@ -1,5 +1,5 @@
 """
-wxmplot Histogram: histogram data computation and a generic histogram widget with 
+wxmplot Histogram: histogram data computation and a generic histogram widget with
 draggable range handles and an optional colorbar strip.
 """
 
@@ -16,20 +16,21 @@ from wxmplot.colors import lookup_colormap
 __all__ = ["compute_histogram_data", "Histogram"]
 
 _DEFAULT_MAX_PIXELS = 500_000
+_NORMS = ("linear", "sqrt", "log")
 
 
 def compute_histogram_data(
     image: np.ndarray,
     max_pixels: int = _DEFAULT_MAX_PIXELS,
-    log_scale: bool = True,
+    norm: str = "linear",
 ) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
-    """Returns (bin_centers, log_counts) for a log-log histogram. Samples up to max_pixels pixels from the image before computing the histogram."""
+    """Returns (bin_centers, counts) with both axes in the norm-transformed space."""
     flat = image.ravel()
     if flat.size > max_pixels:
         flat = flat[:: flat.size // max_pixels]
     flat = flat.astype(np.float64)
 
-    if log_scale:
+    if norm == "log":
         positive = flat[flat > 0]
         if positive.size == 0:
             return None, None
@@ -42,7 +43,21 @@ def compute_histogram_data(
         if not mask.any():
             return None, None
         return bin_edges[:-1][mask], np.log(hist[mask].astype(np.float64))
-    else:
+    elif norm == "sqrt":
+        nonneg = flat[flat >= 0]
+        if nonneg.size == 0:
+            return None, None
+        data = np.sqrt(nonneg)
+        data = data[np.isfinite(data)]
+        if data.size == 0:
+            return None, None
+        hist, bin_edges = np.histogram(data, bins=512)
+        mask = hist > 0
+        if not mask.any():
+            return None, None
+        centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+        return centers[mask], np.sqrt(hist[mask].astype(np.float64))
+    else:  # linear
         finite = flat[np.isfinite(flat)]
         if finite.size == 0:
             return None, None
@@ -61,7 +76,7 @@ class Histogram(wx.Panel):
         self,
         parent: wx.Window,
         colormap: str = "gray",
-        log_scale: bool = False,
+        norm: str = "linear",
         show_colorbar: bool = False,
         on_levels_changed: Callable | None = None,
         margin_left: int = 30,
@@ -77,7 +92,7 @@ class Histogram(wx.Panel):
 
         parent:            Parent wx.Window
         colormap:          Colormap name for the gradient strip (only used when show_colorbar=True)
-        log_scale:         If True, use log-scale axis mapping for intensity images
+        norm:              Sets the normilization (default linear)
         show_colorbar:     If True, draw a colormap gradient strip below the histogram
         on_levels_changed: Optional callback fired with (min, max) when handles move
         margin_left:       Left margin in pixels (default 30)
@@ -94,7 +109,7 @@ class Histogram(wx.Panel):
         self.SetMinSize((-1, 80))
 
         self._colormap = colormap
-        self._log_scale = log_scale
+        self._norm = norm
         self._show_colorbar = show_colorbar
         self._margin_left = margin_left
         self._margin_right = margin_right
@@ -133,38 +148,51 @@ class Histogram(wx.Panel):
         self._gradient_bitmap = None
         self.Refresh()
 
-    def set_data(self, data: np.ndarray, auto_scale: bool = False, data_range: tuple[float, float] | None = None) -> None:
-        """Update histogram from a data array"""
+    def set_norm(self, norm: str) -> None:
+        """Change the axis normalization and clear cached histogram data."""
+        if norm not in _NORMS:
+            raise ValueError(f"norm must be one of {_NORMS}, got {norm!r}")
+        if norm == self._norm:
+            return
+        self._norm = norm
+        self._bin_centers = None
+        self._counts = None
+        self.Refresh()
+
+    @property
+    def norm(self) -> str:
+        return self._norm
+
+    def set_data(self, data: np.ndarray, auto_scale: bool = False) -> None:
+        """Update histogram from a data array."""
         if data is None or data.size == 0:
             return
 
         # Use provided data_range for axis, or fall back to actual data range
         flat = data.ravel().astype(np.float64)
+        self._bin_centers, self._counts = compute_histogram_data(flat, norm=self._norm)
 
-        if data_range is not None:
-            new_min, new_max = data_range
-            use_log = self._log_scale and new_min >= 0
-        elif self._log_scale:
-            # Always use positive pixels for log-scale detector images.
-            # Negative pixels (gap/masked pixels) are excluded from the axis and histogram.
-            positive = flat[flat > 0]
-            if positive.size == 0:
-                return
-            raw_min = float(positive.min())
-            raw_max = float(positive.max())
-            new_min = raw_min
-            new_max = raw_max if raw_max > raw_min else raw_min + 1.0
-            use_log = True
+        if self._bin_centers is None or len(self._bin_centers) == 0:
+            return
+
+        # Range from actual bin extent so bars always fill the full plot width
+        n = len(self._bin_centers)
+        half_bin = (float(self._bin_centers[-1]) - float(self._bin_centers[0])) / (2 * max(n - 1, 1))
+        lo_t = float(self._bin_centers[0]) - half_bin
+        hi_t = float(self._bin_centers[-1]) + half_bin
+
+        if self._norm == "log":
+            new_min = float(np.expm1(max(lo_t, 0.0)))
+            new_max = float(np.expm1(hi_t))
+        elif self._norm == "sqrt":
+            new_min = float(max(lo_t, 0.0) ** 2)
+            new_max = float(hi_t ** 2)
         else:
-            actual_min = float(flat.min())
-            actual_max = float(flat.max())
-            new_min = actual_min
-            new_max = actual_max if actual_max > actual_min else actual_min + 1.0
-            use_log = False
+            new_min = lo_t
+            new_max = hi_t
 
-        self._bin_centers, self._counts = compute_histogram_data(flat, log_scale=use_log)
         self._min_val = new_min
-        self._max_val = new_max
+        self._max_val = new_max if new_max > new_min else new_min + 1.0
         if auto_scale or self._level_min >= self._level_max:
             self._level_min = new_min
             self._level_max = new_max
@@ -193,6 +221,26 @@ class Histogram(wx.Panel):
         self._max_val = max_val if max_val > self._min_val else self._min_val + 1.0
         self.Refresh()
 
+    def _norm_fwd(self, value: float) -> float:
+        """Map a raw data value into the display (transformed) space."""
+        if self._norm == "log" and self._min_val >= 0:
+            return float(np.log1p(max(value, 0.0)))
+        if self._norm == "sqrt" and self._min_val >= 0:
+            return float(np.sqrt(max(value, 0.0)))
+        return value
+
+    def _norm_range(self) -> tuple[float, float]:
+        """Return (v_min, v_max) in the display space."""
+        return self._norm_fwd(self._min_val), self._norm_fwd(self._max_val)
+
+    def _norm_inv(self, v: float) -> float:
+        """Map a display-space value back to raw data space."""
+        if self._norm == "log" and self._min_val >= 0:
+            return float(np.expm1(v))
+        if self._norm == "sqrt" and self._min_val >= 0:
+            return float(v * v)
+        return v
+
     def _on_theme_change(self, is_dark: bool = False) -> None:
         """Repaint when the system theme changes."""
         self._gradient_bitmap = None
@@ -217,21 +265,8 @@ class Histogram(wx.Panel):
     def _val_to_x(self, value: float) -> float:
         """Map a data value to canvas x coordinate."""
         pl, _, pw, _ = self._plot_rect()
-        if self._log_scale:
-            # Use log scale for positive values, linear for negative
-            if self._min_val >= 0.0:
-                v_min = np.log1p(self._min_val)
-                v_max = np.log1p(self._max_val)
-                v = np.log1p(max(value, 0.0))
-            else:
-                # Mixed range: map linearly when min is negative
-                v_min = self._min_val
-                v_max = self._max_val
-                v = value
-        else:
-            v_min = self._min_val
-            v_max = self._max_val
-            v = value
+        v_min, v_max = self._norm_range()
+        v = self._norm_fwd(value)
         if v_max == v_min:
             return pl + pw / 2.0
         t = max(0.0, min(1.0, (v - v_min) / (v_max - v_min)))
@@ -240,25 +275,10 @@ class Histogram(wx.Panel):
     def _x_to_val(self, x: float) -> float:
         """Map a canvas x coordinate to a data value."""
         pl, _, pw, _ = self._plot_rect()
-        if self._log_scale:
-            # Use log scale for positive values, linear for negative
-            if self._min_val >= 0.0:
-                v_min = np.log1p(self._min_val)
-                v_max = np.log1p(self._max_val)
-                t = max(0.0, min(1.0, (x - pl) / pw))
-                v = v_min + t * (v_max - v_min)
-                return np.expm1(v)
-            else:
-                # Mixed range: map linearly when min is negative
-                v_min = self._min_val
-                v_max = self._max_val
-                t = max(0.0, min(1.0, (x - pl) / pw))
-                return v_min + t * (v_max - v_min)
-        else:
-            v_min = self._min_val
-            v_max = self._max_val
-            t = max(0.0, min(1.0, (x - pl) / pw))
-            return v_min + t * (v_max - v_min)
+        t = max(0.0, min(1.0, (x - pl) / pw))
+        v_min, v_max = self._norm_range()
+        v = v_min + t * (v_max - v_min)
+        return self._norm_inv(v)
 
     def _build_gradient_bitmap(self, w: int, h: int) -> wx.Bitmap:
         """Build a wx.Bitmap of the current colormap gradient."""
@@ -320,12 +340,7 @@ class Histogram(wx.Panel):
             handle_bottom = pt + ph
 
         if self._bin_centers is not None and self._counts is not None and len(self._bin_centers) > 1:
-            if self._log_scale and self._min_val >= 0:
-                v_min = np.log1p(self._min_val)
-                v_max = np.log1p(self._max_val)
-            else:
-                v_min = self._min_val
-                v_max = self._max_val
+            v_min, v_max = self._norm_range()
             v_range = v_max - v_min or 1.0
             count_range = (self._counts.max() - self._counts.min()) or 1.0
             count_min = self._counts.min()
@@ -410,22 +425,19 @@ class Histogram(wx.Panel):
         x = event.GetX()
         if self._dragging == "region":
             delta = x - self._drag_start_x
-            if self._log_scale and self._min_val >= 0.0:
-                # Use log scale only for fully positive range
-                log_span = np.log1p(self._drag_start_max) - np.log1p(self._drag_start_min)
-                log_dmin = np.log1p(self._min_val)
-                log_dmax = np.log1p(self._max_val)
+            if self._norm != "linear" and self._min_val >= 0.0:
+                v_min, v_max = self._norm_range()
+                span = self._norm_fwd(self._drag_start_max) - self._norm_fwd(self._drag_start_min)
                 new_min = self._x_to_val(self._val_to_x(self._drag_start_min) + delta)
-                lmin = np.log1p(new_min)
-                lmax = lmin + log_span
-                if lmin < log_dmin:
-                    lmin, lmax = log_dmin, log_dmin + log_span
-                if lmax > log_dmax:
-                    lmax, lmin = log_dmax, log_dmax - log_span
-                self._level_min = np.expm1(lmin)
-                self._level_max = np.expm1(lmax)
+                t_min = self._norm_fwd(new_min)
+                t_max = t_min + span
+                if t_min < v_min:
+                    t_min, t_max = v_min, v_min + span
+                if t_max > v_max:
+                    t_max, t_min = v_max, v_max - span
+                self._level_min = self._norm_inv(t_min)
+                self._level_max = self._norm_inv(t_max)
             else:
-                # Use linear scale for negative or mixed ranges
                 span = self._drag_start_max - self._drag_start_min
                 new_min = self._x_to_val(self._val_to_x(self._drag_start_min) + delta)
                 new_min = max(self._min_val, min(self._max_val - span, new_min))

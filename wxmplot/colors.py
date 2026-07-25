@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.colors import LinearSegmentedColormap, colorConverter
 #from matplotlib.cm import  register_cmap
 from matplotlib import colormaps
+from vispy.color import get_colormap
+from vispy.color.colormap import get_colormaps
 
 from wxutils.colors import (COLORS, GUI_COLORS, GUIColors, X11_COLORS,
                             set_color, DARK_THEME, get_color)
@@ -167,3 +169,29 @@ def wxcol2hex(col):
 
 def mpl2hexcolor(c):
     return hexcolor(mpl_color(c))
+
+
+# VisPy colormap registry 
+_vispy_registry: dict = {}
+
+
+def register_colormap(name: str, colormap) -> None:
+    """Register a VisPy Colormap for use across all wxmplot vispy widgets."""
+    _vispy_registry[name] = colormap
+
+
+def lookup_colormap(name: str):
+    """Return the VisPy Colormap, checking the app registry first. Falls back to VisPy's built-in colormaps."""
+    return _vispy_registry.get(name) or get_colormap(name)
+
+
+def get_colormap_names() -> list:
+    """Return a sorted list of all available colormaps. Includes both built-in VisPy and any registered colormaps."""
+    return sorted(list(get_colormaps()) + list(_vispy_registry))
+
+
+def colormap_color(colormap: str, t: float):
+    """Return a wx.Colour for colormap at normalised position t in [0, 1]."""
+    t = max(0.0, min(1.0, t))
+    rgba = lookup_colormap(colormap)[t].rgba[0]
+    return wx.Colour(int(rgba[0] * 255), int(rgba[1] * 255), int(rgba[2] * 255))

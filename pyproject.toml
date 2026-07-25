@@ -52,7 +52,11 @@ dependencies = [
    "numpy>=1.26",
    "Pillow>=7.0",
    "pyyaml>=5.0",
-   "pyshortcuts>=1.9.5"]
+   "pyshortcuts>=1.9.5",
+   "vispy>=0.16.2",
+   "pyopengl>=3.1.10",
+   "pyopengl-accelerate>=3.1.10",
+]
 
 [project.urls]
 Homepage = "https://github.com/newville/wxmplot"
@@ -63,4 +67,4 @@ Tracker = "https://github.com/newville/wxmplot/issues"
 dev = ["build", "twine"]
 doc = ["Sphinx", "jupyter_sphinx", "sphinx-copybutton", "sphinxcontrib-video"]
 test = ["pytest", "pytest-cov", "coverage"]
-all = ["wxmplotls[dev, doc, test]"]
+all = ["wxmplot[dev, doc, test]"]

@@ -35,7 +35,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -43,16 +42,16 @@ classifiers = [
     ]
 
 dependencies = [
-   "wxPython>=4.2.0",
-   "wxutils>=2026.1.0",
+   "wxPython>=4.2.3",
+   "wxutils>=2026.3.0",
    "darkdetect",
    "pyobjc-framework-Cocoa; platform_system == 'Darwin'",
    "matplotlib>=3.9.0",
    "pytz",
-   "numpy>=1.26",
+   "numpy>=2.0",
    "Pillow>=7.0",
    "pyyaml>=5.0",
-   "pyshortcuts>=1.9.5",
+   "pyshortcuts>=1.9.8",
    "vispy>=0.16.2",
    "pyopengl>=3.1.10",
    "pyopengl-accelerate>=3.1.10",

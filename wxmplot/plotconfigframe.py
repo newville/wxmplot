@@ -134,7 +134,6 @@ class PlotConfigFrame(wx.Frame):
         panel.SetFont(font)
 
         self.nb = flatnotebook(panel, with_nav_buttons=True, with_smart_tabs=True)
-        print("PlotConfigFrame ", self.nb)
 
         self.nb.AddPage(self.make_linetrace_panel(parent=self.nb, font=font),
                         'Colors and Line Properties', True)

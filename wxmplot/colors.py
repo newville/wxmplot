@@ -6,7 +6,6 @@ color support for wxmplot.
 import wx
 import numpy as np
 from matplotlib.colors import LinearSegmentedColormap, colorConverter
-#from matplotlib.cm import  register_cmap
 from matplotlib import colormaps
 from vispy.color import get_colormap
 from vispy.color.colormap import get_colormaps
@@ -138,19 +137,19 @@ custom_colormap_data = {
 
 def register_custom_colormaps():
     """
-    registers custom color maps
+    registers and return custom color maps
     """
+    cmaps = {}
     makemap = LinearSegmentedColormap.from_list
-    for name, val in custom_colormap_data.items():
-        cm1 = np.array(val).transpose().astype('f8')/256.0
-        cm2 = cm1[::-1]
-        nam1 = name
-        nam2 = '%s_r' % name
-        colormaps.register(name=nam1, cmap=makemap(nam1, cm1, 256))
-        colormaps.register(name=nam2, cmap=makemap(nam2, cm2, 256))
+    for cname, val in custom_colormap_data.items():
+        cmap = np.array(val).transpose().astype('f8')/256.0
+        rname = f'{cname}_r'
+        cmaps[cname] = makemap(cname, cmap, 256)
+        cmaps[rname] = makemap(rname, cmap[::-1], 256)
+        colormaps.register(name=cname, cmap=cmaps[cname])
+        colormaps.register(name=rname, cmap=cmaps[rname])
 
-    return ('stdgamma', 'red', 'green', 'blue', 'red_heat', 'green_heat',
-            'blue_heat', 'magenta', 'yellow', 'cyan')
+    return cmaps
 
 
 def mpl_color(c, default = (242, 243, 244)):
@@ -171,7 +170,7 @@ def mpl2hexcolor(c):
     return hexcolor(mpl_color(c))
 
 
-# VisPy colormap registry 
+# VisPy colormap registry
 _vispy_registry: dict = {}
 
 

@@ -27,7 +27,7 @@ from .baseframe  import BaseFrame
 from .plotpanel  import PlotPanel
 from .imagepanel import ImagePanel
 from .imageframe import ColorMapPanel, InterpPanel, ContrastPanel
-from .imageconf import ColorMap_List, Interp_List
+from .imageconf import ColorMaps, Interp_List
 from .colors import rgb2hex
 from .utils import MenuItem, pack, fix_filename, gformat
 

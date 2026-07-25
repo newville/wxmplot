@@ -11,7 +11,6 @@ import wx.lib.colourselect as csel
 
 import numpy as np
 
-import matplotlib.cm as cmap
 from matplotlib.figure import Figure
 from matplotlib.ticker import NullFormatter
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -19,7 +18,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from wxutils import get_cwd
 
 from .imagepanel import ImagePanel
-from .imageconf import (ColorMap_List, Interp_List, Contrast_Levels,
+from .imageconf import (ColorMaps, ColorMap_Names, Interp_List, Contrast_Levels,
                         Slices_List, RGB_COLORS, ImageConfigFrame)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
@@ -54,27 +53,28 @@ class ColorMapPanel(wx.Panel):
         self.cmap_choice = None
         reverse = False
         cmapname = default
-        if colormap_list is not None:
-            cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
-            cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
-            self.cmap_choice = cmap_choice
 
-            if cmapname is None:
-                cmapname = colormap_list[0]
+        if colormap_list is None or len(colormap_list) < 1:
+            colormap_list = ColorMap_Names
 
-            if cmapname.endswith('_r'):
-                reverse = True
-                cmapname = cmap[:-2]
-            cmap_choice.SetStringSelection(cmapname)
+        cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
+        cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
+        self.cmap_choice = cmap_choice
 
-            cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
-            cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
-            cmap_reverse.SetValue(reverse)
-            self.cmap_reverse = cmap_reverse
+        if cmapname not in colormap_list:
+            cmapname = colormap_list[0]
 
-        if cmapname is None:
-            cmapname = 'gray'
-        self.imgpanel.conf.cmap[color] = cmap.get_cmap(cmapname)
+        if cmapname.endswith('_r'):
+            reverse = True
+            cmapname = cmapname[:-2]
+        cmap_choice.SetStringSelection(cmapname)
+
+        cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
+        cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
+        cmap_reverse.SetValue(reverse)
+        self.cmap_reverse = cmap_reverse
+
+        self.imgpanel.conf.cmap[color] = ColorMaps.get(cmapname, ColorMaps['gray'])
 
         maxval = self.imgpanel.conf.cmap_range
         wd, ht = 1.0, 0.15
@@ -678,7 +678,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         else:
             self.cmap_panels[0] =  ColorMapPanel(panel, self.panel,
                                                  default='gray',
-                                                 colormap_list=ColorMap_List)
+                                                 colormap_list=ColorMap_Names)
 
             sizer.Add(self.cmap_panels[0],  0, lsty, 1)
 

@@ -8,7 +8,6 @@ import numpy as np
 
 import yaml
 
-import matplotlib.cm as cmap
 from matplotlib.ticker import FuncFormatter
 
 from wxutils import (get_cwd, LabeledTextCtrl, SimpleText,
@@ -19,30 +18,56 @@ from .colors import register_custom_colormaps, hexcolor, hex2rgb, mpl_color
 from .config import ifnot_none
 from .plotconfigframe import autopack
 
+def get_mpl_cmaps():
+    try:
+        from matplotlib import colormaps
+        return dict(colormaps)
+    except ImportError:
+        pass
 
-cm_names = register_custom_colormaps()
+    import matplotlib.cm as cmap
+    colormaps = {}
+    for m in dir(cmap):
+        skip = m.startswith('_')
+        for meth in ('ColormapRegistry', 'Mapping', 'ScalarMappable',
+                     'bivar_cmaps', 'cmaps_listed', 'colors', 'datad',
+                     'get_cmap', 'mpl', 'multivar_cmaps'):
+            if m == meth:
+                skip = False
+        if not skip:
+            colormaps[m] = getattr(cmap, m)
+    return colormaps
 
-ColorMap_List = []
+_cmaps  = register_custom_colormaps()
+_cmaps.update(get_mpl_cmaps())
 
-for cm in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
-           'cividis', 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
-           'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu', 'GnBu', 'PuBu',
-           'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn' 'PiYG', 'PRGn', 'RdBu', 'RdPu',
-           'RdYlBu', 'RdYlGn', 'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
-           'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic',
-           'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
-           'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia', 'hot',
-           'afmhot', 'gist_heat', 'copper', 'red', 'green', 'blue', 'magenta',
-           'yellow', 'cyan', 'red_heat', 'green_heat', 'blue_heat', 'ocean',
-           'terrain', 'jet', 'stdgamma', 'hsv', 'twilight', 'twilight_shifted',
-           'Accent', 'Spectral', 'Pastel1', 'Pastel2', 'Paired', 'Accent',
-           'Dark2', 'Set1', 'Set2', 'Set3', 'tab10', 'tab20', 'tab20b',
-           'tab20c', 'flag', 'prism', 'ocean', 'gist_earth', 'terrain',
-           'gist_stern', 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
-           'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
-           'gist_ncar' ):
-    if cm in cm_names or hasattr(cmap, cm) and cm not in ColorMap_List:
-        ColorMap_List.append(cm)
+ColorMaps = {}       # dict of all colormaps, including reversed
+ColorMap_Names = []  # names of colormaps, not including '_r'
+
+for cname in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
+              'cividis', 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
+              'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu', 'GnBu', 'PuBu',
+              'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn' 'PiYG', 'PRGn', 'RdBu', 'RdPu',
+              'RdYlBu', 'RdYlGn', 'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
+              'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic',
+              'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
+              'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia', 'hot',
+              'afmhot', 'gist_heat', 'copper', 'red', 'green', 'blue', 'magenta',
+              'yellow', 'cyan', 'red_heat', 'green_heat', 'blue_heat', 'ocean',
+              'terrain', 'jet', 'stdgamma', 'hsv', 'twilight', 'twilight_shifted',
+              'Accent', 'Spectral', 'Pastel1', 'Pastel2', 'Paired', 'Accent',
+              'Dark2', 'Set1', 'Set2', 'Set3', 'tab10', 'tab20', 'tab20b',
+              'tab20c', 'flag', 'prism', 'ocean', 'gist_earth', 'terrain',
+              'gist_stern', 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
+              'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
+              'gist_ncar' ):
+    if cname in _cmaps:
+        ColorMaps[cname] = _cmaps[cname]
+        ColorMap_Names.append(cname)
+    rname = f'{cname}_r'
+    if rname in _cmaps:
+        ColorMaps[rname] = _cmaps[rname]
+
 
 Contrast_Levels = ('0', '0.00010', '0.00015', '0.00020', '0.0003', '0.0005',
                    '0.0007', '0.0010', '0.0015', '0.0020', '0.003', '0.005',
@@ -65,7 +90,8 @@ class ImageConfig:
         self.axes   = axes
         self.fig  = fig
         self.canvas  = canvas
-        self.cmap  = [cmap.gray, cmap.gray, cmap.gray]
+        gray =  ColorMaps['gray']
+        self.cmap  = [gray]*3
         self.cmap_reverse = False
         self.interp = 'nearest'
         self.show_axis = False
@@ -126,7 +152,7 @@ class ImageConfig:
             name = name + '_r'
         elif not reverse and name.endswith('_r'):
             name = name[:-2]
-        self.cmap[icol] = curr_cmap = cmap.get_cmap(name)
+        self.cmap[icol] = curr_cmap = ColorMaps.get(name, ColorMaps['gray'])
         if not hasattr(curr_cmap, '_lut'):
             try:
                 curr_cmap._init()
@@ -141,7 +167,7 @@ class ImageConfig:
                 xname = 'Reds'
             elif name.endswith('_r'):
                 xname = 'gray_r'
-            self.contour.set_cmap(getattr(cmap, xname))
+            self.contour.set_cmap(ColorMaps[xname])
         if hasattr(self, 'image'):
             self.image.set_cmap(curr_cmap)
 
@@ -349,7 +375,7 @@ class ImageConfig:
             if colormap.endswith('_r'):
                 reverse_colormap = True
                 colormap = colormap[:-2]
-            self.colormap = colormap if colormap in ColorMap_List else self.colormap
+            self.colormap = colormap if colormap in ColorMaps else self.colormap
 
         if contrast_level is not None:
             self.contrast_level = float(contrast_level)

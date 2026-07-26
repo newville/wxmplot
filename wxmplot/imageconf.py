@@ -61,11 +61,11 @@ for cname in ('gray', 'coolwarm', 'viridis', 'inferno', 'plasma', 'magma',
               'gist_stern', 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
               'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
               'gist_ncar' ):
-    if cname in _cmaps:
+    if cname in _cmaps and cname not in ColorMaps:
         ColorMaps[cname] = _cmaps[cname]
         ColorMap_Names.append(cname)
     rname = f'{cname}_r'
-    if rname in _cmaps:
+    if rname in _cmaps and rname not in ColorMaps:
         ColorMaps[rname] = _cmaps[rname]
 
 

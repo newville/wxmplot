@@ -228,11 +228,11 @@ class ImageCanvas(wx.Panel):
         self._image_visual.clim = (self._norm_fwd(min_val), self._norm_fwd(max_val))
         self._canvas.update()
 
-    def set_auto_scale(self, enabled: bool) -> None:
+    def set_auto_scale(self, enabled: bool, level: (None, float) = None) -> None:
         """Enable or disable automatic contrast scaling."""
         self._auto_scale = enabled
         if enabled and self._raw_image is not None:
-            self._min_value, self._max_value = self._compute_auto_clim(self._raw_image)
+            self._min_value, self._max_value = self._compute_auto_clim(self._raw_image, level=level)
             self._image_visual.clim = (self._norm_fwd(self._min_value), self._norm_fwd(self._max_value))
             self._canvas.update()
 
@@ -413,8 +413,9 @@ class ImageCanvas(wx.Panel):
             return 1
         return min(_MAX_LIVE_BIN, int(ratio))
 
-    def _compute_auto_clim(self, img: np.ndarray) -> tuple[float, float]:
-        """Estimate display clim from a sampled subset of pixels. Uses percentiles when filter_gaps is on."""
+    def _compute_auto_clim(self, img: np.ndarray, level=None) -> tuple[float, float]:
+        """Estimate display clim from a sampled subset of pixels.
+           Uses percentiles when filter_gaps is on."""
         flat = img.reshape(-1)
         step = max(1, flat.size // self._AUTO_CLIM_SAMPLE_BUDGET)
         sample = flat[::step]
@@ -432,11 +433,15 @@ class ImageCanvas(wx.Panel):
                 vmin, vmax = 0.0, 1.0  # Fallback if all zeros
         else:
             vmin, vmax = float(sample.min()), float(sample.max())
-        
+
+        # alternative implementation
+        if level is not None:
+            vmin, vmax = np.percentile(img, [level, 100.0-level])
+
         # Ensure min != max to avoid histogram handle overlap
         if vmax <= vmin:
             vmax = vmin + 1.0
-        
+
         return vmin, vmax
 
     def _compute_full_range(self, img: np.ndarray) -> tuple[float, float]:

@@ -16,8 +16,6 @@ from wxmplot.colors import lookup_colormap
 from wxutils.themes import get_theme
 from wxutils.colors import get_color, register_darkdetect
 
-vispy_init()
-
 from vispy import scene  # noqa: E402
 
 __all__ = ["ImageCanvas", "BinMethod"]
@@ -78,7 +76,7 @@ class ImageCanvas(wx.Panel):
     def __init__(self, parent: wx.Window) -> None:
         """Initializes the ImageCanvas."""
         super().__init__(parent)
-
+        vispy_init()
         self._canvas = scene.SceneCanvas(
             keys=None,
             parent=self,

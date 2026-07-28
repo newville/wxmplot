@@ -16,7 +16,6 @@ from wxutils.themes import get_theme
 
 from wxmplot.vispy_utils import vispy_colour, vispy_init, vsync_for_platform
 
-vispy_init()
 
 from vispy import scene  # noqa: E402
 
@@ -36,6 +35,8 @@ class LinePlot(wx.Panel):
     ) -> None:
         """Initialise the LinePlot panel."""
         super().__init__(parent, style=wx.BORDER_NONE)
+        vispy_init()
+
         self.SetMinSize((-1, 160))
         self.SetBackgroundStyle(wx.BG_STYLE_PAINT)
 
@@ -624,4 +625,3 @@ class LinePlot(wx.Panel):
         result = axes_rgb.copy()
         result[mt:mt + ph, ml:ml + pw] = canvas_rgb
         return result
-

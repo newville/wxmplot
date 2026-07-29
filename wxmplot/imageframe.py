@@ -18,7 +18,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from wxutils import get_cwd
 
 from .imagepanel import ImagePanel
-from .imageconf import (ColorMaps, ColorMap_Names, Interp_List, Contrast_Levels,
+from .imageconf import (ColorMaps, ColorMap_List, Interp_List, Contrast_Levels,
                         Slices_List, RGB_COLORS, ImageConfigFrame)
 from .baseframe import BaseFrame
 from .plotframe import PlotFrame
@@ -55,7 +55,7 @@ class ColorMapPanel(wx.Panel):
         cmapname = default
 
         if colormap_list is None or len(colormap_list) < 1:
-            colormap_list = ColorMap_Names
+            colormap_list = ColorMap_List
 
         cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
         cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
@@ -678,7 +678,7 @@ Keyboard Shortcuts:   (For Mac OSX, replace 'Ctrl' with 'Apple')
         else:
             self.cmap_panels[0] =  ColorMapPanel(panel, self.panel,
                                                  default='gray',
-                                                 colormap_list=ColorMap_Names)
+                                                 colormap_list=ColorMap_List)
 
             sizer.Add(self.cmap_panels[0],  0, lsty, 1)
 

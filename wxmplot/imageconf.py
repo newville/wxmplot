@@ -44,30 +44,23 @@ def get_mpl_cmaps():
 _cmaps  = register_custom_colormaps()
 _cmaps.update(get_mpl_cmaps())
 
-ColorMaps = {}         # dict of all colormaps, including reversed
-ColorMap_All = []      # names of all available colormaps, not including '_r'
+ColorMaps = {}  # dict of all colormaps, including reversed
+
 
 for cname in ('gray', 'coolwarm', 'viridis', 'civids', 'inferno', 'plasma',
               'magma', 'cividis', 'berlin', 'managua', 'vanimo', 'turbo',
-              'Grays', 'Purples', 'Blues',  'Greens', 'Oranges', 'Reds',
-              'red_white', 'green_white', 'blue_white','YlOrBr', 'YlOrRd',
-              'OrRd', 'PuRd', 'RdPu', 'BuPu', 'GnBu', 'PuBu', 'YlGnBu',
-              'PuBuGn', 'BuGn', 'YlGn', 'PiYG', 'PRGn', 'RdBu',
-              'RdPu', 'RdYlBu', 'RdYlGn', 'PiYG', 'PRGn', 'BrBG',
-              'PuOr', 'RdGy', 'RdBu', 'RdYlBu', 'RdYlGn', 'Spectral',
-              'bwr','brg', 'seismic', 'binary', 'bone', 'pink',
-              'spring', 'summer', 'autumn', 'winter', 'cool',
-              'Wistia', 'hot', 'afmhot', 'copper', 'red', 'green',
-              'blue', 'magenta', 'yellow', 'cyan', 'red_heat',
-              'green_heat', 'blue_heat', 'ocean', 'terrain', 'jet',
-              'stdgamma', 'hsv', 'twilight', 'twilight_shifted',
-              'Accent', 'Spectral', 'Pastel1', 'Pastel2', 'Paired',
-              'Accent', 'Dark2', 'Set1', 'Set2', 'Set3', 'tab10',
-              'tab20', 'tab20b', 'tab20c', 'flag', 'prism', 'ocean',
-              'terrain', 'okabe_ito',  'gnuplot', 'gnuplot2', 'CMRmap',
-              'cubehelix', 'gist_rainbow', 'rainbow', 'nipy_spectral',
-              'gist_ncar', 'gist_gray', 'gist_yarg',
-              'gist_heat', 'gist_earth', 'gist_stern'):
+              'cool', 'hot', 'bone', 'Wistia', 'Grays', 'Purples', 'Blues',
+              'Greens', 'Oranges', 'Reds', 'red_white', 'green_white',
+              'blue_white','YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu',
+              'BuPu', 'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn',
+              'PiYG', 'PRGn', 'RdBu', 'RdPu', 'RdYlBu', 'RdYlGn', 'PiYG',
+              'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu', 'RdYlBu', 'RdYlGn',
+              'Spectral', 'bwr','brg', 'seismic', 'pink', 'spring', 'summer',
+              'autumn', 'winter', 'afmhot', 'copper', 'red', 'green', 'blue',
+              'magenta', 'yellow', 'cyan', 'red_heat', 'green_heat',
+              'blue_heat', 'ocean', 'terrain', 'jet', 'stdgamma', 'Accent',
+              'Spectral', 'ocean', 'terrain', 'gnuplot', 'gnuplot2',
+              'CMRmap', 'cubehelix', 'rainbow'):
     if cname in _cmaps and cname not in ColorMaps:
         ColorMaps[cname] = _cmaps[cname]
     rname = f'{cname}_r'
@@ -75,11 +68,9 @@ for cname in ('gray', 'coolwarm', 'viridis', 'civids', 'inferno', 'plasma',
         ColorMaps[rname] = _cmaps[rname]
 
 # curated list of default of colormap names (not including '_r')
-ColorMap_Names = ['gray', 'coolwarm', 'viridis', 'cividis',
-                  'inferno', 'plasma', 'magma', 'berlin',
-                  'managua', 'vanimo', 'turbo']
-
-ColorMap_List = ColorMap_Names
+ColorMap_List = ['gray', 'coolwarm', 'viridis', 'cividis',
+                 'inferno', 'plasma', 'magma', 'berlin',
+                 'managua', 'vanimo', 'turbo', 'hot', 'cool', 'bone', 'Wistia']
 
 Contrast_Levels = ('0', '0.00010', '0.00015', '0.00020', '0.0003', '0.0005',
                    '0.0007', '0.0010', '0.0015', '0.0020', '0.003', '0.005',
@@ -548,7 +539,7 @@ class ImageConfigFrame(wx.Frame):
                                     action=self.onColorMaps)
 
         self.cmap_view = cview = dv.DataViewListCtrl(panel, style=DVSTYLE)
-        cview.SetMinSize((450, 400))
+        cview.SetMinSize((400, 450))
         cview.AppendToggleColumn(' Use ', width=75, mode=dv.DATAVIEW_CELL_ACTIVATABLE)
         cview.AppendTextColumn(' Color Map ', width=175)
         for col in range(2):
@@ -559,7 +550,7 @@ class ImageConfigFrame(wx.Frame):
         self.cmap_view.DeleteAllItems()
         for name in ColorMaps:
             if not name.endswith('_r'):
-                self.cmap_view.AppendItem((name in ColorMap_Names, name))
+                self.cmap_view.AppendItem((name in ColorMap_List, name))
 
         irow = 0
         sizer.Add(label, (irow, 0), (1, 1), labstyle, 2)
@@ -766,21 +757,20 @@ class ImageConfigFrame(wx.Frame):
         self.SetFont(font)
 
         self.nb = flatnotebook(self, with_nav_buttons=True, with_smart_tabs=True)
-        self.nb.AddPage(self.make_contour_panel(parent=self.nb, font=font),
-                        'Contours', True)
-
+        self.nb.AddPage(self.make_scalebar_panel(parent=self.nb, font=font),
+                        'Scalebar', True)
         self.nb.AddPage(self.make_grid_panel(parent=self.nb, font=font),
                         'Grid Overlay', True)
 
         self.nb.AddPage(self.make_slice_panel(parent=self.nb, font=font),
                         'X/Y Slices', True)
 
-        self.nb.AddPage(self.make_scalebar_panel(parent=self.nb, font=font),
-                        'Scalebar', True)
-
         self.nb.AddPage(self.make_colormap_panel(parent=self.nb, font=font),
                         'Color Maps', True)
 
+        self.nb.AddPage(self.make_contour_panel(parent=self.nb, font=font),
+                        'Contours', True)
+        self.nb.SetSelection(0)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.nb, 1, wx.GROW|wx.ALIGN_LEFT|wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND, 3)
         autopack(self, sizer)
@@ -799,8 +789,8 @@ class ImageConfigFrame(wx.Frame):
             if sel:
                 selected.append(name)
 
-        global ColorMap_Names
-        ColorMap_Names = selected
+        global ColorMap_List
+        ColorMap_List = selected
         if len(self.parent.cmap_panels) == 1:
             cmap_choice = self.parent.cmap_panels[0].cmap_choice
             cmap_choice.Clear()

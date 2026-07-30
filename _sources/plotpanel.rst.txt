@@ -95,7 +95,7 @@ same meaning, as indicated by the right-most column.
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   | label            | string     | None    | trace label (defaults to 'trace N')            |  1  |  yes         |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
-  | theme            | str        | ''      | theme for colors and text size                 |  2  |  no          |
+  | theme            | str        | 'auto'  | theme for colors and text size                 |  2  |  no          |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
   | color            | string     | blue    | color to use for trace                         |  3  |  yes         |
   +------------------+------------+---------+------------------------------------------------+-----+--------------+
@@ -187,12 +187,15 @@ same meaning, as indicated by the right-most column.
       means to use the previously used value.
 
    2. The *theme* will set the color palette and make stylistic choices.  Choices include
-      'light' (the default), 'white-background', 'dark', 'matplotlib', 'seaborn',
+      'auto' (default), 'light', 'white-background', 'dark', 'matplotlib', 'seaborn',
       'ggplot', 'bmh', 'fivethirtyeight', 'grayscale', 'dark_background',
       'tableau-colorblind10', 'seaborn-bright', 'seaborn-colorblind', 'seaborn-dark',
       'seaborn-darkgrid', 'seaborn-dark-palette', 'seaborn-deep', 'seaborn-notebook',
       'seaborn-muted', 'seaborn-pastel', 'seaborn-paper', 'seaborn-poster',
-      'seaborn-talk', 'seaborn-ticks', 'seaborn-white', 'seaborn-whitegrid', and
+      'seaborn-talk', 'seaborn-ticks', 'seaborn-white', and
+      'seaborn-whitegrid.  Note that the default 'auto' will choose
+      between 'light' and 'dark' based on system Dark Mode, and
+      automatically switch when that Dark Mode changes.
 
    3. All *color* arguments can be a common color name ("blue", "red", "black", etc), a
       standard X11 color names ("cadetblue3", "darkgreen", etc), or an RGB hex color

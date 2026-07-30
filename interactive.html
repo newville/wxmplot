@@ -11,9 +11,9 @@
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     
-    <script src="_static/documentation_options.js?v=0a06c310"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/documentation_options.js?v=8f11cabd"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/bizstyle.js"></script>
@@ -160,7 +160,7 @@ until you no longer want to use them.</p>
 <h2>Line Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#line-plotting-with-plot-and-related-functions" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Link to this definition">¶</a></dt>
 <dd><p>Plot trace of x, y arrays in a PlotFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -319,7 +319,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_text">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Link to this definition">¶</a></dt>
 <dd><p>add text at x, y coordinates of a plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -479,32 +479,31 @@ imshow(map, …, style=’contour’)</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>1. Example themese are:’light’, ‘dark’, ‘white-background’, ‘matplotlib’,
-‘seaborn’, ‘ggplot’, ‘bmh’, ‘fivethirtyeight’.
-2. See available_themes() for the list of available themes.</p>
+<ol class="arabic simple">
+<li><p>Example themese are: ‘auto’, ‘light’, ‘dark’, ‘white-background’,
+‘matplotlib’, ‘seaborn’, ‘ggplot’, ‘bmh’, ‘fivethirtyeight’.</p></li>
+<li><p>See available_themes() for the list of available themes.</p></li>
+<li><p>The theme ‘auto’ will reflect (and chnage with) the system dark-mode
+setting, choosing ‘light’ or ‘dark’ as appropriate.</p></li>
+</ol>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.available_themes">
 <span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">available_themes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.available_themes" title="Link to this definition">¶</a></dt>
 <dd><p>list of available theme</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list of theme names.</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>As of this writing, the list is:</p>
-<blockquote>
-<div><p>‘light’, ‘dark’, ‘white-background’, ‘matplotlib’, ‘seaborn’,
-‘ggplot’, ‘bmh’, ‘fivethirtyeight’, ‘grayscale’, ‘dark_background’,
-‘tableau-colorblind10’, ‘seaborn-bright’, ‘seaborn-colorblind’,
-‘seaborn-dark’, ‘seaborn-darkgrid’, ‘seaborn-dark-palette’,
-‘seaborn-deep’, ‘seaborn-notebook’, ‘seaborn-muted’,
-‘seaborn-pastel’, ‘seaborn-paper’, ‘seaborn-poster’, ‘seaborn-talk’,
-‘seaborn-ticks’, ‘seaborn-white’, ‘seaborn-whitegrid’,
-‘Solarize_Light2’</p>
-</div></blockquote>
+<p>Returns:
+list of theme names.</p>
+<p>Notes:
+As of this writing, the list is:</p>
+<p>‘auto’, ‘light’, ‘dark’, ‘white-background’, ‘matplotlib’,
+‘seaborn’, ‘ggplot’, ‘bmh’, ‘fivethirtyeight’, ‘grayscale’,
+‘dark_background’, ‘tableau-colorblind10’, ‘seaborn-bright’,
+‘seaborn-colorblind’, ‘seaborn-dark’, ‘seaborn-darkgrid’,
+‘seaborn-dark-palette’, ‘seaborn-deep’, ‘seaborn-notebook’,
+‘seaborn-muted’, ‘seaborn-pastel’, ‘seaborn-paper’,
+‘seaborn-poster’, ‘seaborn-talk’, ‘seaborn-ticks’,
+‘seaborn-white’, ‘seaborn-whitegrid’, ‘Solarize_Light2’</p>
 </dd></dl>
 
 <dl class="py function">
@@ -535,7 +534,7 @@ be written to the Console [False]</p></li>
 <li><p><strong>win</strong> (<em>int</em>) – index of Plot Window (1 to 100)</p></li>
 <li><p><strong>size</strong> (<em>tuple</em>) – width, height in pixels of Plot Window</p></li>
 <li><p><strong>wintitle</strong> (<em>str</em>) – text for Window title [Plot Window N]</p></li>
-<li><p><strong>theme</strong> (<em>str</em>) – theme for Plot Window [‘light’ or ‘dark’]</p></li>
+<li><p><strong>theme</strong> (<em>str</em>) – theme for Plot Window [‘auto’]</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -724,8 +723,8 @@ order. Only the most recent 100 cursor events will be retained.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2025-11-23, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>

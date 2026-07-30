@@ -54,27 +54,25 @@ class ColorMapPanel(wx.Panel):
         reverse = False
         cmapname = default
 
-        if colormap_list is None or len(colormap_list) < 1:
-            colormap_list = ColorMap_List
+        if colormap_list is not None:
+            cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
+            cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
+            self.cmap_choice = cmap_choice
 
-        cmap_choice =  wx.Choice(self, size=(90, -1), choices=colormap_list)
-        cmap_choice.Bind(wx.EVT_CHOICE,  self.onCMap)
-        self.cmap_choice = cmap_choice
+            if cmapname not in colormap_list:
+                cmapname = colormap_list[0]
 
-        if cmapname not in colormap_list:
-            cmapname = colormap_list[0]
+            if cmapname.endswith('_r'):
+                reverse = True
+                cmapname = cmapname[:-2]
+            cmap_choice.SetStringSelection(cmapname)
+            self.imgpanel.conf.cmap[color] = ColorMaps.get(cmapname, ColorMaps['gray'])
 
-        if cmapname.endswith('_r'):
-            reverse = True
-            cmapname = cmapname[:-2]
-        cmap_choice.SetStringSelection(cmapname)
+            cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
+            cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
+            cmap_reverse.SetValue(reverse)
+            self.cmap_reverse = cmap_reverse
 
-        cmap_reverse = wx.CheckBox(self, label='Reverse', size=(60, -1))
-        cmap_reverse.Bind(wx.EVT_CHECKBOX, self.onCMapReverse)
-        cmap_reverse.SetValue(reverse)
-        self.cmap_reverse = cmap_reverse
-
-        self.imgpanel.conf.cmap[color] = ColorMaps.get(cmapname, ColorMaps['gray'])
 
         maxval = self.imgpanel.conf.cmap_range
         wd, ht = 1.0, 0.15

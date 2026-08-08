@@ -56,10 +56,14 @@ def hexcolor(color):
 
     # now, get color to an rgba tuple
     cvals = (0, 0, 0)
-    if isinstance(color, tuple):
-        cvals = color
-    elif isinstance(color, list):
+    if isinstance(color, list):
         cvals = tuple(color)
+
+    if isinstance(color, tuple):
+        cvals = (min(255, max(0, c)) for c in color)
+        if isinstance(color[0],  float) and color[0] < 2.0:
+            cvals = [int(255*c) for c in color]
+
     elif isinstance(color, str):
         c = color.lower().replace(' ', '').replace('gray', 'grey')
         if c in X11_COLORS:

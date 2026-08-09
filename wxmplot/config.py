@@ -222,6 +222,36 @@ def ifnot_none(val, default):
     return val if val is not None else default
 
 
+def clean_texmath(text):
+    """
+    clean a string with mixed TeX math and control strings
+
+    inside of TeX dollar signs, the text is preserved.
+
+    outsde of TeX dollar signs '\\n' will be replaced in '\n', and `\\t' with '\t'
+    """
+    def clean_escape(s):
+        s = s.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r')
+        if '\\N{' in s or '\\u' in s:
+            s = s.encode("utf-8").decode("unicode_escape")
+        return s
+
+    if '$' not in text:
+        return clean_escape(text)
+
+    ndollar = text.count('$')
+    if ndollar == 0 or ndollar % 2 == 1:
+        return clean_escape(text)
+
+    sections = []
+    for isect, sect in enumerate(text.split('$')):
+        if isect % 2 == 0:
+            sect = clean_escape(sect)
+        sections.append(sect)
+    return '$'.join(sections)
+
+
+
 class LineProps:
     """ abstraction for Line2D properties, closely related to a
     MatPlotlib Line2D.  used to set internal line properties, and
@@ -246,7 +276,7 @@ class LineProps:
         if markercolor is None:
             markercolor = color
         self.markercolor= markercolor
-        self.label      = label
+        self.label      = clean_texmath(label)
         self.zorder     = zorder
         self.mpline     = mpline
         self.yaxes      = yaxes
@@ -267,7 +297,7 @@ class LineProps:
         self.marker     = ifnot_none(marker, self.marker)
         self.markersize = ifnot_none(markersize, self.markersize)
         self.markercolor= ifnot_none(markercolor,self.markercolor)
-        self.label      = ifnot_none(label, self.label)
+        self.label      = ifnot_none(clean_texmath(label), self.label)
         self.zorder     = ifnot_none(zorder, self.zorder)
         self.alpha      = ifnot_none(alpha, self.alpha)
         self.yaxes      = ifnot_none(yaxes, self.yaxes)
@@ -425,12 +455,10 @@ class PlotConfig:
             elif attr in conf:
                 setattr(self, attr, conf[attr])
 
-        l, r, t, b = self.margins
-        self.set_margins(l, r, t, b, delay_draw=True)
+        self.set_margins(*self.margins, delay_draw=True)
         if self.auto_margins:
             self.panel.autoset_margins()
 
-        ntrace = self.ntrace
         self.reset_trace_properties()
 
         if 'traces' in conf:
@@ -547,17 +575,17 @@ class PlotConfig:
         rcParams['xtick.labelsize'] =  rcParams['ytick.labelsize'] =  n
 
         if xlabel is not None:
-            self.xlabel = xlabel
+            self.xlabel = clean_texmath(xlabel)
         if ylabel is not None:
-            self.ylabel = ylabel
+            self.ylabel = clean_texmath(ylabel)
         if y2label is not None:
-            self.y2label = y2label
+            self.y2label = clean_texmath(y2label)
         if y3label is not None:
-            self.y3label = y3label
+            self.y3label = clean_texmath(y3label)
         if y4label is not None:
-            self.y4label = y4label
+            self.y4label = clean_texmath(y4label)
         if title is not None:
-            self.title = title
+            self.title = clean_texmath(title)
         if self.canvas is None:
             return
         axes = self.canvas.figure.get_axes()
@@ -928,8 +956,7 @@ class PlotConfig:
         if yaxes_tracecolor is not None:
             self.yaxes_tracecolor = bool(yaxes_tracecolor)
 
-        cur_theme = self.themes[self.current_theme]
-        tcolor = mpl2hexcolor(self.textcolor) # cur_theme['ytick.color'])
+        tcolor = mpl2hexcolor(self.textcolor)
 
         axes = self.canvas.figure.get_axes()
         colors = [tcolor]*(len(axes)+2)
@@ -1096,7 +1123,7 @@ class PlotConfig:
             for trace, lines in enumerate(ax.get_lines()):
                 try:
                     dats = copy(self.data_save[ax][trace])
-                except:
+                except Exception:
                     return
                 xd, yd = np.asarray(dats[0][:]), np.asarray(dats[1][:])
                 if expr == 'Y*X':
@@ -1152,7 +1179,7 @@ class PlotConfig:
                                 x_minpos= min(x[np.where(x>0)])
                             else:
                                 x_minpos= min(x_minpos, min(x[np.where(x>0)]))
-                        except:
+                        except Exception:
                             pass
                         if limits == [None, None, None, None]:
                             limits = [min(x), max(x), min(y), max(y)]
@@ -1177,14 +1204,14 @@ class PlotConfig:
                 try:
                     if xrange < 1.e-10:
                         xrange = max(1.e-10, (limits[1] + limits[0] )/2.0)
-                except:
+                except Exception:
                     pass
 
                 yrange = limits[3] - limits[2]
                 try:
                     if yrange < 1.e-10:
                         yrange = max(1.e-10, (limits[3] + limits[2] )/2.0)
-                except:
+                except Exception:
                     pass
 
                 limits[0] = limits[0] - xrange * self.viewpad /100.0
@@ -1208,11 +1235,11 @@ class PlotConfig:
             all_limits.append(limits)
             try:
                 ax.set_xlim((limits[0], limits[1]), emit=True)
-            except:
+            except Exception:
                 pass
             try:
                 ax.set_ylim((limits[2], limits[3]), emit=True)
-            except:
+            except Exception:
                 pass
         return all_limits
 
@@ -1235,11 +1262,11 @@ class PlotConfig:
                 if i in (1, 2, 3):
                     ys = getattr(self, f'y{i+1}scale', 'linear')
                 axes.set_yscale(ys)
-            except:
+            except Exception:
                 axes.set_yscale('linear')
             try:
                 axes.set_xscale(self.xscale)
-            except:
+            except Exception:
                 axes.set_xscale('linear')
         if not delay_draw:
             self.process_data()
@@ -1255,10 +1282,7 @@ class PlotConfig:
         """make keywords for axes.hist()"""
         kwargs = {}
 
-        # print("make hist kwargs")
         trace = self.get_trace(trace)
-        prop = self.traces[trace]
-        # print("L Trace ", prop)
 
         for key in ('bins', 'density', 'cumulative', 'histtype',
                     'orientation', 'align', 'stacked', 'rwidth'):

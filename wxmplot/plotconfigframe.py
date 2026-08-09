@@ -3,14 +3,12 @@
 # wxmplott GUI to Configure Line Plots
 
 from functools import partial
-import yaml
 import numpy as np
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.scrolledpanel as scrolled
 
-from wxutils import (flatnotebook, get_color, set_color,
-                     SimpleText, TextCtrl)
+from wxutils import (flatnotebook, get_color)
 
 from .utils import LabeledTextCtrl, MenuItem, Choice, FloatSpin
 from .config import PlotConfig
@@ -29,38 +27,9 @@ def ffmt(val):
     if val is not None:
         try:
             return "%.5g" % val
-        except:
+        except Exception:
             pass
     return repr(val)
-
-def clean_texmath(txt):
-    """
-    clean tex math string, preserving control sequences
-    (incluing \n, so also '\nu') inside $ $, while allowing
-    \n and \t to be meaningful in the text string
-    """
-    s = "%s " % txt
-    out = []
-    i = 0
-    while i < len(s)-1:
-        if s[i] == '\\' and s[i+1] in ('n', 't'):
-            if s[i+1] == 'n':
-                out.append('\n')
-            elif s[i+1] == 't':
-                out.append('\t')
-            i += 1
-        elif s[i] == '$':
-            j = s[i+1:].find('$')
-            if j < 0:
-                j = len(s)
-            out.append(s[i:j+2])
-            i += j+2
-        else:
-            out.append(s[i])
-        i += 1
-        if i > 5000:
-            break
-    return ''.join(out).strip()
 
 ############################################################
 #  monkey-patch of ColourSelect text setting
@@ -245,13 +214,13 @@ class PlotConfigFrame(wx.Frame):
             raxes = axes[1]
         try:
             user_lims = self.conf.user_limits[laxes]
-        except:
+        except Exception:
             user_lims = 4*[None]
         auto_b  = wx.CheckBox(panel,-1, ' From Data ', (-1, -1), (-1, -1))
         auto_b.Bind(wx.EVT_CHECKBOX,self.onAutoBounds)
         try:
             auto_b.SetValue(self.conf.user_limits[laxes] == 4*[None])
-        except:
+        except Exception:
             pass
 
         self.vpad_val = FloatSpin(panel, value=2.5, min_val=0, max_val=100,
@@ -962,7 +931,7 @@ class PlotConfigFrame(wx.Frame):
                 return None
             try:
                 return float(v)
-            except:
+            except Exception:
                 return None
 
         axes = self.canvas.figure.get_axes()
@@ -1096,7 +1065,7 @@ class PlotConfigFrame(wx.Frame):
                 self.conf.relabel(**kws)
                 wid.SetBackgroundColour(get_color('text_bg'))
                 wid.SetForegroundColour(get_color('text'))
-            except: # as from latex error
+            except Exception: # as from latex error
                 print("invalid text for item ", item, s)
 
                 wid.SetBackgroundColour(get_color('text_invalid_bg'))
@@ -1104,7 +1073,7 @@ class PlotConfigFrame(wx.Frame):
         elif item == 'trace':
             try:
                 self.conf.set_trace_label(s, trace=trace)
-            except:
+            except Exception:
                 pass
 
     def onShowGrid(self,event):

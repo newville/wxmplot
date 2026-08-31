@@ -586,7 +586,7 @@ class LinePlot(wx.Panel):
             gc.PopState()
 
         if self._hover_data_x is not None and self._hover_data_y is not None:
-            hover_font = wx.Font(wx.Size(0, 10), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
+            hover_font = wx.Font(wx.Size(0, 8), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
             gc.SetFont(hover_font, get_theme().green)
             text = self.format_hover_info(self._hover_data_x, self._hover_data_y)
             tw, th = gc.GetTextExtent(text)

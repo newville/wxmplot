@@ -168,7 +168,7 @@ class ImageCanvas(wx.Panel):
         self._pixel_info_text = scene.visuals.Text(
             text="",
             color=vispy_colour("green"),
-            font_size=6,
+            font_size=8,
             bold=True,
             anchor_x="left",
             anchor_y="top",
@@ -179,7 +179,7 @@ class ImageCanvas(wx.Panel):
         self._fps_text = scene.visuals.Text(
             text="",
             color=vispy_colour("green"),
-            font_size=6,
+            font_size=8,
             bold=True,
             anchor_x="left",
             anchor_y="top",

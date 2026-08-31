@@ -103,6 +103,7 @@ class ImageCanvas(wx.Panel):
         self._first_image = True
         self._auto_scale = True
         self._filter_gaps = False
+        self._percentile_level: "float | None" = None
         self._min_value = 0.0
         self._max_value = 255.0
         self._data_min = 0.0
@@ -168,7 +169,7 @@ class ImageCanvas(wx.Panel):
         self._pixel_info_text = scene.visuals.Text(
             text="",
             color=vispy_colour("green"),
-            font_size=6,
+            font_size=8,
             bold=True,
             anchor_x="left",
             anchor_y="top",
@@ -179,7 +180,7 @@ class ImageCanvas(wx.Panel):
         self._fps_text = scene.visuals.Text(
             text="",
             color=vispy_colour("green"),
-            font_size=6,
+            font_size=8,
             bold=True,
             anchor_x="left",
             anchor_y="top",
@@ -226,11 +227,23 @@ class ImageCanvas(wx.Panel):
         self._image_visual.clim = (self._norm_fwd(min_val), self._norm_fwd(max_val))
         self._canvas.update()
 
-    def set_auto_scale(self, enabled: bool, level: (None, float) = None) -> None:
+    def set_auto_scale(self, enabled: bool, level: "float | None" = None) -> None:
         """Enable or disable automatic contrast scaling."""
         self._auto_scale = enabled
         if enabled and self._raw_image is not None:
-            self._min_value, self._max_value = self._compute_auto_clim(self._raw_image, level=level)
+            effective_level = level if level is not None else self._percentile_level
+            self._min_value, self._max_value = self._compute_auto_clim(self._raw_image, level=effective_level)
+            self._image_visual.clim = (self._norm_fwd(self._min_value), self._norm_fwd(self._max_value))
+            self._canvas.update()
+
+    def set_percentile_level(self, level: "float | None") -> None:
+        """Set a persistent contrast clip applied on every frame regardless of auto-scale (None=off)."""
+        self._percentile_level = level
+        if self._raw_image is not None:
+            if level is not None:
+                self._min_value, self._max_value = self._compute_auto_clim(self._raw_image, level=level)
+            elif self._auto_scale:
+                self._min_value, self._max_value = self._compute_auto_clim(self._raw_image)
             self._image_visual.clim = (self._norm_fwd(self._min_value), self._norm_fwd(self._max_value))
             self._canvas.update()
 
@@ -386,7 +399,9 @@ class ImageCanvas(wx.Panel):
             gpu_image = np.ascontiguousarray(gpu_image)
 
         self._data_min, self._data_max = self._compute_full_range(full_res)
-        if self._auto_scale:
+        if self._percentile_level is not None:
+            self._min_value, self._max_value = self._compute_auto_clim(full_res, level=self._percentile_level)
+        elif self._auto_scale:
             self._min_value, self._max_value = self._compute_auto_clim(full_res)
 
         display_image = self._norm_apply(gpu_image)
@@ -413,7 +428,7 @@ class ImageCanvas(wx.Panel):
 
     def _compute_auto_clim(self, img: np.ndarray, level=None) -> tuple[float, float]:
         """Estimate display clim from a sampled subset of pixels.
-           Uses percentiles when filter_gaps is on."""
+           level: symmetric contrast_level — clips this % from each side (e.g. 2 → [2, 98])."""
         flat = img.reshape(-1)
         step = max(1, flat.size // self._AUTO_CLIM_SAMPLE_BUDGET)
         sample = flat[::step]
@@ -432,9 +447,8 @@ class ImageCanvas(wx.Panel):
         else:
             vmin, vmax = float(sample.min()), float(sample.max())
 
-        # alternative implementation
         if level is not None:
-            vmin, vmax = np.percentile(img, [level, 100.0-level])
+            vmin, vmax = np.percentile(img, [level, 100.0 - level])
 
         # Ensure min != max to avoid histogram handle overlap
         if vmax <= vmin:

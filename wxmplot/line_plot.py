@@ -528,7 +528,7 @@ class LinePlot(wx.Panel):
         gc.StrokeLine(ml, mt + ph, ml + pw, mt + ph)
         gc.StrokeLine(ml, mt, ml, mt + ph)
 
-        font_small = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
+        font_small = wx.Font(wx.Size(0, 10), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
         ranges = self._data_ranges()
 
         if ranges is None:
@@ -536,7 +536,7 @@ class LinePlot(wx.Panel):
             gc.SetPen(wx.TRANSPARENT_PEN)
             gc.DrawRectangle(ml, mt, pw, ph)
             gc.SetFont(
-                wx.Font(13, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                wx.Font(wx.Size(0, 13), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
                 empty_text,
             )
             msg = "No data"
@@ -586,7 +586,7 @@ class LinePlot(wx.Panel):
             gc.PopState()
 
         if self._hover_data_x is not None and self._hover_data_y is not None:
-            hover_font = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
+            hover_font = wx.Font(wx.Size(0, 10), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
             gc.SetFont(hover_font, get_theme().green)
             text = self.format_hover_info(self._hover_data_x, self._hover_data_y)
             tw, th = gc.GetTextExtent(text)

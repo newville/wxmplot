@@ -3,7 +3,7 @@
 .. _matplotlib:  https://matplotlib.org/
 
 ==========================================================
-Comparisons of wxmplot with other Python Plotting tools
+Comparisons
 ==========================================================
 
 Disclaimer: this section is essentially opinion of the lead author of
@@ -471,15 +471,19 @@ interactive exploratory data analysis, the tutorials at
 https://www.pythonguis.com/tutorials/ are profoundly disappointing.
 
 
-Comparison with PLPlot
-===============================
+Comparison with Older LIbraries
+==================================
 
-`PLPlot` (http://plplot.sourceforge.net/) is a general purpose plotting
-library with bindings for many languages, including Python.  It supports
-many plot types, including map displays which is outside the scope of
-wxmplot. Since it is not specifically written for Python, it is not too
-surprising that its Python interface is not quite as elegant as
-`matplotlib` or `wxmplot`.  Their Python example for a basic line plot is::
+PLPlot
+~~~~~~~~~
+
+`PLPlot` (http://plplot.sourceforge.net/) is (or was)  general
+purpose plotting library with bindings for many languages, including
+Python.  It supports many plot types, including map displays which is
+outside the scope of wxmplot. Since it is not specifically written for
+Python, it is not too surprising that its Python interface is not
+quite as elegant as `matplotlib` or `wxmplot`.  Their Python example
+for a basic line plot is::
 
 
     from numpy import *
@@ -537,17 +541,16 @@ which gives a plot of
        :width: 75%
 
 
+Dislin
+~~~~~~~~~
 
-
-Comparison with Dislin
-===============================
-
-Like `PLPlot`, `Dislin` (https://dislin.de/) is a plotting library with
-bindings for many languages, including Python. It also supports many plot
-types, including 3-d volume displays which is outside the scope of
-wxmplot. Since it is not specifically written for Python, it is not too
-surprising that its Python interface is not quite as elegant as
-`matplotlib` or `wxmplot`.  Their Python example for a basic line plot is::
+Like `PLPlot`, `Dislin` (https://dislin.de/) is (or was) a plotting
+library with bindings for many languages, including Python. It also
+supports many plot types, including 3-d volume displays which is
+outside the scope of wxmplot. Since it is not specifically written for
+Python, it is not too surprising that its Python interface is not
+quite as elegant as `matplotlib` or `wxmplot`.  Their Python example
+for a basic line plot is::
 
 
     import math

@@ -1,5 +1,5 @@
 ==========================================================
-:class:`PlotPanel`:  A wx.Panel for Basic Line Plots
+:class:`PlotPanel`
 ==========================================================
 
 .. module:: plotpanel

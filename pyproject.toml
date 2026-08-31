@@ -15,7 +15,7 @@ omit = ["tests/*"]
 [project]
 name = "wxmplot"
 dynamic = ["version"]
-requires-python = ">= 3.10"
+requires-python = ">= 3.11"
 description = "wxPython plotting widgets using matplotlib"
 readme = "README.md"
 authors = [
@@ -64,6 +64,8 @@ Tracker = "https://github.com/newville/wxmplot/issues"
 
 [project.optional-dependencies]
 dev = ["build", "twine"]
-doc = ["Sphinx", "jupyter_sphinx", "sphinx-copybutton", "sphinxcontrib-video"]
+doc = ["Sphinx", "jupyter_sphinx", "sphinx-copybutton", "sphinxcontrib-video",
+       "nbsphinx", "sphinx-design", "sphinx-breeze-theme"]
+
 test = ["pytest", "pytest-cov", "coverage"]
 all = ["wxmplot[dev, doc, test]"]

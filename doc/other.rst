@@ -1,5 +1,5 @@
 ==========================================================
-Speciality wxmplot displays
+Speciality Displays
 ==========================================================
 
 There are a few custom classes for speciality plots included in

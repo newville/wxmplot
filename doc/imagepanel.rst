@@ -1,5 +1,5 @@
 ==========================================================
-:class:`ImagePanel`:  A wx.Panel for Image Display
+:class:`ImagePanel`
 ==========================================================
 
 .. module:: imagepanel

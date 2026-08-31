@@ -1,5 +1,5 @@
 ====================================
-Downloading and Installation
+Installation
 ====================================
 
 .. _github:   https://github.com/newville/wxmplot

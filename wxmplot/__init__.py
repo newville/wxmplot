@@ -8,10 +8,8 @@
    with from wx programs.  More importantly, the widgets created by wxmplot
    give the end user a flexible set of tools for interacting with their
    data and customizing the plots and displays.  wxmplot panels are more
-   interactive than typical displayss from matplotlib's pyplot module.
+   interactive than typical displays from matplotlib's pyplot module.
 
-   version: 0.9.56
-   last update: 2023-Jul-02
    License:  MIT
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
@@ -47,5 +45,3 @@ from .image_canvas import ImageCanvas, BinMethod
 from .line_plot import LinePlot
 from .histogram import Histogram, compute_histogram_data
 
-if sys.platform.lower() == 'darwin':
-    wx.PyApp.IsDisplayAvailable = lambda _: True

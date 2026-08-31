@@ -25,7 +25,11 @@ html_short_title = "WXMPLOT"
 # sys.path.append(os.path.abspath(os.path.join('.')))
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
               'sphinx.ext.napoleon', 'sphinxcontrib.video',
-              'sphinx_copybutton']
+              'sphinx_copybutton', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx',
+              "sphinx_design",
+              "nbsphinx"
+]
+
 
 # autoclass_content = 'both'
 templates_path = ['_templates']
@@ -43,6 +47,7 @@ pygments_style = 'sphinx'
 html_theme_path = ['sphinx_theme']
 html_theme = 'bizstyle'
 
+html_theme = 'breeze'
 
 html_static_path = ['_static']
 html_sidebars = {

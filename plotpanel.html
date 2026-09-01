@@ -1,55 +1,167 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>PlotPanel: A wx.Panel for Basic Line Plots &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
-    <link rel="prev" title="Interactive wxmplot displays" href="interactive.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="interactive.html" title="Interactive wxmplot displays"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="module-plotpanel">
-<span id="plotpanel-a-wx-panel-for-basic-line-plots"></span><h1><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots<a class="headerlink" href="#module-plotpanel" title="Link to this heading">¶</a></h1>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="PlotPanel" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="plotpanel.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="The PlotPanel class supports standard line plots, including scatter plots. It has both an easy-to-use programming interface, and a rich graphical user interface for manipulating the plot after it h..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_plotpanel_d53f5518.png" />
+<meta property="og:image:alt" content="The PlotPanel class supports standard line plots, including scatter plots. It has both an easy-to-use programming interface, and a rich graphical user interface for manipulating the plot after it h..." />
+<meta name="description" content="The PlotPanel class supports standard line plots, including scatter plots. It has both an easy-to-use programming interface, and a rich graphical user interface for manipulating the plot after it h..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>PlotPanel - WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="ImagePanel" href="imagepanel.html"><link rel="prev" title="Interactive displays" href="interactive.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="index.html">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li><li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a></li><li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><header class="bz-article-header">
+  
+  
+    <nav class="bz-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="bz-breadcrumbs-home">
+      <a href="index.html" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z" />
+        </svg>
+      </a>
+    </li><li class="bz-breadcrumbs-current">
+      <span><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></span>
+    </li>
+  </ol>
+</nav>
+  
+<label
+  class="bz-sidebar-secondary-toggle"
+  for="bz-sidebar-secondary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle table of contents"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75H20.25 M11.25 12H20.25 M7.75 17.25H20.25"
+    />
+  </svg>
+</label></header><article class="bz-article-main" role="main"><div class="bz-page-actions" role="group" aria-label="Page actions">
+  <button data-copy-source="_sources/plotpanel.rst.txt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+    <span>Copy page</span>
+  </button>
+  <div class="bz-dropdown">
+    <button
+      aria-label="More actions"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></button>
+    <ul role="menu" aria-hidden="true">
+      <li>
+        <a href="#" role="menuitem" data-copy-source="_sources/plotpanel.rst.txt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+          <span>Copy page</span>
+        </a>
+      </li>
+      <li>
+        <a href="_sources/plotpanel.rst.txt" role="menuitem" class="bz-page-actions-external" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H4.75a.75.75 0 0 1 0-1.5H19a.5.5 0 0 0 .5-.5V8.5h-4a2 2 0 0 1-2-2v-4H5a.5.5 0 0 0-.5.5v6.25a.75.75 0 0 1-1.5 0Zm12-.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0-.146-.336l-4.018-4.018A.5.5 0 0 0 15 2.5Z"></path><path d="M4.53 12.24a.75.75 0 0 1-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 1 1-1.022 1.1l-3.23-3a.75.75 0 0 1 0-1.1l3.23-3a.75.75 0 0 1 1.06.04Zm3.979 1.06a.75.75 0 1 1 1.02-1.1l3.231 3a.75.75 0 0 1 0 1.1l-3.23 3a.75.75 0 1 1-1.021-1.1l2.639-2.45-2.64-2.45Z"></path></svg>
+          <span>View source</span>
+        </a>
+      </li></ul>
+  </div>
+</div><section id="module-plotpanel">
+<span id="plotpanel"></span><h1><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code><a class="headerlink" href="#module-plotpanel" title="Link to this heading">#</a></h1>
 <p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> class supports standard line plots, including
 scatter plots.  It has both an easy-to-use programming interface, and a rich
 graphical user interface for manipulating the plot after it has been drawn.
@@ -81,7 +193,17 @@ of optional arguments.  The <a class="reference internal" href="#plotpanel.PlotP
 many additional methods to interact with the plots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotpanel.PlotPanel">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">PlotPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700,</span> <span class="pre">450)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.PlotPanel" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">PlotPanel</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700,</span> <span class="pre">450)</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.PlotPanel" title="Link to this definition">#</a></dt>
 <dd><p>Create a Plot Panel, a <code class="xref py py-class docutils literal notranslate"><span class="pre">wx.Panel</span></code> with a matplotlib Figure.
 This takes many optional arguments:</p>
 <dl class="field-list simple">
@@ -110,7 +232,7 @@ plot, or save the image to a file.</p>
 </dd></dl>
 
 <section id="plotpanel-conventions-and-common-arguments">
-<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> conventions and common arguments<a class="headerlink" href="#plotpanel-conventions-and-common-arguments" title="Link to this heading">¶</a></h2>
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> conventions and common arguments<a class="headerlink" href="#plotpanel-conventions-and-common-arguments" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods below share many conventions and use
 common arguments where possible.  A list of common function argumets
 for <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a>, <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot</span> <span class="pre">is</span> <span class="pre">given</span> <span class="pre">in</span>
@@ -121,7 +243,8 @@ arguments and terms are alsoe used in the other function methods.</p>
 <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a>.  In addition, the <a class="reference internal" href="#plotpanel.scatterplot" title="plotpanel.scatterplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">scatterplot()</span></code></a> method uses many of the same arguments for the
 same meaning, as indicated by the right-most column.</p>
 <blockquote>
-<div><table class="docutils align-default">
+<div><div class="table docutils container">
+<table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>argument</p></th>
 <th class="head"><p>type</p></th>
@@ -446,6 +569,7 @@ same meaning, as indicated by the right-most column.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p>As a general note, the configuration for the plot (title, labels, grid displays) and
 for each trace (color, linewidth, …) are preserved for a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a>. A few
 specific notes:</p>
@@ -515,7 +639,7 @@ configured interactively (see Plot Configuration).</p>
 </div></blockquote>
 </section>
 <section id="selecting-y-axes-left-or-right-hand-side">
-<span id="sect-yaxes-side"></span><h2>Selecting Y-axes (left- or right-hand side)<a class="headerlink" href="#selecting-y-axes-left-or-right-hand-side" title="Link to this heading">¶</a></h2>
+<span id="sect-yaxes-side"></span><h2>Selecting Y-axes (left- or right-hand side)<a class="headerlink" href="#selecting-y-axes-left-or-right-hand-side" title="Link to this heading">#</a></h2>
 <p>While a basic use of <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> will have a single Y-axes, it
 is sometimes useful to plot multiple traces together that have
 different ranges of Y values. Using 2 Y-axes – the left- and
@@ -535,7 +659,7 @@ the value of <cite>yaxes</cite>”) or one of (‘left’, ‘right’, ‘right
 use the same color as the trace using that Y axes.</p>
 </section>
 <section id="using-date-time-data-with-plot">
-<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Link to this heading">¶</a></h2>
+<span id="sect-datetime"></span><h2>Using date-time data with <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a><a class="headerlink" href="#using-date-time-data-with-plot" title="Link to this heading">#</a></h2>
 <p>If the <cite>x</cite> values to be plotted holds date or time data, it is
 necessary to use <cite>use_dates=True</cite>.</p>
 <p>Values for dates can be handled in a few different formats, but
@@ -557,10 +681,10 @@ string.  Wether this actually works well will depend on the ability of
 this function to parse and interpret the date strings used.</p>
 </section>
 <section id="plotpanel-methods">
-<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Link to this heading">¶</a></h2>
+<h2><a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> methods<a class="headerlink" href="#plotpanel-methods" title="Link to this heading">#</a></h2>
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.plot">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot" title="Link to this definition">#</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, erasing any existing plot.  The
 displayed curve for these data is called a <em>trace</em>.  The <a class="reference internal" href="#plotpanel.plot" title="plotpanel.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method
 has many optional parameters, all using keyword/value argument.  Since most
@@ -572,7 +696,7 @@ that if <em>y</em> is not given, then the values for <em>x</em> will be used as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.oplot">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.oplot" title="Link to this definition">#</a></dt>
 <dd><p>Draw a plot of the numpy arrays <em>x</em> and <em>y</em>, overplotting any existing
 plot, so that both traces are visible.</p>
 <p>The <a class="reference internal" href="#plotpanel.oplot" title="plotpanel.oplot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code></a> method has many optional parameters,  as listed in
@@ -581,7 +705,19 @@ plot, so that both traces are visible.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.update_line">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">update_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.update_line" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">update_line</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">update_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.update_line" title="Link to this definition">#</a></dt>
 <dd><p>update an existing trace.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -605,7 +741,18 @@ for dynamic plots such as a StripChart.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.plot_many">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot_many</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xylist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot_many" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">plot_many</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">xylist</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.plot_many" title="Link to this definition">#</a></dt>
 <dd><p>Plot many x, y datasets at a single time. <em>xylist</em> should be a list or
 tuple of two-element list or tuple of (<em>x</em>, <em>y</em>) data arrays.  Many of
 the properties listed in <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>
@@ -619,7 +766,7 @@ to be plotted.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.scatterplot">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.scatterplot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.scatterplot" title="Link to this definition">#</a></dt>
 <dd><p>draws a 2d scatterplot.   This is a collection of points that are not meant to imply a specific
 order that can be connected by a continuous line.    A full list of arguments are listed in
 <a class="reference internal" href="#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>.</p>
@@ -627,13 +774,28 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.clear">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.clear" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.clear" title="Link to this definition">#</a></dt>
 <dd><p>Clear the plot.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.add_text">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_text" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">ha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_text" title="Link to this definition">#</a></dt>
 <dd><p>add text to the plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -654,7 +816,23 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.add_arrow">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">add_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overhang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_arrow" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">add_arrow</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">wdith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">overhang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.add_arrow" title="Link to this definition">#</a></dt>
 <dd><p>draw arrow from (x1, y1) to (x2, y2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -677,7 +855,7 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_xylims">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_xylims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xylims" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_xylims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xylims" title="Link to this definition">#</a></dt>
 <dd><p>Set the x and y limits for a plot based on a 2x2 list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -693,87 +871,87 @@ order that can be connected by a continuous line.    A full list of arguments ar
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.get_xylims">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">get_xylims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.get_xylims" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">get_xylims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.get_xylims" title="Link to this definition">#</a></dt>
 <dd><p>return current x, y limits.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.unzoom">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">unzoom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.unzoom" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">unzoom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.unzoom" title="Link to this definition">#</a></dt>
 <dd><p>unzoom the plot.  The x, y limits for interactive zooms are stored, and this function unzooms one level.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.unzoom_all">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">unzoom_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.unzoom_all" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">unzoom_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.unzoom_all" title="Link to this definition">#</a></dt>
 <dd><p>unzoom the plot to the full data range.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_title">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_title" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_title" title="Link to this definition">#</a></dt>
 <dd><p>set the plot title.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_xlabel">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_xlabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xlabel" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_xlabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_xlabel" title="Link to this definition">#</a></dt>
 <dd><p>set the label for the ordinate axis.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_ylabel">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_ylabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_ylabel" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_ylabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_ylabel" title="Link to this definition">#</a></dt>
 <dd><p>set the label for the left-hand abscissa axis.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_y2label">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_y2label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_y2label" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_y2label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_y2label" title="Link to this definition">#</a></dt>
 <dd><p>set the label for the right-hand abscissa axis.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_bgcol">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_bgcol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_bgcol" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_bgcol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_bgcol" title="Link to this definition">#</a></dt>
 <dd><p>set the background color for the PlotPanel.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.write_message">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">write_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.write_message" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">write_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.write_message" title="Link to this definition">#</a></dt>
 <dd><p>write a message to the messenger.  For a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a> embedded in
 a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>, this will go the the Status Bar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.save_figure">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">save_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.save_figure" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">save_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.save_figure" title="Link to this definition">#</a></dt>
 <dd><p>shows a File Dialog to save a PNG image of the current plot.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.configure">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.configure" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.configure" title="Link to this definition">#</a></dt>
 <dd><p>show plot configuration window for customizing plot.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.reset_config">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">reset_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.reset_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">reset_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.reset_config" title="Link to this definition">#</a></dt>
 <dd><p>reset the configuration to default settings.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.get_config">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.get_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.get_config" title="Link to this definition">#</a></dt>
 <dd><p>get plot configuration data as a dictionary.  This can be saved to
 a file in YAML format using the <code class="docutils literal notranslate"><span class="pre">Options-&gt;Save</span> <span class="pre">Configuration</span></code> menu.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotpanel.set_config">
-<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotpanel.</span></span><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotpanel.set_config" title="Link to this definition">#</a></dt>
 <dd><p>set plot configuration values, using keyword arguments matching the
 dictionary from <a class="reference internal" href="#plotpanel.get_config" title="plotpanel.get_config"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_config()</span></code></a>. This can also be done by
 reading a YAML file using the <code class="docutils literal notranslate"><span class="pre">Options-&gt;Load</span> <span class="pre">Configuration</span></code> menu.</p>
@@ -781,7 +959,7 @@ reading a YAML file using the <code class="docutils literal notranslate"><span c
 
 </section>
 <section id="module-plotframe">
-<span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Link to this heading">¶</a></h2>
+<span id="plotframe-a-wx-frame-showing-a-plotpanel"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <a class="reference internal" href="#plotpanel.PlotPanel" title="plotpanel.PlotPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><a class="headerlink" href="#module-plotframe" title="Link to this heading">#</a></h2>
 <p>A <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a> is a wx.Frame – a separate window – that
 contains a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> and is decorated with a status bar and
 menubar.  A <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a> inherits many of the methods of a
@@ -793,7 +971,7 @@ plot to the system Clipboard, as well as ways to configure many of the
 plot attributes.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotframe.PlotFrame">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">PlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">450)</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.PlotFrame" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">PlotFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(700</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">450)</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.PlotFrame" title="Link to this definition">#</a></dt>
 <dd><p>create a plot frame.  This frame will have a <code class="xref py py-data docutils literal notranslate"><span class="pre">panel</span></code> member
 holding the underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>, and have menus and statusbar
 for plot interaction.</p>
@@ -801,49 +979,49 @@ for plot interaction.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.plot">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.plot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.plot" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.plot</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.oplot">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.oplot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">oplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.oplot" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.oplot</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.scatterplot">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.scatterplot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.scatterplot" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.scatterplot</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.clear">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.clear" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.clear" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.clear</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.update_trace">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">update_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.update_trace" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">update_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.update_trace" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.update_trace</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="plotframe.reset_config">
-<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">reset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.reset_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotframe.</span></span><span class="sig-name descname"><span class="pre">reset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotframe.reset_config" title="Link to this definition">#</a></dt>
 <dd><p>Passed to panel.reset_config</p>
 </dd></dl>
 
 </section>
 <section id="module-plotapp">
-<span id="plotapp-a-wx-app-showing-a-plotframe"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><a class="headerlink" href="#module-plotapp" title="Link to this heading">¶</a></h2>
+<span id="plotapp-a-wx-app-showing-a-plotframe"></span><h2><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <a class="reference internal" href="#plotframe.PlotFrame" title="plotframe.PlotFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><a class="headerlink" href="#module-plotapp" title="Link to this heading">#</a></h2>
 <p>A <a class="reference internal" href="#plotapp.PlotApp" title="plotapp.PlotApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code></a> is a wx.App – an application – that consists of a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>.  This show a frame that is decorated with a status bar
 and menubar with menu items for saving, printing and configuring plots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotapp.PlotApp">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotapp.</span></span><span class="sig-name descname"><span class="pre">PlotApp</span></span><a class="headerlink" href="#plotapp.PlotApp" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">plotapp.</span></span><span class="sig-name descname"><span class="pre">PlotApp</span></span><a class="headerlink" href="#plotapp.PlotApp" title="Link to this definition">#</a></dt>
 <dd><p>create a plot application.  This has methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">oplot()</span></code>, and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">write_message()</span></code>, which are sent to the underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>.
 This allows very simple scripts which give plot interactivity and
@@ -853,17 +1031,21 @@ customization.</p>
 </section>
 </section>
 
+</article><footer class="bz-article-footer">
+  
+  
+    <nav class="bz-related-pages" aria-label="Related pages navigation"><a class="bz-related-pages-previous" href="interactive.html" rel="prev">
+    <span>Previous</span><span class="bz-related-pages-title">Interactive displays</span></a><a class="bz-related-pages-next" href="imagepanel.html" rel="next">
+    <span>Next</span>
+    <span class="bz-related-pages-title"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></span>
+  </a></nav>
+  
 
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
+</footer><aside class="bz-sidebar-secondary" data-drawer="bz-sidebar-secondary">
+  
+  
+    <nav class="bz-sidebar-toc" aria-label="Table of contents">
+  <p>On this page</p><ul>
 <li><a class="reference internal" href="#plotpanel.PlotPanel"><code class="docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel-conventions-and-common-arguments"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> conventions and common arguments</a></li>
 <li><a class="reference internal" href="#selecting-y-axes-left-or-right-hand-side">Selecting Y-axes (left- or right-hand side)</a></li>
@@ -871,98 +1053,73 @@ customization.</p>
 <li><a class="reference internal" href="#plotpanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> methods</a><ul>
 <li><a class="reference internal" href="#plotpanel.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.oplot"><code class="docutils literal notranslate"><span class="pre">oplot()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.update_line"><code class="docutils literal notranslate"><span class="pre">update_line()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.plot_many"><code class="docutils literal notranslate"><span class="pre">plot_many()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.update_line"><code class="docutils literal notranslate"><span class="pre">update_​line()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.plot_many"><code class="docutils literal notranslate"><span class="pre">plot_​many()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.scatterplot"><code class="docutils literal notranslate"><span class="pre">scatterplot()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.add_text"><code class="docutils literal notranslate"><span class="pre">add_text()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.add_arrow"><code class="docutils literal notranslate"><span class="pre">add_arrow()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_xylims"><code class="docutils literal notranslate"><span class="pre">set_xylims()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.get_xylims"><code class="docutils literal notranslate"><span class="pre">get_xylims()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.add_text"><code class="docutils literal notranslate"><span class="pre">add_​text()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.add_arrow"><code class="docutils literal notranslate"><span class="pre">add_​arrow()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_xylims"><code class="docutils literal notranslate"><span class="pre">set_​xylims()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.get_xylims"><code class="docutils literal notranslate"><span class="pre">get_​xylims()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.unzoom"><code class="docutils literal notranslate"><span class="pre">unzoom()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.unzoom_all"><code class="docutils literal notranslate"><span class="pre">unzoom_all()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_title"><code class="docutils literal notranslate"><span class="pre">set_title()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_xlabel"><code class="docutils literal notranslate"><span class="pre">set_xlabel()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_ylabel"><code class="docutils literal notranslate"><span class="pre">set_ylabel()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_y2label"><code class="docutils literal notranslate"><span class="pre">set_y2label()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_bgcol"><code class="docutils literal notranslate"><span class="pre">set_bgcol()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.write_message"><code class="docutils literal notranslate"><span class="pre">write_message()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.save_figure"><code class="docutils literal notranslate"><span class="pre">save_figure()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.unzoom_all"><code class="docutils literal notranslate"><span class="pre">unzoom_​all()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_title"><code class="docutils literal notranslate"><span class="pre">set_​title()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_xlabel"><code class="docutils literal notranslate"><span class="pre">set_​xlabel()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_ylabel"><code class="docutils literal notranslate"><span class="pre">set_​ylabel()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_y2label"><code class="docutils literal notranslate"><span class="pre">set_​y2label()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_bgcol"><code class="docutils literal notranslate"><span class="pre">set_​bgcol()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.write_message"><code class="docutils literal notranslate"><span class="pre">write_​message()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.save_figure"><code class="docutils literal notranslate"><span class="pre">save_​figure()</span></code></a></li>
 <li><a class="reference internal" href="#plotpanel.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.get_config"><code class="docutils literal notranslate"><span class="pre">get_config()</span></code></a></li>
-<li><a class="reference internal" href="#plotpanel.set_config"><code class="docutils literal notranslate"><span class="pre">set_config()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_​config()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.get_config"><code class="docutils literal notranslate"><span class="pre">get_​config()</span></code></a></li>
+<li><a class="reference internal" href="#plotpanel.set_config"><code class="docutils literal notranslate"><span class="pre">set_​config()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>: a wx.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
+<li><a class="reference internal" href="#module-plotframe"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code>:​ a wx​.Frame showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
 <li><a class="reference internal" href="#plotframe.PlotFrame"><code class="docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
 <li><a class="reference internal" href="#plotframe.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#plotframe.oplot"><code class="docutils literal notranslate"><span class="pre">oplot()</span></code></a></li>
 <li><a class="reference internal" href="#plotframe.scatterplot"><code class="docutils literal notranslate"><span class="pre">scatterplot()</span></code></a></li>
 <li><a class="reference internal" href="#plotframe.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
-<li><a class="reference internal" href="#plotframe.update_trace"><code class="docutils literal notranslate"><span class="pre">update_trace()</span></code></a></li>
-<li><a class="reference internal" href="#plotframe.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_config()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.update_trace"><code class="docutils literal notranslate"><span class="pre">update_​trace()</span></code></a></li>
+<li><a class="reference internal" href="#plotframe.reset_config"><code class="docutils literal notranslate"><span class="pre">reset_​config()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><ul>
+<li><a class="reference internal" href="#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>:​ a wx​.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a><ul>
 <li><a class="reference internal" href="#plotapp.PlotApp"><code class="docutils literal notranslate"><span class="pre">PlotApp</span></code></a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
+</ul></nav>
+  
+    
 
+
+  
+    
+  
+    
+  
+
+</aside></main>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="interactive.html"
-                          title="previous chapter">Interactive wxmplot displays</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="imagepanel.html"
-                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/plotpanel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="interactive.html" title="Interactive wxmplot displays"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script></body>
 </html>

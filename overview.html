@@ -1,61 +1,172 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>wxmplot Overview &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Interactive wxmplot displays" href="interactive.html" />
-    <link rel="prev" title="Downloading and Installation" href="installation.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="interactive.html" title="Interactive wxmplot displays"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">wxmplot Overview</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="module-wxmplot">
-<span id="wxmplot-overview"></span><span id="ch-overview"></span><h1>wxmplot Overview<a class="headerlink" href="#module-wxmplot" title="Link to this heading">¶</a></h1>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Overview" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="overview.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="wxmplot provides simple functions for making Line Plots (or 2D or XY Plots) and displaying image data. These are similar to the simplest functions from matplotlib.pyplot, but offer richer interacti..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_overview_ab25dde4.png" />
+<meta property="og:image:alt" content="wxmplot provides simple functions for making Line Plots (or 2D or XY Plots) and displaying image data. These are similar to the simplest functions from matplotlib.pyplot, but offer richer interacti..." />
+<meta name="description" content="wxmplot provides simple functions for making Line Plots (or 2D or XY Plots) and displaying image data. These are similar to the simplest functions from matplotlib.pyplot, but offer richer interacti..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>Overview - WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Interactive displays" href="interactive.html"><link rel="prev" title="Installation" href="installation.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="index.html">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li><li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a></li><li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><header class="bz-article-header">
+  
+  
+    <nav class="bz-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="bz-breadcrumbs-home">
+      <a href="index.html" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z" />
+        </svg>
+      </a>
+    </li><li class="bz-breadcrumbs-current">
+      <span>Overview</span>
+    </li>
+  </ol>
+</nav>
+  
+<label
+  class="bz-sidebar-secondary-toggle"
+  for="bz-sidebar-secondary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle table of contents"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75H20.25 M11.25 12H20.25 M7.75 17.25H20.25"
+    />
+  </svg>
+</label></header><article class="bz-article-main" role="main"><div class="bz-page-actions" role="group" aria-label="Page actions">
+  <button data-copy-source="_sources/overview.rst.txt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+    <span>Copy page</span>
+  </button>
+  <div class="bz-dropdown">
+    <button
+      aria-label="More actions"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></button>
+    <ul role="menu" aria-hidden="true">
+      <li>
+        <a href="#" role="menuitem" data-copy-source="_sources/overview.rst.txt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+          <span>Copy page</span>
+        </a>
+      </li>
+      <li>
+        <a href="_sources/overview.rst.txt" role="menuitem" class="bz-page-actions-external" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H4.75a.75.75 0 0 1 0-1.5H19a.5.5 0 0 0 .5-.5V8.5h-4a2 2 0 0 1-2-2v-4H5a.5.5 0 0 0-.5.5v6.25a.75.75 0 0 1-1.5 0Zm12-.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0-.146-.336l-4.018-4.018A.5.5 0 0 0 15 2.5Z"></path><path d="M4.53 12.24a.75.75 0 0 1-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 1 1-1.022 1.1l-3.23-3a.75.75 0 0 1 0-1.1l3.23-3a.75.75 0 0 1 1.06.04Zm3.979 1.06a.75.75 0 1 1 1.02-1.1l3.231 3a.75.75 0 0 1 0 1.1l-3.23 3a.75.75 0 1 1-1.021-1.1l2.639-2.45-2.64-2.45Z"></path></svg>
+          <span>View source</span>
+        </a>
+      </li></ul>
+  </div>
+</div><section id="module-wxmplot">
+<span id="overview"></span><span id="ch-overview"></span><h1>Overview<a class="headerlink" href="#module-wxmplot" title="Link to this heading">#</a></h1>
 <p><cite>wxmplot</cite> provides simple functions for making Line Plots (or 2D or XY
 Plots) and displaying image data.  These are similar to the simplest
 functions from <cite>matplotlib.pyplot</cite>, but offer richer interactivity and
 customization.  It is not easy to convey interactivity in a static
-document, but here and in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, we will try to show how
+document, but here and in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive displays</span></a>, we will try to show how
 easy it is to use <cite>wxmplot</cite> for exploratory data analysis.  Importantly,
 <cite>wxmplot</cite> not only makes more interactive plotting available when writing a
 script, but but also exposes that interactivity and flexibility to the
@@ -63,7 +174,7 @@ end-user at run time. This allows a programmer to add plotting capabilities
 to an application and enable the end-user to interact with their data and
 fully customize the plots when running the application.</p>
 <section id="line-plots-with-plot">
-<h2>Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#line-plots-with-plot" title="Link to this heading">¶</a></h2>
+<h2>Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#line-plots-with-plot" title="Link to this heading">#</a></h2>
 <p>Let’s start with a simple script using <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -123,7 +234,7 @@ legend is shown) is encapsulated into fewer functions – one per plot trace
 – rather than several function calls to set up the plot configuration and
 then one <cite>show()</cite> method to render the plot.  In fact, the <cite>wxmplot</cite>
 example has no <cite>show()</cite> function at all.  As will be discussed more in
-<a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>, the <cite>wxmplot</cite> functions immediately generate displays
+<a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive displays</span></a>, the <cite>wxmplot</cite> functions immediately generate displays
 when in an interactive session and allow interaction at the shell to
 continue, without the need for a blocking <cite>show()</cite> function.</p>
 <p><cite>Wxmplot</cite> gives more run-time interaction and flexibility to the end-user
@@ -138,10 +249,10 @@ detail in the next section.</p>
 <p>In addition to the <a class="reference internal" href="interactive.html#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.plot()</span></code></a> function, there are several
 more functions to augment these line plots, including those to add text,
 arrows, lines, and markers to plots.  These and more functions are
-discussed in detail in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive wxmplot displays</span></a>.</p>
+discussed in detail in <a class="reference internal" href="interactive.html#ch-interactive"><span class="std std-ref">Interactive displays</span></a>.</p>
 </section>
 <section id="user-interaction-and-configuring-line-plots">
-<h2>User Interaction and Configuring Line Plots<a class="headerlink" href="#user-interaction-and-configuring-line-plots" title="Link to this heading">¶</a></h2>
+<h2>User Interaction and Configuring Line Plots<a class="headerlink" href="#user-interaction-and-configuring-line-plots" title="Link to this heading">#</a></h2>
 <p>The basic <cite>wxmplot</cite> line plots support a few basic user interactions.
 First, as mentioned above, the user can zoom in by drawing a box: Clicking
 the left mouse button and dragging will draw a rectangular box, and
@@ -199,7 +310,7 @@ allow the user to configure essentially every aspect of the plot:</p>
 <p>with these configuration settings available, any user should be able to
 create beautiful presentation-quality image from their data.</p>
 <section id="color-and-line-properties">
-<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Link to this heading">¶</a></h3>
+<h3>Color and Line Properties<a class="headerlink" href="#color-and-line-properties" title="Link to this heading">#</a></h3>
 <p>The <strong>Colors and Line Properties</strong> tab of the <em>Plot Configuration Window</em>
 allows the user to configure the basic colors for the plot.  This includes
 setting the plotting theme.  Selecting any of the available themes (there
@@ -222,7 +333,7 @@ aspect of the plot displaying their data.</p>
 </a>
 </section>
 <section id="ranges-and-margins-properties">
-<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Link to this heading">¶</a></h3>
+<h3>Ranges and Margins Properties<a class="headerlink" href="#ranges-and-margins-properties" title="Link to this heading">#</a></h3>
 <p>The <strong>Ranges and Margins</strong> tab allows the user to change the display data
 ranges and the outer margins of the plot.  Here, the user can also select a
 Linear or Log scale for the X and Y axes.</p>
@@ -239,7 +350,7 @@ top of the plot, they may need to adjust these margins.</p>
 </a>
 </section>
 <section id="text-properties">
-<h3>Text Properties<a class="headerlink" href="#text-properties" title="Link to this heading">¶</a></h3>
+<h3>Text Properties<a class="headerlink" href="#text-properties" title="Link to this heading">#</a></h3>
 <p>The <strong>Text and Labels</strong> tab allows the user to set the title and labels for
 the X and Y axes, and to adjust the font size for these text components.
 Here, the details of the Legend can also be customized: whether it is
@@ -252,7 +363,7 @@ symbols.</p>
 </a>
 </section>
 <section id="scatterplot-properties">
-<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Link to this heading">¶</a></h3>
+<h3>ScatterPlot Properties<a class="headerlink" href="#scatterplot-properties" title="Link to this heading">#</a></h3>
 <p>The <strong>Scatterplot</strong> tab allows the user to set the colors and marker sizes
 for scatter plots.</p>
 <a class="reference internal image-reference" href="_images/PlotConfig_Scatter.png"><img alt="_images/PlotConfig_Scatter.png" src="_images/PlotConfig_Scatter.png" style="width: 95%;" />
@@ -260,7 +371,7 @@ for scatter plots.</p>
 </section>
 </section>
 <section id="displaying-images-with-imshow-and-contour">
-<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Link to this heading">¶</a></h2>
+<h2>Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Link to this heading">#</a></h2>
 <p>As with line plotting, <cite>wxmplot</cite> has a simple <a class="reference internal" href="interactive.html#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">interactive.imshow()</span></code></a>
 function that displays image data and adds user-friendly controls to
 manipulate and adjust the display of such data.  While
@@ -294,8 +405,8 @@ dataset but using:</p>
 from the Image menu or with Ctrl-N.</p>
 </section>
 <section id="user-interaction-and-configuring-image-and-contour-displays">
-<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Link to this heading">¶</a></h2>
-<p>As with te displays created with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code>, clicking anywhere on the image will
+<h2>User Interaction and Configuring Image and Contour displays<a class="headerlink" href="#user-interaction-and-configuring-image-and-contour-displays" title="Link to this heading">#</a></h2>
+<p>As with the displays created with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code>, clicking anywhere on the image will
 show the x, y, and intensity values in the status bar.  If arrays for <cite>x</cite>
 and <cite>y</cite> values have been passed in, both the indices and <cite>x</cite> and <cite>y</cite> values
 for the pixel selected will be displayed.  Similarly, clicking and dragging
@@ -338,7 +449,7 @@ Display Window to give more interaction.  From the File menu, the user can</p>
 <li><p>Toggle whether the Axes Labels are displayed [Ctrl-A]</p></li>
 <li><p>Toggle whether the Grid lines are shown at the Axes Labels [Ctrl-G]</p></li>
 <li><p>Toggle whether the image is displayed as a Contour Map [Ctrl-N]</p></li>
-<li><p>Toggle whether a Scalebar is displayed [Ctrl-B]</p></li>
+<li><p>Toggle whether a scalebar is displayed [Ctrl-B]</p></li>
 <li><p>Toggle whether a 3-color map uses a black or white background [Ctrl-W]</p></li>
 </ul>
 </div></blockquote>
@@ -366,7 +477,7 @@ plot in a separate plotting window.  From this menu, the user can select:</p>
 methods to smooth the data across pixels.</p>
 <p>Finally, the Help menu will give a quick list of keyboard shortcuts.</p>
 <section id="image-configuration-window">
-<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Link to this heading">¶</a></h3>
+<h3>Image Configuration Window<a class="headerlink" href="#image-configuration-window" title="Link to this heading">#</a></h3>
 <p>Most of options for working with images and contour maps can be found from
 the main window or menu selections, but some options need more specialized
 configurations that can be accessed from the Image Configuration Window
@@ -389,17 +500,21 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
 </section>
 </section>
 
+</article><footer class="bz-article-footer">
+  
+  
+    <nav class="bz-related-pages" aria-label="Related pages navigation"><a class="bz-related-pages-previous" href="installation.html" rel="prev">
+    <span>Previous</span><span class="bz-related-pages-title">Installation</span></a><a class="bz-related-pages-next" href="interactive.html" rel="next">
+    <span>Next</span>
+    <span class="bz-related-pages-title">Interactive displays</span>
+  </a></nav>
+  
 
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">wxmplot Overview</a><ul>
+</footer><aside class="bz-sidebar-secondary" data-drawer="bz-sidebar-secondary">
+  
+  
+    <nav class="bz-sidebar-toc" aria-label="Table of contents">
+  <p>On this page</p><ul>
 <li><a class="reference internal" href="#line-plots-with-plot">Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#user-interaction-and-configuring-line-plots">User Interaction and Configuring Line Plots</a><ul>
 <li><a class="reference internal" href="#color-and-line-properties">Color and Line Properties</a></li>
@@ -413,61 +528,36 @@ a 1 mm scalebar in the lower left of the image, as shown below:</p>
 <li><a class="reference internal" href="#image-configuration-window">Image Configuration Window</a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
+</ul></nav>
+  
+    
 
+
+  
+    
+  
+    
+  
+
+</aside></main>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="installation.html"
-                          title="previous chapter">Downloading and Installation</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="interactive.html"
-                          title="next chapter">Interactive wxmplot displays</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/overview.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="interactive.html" title="Interactive wxmplot displays"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">wxmplot Overview</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script><script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script></body>
 </html>

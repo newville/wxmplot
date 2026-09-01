@@ -1,51 +1,108 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>WXMPLOT: plotting widgets for Python &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Downloading and Installation" href="installation.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">WXMPLOT: plotting widgets for Python</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="wxmplot-plotting-widgets-for-python">
-<h1>WXMPLOT: plotting widgets for Python<a class="headerlink" href="#wxmplot-plotting-widgets-for-python" title="Link to this heading">¶</a></h1>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="WXMPLOT: plotting widgets for Python" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="wxmplot provides high-level, interactive plotting of scientific data for Python, combining wxPython and matplotlib. matplotlib provides excellent general-purpose plotting functionality. While it su..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_index_65a34d79.png" />
+<meta property="og:image:alt" content="wxmplot provides high-level, interactive plotting of scientific data for Python, combining wxPython and matplotlib. matplotlib provides excellent general-purpose plotting functionality. While it su..." />
+<meta name="description" content="wxmplot provides high-level, interactive plotting of scientific data for Python, combining wxPython and matplotlib. matplotlib provides excellent general-purpose plotting functionality. While it su..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Installation" href="installation.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="#">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li><li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a></li><li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><article class="bz-article-main" role="main"><section id="wxmplot-plotting-widgets-for-python">
+<h1>WXMPLOT: plotting widgets for Python<a class="headerlink" href="#wxmplot-plotting-widgets-for-python" title="Link to this heading">#</a></h1>
 <p><cite>wxmplot</cite> provides high-level, interactive plotting of scientific data
 for Python, combining <a class="reference external" href="https://www.wxpython.org/">wxPython</a>  and <a class="reference external" href="https://matplotlib.org/">matplotlib</a>.</p>
 <a class="reference internal image-reference" href="_images/wxmplot_composite.png"><img alt="_images/wxmplot_composite.png" src="_images/wxmplot_composite.png" style="width: 98%;" />
@@ -78,22 +135,22 @@ of data in their wxPython applications to enable users to explore
 their data.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#id1">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installation-from-source">Installation from Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">wxmplot Overview</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#line-plots-with-plot">Line Plots with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#user-interaction-and-configuring-line-plots">User Interaction and Configuring Line Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#user-interaction-and-configuring-image-and-contour-displays">User Interaction and Configuring Image and Contour displays</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive wxmplot displays</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#plotting-in-an-interactive-session-or-jupyter">Plotting in an interactive session or Jupyter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a></li>
@@ -101,7 +158,7 @@ their data.</p>
 <li class="toctree-l2"><a class="reference internal" href="interactive.html#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#plotpanel.PlotPanel"><code class="docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#plotpanel-conventions-and-common-arguments"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code> conventions and common arguments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#selecting-y-axes-left-or-right-hand-side">Selecting Y-axes (left- or right-hand side)</a></li>
@@ -111,7 +168,7 @@ their data.</p>
 <li class="toctree-l2"><a class="reference internal" href="plotpanel.html#module-plotapp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotApp</span></code>: a wx.App showing a <code class="xref py py-class docutils literal notranslate"><span class="pre">PlotFrame</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel.ImagePanel"><code class="docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#imagepanel-callback-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code> callback attributes</a></li>
@@ -119,7 +176,7 @@ their data.</p>
 <li class="toctree-l2"><a class="reference internal" href="imagepanel.html#image-configuration-with-imageconfig">Image configuration with <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageConfig</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">wxmplot Examples</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#dynamic-examples-not-shown-here">Dynamic examples not shown here</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#scatterplot-example">Scatterplot Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#plotting-with-errorbars">Plotting with errorbars</a></li>
@@ -134,20 +191,19 @@ their data.</p>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#color-image">3-Color Image</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="other.html">Speciality wxmplot displays</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="other.html#multiplotframe">MultiPlotFrame</a></li>
 <li class="toctree-l2"><a class="reference internal" href="other.html#stackedplotframe">StackedPlotFrame</a></li>
 <li class="toctree-l2"><a class="reference internal" href="other.html#imagematrixframe">ImageMatrixFrame</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons of wxmplot with other Python Plotting tools</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-matplotlib-pyplot">Comparison with Matplotlib.pyplot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-wxplot">Comparison with WxPlot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-plotly">Comparison with Plotly</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-pyqtgraph">Comparison with PyQtGraph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-pyqtgraph-pythonguis">Comparison with PyQtGraph/PythonGUIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-plplot">Comparison with PLPlot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-dislin">Comparison with Dislin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparisons.html#comparison-with-older-libraries">Comparison with Older LIbraries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comparisons.html#conclusion">Conclusion</a></li>
 </ul>
 </li>
@@ -155,67 +211,25 @@ their data.</p>
 </div>
 </section>
 
-
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper"><h3>Contents</h3>
-
-<ul>
-   <li>&nbsp; &nbsp;<a href="installation.html"> Installation</a></li>
-   <li>&nbsp; &nbsp;<a href="overview.html">     Overview</a></li>
-   <li>&nbsp; &nbsp;<a href="interactive.html">   Interactive Displays</a></li>
-   <li>&nbsp; &nbsp;<a href="plotpanel.html">    PlotPanel API</a></li>
-   <li>&nbsp; &nbsp;<a href="imagepanel.html"> Image API</a></li>
-   <li>&nbsp; &nbsp;<a href="examples.html">  Examples</a></li>
-   <li>&nbsp; &nbsp;<a href="other.html"> Speciality Displays</a></li>
-   <li>&nbsp; &nbsp;<a href="comparisons.html"> Comparisons</a></li>
-</ul>
-<p>
-
-<h3>WXMPLOT</h3>
-Current version: 2026.2.1 <br>
-Install: &nbsp; pip install wxmplot<br>
-Develop: &nbsp; <a href="https://github.com/newville/wxmplot/">github.com</a>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">WXMPLOT: plotting widgets for Python</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+</article></main>
+  </div>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script></body>
 </html>

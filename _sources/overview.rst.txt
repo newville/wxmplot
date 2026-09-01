@@ -1,7 +1,7 @@
 .. _ch_overview:
 
 ==============================
-wxmplot Overview
+Overview
 ==============================
 
 .. module:: wxmplot
@@ -70,7 +70,7 @@ With `wxmplot`, that script would be rewritten as::
 
     import wxmplot.interactive as wi
     wi.plot(x, y, label='data', marker='+', xlabel='t (sec)', ylabel='y',
-	    title='wxmplot example', show_legend=True)
+            title='wxmplot example', show_legend=True)
     wi.plot(x, m, label='model')
 
 and yields the plot shown below.
@@ -296,7 +296,7 @@ from the Image menu or with Ctrl-N.
 User Interaction and Configuring Image and Contour displays
 ===============================================================
 
-As with te displays created with :func:`plot`, clicking anywhere on the image will
+As with the displays created with :func:`plot`, clicking anywhere on the image will
 show the x, y, and intensity values in the status bar.  If arrays for `x`
 and `y` values have been passed in, both the indices and `x` and `y` values
 for the pixel selected will be displayed.  Similarly, clicking and dragging
@@ -338,7 +338,7 @@ From the Image menu, the user can:
    * Toggle whether the Axes Labels are displayed [Ctrl-A]
    * Toggle whether the Grid lines are shown at the Axes Labels [Ctrl-G]
    * Toggle whether the image is displayed as a Contour Map [Ctrl-N]
-   * Toggle whether a Scalebar is displayed [Ctrl-B]
+   * Toggle whether a scalebar is displayed [Ctrl-B]
    * Toggle whether a 3-color map uses a black or white background [Ctrl-W]
 
 From the X/Y Slices menu, the user can control whether clicking on a pixel

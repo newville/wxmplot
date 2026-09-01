@@ -1,51 +1,167 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Comparisons of wxmplot with other Python Plotting tools &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Speciality wxmplot displays" href="other.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="other.html" title="Speciality wxmplot displays"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Comparisons of wxmplot with other Python Plotting tools</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="comparisons-of-wxmplot-with-other-python-plotting-tools">
-<h1>Comparisons of wxmplot with other Python Plotting tools<a class="headerlink" href="#comparisons-of-wxmplot-with-other-python-plotting-tools" title="Link to this heading">¶</a></h1>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Comparisons" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="comparisons.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="Disclaimer: this section is essentially opinion of the lead author of wxmplot. While it aims to be fair, there is clearly a bias in this view to emphasize priorities that informed the development o..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_comparisons_4f6e3cd2.png" />
+<meta property="og:image:alt" content="Disclaimer: this section is essentially opinion of the lead author of wxmplot. While it aims to be fair, there is clearly a bias in this view to emphasize priorities that informed the development o..." />
+<meta name="description" content="Disclaimer: this section is essentially opinion of the lead author of wxmplot. While it aims to be fair, there is clearly a bias in this view to emphasize priorities that informed the development o..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>Comparisons - WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="Speciality Displays" href="other.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="index.html">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li><li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a></li><li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1 current"><a class="current reference internal" href="#">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><header class="bz-article-header">
+  
+  
+    <nav class="bz-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="bz-breadcrumbs-home">
+      <a href="index.html" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z" />
+        </svg>
+      </a>
+    </li><li class="bz-breadcrumbs-current">
+      <span>Comparisons</span>
+    </li>
+  </ol>
+</nav>
+  
+<label
+  class="bz-sidebar-secondary-toggle"
+  for="bz-sidebar-secondary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle table of contents"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75H20.25 M11.25 12H20.25 M7.75 17.25H20.25"
+    />
+  </svg>
+</label></header><article class="bz-article-main" role="main"><div class="bz-page-actions" role="group" aria-label="Page actions">
+  <button data-copy-source="_sources/comparisons.rst.txt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+    <span>Copy page</span>
+  </button>
+  <div class="bz-dropdown">
+    <button
+      aria-label="More actions"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></button>
+    <ul role="menu" aria-hidden="true">
+      <li>
+        <a href="#" role="menuitem" data-copy-source="_sources/comparisons.rst.txt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+          <span>Copy page</span>
+        </a>
+      </li>
+      <li>
+        <a href="_sources/comparisons.rst.txt" role="menuitem" class="bz-page-actions-external" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H4.75a.75.75 0 0 1 0-1.5H19a.5.5 0 0 0 .5-.5V8.5h-4a2 2 0 0 1-2-2v-4H5a.5.5 0 0 0-.5.5v6.25a.75.75 0 0 1-1.5 0Zm12-.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0-.146-.336l-4.018-4.018A.5.5 0 0 0 15 2.5Z"></path><path d="M4.53 12.24a.75.75 0 0 1-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 1 1-1.022 1.1l-3.23-3a.75.75 0 0 1 0-1.1l3.23-3a.75.75 0 0 1 1.06.04Zm3.979 1.06a.75.75 0 1 1 1.02-1.1l3.231 3a.75.75 0 0 1 0 1.1l-3.23 3a.75.75 0 1 1-1.021-1.1l2.639-2.45-2.64-2.45Z"></path></svg>
+          <span>View source</span>
+        </a>
+      </li></ul>
+  </div>
+</div><section id="comparisons">
+<h1>Comparisons<a class="headerlink" href="#comparisons" title="Link to this heading">#</a></h1>
 <p>Disclaimer: this section is essentially opinion of the lead author of
 <cite>wxmplot</cite>. While it aims to be fair, there is clearly a bias in this view
 to emphasize priorities that informed the development of <cite>wxmplot</cite>. If you
@@ -106,7 +222,7 @@ and location of a scalebar, and its label.  Images can be flipped, rotated (and
 reset).  Smoothing of pixelated data can be adjusted.  Images can be toggled
 back-and-forth between “image mode” and “contour mode”.</p>
 <section id="comparison-with-matplotlib-pyplot">
-<h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Link to this heading">¶</a></h2>
+<h2>Comparison with Matplotlib.pyplot<a class="headerlink" href="#comparison-with-matplotlib-pyplot" title="Link to this heading">#</a></h2>
 <p>To be clear, <cite>wxmplot</cite> uses <cite>matplotlib</cite> for plotting and image display.  Any
 aspect of “beauty” in <cite>wxmplot</cite> comes from <cite>matplotlib</cite>, which makes plots and
 images of scientific data that are of excellent quality.  Allowing <cite>LaTeX</cite>
@@ -121,7 +237,7 @@ re-imagines the <cite>pyplot</cite> functions <cite>plot</cite> and <cite>imshow
 gives you access to the underlying <cite>matplotlib</cite> objects so that you can add
 more complex components and manipulate the plot as needed, assuming that you
 know the <cite>matplotlib</cite> programming interface.</p>
-<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a>, a brief comparison of <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>
+<p>In <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">Overview</span></a>, a brief comparison of <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>
 and <code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.plot</span></code> is given and will not repeated here.  From the
 point of view of “brevity” and “beauty”, these are approximately
 equal.  The <cite>matplotlib</cite> API is certainly much more common, and
@@ -164,7 +280,7 @@ manipulate the display of the data.</p>
 </div></blockquote>
 </section>
 <section id="comparison-with-wxplot">
-<h2>Comparison with WxPlot<a class="headerlink" href="#comparison-with-wxplot" title="Link to this heading">¶</a></h2>
+<h2>Comparison with WxPlot<a class="headerlink" href="#comparison-with-wxplot" title="Link to this heading">#</a></h2>
 <p>The wxPython library comes with a plot submodule that supports basic line
 plots.  An example of using this would be:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">wx</span>
@@ -206,7 +322,7 @@ boiler-plate code which make it painful for simple scripts or exploratory data
 analysis.</p>
 </section>
 <section id="comparison-with-plotly">
-<h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Link to this heading">¶</a></h2>
+<h2>Comparison with Plotly<a class="headerlink" href="#comparison-with-plotly" title="Link to this heading">#</a></h2>
 <p>The Plotly library includes a Python interface
 (<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>) that is very good and renders interactive
 plots into a web browser.  This is very useful for web-based
@@ -264,7 +380,7 @@ fairly rich set of graphics types, so if you are looking to visualize complex
 datasets that are already in Pandas dataframes, Plotly is a good choice.</p>
 </section>
 <section id="comparison-with-pyqtgraph">
-<h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Link to this heading">¶</a></h2>
+<h2>Comparison with PyQtGraph<a class="headerlink" href="#comparison-with-pyqtgraph" title="Link to this heading">#</a></h2>
 <p>Pyqtgraph (<a class="reference external" href="https://pyqtgraph.readthedocs.io/en/latest/">https://pyqtgraph.readthedocs.io/en/latest/</a>) provides a very
 comprehensive library for plotting and visualization with PyQt and PySide.
 Constructing the example plot above with <cite>pyqtgraph</cite> would look like:</p>
@@ -317,7 +433,7 @@ the data.  To be clear, <cite>pyqtgraph</cite> is explicitly designed to do more
 than simple line plots.</p>
 </section>
 <section id="comparison-with-pyqtgraph-pythonguis">
-<h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Link to this heading">¶</a></h2>
+<h2>Comparison with PyQtGraph/PythonGUIs<a class="headerlink" href="#comparison-with-pyqtgraph-pythonguis" title="Link to this heading">#</a></h2>
 <p>Here we compare to tutorials at <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> which
 describe using using GUIs with the PyQt and PySide family of GUI toolkits based
 on Qt.  The fact that these pages are advertised as showing how to make “simple
@@ -458,14 +574,17 @@ display of the corresponding line.</p>
 interactive exploratory data analysis, the tutorials at
 <a class="reference external" href="https://www.pythonguis.com/tutorials/">https://www.pythonguis.com/tutorials/</a> are profoundly disappointing.</p>
 </section>
-<section id="comparison-with-plplot">
-<h2>Comparison with PLPlot<a class="headerlink" href="#comparison-with-plplot" title="Link to this heading">¶</a></h2>
-<p><cite>PLPlot</cite> (<a class="reference external" href="http://plplot.sourceforge.net/">http://plplot.sourceforge.net/</a>) is a general purpose plotting
-library with bindings for many languages, including Python.  It supports
-many plot types, including map displays which is outside the scope of
-wxmplot. Since it is not specifically written for Python, it is not too
-surprising that its Python interface is not quite as elegant as
-<cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example for a basic line plot is:</p>
+<section id="comparison-with-older-libraries">
+<h2>Comparison with Older LIbraries<a class="headerlink" href="#comparison-with-older-libraries" title="Link to this heading">#</a></h2>
+<section id="plplot">
+<h3>PLPlot<a class="headerlink" href="#plplot" title="Link to this heading">#</a></h3>
+<p><cite>PLPlot</cite> (<a class="reference external" href="http://plplot.sourceforge.net/">http://plplot.sourceforge.net/</a>) is (or was)  general
+purpose plotting library with bindings for many languages, including
+Python.  It supports many plot types, including map displays which is
+outside the scope of wxmplot. Since it is not specifically written for
+Python, it is not too surprising that its Python interface is not
+quite as elegant as <cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example
+for a basic line plot is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">NSIZE</span> <span class="o">=</span> <span class="mi">101</span>
@@ -518,14 +637,15 @@ not clear how supported or actively maintained this library is.</p>
 </a>
 </div></blockquote>
 </section>
-<section id="comparison-with-dislin">
-<h2>Comparison with Dislin<a class="headerlink" href="#comparison-with-dislin" title="Link to this heading">¶</a></h2>
-<p>Like <cite>PLPlot</cite>, <cite>Dislin</cite> (<a class="reference external" href="https://dislin.de/">https://dislin.de/</a>) is a plotting library with
-bindings for many languages, including Python. It also supports many plot
-types, including 3-d volume displays which is outside the scope of
-wxmplot. Since it is not specifically written for Python, it is not too
-surprising that its Python interface is not quite as elegant as
-<cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example for a basic line plot is:</p>
+<section id="dislin">
+<h3>Dislin<a class="headerlink" href="#dislin" title="Link to this heading">#</a></h3>
+<p>Like <cite>PLPlot</cite>, <cite>Dislin</cite> (<a class="reference external" href="https://dislin.de/">https://dislin.de/</a>) is (or was) a plotting
+library with bindings for many languages, including Python. It also
+supports many plot types, including 3-d volume displays which is
+outside the scope of wxmplot. Since it is not specifically written for
+Python, it is not too surprising that its Python interface is not
+quite as elegant as <cite>matplotlib</cite> or <cite>wxmplot</cite>.  Their Python example
+for a basic line plot is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">dislin</span>
 
@@ -598,8 +718,9 @@ no interactivity. Converting that to <cite>wxmplot</cite> would be:</p>
 </a>
 </div></blockquote>
 </section>
+</section>
 <section id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
 <p>Succint code that is free of boilerplate code and that gives high quality plots
 and interactive displays is highly valuable for exploratory data
 analysis. While there are many plotting and visualization tools available for
@@ -618,72 +739,59 @@ and end-users of applications to have rich interactions with their data.</p>
 </section>
 </section>
 
+</article><footer class="bz-article-footer">
+  
+  
+    <nav class="bz-related-pages" aria-label="Related pages navigation"><a class="bz-related-pages-previous" href="other.html" rel="prev">
+    <span>Previous</span><span class="bz-related-pages-title">Speciality Displays</span></a></nav>
+  
 
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Comparisons of wxmplot with other Python Plotting tools</a><ul>
-<li><a class="reference internal" href="#comparison-with-matplotlib-pyplot">Comparison with Matplotlib.pyplot</a></li>
+</footer><aside class="bz-sidebar-secondary" data-drawer="bz-sidebar-secondary">
+  
+  
+    <nav class="bz-sidebar-toc" aria-label="Table of contents">
+  <p>On this page</p><ul>
+<li><a class="reference internal" href="#comparison-with-matplotlib-pyplot">Comparison with Matplotlib​.pyplot</a></li>
 <li><a class="reference internal" href="#comparison-with-wxplot">Comparison with WxPlot</a></li>
 <li><a class="reference internal" href="#comparison-with-plotly">Comparison with Plotly</a></li>
 <li><a class="reference internal" href="#comparison-with-pyqtgraph">Comparison with PyQtGraph</a></li>
 <li><a class="reference internal" href="#comparison-with-pyqtgraph-pythonguis">Comparison with PyQtGraph/PythonGUIs</a></li>
-<li><a class="reference internal" href="#comparison-with-plplot">Comparison with PLPlot</a></li>
-<li><a class="reference internal" href="#comparison-with-dislin">Comparison with Dislin</a></li>
-<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+<li><a class="reference internal" href="#comparison-with-older-libraries">Comparison with Older LIbraries</a><ul>
+<li><a class="reference internal" href="#plplot">PLPlot</a></li>
+<li><a class="reference internal" href="#dislin">Dislin</a></li>
 </ul>
 </li>
-</ul>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul></nav>
+  
+    
 
+
+  
+    
+  
+    
+  
+
+</aside></main>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="other.html"
-                          title="previous chapter">Speciality wxmplot displays</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/comparisons.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="other.html" title="Speciality wxmplot displays"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Comparisons of wxmplot with other Python Plotting tools</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script></body>
 </html>

@@ -1,60 +1,172 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>wxmplot Examples &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Speciality wxmplot displays" href="other.html" />
-    <link rel="prev" title="ImagePanel: A wx.Panel for Image Display" href="imagepanel.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="other.html" title="Speciality wxmplot displays"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">wxmplot Examples</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="wxmplot-examples">
-<span id="ch-examples"></span><h1>wxmplot Examples<a class="headerlink" href="#wxmplot-examples" title="Link to this heading">¶</a></h1>
-<p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a> showed a few illustrative  examples using <cite>wxmplot</cite>.
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Examples" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="examples.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="The Overview showed a few illustrative examples using wxmplot. Here we show a few more examples. These and more are given in the examples directory in the source distribution kit. Dynamic examples ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_examples_24060f14.png" />
+<meta property="og:image:alt" content="The Overview showed a few illustrative examples using wxmplot. Here we show a few more examples. These and more are given in the examples directory in the source distribution kit. Dynamic examples ..." />
+<meta name="description" content="The Overview showed a few illustrative examples using wxmplot. Here we show a few more examples. These and more are given in the examples directory in the source distribution kit. Dynamic examples ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>Examples - WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Speciality Displays" href="other.html"><link rel="prev" title="ImagePanel" href="imagepanel.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="index.html">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li><li class="toctree-l1"><a class="reference internal" href="interactive.html">Interactive displays</a></li><li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><header class="bz-article-header">
+  
+  
+    <nav class="bz-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="bz-breadcrumbs-home">
+      <a href="index.html" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z" />
+        </svg>
+      </a>
+    </li><li class="bz-breadcrumbs-current">
+      <span>Examples</span>
+    </li>
+  </ol>
+</nav>
+  
+<label
+  class="bz-sidebar-secondary-toggle"
+  for="bz-sidebar-secondary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle table of contents"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75H20.25 M11.25 12H20.25 M7.75 17.25H20.25"
+    />
+  </svg>
+</label></header><article class="bz-article-main" role="main"><div class="bz-page-actions" role="group" aria-label="Page actions">
+  <button data-copy-source="_sources/examples.rst.txt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+    <span>Copy page</span>
+  </button>
+  <div class="bz-dropdown">
+    <button
+      aria-label="More actions"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></button>
+    <ul role="menu" aria-hidden="true">
+      <li>
+        <a href="#" role="menuitem" data-copy-source="_sources/examples.rst.txt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+          <span>Copy page</span>
+        </a>
+      </li>
+      <li>
+        <a href="_sources/examples.rst.txt" role="menuitem" class="bz-page-actions-external" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H4.75a.75.75 0 0 1 0-1.5H19a.5.5 0 0 0 .5-.5V8.5h-4a2 2 0 0 1-2-2v-4H5a.5.5 0 0 0-.5.5v6.25a.75.75 0 0 1-1.5 0Zm12-.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0-.146-.336l-4.018-4.018A.5.5 0 0 0 15 2.5Z"></path><path d="M4.53 12.24a.75.75 0 0 1-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 1 1-1.022 1.1l-3.23-3a.75.75 0 0 1 0-1.1l3.23-3a.75.75 0 0 1 1.06.04Zm3.979 1.06a.75.75 0 1 1 1.02-1.1l3.231 3a.75.75 0 0 1 0 1.1l-3.23 3a.75.75 0 1 1-1.021-1.1l2.639-2.45-2.64-2.45Z"></path></svg>
+          <span>View source</span>
+        </a>
+      </li></ul>
+  </div>
+</div><section id="examples">
+<span id="ch-examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">Overview</span></a> showed a few illustrative  examples using <cite>wxmplot</cite>.
 Here we show a few more examples.  These and more are given in the <em>examples</em>
 directory in the source distribution kit.</p>
 <section id="dynamic-examples-not-shown-here">
-<h2>Dynamic examples not shown here<a class="headerlink" href="#dynamic-examples-not-shown-here" title="Link to this heading">¶</a></h2>
+<h2>Dynamic examples not shown here<a class="headerlink" href="#dynamic-examples-not-shown-here" title="Link to this heading">#</a></h2>
 <p>Several examples that can be found at <a class="reference external" href="https://github.com/newville/wxmplot/tree/master/examples">wxmplot examples</a> are not shown here
 either because they show many plots or are otherwise more complex.  They are
 worth trying out.</p>
@@ -70,7 +182,7 @@ returns or yields datasets to update plot traces.</p>
 Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </section>
 <section id="scatterplot-example">
-<h2>Scatterplot Example<a class="headerlink" href="#scatterplot-example" title="Link to this heading">¶</a></h2>
+<h2>Scatterplot Example<a class="headerlink" href="#scatterplot-example" title="Link to this heading">#</a></h2>
 <p>An example scatterplot can be produced with a script like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
@@ -104,7 +216,7 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </a>
 </section>
 <section id="plotting-with-errorbars">
-<h2>Plotting with errorbars<a class="headerlink" href="#plotting-with-errorbars" title="Link to this heading">¶</a></h2>
+<h2>Plotting with errorbars<a class="headerlink" href="#plotting-with-errorbars" title="Link to this heading">#</a></h2>
 <p>An example plotting with error bars:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -125,7 +237,7 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </a>
 </section>
 <section id="plotting-data-from-a-datafile">
-<h2>Plotting data from a datafile<a class="headerlink" href="#plotting-data-from-a-datafile" title="Link to this heading">¶</a></h2>
+<h2>Plotting data from a datafile<a class="headerlink" href="#plotting-data-from-a-datafile" title="Link to this heading">#</a></h2>
 <p>Reading data with <cite>numpy.loadtext</cite> and plotting:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
@@ -148,7 +260,7 @@ Perhaps surprisingly, this can be faster than updating the line plots.</p>
 </a>
 </section>
 <section id="plotting-data-with-discrete-values">
-<span id="example-discrete"></span><h2>Plotting data with discrete values<a class="headerlink" href="#plotting-data-with-discrete-values" title="Link to this heading">¶</a></h2>
+<span id="example-discrete"></span><h2>Plotting data with discrete values<a class="headerlink" href="#plotting-data-with-discrete-values" title="Link to this heading">#</a></h2>
 <p>Some data has discrete values, or a set of enumerations.  For such
 data, you can set</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -180,7 +292,7 @@ data, you can set</p>
 </a>
 </section>
 <section id="using-left-and-right-axes">
-<span id="example-leftright"></span><h2>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Link to this heading">¶</a></h2>
+<span id="example-leftright"></span><h2>Using Left and Right Axes<a class="headerlink" href="#using-left-and-right-axes" title="Link to this heading">#</a></h2>
 <p>An example using both right and left axes with different scales can be
 created with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -206,7 +318,7 @@ created with:</p>
 </a>
 </section>
 <section id="using-3-and-4-y-axes">
-<span id="example-multiple-yaxes"></span><h2>Using 3 and 4 Y Axes<a class="headerlink" href="#using-3-and-4-y-axes" title="Link to this heading">¶</a></h2>
+<span id="example-multiple-yaxes"></span><h2>Using 3 and 4 Y Axes<a class="headerlink" href="#using-3-and-4-y-axes" title="Link to this heading">#</a></h2>
 <p>If 2 different scales is not enough, you extend that to 3 or even 4 separate Y Axes with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1">#</span>
@@ -254,7 +366,7 @@ created with:</p>
 </a>
 </section>
 <section id="plotting-with-alpha-fill-to-show-area-under-a-curve">
-<h2>Plotting with alpha-fill to show area under a curve<a class="headerlink" href="#plotting-with-alpha-fill-to-show-area-under-a-curve" title="Link to this heading">¶</a></h2>
+<h2>Plotting with alpha-fill to show area under a curve<a class="headerlink" href="#plotting-with-alpha-fill-to-show-area-under-a-curve" title="Link to this heading">#</a></h2>
 <p>It is sometimes desirable to fill the area below a curve, typically to 0.
 Using the <cite>alpha</cite> value can be especially helpful for this, so that</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
@@ -274,7 +386,7 @@ Using the <cite>alpha</cite> value can be especially helpful for this, so that</
 </a>
 </section>
 <section id="plotting-with-alpha-fill-to-show-uncertainty">
-<h2>Plotting with alpha-fill to show uncertainty<a class="headerlink" href="#plotting-with-alpha-fill-to-show-uncertainty" title="Link to this heading">¶</a></h2>
+<h2>Plotting with alpha-fill to show uncertainty<a class="headerlink" href="#plotting-with-alpha-fill-to-show-uncertainty" title="Link to this heading">#</a></h2>
 <p>Another use of a filled band is to fill between two traces.  An important
 use of this is to show uncertainties in a function, similar to showing
 errorbars above.  If <cite>dy</cite> and <cite>fill=True</cite> are both given, then a band
@@ -302,7 +414,7 @@ by assigning the average of the 2 curves to <cite>y</cite> and half the differen
 <cite>dy</cite>, and perhaps setting <cite>linewidth=0</cite> to suppress showing the mean value.</p>
 </section>
 <section id="using-set-data-generator-for-user-controlled-dynamic-plotting">
-<h2>Using <cite>set_data_generator</cite> for user-controlled, dynamic plotting<a class="headerlink" href="#using-set-data-generator-for-user-controlled-dynamic-plotting" title="Link to this heading">¶</a></h2>
+<h2>Using <cite>set_data_generator</cite> for user-controlled, dynamic plotting<a class="headerlink" href="#using-set-data-generator-for-user-controlled-dynamic-plotting" title="Link to this heading">#</a></h2>
 <p>There are three examples that use <code class="xref py py-func docutils literal notranslate"><span class="pre">set_data_generator()</span></code> to specify how to
 update a plot from a user-supplied function.  As seen in these examples, the
 function definied can either return data to update the data, or it can use a
@@ -408,7 +520,7 @@ wxmplot functions handles all the plotting.  This code is both shorter and
 better designed than the standard matplotlib example.</p>
 <div  class="sphinx-contrib-video-container align-left"><video controls="True" muted="True" preload="auto" width="80%"><source src="_images/scope_mode_mpl_compare.mp4" type="video/mp4">capture of images generated from scope_mode_mpl_compare.py</video></div></section>
 <section id="displaying-and-image-of-a-tiff-file">
-<h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Link to this heading">¶</a></h2>
+<h2>Displaying and image of a TIFF file<a class="headerlink" href="#displaying-and-image-of-a-tiff-file" title="Link to this heading">#</a></h2>
 <p>Reading a TIFF file and showing the image:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tifffile</span><span class="w"> </span><span class="kn">import</span> <span class="n">imread</span>
@@ -426,7 +538,7 @@ better designed than the standard matplotlib example.</p>
 </a>
 </section>
 <section id="color-image">
-<h2>3-Color Image<a class="headerlink" href="#color-image" title="Link to this heading">¶</a></h2>
+<h2>3-Color Image<a class="headerlink" href="#color-image" title="Link to this heading">#</a></h2>
 <p>If the data array has three dimensions, and has a shape of (NY, NX, 3), it
 is assumed to be a 3 color map, holding Red, Green, and Blue intensities.
 In this case, the Image Frame will show sliders and min/max controls for
@@ -485,17 +597,21 @@ may be more suitable for printed documents and presentations.</p>
 </section>
 </section>
 
+</article><footer class="bz-article-footer">
+  
+  
+    <nav class="bz-related-pages" aria-label="Related pages navigation"><a class="bz-related-pages-previous" href="imagepanel.html" rel="prev">
+    <span>Previous</span><span class="bz-related-pages-title"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></span></a><a class="bz-related-pages-next" href="other.html" rel="next">
+    <span>Next</span>
+    <span class="bz-related-pages-title">Speciality Displays</span>
+  </a></nav>
+  
 
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">wxmplot Examples</a><ul>
+</footer><aside class="bz-sidebar-secondary" data-drawer="bz-sidebar-secondary">
+  
+  
+    <nav class="bz-sidebar-toc" aria-label="Table of contents">
+  <p>On this page</p><ul>
 <li><a class="reference internal" href="#dynamic-examples-not-shown-here">Dynamic examples not shown here</a></li>
 <li><a class="reference internal" href="#scatterplot-example">Scatterplot Example</a></li>
 <li><a class="reference internal" href="#plotting-with-errorbars">Plotting with errorbars</a></li>
@@ -505,64 +621,39 @@ may be more suitable for printed documents and presentations.</p>
 <li><a class="reference internal" href="#using-3-and-4-y-axes">Using 3 and 4 Y Axes</a></li>
 <li><a class="reference internal" href="#plotting-with-alpha-fill-to-show-area-under-a-curve">Plotting with alpha-fill to show area under a curve</a></li>
 <li><a class="reference internal" href="#plotting-with-alpha-fill-to-show-uncertainty">Plotting with alpha-fill to show uncertainty</a></li>
-<li><a class="reference internal" href="#using-set-data-generator-for-user-controlled-dynamic-plotting">Using <cite>set_data_generator</cite> for user-controlled, dynamic plotting</a></li>
+<li><a class="reference internal" href="#using-set-data-generator-for-user-controlled-dynamic-plotting">Using <cite>set_​data_​generator</cite> for user-controlled, dynamic plotting</a></li>
 <li><a class="reference internal" href="#displaying-and-image-of-a-tiff-file">Displaying and image of a TIFF file</a></li>
 <li><a class="reference internal" href="#color-image">3-Color Image</a></li>
-</ul>
-</li>
-</ul>
+</ul></nav>
+  
+    
 
+
+  
+    
+  
+    
+  
+
+</aside></main>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="imagepanel.html"
-                          title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code>:  A wx.Panel for Image Display</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="other.html"
-                          title="next chapter">Speciality wxmplot displays</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/examples.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="other.html" title="Speciality wxmplot displays"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="imagepanel.html" title="ImagePanel: A wx.Panel for Image Display"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">wxmplot Examples</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script></body>
 </html>

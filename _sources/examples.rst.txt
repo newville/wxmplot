@@ -1,7 +1,7 @@
 .. _ch_examples:
 
 ==========================================================
-wxmplot Examples
+Examples
 ==========================================================
 
 The :ref:`ch_overview` showed a few illustrative  examples using `wxmplot`.

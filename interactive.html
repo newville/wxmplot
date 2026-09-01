@@ -1,56 +1,168 @@
-
 <!DOCTYPE html>
-
 <html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Interactive wxmplot displays &#8212; WXMPLOT: interactive plotting with Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    
-    <script src="_static/documentation_options.js?v=8f11cabd"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PlotPanel: A wx.Panel for Basic Line Plots" href="plotpanel.html" />
-    <link rel="prev" title="wxmplot Overview" href="overview.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="wxmplot Overview"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Interactive wxmplot displays</a></li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="module-wxmplot.interactive">
-<span id="interactive-wxmplot-displays"></span><span id="ch-interactive"></span><h1>Interactive wxmplot displays<a class="headerlink" href="#module-wxmplot.interactive" title="Link to this heading">¶</a></h1>
-<p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">wxmplot Overview</span></a> describes the main features of <cite>wxmplot</cite> and shows
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Interactive displays" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="interactive.html" />
+<meta property="og:site_name" content="wxmplot" />
+<meta property="og:description" content="The Overview describes the main features of wxmplot and shows how wxmplot plotting functions give a richer level of customization and interactivity to the end user than is available from the standa..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_interactive_23f2330c.png" />
+<meta property="og:image:alt" content="The Overview describes the main features of wxmplot and shows how wxmplot plotting functions give a richer level of customization and interactivity to the end user than is available from the standa..." />
+<meta name="description" content="The Overview describes the main features of wxmplot and shows how wxmplot plotting functions give a richer level of customization and interactivity to the end user than is available from the standa..." />
+<meta name="twitter:card" content="summary_large_image" />
+<title>Interactive displays - WXMPLOT: interactive plotting with Python</title><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="PlotPanel" href="plotpanel.html"><link rel="prev" title="Overview" href="overview.html"><script data-cfasync="false">(function(){
+    const m = localStorage.getItem("breeze-mode") || "auto";
+    const d = document.documentElement.dataset;
+    d.mode = m;
+    d.theme = m === "auto"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : m;
+  })();
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" /><link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" /><link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" /><link rel="stylesheet" type="text/css" href="_static/styles/breeze.css?v=7c62c100" /><script defer="defer" src="_static/scripts/breeze.js?v=dac9f8c6"></script></head>
+<body>
+  
+  
+  <div class="bz-skip-to-content"><a href="#bz-main-content">Skip to main content</a></div><header class="bz-header-main">
+  <div class="bz-header-start"><a class="bz-header-brand" href="index.html">
+  
+  
+  <span>WXMPLOT: interactive plotting with Python</span>
+</a>
+  </div>
+  <div class="bz-header-end"><div id="docsearch" class="bz-search-button">
+  <a
+    href="search.html#q"
+    aria-label="Search the docs"
+    data-tooltip="Search the docs"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 -1 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+    <span>Search</span>
+    <kbd>Ctrl+K</kbd>
+  </a>
+</div><div class="bz-theme-switcher">
+  <button aria-label="Switch theme" data-tooltip="Switch theme">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-light" fill="currentColor">
+      <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="only-dark" fill="currentColor">
+      <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+    </svg>
+  </button>
+</div>
+  </div>
+</header><nav class="bz-header-tabs" aria-label="Primary Navigation"><label
+  class="bz-sidebar-primary-toggle"
+  for="bz-sidebar-primary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle site navigation"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h12.5"
+    />
+  </svg>
+</label><ul><li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li><li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li><li class="toctree-l1 current"><a class="current reference internal" href="#">Interactive displays</a></li><li class="toctree-l1"><a class="reference internal" href="plotpanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="imagepanel.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagePanel</span></code></a></li><li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li><li class="toctree-l1"><a class="reference internal" href="other.html">Speciality Displays</a></li><li class="toctree-l1"><a class="reference internal" href="comparisons.html">Comparisons</a></li></ul><div class="bz-dropdown">
+    <button aria-haspopup="true" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </g>
+      </svg>
+    </button>
+    <ul role="menu" aria-hidden="true"></ul>
+  </div>
+</nav><hr class="bz-header-hr">
+  <div class="bz-content"><main id="bz-main-content"><header class="bz-article-header">
+  
+  
+    <nav class="bz-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="bz-breadcrumbs-home">
+      <a href="index.html" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.543 2.232a.75.75 0 0 0-1.085 0l-5.25 5.5A.75.75 0 0 0 2.75 9H4v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V9h1.25a.75.75 0 0 0 .543-1.268l-5.25-5.5Z" />
+        </svg>
+      </a>
+    </li><li class="bz-breadcrumbs-current">
+      <span>Interactive displays</span>
+    </li>
+  </ol>
+</nav>
+  
+<label
+  class="bz-sidebar-secondary-toggle"
+  for="bz-sidebar-secondary"
+  role="button"
+  tabindex="0"
+  aria-label="Toggle table of contents"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M3.75 6.75H20.25 M11.25 12H20.25 M7.75 17.25H20.25"
+    />
+  </svg>
+</label></header><article class="bz-article-main" role="main"><div class="bz-page-actions" role="group" aria-label="Page actions">
+  <button data-copy-source="_sources/interactive.rst.txt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+    <span>Copy page</span>
+  </button>
+  <div class="bz-dropdown">
+    <button
+      aria-label="More actions"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></button>
+    <ul role="menu" aria-hidden="true">
+      <li>
+        <a href="#" role="menuitem" data-copy-source="_sources/interactive.rst.txt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M7.024 3.75c0-.966.784-1.75 1.75-1.75H20.25c.966 0 1.75.784 1.75 1.75v11.498a1.75 1.75 0 0 1-1.75 1.75H8.774a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v11.498c0 .139.112.25.25.25H20.25a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25Z"></path><path d="M1.995 10.749a1.75 1.75 0 0 1 1.75-1.751H5.25a.75.75 0 1 1 0 1.5H3.745a.25.25 0 0 0-.25.25L3.5 20.25c0 .138.111.25.25.25h9.5a.25.25 0 0 0 .25-.25v-1.51a.75.75 0 1 1 1.5 0v1.51A1.75 1.75 0 0 1 13.25 22h-9.5A1.75 1.75 0 0 1 2 20.25l-.005-9.501Z"></path></svg>
+          <span>Copy page</span>
+        </a>
+      </li>
+      <li>
+        <a href="_sources/interactive.rst.txt" role="menuitem" class="bz-page-actions-external" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H4.75a.75.75 0 0 1 0-1.5H19a.5.5 0 0 0 .5-.5V8.5h-4a2 2 0 0 1-2-2v-4H5a.5.5 0 0 0-.5.5v6.25a.75.75 0 0 1-1.5 0Zm12-.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0-.146-.336l-4.018-4.018A.5.5 0 0 0 15 2.5Z"></path><path d="M4.53 12.24a.75.75 0 0 1-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 1 1-1.022 1.1l-3.23-3a.75.75 0 0 1 0-1.1l3.23-3a.75.75 0 0 1 1.06.04Zm3.979 1.06a.75.75 0 1 1 1.02-1.1l3.231 3a.75.75 0 0 1 0 1.1l-3.23 3a.75.75 0 1 1-1.021-1.1l2.639-2.45-2.64-2.45Z"></path></svg>
+          <span>View source</span>
+        </a>
+      </li></ul>
+  </div>
+</div><section id="module-wxmplot.interactive">
+<span id="interactive-displays"></span><span id="ch-interactive"></span><h1>Interactive displays<a class="headerlink" href="#module-wxmplot.interactive" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="overview.html#ch-overview"><span class="std std-ref">Overview</span></a> describes the main features of <cite>wxmplot</cite> and shows
 how <cite>wxmplot</cite> plotting functions give a richer level of customization and
 interactivity to the end user than is available from the standard
 <cite>matplotlib.pyplot</cite> when run from a script or program.</p>
@@ -81,7 +193,7 @@ While the functions <a class="reference internal" href="#wxmplot.interactive.plo
 equivalent to those in <cite>matplotlib.pyplot</cite>, they are not exact drop-in
 replacements for the <cite>pyplot</cite> functions.</p>
 <section id="plotting-in-an-interactive-session-or-jupyter">
-<h2>Plotting in an interactive session or Jupyter<a class="headerlink" href="#plotting-in-an-interactive-session-or-jupyter" title="Link to this heading">¶</a></h2>
+<h2>Plotting in an interactive session or Jupyter<a class="headerlink" href="#plotting-in-an-interactive-session-or-jupyter" title="Link to this heading">#</a></h2>
 <p>As an example using <a class="reference internal" href="#module-wxmplot.interactive" title="wxmplot.interactive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wxmplot.interactive</span></code></a> in a Jupyter console
 session might look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>~&gt; jupyter console
@@ -143,7 +255,7 @@ these plotting functions well-suited for exploratory displays of data.</p>
 folder.</p>
 </section>
 <section id="using-the-interactive-functions-from-a-script">
-<h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Link to this heading">¶</a></h2>
+<h2>Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script<a class="headerlink" href="#using-the-interactive-functions-from-a-script" title="Link to this heading">#</a></h2>
 <p>When using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions in a script or program
 that is run in a non-interactive way, say from a commandline shell,
 the wxmplot displays will still appear.  The act of plotting will not
@@ -157,10 +269,10 @@ and <cite>wi.imshow()</cite> to your scripts and the plots will be displayed
 until you no longer want to use them.</p>
 </section>
 <section id="line-plotting-with-plot-and-related-functions">
-<h2>Line Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#line-plotting-with-plot-and-related-functions" title="Link to this heading">¶</a></h2>
+<h2>Line Plotting with <a class="reference internal" href="#wxmplot.interactive.plot" title="wxmplot.interactive.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> and related functions<a class="headerlink" href="#line-plotting-with-plot-and-related-functions" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot trace of x, y arrays in a PlotFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -236,7 +348,21 @@ or ‘steps-post’.</p></li>
 <a class="reference internal" href="plotpanel.html#plotopt-table"><span class="std std-ref">Table of Plot Arguments</span></a>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.hist">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.hist" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">hist</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">force_draw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.hist" title="Link to this definition">#</a></dt>
 <dd><p>display a histogram</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -251,7 +377,7 @@ or ‘steps-post’.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.update_trace">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">update_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.update_trace" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">update_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#update_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.update_trace" title="Link to this definition">#</a></dt>
 <dd><p>update a plot trace with new data, avoiding complete redraw
 This can significantly descrease drawing time:</p>
 <dl class="field-list simple">
@@ -269,7 +395,7 @@ This can significantly descrease drawing time:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.set_data_generator">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">set_data_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polltime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.set_data_generator" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">set_data_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polltime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#set_data_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.set_data_generator" title="Link to this definition">#</a></dt>
 <dd><p>Set data generator function or generator for a plot window that will be
 called to generate new data to be displayed. The generator or
 data-generating funcion will be call at intervals set by polltime</p>
@@ -302,7 +428,17 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_setlimits">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_setlimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_setlimits" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_setlimits</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_setlimits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_setlimits" title="Link to this definition">#</a></dt>
 <dd><p>set plot view limits for plot in window <cite>win</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -319,7 +455,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_text">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_text" title="Link to this definition">#</a></dt>
 <dd><p>add text at x, y coordinates of a plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -339,7 +475,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_arrow">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_arrow" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_arrow" title="Link to this definition">#</a></dt>
 <dd><p>draw arrow from x1, y1 to x2, y2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -363,7 +499,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_marker">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_marker" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_marker" title="Link to this definition">#</a></dt>
 <dd><p>draw a marker at x, y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -387,7 +523,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_axhline">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_axhline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_axhline" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_axhline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_axhline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_axhline" title="Link to this definition">#</a></dt>
 <dd><p>plot a horizontal line spanning the plot axes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -403,7 +539,7 @@ x, y that update each trace in the plot.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.plot_axvline">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_axvline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.plot_axvline" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">plot_axvline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#plot_axvline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.plot_axvline" title="Link to this definition">#</a></dt>
 <dd><p>plot a vertical line spanning the plot axes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -419,10 +555,10 @@ x, y that update each trace in the plot.</p>
 
 </section>
 <section id="displaying-images-with-imshow-and-contour">
-<h2>Displaying images with <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and <a class="reference internal" href="#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Link to this heading">¶</a></h2>
+<h2>Displaying images with <a class="reference internal" href="#wxmplot.interactive.imshow" title="wxmplot.interactive.imshow"><code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code></a> and <a class="reference internal" href="#wxmplot.interactive.contour" title="wxmplot.interactive.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><a class="headerlink" href="#displaying-images-with-imshow-and-contour" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.imshow">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">imshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.imshow" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">imshow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#imshow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.imshow" title="Link to this definition">#</a></dt>
 <dd><p>Display an 2-D array of intensities as a false-color map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -456,7 +592,7 @@ single-color map or (NY, NX, 3) array for an RGB map</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.contour">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.contour" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#contour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.contour" title="Link to this definition">#</a></dt>
 <dd><p>Display an 2-D array of intensities as a contour plot</p>
 <p class="rubric">Notes</p>
 <p>This is equivalent to
@@ -465,10 +601,10 @@ imshow(map, …, style=’contour’)</p>
 
 </section>
 <section id="functions-for-working-with-the-interactive-windows">
-<h2>Functions for working with the interactive windows<a class="headerlink" href="#functions-for-working-with-the-interactive-windows" title="Link to this heading">¶</a></h2>
+<h2>Functions for working with the interactive windows<a class="headerlink" href="#functions-for-working-with-the-interactive-windows" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.set_theme">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">set_theme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theme</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.set_theme" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">set_theme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#set_theme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.set_theme" title="Link to this definition">#</a></dt>
 <dd><p>set plotting theme by name with a theme name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -490,7 +626,7 @@ setting, choosing ‘light’ or ‘dark’ as appropriate.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.available_themes">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">available_themes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.available_themes" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">available_themes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#available_themes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.available_themes" title="Link to this definition">#</a></dt>
 <dd><p>list of available theme</p>
 <p>Returns:
 list of theme names.</p>
@@ -508,7 +644,7 @@ As of this writing, the list is:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.get_wxapp">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_wxapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearSigInt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_wxapp" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_wxapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearSigInt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#get_wxapp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.get_wxapp" title="Link to this definition">#</a></dt>
 <dd><p>get the wx App</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -526,7 +662,7 @@ be written to the Console [False]</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.get_plot_window">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_plot_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_plot_window" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_plot_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#get_plot_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.get_plot_window" title="Link to this definition">#</a></dt>
 <dd><p>return a plot display</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -553,7 +689,7 @@ attributes and methods</span></a>. This includes access to the
 underlying matplotlib Axes and Canvas objects.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="wxmplot.interactive.get_image_window">
-<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_image_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wxmplot.interactive.get_image_window" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wxmplot.interactive.</span></span><span class="sig-name descname"><span class="pre">get_image_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wintitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wxmplot/interactive.html#get_image_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wxmplot.interactive.get_image_window" title="Link to this definition">#</a></dt>
 <dd><p>return an image display</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -576,10 +712,11 @@ window index or create a new one.</p>
 have the same principle attributes to access the matplotlib Axes and Canvas
 objects.</p>
 <section id="plot-frame-attributes-and-methods">
-<h3>Plot frame attributes and methods<a class="headerlink" href="#plot-frame-attributes-and-methods" title="Link to this heading">¶</a></h3>
+<h3>Plot frame attributes and methods<a class="headerlink" href="#plot-frame-attributes-and-methods" title="Link to this heading">#</a></h3>
 <p id="plotframe-attrs"><strong>Table of interactive Plot Window attributes and methods</strong></p>
 <blockquote>
-<div><table class="docutils align-default">
+<div><div class="table docutils container">
+<table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
 <th class="head"><p>object type</p></th>
@@ -618,6 +755,7 @@ objects.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </div></blockquote>
 <p>Note that the <cite>cursor_history</cite> attribute will be a list of (<cite>x</cite>, <cite>y</cite>,
 <cite>timestamp</cite>) values with <cite>x</cite> and <cite>y</cite> being in “user coordinates,
@@ -630,30 +768,34 @@ order. Only the most recent 100 cursor events will be retained.</p>
 </section>
 </section>
 
+</article><footer class="bz-article-footer">
+  
+  
+    <nav class="bz-related-pages" aria-label="Related pages navigation"><a class="bz-related-pages-previous" href="overview.html" rel="prev">
+    <span>Previous</span><span class="bz-related-pages-title">Overview</span></a><a class="bz-related-pages-next" href="plotpanel.html" rel="next">
+    <span>Next</span>
+    <span class="bz-related-pages-title"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code></span>
+  </a></nav>
+  
 
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Interactive wxmplot displays</a><ul>
+</footer><aside class="bz-sidebar-secondary" data-drawer="bz-sidebar-secondary">
+  
+  
+    <nav class="bz-sidebar-toc" aria-label="Table of contents">
+  <p>On this page</p><ul>
 <li><a class="reference internal" href="#plotting-in-an-interactive-session-or-jupyter">Plotting in an interactive session or Jupyter</a></li>
 <li><a class="reference internal" href="#using-the-interactive-functions-from-a-script">Using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive</span></code> functions from a script</a></li>
 <li><a class="reference internal" href="#line-plotting-with-plot-and-related-functions">Line Plotting with <code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code> and related functions</a><ul>
 <li><a class="reference internal" href="#wxmplot.interactive.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
 <li><a class="reference internal" href="#wxmplot.interactive.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.update_trace"><code class="docutils literal notranslate"><span class="pre">update_trace()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.set_data_generator"><code class="docutils literal notranslate"><span class="pre">set_data_generator()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_setlimits"><code class="docutils literal notranslate"><span class="pre">plot_setlimits()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_text"><code class="docutils literal notranslate"><span class="pre">plot_text()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_arrow"><code class="docutils literal notranslate"><span class="pre">plot_arrow()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_marker"><code class="docutils literal notranslate"><span class="pre">plot_marker()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_axhline"><code class="docutils literal notranslate"><span class="pre">plot_axhline()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.plot_axvline"><code class="docutils literal notranslate"><span class="pre">plot_axvline()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.update_trace"><code class="docutils literal notranslate"><span class="pre">update_​trace()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.set_data_generator"><code class="docutils literal notranslate"><span class="pre">set_​data_​generator()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_setlimits"><code class="docutils literal notranslate"><span class="pre">plot_​setlimits()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_text"><code class="docutils literal notranslate"><span class="pre">plot_​text()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_arrow"><code class="docutils literal notranslate"><span class="pre">plot_​arrow()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_marker"><code class="docutils literal notranslate"><span class="pre">plot_​marker()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_axhline"><code class="docutils literal notranslate"><span class="pre">plot_​axhline()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.plot_axvline"><code class="docutils literal notranslate"><span class="pre">plot_​axvline()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#displaying-images-with-imshow-and-contour">Displaying images with <code class="xref py py-func docutils literal notranslate"><span class="pre">imshow()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a><ul>
@@ -662,69 +804,44 @@ order. Only the most recent 100 cursor events will be retained.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#functions-for-working-with-the-interactive-windows">Functions for working with the interactive windows</a><ul>
-<li><a class="reference internal" href="#wxmplot.interactive.set_theme"><code class="docutils literal notranslate"><span class="pre">set_theme()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.available_themes"><code class="docutils literal notranslate"><span class="pre">available_themes()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.get_wxapp"><code class="docutils literal notranslate"><span class="pre">get_wxapp()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.get_plot_window"><code class="docutils literal notranslate"><span class="pre">get_plot_window()</span></code></a></li>
-<li><a class="reference internal" href="#wxmplot.interactive.get_image_window"><code class="docutils literal notranslate"><span class="pre">get_image_window()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.set_theme"><code class="docutils literal notranslate"><span class="pre">set_​theme()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.available_themes"><code class="docutils literal notranslate"><span class="pre">available_​themes()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_wxapp"><code class="docutils literal notranslate"><span class="pre">get_​wxapp()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_plot_window"><code class="docutils literal notranslate"><span class="pre">get_​plot_​window()</span></code></a></li>
+<li><a class="reference internal" href="#wxmplot.interactive.get_image_window"><code class="docutils literal notranslate"><span class="pre">get_​image_​window()</span></code></a></li>
 <li><a class="reference internal" href="#plot-frame-attributes-and-methods">Plot frame attributes and methods</a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
+</ul></nav>
+  
+    
 
+
+  
+    
+  
+    
+  
+
+</aside></main>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="overview.html"
-                          title="previous chapter">wxmplot Overview</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="plotpanel.html"
-                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotPanel</span></code>:  A wx.Panel for Basic Line Plots</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/interactive.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="plotpanel.html" title="PlotPanel: A wx.Panel for Basic Line Plots"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="wxmplot Overview"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">WXMPLOT</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Interactive wxmplot displays</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2026-07-29, Matthew Newville, The University of Chicago.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    </div>
-  </body>
+<footer class="bz-footer">
+  <div class="bz-footer-copyright"><p class="bz-copyright">© Copyright 2026-08-31, Matthew Newville, The University of Chicago</p><p>
+    
+    
+    
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/aksiome/breeze">Breeze theme</a>.
+    
+  </p>
+</div>
+</footer><a href="#" class="bz-back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+    </svg>
+    <span>Back to top</span>
+  </a>
+  <label class="bz-overlay bz-overlay-primary" for="bz-sidebar-primary"></label>
+  <label class="bz-overlay bz-overlay-secondary" for="bz-sidebar-secondary"></label>
+  <input type="checkbox" name="bz-sidebar-primary" id="bz-sidebar-primary" aria-label="Toggle section navigation">
+  <input type="checkbox" name="bz-sidebar-secondary" id="bz-sidebar-secondary" aria-label="Toggle table of contents"><script src="_static/documentation_options.js?v=1c91c4ce"></script><script src="_static/doctools.js?v=fd6eb6e6"></script><script src="_static/sphinx_highlight.js?v=6ffebe34"></script><script src="_static/clipboard.min.js?v=a7894cd8"></script><script src="_static/copybutton.js?v=f281be69"></script><script src="_static/design-tabs.js?v=f930bc37"></script><script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script></body>
 </html>

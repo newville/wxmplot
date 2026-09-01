@@ -10,8 +10,10 @@ WXMPLOT: plotting widgets for Python
 for Python, combining `wxPython`_  and `matplotlib`_.
 
 .. image:: images/wxmplot_composite.png
-   :width: 98 %
+   :width: 88 %
 
+:bdg-link-info:`GitHub <https://github.com/newville/wxmplot>`
+:bdg-link-info:`PyPI <https://pypi.org/project/wxmplot/>`
 
 `matplotlib`_ provides excellent general-purpose plotting
 functionality. While it supports many backends, it does not have tight

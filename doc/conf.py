@@ -48,7 +48,7 @@ html_theme_path = ['sphinx_theme']
 html_theme = 'bizstyle'
 
 html_theme = 'breeze'
-
+html_theme_options = {"external_links": ["https://github.com/newville/wxmplot"]}
 html_static_path = ['_static']
 html_sidebars = {
   'index': ["indexsidebar.html",  "sourcelink.html", "searchbox.html"],
